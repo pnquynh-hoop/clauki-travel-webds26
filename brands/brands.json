@@ -1,0 +1,4 @@
+{
+  "default": "brand-a",
+  "brands": ["brand-a", "brand-b", "brand-c"]
+}

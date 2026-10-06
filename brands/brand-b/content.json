@@ -1,0 +1,10 @@
+{
+  "id": "brand-b",
+  "meta": { "title": "", "description": "", "favicon": "" },
+  "brand": { "name": "", "logo": "", "slogan": "" },
+  "cta": { "label": "", "href": "" },
+  "nav": [],
+  "sections": [],
+  "footer": {},
+  "credits": []
+}
