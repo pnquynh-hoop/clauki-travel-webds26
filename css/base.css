@@ -1,0 +1,8 @@
+/* base.css - reset, kiểu chữ, bố cục, responsive.
+   Chỉ dùng biến CSS; giá trị mặc định của biến khai báo ở :root bên dưới,
+   giá trị thật của từng thương hiệu nằm trong brands/<id>/theme.css.
+
+   Biến dùng chung:
+   --color-primary  --color-on-primary  --color-bg  --color-surface  --color-ink  --color-muted  --color-accent
+   --font-heading  --font-body
+   --radius */

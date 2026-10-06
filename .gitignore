@@ -1,0 +1,13 @@
+CLAUDE.local.md
+
+web-design-2026-docs/
+
+# Hệ điều hành và trình soạn thảo
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+node_modules/
+package-lock.json
