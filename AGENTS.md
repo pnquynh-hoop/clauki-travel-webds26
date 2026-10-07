@@ -42,20 +42,19 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
 ## 3. Luồng dữ liệu (hợp đồng chung, đổi phải báo cả đội)
 
 1. `index.html` là vỏ. Nó chỉ chứa `<wl-header>`, `<main id="main">` rỗng, `<wl-footer>`, `<wl-sticky-cta>`, không có chữ của thương hiệu nào.
-2. `app.js` import mọi component, gọi `customElements.define('wl-<tên>', Lớp)`, rồi gọi `core.js`.
+2. `app.js` import mọi component, gọi `customElements.define('wl-<tên>', Lớp)`, rồi gọi `start()` của `core.js`.
 3. `core.js`:
-   - đọc `?brand=`, chỉ nhận id có trong `brands/brands.json` (không có thì dùng `default`);
-   - nạp `brands/<id>/content.json`;
-   - đổi `href` của `<link id="brand-theme">` thành `brands/<id>/theme.css`;
-   - điền `title`, `description`, `favicon`;
-   - với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng.
+   - đọc `brands/brands.json`; nếu địa chỉ có `?brand=` thì chỉ nhận id có trong danh sách (không có thì dùng `default`);
+   - gọi `WebDesign2026.init`: `wd2026.js` tải `brands/<id>/content.json`, nhớ lựa chọn sau F5 và hiện nút tròn ở góc dưới phải để BGK đổi thương hiệu;
+   - mỗi lần có sự kiện `webdesign2026:datachange`: đổi `href` của `<link id="brand-theme">` thành `brands/<id>/theme.css`, điền `title`, `description`, `favicon`, cập nhật `?brand=` trên địa chỉ;
+   - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng.
 4. Các component cố định (header, footer, sticky-cta) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`.
 5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật.
 
-Nếu BTC xác nhận phải dùng `wd2026.js`:
-- đặt nguyên tệp ở gốc, **không sửa**;
-- `core.js` dựng lại trang khi có sự kiện `webdesign2026:datachange`;
-- lấy `id` trong JSON để biết nạp `theme.css` nào.
+**`wd2026.js` do BTC cấp:** đặt nguyên ở thư mục gốc, **không sửa**.
+- Đổi thương hiệu bằng nút của BTC **không tải lại trang**: component có thể nhận `data` mới nhiều lần, mỗi lần phải dựng lại từ đầu (`replaceChildren`), không cộng dồn phần tử hay listener.
+- `id` trong `content.json` phải trùng tên thư mục thương hiệu, vì `core.js` dùng nó để chọn `theme.css`.
+- Góc dưới phải là chỗ của nút tròn: không đặt thành phần `position: fixed` đè lên góc đó.
 
 ## 4. Component
 
@@ -175,7 +174,7 @@ export class WlHero extends HTMLElement {
 ## 11. Trước khi push: tự kiểm
 
 - [ ] Chạy bằng Live Server hoặc `python3 -m http.server`, không có lỗi trong console.
-- [ ] `?brand=brand-a`, `brand-b`, `brand-c` đều ra trang đúng.
+- [ ] `?brand=brand-a`, `brand-b`, `brand-c` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
 - [ ] Đổi màu chủ đạo ở `theme.css`: toàn trang đổi theo.
 - [ ] Đổi thứ tự hai section trong `content.json`: trang đổi theo.
 - [ ] Thêm một thương hiệu mới chỉ bằng dữ liệu, không sửa mã: vẫn ra trang.

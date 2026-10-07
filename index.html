@@ -17,6 +17,15 @@
        Phải đứng trước app.js để window.WebDesign2026 có sẵn khi core.js chạy. -->
   <script src="wd2026.js" defer></script>
   <script type="module" src="js/app.js"></script>
+  <script>
+    // Mở bằng file:// thì trình duyệt chặn module app.js; script thường này vẫn chạy để báo cách mở đúng.
+    if (location.protocol === 'file:') {
+      addEventListener('DOMContentLoaded', () => {
+        document.body.textContent = 'Trang cần chạy qua máy chủ: mở bằng Live Server của VS Code, '
+          + 'hoặc chạy "python3 -m http.server 5500" trong thư mục dự án rồi vào http://localhost:5500.';
+      });
+    }
+  </script>
 </head>
 <body>
   <!-- Trang này không chứa chữ của thương hiệu nào. Các section trong <main> do core.js
