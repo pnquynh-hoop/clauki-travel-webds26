@@ -1,4 +1,4 @@
-# ClauKi Travel · Web Design 2026
+# ClauKi - Web Design 2026
 
 Landing page white label cho chủ đề **Du lịch & Dịch vụ lưu trú**. Ba thương hiệu giả tưởng dùng chung
 một mã nguồn; đổi thương hiệu chỉ là đổi dữ liệu, không sửa dòng mã nào.
@@ -47,3 +47,5 @@ docs/ai-log.md          nhật ký dùng AI
 ## Nguồn ảnh và thư viện
 
 Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi `content.json`, hiện ở chân trang.
+
+`wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.
