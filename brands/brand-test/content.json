@@ -1,0 +1,215 @@
+{
+  "id": "brand-test",
+  "meta": {
+    "title": "Lối Mây · Hà Giang 4 ngày 3 đêm mùa tam giác mạch",
+    "description": "Tour đoàn nhỏ tối đa 10 khách qua cổng trời Quản Bạ, phố cổ Đồng Văn và đèo Mã Pì Lèng, ngủ nhà dân, đi cùng hướng dẫn viên người địa phương.",
+    "favicon": ""
+  },
+  "brand": { "name": "Lối Mây", "logo": "", "slogan": "Đi chậm qua những cung đèo" },
+  "cta": { "label": "Giữ chỗ", "href": "#dat-cho", "note": "Từ 6.490.000đ / khách" },
+  "nav": [
+    { "label": "Hành trình", "href": "#lich-trinh" },
+    { "label": "Nơi nghỉ", "href": "#noi-nghi" },
+    { "label": "Ảnh", "href": "#thu-vien" },
+    { "label": "Hỏi đáp", "href": "#hoi-dap" }
+  ],
+  "header": { "variant": "overlay" },
+  "contact": {
+    "phone": "0123 456 789",
+    "email": "xin-chao@loimay.example",
+    "address": "Hoàn Kiếm, Hà Nội",
+    "hours": "8:00 đến 20:00, cả tuần"
+  },
+  "place": {
+    "name": "Đồng Văn, Hà Giang",
+    "lat": 23.2786,
+    "lon": 105.3622,
+    "timezone": "Asia/Ho_Chi_Minh",
+    "sunrise": "05:58",
+    "sunset": "17:31"
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "id": "gioi-thieu",
+      "variant": "full",
+      "eyebrow": "Hà Giang · 4 ngày 3 đêm · Mùa tam giác mạch",
+      "title": "Đi qua cổng trời",
+      "lead": "Bốn ngày theo cung đường đá từ Quản Bạ lên Đồng Văn, ngủ nhà dân và đi chậm qua đèo Mã Pì Lèng.",
+      "image": { "src": "images/hero.jpg", "alt": "Ruộng bậc thang và núi đá tai mèo trong sương sớm ở Hà Giang" },
+      "link": { "label": "Xem lịch trình", "href": "#lich-trinh" },
+      "stats": [
+        { "value": "4N3Đ", "label": "khởi hành từ Hà Nội" },
+        { "value": "10", "label": "khách tối đa mỗi đoàn" },
+        { "value": "3", "label": "đêm ngủ nhà dân" }
+      ]
+    },
+    {
+      "type": "intro",
+      "id": "cach-di",
+      "eyebrow": "Cách Lối Mây đi",
+      "title": "Có những con đèo phải đi chậm mới thấy hết",
+      "lead": "Không chạy đua điểm check-in. Mỗi ngày chỉ hai chặng chính, còn lại là thời gian dừng, ngắm và trò chuyện với người bản địa."
+    },
+    {
+      "type": "features",
+      "id": "vi-sao",
+      "variant": "grid",
+      "eyebrow": "Vì sao chọn chuyến này",
+      "title": "Nhỏ, chậm và có người dẫn đường bản địa",
+      "items": [
+        { "value": "10", "title": "Khách tối đa mỗi đoàn", "text": "Đoàn nhỏ nên dừng được ở những khúc cua mà xe lớn phải bỏ qua." },
+        { "value": "3", "title": "Đêm ngủ nhà dân", "text": "Nhà trình tường ở Quản Bạ, nhà cổ ở Đồng Văn, nhà gỗ nhìn xuống thung lũng Mèo Vạc." },
+        { "value": "1:5", "title": "Hướng dẫn viên trên số khách", "text": "Người dẫn đường sinh ra ở Hà Giang, nói được tiếng H'Mông." },
+        { "value": "0đ", "title": "Phí đổi ngày", "text": "Đổi sang chuyến khác miễn phí nếu báo trước 7 ngày." }
+      ]
+    },
+    {
+      "type": "journey",
+      "id": "lich-trinh",
+      "variant": "sticky",
+      "eyebrow": "Lịch trình",
+      "title": "Bốn ngày, sáu chặng",
+      "stops": [
+        {
+          "time": "Ngày 1 · 06:00",
+          "title": "Rời Hà Nội",
+          "text": "Xe limousine đón ở phố cổ, trưa tới thành phố Hà Giang, chiều đổi sang xe nhỏ lên Quản Bạ.",
+          "image": { "src": "images/journey-1.jpg", "alt": "Xe chạy trên con đường đèo quanh co giữa núi" }
+        },
+        {
+          "time": "Ngày 1 · 16:30",
+          "title": "Cổng trời Quản Bạ",
+          "text": "Ngắm núi Đôi lúc hoàng hôn, tối nghỉ trong nhà trình tường của một gia đình người Tày.",
+          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" }
+        },
+        {
+          "time": "Ngày 2 · 08:00",
+          "title": "Dốc Thẩm Mã",
+          "text": "Đi bộ một đoạn dốc ngắn, ghé chợ nhỏ ven đường của người H'Mông.",
+          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" }
+        },
+        {
+          "time": "Ngày 2 · 15:00",
+          "title": "Phố cổ Đồng Văn",
+          "text": "Chiều dạo phố đá, tối ăn món bản địa cùng gia chủ.",
+          "image": { "src": "images/journey-4.jpg", "alt": "Dãy nhà cổ lợp ngói âm dương trong phố cổ Đồng Văn" }
+        },
+        {
+          "time": "Ngày 3 · 07:00",
+          "title": "Đèo Mã Pì Lèng",
+          "text": "Đi bộ trên con đường men vách đá, nhìn xuống dòng Nho Quế xanh ngọc phía dưới.",
+          "image": { "src": "images/journey-5.jpg", "alt": "Dòng sông xanh ngọc chảy dưới hẻm núi sâu" }
+        },
+        {
+          "time": "Ngày 4 · 08:00",
+          "title": "Chợ Mèo Vạc rồi về",
+          "text": "Ghé chợ buổi sáng, trưa xuống núi, tối về tới Hà Nội.",
+          "image": { "src": "images/journey-6.jpg", "alt": "Khu chợ vùng cao đông người mặc trang phục truyền thống" }
+        }
+      ]
+    },
+    {
+      "type": "stays",
+      "id": "noi-nghi",
+      "variant": "rows",
+      "eyebrow": "Nơi nghỉ",
+      "title": "Ba đêm, ba mái nhà",
+      "items": [
+        {
+          "kind": "Đêm 1",
+          "name": "Nhà trình tường ở Quản Bạ",
+          "text": "Tường đất dày giữ ấm, phòng chung có rèm riêng cho từng giường.",
+          "amenities": ["Chăn ấm", "Nước nóng", "Bữa tối cùng gia chủ"],
+          "image": { "src": "images/stay-1.jpg", "alt": "Ngôi nhà tường đất mái ngói nằm giữa ruộng ngô" }
+        },
+        {
+          "kind": "Đêm 2",
+          "name": "Nhà cổ trong phố đá Đồng Văn",
+          "text": "Phòng đôi trên gác gỗ, mở cửa sổ là thấy mái ngói âm dương.",
+          "amenities": ["Phòng đôi", "Nước nóng", "Sân thượng ngắm sao"],
+          "image": { "src": "images/stay-2.jpg", "alt": "Gác gỗ nhìn xuống con phố lát đá" }
+        },
+        {
+          "kind": "Đêm 3",
+          "name": "Nhà gỗ trên đồi Mèo Vạc",
+          "text": "Ban công nhìn thẳng xuống thung lũng, sáng sớm có hôm gặp biển mây.",
+          "amenities": ["Phòng đôi", "Ban công", "Bếp lửa"],
+          "image": { "src": "images/stay-3.jpg", "alt": "Ban công gỗ nhìn ra thung lũng phủ mây" }
+        }
+      ]
+    },
+    {
+      "type": "gallery",
+      "id": "thu-vien",
+      "variant": "mosaic",
+      "eyebrow": "Ảnh từ các chuyến trước",
+      "title": "Hà Giang qua ống kính khách đi cùng",
+      "images": [
+        { "src": "images/gallery-1.jpg", "alt": "Hoa tam giác mạch màu hồng phủ kín sườn đồi", "caption": "Tam giác mạch nở cuối tháng 10" },
+        { "src": "images/gallery-2.jpg", "alt": "Hai người đi bộ trên con đường men vách núi đá", "caption": "Đoạn đi bộ trên Mã Pì Lèng" },
+        { "src": "images/gallery-3.jpg", "alt": "Biển mây phủ kín thung lũng lúc bình minh", "caption": "Sáng sớm ở Mèo Vạc" },
+        { "src": "images/gallery-4.jpg", "alt": "Mái ngói âm dương phủ rêu trong phố cổ", "caption": "Phố cổ Đồng Văn" },
+        { "src": "images/gallery-5.jpg", "alt": "Bữa tối bên bếp lửa trong một ngôi nhà gỗ", "caption": "Bữa tối cùng gia chủ" }
+      ]
+    },
+    {
+      "type": "booking",
+      "id": "dat-cho",
+      "eyebrow": "Giữ chỗ",
+      "title": "Chọn ngày khởi hành",
+      "lead": "Giữ chỗ trước, Lối Mây gọi lại xác nhận trong 2 giờ rồi mới nhận cọc 30%.",
+      "price": 6490000,
+      "priceNote": "mỗi khách, đã gồm xe, ăn, ngủ và vé tham quan",
+      "includes": [
+        "Xe limousine Hà Nội và Hà Giang, khứ hồi",
+        "3 đêm nhà dân",
+        "Các bữa chính trong hành trình",
+        "Hướng dẫn viên người địa phương",
+        "Vé tham quan",
+        "Bảo hiểm du lịch"
+      ],
+      "departures": [
+        { "date": "2026-10-16", "seats": 4 },
+        { "date": "2026-10-23", "seats": 0 },
+        { "date": "2026-10-30", "seats": 7 },
+        { "date": "2026-11-06", "seats": 10 },
+        { "date": "2026-11-13", "seats": 2 }
+      ],
+      "hotline": "0123 456 789"
+    },
+    {
+      "type": "faq",
+      "id": "hoi-dap",
+      "eyebrow": "Hỏi đáp",
+      "title": "Trước khi lên đường",
+      "items": [
+        {
+          "question": "Không biết đi xe máy thì có tham gia được không?",
+          "answer": "Được. Cả đoàn đi xe 16 chỗ; đoạn đi bộ trên Mã Pì Lèng ai mệt có thể ngồi xe chờ ở điểm dừng kế tiếp."
+        },
+        {
+          "question": "Tháng 10, tháng 11 trên Hà Giang có lạnh không?",
+          "answer": "Ban ngày khoảng 18 đến 24 độ, đêm có thể xuống dưới 12 độ. Nên mang áo khoác gió và một lớp áo giữ nhiệt."
+        },
+        {
+          "question": "Trẻ em và người lớn tuổi đi được không?",
+          "answer": "Phù hợp với trẻ từ 8 tuổi và người đi bộ được khoảng 2 km. Đường đèo nhiều khúc cua, ai dễ say xe nên mang thuốc."
+        },
+        {
+          "question": "Hủy chuyến thì tiền cọc xử lý thế nào?",
+          "answer": "Hủy trước 7 ngày được hoàn toàn bộ tiền cọc. Hủy sát ngày hơn thì tiền cọc được chuyển sang một chuyến khác trong 6 tháng."
+        },
+        {
+          "question": "Có phòng riêng không?",
+          "answer": "Đêm 2 và đêm 3 là phòng đôi. Đêm 1 ở nhà trình tường là phòng chung, mỗi giường có rèm riêng."
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "variant": "columns",
+    "note": "Lối Mây là thương hiệu giả tưởng, chỉ dùng làm dữ liệu thử khi phát triển trang cho cuộc thi Web Design 2026."
+  },
+  "credits": []
+}

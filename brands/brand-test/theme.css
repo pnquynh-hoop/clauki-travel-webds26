@@ -1,0 +1,17 @@
+/* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
+   Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+
+/* brand-test: công ty tour núi giả tưởng, chỉ dùng khi phát triển. Màu rừng thông, giấy dó, vàng ruộng bậc thang. */
+:root {
+  --color-primary: #2e4a3b;
+  --color-on-primary: #ffffff;
+  --color-bg: #f4efe6;
+  --color-surface: #ffffff;
+  --color-ink: #1f2622;
+  --color-muted: #5a635d;
+  --color-accent: #8c5a14;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  --radius: 0.75rem;
+}

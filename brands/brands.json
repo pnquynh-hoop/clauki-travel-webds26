@@ -3,6 +3,7 @@
   "brands": [
     { "id": "brand-a", "label": "Thương hiệu A" },
     { "id": "brand-b", "label": "Thương hiệu B" },
-    { "id": "brand-c", "label": "Thương hiệu C" }
+    { "id": "brand-c", "label": "Thương hiệu C" },
+    { "id": "brand-test", "label": "Dữ liệu test (chỉ khi phát triển)" }
   ]
 }

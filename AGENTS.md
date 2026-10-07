@@ -47,8 +47,11 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
    - đọc `brands/brands.json`; nếu địa chỉ có `?brand=` thì chỉ nhận id có trong danh sách (không có thì dùng `default`);
    - gọi `WebDesign2026.init`: `wd2026.js` tải `brands/<id>/content.json`, nhớ lựa chọn sau F5 và hiện nút tròn ở góc dưới phải để BGK đổi thương hiệu;
    - mỗi lần có sự kiện `webdesign2026:datachange`: đổi `href` của `<link id="brand-theme">` thành `brands/<id>/theme.css`, điền `title`, `description`, `favicon`, cập nhật `?brand=` trên địa chỉ;
-   - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng.
-4. Các component cố định (header, footer, sticky-cta) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`.
+   - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng;
+   - `type` chưa có component đăng ký thì bỏ qua khối đó và cảnh báo trong console, không làm sập trang;
+   - `id` của section được gán làm `id` của thẻ, để menu và nút CTA (`"href": "#dat-tour"`) nhảy tới được;
+   - `el.site` gồm `brand`, `cta`, `nav`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
+4. Các component cố định (header, footer, sticky-cta) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`; thẻ nào chưa có component thì bỏ qua.
 5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật.
 
 **`wd2026.js` do BTC cấp:** đặt nguyên ở thư mục gốc, **không sửa**.
@@ -76,6 +79,8 @@ export class WlHero extends HTMLElement {
 }
 ```
 
+- **Ví dụ đầy đủ:** `js/components/wl-intro.js` và `css/components/intro.css`.
+- **Đăng ký trong `app.js`, đặt trước dòng `start()`:** import lớp rồi `customElements.define('wl-<tên>', Lớp)`. Phải đăng ký trước khi `core.js` tạo khối: chưa đăng ký thì `core.js` bỏ qua khối đó.
 - **Light DOM**, không dùng Shadow DOM, để biến CSS và `css/components/*.css` áp vào được.
 - **Không ghi cứng** chữ, màu, font, đường dẫn ảnh. Chữ và ảnh lấy từ dữ liệu; màu và font chỉ dùng biến CSS.
 - **Chèn chữ bằng `textContent`.** Không ghép dữ liệu vào `innerHTML`.
@@ -111,6 +116,10 @@ export class WlHero extends HTMLElement {
 - **Ảnh** luôn là object `{ "src", "alt" }`, đường dẫn tính từ thư mục thương hiệu.
 - **Chữ:** chữ thường, không chứa HTML. Ít chữ: tiêu đề ngắn, mỗi đoạn tối đa khoảng 2 câu.
 
+**`brands/brand-test/`: bộ dữ liệu chung của cả đội khi phát triển** (công ty tour núi giả tưởng "Lối Mây"), có đủ các loại section dự kiến.
+- Viết component mới thì thử trên `?brand=brand-test` trước. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
+- Không nộp cho BGK: gỡ khỏi `brands/brands.json` trước khi nộp (xem mục 11).
+
 **`brands/<id>/theme.css`**
 - chỉ có `@import` Google Fonts (nếu cần) và một khối `:root { }`;
 - không viết bộ chọn nào khác.
@@ -125,6 +134,7 @@ export class WlHero extends HTMLElement {
 - `base.css` khai báo giá trị mặc định của mọi biến; style component chỉ đọc biến (được dùng `color-mix()` với biến).
 - Thiết kế cho điện thoại trước. Điểm ngắt: `760px` và `1024px`. Đơn vị: `rem`; dùng `clamp()` cho cỡ chữ lớn.
 - Đặt tên kiểu BEM: `.hero`, `.hero__title`, `.hero--split`. Không dùng `!important`, không style theo id.
+- Thẻ tự đặt tên như `<wl-hero>` mặc định là inline: class gốc của component phải có `display: block`, nếu không `padding` và `max-width` không có tác dụng.
 
 ## 7. JavaScript
 
@@ -181,6 +191,7 @@ export class WlHero extends HTMLElement {
 - [ ] Hiển thị đúng ở bề ngang 390px và 1440px.
 - [ ] Ảnh mới có `alt` và có dòng trong `credits`.
 - [ ] Người viết giải thích được từng dòng mình vừa thêm.
+- [ ] Bản nộp vòng loại: đã gỡ `brand-test` khỏi `brands/brands.json`, nút đổi thương hiệu chỉ còn 3 thương hiệu thật.
 
 ## 12. Trường riêng của từng section
 
@@ -188,3 +199,4 @@ Mỗi người thêm một dòng khi tạo component mới.
 
 | type | Kiểu trình bày (`variant`) | Trường riêng | Người viết |
 |---|---|---|---|
+| `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | Như Quỳnh |
