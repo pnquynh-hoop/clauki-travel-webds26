@@ -1,10 +1,13 @@
 /* core.js - lõi white label: đọc danh sách thương hiệu, chọn thương hiệu theo ?brand=,
-   rồi để wd2026.js (của BTC) tải content.json và hiện nút đổi dữ liệu cho BGK. */
+   rồi để wd2026.js (của BTC) tải content.json và hiện nút đổi dữ liệu cho BGK;
+   mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối trong <main>. */
 
 const BRAND_LIST_URL = 'brands/brands.json';
 // Tên do wd2026.js đặt, phải khớp với mã của BTC.
 const STORAGE_KEY = 'wd2026_active_file';
 const CHANGE_EVENT = 'webdesign2026:datachange';
+// Ba khối luôn có sẵn trong index.html, không nằm trong danh sách sections.
+const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-sticky-cta'];
 
 let currentId = null;
 
@@ -58,6 +61,55 @@ function applyBrand(data) {
   history.replaceState(null, '', url);
 }
 
+// Khối nào cũng cần tên thương hiệu, menu và nút hành động chung (CTA),
+// nên gom ba thứ này lại để đưa cho mọi khối.
+function siteInfo(data) {
+  return { brand: data.brand, cta: data.cta, nav: data.nav };
+}
+
+// Phải gán site trước: dòng el.data = section làm khối vẽ ngay lập tức,
+// nếu lúc đó chưa có site thì khối vẽ ra thiếu nút CTA và không tự vẽ lại.
+function createSection(section, site) {
+  const el = document.createElement(`wl-${section.type}`);
+  // Đặt id để bấm menu (href="#dat-cho") là trang cuộn tới khối này; làm ở đây cho mọi khối.
+  if (section.id) el.id = section.id;
+  el.site = site;
+  el.data = section;
+  return el;
+}
+
+// JSON có thể ghi một loại khối chưa ai viết code (ví dụ booking).
+// Khi đó bỏ qua khối và báo trong console, để biết vì sao khối không hiện.
+function hasComponent(section) {
+  if (customElements.get(`wl-${section.type}`)) return true;
+  console.warn(`Bỏ qua section "${section.id ?? section.type}": chưa có component <wl-${section.type}>.`);
+  return false;
+}
+
+// Xoá hết khối cũ rồi mới đặt khối mới, nên đổi thương hiệu không bị lặp hay sót khối.
+function renderSections(data) {
+  const site = siteInfo(data);
+  // Thương hiệu chưa có sections thì coi như danh sách rỗng.
+  const blocks = (data.sections ?? [])
+    .filter((section) => !section.hidden)
+    .filter(hasComponent)
+    .map((section) => createSection(section, site));
+  document.getElementById('main').replaceChildren(...blocks);
+}
+
+// Mỗi khối cố định cần một phần khác nhau (đầu trang cần menu, chân trang cần nguồn ảnh), nên đưa cả tệp.
+function renderFixed(data) {
+  const site = siteInfo(data);
+  for (const tag of FIXED_TAGS) {
+    const el = document.querySelector(tag);
+    // Trang khác có thể thiếu thẻ này, hoặc thẻ chưa có ai viết code: bỏ qua.
+    // Không gán vào thẻ chưa có code: gán trước khi đăng ký thì khối sẽ không bao giờ tự vẽ.
+    if (!el || !customElements.get(tag)) continue;
+    el.site = site;
+    el.data = data;
+  }
+}
+
 export async function start() {
   try {
     const list = await loadBrandList();
@@ -67,7 +119,10 @@ export async function start() {
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
     document.addEventListener(CHANGE_EVENT, (e) => {
       try {
+        // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
         applyBrand(e.detail);
+        renderSections(e.detail);
+        renderFixed(e.detail);
       } catch (err) {
         showError(err);
       }
