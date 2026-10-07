@@ -15,18 +15,20 @@ python3 -m http.server 5500
 
 Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
-Đổi thương hiệu bằng tham số trên địa chỉ: `index.html?brand=brand-b`.
+Đổi thương hiệu bằng nút tròn ở góc dưới phải (của BTC, trong `wd2026.js`), hoặc bằng tham số trên
+địa chỉ: `index.html?brand=brand-b`.
 
 ## Cấu trúc
 
 ```
 index.html              vỏ trang: không chứa chữ của thương hiệu nào
+wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
   components.css        @import style của từng component
   components/           mỗi component một file
 js/
-  core.js               đọc ?brand=, nạp content.json + theme.css, dựng các section
+  core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
   app.js                đăng ký các component <wl-*>
   components/           mỗi component một file: wl-<tên>.js
 brands/
