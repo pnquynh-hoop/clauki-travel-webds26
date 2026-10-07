@@ -1,6 +1,6 @@
 {
   "id": "brand-a",
-  "meta": { "title": "", "description": "", "favicon": "" },
+  "meta": { "title": "Thương hiệu A (tạm)", "description": "", "favicon": "" },
   "brand": { "name": "", "logo": "", "slogan": "" },
   "cta": { "label": "", "href": "" },
   "nav": [],
