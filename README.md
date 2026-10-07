@@ -1,4 +1,4 @@
-# ClauKi Travel · Web Design 2026
+# ClauKi - Web Design 2026
 
 Landing page white label cho chủ đề **Du lịch & Dịch vụ lưu trú**. Ba thương hiệu giả tưởng dùng chung
 một mã nguồn; đổi thương hiệu chỉ là đổi dữ liệu, không sửa dòng mã nào.
@@ -30,7 +30,7 @@ js/
   app.js                đăng ký các component <wl-*>
   components/           mỗi component một file: wl-<tên>.js
 brands/
-  brands.json           danh sách id thương hiệu và thương hiệu mặc định
+  brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
   <id>/theme.css        màu, font, bo góc của thương hiệu (chỉ biến CSS)
   <id>/images/          ảnh của thương hiệu
@@ -47,3 +47,5 @@ docs/ai-log.md          nhật ký dùng AI
 ## Nguồn ảnh và thư viện
 
 Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi `content.json`, hiện ở chân trang.
+
+`wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.

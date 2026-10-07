@@ -5,21 +5,20 @@ Khi trình bày hiệu ứng phức tạp, đội phải cung cấp prompt đã 
 
 Mỗi lần dùng AI cho mã nguồn, thêm một dòng vào bảng của mình. Cột "Commit" ghi mã commit chứa phần đó.
 
-| Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
-|---|---|---|---|---|
-| 06/10 | Claude Code | Dựng khung thư mục theo phụ lục biên bản khai mạc, viết README, AGENTS.md, .gitignore | "dựng cấu trúc thư mục đã chốt, file ignore đi" | |
+| Ngày  | Công cụ     | Việc nhờ AI làm                                                                       | Prompt chính (hoặc tóm tắt)                     | Commit |
+| ----- | ----------- | ------------------------------------------------------------------------------------- | ----------------------------------------------- | ------ |
 
-## Thành viên 1
-
-| Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
-|---|---|---|---|---|
-
-## Thành viên 2
+## Gia Huy
 
 | Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
-|---|---|---|---|---|
+| ---- | ------- | --------------- | --------------------------- | ------ |
 
-## Thành viên 3
+## Mị Nương
 
 | Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
-|---|---|---|---|---|
+| ---- | ------- | --------------- | --------------------------- | ------ |
+
+## Như Quỳnh
+
+| Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
+| ---- | ------- | --------------- | --------------------------- | ------ |
