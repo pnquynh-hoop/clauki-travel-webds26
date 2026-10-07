@@ -18,8 +18,7 @@
   <script src="wd2026.js" defer></script>
   <script type="module" src="js/app.js"></script>
   <script>
-    // Mở bằng nhấp đúp (file://) thì trình duyệt chặn module và fetch, nên app.js không chạy được.
-    // Đoạn này là script thường nên vẫn chạy: báo cách mở đúng thay vì để trang trắng.
+    // Mở bằng file:// thì trình duyệt chặn module app.js; script thường này vẫn chạy để báo cách mở đúng.
     if (location.protocol === 'file:') {
       addEventListener('DOMContentLoaded', () => {
         document.body.textContent = 'Trang cần chạy qua máy chủ: mở bằng Live Server của VS Code, '
