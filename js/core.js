@@ -6,10 +6,13 @@ const BRAND_LIST_URL = 'brands/brands.json';
 const STORAGE_KEY = 'wd2026_active_file';
 const CHANGE_EVENT = 'webdesign2026:datachange';
 
-function showError(message) {
+let currentId = null;
+
+function showError(err) {
   const note = document.createElement('p');
-  note.textContent = message;
+  note.textContent = err.message;
   document.getElementById('main').replaceChildren(note);
+  console.error(err);
 }
 
 async function loadBrandList() {
@@ -35,9 +38,24 @@ function saveBrandFromUrl(ids, defaultId) {
   localStorage.setItem(STORAGE_KEY, contentFile(id));
 }
 
-// Tạm in ra để kiểm tra; bước sau thay bằng đổi theme.css, điền meta và dựng section.
+// Đường dẫn ảnh trong content.json tính từ thư mục thương hiệu; component gọi hàm này để ra đường dẫn thật.
+export function asset(path) {
+  return `brands/${currentId}/${path}`;
+}
+
 function applyBrand(data) {
-  console.log('[core] đang dùng thương hiệu:', data.id);
+  currentId = data.id;
+  document.getElementById('brand-theme').href = `brands/${data.id}/theme.css`;
+  document.title = data.meta.title;
+  document.querySelector('meta[name="description"]').content = data.meta.description;
+  // 'data:,' là favicon rỗng, để trình duyệt khỏi tự đi tìm /favicon.ico khi thương hiệu chưa có.
+  document.querySelector('link[rel="icon"]').href = data.meta.favicon ? asset(data.meta.favicon) : 'data:,';
+
+  // Giữ ?brand= khớp với thương hiệu đang dùng, nếu không thì BGK đổi trong hộp chọn rồi tải lại trang
+  // sẽ bị ?brand= cũ kéo về thương hiệu trước.
+  const url = new URL(location.href);
+  url.searchParams.set('brand', data.id);
+  history.replaceState(null, '', url);
 }
 
 export async function start() {
@@ -46,7 +64,14 @@ export async function start() {
     const ids = list.brands.map((b) => b.id);
     saveBrandFromUrl(ids, list.default);
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
-    document.addEventListener(CHANGE_EVENT, (e) => applyBrand(e.detail));
+    // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
+    document.addEventListener(CHANGE_EVENT, (e) => {
+      try {
+        applyBrand(e.detail);
+      } catch (err) {
+        showError(err);
+      }
+    });
     window.WebDesign2026.init({
       folder: 'brands',
       files: ids.map(contentFile),
@@ -55,7 +80,6 @@ export async function start() {
       overrideCss: false,
     });
   } catch (err) {
-    showError(err.message);
-    console.error(err);
+    showError(err);
   }
 }
