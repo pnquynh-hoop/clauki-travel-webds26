@@ -1,4 +1,8 @@
 {
   "default": "brand-a",
-  "brands": ["brand-a", "brand-b", "brand-c"]
+  "brands": [
+    { "id": "brand-a", "label": "Thương hiệu A" },
+    { "id": "brand-b", "label": "Thương hiệu B" },
+    { "id": "brand-c", "label": "Thương hiệu C" }
+  ]
 }

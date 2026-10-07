@@ -30,7 +30,7 @@ js/
   app.js                đăng ký các component <wl-*>
   components/           mỗi component một file: wl-<tên>.js
 brands/
-  brands.json           danh sách id thương hiệu và thương hiệu mặc định
+  brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
   <id>/theme.css        màu, font, bo góc của thương hiệu (chỉ biến CSS)
   <id>/images/          ảnh của thương hiệu
