@@ -34,7 +34,35 @@
       ]
     },
     { "type": "stays", "id": "hang-nha", "variant": "rows" },
-    { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
+    {
+      "type": "room-view",
+      "id": "nhin-ra",
+      "variant": "coverflow",
+      "eyebrow": "Nhìn từ ban công",
+      "title": "Mỗi hạng nhà một khung cửa ra biển",
+      "lead": "Chọn hạng nhà để xem cảnh bạn thấy khi mở cửa.",
+      "bestLabel": "Đẹp nhất lúc",
+      "views": [
+        {
+          "label": "Villa sát biển",
+          "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dãy đảo, nắng cam phản chiếu trên mặt biển phẳng lặng" },
+          "text": "Mở cửa là chạm vào tiếng sóng.",
+          "best": "bình minh"
+        },
+        {
+          "label": "Nhà đồi",
+          "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" },
+          "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.",
+          "best": "bình minh và hoàng hôn"
+        },
+        {
+          "label": "Phòng vườn",
+          "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" },
+          "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.",
+          "best": "buổi trưa"
+        }
+      ]
+    },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
@@ -51,6 +79,26 @@
       "author": "Lê Hồ Bắc",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Queen%27s_beach,_Quy_Nhon_city,_Binh_Dinh_province,_Vietnam.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/view-villa.webp",
+      "author": "ChiLam Ly",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Sunrise_in_Nha_Trang.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/view-hill.webp",
+      "author": "Boconganh Phan",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:Ky_Co_-_Nhon_Ly_-_Quy_Nhon_-_Binh_Dinh_-_Viet_Nam.jpg"
+    },
+    {
+      "file": "images/view-garden.webp",
+      "author": "Vyacheslav Argenberg",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Corong_Corong_Beach,_Coconut_palm_trees,_El_Nido,_Palawan_Island,_Philippines.jpg",
       "note": "Đã cắt khung và thu nhỏ"
     }
   ]
