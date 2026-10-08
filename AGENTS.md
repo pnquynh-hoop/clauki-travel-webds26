@@ -206,3 +206,4 @@ Mỗi người thêm một dòng khi tạo component mới.
 | type | Kiểu trình bày (`variant`) | Trường riêng | Thương hiệu dùng | Người viết |
 |---|---|---|---|---|
 | `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | dùng chung | Như Quỳnh |
+| `hero` | `split` (mặc định): chữ trái, ảnh khung phải, điện thoại thì ảnh lên trên; `full`, `stacked`: người phụ trách Bậc Trà, Mé Rạch tự thiết kế | `image` (`src`, `alt`), `link` (`label`, `href`), `stats` (mảng `value`, `label`), `effect` (`sunrise`: mở trang như bình minh); nút chính lấy từ `site.cta` | chung: Bậc Trà `full`, Gành Sớm `split`, Mé Rạch `stacked` | Gia Huy |
