@@ -16,7 +16,7 @@ python3 -m http.server 5500
 Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
 Đổi thương hiệu bằng nút tròn ở góc dưới phải (của BTC, trong `wd2026.js`), hoặc bằng tham số trên
-địa chỉ: `index.html?brand=brand-b`.
+địa chỉ: `index.html?brand=ganh-som`.
 
 ## Cấu trúc
 

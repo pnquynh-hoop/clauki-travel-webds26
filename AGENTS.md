@@ -189,7 +189,7 @@ export class WlHero extends HTMLElement {
 ## 11. Trước khi push: tự kiểm
 
 - [ ] Chạy bằng Live Server hoặc `python3 -m http.server`, không có lỗi trong console.
-- [ ] `?brand=brand-a`, `brand-b`, `brand-c` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
+- [ ] `?brand=bac-tra`, `ganh-som`, `me-rach` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
 - [ ] Đổi màu chủ đạo ở `theme.css`: toàn trang đổi theo.
 - [ ] Đổi thứ tự hai section trong `content.json`: trang đổi theo.
 - [ ] Thêm một thương hiệu mới chỉ bằng dữ liệu, không sửa mã: vẫn ra trang.
