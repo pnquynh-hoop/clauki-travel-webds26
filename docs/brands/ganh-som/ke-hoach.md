@@ -227,10 +227,10 @@ Quy tắc khi chọn ảnh:
 
 - [ ] Điền dòng Gành Sớm vào bảng sườn trang trong issue #3. Hạn: 08/10/2026.
 - [ ] Tra tên "Gành Sớm" trên Google Maps, Booking, Facebook. Hạn: 08/10/2026.
-- [ ] Đội chọn thư mục nào trong `brand-a`, `brand-b`, `brand-c` đổi thành `ganh-som`, rồi sửa `brands/brands.json`. Hạn: 08/10/2026.
+- [x] Đổi `brands/brand-b` thành `brands/ganh-som`, sửa `id` và `brands/brands.json`. Xong 08/10/2026.
 - [ ] Báo người làm các issue chung về kiểu trình bày Gành Sớm cần: #7 (`solid`, `compact`), #11 (`numbered`), #12 (`strip`), #14 (`stay`), #16 (`rows`). Hạn: 08/10/2026.
-- [ ] Viết khung `brands/ganh-som/content.json` theo mục 6. Hạn: 09/10/2026.
-- [ ] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Hạn: 09/10/2026.
+- [x] Viết khung `brands/ganh-som/content.json` theo mục 6 (logo và favicon để trống tới khi có `logo.svg`). Xong 08/10/2026.
+- [x] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Xong 08/10/2026.
 - [ ] Tạo issue cho khối mới `room-view` (nhìn từ ban công). Hạn: 09/10/2026.
 - [ ] Tìm đủ ảnh theo mục 8, kèm dòng `credits`. Hạn: 09/10/2026.
 - [ ] Vẽ logo `logo.svg` theo mô tả ở mục 3. Hạn: 09/10/2026.

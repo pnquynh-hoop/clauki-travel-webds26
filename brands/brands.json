@@ -2,7 +2,7 @@
   "default": "bac-tra",
   "brands": [
     { "id": "bac-tra", "label": "Bậc Trà" },
-    { "id": "brand-b", "label": "Thương hiệu B" },
+    { "id": "ganh-som", "label": "Gành Sớm" },
     { "id": "me-rach", "label": "Mé Rạch" },
     { "id": "brand-test", "label": "Dữ liệu test (chỉ khi phát triển)" }
   ]

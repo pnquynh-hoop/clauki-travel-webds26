@@ -1,0 +1,16 @@
+/* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
+   Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Nunito:wght@400;600&display=swap');
+
+:root {
+  --color-primary: #1d4f73;
+  --color-on-primary: #ffffff;
+  --color-bg: #f6f2ea;
+  --color-surface: #ffffff;
+  --color-ink: #1c2a33;
+  --color-muted: #5b6770;
+  --color-accent: #a8461f;
+  --font-heading: 'Josefin Sans', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
+  --radius: 1.75rem;
+}
