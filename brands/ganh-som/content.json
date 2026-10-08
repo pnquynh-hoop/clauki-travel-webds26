@@ -17,7 +17,22 @@
   "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.example", "address": "Phía nam Quy Nhơn" },
   "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
   "sections": [
-    { "type": "hero", "id": "gioi-thieu", "variant": "split" },
+    {
+      "type": "hero",
+      "id": "gioi-thieu",
+      "variant": "split",
+      "effect": "sunrise",
+      "eyebrow": "Phía nam Quy Nhơn · 24 căn nhà hướng đông",
+      "title": "Mở cửa là thấy bình\u00a0minh trên biển",
+      "lead": "Mỗi căn nhà trên mỏm gành đều nhìn thẳng về hướng mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
+      "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, bờ đá cuội tròn ở Quy Nhơn" },
+      "link": { "label": "Xem các hạng nhà", "href": "#hang-nha" },
+      "stats": [
+        { "value": "24", "label": "căn nhà nhìn ra biển" },
+        { "value": "3", "label": "hạng nhà để chọn" },
+        { "value": "3+1", "label": "đêm khi đặt sớm hè 2027" }
+      ]
+    },
     { "type": "stays", "id": "hang-nha", "variant": "rows" },
     { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
@@ -27,5 +42,13 @@
     { "type": "faq", "id": "hoi-dap" }
   ],
   "footer": { "variant": "compact" },
-  "credits": []
+  "credits": [
+    {
+      "file": "images/hero.webp",
+      "author": "Lê Hồ Bắc",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Queen%27s_beach,_Quy_Nhon_city,_Binh_Dinh_province,_Vietnam.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    }
+  ]
 }
