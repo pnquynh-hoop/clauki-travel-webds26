@@ -47,16 +47,16 @@ Nội dung gửi BTC khi đã chốt:
 | Khẩu hiệu (đề xuất) | Bình minh ngay hiên nhà |
 | Khẩu hiệu dự phòng | Mỗi sáng một bình minh trên biển |
 | Khách hàng chính | Cặp đôi và gia đình nhỏ từ 28 đến 45 tuổi, nghỉ 3 đến 4 đêm, thích yên tĩnh |
-| Nút kêu gọi hành động chính | "Đặt phòng", dẫn tới phần đặt phòng trên trang (`#dat-phong`) |
+| Nút kêu gọi hành động chính | "Đặt phòng ngay", dẫn tới phần đặt phòng trên trang (`#dat-phong`) |
 | Nút phụ | "Xem các hạng nhà", dẫn tới `#hang-nha` |
 | Giá (giả định, 2 khách, có bữa sáng) | Phòng vườn 2.800.000 đồng, nhà đồi 3.900.000 đồng, villa sát biển 6.200.000 đồng một đêm |
 | Thêm khách | 450.000 đồng một khách một đêm, gồm bữa sáng |
 | Ưu đãi (giả định) | Đặt trước 31/12/2026 cho kỳ nghỉ từ tháng 4 đến tháng 8/2027: ở 4 đêm chỉ trả tiền 3 đêm |
-| Liên hệ (giả) | Điện thoại 0123 456 789, email dat-phong@ganhsom.example |
-| Tiêu đề tab trình duyệt (`meta.title`) | Gành Sớm · Nhà nghỉ trên mỏm gành phía nam Quy Nhơn |
+| Liên hệ (giả) | Điện thoại 0123 456 789, email dat-phong@ganhsom.clauki |
+| Tiêu đề tab trình duyệt (`meta.title`) | Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn |
 | Mô tả khi chia sẻ trang (`meta.description`) | 24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư. |
 | Logo và biểu tượng tab (`brand.logo`, `meta.favicon`) | Logo tự vẽ bằng SVG: chữ "Gành Sớm" kèm nửa mặt trời trên đường chân trời và một mỏm đá. Không dùng logo có sẵn. |
-| Menu (`nav`) | Các hạng nhà, Nhìn từ ban công, Có gì trong giá, Hỏi đáp |
+| Menu (`nav`) | Các hạng nhà, Nhìn từ ban công, Giá đã gồm, Hỏi đáp |
 | Dòng giá trên thanh đặt phòng (`cta.note`) | Từ 2.800.000 đồng một đêm |
 
 Giá đã gồm:
@@ -84,7 +84,7 @@ Nội dung cho khối `room-view` (nhìn từ ban công), mỗi hạng một th�
 | Nhà đồi | Toàn cảnh vịnh và mỏm gành từ trên cao | Thấy cả vịnh đổi màu từ tím sang vàng. | Bình minh và hoàng hôn |
 | Phòng vườn | Hàng dừa, khoảng biển xanh giữa các thân cây | Bóng dừa che nắng trưa, biển vẫn ở ngay đó. | Buổi trưa |
 
-Khối `features` (có gì trong giá) dùng 4 mục đánh số: đón sân bay, bữa sáng địa phương, xe đạp, chèo ván lúc bình minh.
+Khối `features` (giá đã gồm) dùng 4 mục đánh số: đón sân bay, bữa sáng địa phương, xe đạp, chèo ván lúc bình minh.
 
 Khối `intro` ("Ở chậm") nói về cách nghỉ ở Gành Sớm: không lịch trình, không loa nhạc, giờ giấc theo mặt trời.
 
@@ -127,7 +127,7 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 1 | `hero` + lớp trời thật (#9) | `split` (chữ bên trái, ảnh trong khung bên phải) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | riêng |
 | 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra | đặc trưng |
-| 4 | `features`: có gì trong giá (#11) | `numbered`: hàng đánh số | riêng |
+| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
 | 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái | dùng lại |
 | 7 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |

@@ -155,7 +155,7 @@ export class WlHero extends HTMLElement {
 - **Giấy phép:** chỉ CC0, phạm vi công cộng, CC BY, CC BY-SA, hoặc giấy phép Unsplash/Pexels. Không dùng ảnh NC hay ND. Mỗi ảnh phải có một dòng trong `credits`.
 - **Không có logo, biển hiệu thương hiệu thật** trong ảnh.
 - **Kích thước:** ảnh rộng tối đa 2000px, JPEG hoặc WebP, nên dưới 300KB.
-- **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.example`.
+- **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.clauki` (không phải tên miền thật, đã đối chiếu danh sách của IANA), ví dụ `dat-phong@ganhsom.clauki`.
 
 **Icon:** quy định của BTC coi "icon 3D bóng bẩy vô nghĩa" là AI slop.
 - Không dùng icon chỉ để trang trí; mỗi icon phải giúp hiểu nhanh hơn chữ.
@@ -206,4 +206,6 @@ Mỗi người thêm một dòng khi tạo component mới.
 | type | Kiểu trình bày (`variant`) | Trường riêng | Thương hiệu dùng | Người viết |
 |---|---|---|---|---|
 | `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | dùng chung | Như Quỳnh |
+| `header` (khối cố định) | `solid` (mặc định): nền đặc, dòng thông tin nhỏ phía trên; các kiểu khác người phụ trách thương hiệu tự thêm | khoá `header` ngoài `sections`: `variant`, `note` (dòng thông tin), `menu` (chữ trên nút menu điện thoại); số điện thoại lấy từ `contact.phone` | chung: Bậc Trà `overlay`, Gành Sớm `solid`, Mé Rạch `center` | Gia Huy |
+| `footer` (khối cố định) | `compact` (mặc định): hai hàng, trên là tên, liên hệ và nút CTA (`site.cta`), dưới là ghi chú và nguồn ảnh, ẩn menu và địa chỉ; các kiểu khác người phụ trách thương hiệu tự thêm | khoá `footer` ngoài `sections`: `variant`, `note` (ghi chú thương hiệu giả tưởng), `creditsTitle`; đọc thêm `brand`, `contact`, `nav`, `credits` | chung: Bậc Trà `columns`, Gành Sớm `compact`, Mé Rạch `directions` | Gia Huy |
 | `hero` | `split` (mặc định): chữ trái, ảnh khung phải, điện thoại thì ảnh lên trên; `full`, `stacked`: người phụ trách Bậc Trà, Mé Rạch tự thiết kế | `image` (`src`, `alt`), `link` (`label`, `href`), `stats` (mảng `value`, `label`), `effect` (`sunrise`: mở trang như bình minh); nút chính lấy từ `site.cta` | chung: Bậc Trà `full`, Gành Sớm `split`, Mé Rạch `stacked` | Gia Huy |
