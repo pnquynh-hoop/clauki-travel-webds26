@@ -1,6 +1,6 @@
 {
-  "id": "brand-a",
-  "meta": { "title": "Thương hiệu A (tạm)", "description": "", "favicon": "" },
+  "id": "me-rach",
+  "meta": { "title": "Mé Rạch", "description": "", "favicon": "" },
   "brand": { "name": "", "logo": "", "slogan": "" },
   "cta": { "label": "", "href": "" },
   "nav": [],

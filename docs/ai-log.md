@@ -20,8 +20,14 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 
 | Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
 | ---- | ------- | --------------- | --------------------------- | ------ |
+| 08/10 | Claude Code (Claude Opus 5.5) | Reset cho base.css (#4): box-sizing, bỏ margin mặc định, ảnh không tràn khung, ô nhập kế thừa font; `body` lấy nền, chữ, font từ biến | Tóm tắt dạng prompt: [docs/prompts/08-10-base-css.md](prompts/08-10-base-css.md) | 2e94722 |
+| 08/10 | Claude Code (Claude Opus 5.5) | Phần còn lại của #4 trong base.css: kiểu chữ tiêu đề và liên kết, khung, khoảng cách section, lưới, nút `.btn`, `:focus-visible`, giảm chuyển động; Claude Code kiểm tra theo issue và AGENTS.md, sửa 3 biến chưa khai báo, màu liên kết có class, chú thích, chạy thử bằng Chrome headless | Tóm tắt dạng prompt: [docs/prompts/08-10-base-css.md](prompts/08-10-base-css.md) | 4e1ef31 |
+| 08/10 | Claude Code (Claude Opus 5.5) | Đề xuất thương hiệu miền Tây "Mé Rạch" (#3): loại hình homestay nhà vườn, sản phẩm, chiến dịch, giá, màu, font, sườn trang với hai khối riêng `host` và `day-plan`, khung `content.json`; tự chọn tên và chỉnh thông tin | Tóm tắt dạng prompt và phần tự kiểm tra: [docs/prompts/08-10-me-rach.md](prompts/08-10-me-rach.md) | [comment #3](https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/3#issuecomment-6052146644) |
 
 ## Như Quỳnh
 
 | Ngày | Công cụ | Việc nhờ AI làm | Prompt chính (hoặc tóm tắt) | Commit |
 | ---- | ------- | --------------- | --------------------------- | ------ |
+| 07–08/10 | Claude Code (Claude Opus 5.5) | Dựng section từ `content.json` (#5): phần dựng section trong `core.js`, đăng ký component trong `app.js`, component mẫu `wl-intro`, bộ dữ liệu `brand-test`, cập nhật AGENTS.md | Tóm tắt dạng prompt và phần tự làm: [docs/prompts/07-10-dung-section.md](prompts/07-10-dung-section.md) | e61df46 |
+| 08/10 | Claude Code (Claude Opus 5.5) | Đề xuất thương hiệu miền Bắc "Bậc Trà" (#3): tên, tour, lịch trình, chiến dịch, màu, font, sườn trang, khung `content.json`, tài liệu kế hoạch và bản tóm tắt đăng ở issue #3 | Tóm tắt dạng prompt và phần tự làm: [docs/prompts/08-10-bac-tra.md](prompts/08-10-bac-tra.md) | 782a1de, 4664d58, fd5fdb9, a7db6b7, [comment #3](https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/3#issuecomment-6051395000) |
+| 08/10 | Claude Code (Claude Opus 5.5) | Đổi `brands/brand-a` thành `brands/bac-tra` (#3): đổi tên thư mục, sửa `id` trong `content.json` và `brands.json`, chạy thử bằng Chrome headless | Đổi brand-a thành bac-tra, tôi đã nhận phần này với đội | 1b7c107 |

@@ -5,4 +5,209 @@
    Biến dùng chung:
    --color-primary  --color-on-primary  --color-bg  --color-surface  --color-ink  --color-muted  --color-accent
    --font-heading  --font-body
-   --radius */
+   --radius
+
+   Biến bố cục và chuyển động (theme.css không cần khai báo):
+   --container  --space-section  --duration */
+
+/* Giá trị trung tính, chỉ được dùng khi theme.css của brand thiếu biến thì sẽ lấy giá trị mặc định ở đây,
+   để trang không bị mất màu, font. Và theme.css được nạp sau base.css và cũng viết trong :root nên biến nào
+   được khai báo sẽ ghi đè lên giá trị ở đây. */
+:root {
+  --color-primary: #1f4e79;
+  --color-on-primary: #ffffff;
+  --color-bg: #ffffff;
+  --color-surface: #f3f4f6;
+  --color-ink: #1f2328;
+  --color-muted: #5b6470;
+  --color-accent: #b4400a;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --radius: 0.5rem;
+  /* Mọi section đọc chung ba biến này, nên chỉnh một chỗ là cả trang đổi nhịp. */
+  --container: 72rem;
+  --space-section: 4rem;
+  --duration: 0.2s;
+}
+
+/* Màn rộng thì section thoáng hơn; điện thoại giữ khoảng nhỏ để không phải cuộn nhiều. */
+@media (min-width: 760px) {
+  :root {
+    --space-section: 6rem;
+  }
+}
+
+/* Reset: bỏ khác biệt mặc định giữa các trình duyệt. */
+
+/* Chiều rộng tính cả padding và viền, nên width: 100% không bị tràn khi thêm padding. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Trình duyệt tự thêm margin cho h1, p, ul…; bỏ hết để component tự quyết khoảng cách. */
+* {
+  margin: 0;
+}
+
+/* Ảnh không bao giờ rộng hơn khối chứa nó; display: block bỏ khoảng hở nhỏ dưới ảnh. */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ô nhập và nút mặc định không kế thừa font của trang. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Nền, chữ của cả trang lấy từ biến, nên đổi theme.css là đổi theo. */
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-bg);
+}
+
+/* Kiểu chữ. */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+  /* Chia đều chữ giữa các dòng, tránh dòng cuối chỉ còn một chữ. */
+  text-wrap: balance;
+}
+
+/* Cỡ tiêu đề co theo bề ngang màn hình: điện thoại không tràn chữ, màn lớn không bị nhỏ.
+   Có phần rem nên người dùng phóng to trình duyệt thì chữ vẫn to theo. */
+h1 {
+  font-size: clamp(2.25rem, 1.5rem + 3.5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+}
+
+/* Liên kết trong component (menu, chân trang) mặc định theo màu chữ xung quanh,
+   thay vì màu xanh, tím của trình duyệt; component muốn màu khác thì tự đặt. */
+a {
+  color: inherit;
+}
+
+/* Chỉ áp cho liên kết trong đoạn chữ. Liên kết có class (như .btn) do class đó tự lo,
+   nếu không thì nút <a class="btn"> rê chuột vào cũng bị đổi sang màu nhấn. */
+a:not([class]) {
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+}
+
+a:not([class]):hover {
+  color: var(--color-accent);
+}
+
+/* Bố cục chung. */
+
+/* Khung nội dung: rộng tối đa --container, luôn chừa 1rem lề mỗi bên trên điện thoại. */
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+
+/* Mỗi section là một thẻ <wl-*> nằm trong <main>. Thẻ tự đặt tên mặc định nằm chung dòng,
+   nên đổi sang khối. Đệm trên và dưới giống nhau cho mọi section, nên nhịp trang đều. */
+main > * {
+  display: block;
+  padding-block: var(--space-section);
+}
+
+/* Lưới: điện thoại 1 cột (viết trước), màn rộng hơn mới thêm cột. */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 760px) {
+  .grid--2,
+  .grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Nút kêu gọi hành động dùng chung. */
+
+/* Dùng cho cả <a> và <button>: <a class="btn" href="#dat-cho">Giữ chỗ</a> */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  /* 2.75rem = 44px: vùng bấm tối thiểu để dễ chạm trên điện thoại. */
+  min-height: 2.75rem;
+  padding: 0.75em 1.5em;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--duration) ease, border-color var(--duration) ease;
+}
+
+/* Hover: pha thêm một chút màu chữ chính để nút tối lại, không ghi cứng mã màu nào. */
+.btn:hover {
+  background: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink));
+  border-color: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink));
+}
+
+/* Nút phụ: viền, nền trong suốt. Dùng cho liên kết phụ như "Xem lịch trình". */
+.btn--ghost {
+  color: var(--color-primary);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* Viền chỉ hiện khi dùng bàn phím (Tab), bấm chuột thì không. Áp cho mọi phần tử bấm được. */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Giảm chuyển động. */
+
+/* AGENTS.md cấm !important, nên không dùng được * { transition: none !important }.
+   Thay vào đó mọi transition, animation dùng var(--duration); bật "giảm chuyển động" thì đặt về 0.
+   Hiệu ứng chạy bằng JS (GSAP, AOS) không đọc biến này, phải tự kiểm matchMedia trong JS. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0s;
+  }
+}

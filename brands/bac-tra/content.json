@@ -1,6 +1,6 @@
 {
-  "id": "brand-c",
-  "meta": { "title": "Thương hiệu C (tạm)", "description": "", "favicon": "" },
+  "id": "bac-tra",
+  "meta": { "title": "Bậc Trà (tạm)", "description": "", "favicon": "" },
   "brand": { "name": "", "logo": "", "slogan": "" },
   "cta": { "label": "", "href": "" },
   "nav": [],
