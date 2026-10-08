@@ -362,6 +362,7 @@ export class WlJourney extends HTMLElement {
     this._total = done.getTotalLength();
     done.style.strokeDasharray = `${this._total} ${this._total}`;
     this._lens = this.lengthsAt(done, points);
+    this._lastY = points[points.length - 1].y;
     this._skyKeys = this.skyKeys();
     this.update();
   }
@@ -396,13 +397,13 @@ export class WlJourney extends HTMLElement {
     return keys;
   }
 
-  // Mỗi lần cuộn: xe luôn nằm ngang giữa màn hình. Lấy độ cao của giữa màn hình trong khung,
+  // Mỗi lần cuộn: xe nằm ngang mốc trên màn hình (thường là giữa màn hình). Lấy độ cao của mốc trong khung,
   // tìm điểm trên đường có cùng độ cao, rồi cập nhật từng phần theo vị trí đó.
   update() {
     if (!this._total) return;
     const rect = this.querySelector('.journey__track').getBoundingClientRect();
     if (rect.bottom < -innerHeight || rect.top > innerHeight * 2) return;
-    const len = this.lengthAtY(clamp(innerHeight * 0.5 - rect.top, 0, rect.height));
+    const len = this.lengthAtY(clamp(this.anchorY(rect) - rect.top, 0, rect.height));
     const index = this.stopIndexAt(len);
 
     this.moveCar(reduceMotion.matches ? 0 : len);
@@ -410,6 +411,18 @@ export class WlJourney extends HTMLElement {
     this.setActive(index);
     this.showAltitude(len, index);
     this.clearClouds();
+  }
+
+  // Mốc của xe trên màn hình. Bình thường là giữa màn hình. Nhưng khi khối nằm gần cuối trang, trang có thể
+  // hết chỗ cuộn trước khi trạm cuối lên tới giữa màn hình (thẻ cuối ngắn, phía sau không còn khối nào),
+  // nên xe không bao giờ tới trạm cuối. Khi đó, trong nửa màn hình cuộn cuối cùng, kéo dần mốc xuống chỗ
+  // trạm cuối sẽ nằm lúc hết trang: cuộn hết trang là xe vừa tới trạm cuối, dữ liệu dài ngắn thế nào cũng vậy.
+  anchorY(rect) {
+    const middle = innerHeight * 0.5;
+    const left = document.documentElement.scrollHeight - innerHeight - scrollY;
+    const lastAtEnd = rect.top + this._lastY - left;
+    if (lastAtEnd <= middle) return middle;
+    return middle + (lastAtEnd - middle) * smooth(0, 1, 1 - left / middle);
   }
 
   // Đường vòng sang hai bên nên chiều dài không tỉ lệ với độ cuộn; nhưng đường luôn đi xuống,
