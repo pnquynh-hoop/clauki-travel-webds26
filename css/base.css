@@ -6,3 +6,19 @@
    --color-primary  --color-on-primary  --color-bg  --color-surface  --color-ink  --color-muted  --color-accent
    --font-heading  --font-body
    --radius */
+
+/* Giá trị trung tính, chỉ được dùng khi theme.css của brand thiếu biến thì sẽ lấy giá trị mặc định ở đây,
+   để trang không bị mất màu, font. Và theme.css được nạp sau base.css và cũng viết trong :root nên biến nào 
+   được khai báo sẽ ghi đè lên giá trị ở đây. */
+:root {
+  --color-primary: #1f4e79;
+  --color-on-primary: #ffffff;
+  --color-bg: #ffffff;
+  --color-surface: #f3f4f6;
+  --color-ink: #1f2328;
+  --color-muted: #5b6470;
+  --color-accent: #b4400a;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --radius: 0.5rem;
+}
