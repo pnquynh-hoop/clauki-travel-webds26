@@ -1,0 +1,177 @@
+/* header.css - giao diện của <wl-header>. Màu, font lấy từ biến CSS; class header--<variant> quyết định kiểu. */
+
+.header {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: box-shadow var(--duration) ease;
+}
+
+.header__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+  min-height: 4.5rem;
+}
+
+.header__brand {
+  margin-right: auto;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.header__brand img {
+  display: block;
+  height: 2.5rem;
+  width: auto;
+}
+
+.header__toggle {
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--duration) ease;
+}
+
+.header__toggle:hover {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+/* Điện thoại: menu nằm dưới thanh, chỉ hiện khi bấm nút Menu (lớp is-open do JS bật). */
+.header__nav {
+  display: none;
+  flex-basis: 100%;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+.header.is-open .header__nav {
+  display: flex;
+}
+
+.header__link {
+  position: relative;
+  padding: 0.85rem 0;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-ink);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  transition: color var(--duration) ease;
+}
+
+.header__link:hover {
+  color: var(--color-primary);
+}
+
+/* Nút CTA trên thanh chỉ hiện ở màn rộng; điện thoại dùng thanh CTA dính đáy. */
+.header__cta {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .header__toggle {
+    display: none;
+  }
+
+  .header__nav {
+    display: flex;
+    flex-basis: auto;
+    flex-direction: row;
+    gap: 2rem;
+    padding-bottom: 0;
+  }
+
+  .header__link {
+    padding: 0.25rem 0;
+    font-size: 0.95rem;
+    border-top: 0;
+  }
+
+  /* Rê chuột hoặc Tab tới: vạch màu nhấn chạy từ trái sang dưới chữ. */
+  .header__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.2rem;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform calc(var(--duration) * 1.5) ease;
+  }
+
+  .header__link:hover::after,
+  .header__link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .header__cta {
+    display: inline-flex;
+  }
+}
+
+/* Kiểu solid: nền màu trang hơi trong và làm mờ nội dung chạy phía sau khi cuộn,
+   thêm một dòng thông tin nhỏ phía trên. */
+.header--solid {
+  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+/* Đã cuộn khỏi đầu trang (lớp is-scrolled do JS bật): thêm bóng cho tách khỏi nội dung. */
+.header--solid.is-scrolled {
+  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.header__topbar {
+  overflow: hidden;
+  max-height: 3rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  transition: max-height var(--duration) ease;
+}
+
+/* Cuộn xuống thì thu dải thông tin lại để header gọn khi đọc nội dung. */
+.header.is-scrolled .header__topbar {
+  max-height: 0;
+}
+
+.header__topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.25rem;
+}
+
+.header__note {
+  margin: 0;
+}
+
+.header__phone {
+  margin-left: auto;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.header__phone:hover {
+  text-decoration: underline;
+}

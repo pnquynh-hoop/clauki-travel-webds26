@@ -13,7 +13,7 @@ Kế hoạch đầy đủ: [ke-hoach.md](ke-hoach.md).
 | Giá (giả định, 2 khách, có bữa sáng) | Phòng vườn 2.800.000 đồng, nhà đồi 3.900.000 đồng, villa sát biển 6.200.000 đồng một đêm |
 | Có sẵn trong giá | Đón sân bay Phù Cát, bữa sáng, xe đạp, chèo ván đứng (SUP) buổi sáng |
 | Khẩu hiệu | Bình minh ngay hiên nhà |
-| Nút kêu gọi hành động | "Đặt phòng", dẫn tới `#dat-phong` |
+| Nút kêu gọi hành động | "Đặt phòng ngay", dẫn tới `#dat-phong` |
 
 ### Màu sắc và font
 
@@ -33,7 +33,7 @@ Font: Josefin Sans cho tiêu đề, Nunito cho nội dung. Mọi cặp màu ch�
 | 1 | `hero` + lớp trời thật (#9) | `split` (chữ bên trái, ảnh trong khung bên phải) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | **riêng** |
 | 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra từ ban công | **đặc trưng** |
-| 4 | `features`: có gì trong giá (#11) | `numbered`: hàng đánh số | **riêng** |
+| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | **riêng** |
 | 5 | `gallery` | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái | dùng lại |
 | 7 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
@@ -49,20 +49,20 @@ Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room
 {
   "id": "ganh-som",
   "meta": {
-    "title": "Gành Sớm · Nhà nghỉ trên mỏm gành phía nam Quy Nhơn",
+    "title": "Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn",
     "description": "24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
     "favicon": "images/logo.svg"
   },
   "brand": { "name": "Gành Sớm", "logo": "images/logo.svg", "slogan": "Bình minh ngay hiên nhà" },
-  "cta": { "label": "Đặt phòng", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
+  "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
     { "label": "Nhìn từ ban công", "href": "#nhin-ra" },
-    { "label": "Có gì trong giá", "href": "#trong-gia" },
+    { "label": "Giá đã gồm", "href": "#trong-gia" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
   "header": { "variant": "solid" },
-  "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.example", "address": "Phía nam Quy Nhơn" },
+  "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.clauki", "address": "Phía nam Quy Nhơn" },
   "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
   "sections": [
     { "type": "hero", "id": "gioi-thieu", "variant": "split" },

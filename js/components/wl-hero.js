@@ -2,24 +2,7 @@
    Mọi kiểu trình bày dùng chung HTML này; hero.css đổi bố cục theo class hero--<variant>.
    Lớp trời thật sau này gắn vào khung ảnh .hero__media. */
 import { asset } from '../core.js';
-
-// Trường nào trống thì trả về null để bỏ qua, không tạo thẻ rỗng.
-function textEl(tag, className, text) {
-  if (!text) return null;
-  const el = document.createElement(tag);
-  el.className = className;
-  el.textContent = text;
-  return el;
-}
-
-function linkEl(link, className) {
-  if (!link?.href || !link?.label) return null;
-  const a = document.createElement('a');
-  a.className = className;
-  a.href = link.href;
-  a.textContent = link.label;
-  return a;
-}
+import { textEl, linkEl, groupEl } from '../dom.js';
 
 function statsEl(stats) {
   if (!stats?.length) return null;
@@ -63,13 +46,10 @@ export class WlHero extends HTMLElement {
     this.className = classes.join(' ');
 
     // Nút chính luôn lấy từ site.cta để cả trang dùng chung một lời kêu gọi.
-    const buttons = [linkEl(this.site?.cta, 'btn'), linkEl(section.link, 'btn btn--ghost')].filter(Boolean);
-    let actions = null;
-    if (buttons.length) {
-      actions = document.createElement('div');
-      actions.className = 'hero__actions';
-      actions.append(...buttons);
-    }
+    const actions = groupEl('hero__actions', [
+      linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn'),
+      linkEl(section.link?.href, section.link?.label, 'btn btn--ghost'),
+    ]);
 
     const copy = document.createElement('div');
     copy.className = 'hero__copy';
