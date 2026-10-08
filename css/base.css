@@ -22,3 +22,46 @@
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --radius: 0.5rem;
 }
+/* ---------- Reset: bỏ khác biệt mặc định giữa các trình duyệt ---------- */
+
+/* Chiều rộng tính cả padding và viền, nên width: 100% không bị tràn khi thêm padding. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Trình duyệt tự thêm margin cho h1, p, ul…; bỏ hết để component tự quyết khoảng cách. */
+* {
+  margin: 0;
+}
+
+/* Ảnh không bao giờ rộng hơn khối chứa nó; display: block bỏ khoảng hở nhỏ dưới ảnh. */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ô nhập và nút mặc định không kế thừa font của trang. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Nền, chữ của cả trang lấy từ biến, nên đổi theme.css là đổi theo. */
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-bg);
+}
