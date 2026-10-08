@@ -37,6 +37,7 @@ brands/
   <id>/theme.css        màu, font, bo góc của thương hiệu (chỉ biến CSS)
   <id>/images/          ảnh của thương hiệu
 docs/ai-log.md          nhật ký dùng AI
+docs/prompts/           prompt đầy đủ của các lần dùng AI, link từ ai-log.md
 ```
 
 ## Quy ước
