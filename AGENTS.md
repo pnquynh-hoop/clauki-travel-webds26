@@ -85,6 +85,7 @@ export class WlHero extends HTMLElement {
 - **Không ghi cứng** chữ, màu, font, đường dẫn ảnh. Chữ và ảnh lấy từ dữ liệu; màu và font chỉ dùng biến CSS.
 - **Chèn chữ bằng `textContent`.** Không ghép dữ liệu vào `innerHTML`.
 - **Kiểu trình bày:** `variant` thành class `<tên>--<variant>`, CSS lo phần bố cục; chỉ rẽ nhánh JS khi cấu trúc HTML thật sự khác.
+- **Đặt tên theo chức năng, không theo thương hiệu:** `wl-route-profile`, không phải `wl-brand-a-special`. Một component có thể chỉ một thương hiệu dùng, nhưng phải chạy đúng với mọi thương hiệu: thêm nó vào `sections` của thương hiệu khác thì vẫn hiện đúng, theo màu và font của thương hiệu đó. Không bao giờ viết `if (id === 'brand-a')`.
 - **Nút kêu gọi hành động:** luôn lấy `el.site.cta`, để cả trang dùng một CTA nhất quán (yêu cầu của BTC).
 - **Thiếu trường tuỳ chọn thì bỏ qua phần đó, không được lỗi.** Phải chịu được chữ dài ngắn khác nhau và số mục khác nhau.
 - **Dùng thẻ đúng nghĩa:**
@@ -115,6 +116,10 @@ export class WlHero extends HTMLElement {
 - **Trường chung của mọi section:** `type` (bắt buộc, trùng tên component), `id` (neo cho menu), `variant`, `hidden`, `eyebrow`, `title`, `lead`. Các trường riêng do người viết component quy định, và phải ghi vào bảng ở cuối tệp này.
 - **Ảnh** luôn là object `{ "src", "alt" }`, đường dẫn tính từ thư mục thương hiệu.
 - **Chữ:** chữ thường, không chứa HTML. Ít chữ: tiêu đề ngắn, mỗi đoạn tối đa khoảng 2 câu.
+- **Mỗi thương hiệu một sườn trang riêng**, không chỉ đổi màu và chữ:
+  - phần dùng chung (header, hero, đặt chỗ, footer) chọn `variant` khác nhau giữa các thương hiệu;
+  - mỗi thương hiệu có ít nhất 2 section mà hai thương hiệu kia không dùng, gắn với loại hình của nó;
+  - thương hiệu nào dùng section nào ghi ở cột "Thương hiệu dùng" trong bảng mục 12.
 
 **`brands/brand-test/`: bộ dữ liệu chung của cả đội khi phát triển** (công ty tour núi giả tưởng "Lối Mây"), có đủ các loại section dự kiến.
 - Viết component mới thì thử trên `?brand=brand-test` trước. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
@@ -188,6 +193,7 @@ export class WlHero extends HTMLElement {
 - [ ] Đổi màu chủ đạo ở `theme.css`: toàn trang đổi theo.
 - [ ] Đổi thứ tự hai section trong `content.json`: trang đổi theo.
 - [ ] Thêm một thương hiệu mới chỉ bằng dữ liệu, không sửa mã: vẫn ra trang.
+- [ ] Thêm section dùng riêng của thương hiệu này vào `content.json` của thương hiệu khác: vẫn hiện đúng, theo màu và font của thương hiệu đó.
 - [ ] Hiển thị đúng ở bề ngang 390px và 1440px.
 - [ ] Ảnh mới có `alt` và có dòng trong `credits`.
 - [ ] Người viết giải thích được từng dòng mình vừa thêm.
@@ -197,6 +203,6 @@ export class WlHero extends HTMLElement {
 
 Mỗi người thêm một dòng khi tạo component mới.
 
-| type | Kiểu trình bày (`variant`) | Trường riêng | Người viết |
-|---|---|---|---|
-| `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | Như Quỳnh |
+| type | Kiểu trình bày (`variant`) | Trường riêng | Thương hiệu dùng | Người viết |
+|---|---|---|---|---|
+| `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | dùng chung | Như Quỳnh |
