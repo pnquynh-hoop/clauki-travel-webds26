@@ -67,38 +67,53 @@
     {
       "type": "journey",
       "id": "lich-trinh",
-      "variant": "sticky",
+      "variant": "road",
       "eyebrow": "Lịch trình",
       "title": "Bốn ngày, sáu chặng",
+      "days": [
+        { "title": "Ngày 1", "text": "Hà Nội, Quản Bạ" },
+        { "title": "Ngày 2", "text": "Dốc Thẩm Mã, Đồng Văn" },
+        { "title": "Ngày 3", "text": "Đèo Mã Pì Lèng, Mèo Vạc" },
+        { "title": "Ngày 4", "text": "Về Hà Nội" }
+      ],
+      "note": "Độ cao trong dữ liệu mẫu chỉ để thử.",
       "stops": [
         {
           "time": "Ngày 1 · 06:00",
           "title": "Rời Hà Nội",
+          "altitude": 20,
           "text": "Xe limousine đón ở phố cổ, trưa tới thành phố Hà Giang, chiều đổi sang xe nhỏ lên Quản Bạ.",
           "image": { "src": "images/journey-1.jpg", "alt": "Xe chạy trên con đường đèo quanh co giữa núi" }
         },
         {
           "time": "Ngày 1 · 16:30",
           "title": "Cổng trời Quản Bạ",
+          "altitude": 1100,
           "text": "Ngắm núi Đôi lúc hoàng hôn, tối nghỉ trong nhà trình tường của một gia đình người Tày.",
+          "night": "Đêm 1: nhà trình tường ở Quản Bạ",
           "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" }
         },
         {
           "time": "Ngày 2 · 08:00",
           "title": "Dốc Thẩm Mã",
+          "altitude": 1200,
           "text": "Đi bộ một đoạn dốc ngắn, ghé chợ nhỏ ven đường của người H'Mông.",
           "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" }
         },
         {
           "time": "Ngày 2 · 15:00",
           "title": "Phố cổ Đồng Văn",
+          "altitude": 1050,
           "text": "Chiều dạo phố đá, tối ăn món bản địa cùng gia chủ.",
+          "night": "Đêm 2: nhà người dân ở phố cổ Đồng Văn",
           "image": { "src": "images/journey-4.jpg", "alt": "Dãy nhà cổ lợp ngói âm dương trong phố cổ Đồng Văn" }
         },
         {
           "time": "Ngày 3 · 07:00",
           "title": "Đèo Mã Pì Lèng",
+          "altitude": 1500,
           "text": "Đi bộ trên con đường men vách đá, nhìn xuống dòng Nho Quế xanh ngọc phía dưới.",
+          "night": "Đêm 3: homestay ở Mèo Vạc",
           "image": { "src": "images/journey-5.jpg", "alt": "Dòng sông xanh ngọc chảy dưới hẻm núi sâu" }
         },
         {

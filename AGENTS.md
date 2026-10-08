@@ -206,3 +206,4 @@ Mỗi người thêm một dòng khi tạo component mới.
 | type | Kiểu trình bày (`variant`) | Trường riêng | Thương hiệu dùng | Người viết |
 |---|---|---|---|---|
 | `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | dùng chung | Như Quỳnh |
+| `journey` | `road`: các trạm dọc con đường chữ S, xe chạy theo cuộn; trời đổi theo giờ ghi trong `time`, sau trạm có `night` thì trời tối; đồng hồ độ cao bên cạnh; nền có ba dải núi ở đáy màn hình, chìm dần khi xe lên cao, trạm cao nhất có biển mây. Điện thoại đường sát mép trái, từ 760px thẻ xen kẽ hai bên | `stops[]`: `time` (có giờ dạng 05:00), `title`, `text`, `image`; tuỳ chọn `altitude` (số mét), `night` (nơi ngủ đêm đó). Tuỳ chọn ở khối: `days[]` (`title`, `text`; hiện ở cột đồng hồ, sang ngày mới sau mỗi trạm có `night`), `note` (ghi chú nhỏ dưới đồng hồ, ví dụ nguồn độ cao) | Bậc Trà | Như Quỳnh |
