@@ -1,5 +1,18 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+
+/* Bậc Trà: xanh của đồi chè, vàng của lúa, trắng mờ của sương núi.
+   Tương phản các cặp chữ và nền đều đạt chuẩn AA (xem mục 7 của tài liệu kế hoạch). */
 :root {
-  --color-bg: #f4efe6;
+  --color-primary: #2f5d46;
+  --color-on-primary: #ffffff;
+  --color-bg: #f2f4ee;
+  --color-surface: #ffffff;
+  --color-ink: #1d2520;
+  --color-muted: #56605a;
+  --color-accent: #8a6111;
+  --font-heading: 'Lora', Georgia, serif;
+  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  --radius: 1rem;
 }
