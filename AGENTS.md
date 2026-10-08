@@ -50,7 +50,7 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
    - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng;
    - `type` chưa có component đăng ký thì bỏ qua khối đó và cảnh báo trong console, không làm sập trang;
    - `id` của section được gán làm `id` của thẻ, để menu và nút CTA (`"href": "#dat-tour"`) nhảy tới được;
-   - `el.site` gồm `brand`, `cta`, `nav`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
+   - `el.site` gồm `brand`, `cta`, `nav`, `place` (nơi chốn, toạ độ, múi giờ), `contact` (điện thoại, email, địa chỉ); thương hiệu nào thiếu khoá nào thì khoá đó là `undefined`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
 4. Các component cố định (header, footer, sticky-cta) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`; thẻ nào chưa có component thì bỏ qua.
 5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật.
 

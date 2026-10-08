@@ -18,6 +18,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 08/10 | Claude Code (Claude Opus 5.5) | Đổi `brand-b` thành `ganh-som` (#3): khung `content.json` theo sườn trang, `theme.css`, `brands.json`; tạo issue `room-view` (#31); điền bảng sườn trang trong #3; chạy thử bằng Chrome headless | Tóm tắt dạng prompt: [docs/prompts/08-10-dua-ganh-som-vao-repo.md](prompts/08-10-dua-ganh-som-vao-repo.md) | e505bb6 |
 | 08/10 | Claude Code (Claude Opus 5.5) | Hero (#10): component `wl-hero`, kiểu `split`, hiệu ứng `sunrise`; ảnh hero và nội dung hero của Gành Sớm | Tóm tắt dạng prompt: [docs/prompts/08-10-hero.md](prompts/08-10-hero.md) | 5d7ca8e |
 | 08/10 | Claude Code (Claude Opus 5.5) | Header và footer (#7): `wl-header` kiểu `solid`, `wl-footer` kiểu `compact`, dữ liệu Gành Sớm; gom hàm dựng thẻ vào `js/dom.js` | Tóm tắt dạng prompt: [docs/prompts/08-10-header-footer.md](prompts/08-10-header-footer.md) | 8e9c834 |
+| 08/10 | Claude Code (Claude Opus 5.5) | Sửa lỗi #33: `siteInfo` trong `core.js` đưa thêm `place`, `contact` cho mọi section; cập nhật AGENTS.md mục 3; chạy thử khi đổi thương hiệu | (tóm tắt) Sửa issue #33 theo các bước trong issue, chạy thử với thương hiệu có và không có `place`, `contact` | 007436e |
 
 ## Mị Nương
 
