@@ -21,6 +21,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | ---- | ------- | --------------- | --------------------------- | ------ |
 | 08/10 | Claude Code (Claude Opus 5.5) | Reset cho base.css (#4): box-sizing, bỏ margin mặc định, ảnh không tràn khung, ô nhập kế thừa font; `body` lấy nền, chữ, font từ biến | Tóm tắt dạng prompt: [docs/prompts/08-10-base-css.md](prompts/08-10-base-css.md) | 2e94722 |
 | 08/10 | Claude Code (Claude Opus 5.5) | Phần còn lại của #4 trong base.css: kiểu chữ tiêu đề và liên kết, khung, khoảng cách section, lưới, nút `.btn`, `:focus-visible`, giảm chuyển động; Claude Code kiểm tra theo issue và AGENTS.md, sửa 3 biến chưa khai báo, màu liên kết có class, chú thích, chạy thử bằng Chrome headless | Tóm tắt dạng prompt: [docs/prompts/08-10-base-css.md](prompts/08-10-base-css.md) | 4e1ef31 |
+| 08/10 | Claude Code (Claude Opus 5.5) | Đề xuất thương hiệu miền Tây "Mé Rạch" (#3): loại hình homestay nhà vườn, sản phẩm, chiến dịch, giá, màu, font, sườn trang với hai khối riêng `host` và `day-plan`, khung `content.json`; tự chọn tên và chỉnh thông tin | Tóm tắt dạng prompt và phần tự kiểm tra: [docs/prompts/08-10-me-rach.md](prompts/08-10-me-rach.md) | [comment #3](https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/3#issuecomment-6052146644) |
 
 ## Như Quỳnh
 
