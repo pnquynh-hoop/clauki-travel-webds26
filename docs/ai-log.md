@@ -15,6 +15,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 08/10 | Claude Code (Claude Opus 5.5) | AGENTS.md: mỗi thương hiệu một sườn trang riêng, đặt tên component theo chức năng | Tóm tắt dạng prompt: [docs/prompts/08-10-so-do-thuong-hieu.md](prompts/08-10-so-do-thuong-hieu.md) | 396d72d |
 | 08/10 | Claude Code (Claude Opus 5.5) | Đề xuất thương hiệu miền Trung "Gành Sớm": loại hình, sản phẩm, màu, font, sườn trang, khung `content.json`; đội kiểm tra lại tương phản, tên, địa danh | Tóm tắt dạng prompt và phần đội tự kiểm tra: [docs/prompts/08-10-ganh-som.md](prompts/08-10-ganh-som.md) | [comment #3](https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/3#issuecomment-6051703384) |
 | 08/10 | Claude Code (Claude Opus 5.5) | Soạn tài liệu Gành Sớm theo khuôn tài liệu Bậc Trà: bản tóm tắt và bản kế hoạch 10 mục trong `docs/brands/ganh-som/` | Tóm tắt dạng prompt: [docs/prompts/08-10-tai-lieu-ganh-som.md](prompts/08-10-tai-lieu-ganh-som.md) | 80ba2fc |
+| 08/10 | Claude Code (Claude Opus 5.5) | Đổi `brand-b` thành `ganh-som` (#3): khung `content.json` theo sườn trang, `theme.css`, `brands.json`; tạo issue `room-view` (#31); điền bảng sườn trang trong #3; chạy thử bằng Chrome headless | Tóm tắt dạng prompt: [docs/prompts/08-10-dua-ganh-som-vao-repo.md](prompts/08-10-dua-ganh-som-vao-repo.md) | e505bb6 |
 
 ## Mị Nương
 
