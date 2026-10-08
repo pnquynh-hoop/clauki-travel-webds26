@@ -2,7 +2,7 @@
 
 - Người dùng AI: Như Quỳnh
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 94a1fe9 trên nhánh `feat/13-lich-trinh-road`
+- Kết quả: commit 94a1fe9, 0bc94a2 trên nhánh `feat/13-lich-trinh-road`
 
 ## Prompt (tóm tắt)
 
@@ -31,11 +31,16 @@ Các lần yêu cầu chỉnh sau đó:
   chọn bằng nút trên bản phác (biển mây, núi theo độ cao, tên địa danh, theo ngày).
 - Chọn "núi theo độ cao", hỏi lại cơ chế cho tới khi hiểu, rồi cho đưa vào repo.
 - "Bỏ con số độ cao phía sau tấm ảnh".
+- "Test trên brand-test thì xe không đi tới được trạm cuối như Bậc Trà, vậy là chưa đảm bảo white label":
+  AI dựng lại lỗi (cả Bậc Trà cũng thiếu một đoạn), tìm ra nguyên nhân là khối nằm cuối trang nên trang hết
+  chỗ cuộn trước khi trạm cuối lên giữa màn hình; sửa bằng cách kéo dần mốc của xe xuống ở nửa màn hình cuộn
+  cuối cùng (commit 0bc94a2).
 
 ## Kết quả và phần tự làm
 
 - Ý tưởng con đường chữ S và chiếc xe chạy theo cuộn là của mình từ lúc brainstorm (bản phác 2).
 - Tự đối chiếu khối với issue #13 và với bản phác, chỉ ra chỗ thiếu thông tin và chỗ CSS chưa đẹp.
+- Tự thử trên `brand-test` và phát hiện xe không tới được trạm cuối.
 - Tự xem từng bản trên trình duyệt và quyết định giữ hay bỏ: bỏ các kiểu nền thử trong repo, chuyển sang thử
   trên bản phác trước; chọn kiểu núi theo độ cao trong 4 kiểu; bỏ số độ cao viền rỗng sau thẻ.
 - AI viết `js/components/wl-journey.js`, `css/components/journey.css`, đăng ký trong `js/app.js` và
