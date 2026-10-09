@@ -1,0 +1,57 @@
+{
+  "id": "ganh-som",
+  "meta": {
+    "title": "Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn",
+    "description": "24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
+    "favicon": ""
+  },
+  "brand": { "name": "Gành Sớm", "logo": "", "slogan": "Bình minh ngay hiên nhà" },
+  "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
+  "nav": [
+    { "label": "Các hạng nhà", "href": "#hang-nha" },
+    { "label": "Nhìn từ ban công", "href": "#nhin-ra" },
+    { "label": "Giá đã gồm", "href": "#trong-gia" },
+    { "label": "Hỏi đáp", "href": "#hoi-dap" }
+  ],
+  "header": { "variant": "solid", "note": "Nhận phòng 14:00, trả phòng 12:00", "menu": "Menu" },
+  "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.clauki", "address": "Phía nam Quy Nhơn" },
+  "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
+  "sections": [
+    {
+      "type": "hero",
+      "id": "gioi-thieu",
+      "variant": "split",
+      "effect": "sunrise",
+      "eyebrow": "Phía nam Quy Nhơn, 24 căn nhà hướng đông",
+      "title": "Mở cửa là thấy bình\u00a0minh trên biển",
+      "lead": "Mỗi căn nhà trên mỏm gành đều nhìn thẳng về hướng mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
+      "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, bờ đá cuội tròn ở Quy Nhơn" },
+      "link": { "label": "Xem các hạng nhà", "href": "#hang-nha" },
+      "stats": [
+        { "value": "24", "label": "căn nhà nhìn ra biển" },
+        { "value": "3", "label": "hạng nhà để chọn" },
+        { "value": "3+1", "label": "đêm khi đặt sớm hè 2027" }
+      ]
+    },
+    { "type": "stays", "id": "hang-nha", "variant": "rows" },
+    { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
+    { "type": "features", "id": "trong-gia", "variant": "numbered" },
+    { "type": "gallery", "id": "thu-vien", "variant": "strip" },
+    { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
+    { "type": "booking", "id": "dat-phong", "variant": "stay" },
+    { "type": "faq", "id": "hoi-dap" }
+  ],
+  "footer": {
+    "variant": "compact",
+    "creditsTitle": "Nguồn ảnh"
+  },
+  "credits": [
+    {
+      "file": "images/hero.webp",
+      "author": "Lê Hồ Bắc",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Queen%27s_beach,_Quy_Nhon_city,_Binh_Dinh_province,_Vietnam.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    }
+  ]
+}

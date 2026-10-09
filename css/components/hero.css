@@ -1,0 +1,249 @@
+/* hero.css - giao diện của <wl-hero>. Mọi kiểu dùng chung HTML; class hero--<variant> quyết định bố cục.
+   Màu, font, bo góc lấy từ biến CSS để mỗi thương hiệu tự đổi. */
+
+.hero__inner {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* Vạch ngắn trước nhãn nhỏ dẫn mắt xuống tiêu đề. */
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.hero__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 1.5rem + 3.4vw, 4.25rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.hero__lead {
+  max-width: 32rem;
+  margin: 1.5rem 0 0;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.25rem;
+}
+
+/* Ba con số xếp một hàng, ngăn nhau bằng vạch dọc mảnh. */
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 0;
+  margin: 3rem 0 0;
+}
+
+/* HTML để nhãn trước con số (đúng thứ tự dt, dd); column-reverse đưa con số lên trên.
+   Khi đảo chiều, flex-end là mép trên, nên các con số thẳng hàng dù nhãn dài ngắn khác nhau. */
+.hero__stat {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  min-width: 5.5rem;
+  padding-inline: 1rem;
+  border-left: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.hero__stat:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.hero__stat-value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+.hero__stat-label {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+.hero__media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Kiểu split: chữ bên trái, ảnh lớn bên phải tràn sát mép màn hình, chỉ bo lớn góc dưới bên trái.
+   Độ cong tính từ --radius: thương hiệu bo tròn thì cong lớn, thương hiệu góc vuông thì gần như vuông. */
+.hero--split {
+  padding-block: 0;
+}
+
+/* Bỏ khung .container ở kiểu này để ảnh tràn được ra sát mép; chữ tự chừa lề. */
+.hero--split .hero__inner {
+  width: 100%;
+  gap: 0;
+  align-items: stretch;
+}
+
+.hero--split .hero__copy {
+  padding: 2.5rem 1rem var(--space-section);
+}
+
+/* Điện thoại: ảnh lên trên cùng, tràn hai mép, cao hơn nửa màn hình để vừa mở trang đã thấy ảnh. */
+.hero--split .hero__media {
+  order: -1;
+  height: 58svh;
+  border-radius: 0 0 0 calc(var(--radius) * 2.5);
+}
+
+@media (min-width: 760px) {
+  .hero--split .hero__copy {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero--split .hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 100svh;
+  }
+
+  /* Lề trái của chữ thẳng hàng với lề .container của các section bên dưới. */
+  .hero--split .hero__copy {
+    align-self: center;
+    padding-block: 6rem;
+    padding-inline: max(1rem, (100vw - var(--container)) / 2) 3rem;
+  }
+
+  .hero--split .hero__media {
+    order: 0;
+    height: auto;
+    border-radius: 0 0 0 calc(var(--radius) * 6);
+  }
+}
+
+/* Hiệu ứng sunrise, bật bằng "effect": "sunrise" trong content.json.
+   Mở trang: ảnh phủ màu chủ đạo tối rồi tan dần, quầng sáng ấm dâng lên ở mép trên ảnh, chữ hiện lần lượt.
+   Màu lấy từ biến của thương hiệu; chỉ chạy khi người dùng không bật giảm chuyển động. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero--sunrise .hero__media img {
+    animation: hero-dawn 2.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Màu chủ đạo nhân (multiply) lên ảnh cho tối như lúc chưa sáng, rồi mờ dần về 0. */
+  .hero--sunrise .hero__media::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--color-primary);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    animation: hero-night 2.6s ease-out both;
+  }
+
+  /* Quầng sáng ấm ở mép trên ảnh dâng lên, rồi dịu lại và ở yên đó. */
+  .hero--sunrise .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: radial-gradient(
+      ellipse 75% 55% at 45% 0%,
+      color-mix(in srgb, var(--color-accent) 45%, var(--color-bg)),
+      transparent 70%
+    );
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    animation: hero-glow 3.4s ease-out both;
+  }
+
+  .hero--sunrise .hero__copy > * {
+    animation: hero-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .hero--sunrise .hero__copy > :nth-child(1) { animation-delay: 0.9s; }
+  .hero--sunrise .hero__copy > :nth-child(2) { animation-delay: 1.05s; }
+  .hero--sunrise .hero__copy > :nth-child(3) { animation-delay: 1.25s; }
+  .hero--sunrise .hero__copy > :nth-child(4) { animation-delay: 1.45s; }
+  .hero--sunrise .hero__copy > :nth-child(5) { animation-delay: 1.65s; }
+}
+
+@keyframes hero-dawn {
+  from {
+    filter: brightness(0.55) saturate(0.6);
+    transform: scale(1.08);
+  }
+
+  to {
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-night {
+  from { opacity: 0.92; }
+  to { opacity: 0; }
+}
+
+@keyframes hero-glow {
+  0% {
+    opacity: 0;
+    transform: translateY(35%);
+  }
+
+  60% { opacity: 1; }
+
+  100% {
+    opacity: 0.6;
+    transform: none;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

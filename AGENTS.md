@@ -50,7 +50,7 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
    - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng;
    - `type` chưa có component đăng ký thì bỏ qua khối đó và cảnh báo trong console, không làm sập trang;
    - `id` của section được gán làm `id` của thẻ, để menu và nút CTA (`"href": "#dat-tour"`) nhảy tới được;
-   - `el.site` gồm `brand`, `cta`, `nav`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
+   - `el.site` gồm `brand`, `cta`, `nav`, `place` (nơi chốn, toạ độ, múi giờ), `contact` (điện thoại, email, địa chỉ); thương hiệu nào thiếu khoá nào thì khoá đó là `undefined`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
 4. Các component cố định (header, footer, sticky-cta) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`; thẻ nào chưa có component thì bỏ qua.
 5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật.
 
@@ -155,7 +155,7 @@ export class WlHero extends HTMLElement {
 - **Giấy phép:** chỉ CC0, phạm vi công cộng, CC BY, CC BY-SA, hoặc giấy phép Unsplash/Pexels. Không dùng ảnh NC hay ND. Mỗi ảnh phải có một dòng trong `credits`.
 - **Không có logo, biển hiệu thương hiệu thật** trong ảnh.
 - **Kích thước:** ảnh rộng tối đa 2000px, JPEG hoặc WebP, nên dưới 300KB.
-- **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.example`.
+- **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.clauki` (không phải tên miền thật, đã đối chiếu danh sách của IANA), ví dụ `dat-phong@ganhsom.clauki`.
 
 **Icon:** quy định của BTC coi "icon 3D bóng bẩy vô nghĩa" là AI slop.
 - Không dùng icon chỉ để trang trí; mỗi icon phải giúp hiểu nhanh hơn chữ.
@@ -189,7 +189,7 @@ export class WlHero extends HTMLElement {
 ## 11. Trước khi push: tự kiểm
 
 - [ ] Chạy bằng Live Server hoặc `python3 -m http.server`, không có lỗi trong console.
-- [ ] `?brand=brand-a`, `brand-b`, `brand-c` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
+- [ ] `?brand=bac-tra`, `ganh-som`, `me-rach` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
 - [ ] Đổi màu chủ đạo ở `theme.css`: toàn trang đổi theo.
 - [ ] Đổi thứ tự hai section trong `content.json`: trang đổi theo.
 - [ ] Thêm một thương hiệu mới chỉ bằng dữ liệu, không sửa mã: vẫn ra trang.
@@ -207,3 +207,6 @@ Mỗi người thêm một dòng khi tạo component mới.
 |---|---|---|---|---|
 | `intro` | mặc định căn trái; `center`: căn giữa, khối hẹp hơn | không có, chỉ dùng `eyebrow`, `title`, `lead` | dùng chung | Như Quỳnh |
 | `journey` | `road`: các trạm dọc con đường chữ S, xe chạy theo cuộn; trời đổi theo giờ ghi trong `time`, sau trạm có `night` thì trời tối; đồng hồ độ cao bên cạnh; nền có ba dải núi ở đáy màn hình, chìm dần khi xe lên cao, trạm cao nhất có biển mây. Điện thoại đường sát mép trái, từ 760px thẻ xen kẽ hai bên. Trạm có `plan`: rê chuột vào ảnh (hoặc bấm nút trên ảnh) thì các đám mây bay sang cột trống bên kia đường, mỗi đám một mốc giờ; điện thoại thì mây xếp dưới thẻ. Hình mây là ảnh mặt nạ trong `css/components/journey/` | `stops[]`: `time` (có giờ dạng 05:00), `title`, `text`, `image`; tuỳ chọn `altitude` (số mét), `night` (nơi ngủ đêm đó), `plan[]` (các mốc giờ ở trạm: `time`, `text`, tuỳ chọn `image`, `kind` là `night` cho chỗ ngủ hoặc `tip` cho đồ nên mang, `link` gồm `label`, `href` để dẫn sang khối khác; khối đó không có trên trang thì liên kết tự ẩn). Tuỳ chọn ở khối: `days[]` (`title`, `text`; hiện ở cột đồng hồ, sang ngày mới sau mỗi trạm có `night`), `note` (ghi chú nhỏ dưới đồng hồ, ví dụ nguồn độ cao), `planLabel` (chữ của nút mở mây, ví dụ "Ở đây làm gì?"; thiếu thì không hiện mây), `finish` (ô cuối con đường: `eyebrow`, `title`, `text`; nút trong ô lấy từ `cta` chung; có ô thì đường dừng ở mép trên của ô) | Bậc Trà | Như Quỳnh |
+| `header` (khối cố định) | `solid` (mặc định): nền đặc, dòng thông tin nhỏ phía trên; các kiểu khác người phụ trách thương hiệu tự thêm | khoá `header` ngoài `sections`: `variant`, `note` (dòng thông tin), `menu` (chữ trên nút menu điện thoại); số điện thoại lấy từ `contact.phone` | chung: Bậc Trà `overlay`, Gành Sớm `solid`, Mé Rạch `center` | Gia Huy |
+| `footer` (khối cố định) | `compact` (mặc định): hai hàng, trên là tên, liên hệ và nút CTA (`site.cta`), dưới là ghi chú và nguồn ảnh, ẩn menu và địa chỉ; các kiểu khác người phụ trách thương hiệu tự thêm | khoá `footer` ngoài `sections`: `variant`, `note` (ghi chú thương hiệu giả tưởng), `creditsTitle`; đọc thêm `brand`, `contact`, `nav`, `credits` | chung: Bậc Trà `columns`, Gành Sớm `compact`, Mé Rạch `directions` | Gia Huy |
+| `hero` | `split` (mặc định): chữ trái, ảnh khung phải, điện thoại thì ảnh lên trên; `full`, `stacked`: người phụ trách Bậc Trà, Mé Rạch tự thiết kế | `image` (`src`, `alt`), `link` (`label`, `href`), `stats` (mảng `value`, `label`), `effect` (`sunrise`: mở trang như bình minh); nút chính lấy từ `site.cta` | chung: Bậc Trà `full`, Gành Sớm `split`, Mé Rạch `stacked` | Gia Huy |

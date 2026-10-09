@@ -61,10 +61,10 @@ function applyBrand(data) {
   history.replaceState(null, '', url);
 }
 
-// Khối nào cũng cần tên thương hiệu, menu và nút hành động chung (CTA),
-// nên gom ba thứ này lại để đưa cho mọi khối.
+// Thông tin chung của thương hiệu mà khối nào cũng có thể cần (tên, menu, CTA, nơi chốn, liên hệ),
+// gom lại một chỗ để đưa cho mọi khối, khỏi phải chép vào dữ liệu từng section.
 function siteInfo(data) {
-  return { brand: data.brand, cta: data.cta, nav: data.nav };
+  return { brand: data.brand, cta: data.cta, nav: data.nav, place: data.place, contact: data.contact };
 }
 
 // Phải gán site trước: dòng el.data = section làm khối vẽ ngay lập tức,
