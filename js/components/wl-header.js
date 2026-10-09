@@ -19,8 +19,9 @@ function brandEl(brand) {
   return a;
 }
 
-// Dòng thông tin nhỏ phía trên (kiểu solid): ghi chú như giờ nhận phòng, và số điện thoại bấm gọi được.
+// Dòng thông tin nhỏ phía trên: chỉ có khi dữ liệu ghi header.note (ví dụ giờ nhận phòng), kèm số điện thoại bấm gọi được.
 function topbarEl(note, phone) {
+  if (!note) return null;
   const inner = groupEl('header__topbar-inner container', [
     textEl('p', 'header__note', note),
     linkEl(telHref(phone), phone, 'header__phone'),

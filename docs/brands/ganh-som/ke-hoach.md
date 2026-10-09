@@ -123,8 +123,8 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 
 | Thứ tự | Khối | Kiểu trình bày | Loại |
 |---|---|---|---|
-| | `header` | `solid` (nền đặc, dòng nhỏ phía trên ghi giờ nhận phòng và số điện thoại) | cố định |
-| 1 | `hero` + lớp trời thật (#9) | `split` (chữ bên trái, ảnh trong khung bên phải) | chung |
+| | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
+| 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | riêng |
 | 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra | đặc trưng |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
@@ -132,10 +132,10 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 6 | `intro` | mặc định, căn trái | dùng lại |
 | 7 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | 8 | `faq` (#15) | mặc định | dùng lại |
-| | `footer` | `compact` (gọn một hàng) | cố định |
+| | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
-So với Bậc Trà: header `solid` thay cho `overlay`, hero `split` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `compact` thay cho `columns`. Ba khối riêng là `stays`, `room-view`, `features`; chỉ `room-view` là khối mới.
+So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Ba khối riêng là `stays`, `room-view`, `features`; chỉ `room-view` là khối mới.
 
 ### Khung `content.json`
 
@@ -143,35 +143,32 @@ Xem khung đầy đủ trong [tom-tat.md](tom-tat.md). Các link trong `nav` đ�
 
 ## 7. Nhận diện thương hiệu
 
-Cảm giác chung: xanh biển sâu lúc sáng sớm, màu cát, đỏ gạch của đá gành và mái ngói.
+Cảm giác chung: cát ấm lúc trời vừa sáng, một vệt cam của nắng sớm. Nền sáng màu cát, chữ nâu than, chỉ nút bấm mang màu cam để mắt tìm thấy ngay chỗ đặt phòng. Ảnh biển làm chủ. Đã đổi hai lần: từ xanh biển `#1d4f73`, rồi từ nâu than làm màu chủ đạo, sau khi đội thấy trông quê.
 
 | Biến CSS | Mã màu | Dùng cho |
 |---|---|---|
-| `--color-primary` | `#1d4f73` | Màu chủ đạo, xanh biển sâu: nút, liên kết |
-| `--color-on-primary` | `#ffffff` | Chữ nằm trên màu chủ đạo |
-| `--color-bg` | `#f6f2ea` | Nền trang, trắng cát |
+| `--color-primary` | `#e8743b` | Màu chủ đạo, cam nắng sớm: nền nút bấm |
+| `--color-on-primary` | `#1d1b18` | Chữ nằm trên nút màu chủ đạo |
+| `--color-bg` | `#f3eee6` | Nền trang, màu cát |
 | `--color-surface` | `#ffffff` | Nền thẻ, hộp |
-| `--color-ink` | `#1c2a33` | Chữ chính |
-| `--color-muted` | `#5b6770` | Chữ phụ |
-| `--color-accent` | `#a8461f` | Màu nhấn, đỏ gạch san hô: nhãn nhỏ, điểm nhấn |
+| `--color-ink` | `#1d1b18` | Chữ chính |
+| `--color-muted` | `#5f5850` | Chữ phụ |
+| `--color-accent` | `#a3431a` | Màu nhấn, cam đất đậm: nhãn nhỏ, khẩu hiệu, liên kết |
 
 Đã tính độ tương phản (từ 4,5 trở lên là đạt AA cho chữ cỡ thường):
 
 | Cặp | Trên nền trang | Trên nền thẻ trắng |
 |---|---|---|
-| Chữ chính | 13,17 | 14,70 |
-| Chữ phụ | 5,20 | 5,80 |
-| Màu chủ đạo | 7,78 | 8,68 |
-| Màu nhấn | 5,28 | 5,90 |
-| Chữ trắng trên màu chủ đạo | 8,68 | |
-| Chữ trắng trên màu nhấn | 5,90 | |
+| Chữ chính | 14,88 | 17,18 |
+| Chữ phụ | 6,06 | 7,00 |
+| Màu nhấn | 5,39 | 6,22 |
+| Chữ nâu than trên nút màu chủ đạo | 5,72 | |
 
-Font chữ (Google Fonts, đã kiểm tra cả hai có bộ ký tự tiếng Việt):
+Màu chủ đạo `#e8743b` chỉ dùng làm nền nút, không dùng làm màu chữ: trên nền trang nó chỉ đạt 2,6. Chữ cần màu cam thì dùng màu nhấn.
 
-- Tiêu đề: **Josefin Sans**, không chân, hình học, thoáng.
-- Nội dung: **Nunito**, nét tròn, dễ đọc trên điện thoại.
+Font chữ (Google Fonts, đã kiểm tra có bộ ký tự tiếng Việt): **Montserrat** cho cả tiêu đề và nội dung, ba độ đậm 400, 600, 800. Tiêu đề lớn ở hero và tên thương hiệu in hoa đậm; các tiêu đề khác viết thường.
 
-Bo góc: `1.75rem`, tròn như đá cuội bị sóng mài, khác hẳn Bậc Trà (`1rem`).
+Bo góc: `1.25rem`, thẻ ảnh và nút bo tròn mềm.
 
 Giọng văn:
 
@@ -182,19 +179,19 @@ Giọng văn:
 Bản nháp `theme.css` (đặt ở `brands/ganh-som/theme.css`):
 
 ```css
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Nunito:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
 :root {
-  --color-primary: #1d4f73;
-  --color-on-primary: #ffffff;
-  --color-bg: #f6f2ea;
+  --color-primary: #e8743b;
+  --color-on-primary: #1d1b18;
+  --color-bg: #f3eee6;
   --color-surface: #ffffff;
-  --color-ink: #1c2a33;
-  --color-muted: #5b6770;
-  --color-accent: #a8461f;
-  --font-heading: 'Josefin Sans', system-ui, sans-serif;
-  --font-body: 'Nunito', system-ui, sans-serif;
-  --radius: 1.75rem;
+  --color-ink: #1d1b18;
+  --color-muted: #5f5850;
+  --color-accent: #a3431a;
+  --font-heading: 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Montserrat', system-ui, sans-serif;
+  --radius: 1.25rem;
 }
 ```
 
@@ -228,7 +225,7 @@ Quy tắc khi chọn ảnh:
 - [ ] Điền dòng Gành Sớm vào bảng sườn trang trong issue #3. Hạn: 08/10/2026.
 - [ ] Tra tên "Gành Sớm" trên Google Maps, Booking, Facebook. Hạn: 08/10/2026.
 - [x] Đổi `brands/brand-b` thành `brands/ganh-som`, sửa `id` và `brands/brands.json`. Xong 08/10/2026.
-- [ ] Báo người làm các issue chung về kiểu trình bày Gành Sớm cần: #7 (`solid`, `compact`), #11 (`numbered`), #12 (`strip`), #14 (`stay`), #16 (`rows`). Hạn: 08/10/2026.
+- [ ] Báo người làm các issue chung về kiểu trình bày Gành Sớm cần: #7 (`solid`, `card`), #11 (`numbered`), #12 (`strip`), #14 (`stay`), #16 (`rows`). Hạn: 08/10/2026.
 - [x] Viết khung `brands/ganh-som/content.json` theo mục 6 (logo và favicon để trống tới khi có `logo.svg`). Xong 08/10/2026.
 - [x] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Xong 08/10/2026.
 - [ ] Tạo issue cho khối mới `room-view` (nhìn từ ban công). Hạn: 09/10/2026.
@@ -249,4 +246,4 @@ Quy tắc khi chọn ảnh:
 
 - [Tên gọi và thủ phủ các tỉnh, thành sau sáp nhập 2025 (Thư viện Pháp luật)](https://thuvienphapluat.vn/hoi-dap-phap-luat/ten-goi-va-thu-phu-28-tinh-6-thanh-pho-sau-sap-nhap-2025-theo-quyet-dinh-759-138047615.html): lý do chỉ ghi "Quy Nhơn", không ghi tên tỉnh.
 - [Homestay view biển ở Quy Nhơn (Mytour)](https://mytour.vn/vi/blog/bai-viet/top-10-homestay-view-bien-dep-nhat-tai-tp-quy-nhon-binh-dinh.html) và [khách sạn Quy Nhơn (MoMo)](https://momo.vn/blog/top-khach-san-quy-nhon-c101dt252): kết quả khi tra trùng tên "Gành Sớm".
-- Google Fonts: kiểm tra Josefin Sans và Nunito có bộ ký tự tiếng Việt.
+- Google Fonts: kiểm tra Montserrat có bộ ký tự tiếng Việt.
