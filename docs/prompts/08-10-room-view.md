@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 40204d6; làm lại ngày 09/10: de8607e, e6f23d2, c885de2
+- Kết quả: commit 40204d6; làm lại ngày 09/10: de8607e, e6f23d2, c885de2, 8cb1480
 
 ## Prompt (tóm tắt)
 
@@ -30,11 +30,19 @@ khác dùng lại được.
 Hero đã chuyển sang chồng thẻ ảnh xoay vòng, nên khối này đang trùng hiệu ứng với hero. Hãy:
 
 1. sửa nút CTA và nhãn nhỏ theo màu mới của Gành Sớm, nút không dùng màu chủ đạo làm màu chữ;
-2. đổi `room-view` sang kiểu khung cửa lật: một khung ảnh ngang hai mặt, chọn hạng khác thì khung lật nửa vòng
-   quanh trục dọc như cánh cửa; màn rộng thì tên các hạng là danh sách chữ lớn bên trái; giữ mẫu tabs của WAI-ARIA
-   và vuốt ngang; bỏ nền ảnh mờ để không giống hero;
+2. đổi `room-view` sang một hiệu ứng riêng, kể đúng ý "mỗi hạng nhà một khung cửa ra biển";
 3. sửa header để nằm gọn một hàng trên điện thoại 360px.
+
+Lần đầu làm kiểu khung cửa lật (`flip`): một khung ảnh hai mặt, chọn hạng khác thì khung lật nửa vòng.
+Sau khi duyệt, làm lại thành kiểu cuộn để lên dốc (`climb`):
+
+- khối ghim trên màn hình trong lúc cuộn, mỗi hạng một quãng cuộn bằng một màn hình;
+- cuộn tới đâu góc nhìn leo dốc tới đó: villa sát mép nước, rồi phòng vườn, rồi nhà đồi trên đỉnh dốc;
+  cảnh trôi xuống như máy quay đi lên, cảnh của hạng cao hơn hiện dần đè lên;
+- thanh độ cao bên phải khung có mốc từng hạng, bấm mốc thì cuộn tới hạng đó;
+- bật giảm chuyển động thì không ghim, bấm mốc là đổi cảnh ngay.
 
 ## Phần tự quyết định (09/10)
 
-- Nhận ra hero và khối này trùng kiểu, chọn hướng khung cửa lật trong các phương án.
+- Nhận ra hero và khối này trùng kiểu, yêu cầu đổi.
+- Thấy khung cửa lật chưa độc đáo; chọn hướng cuộn để lên dốc trong các phương án.
