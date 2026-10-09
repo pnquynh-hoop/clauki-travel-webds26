@@ -53,7 +53,7 @@
     {
       "type": "hero",
       "id": "gioi-thieu",
-      "variant": "split",
+      "variant": "stacked",
       "eyebrow": "Nhà vườn ven rạch, Cần Thơ",
       "title": "Sáng ra chợ nổi, chiều về mé rạch",
       "lead": "Ở cùng gia đình chú Sáu và sống theo nhịp một ngày của nhà vườn miền Tây.",
@@ -271,7 +271,7 @@
     }
   ],
   "footer": {
-    "variant": "compact",
+    "variant": "card",
     "note": "Mé Rạch là thương hiệu giả tưởng, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
     "creditsTitle": "Nguồn ảnh",
     "directions": [
