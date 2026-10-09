@@ -21,6 +21,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 08/10 | Claude Code (Claude Opus 5.5) | Sửa lỗi #33: `siteInfo` trong `core.js` đưa thêm `place`, `contact` cho mọi section; cập nhật AGENTS.md mục 3; chạy thử khi đổi thương hiệu | (tóm tắt) Sửa issue #33 theo các bước trong issue, chạy thử với thương hiệu có và không có `place`, `contact` | 5bdb749 (PR #36, squash) |
 | 08/10 | Claude Code (Claude Opus 5.5) | Khối nhìn từ ban công (#31): `wl-room-view` kiểu `coverflow` (thẻ ảnh xếp nghiêng 3D), ngày 09/10 đổi sang kiểu `flip` (khung cửa lật) rồi `climb` (cuộn để lên dốc) để không trùng hero, sửa header vừa một hàng trên điện thoại, ba ảnh có giấy phép và `credits`, dữ liệu Gành Sớm | Tóm tắt dạng prompt: [docs/prompts/08-10-room-view.md](prompts/08-10-room-view.md) | dd93c83 (PR #37, squash) |
 | 09/10 | Claude Code (Claude Opus 5.5) | Giao diện mới cho Gành Sớm (#7, #10): hero kiểu `coverflow`, header `solid` làm lại, footer kiểu `card`, theme nền cát và font Montserrat, 4 ảnh hero có giấy phép; sửa `base.css` để liên kết và nút viền dùng màu nhấn | Tóm tắt dạng prompt: [docs/prompts/09-10-giao-dien-ganh-som.md](prompts/09-10-giao-dien-ganh-som.md) | b00fb35, a9c0170 |
+| 09/10 | Claude Code (Claude Opus 5.5) | Khối đặt chỗ (#14) kiểu `stay` cho Gành Sớm: form ngày, hạng nhà, số khách, tạm tính có ưu đãi, số căn còn, báo lỗi dưới ô, tin nhắn soạn sẵn gửi SMS, gọi, chép | Tóm tắt dạng prompt: [docs/prompts/09-10-dat-phong.md](prompts/09-10-dat-phong.md) | 5c4120d |
 
 ## Mị Nương
 
