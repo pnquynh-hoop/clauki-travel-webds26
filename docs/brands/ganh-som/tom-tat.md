@@ -19,18 +19,18 @@ Kế hoạch đầy đủ: [ke-hoach.md](ke-hoach.md).
 
 | Vai trò | Màu |
 |---|---|
-| Chủ đạo (xanh biển sâu) | `#1d4f73` |
-| Nhấn (đỏ gạch san hô) | `#a8461f` |
-| Nền (trắng cát) | `#f6f2ea` |
+| Chủ đạo (cam nắng sớm, nền nút bấm) | `#e8743b` |
+| Nhấn (cam đất đậm, chữ nhấn) | `#a3431a` |
+| Nền (màu cát) | `#f3eee6` |
 
-Font: Josefin Sans cho tiêu đề, Nunito cho nội dung. Mọi cặp màu chữ và nền đạt chuẩn tương phản AA.
+Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và nền đạt chuẩn tương phản AA; màu chủ đạo chỉ làm nền nút, không làm màu chữ.
 
 ### Sườn trang
 
 | Thứ tự | Khối | Kiểu trình bày | Loại |
 |---|---|---|---|
-| | `header` | `solid` (nền đặc, dòng nhỏ phía trên ghi giờ nhận phòng và số điện thoại) | cố định |
-| 1 | `hero` + lớp trời thật (#9) | `split` (chữ bên trái, ảnh trong khung bên phải) | chung |
+| | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
+| 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | **riêng** |
 | 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra từ ban công | **đặc trưng** |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | **riêng** |
@@ -38,7 +38,7 @@ Font: Josefin Sans cho tiêu đề, Nunito cho nội dung. Mọi cặp màu ch�
 | 6 | `intro` | mặc định, căn trái | dùng lại |
 | 7 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | 8 | `faq` | mặc định | dùng lại |
-| | `footer` | `compact` (gọn một hàng) | cố định |
+| | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
 Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room-view` là khối mới, cần tạo issue.
@@ -65,7 +65,7 @@ Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room
   "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.clauki", "address": "Phía nam Quy Nhơn" },
   "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
   "sections": [
-    { "type": "hero", "id": "gioi-thieu", "variant": "split" },
+    { "type": "hero", "id": "gioi-thieu", "variant": "coverflow" },
     { "type": "stays", "id": "hang-nha", "variant": "rows" },
     { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
@@ -74,7 +74,7 @@ Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room
     { "type": "booking", "id": "dat-phong", "variant": "stay" },
     { "type": "faq", "id": "hoi-dap" }
   ],
-  "footer": { "variant": "compact" },
+  "footer": { "variant": "card" },
   "credits": []
 }
 ```
