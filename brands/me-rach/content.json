@@ -1,10 +1,399 @@
 {
   "id": "me-rach",
-  "meta": { "title": "Mé Rạch", "description": "", "favicon": "" },
-  "brand": { "name": "", "logo": "", "slogan": "" },
-  "cta": { "label": "", "href": "" },
-  "nav": [],
-  "sections": [],
-  "footer": {},
-  "credits": []
+  "meta": {
+    "title": "Mé Rạch · Ở nhà vườn ven rạch Cần Thơ, sáng đi chợ nổi Cái Răng",
+    "description": "Homestay 5 phòng trong nhà gỗ của một gia đình làm vườn ba đời. Sáng đi ghe ra chợ nổi, trưa hái trái, chiều chèo xuồng, tối ăn cơm chung mâm.",
+    "favicon": ""
+  },
+  "brand": {
+    "name": "Mé Rạch",
+    "logo": "",
+    "slogan": "Sáng ra chợ nổi, chiều về mé rạch"
+  },
+  "cta": {
+    "label": "Giữ phòng",
+    "href": "#giu-phong",
+    "note": "690.000 đồng một khách một đêm"
+  },
+  "nav": [
+    {
+      "label": "Nhà chú Sáu",
+      "href": "#nha-chu-sau"
+    },
+    {
+      "label": "Một ngày ở vườn",
+      "href": "#mot-ngay"
+    },
+    {
+      "label": "Ảnh",
+      "href": "#thu-vien"
+    },
+    {
+      "label": "Hỏi đáp",
+      "href": "#hoi-dap"
+    }
+  ],
+  "header": {
+    "variant": "solid",
+    "note": "Ghe nhà đón ở bến Ninh Kiều",
+    "menu": "Menu"
+  },
+  "contact": {
+    "phone": "0123 456 789",
+    "email": "giu-phong@merach.clauki",
+    "address": "Ven rạch, Cần Thơ"
+  },
+  "place": {
+    "name": "Cần Thơ",
+    "lat": 10.02,
+    "lon": 105.76,
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "id": "gioi-thieu",
+      "variant": "split",
+      "eyebrow": "Nhà vườn ven rạch, Cần Thơ",
+      "title": "Sáng ra chợ nổi, chiều về mé rạch",
+      "lead": "Ở cùng gia đình chú Sáu và sống theo nhịp một ngày của nhà vườn miền Tây.",
+      "image": {
+        "src": "images/hero-dua-nuoc.webp",
+        "alt": "Người phụ nữ đội nón lá ngồi trên chiếc xuồng xanh, trôi dưới rặng dừa nước hai bên rạch"
+      },
+      "link": {
+        "label": "Xem một ngày ở vườn",
+        "href": "#mot-ngay"
+      },
+      "stats": [
+        {
+          "value": "5",
+          "label": "phòng trong căn nhà gỗ"
+        },
+        {
+          "value": "3",
+          "label": "đời làm vườn ven rạch"
+        },
+        {
+          "value": "40",
+          "label": "phút đi ghe từ bến Ninh Kiều"
+        }
+      ]
+    },
+    {
+      "type": "intro",
+      "id": "khong-phai-khach-san",
+      "variant": "center",
+      "eyebrow": "Mé Rạch",
+      "title": "Chuyến trải nghiệm lần này ta không ở khách sạn",
+      "lead": "Mà ở nhà của chú Sáu, vì chú có sẵn 5 căn phòng ấm cúng cho khách."
+    },
+    {
+      "type": "host",
+      "id": "nha-chu-sau",
+      "eyebrow": "Nhà chú Sáu",
+      "title": "Ba đời làm vườn bên mé rạch",
+      "story": [
+        "Ông nội chú Sáu đào con mương đầu tiên quanh vườn. Giờ thì chú giữ vườn, cô Út sẽ lo phần giữ bếp.",
+        "Năm phòng cho khách nằm ngay trong căn nhà gỗ, cửa sổ nhìn ra rạch."
+      ],
+      "quote": {
+        "text": "Khách tới thì ăn chung mâm, vườn có gì hái nấy.",
+        "by": "Chú Sáu, chủ nhà"
+      },
+      "facts": [
+        {
+          "value": "3",
+          "label": "đời làm vườn"
+        },
+        {
+          "value": "2",
+          "label": "hecta vườn trái"
+        },
+        {
+          "value": "5",
+          "label": "phòng sẵn cho khách"
+        }
+      ],
+      "image": {
+        "src": "images/nha-san-vuon.webp",
+        "alt": "Căn nhà sàn gỗ mái ngói đỏ giữa vườn cây, trước sân có lu nước và bồn hoa"
+      },
+      "imageSecond": {
+        "src": "images/nha-ben-ao.webp",
+        "alt": "Nhà gỗ nằm bên ao, hàng dừa soi bóng xuống mặt nước"
+      }
+    },
+    {
+      "type": "day-plan",
+      "id": "mot-ngay",
+      "eyebrow": "Một ngày ở vườn",
+      "title": "Từ lúc gà gáy tới khi nghe tiếng ếch",
+      "nowLabel": "Ở vườn lúc này",
+      "liveLabel": "Đang diễn ra ở vườn",
+      "stops": [
+        {
+          "time": "05:00",
+          "title": "Đi ghe ra chợ nổi",
+          "text": "Ghe nhà đưa khách ra chợ nổi Cái Răng lúc trời còn sương.",
+          "image": {
+            "src": "images/cho-noi-sang.webp",
+            "alt": "Ghe xuồng nối nhau trên sông ở chợ nổi buổi sáng"
+          }
+        },
+        {
+          "time": "09:00",
+          "title": "Hái trái trong vườn",
+          "text": "Măng cụt, chôm chôm theo mùa, hái tới đâu ăn tới đó.",
+          "image": {
+            "src": "images/mang-cut.webp",
+            "alt": "Trái măng cụt chín tím trên cành giữa lá xanh"
+          }
+        },
+        {
+          "time": "12:00",
+          "title": "Nấu cơm cùng cô Út",
+          "text": "Canh rau, cá kho, rau hái sau nhà. Cả nhà ăn chung một mâm.",
+          "image": {
+            "src": "images/mam-com.webp",
+            "alt": "Mâm cơm gia đình với tô canh, đĩa thịt kho, rau xào và chén nước mắm"
+          }
+        },
+        {
+          "time": "15:00",
+          "title": "Chèo xuồng trong rạch",
+          "text": "Xuồng ba lá len dưới tán cây, nước rạch êm như mặt gương.",
+          "image": {
+            "src": "images/cheo-xuong-non-la.webp",
+            "alt": "Người đội nón lá đứng chèo xuồng gỗ trên con rạch, sau lưng là rặng cây"
+          }
+        },
+        {
+          "time": "18:00",
+          "title": "Đổ bánh xèo",
+          "text": "Cả nhà xúm quanh bếp, cuốn bánh với rau vườn.",
+          "image": {
+            "src": "images/banh-xeo.webp",
+            "alt": "Bánh xèo vàng giòn bày trên lá chuối cạnh rổ rau sống"
+          }
+        },
+        {
+          "time": "20:00",
+          "title": "Ngủ màn nghe tiếng ếch",
+          "text": "Tắt đèn sớm. Ngoài rạch chỉ còn tiếng ếch và tiếng nước.",
+          "image": {
+            "src": "images/hoang-hon-song.webp",
+            "alt": "Mặt trời lặn đỏ trên sông, một chiếc phà đi qua"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gallery",
+      "id": "thu-vien",
+      "variant": "mosaic",
+      "eyebrow": "Quanh nhà vườn",
+      "title": "Miền Tây theo con nước",
+      "images": [
+        {
+          "src": "images/ghe-bong-sung.webp",
+          "alt": "Những chiếc xuồng chở bó bông súng hồng giữa đầm nước xanh",
+          "caption": "Mùa bông súng"
+        },
+        {
+          "src": "images/rung-tram.webp",
+          "alt": "Rừng tràm xanh mướt, mặt nước phủ kín bèo cám",
+          "caption": "Rừng tràm mùa nước"
+        },
+        {
+          "src": "images/rach-dua-nuoc.webp",
+          "alt": "Con rạch nước phù sa len giữa hai rặng dừa nước",
+          "caption": "Rạch dừa nước"
+        },
+        {
+          "src": "images/chom-chom.webp",
+          "alt": "Đống chôm chôm chín đỏ vàng",
+          "caption": "Chôm chôm vào mùa"
+        },
+        {
+          "src": "images/cau-khi.webp",
+          "alt": "Cây cầu khỉ bằng tre bắc qua con rạch giữa vườn cây",
+          "caption": "Cầu khỉ bắc qua rạch"
+        },
+        {
+          "src": "images/ghe-chom-chom.webp",
+          "alt": "Chiếc ghe dài chở chôm chôm đỏ chạy trên sông, phía sau là nhà ven bờ",
+          "caption": "Ghe chở chôm chôm"
+        }
+      ]
+    },
+    {
+      "type": "booking",
+      "id": "giu-phong",
+      "variant": "request",
+      "eyebrow": "Giữ phòng",
+      "title": "Gửi yêu cầu, cô Út gọi lại trong ngày",
+      "lead": "Chưa cần trả trước. Trang soạn sẵn tin nhắn để bạn gửi cho nhà.",
+      "price": 690000,
+      "priceNote": "mỗi khách một đêm; trẻ dưới 6 tuổi miễn phí",
+      "includes": [
+        "Bữa tối cùng nhà",
+        "Bữa sáng",
+        "Ghe đi chợ nổi lúc 5 giờ sáng",
+        "Xuồng chèo trong rạch",
+        "Xe đạp"
+      ],
+      "hotline": "0123 456 789"
+    },
+    {
+      "type": "faq",
+      "id": "hoi-dap",
+      "eyebrow": "Hỏi đáp",
+      "title": "Trước khi xuống miền Tây",
+      "items": [
+        {
+          "question": "Ở vườn có nhiều muỗi không?",
+          "answer": "Có, nhất là lúc chạng vạng. Giường nào cũng có mùng, nhà đốt lá xả đuổi muỗi mỗi tối."
+        },
+        {
+          "question": "Trẻ nhỏ đi được không?",
+          "answer": "Được, nhà có nhiều gia đình có con nhỏ ghé. Xuồng và ghe đều có áo phao cỡ trẻ em."
+        },
+        {
+          "question": "Phòng tắm riêng hay chung?",
+          "answer": "Ba phòng có phòng tắm riêng, hai phòng dùng chung một phòng tắm lớn ở cuối hiên."
+        },
+        {
+          "question": "Đi tới nhà bằng gì?",
+          "answer": "Từ bến Ninh Kiều, ghe nhà đón khoảng 40 phút. Có thể đi xe máy tới đầu cầu rồi đi bộ vào vườn."
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "variant": "compact",
+    "note": "Mé Rạch là thương hiệu giả tưởng, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
+    "creditsTitle": "Nguồn ảnh",
+    "directions": [
+      {
+        "place": "TP.HCM",
+        "how": "Xe khách khoảng 3 tiếng rưỡi tới bến Ninh Kiều."
+      },
+      {
+        "place": "Bến Ninh Kiều",
+        "how": "Ghe nhà đón, chạy khoảng 40 phút theo sông vào rạch."
+      },
+      {
+        "place": "Mé Rạch",
+        "how": "Cập bến ngay sau vườn nhà chú Sáu."
+      }
+    ]
+  },
+  "credits": [
+    {
+      "file": "images/hero-dua-nuoc.webp",
+      "author": "Esin Üstün",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Canal_in_Mekong_Delta_-_My_Tho_-_Vietnam_(15912635245).jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/nha-san-vuon.webp",
+      "author": "Bùi Thụy Đào Nguyên",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:M%E1%BB%99t_ng%C3%B4i_nh%C3%A0_s%C3%A0n_%E1%BB%9F_Nam_B%E1%BB%99.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/nha-ben-ao.webp",
+      "author": "Thuydaonguyen",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Nh%C3%A0_s%C3%A0n_Nam_B%E1%BB%99.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/cho-noi-sang.webp",
+      "author": "Vyacheslav Argenberg",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Can_Tho,_Vietnam,_Floating_Market,_Boats.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/mang-cut.webp",
+      "author": "VpuipV",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Mangosteen_fruit_on_the_tree.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/mam-com.webp",
+      "author": "Hoangkid",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vietnamese_family_daily_meal.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/cheo-xuong-non-la.webp",
+      "author": "Jean-Pierre Dalbéra",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Arroyo_dans_le_delta_du_M%C3%A9kong_(Vietnam)_(6658765001).jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/banh-xeo.webp",
+      "author": "pelican",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C3%A1nh_x%C3%A8o_(15826153307).jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/hoang-hon-song.webp",
+      "author": "ZAC",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Sunset_at_Mekong_River.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/ghe-bong-sung.webp",
+      "author": "Aung Chan Thar Myanmar",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vietnam_water_lilies.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/rung-tram.webp",
+      "author": "Bùi Thụy Đào Nguyên",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:R%E1%BB%ABng_tr%C3%A0m_Tr%C3%A0_S%C6%B0.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/rach-dua-nuoc.webp",
+      "author": "Esin Üstün",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Canal_in_Mekong_Delta_-_My_Tho_-_Vietnam_(15726848817).jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/chom-chom.webp",
+      "author": "Dmitry Makeev",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Rambutan_01.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/cau-khi.webp",
+      "author": "Kelcey Kinjo",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Cau_khi_My_Tho.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/ghe-chom-chom.webp",
+      "author": "McKay Savage",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vietnam_08_-_134-_Cai_Be_floating_market_(3185921110).jpg",
+      "note": "Đã thu nhỏ"
+    }
+  ]
 }
