@@ -13,28 +13,78 @@
     { "label": "Giá đã gồm", "href": "#trong-gia" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
-  "header": { "variant": "solid", "note": "Nhận phòng 14:00, trả phòng 12:00", "menu": "Menu" },
-  "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.clauki", "address": "Phía nam Quy Nhơn" },
+  "header": { "variant": "solid", "menu": "Menu" },
+  "contact": { "phone": "0123 456 789", "email": "dat-phong@ganhsom.clauki", "address": "Mỏm gành phía nam Quy Nhơn" },
   "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
   "sections": [
     {
       "type": "hero",
       "id": "gioi-thieu",
-      "variant": "split",
-      "effect": "sunrise",
-      "eyebrow": "Phía nam Quy Nhơn, 24 căn nhà hướng đông",
-      "title": "Mở cửa là thấy bình\u00a0minh trên biển",
-      "lead": "Mỗi căn nhà trên mỏm gành đều nhìn thẳng về hướng mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
-      "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, bờ đá cuội tròn ở Quy Nhơn" },
+      "variant": "coverflow",
+      "eyebrow": "Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư",
+      "title": "Bình\u00a0minh ngay hiên\u00a0nhà",
+      "lead": "24 căn nhà trên mỏm gành phía nam Quy Nhơn. Mở cửa là thấy mặt trời lên khỏi biển.",
       "link": { "label": "Xem các hạng nhà", "href": "#hang-nha" },
-      "stats": [
-        { "value": "24", "label": "căn nhà nhìn ra biển" },
-        { "value": "3", "label": "hạng nhà để chọn" },
-        { "value": "3+1", "label": "đêm khi đặt sớm hè 2027" }
+      "slidesLabel": "Ảnh Gành Sớm, dùng phím mũi tên trái phải để đổi ảnh",
+      "prevLabel": "Trước",
+      "nextLabel": "Sau",
+      "slides": [
+        {
+          "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và vài tảng đá nhô lên ngoài xa" },
+          "caption": "Nắng sớm trên bờ sỏi"
+        },
+        {
+          "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" },
+          "caption": "Hiên gỗ nhìn ra biển"
+        },
+        {
+          "image": { "src": "images/hero-dawn.webp", "alt": "Bầu trời xanh tím trước bình minh trên biển lặng, mũi đất tối có ngọn hải đăng nhỏ" },
+          "caption": "Trời chuyển màu trước bình minh"
+        },
+        {
+          "image": { "src": "images/hero-sunrise.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" },
+          "caption": "Mặt trời lên sau dải mây"
+        },
+        {
+          "image": { "src": "images/hero-pool.webp", "alt": "Mép hồ bơi tràn lát gạch xanh trên sườn đồi, nhìn xuống vịnh nhỏ và biển xa" },
+          "caption": "Hồ bơi nhìn xuống vịnh"
+        }
       ]
     },
     { "type": "stays", "id": "hang-nha", "variant": "rows" },
-    { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
+    {
+      "type": "room-view",
+      "id": "nhin-ra",
+      "variant": "climb",
+      "eyebrow": "Nhìn từ ban công",
+      "title": "Mỗi hạng nhà một khung cửa ra biển",
+      "lead": "Cuộn xuống để đi từ mép nước lên đỉnh dốc, xem cảnh mỗi hạng nhà nhìn ra.",
+      "hint": "Cuộn để lên dốc",
+      "bestLabel": "Đẹp nhất lúc",
+      "views": [
+        {
+          "label": "Villa sát biển",
+          "level": "Mép nước",
+          "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dãy đảo, nắng cam phản chiếu trên mặt biển phẳng lặng" },
+          "text": "Mở cửa là chạm vào tiếng sóng.",
+          "best": "bình minh"
+        },
+        {
+          "label": "Phòng vườn",
+          "level": "Giữa vườn dừa",
+          "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" },
+          "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.",
+          "best": "buổi trưa"
+        },
+        {
+          "label": "Nhà đồi",
+          "level": "Trên đỉnh dốc",
+          "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" },
+          "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.",
+          "best": "bình minh và hoàng hôn"
+        }
+      ]
+    },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
@@ -42,7 +92,10 @@
     { "type": "faq", "id": "hoi-dap" }
   ],
   "footer": {
-    "variant": "compact",
+    "variant": "card",
+    "navTitle": "Xem thêm",
+    "contactTitle": "Liên hệ",
+    "addressTitle": "Địa chỉ",
     "creditsTitle": "Nguồn ảnh"
   },
   "credits": [
@@ -51,6 +104,54 @@
       "author": "Lê Hồ Bắc",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Queen%27s_beach,_Quy_Nhon_city,_Binh_Dinh_province,_Vietnam.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/hero-veranda.webp",
+      "author": "PattayaPatrol",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:DSC_9001_Golden_hour_on_the_deck_-_sun_sinking_over_the_ocean_painting_the_railing_with_light.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/hero-dawn.webp",
+      "author": "Lê Nguyễn Nhật Long",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Muidienvaobinhminh.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/hero-sunrise.webp",
+      "author": "ChiLam Ly",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Sunrise_in_Nha_Trang.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/hero-pool.webp",
+      "author": "Cosmic Timetraveler",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Round_infinity_pool_(Unsplash).jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/view-villa.webp",
+      "author": "ChiLam Ly",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Sunrise_in_Nha_Trang.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/view-hill.webp",
+      "author": "Boconganh Phan",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:Ky_Co_-_Nhon_Ly_-_Quy_Nhon_-_Binh_Dinh_-_Viet_Nam.jpg"
+    },
+    {
+      "file": "images/view-garden.webp",
+      "author": "Vyacheslav Argenberg",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Corong_Corong_Beach,_Coconut_palm_trees,_El_Nido,_Palawan_Island,_Philippines.jpg",
       "note": "Đã cắt khung và thu nhỏ"
     }
   ]

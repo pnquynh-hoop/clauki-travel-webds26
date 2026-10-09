@@ -9,14 +9,19 @@
 
 .footer__main {
   display: grid;
-  gap: 1.75rem;
+  gap: 2rem;
+}
+
+.footer__top {
+  display: grid;
+  gap: 1.5rem;
 }
 
 .footer__name {
   margin: 0;
   font-family: var(--font-heading);
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: 0.02em;
 }
 
@@ -25,17 +30,42 @@
   color: var(--color-muted);
 }
 
-.footer__contact,
-.footer__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.75rem;
-  align-items: baseline;
+.footer__action {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+}
+
+.footer__cta-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.footer__cols {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.footer__col {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  justify-items: start;
+}
+
+.footer__col-title {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
 }
 
 /* Rê chuột hoặc Tab tới: vạch dưới chữ chạy từ trái sang, giống menu ở header. */
 .footer__link {
   position: relative;
+  padding-block: 0.2rem;
+  font-weight: 600;
   text-decoration: none;
   color: inherit;
 }
@@ -45,7 +75,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.15rem;
+  bottom: 0;
   height: 1px;
   background: currentColor;
   transform: scaleX(0);
@@ -60,15 +90,14 @@
 
 .footer__address {
   margin: 0;
-  color: var(--color-muted);
+  font-weight: 600;
 }
 
 .footer__fine {
   display: grid;
   gap: 0.75rem;
-  margin-top: 2.5rem;
-  padding-top: 1.25rem;
-  font-size: 0.8rem;
+  padding-top: 1rem;
+  font-size: 0.8125rem;
   color: var(--color-muted);
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
 }
@@ -77,73 +106,95 @@
   margin: 0;
 }
 
+/* summary cao 2.75rem để dễ bấm trên điện thoại. */
 .footer__credits-title {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--color-ink);
   cursor: pointer;
 }
 
 .footer__credits {
-  margin: 0.25rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0;
   padding: 0;
   list-style: none;
 }
 
+.footer__credits li {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 .footer__credit-link {
-  color: inherit;
+  color: var(--color-accent);
   text-underline-offset: 0.2em;
 }
 
-/* Kiểu compact: nền màu chủ đạo, chữ sáng, chỉ hai hàng.
-   Hàng trên: tên thương hiệu, liên hệ, nút CTA. Hàng dưới: ghi chú (nếu có) và nguồn ảnh.
-   Kiểu này ẩn menu (đã có ở header) và địa chỉ cho gọn; kiểu nhiều cột thì hiện đủ. */
-.footer--compact {
-  padding-block: 3.5rem 2rem;
-  color: var(--color-on-primary);
-  background: var(--color-primary);
+/* Kiểu card: cả chân trang là một thẻ màu nền thẻ đặt trên nền trang, bo góc lớn.
+   Hàng trên là tên thương hiệu in hoa rất lớn và nút CTA; giữa là ba cột menu, liên hệ, địa chỉ; cuối là nguồn ảnh. */
+.footer--card {
+  padding-block: 0 2rem;
+  background: var(--color-bg);
 }
 
-.footer--compact .footer__nav,
-.footer--compact .footer__address {
-  display: none;
+.footer--card .footer__main {
+  gap: 0;
+  padding: 2.25rem 1.5rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: calc(var(--radius) * 1.4);
 }
 
-/* Nền footer là màu chủ đạo, nên nút đảo màu: nền sáng, chữ màu chủ đạo. */
-.footer--compact .footer__cta {
-  justify-self: start;
-  color: var(--color-primary);
-  background: var(--color-on-primary);
-  border-color: var(--color-on-primary);
+.footer--card .footer__top {
+  gap: 1.75rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
 }
 
-.footer--compact .footer__cta:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 85%, var(--color-primary));
-  border-color: color-mix(in srgb, var(--color-on-primary) 85%, var(--color-primary));
+.footer--card .footer__name {
+  font-size: clamp(2.5rem, 1.4rem + 5vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.footer--compact .footer__slogan,
-.footer--compact .footer__fine {
-  color: color-mix(in srgb, var(--color-on-primary) 72%, transparent);
+.footer--card .footer__slogan {
+  margin-top: 0.75rem;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  font-weight: 600;
+  color: var(--color-accent);
 }
 
-.footer--compact .footer__fine {
-  border-top-color: color-mix(in srgb, var(--color-on-primary) 20%, transparent);
+.footer--card .footer__cols {
+  padding-block: 2rem;
 }
 
 @media (min-width: 760px) {
-  .footer--compact .footer__main,
-  .footer--compact .footer__fine {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
+  .footer--card .footer__main {
+    padding: 3rem 2.75rem 1.25rem;
   }
 
-  /* Liên hệ và nút CTA đứng sát nhau ở bên phải, tên thương hiệu một mình bên trái. */
-  .footer--compact .footer__contact {
-    margin-left: auto;
+  .footer--card .footer__top {
+    grid-template-columns: 1fr auto;
+    align-items: end;
   }
 
-  .footer--compact .footer__credits-wrap {
-    margin-left: auto;
+  .footer--card .footer__action {
+    justify-items: end;
     text-align: right;
+  }
+
+  .footer--card .footer__cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footer--card .footer__credits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
   }
 }

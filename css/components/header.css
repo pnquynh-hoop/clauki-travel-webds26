@@ -72,7 +72,7 @@
 }
 
 .header__link:hover {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 /* Nút CTA trên thanh chỉ hiện ở màn rộng; điện thoại dùng thanh CTA dính đáy. */
@@ -123,17 +123,100 @@
   }
 }
 
-/* Kiểu solid: nền màu trang hơi trong và làm mờ nội dung chạy phía sau khi cuộn,
-   thêm một dòng thông tin nhỏ phía trên. */
+/* Kiểu solid: nền màu trang hơi trong, làm mờ nội dung chạy phía sau; cuộn khỏi đầu trang thì hiện đường kẻ dưới.
+   Tên thương hiệu in hoa đậm, giãn rộng; nút đặt phòng nhỏ, hiện cả trên điện thoại cạnh nút Menu.
+   Dòng thông tin phía trên chỉ hiện khi dữ liệu có header.note. */
 .header--solid {
-  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 86%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration) ease;
 }
 
-/* Đã cuộn khỏi đầu trang (lớp is-scrolled do JS bật): thêm bóng cho tách khỏi nội dung. */
 .header--solid.is-scrolled {
-  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+/* Điện thoại hẹp nhất (360px) vẫn phải đủ một hàng cho tên, nút đặt phòng và nút Menu, nên khoảng cách và chữ thu nhỏ. */
+.header--solid .header__bar {
+  gap: 0.5rem;
+  min-height: 4rem;
+}
+
+/* Điện thoại: thứ tự tên, nút đặt phòng, nút Menu; menu mở ra nằm hàng dưới. */
+.header--solid .header__brand {
+  order: -2;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.header--solid .header__cta {
+  order: -1;
+  display: inline-flex;
+  min-height: 2.5rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.header--solid .header__toggle {
+  min-height: 2.5rem;
+  padding: 0 0.8rem;
+  font-size: 0.8125rem;
+  border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.header--solid .header__toggle[aria-expanded='true'] {
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.header--solid .header__link {
+  padding: 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+@media (min-width: 1024px) {
+  .header--solid .header__bar {
+    gap: 0.75rem 2rem;
+    min-height: 4.5rem;
+  }
+
+  .header--solid .header__brand,
+  .header--solid .header__cta {
+    order: 0;
+  }
+
+  .header--solid .header__brand {
+    font-size: 0.9375rem;
+    letter-spacing: 0.22em;
+  }
+
+  .header--solid .header__nav {
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
+  }
+
+  .header--solid .header__link {
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  .header--solid .header__link:hover {
+    color: var(--color-ink);
+  }
+
+  .header--solid .header__link::after {
+    background: var(--color-primary);
+  }
+
+  .header--solid .header__cta {
+    padding-inline: 1.3rem;
+  }
 }
 
 .header__topbar {
