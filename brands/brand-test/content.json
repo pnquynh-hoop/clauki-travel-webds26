@@ -52,6 +52,24 @@
       "lead": "Không chạy đua điểm check-in. Mỗi ngày chỉ hai chặng chính, còn lại là thời gian dừng, ngắm và trò chuyện với người bản địa."
     },
     {
+      "type": "host",
+      "id": "nguoi-dan-duong",
+      "eyebrow": "Người dẫn đường",
+      "title": "Anh Páo, sinh ra dưới chân đèo Mã Pì Lèng",
+      "story": [
+        "Anh Páo dẫn khách đi những con đường anh đi học hồi nhỏ.",
+        "Mỗi đoàn anh chỉ nhận 10 người, để ai cũng hỏi được chuyện bản."
+      ],
+      "quote": { "text": "Đi chậm thì mới gặp được người.", "by": "Anh Páo, hướng dẫn viên" },
+      "facts": [
+        { "value": "12", "label": "năm dẫn đoàn" },
+        { "value": "3", "label": "thứ tiếng" },
+        { "value": "10", "label": "khách mỗi đoàn" }
+      ],
+      "image": { "src": "images/host-1.jpg", "alt": "Người đàn ông đứng trên con đường đèo, sau lưng là núi đá" },
+      "imageSecond": { "src": "images/host-2.jpg", "alt": "Ngôi nhà trình tường giữa ruộng ngô" }
+    },
+    {
       "type": "features",
       "id": "vi-sao",
       "variant": "grid",
