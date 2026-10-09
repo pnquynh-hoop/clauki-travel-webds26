@@ -1,0 +1,119 @@
+/* host.css - giao diện của <wl-host>. Màu, font lấy từ biến CSS; đệm trên dưới của khối do base.css lo (main > *). */
+
+.host {
+  display: block;
+}
+
+/* Điện thoại: ảnh trên, chữ dưới. Màn rộng: ảnh một bên, chữ một bên. */
+.host__inner {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .host__inner {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 5rem;
+  }
+}
+
+/* Ảnh nhỏ đè lên góc dưới phải ảnh lớn; chừa lề để ảnh nhỏ không tràn ra ngoài khối.
+   Không có ảnh nhỏ thì không cần chừa lề. */
+.host__media {
+  position: relative;
+}
+
+.host__media:has(.host__second) {
+  padding: 0 2rem 2rem 0;
+}
+
+.host__main {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.host__second {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 45%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  /* Viền cùng màu nền trang để ảnh nhỏ tách khỏi ảnh lớn, thương hiệu nào cũng hợp. */
+  border: 0.4rem solid var(--color-bg);
+  border-radius: var(--radius);
+}
+
+.host__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.host__title {
+  margin-top: 0.75rem;
+  color: var(--color-ink);
+}
+
+.host__story {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+  max-width: 40ch;
+  color: var(--color-muted);
+}
+
+.host__quote {
+  margin-top: 1.75rem;
+  padding-left: 1.1rem;
+  border-left: 3px solid var(--color-accent);
+}
+
+.host__quote-text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.45rem);
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.host__quote-by {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.host__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+/* dt đứng trước dd trong mã; đảo chiều để con số lớn nằm trên nhãn. */
+.host__fact {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.host__fact-value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 1.5rem + 1.5vw, 2.4rem);
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+.host__fact-label {
+  margin-top: 0.3rem;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
