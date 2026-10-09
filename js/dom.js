@@ -31,3 +31,16 @@ export function groupEl(className, children) {
 export function telHref(phone) {
   return phone ? `tel:${phone.replace(/\s/g, '')}` : null;
 }
+
+// Hai hàm tính toán nhỏ cho các hiệu ứng chạy theo cuộn trang.
+
+// Giữ một số nằm trong khoảng từ min tới max.
+export function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+// Đi dần từ 0 lên 1 khi x chạy từ from tới to, chậm ở hai đầu, để chuyển động không bị giật.
+export function smooth(from, to, x) {
+  const t = clamp((x - from) / (to - from), 0, 1);
+  return t * t * (3 - 2 * t);
+}

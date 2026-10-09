@@ -2,14 +2,8 @@
    core.js đưa thông tin chung (el.site) trước, rồi đưa dữ liệu của khối (el.data) để vẽ.
    Khối này không cần el.site; khối có nút (như hero) thì lấy nút từ this.site.cta. */
 
-// Trường nào trống thì trả về null để bỏ qua, không tạo thẻ rỗng.
-function textEl(tag, className, text) {
-  if (!text) return null;
-  const el = document.createElement(tag);
-  el.className = className;
-  el.textContent = text;
-  return el;
-}
+// textEl dùng chung trong dom.js: trường nào trống thì trả về null để bỏ qua, không tạo thẻ rỗng.
+import { textEl } from '../dom.js';
 
 export class WlIntro extends HTMLElement {
   // "set data" tự chạy mỗi khi có dòng el.data = ... (core.js làm việc này).
