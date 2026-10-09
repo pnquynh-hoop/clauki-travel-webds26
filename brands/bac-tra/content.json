@@ -1,10 +1,787 @@
 {
   "id": "bac-tra",
-  "meta": { "title": "Bậc Trà (tạm)", "description": "", "favicon": "" },
-  "brand": { "name": "", "logo": "", "slogan": "" },
-  "cta": { "label": "", "href": "" },
-  "nav": [],
-  "sections": [],
-  "footer": {},
-  "credits": []
+  "meta": {
+    "title": "Bậc Trà · Tour Tây Bắc 4 ngày 3 đêm mùa nước đổ 2027",
+    "description": "Tour đoàn nhỏ tối đa 12 khách: hái chè Shan tuyết trên mây ở Suối Giàng, tắm suối khoáng Tú Lệ, ngắm ruộng bậc thang Mù Cang Chải mùa nước đổ.",
+    "favicon": "images/favicon.png"
+  },
+  "brand": {
+    "name": "Bậc Trà",
+    "logo": "images/logo.png",
+    "slogan": "Hái trà trên mây, ngắm lúa trên núi"
+  },
+  "cta": {
+    "label": "Giữ chỗ",
+    "href": "#dat-cho",
+    "note": "Từ 5.490.000đ / khách"
+  },
+  "nav": [
+    {
+      "label": "Lịch trình",
+      "href": "#lich-trinh"
+    },
+    {
+      "label": "Làm trà",
+      "href": "#tu-bup-den-chen"
+    },
+    {
+      "label": "Lịch mùa",
+      "href": "#lich-mua"
+    },
+    {
+      "label": "Hỏi đáp",
+      "href": "#hoi-dap"
+    }
+  ],
+  "header": {
+    "variant": "overlay"
+  },
+  "contact": {
+    "phone": "0123 456 789",
+    "email": "clauki@bactra.example",
+    "address": "Thành phố Hồ Chí Minh"
+  },
+  "place": {
+    "name": "Mù Cang Chải",
+    "lat": 21.85,
+    "lon": 104.09,
+    "timezone": "Asia/Ho_Chi_Minh",
+    "hunt": {
+      "name": "Suối Giàng",
+      "lat": 21.62,
+      "lon": 104.47
+    }
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "id": "gioi-thieu",
+      "variant": "full",
+      "eyebrow": "Tour Tây Bắc · 4 ngày 3 đêm · Mùa nước đổ 2027",
+      "title": "Hái trà trên mây, ngắm lúa trên núi",
+      "lead": "Đoàn nhỏ tối đa 12 khách, đi chậm qua hồ Thác Bà, đồi chè Suối Giàng và ruộng bậc thang Mù Cang Chải.",
+      "image": {
+        "src": "images/hero.jpg",
+        "alt": "Ruộng bậc thang xanh trong sương, một chòi nhỏ giữa sườn đồi"
+      },
+      "link": {
+        "label": "Xem lịch trình",
+        "href": "#lich-trinh"
+      },
+      "stats": [
+        {
+          "value": "4N3Đ",
+          "label": "khởi hành từ Hà Nội"
+        },
+        {
+          "value": "12",
+          "label": "khách tối đa mỗi đoàn"
+        },
+        {
+          "value": "1.400 m",
+          "label": "đồi chè Suối Giàng"
+        }
+      ]
+    },
+    {
+      "type": "intro",
+      "id": "cach-di",
+      "eyebrow": "Cách Bậc Trà đi",
+      "title": "Bốn ngày không vội",
+      "lead": "Mỗi ngày một chặng ngắn, ngủ nhà người dân, ăn cơm cùng chủ nhà. Đủ chậm để thấy mây lên từ thung lũng."
+    },
+    {
+      "type": "journey",
+      "id": "lich-trinh",
+      "variant": "road",
+      "eyebrow": "Lịch trình",
+      "title": "Con đường bốn ngày",
+      "lead": "Từ mặt hồ lên đồi chè trong mây, rồi xuống thung lũng lúa. Mỗi ngày một chặng ngắn, mỗi đêm ngủ nhà người dân.",
+      "days": [
+        {
+          "title": "Ngày 1",
+          "text": "Hồ Thác Bà, Nghĩa Lộ"
+        },
+        {
+          "title": "Ngày 2",
+          "text": "Suối Giàng, Tú Lệ"
+        },
+        {
+          "title": "Ngày 3",
+          "text": "Đèo Khau Phạ, Mù Cang Chải"
+        },
+        {
+          "title": "Ngày 4",
+          "text": "Về Hà Nội"
+        }
+      ],
+      "note": "Độ cao làm tròn, theo báo chí và dữ liệu địa hình.",
+      "planLabel": "Ở đây làm gì?",
+      "finish": {
+        "eyebrow": "Hết bốn ngày, xe về tới Hà Nội",
+        "title": "Chuyến gần nhất: thứ Năm 13/05/2027, còn 12 chỗ",
+        "text": "Giữ chỗ trước 31/12/2026: giảm 500.000đ mỗi khách"
+      },
+      "stops": [
+        {
+          "time": "Ngày 1 · 09:45",
+          "title": "Hồ Thác Bà",
+          "altitude": 58,
+          "text": "Đi thuyền giữa mặt hồ xanh ngọc, len qua những hòn đảo nhỏ.",
+          "image": {
+            "src": "images/journey-1.jpg",
+            "alt": "Hồ Thác Bà nhìn từ trên cao với nhiều đảo nhỏ xanh"
+          },
+          "plan": [
+            {
+              "time": "06:00",
+              "text": "Xe 16 chỗ đón ở phố cổ Hà Nội, đi khoảng 3 tiếng tới hồ."
+            },
+            {
+              "time": "09:45",
+              "text": "Lên thuyền khoảng 2 tiếng, len qua các đảo nhỏ giữa hồ.",
+              "image": {
+                "src": "images/plan-boat.jpg",
+                "alt": "Thuyền du lịch neo bên một đảo trên hồ Thác Bà"
+              }
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa với cá hồ.",
+              "image": {
+                "src": "images/plan-grilled-fish.jpg",
+                "alt": "Cá nướng đặt trên lá chuối"
+              }
+            },
+            {
+              "time": "13:30",
+              "text": "Lên xe đi Nghĩa Lộ."
+            }
+          ]
+        },
+        {
+          "time": "Ngày 1 · 16:30",
+          "title": "Cánh đồng Mường Lò",
+          "altitude": 250,
+          "text": "Dạo bờ ruộng lúc chiều xuống, tối xem múa xòe Thái bên bếp lửa.",
+          "night": "Đêm 1: nhà sàn của một gia đình người Thái ở Nghĩa Lộ",
+          "image": {
+            "src": "images/journey-2.jpg",
+            "alt": "Cánh đồng lúa Mường Lò chín vàng, phía xa là nhà dân và dãy núi"
+          },
+          "plan": [
+            {
+              "time": "16:30",
+              "text": "Tới bản người Thái, đi dạo bờ ruộng Mường Lò lúc chiều xuống."
+            },
+            {
+              "time": "19:30",
+              "text": "Ăn tối, xem múa xòe Thái. Nghệ thuật Xòe Thái được UNESCO ghi danh năm 2021.",
+              "image": {
+                "src": "images/plan-xoe-dance.jpg",
+                "alt": "Thiếu nữ Thái múa xòe quạt trong nhà sàn"
+              }
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 1",
+              "text": "Ngủ nhà sàn của một gia đình người Thái.",
+              "image": {
+                "src": "images/plan-stilt-house.jpg",
+                "alt": "Nhà sàn gỗ bên cánh đồng lúa ở Nghĩa Lộ"
+              }
+            }
+          ]
+        },
+        {
+          "time": "Ngày 2 · 05:00",
+          "title": "Suối Giàng",
+          "altitude": 1400,
+          "text": "Đứng trên mây lúc trời vừa sáng, rồi hái chè Shan tuyết cổ thụ cùng một gia đình người H'Mông.",
+          "image": {
+            "src": "images/journey-3.jpg",
+            "alt": "Cây chè Shan tuyết cổ thụ cành xoè rộng ở Suối Giàng"
+          },
+          "plan": [
+            {
+              "time": "05:00",
+              "text": "Lên đồi ngắm mây buổi sớm, ở độ cao khoảng 1.400 m.",
+              "image": {
+                "src": "images/plan-sea-of-clouds.jpg",
+                "alt": "Một người đứng ngắm biển mây phủ kín các dãy núi"
+              }
+            },
+            {
+              "time": "08:00",
+              "text": "Hái chè Shan tuyết cùng một gia đình người H'Mông.",
+              "image": {
+                "src": "images/plan-tea-picking.jpg",
+                "alt": "Người phụ nữ đeo túi vải hái chè giữa vườn chè cây cao"
+              }
+            },
+            {
+              "time": "Sau đó",
+              "text": "Xem sao chè bằng tay trong chảo gang, uống chén trà vừa làm.",
+              "image": {
+                "src": "images/tea-dry.jpg",
+                "alt": "Chè Shan tuyết đã sao khô"
+              },
+              "link": {
+                "label": "Xem cách làm trà",
+                "href": "#tu-bup-den-chen"
+              }
+            },
+            {
+              "kind": "tip",
+              "time": "Mang theo",
+              "text": "Áo ấm: buổi sáng trên đồi chè lạnh hơn dưới thung lũng."
+            }
+          ]
+        },
+        {
+          "time": "Ngày 2 · 16:00",
+          "title": "Tú Lệ",
+          "altitude": 660,
+          "text": "Ngâm mình trong suối khoáng nóng khoảng 35 độ, tối ăn xôi nếp Tú Lệ.",
+          "night": "Đêm 2: nhà sàn ở Tú Lệ",
+          "image": {
+            "src": "images/journey-4.jpg",
+            "alt": "Thung lũng Tú Lệ mùa nước đổ, ruộng bậc thang loang loáng nước dưới nắng chiều"
+          },
+          "plan": [
+            {
+              "time": "16:00",
+              "text": "Tắm suối khoáng nóng khoảng 35 độ C, ở khu dành cho khách."
+            },
+            {
+              "time": "19:00",
+              "text": "Ăn tối với xôi nếp Tú Lệ và các món địa phương.",
+              "image": {
+                "src": "images/plan-sticky-rice.jpg",
+                "alt": "Xôi nếp trắng trong giỏ mây đan của người Thái"
+              }
+            },
+            {
+              "kind": "tip",
+              "time": "Mang theo",
+              "text": "Đồ bơi cho suối khoáng."
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 2",
+              "text": "Ngủ nhà sàn ở Tú Lệ."
+            }
+          ]
+        },
+        {
+          "time": "Ngày 3 · 07:30",
+          "title": "Đèo Khau Phạ",
+          "altitude": 1200,
+          "text": "Khau Phạ nghĩa là sừng trời: từ đỉnh đèo nhìn xuống cả thung lũng ruộng bậc thang.",
+          "image": {
+            "src": "images/journey-5.jpg",
+            "alt": "Ruộng bậc thang xanh dưới chân đèo Khau Phạ nhìn từ trên cao"
+          },
+          "plan": [
+            {
+              "time": "07:30",
+              "text": "Qua đèo dài khoảng 30 km, xe dừng ở chỗ ngắm thung lũng.",
+              "image": {
+                "src": "images/plan-khau-pha.jpg",
+                "alt": "Thung lũng ruộng bậc thang dưới đèo Khau Phạ, mây vắt ngang núi"
+              }
+            },
+            {
+              "time": "Quãng đường",
+              "text": "Tú Lệ đến Mù Cang Chải khoảng 60 km."
+            },
+            {
+              "time": "10:00",
+              "text": "Tới Mù Cang Chải."
+            }
+          ]
+        },
+        {
+          "time": "Ngày 3 · 10:30",
+          "title": "La Pán Tẩn",
+          "altitude": 1240,
+          "text": "Đi bộ giữa ruộng bậc thang mùa nước đổ, chiều ghé thác Pú Nhu.",
+          "night": "Đêm 3: nhà của một gia đình người H'Mông ở Mù Cang Chải",
+          "image": {
+            "src": "images/journey-6.jpg",
+            "alt": "Mây trắng trôi qua sườn đồi ruộng bậc thang La Pán Tẩn"
+          },
+          "plan": [
+            {
+              "time": "10:30",
+              "text": "Đi bộ giữa ruộng bậc thang mùa nước đổ cùng người dẫn đường trong bản.",
+              "image": {
+                "src": "images/plan-terrace-walk.jpg",
+                "alt": "Người đi trên bờ ruộng bậc thang mùa nước đổ"
+              }
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa ở bản."
+            },
+            {
+              "time": "14:30",
+              "text": "Thăm thác Pú Nhu, cách trung tâm Mù Cang Chải khoảng 10 km.",
+              "image": {
+                "src": "images/plan-waterfall.jpg",
+                "alt": "Thác nước trắng đổ xuống vách núi, du khách đứng trên cầu sắt"
+              }
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 3",
+              "text": "17:30 về nhà một gia đình người H'Mông, ăn tối và ngủ lại.",
+              "image": {
+                "src": "images/plan-hmong-house.jpg",
+                "alt": "Phụ nữ H'Mông nện đất trình tường dựng nhà"
+              }
+            }
+          ]
+        },
+        {
+          "time": "Ngày 4 · 06:00",
+          "title": "Chào Mù Cang Chải",
+          "altitude": 1000,
+          "text": "Ngắm ruộng lúc sáng sớm rồi lên xe, về tới Hà Nội khoảng 18:00 đến 19:00.",
+          "image": {
+            "src": "images/journey-7.jpg",
+            "alt": "Ruộng bậc thang uốn quanh sườn núi ở Chế Cu Nha, Mù Cang Chải"
+          },
+          "plan": [
+            {
+              "time": "06:00",
+              "text": "Ngắm ruộng bậc thang lúc sáng sớm.",
+              "image": {
+                "src": "images/plan-morning-mist.jpg",
+                "alt": "Sương sớm vắt ngang thung lũng ruộng bậc thang Mù Cang Chải"
+              }
+            },
+            {
+              "time": "08:00",
+              "text": "Ăn sáng, rời Mù Cang Chải. Đường về khoảng 300 km."
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa dọc đường."
+            },
+            {
+              "time": "18:00 đến 19:00",
+              "text": "Về tới phố cổ Hà Nội."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "process",
+      "id": "tu-bup-den-chen",
+      "variant": "morph",
+      "eyebrow": "Làm trà cùng người H'Mông",
+      "title": "Từ búp chè đến chén trà",
+      "lead": "Ở Suối Giàng, bạn tự tay làm cả năm bước. Chén trà cuối cùng uống ngay tại bản.",
+      "steps": [
+        {
+          "name": "Hái",
+          "text": "Hái một tôm hai lá non bằng tay, lúc sương còn đọng.",
+          "color": "#6f9c3f",
+          "shape": "M -150 0 C -90 -100 75 -108 150 0 C 75 108 -90 100 -150 0 Z"
+        },
+        {
+          "name": "Làm héo",
+          "text": "Rải mỏng búp chè cho bớt nước, lá mềm ra.",
+          "color": "#8b9546",
+          "shape": "M -140 12 C -82 -74 62 -84 138 30 C 66 88 -84 86 -140 12 Z"
+        },
+        {
+          "name": "Sao",
+          "text": "Đảo chè trong chảo gang nóng để giữ màu xanh.",
+          "color": "#6c6430",
+          "shape": "M -128 10 C -74 -60 52 -70 122 24 C 56 74 -76 72 -128 10 Z"
+        },
+        {
+          "name": "Vò",
+          "text": "Vò bằng tay cho lá xoăn lại, hương chè dậy lên.",
+          "color": "#4e4a27",
+          "shape": "M -122 8 C -64 -26 50 -34 116 6 C 52 28 -64 32 -122 8 Z"
+        },
+        {
+          "name": "Sấy khô",
+          "text": "Sấy lần cuối, rồi pha chén trà đầu tiên ngay tại bản.",
+          "color": "#37321f",
+          "shape": "M -74 4 C -38 -16 30 -20 68 2 C 30 16 -38 18 -74 4 Z",
+          "image": {
+            "src": "images/tea-dry.jpg",
+            "alt": "Chè Shan tuyết đã sấy khô, sợi xoăn màu xanh đen"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gallery",
+      "id": "thu-vien",
+      "variant": "window",
+      "eyebrow": "Ngồi bên cửa sổ",
+      "title": "Đèo Khau Phạ qua kính xe 16 chỗ",
+      "images": [
+        {
+          "src": "images/window-1.jpg",
+          "alt": "Dãy núi xanh trùng điệp nhìn từ đèo Khau Phạ",
+          "caption": "Đèo Khau Phạ"
+        },
+        {
+          "src": "images/season-water.jpg",
+          "alt": "Ruộng bậc thang đầy nước dưới chân đèo Khau Phạ",
+          "caption": "Khau Phạ mùa nước đổ"
+        },
+        {
+          "src": "images/journey-5.jpg",
+          "alt": "Ruộng bậc thang xanh nhìn từ trên cao",
+          "caption": "Thung lũng dưới chân đèo"
+        },
+        {
+          "src": "images/journey-6.jpg",
+          "alt": "Mây trôi qua ruộng bậc thang La Pán Tẩn",
+          "caption": "La Pán Tẩn"
+        },
+        {
+          "src": "images/journey-7.jpg",
+          "alt": "Ruộng bậc thang uốn quanh sườn núi ở Chế Cu Nha",
+          "caption": "Chế Cu Nha, Mù Cang Chải"
+        }
+      ]
+    },
+    {
+      "type": "seasons",
+      "id": "lich-mua",
+      "variant": "slider",
+      "eyebrow": "Lịch mùa",
+      "title": "Kéo một năm qua ruộng",
+      "lead": "Kéo thanh tháng để thấy nước đổ từ tầng ruộng trên cùng xuống, lúa lên xanh rồi chín vàng.",
+      "month": 5,
+      "seasons": [
+        {
+          "name": "Hái chè xuân",
+          "months": [
+            3,
+            4
+          ],
+          "color": "#2f5d46",
+          "text": "Búp chè Shan tuyết non lên sau mùa đông, phủ một lớp lông tơ trắng.",
+          "image": {
+            "src": "images/journey-3.jpg",
+            "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
+          }
+        },
+        {
+          "name": "Mùa nước đổ",
+          "months": [
+            5,
+            6
+          ],
+          "color": "#7fb4c6",
+          "trip": true,
+          "text": "Nước dẫn về từng tầng ruộng, mặt ruộng soi cả bầu trời. Các chuyến năm 2027 đi đúng mùa này.",
+          "image": {
+            "src": "images/season-water.jpg",
+            "alt": "Ruộng bậc thang đầy nước phản chiếu bầu trời"
+          }
+        },
+        {
+          "name": "Lúa xanh",
+          "months": [
+            7,
+            8
+          ],
+          "color": "#6f9a3e",
+          "text": "Lúa lên đều, các tầng ruộng xanh mướt từ chân đồi tới đỉnh.",
+          "image": {
+            "src": "images/season-green.jpg",
+            "alt": "Ruộng lúa xanh trên sườn đồi ở Lìm Mông"
+          }
+        },
+        {
+          "name": "Lúa chín",
+          "months": [
+            9,
+            10
+          ],
+          "color": "#d4a43a",
+          "text": "Ruộng chuyển vàng, mùa đông khách nhất trong năm.",
+          "image": {
+            "src": "images/season-gold.jpg",
+            "alt": "Người dân gặt lúa trên ruộng bậc thang vàng"
+          }
+        }
+      ],
+      "rest": {
+        "name": "Ruộng nghỉ",
+        "color": "#a3865f",
+        "text": "Sau mùa gặt, ruộng để nghỉ. Bậc Trà chưa mở chuyến vào những tháng này.",
+        "image": {
+          "src": "images/journey-7.jpg",
+          "alt": "Ruộng bậc thang sau mùa gặt"
+        }
+      }
+    },
+    {
+      "type": "booking",
+      "id": "dat-cho",
+      "variant": "calendar",
+      "eyebrow": "Mùa nước đổ 2027 · Mở giữ chỗ sớm",
+      "title": "Chọn chuyến, giữ chỗ",
+      "lead": "Năm chuyến, đều khởi hành thứ Năm và về Hà Nội chiều Chủ nhật. Bậc Trà gọi lại xác nhận rồi mới nhận cọc.",
+      "price": 5490000,
+      "priceNote": "mỗi khách, đã gồm xe, ăn, ngủ và vé tham quan",
+      "deal": {
+        "amount": 500000,
+        "until": "2026-12-31",
+        "label": "Giữ chỗ trước 31/12/2026: giảm 500.000đ mỗi khách"
+      },
+      "includes": [
+        "Xe đưa đón từ phố cổ Hà Nội và trở về",
+        "3 đêm ngủ nhà sàn, nhà người dân",
+        "Các bữa chính trong hành trình",
+        "Thuyền hồ Thác Bà, vé suối khoáng Tú Lệ",
+        "Trưởng đoàn, người dẫn đường địa phương, bảo hiểm du lịch"
+      ],
+      "excludes": [
+        "Đồ uống gọi thêm",
+        "Chi tiêu cá nhân",
+        "Bay dù lượn tự chọn"
+      ],
+      "departures": [
+        {
+          "date": "2027-05-13",
+          "seats": 12
+        },
+        {
+          "date": "2027-05-20",
+          "seats": 4
+        },
+        {
+          "date": "2027-05-27",
+          "seats": 0
+        },
+        {
+          "date": "2027-06-03",
+          "seats": 9
+        },
+        {
+          "date": "2027-06-10",
+          "seats": 12
+        }
+      ],
+      "hotline": "0123 456 789"
+    },
+    {
+      "type": "faq",
+      "id": "hoi-dap",
+      "eyebrow": "Hỏi đáp",
+      "title": "Trước khi lên đường",
+      "items": [
+        {
+          "question": "Chưa đi núi bao giờ thì có theo được không?",
+          "answer": "Được. Các chặng đi bộ ngắn, đi chậm và có nghỉ; phần lớn quãng đường đi bằng xe 16 chỗ."
+        },
+        {
+          "question": "Chuyến đi không trúng vụ hái chè thì sao?",
+          "answer": "Bạn vẫn thăm vườn chè cổ thụ và học sao chè cùng chủ nhà ở Suối Giàng."
+        },
+        {
+          "question": "Ngủ ở đâu?",
+          "answer": "Ba đêm ngủ nhà sàn và nhà của người dân, chăn đệm sạch. Đây là chỗ ngủ kiểu nhà sàn, không phải phòng khách sạn."
+        },
+        {
+          "question": "Cần mang theo gì?",
+          "answer": "Áo ấm cho buổi sáng trên Suối Giàng, giày đi bộ, đồ bơi cho suối khoáng nóng ở Tú Lệ."
+        },
+        {
+          "question": "Đi một mình có được không?",
+          "answer": "Được. Đoàn tối đa 12 khách, có trưởng đoàn đi cùng suốt bốn ngày."
+        }
+      ]
+    },
+    {
+      "type": "banner",
+      "id": "hen-tren-may",
+      "title": "Hẹn bạn trên mây",
+      "image": {
+        "src": "images/journey-6.jpg",
+        "alt": "Mây trắng trôi qua ruộng bậc thang La Pán Tẩn"
+      }
+    }
+  ],
+  "footer": {
+    "variant": "columns",
+    "note": "Bậc Trà là thương hiệu giả tưởng, mọi thông tin chỉ để minh hoạ."
+  },
+  "credits": [
+    {
+      "file": "images/logo.png",
+      "author": "Đội ClauKi, tạo bằng Gemini",
+      "license": "Tự thiết kế",
+      "source": ""
+    },
+    {
+      "file": "images/favicon.png",
+      "author": "Đội ClauKi, tạo bằng Gemini",
+      "license": "Tự thiết kế",
+      "source": ""
+    },
+    {
+      "file": "images/hero.jpg",
+      "author": "Sasint",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Steadywhenwalking.jpg"
+    },
+    {
+      "file": "images/journey-1.jpg",
+      "author": "Kiếm Anh",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Th%C3%A1c_B%C3%A0_lake_-_panorama.jpg"
+    },
+    {
+      "file": "images/journey-2.jpg",
+      "author": "Saokim999",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:C%C3%A1nh_%C4%91%E1%BB%93ng_M%C6%B0%E1%BB%9Dng_L%C3%B2_v%C3%A0o_v%E1%BB%A5.jpg"
+    },
+    {
+      "file": "images/journey-3.jpg",
+      "author": "Viethavvh",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:Suoi_Giang_tea.JPG"
+    },
+    {
+      "file": "images/journey-4.jpg",
+      "author": "An Bui",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Tu_Le,_Yen_Bai.jpg"
+    },
+    {
+      "file": "images/journey-5.jpg",
+      "author": "Doan Tuan",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_Pass,_Vietnam_(Unsplash).jpg"
+    },
+    {
+      "file": "images/journey-6.jpg",
+      "author": "Văn Ngọc Tăng",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:La_P%C3%A1n_T%E1%BA%A9n_Agriculture_(Unsplash).jpg"
+    },
+    {
+      "file": "images/journey-7.jpg",
+      "author": "Doan Tuan",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Terraces_in_Che_Cu_Nha_commune,_Mu_Cang_Chai_(Unsplash).jpg"
+    },
+    {
+      "file": "images/window-1.jpg",
+      "author": "Viethavvh",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1.jpg"
+    },
+    {
+      "file": "images/season-water.jpg",
+      "author": "Vũ Hùng",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:KHAU_PH%E1%BA%A0_M%C3%99A_N%C6%AF%E1%BB%9AC_%C4%90%E1%BB%94_-_panoramio.jpg"
+    },
+    {
+      "file": "images/season-green.jpg",
+      "author": "jihadv",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Limmong1.jpg"
+    },
+    {
+      "file": "images/season-gold.jpg",
+      "author": "Malock2589",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Golden-terraced-fields-in-Mu-Cang-Chai.jpg"
+    },
+    {
+      "file": "images/tea-dry.jpg",
+      "author": "VuThiAnh",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:Che_Shan_tuyet.JPG"
+    },
+    {
+      "file": "images/plan-boat.jpg",
+      "author": "Kiếm Anh",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Th%C3%A1c_B%C3%A0_lake.jpg"
+    },
+    {
+      "file": "images/plan-grilled-fish.jpg",
+      "author": "Phương Huy",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khu_%E1%BA%A9m_th%E1%BB%B1c_B%E1%BA%BFn_Ngh%C3%A9_ng13th8n2023_(c%C3%A1_n%C6%B0%E1%BB%9Bng_T%C3%A2y_B%E1%BA%AFc_Pa_t%E1%BB%89nh_t%E1%BB%99p)_(7).jpg"
+    },
+    {
+      "file": "images/plan-xoe-dance.jpg",
+      "author": "RG72",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Distrikto_Mai_Chau,_Vjetnamio_20.jpg"
+    },
+    {
+      "file": "images/plan-stilt-house.jpg",
+      "author": "Velvet",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Nghia_Lo_maisons_tradi.jpg"
+    },
+    {
+      "file": "images/plan-sea-of-clouds.jpg",
+      "author": "Linh Pham",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Man_alone_in_T%E1%BA%A3_X%C3%B9a_03-03-2017.jpg"
+    },
+    {
+      "file": "images/plan-tea-picking.jpg",
+      "author": "Benjamin Smith",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:L%C3%B9ng_V%C3%A0i,_H%C3%A0_Giang,_Vietnam_-_3.jpg"
+    },
+    {
+      "file": "images/plan-sticky-rice.jpg",
+      "author": "Hà Nghĩa VN",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:X%C3%B4i_n%E1%BA%BFp_c%E1%BB%A7a_ng%C6%B0%E1%BB%9Di_Th%C3%A1i_b%E1%BA%A3n_Phe.jpg"
+    },
+    {
+      "file": "images/plan-khau-pha.jpg",
+      "author": "Victor311",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao.jpg"
+    },
+    {
+      "file": "images/plan-terrace-walk.jpg",
+      "author": "Vũ Hùng",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:WAVES_-_panoramio.jpg"
+    },
+    {
+      "file": "images/plan-waterfall.jpg",
+      "author": "Lori_NY",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Thacbac3.jpg"
+    },
+    {
+      "file": "images/plan-hmong-house.jpg",
+      "author": "Alfred Boc",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:HouseBuildingInNorthernVietnam.jpg"
+    },
+    {
+      "file": "images/plan-morning-mist.jpg",
+      "author": "Vũ Hùng",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:S%C3%81NG_S%E1%BB%9AM_%E1%BB%9E_M%C3%99_CANG_CH%E1%BA%A2I_-_panoramio.jpg"
+    }
+  ]
 }
