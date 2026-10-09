@@ -39,9 +39,8 @@
 
 .room-view__eyebrow {
   margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: color-mix(in srgb, var(--color-bg) 75%, var(--color-accent));
 }
 
@@ -188,18 +187,11 @@
 }
 
 /* Nền khối tối nên nút CTA đảo màu: nền sáng, chữ màu chủ đạo. */
+/* Nút giữ màu nút chính của trang (nền màu chủ đạo, chữ --color-on-primary), nổi rõ trên nền tối. */
 .room-view__cta {
   display: flex;
   width: fit-content;
   margin: 2rem auto 0;
-  color: var(--color-primary);
-  background: var(--color-bg);
-  border-color: var(--color-bg);
-}
-
-.room-view__cta:hover {
-  background: color-mix(in srgb, var(--color-bg) 85%, var(--color-primary));
-  border-color: color-mix(in srgb, var(--color-bg) 85%, var(--color-primary));
 }
 
 /* Có chuyển động: trước khi khối cuộn tới (chưa có is-visible), hai thẻ bên nằm sau thẻ giữa;
