@@ -7,24 +7,11 @@
   align-items: center;
 }
 
-/* Vạch ngắn trước nhãn nhỏ dẫn mắt xuống tiêu đề. */
 .hero__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   margin: 0 0 1rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--color-accent);
-}
-
-.hero__eyebrow::before {
-  content: '';
-  flex: none;
-  width: 2.5rem;
-  height: 1px;
-  background: currentColor;
 }
 
 .hero__title {
@@ -51,6 +38,13 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 2.25rem;
+}
+
+/* Dòng giá nhỏ ngay dưới nút, lấy từ cta.note. */
+.hero__note {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
 }
 
 /* Ba con số xếp một hàng, ngăn nhau bằng vạch dọc mảnh. */
@@ -85,7 +79,7 @@
   font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
   font-weight: 600;
   line-height: 1;
-  color: var(--color-primary);
+  color: var(--color-ink);
 }
 
 .hero__stat-label {
@@ -108,142 +102,314 @@
   object-fit: cover;
 }
 
-/* Kiểu split: chữ bên trái, ảnh lớn bên phải tràn sát mép màn hình, chỉ bo lớn góc dưới bên trái.
-   Độ cong tính từ --radius: thương hiệu bo tròn thì cong lớn, thương hiệu góc vuông thì gần như vuông. */
-.hero--split {
-  padding-block: 0;
+/* Kiểu coverflow: chồng thẻ ảnh đứng xếp theo chiều sâu, tiêu đề lớn đè lên giữa chồng thẻ,
+   nền là ảnh đang xem được làm mờ rồi phủ màu nền trang. Dưới chồng thẻ là nút chuyển ảnh, đoạn dẫn, nút CTA.
+   --deck-h là chiều cao chồng thẻ; bề ngang mỗi thẻ tính theo nó để thẻ luôn giữ dáng đứng. */
+.hero--coverflow {
+  --deck-h: min(27rem, 112vw);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-height: min(100svh - 4.5rem, 64rem);
+  padding-block: 1.5rem 3rem;
+  overflow: clip;
 }
 
-/* Bỏ khung .container ở kiểu này để ảnh tràn được ra sát mép; chữ tự chừa lề. */
-.hero--split .hero__inner {
-  width: 100%;
+/* Bỏ khung chữ riêng (display: contents) để từng phần chữ xếp thẳng vào lưới của .hero__inner:
+   tiêu đề nằm cùng ô với chồng thẻ nên đè lên giữa, đoạn dẫn và nút xuống dưới phần nút chuyển ảnh. */
+.hero--coverflow .hero__inner {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
   gap: 0;
-  align-items: stretch;
+  text-align: center;
 }
 
-.hero--split .hero__copy {
-  padding: 2.5rem 1rem var(--space-section);
+.hero--coverflow .hero__copy {
+  display: contents;
 }
 
-/* Điện thoại: ảnh lên trên cùng, tràn hai mép, cao hơn nửa màn hình để vừa mở trang đã thấy ảnh. */
-.hero--split .hero__media {
-  order: -1;
-  height: 58svh;
-  border-radius: 0 0 0 calc(var(--radius) * 2.5);
+.hero--coverflow .hero__eyebrow {
+  grid-row: 1;
+  margin: 0 0 1.5rem;
+}
+
+.hero--coverflow .hero__deck,
+.hero--coverflow .hero__media {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.hero--coverflow .hero__title {
+  position: relative;
+  z-index: 4;
+  grid-row: 2;
+  grid-column: 1;
+  align-self: center;
+  padding-inline: 0.5rem;
+  font-size: clamp(2.3rem, 0.85rem + 6vw, 5.25rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  text-shadow: 0 0.25rem 1.75rem color-mix(in srgb, var(--color-ink) 55%, transparent);
+  /* Chữ đè lên ảnh: không chặn cú bấm vào thẻ ảnh phía dưới. */
+  pointer-events: none;
+}
+
+/* Quầng tối mờ sau tiêu đề để chữ sáng luôn đọc được, dù ảnh phía sau sáng hay tối. */
+.hero--coverflow .hero__title::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: min(52rem, 125%);
+  height: 62%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-ink) 55%, transparent), transparent);
+}
+
+.hero--coverflow .hero__controls { grid-row: 3; }
+.hero--coverflow .hero__lead { grid-row: 4; }
+.hero--coverflow .hero__actions { grid-row: 5; }
+.hero--coverflow .hero__note { grid-row: 6; }
+.hero--coverflow .hero__stats { grid-row: 7; }
+
+.hero--coverflow .hero__lead {
+  max-width: 31rem;
+  margin-top: 1.25rem;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+}
+
+/* Điện thoại: hai nút xếp dọc, rộng bằng nhau. */
+.hero--coverflow .hero__actions {
+  display: grid;
+  width: 100%;
+  max-width: 22rem;
+  margin-top: 1.5rem;
+}
+
+.hero--coverflow .btn--ghost {
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.hero--coverflow .btn--ghost:hover {
+  background: var(--color-surface);
+}
+
+/* Chỉ có một ảnh: khung ảnh đứng ở giữa, tiêu đề vẫn đè lên. */
+.hero--coverflow .hero__media {
+  width: calc(var(--deck-h) * 0.62);
+  height: var(--deck-h);
+}
+
+.hero__deck {
+  position: relative;
+  width: 100%;
+  height: var(--deck-h);
+  perspective: 1400px;
+  /* Vuốt dọc vẫn cuộn trang; vuốt ngang để JS chuyển thẻ. */
+  touch-action: pan-y;
+}
+
+/* Thẻ ở xa hơn 2 bậc thì ẩn; các bậc -2 tới 2 đặt bên dưới, đối xứng hai bên. */
+.hero__card {
+  --card-w: calc(var(--deck-h) * 0.62);
+  --dim: 0.62;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--card-w);
+  height: 100%;
+  margin: 0 0 0 calc(var(--card-w) / -2);
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 24%, transparent);
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hero__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Lớp tối phủ lên ảnh, thẻ càng xa càng tối để thẻ giữa nổi lên. */
+.hero__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: var(--dim);
+}
+
+.hero__card[data-pos='0'] {
+  --dim: 0.2;
+  z-index: 3;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.hero__card[data-pos='-1'],
+.hero__card[data-pos='1'] {
+  --dim: 0.45;
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero__card[data-pos='-2'],
+.hero__card[data-pos='2'] {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero__card[data-pos='-1'] { transform: translateX(-92%) rotateY(32deg) scale(0.86); }
+.hero__card[data-pos='1'] { transform: translateX(92%) rotateY(-32deg) scale(0.86); }
+.hero__card[data-pos='-2'] { transform: translateX(-166%) rotateY(42deg) scale(0.72); }
+.hero__card[data-pos='2'] { transform: translateX(166%) rotateY(-42deg) scale(0.72); }
+
+/* Chú thích của ảnh đang xem, nằm ở chân thẻ giữa. */
+.hero__caption {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 1rem;
+  width: max-content;
+  max-width: calc(var(--deck-h) * 0.62 - 2rem);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-bg);
+  background: color-mix(in srgb, var(--color-ink) 66%, transparent);
+  border-radius: var(--radius);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.hero__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Nút Trước, Sau: chữ kèm một vạch ngắn chỉ hướng, rê chuột thì vạch dài ra. */
+.hero__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.hero__nav--prev::before,
+.hero__nav--next::after {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  background: currentColor;
+  transition: width var(--duration) ease;
+}
+
+.hero__nav:hover {
+  color: var(--color-accent);
+}
+
+.hero__nav--prev:hover::before,
+.hero__nav--next:hover::after {
+  width: 2.5rem;
+}
+
+.hero__count {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Nền: ảnh đang xem làm mờ, phủ màu nền trang cho nhạt đi, mép trên và dưới hoà vào màu nền. */
+.hero__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero__backdrop img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(34px) saturate(1.15);
+  transform: scale(1.15);
+  opacity: 0;
+}
+
+.hero__backdrop img.is-active {
+  opacity: 1;
+}
+
+.hero__backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--color-bg), transparent 18%, transparent 62%, var(--color-bg) 98%),
+    color-mix(in srgb, var(--color-bg) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__card {
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s ease;
+  }
+
+  .hero__card::after {
+    transition: opacity 0.8s ease;
+  }
+
+  .hero__card.is-jump {
+    transition: none;
+  }
+
+  .hero__backdrop img {
+    transition: opacity 0.9s ease;
+  }
 }
 
 @media (min-width: 760px) {
-  .hero--split .hero__copy {
-    padding-inline: 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero--split .hero__inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    min-height: 100svh;
+  /* Chồng thẻ cao theo màn hình, chừa chỗ cho header, nút và đoạn dẫn bên dưới. */
+  .hero--coverflow {
+    --deck-h: clamp(22rem, min(100svh, 64rem) - 27rem, 36rem);
   }
 
-  /* Lề trái của chữ thẳng hàng với lề .container của các section bên dưới. */
-  .hero--split .hero__copy {
-    align-self: center;
-    padding-block: 6rem;
-    padding-inline: max(1rem, (100vw - var(--container)) / 2) 3rem;
-  }
-
-  .hero--split .hero__media {
-    order: 0;
-    height: auto;
-    border-radius: 0 0 0 calc(var(--radius) * 6);
-  }
-}
-
-/* Hiệu ứng sunrise, bật bằng "effect": "sunrise" trong content.json.
-   Mở trang: ảnh phủ màu chủ đạo tối rồi tan dần, quầng sáng ấm dâng lên ở mép trên ảnh, chữ hiện lần lượt.
-   Màu lấy từ biến của thương hiệu; chỉ chạy khi người dùng không bật giảm chuyển động. */
-@media (prefers-reduced-motion: no-preference) {
-  .hero--sunrise .hero__media img {
-    animation: hero-dawn 2.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  }
-
-  /* Màu chủ đạo nhân (multiply) lên ảnh cho tối như lúc chưa sáng, rồi mờ dần về 0. */
-  .hero--sunrise .hero__media::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: var(--color-primary);
-    mix-blend-mode: multiply;
-    pointer-events: none;
-    animation: hero-night 2.6s ease-out both;
-  }
-
-  /* Quầng sáng ấm ở mép trên ảnh dâng lên, rồi dịu lại và ở yên đó. */
-  .hero--sunrise .hero__media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background: radial-gradient(
-      ellipse 75% 55% at 45% 0%,
-      color-mix(in srgb, var(--color-accent) 45%, var(--color-bg)),
-      transparent 70%
-    );
-    mix-blend-mode: soft-light;
-    pointer-events: none;
-    animation: hero-glow 3.4s ease-out both;
-  }
-
-  .hero--sunrise .hero__copy > * {
-    animation: hero-rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  }
-
-  .hero--sunrise .hero__copy > :nth-child(1) { animation-delay: 0.9s; }
-  .hero--sunrise .hero__copy > :nth-child(2) { animation-delay: 1.05s; }
-  .hero--sunrise .hero__copy > :nth-child(3) { animation-delay: 1.25s; }
-  .hero--sunrise .hero__copy > :nth-child(4) { animation-delay: 1.45s; }
-  .hero--sunrise .hero__copy > :nth-child(5) { animation-delay: 1.65s; }
-}
-
-@keyframes hero-dawn {
-  from {
-    filter: brightness(0.55) saturate(0.6);
-    transform: scale(1.08);
-  }
-
-  to {
-    filter: none;
-    transform: scale(1);
-  }
-}
-
-@keyframes hero-night {
-  from { opacity: 0.92; }
-  to { opacity: 0; }
-}
-
-@keyframes hero-glow {
-  0% {
-    opacity: 0;
-    transform: translateY(35%);
-  }
-
-  60% { opacity: 1; }
-
-  100% {
-    opacity: 0.6;
-    transform: none;
-  }
-}
-
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    transform: translateY(1.25rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
+  .hero--coverflow .hero__actions {
+    display: flex;
+    justify-content: center;
+    width: auto;
+    max-width: none;
   }
 }

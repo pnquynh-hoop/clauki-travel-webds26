@@ -1,18 +1,25 @@
-/* wl-footer.js - chân trang: tên thương hiệu, khẩu hiệu, liên hệ, menu, nút CTA, ghi chú thương hiệu giả tưởng, nguồn ảnh.
+/* wl-footer.js - chân trang: tên thương hiệu, khẩu hiệu, nút CTA, các cột menu, liên hệ, địa chỉ, ghi chú, nguồn ảnh.
    Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ footer.variant. */
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
 
-function contactEl(contact = {}) {
-  return groupEl('footer__contact', [
-    linkEl(telHref(contact.phone), contact.phone, 'footer__link'),
-    linkEl(contact.email && `mailto:${contact.email}`, contact.email, 'footer__link'),
-    textEl('p', 'footer__address', contact.address),
-  ]);
+// Một cột: tiêu đề nhỏ (nếu dữ liệu có) rồi tới các dòng. Không có dòng nào thì bỏ cả cột.
+function columnEl(title, items) {
+  const rows = items.filter(Boolean);
+  if (!rows.length) return null;
+  return groupEl('footer__col', [textEl('p', 'footer__col-title', title), ...rows]);
 }
 
-function navEl(nav = []) {
-  const links = nav.map((item) => linkEl(item.href, item.label, 'footer__link'));
-  return groupEl('footer__nav', links);
+function columnsEl(content, footer) {
+  const contact = content.contact ?? {};
+  const nav = (content.nav ?? []).map((item) => linkEl(item.href, item.label, 'footer__link'));
+  return groupEl('footer__cols', [
+    columnEl(footer.navTitle, nav),
+    columnEl(footer.contactTitle, [
+      linkEl(telHref(contact.phone), contact.phone, 'footer__link'),
+      linkEl(contact.email && `mailto:${contact.email}`, contact.email, 'footer__link'),
+    ]),
+    columnEl(footer.addressTitle, [textEl('p', 'footer__address', contact.address)]),
+  ]);
 }
 
 // Ảnh CC BY và CC BY-SA bắt buộc ghi tên tác giả, giấy phép và nguồn trên trang, nên mỗi ảnh một dòng.
@@ -45,20 +52,27 @@ export class WlFooter extends HTMLElement {
   render() {
     const content = this._data;
     const footer = content.footer ?? {};
-    this.className = `footer footer--${footer.variant ?? 'compact'}`;
+    this.className = `footer footer--${footer.variant ?? 'card'}`;
 
     const brand = groupEl('footer__brand', [
       textEl('p', 'footer__name', content.brand?.name),
       textEl('p', 'footer__slogan', content.brand?.slogan),
     ]);
     // Khách đọc tới cuối trang là lúc dễ quyết định nhất, nên footer cũng có nút CTA chung của trang.
-    const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn footer__cta');
-    const main = groupEl('footer__main container', [brand, contactEl(content.contact), navEl(content.nav), cta]);
-    const fine = groupEl('footer__fine container', [
+    const action = groupEl('footer__action', [
+      linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn footer__cta'),
+      textEl('p', 'footer__cta-note', this.site?.cta?.note),
+    ]);
+    const fine = groupEl('footer__fine', [
       textEl('p', 'footer__note', footer.note),
       creditsEl(footer.creditsTitle, content.credits),
     ]);
+    const main = groupEl('footer__main container', [
+      groupEl('footer__top', [brand, action]),
+      columnsEl(content, footer),
+      fine,
+    ]);
 
-    this.replaceChildren(...[main, fine].filter(Boolean));
+    this.replaceChildren(...[main].filter(Boolean));
   }
 }
