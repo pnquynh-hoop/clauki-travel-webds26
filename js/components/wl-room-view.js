@@ -1,39 +1,48 @@
-/* wl-room-view.js - "nhìn từ ban công": mỗi hạng phòng một cảnh nhìn ra từ cửa.
-   Một khung ảnh ngang lớn có hai mặt; chọn hạng khác thì khung lật quanh trục dọc như cánh cửa,
-   mặt sau hiện cảnh của hạng mới. Chọn bằng hàng nút tên hạng (mẫu tabs của WAI-ARIA, dùng được bằng bàn phím)
-   hoặc vuốt ngang trên khung ảnh. */
+/* wl-room-view.js - "nhìn từ ban công": mỗi hạng phòng một cảnh nhìn ra, xếp theo độ cao từ thấp lên cao.
+   Khối được ghim trên màn hình trong lúc cuộn; cuộn tới đâu thì góc nhìn leo dốc tới đó: cảnh đang xem trôi xuống
+   và mờ đi, cảnh của hạng cao hơn trôi từ trên vào. Thanh độ cao bên phải khung chạy theo; bấm một mốc thì cuộn tới hạng đó.
+   Người dùng bật giảm chuyển động thì không ghim: bấm mốc là đổi cảnh ngay. */
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl } from '../dom.js';
 
-function faceEl() {
-  const face = document.createElement('figure');
-  face.className = 'room-view__face';
-  const img = document.createElement('img');
-  img.loading = 'lazy';
-  face.append(img);
-  return face;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+// Mỗi hạng đứng yên một quãng rồi mới chuyển sang hạng kế: phần lẻ của vị trí được ép phẳng ở hai đầu.
+function settle(position) {
+  const step = Math.floor(position);
+  const x = clamp((position - step - 0.2) / 0.6, 0, 1);
+  return step + x * x * (3 - 2 * x);
 }
 
-function setFace(face, view) {
-  const img = face.querySelector('img');
+function layerEl(view, first) {
+  const img = document.createElement('img');
+  img.className = 'room-view__layer';
   img.src = asset(view.image.src);
   img.alt = view.image.alt ?? '';
+  if (!first) img.loading = 'lazy';
+  return img;
 }
 
 export class WlRoomView extends HTMLElement {
-  // Khung chỉ hiện ra khi khối cuộn tới màn hình, để khách thấy lúc khung mở thay vì nó chạy từ lúc tải trang.
   connectedCallback() {
-    this._observer = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) return;
-      this._seen = true;
-      this.classList.add('is-visible');
-      this._observer.disconnect();
-    }, { threshold: 0.3 });
-    this._observer.observe(this);
+    this._reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Cuộn thì chỉ đánh dấu, đợi khung hình kế của trình duyệt mới tính lại, để không tính nhiều lần trong một khung hình.
+    this._onScroll = () => {
+      if (this._frame) return;
+      this._frame = requestAnimationFrame(() => {
+        this._frame = null;
+        this.update();
+      });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll);
+    this.update();
   }
 
   disconnectedCallback() {
-    this._observer?.disconnect();
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onScroll);
+    cancelAnimationFrame(this._frame);
   }
 
   set data(section) {
@@ -41,105 +50,109 @@ export class WlRoomView extends HTMLElement {
     this.render();
   }
 
-  // Lật khung sang cảnh của hạng index. Ảnh mới được đặt vào mặt đang quay lưng lại,
-  // rồi cả khung quay thêm nửa vòng theo hướng bấm (sang phải thì lật sang phải), nên mặt đó quay ra trước.
-  select(index, focus = false) {
-    const count = this._views.length;
-    const next = (index + count) % count;
-    if (next !== this._active) {
-      const direction = next > this._active ? 1 : -1;
-      this._turns += direction;
-      const shown = this._faces[Math.abs(this._turns) % 2];
-      const hidden = this._faces[(Math.abs(this._turns) + 1) % 2];
-      setFace(shown, this._views[next]);
-      shown.removeAttribute('aria-hidden');
-      hidden.setAttribute('aria-hidden', 'true');
-      this._door.style.setProperty('--turn', `${this._turns * 180}deg`);
-      this._active = next;
-    }
+  get isStatic() {
+    return this._reduced?.matches ?? false;
+  }
 
-    const view = this._views[this._active];
+  // Quãng cuộn của khối: từ lúc mép trên khối chạm đầu màn hình tới lúc mép dưới khối chạm đáy màn hình.
+  scrollRange() {
+    const top = this.getBoundingClientRect().top + window.scrollY;
+    return { top, length: Math.max(1, this.offsetHeight - window.innerHeight) };
+  }
+
+  update() {
+    if (!this._layers?.length) return;
+    this.classList.toggle('is-static', this.isStatic);
+    const last = this._layers.length - 1;
+    let position = this._static ?? 0;
+    if (!this.isStatic) {
+      const { top, length } = this.scrollRange();
+      const progress = clamp((window.scrollY - top) / length, 0, 1);
+      position = settle(progress * last);
+      this.classList.toggle('is-moving', progress > 0.02);
+    }
+    this.show(position);
+  }
+
+  // position chạy liên tục từ 0 (hạng thấp nhất) tới số hạng trừ 1. Mọi ảnh trôi xuống khi vị trí đi lên, như máy quay
+  // đang đi lên. Ảnh của hạng cao hơn nằm đè lên và hiện dần khi tới gần, ảnh bên dưới giữ nguyên độ đậm,
+  // nên lúc chuyển không có khoảnh khắc cả hai ảnh cùng mờ làm khung tối đi.
+  show(position) {
+    const last = this._layers.length - 1;
+    this._layers.forEach((layer, i) => {
+      const d = position - i;
+      layer.style.opacity = String(clamp(1 + d, 0, 1));
+      layer.style.transform = `translateY(${d * 16}%) scale(${1 + Math.abs(d) * 0.06})`;
+    });
+    this._fill.style.height = `${last ? (position / last) * 100 : 100}%`;
+
+    const active = Math.round(position);
+    if (active === this._active) return;
+    this._active = active;
+    const view = this._views[active];
     const best = view.best && (this._bestLabel ? `${this._bestLabel}: ${view.best}` : view.best);
+    this._name.textContent = view.label;
     this._text.textContent = view.text ?? '';
     this._best.textContent = best ?? '';
-    this._tabs.forEach((tab, i) => {
-      const on = i === this._active;
-      tab.setAttribute('aria-selected', String(on));
-      tab.tabIndex = on ? 0 : -1;
+    this._layers.forEach((layer, i) => layer.setAttribute('aria-hidden', String(i !== active)));
+    this._stops.forEach((stop, i) => {
+      if (i === active) stop.setAttribute('aria-current', 'true');
+      else stop.removeAttribute('aria-current');
     });
-    this._panel.setAttribute('aria-labelledby', this._tabs[this._active].id);
-    if (focus) this._tabs[this._active].focus();
+  }
+
+  // Bấm một mốc độ cao: đang ghim thì cuộn trang tới đoạn của hạng đó; giảm chuyển động thì đổi cảnh ngay.
+  goTo(index) {
+    if (this.isStatic) {
+      this._static = index;
+      this.update();
+      return;
+    }
+    const { top, length } = this.scrollRange();
+    const last = this._layers.length - 1;
+    window.scrollTo({ top: top + (last ? (index / last) * length : 0), behavior: 'smooth' });
   }
 
   render() {
     const section = this._data;
-    this.className = `room-view room-view--${section.variant ?? 'flip'}`;
-    // Gán className xoá mất is-visible; khối đã từng hiện thì giữ lại để khung không ẩn đi khi đổi thương hiệu.
-    if (this._seen) this.classList.add('is-visible');
+    this.className = `room-view room-view--${section.variant ?? 'climb'}`;
 
     this._views = (section.views ?? []).filter((view) => view.label && view.image?.src);
     this._bestLabel = section.bestLabel;
-    const prefix = this.id || 'room-view';
+    this._active = null;
+    this._static = 0;
+    // Mỗi hạng một quãng cuộn bằng một màn hình; CSS đọc --steps để tính chiều cao khối.
+    this.style.setProperty('--steps', String(Math.max(1, this._views.length)));
 
-    const tablist = document.createElement('div');
-    tablist.className = 'room-view__tabs';
-    tablist.setAttribute('role', 'tablist');
-    if (section.title) tablist.setAttribute('aria-label', section.title);
+    this._layers = this._views.map((view, i) => layerEl(view, i === 0));
+    const frame = groupEl('room-view__frame', this._layers);
 
-    this._panel = document.createElement('div');
-    this._panel.className = 'room-view__panel';
-    this._panel.id = `${prefix}-panel`;
-    this._panel.setAttribute('role', 'tabpanel');
-
-    this._tabs = this._views.map((view, i) => {
-      const tab = document.createElement('button');
-      tab.type = 'button';
-      tab.className = 'room-view__tab';
-      tab.id = `${prefix}-tab-${i}`;
-      tab.textContent = view.label;
-      tab.setAttribute('role', 'tab');
-      tab.setAttribute('aria-controls', this._panel.id);
-      tab.addEventListener('click', () => this.select(i));
-      return tab;
+    // Thanh độ cao: mốc của hạng thấp nhất ở dưới cùng, hạng cao nhất ở trên cùng; vạch màu chủ đạo dâng lên theo vị trí.
+    this._fill = document.createElement('div');
+    this._fill.className = 'room-view__fill';
+    const track = groupEl('room-view__track', [this._fill]);
+    const last = Math.max(1, this._views.length - 1);
+    this._stops = this._views.map((view, i) => {
+      const stop = document.createElement('button');
+      stop.type = 'button';
+      stop.className = 'room-view__stop';
+      stop.style.setProperty('--at', `${(i / last) * 100}%`);
+      stop.append(...[textEl('span', 'room-view__level', view.level), textEl('span', 'room-view__stop-name', view.label)].filter(Boolean));
+      stop.addEventListener('click', () => this.goTo(i));
+      return stop;
     });
-    tablist.append(...this._tabs);
+    const gauge = groupEl('room-view__gauge', [track, ...this._stops]);
+    if (frame && gauge && this._views.length > 1) frame.append(gauge);
+    const hint = textEl('p', 'room-view__hint', section.hint);
+    if (frame && hint) frame.append(hint);
 
-    // Phím mũi tên, Home, End đi qua các nút như hướng dẫn của WAI-ARIA cho tabs.
-    tablist.addEventListener('keydown', (e) => {
-      const current = this._tabs.indexOf(document.activeElement);
-      if (current < 0) return;
-      const last = this._tabs.length - 1;
-      const next = { ArrowRight: current + 1, ArrowDown: current + 1, ArrowLeft: current - 1, ArrowUp: current - 1, Home: 0, End: last }[e.key];
-      if (next === undefined) return;
-      e.preventDefault();
-      this.select(next, true);
-    });
-
-    // Khung hai mặt: mặt trước và mặt sau quay lưng vào nhau, cả khung xoay theo biến --turn.
-    this._faces = [faceEl(), faceEl()];
-    this._faces[1].classList.add('room-view__face--back');
-    this._faces[1].setAttribute('aria-hidden', 'true');
-    this._door = groupEl('room-view__door', this._faces);
-    const frame = groupEl('room-view__frame', [this._door]);
-
-    // Vuốt ngang trên khung: kéo quá 40px theo chiều ngang thì sang hạng bên cạnh.
-    frame.addEventListener('pointerdown', (e) => {
-      this._start = { x: e.clientX, y: e.clientY };
-    });
-    frame.addEventListener('pointerup', (e) => {
-      if (!this._start) return;
-      const dx = e.clientX - this._start.x;
-      const dy = e.clientY - this._start.y;
-      this._start = null;
-      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-      this.select(this._active + (dx < 0 ? 1 : -1));
-    });
-
+    this._name = document.createElement('p');
+    this._name.className = 'room-view__name';
     this._text = document.createElement('p');
     this._text.className = 'room-view__text';
     this._best = document.createElement('p');
     this._best.className = 'room-view__best';
-    this._panel.append(frame, this._text, this._best);
+    const info = groupEl('room-view__info', [this._name, this._text, this._best]);
 
     const head = groupEl('room-view__head', [
       textEl('p', 'room-view__eyebrow', section.eyebrow),
@@ -148,20 +161,9 @@ export class WlRoomView extends HTMLElement {
     ]);
     const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn room-view__cta');
     const hasViews = this._views.length > 0;
-    const inner = groupEl('room-view__inner container', [
-      head,
-      this._views.length > 1 ? tablist : null,
-      hasViews ? this._panel : null,
-      cta,
-    ]);
-    this.replaceChildren(...[inner].filter(Boolean));
-    if (!hasViews) return;
+    const sticky = groupEl('room-view__sticky container', [head, hasViews ? frame : null, hasViews ? info : null, cta]);
 
-    // Lần dựng đầu: mặt trước hiện hạng đầu tiên, khung đứng thẳng, không có chuyển động.
-    this._turns = 0;
-    this._active = 0;
-    setFace(this._faces[0], this._views[0]);
-    this._door.style.setProperty('--turn', '0deg');
-    this.select(0);
+    this.replaceChildren(...[sticky].filter(Boolean));
+    this.update();
   }
 }
