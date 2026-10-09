@@ -1,15 +1,17 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
-@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Quicksand:wght@500;600&display=swap');
-/* Mé Rạch: homestay nhà vườn ven rạch Cần Thơ. Nâu đỏ phù sa, xanh nước rạch, nền kem ấm. */
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap');
+
+/* Mé Rạch: homestay nhà vườn ven rạch Cần Thơ. Nền giấy kem ấm, nút và mặt sông xanh ngọc như nước rạch
+   (khác xanh lá của Bậc Trà), chữ xanh lá rất đậm, nhấn cam hoàng hôn. Mọi cặp chữ đạt AA. */
 :root {
-  --color-primary: #8a3b1c;
+  --color-primary: #17666f;
   --color-on-primary: #ffffff;
-  --color-bg: #fbf3e9;
-  --color-surface: #f4e6d4;
-  --color-ink: #2b1d16;
-  --color-muted: #6b5a4f;
-  --color-accent: #1f6660;
+  --color-bg: #f8f1e3;
+  --color-surface: #efe3cc;
+  --color-ink: #1f3328;
+  --color-muted: #56655a;
+  --color-accent: #a8491a;
   --font-heading: 'Bitter', Georgia, serif;
   --font-body: 'Quicksand', system-ui, sans-serif;
   --radius: 0.375rem;
