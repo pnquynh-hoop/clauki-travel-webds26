@@ -113,14 +113,16 @@ a {
 }
 
 /* Chỉ áp cho liên kết trong đoạn chữ. Liên kết có class (như .btn) do class đó tự lo,
-   nếu không thì nút <a class="btn"> rê chuột vào cũng bị đổi sang màu nhấn. */
+   nếu không thì nút <a class="btn"> rê chuột vào cũng bị đổi màu.
+   Chữ dùng màu nhấn chứ không dùng màu chủ đạo: màu chủ đạo có thể là màu sáng chỉ hợp làm nền nút,
+   còn màu nhấn thương hiệu nào cũng phải đọc được trên nền trang. */
 a:not([class]) {
-  color: var(--color-primary);
+  color: var(--color-accent);
   text-underline-offset: 0.2em;
 }
 
 a:not([class]):hover {
-  color: var(--color-accent);
+  color: var(--color-ink);
 }
 
 /* Bố cục chung. */
@@ -185,9 +187,10 @@ main > * {
   border-color: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink));
 }
 
-/* Nút phụ: viền, nền trong suốt. Dùng cho liên kết phụ như "Xem lịch trình". */
+/* Nút phụ: viền màu chủ đạo, nền trong suốt. Dùng cho liên kết phụ như "Xem lịch trình".
+   Chữ dùng màu nhấn cùng lý do với liên kết ở trên. */
 .btn--ghost {
-  color: var(--color-primary);
+  color: var(--color-accent);
   background: transparent;
 }
 
