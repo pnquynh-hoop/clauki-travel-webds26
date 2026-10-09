@@ -88,7 +88,71 @@
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
-    { "type": "booking", "id": "dat-phong", "variant": "stay" },
+    {
+      "type": "booking",
+      "id": "dat-phong",
+      "variant": "stay",
+      "eyebrow": "Đặt phòng",
+      "title": "Giữ chỗ cho mùa hè 2027",
+      "lead": "Chọn ngày và hạng nhà, trang soạn sẵn tin nhắn để bạn gửi cho Gành Sớm. Chúng tôi gọi lại xác nhận trong ngày.",
+      "currency": "đồng",
+      "rooms": [
+        { "id": "villa", "label": "Villa sát biển", "price": 6200000, "maxGuests": 4 },
+        { "id": "nha-doi", "label": "Nhà đồi", "price": 3900000, "maxGuests": 3 },
+        { "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000, "maxGuests": 2 }
+      ],
+      "includedGuests": 2,
+      "extraGuestPrice": 450000,
+      "defaultDates": { "checkIn": "2027-05-12", "checkOut": "2027-05-16" },
+      "offer": {
+        "label": "Ưu đãi đặt sớm",
+        "note": "Hè 2027, ở từ 4 đêm tặng 1 đêm",
+        "bookBy": "2026-12-31",
+        "from": "2027-04-01",
+        "to": "2027-08-31",
+        "minNights": 4,
+        "freeNights": 1
+      },
+      "availability": [
+        { "from": "2027-05-01", "to": "2027-05-15", "left": { "villa": 3, "nha-doi": 6, "phong-vuon": 4 } },
+        { "from": "2027-05-16", "to": "2027-05-31", "left": { "villa": 0, "nha-doi": 2, "phong-vuon": 1 } },
+        { "from": "2027-06-01", "to": "2027-06-30", "left": { "villa": 5, "nha-doi": 8, "phong-vuon": 6 } }
+      ],
+      "labels": {
+        "checkIn": "Ngày nhận phòng",
+        "checkOut": "Ngày trả phòng",
+        "room": "Hạng nhà",
+        "guests": "Số khách",
+        "guestUnit": "khách",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "summary": "Tạm tính",
+        "roomLine": "Tiền phòng",
+        "roomDetail": "{nights} đêm × {price}",
+        "extraLine": "Thêm khách",
+        "extraDetail": "{guests} khách × {nights} đêm × {price}",
+        "total": "Tổng cộng",
+        "includes": "Giá gồm bữa sáng cho 2 khách. Trang chưa gửi gì đi cho tới khi bạn gửi tin nhắn.",
+        "left": "Còn {n} căn",
+        "soldOut": "Hết phòng"
+      },
+      "errors": {
+        "dates": "Ngày trả phòng phải sau ngày nhận phòng.",
+        "name": "Bạn nhập họ tên giúp Gành Sớm.",
+        "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678.",
+        "soldOut": "Hạng này đã hết phòng trong những ngày bạn chọn. Bạn thử hạng khác hoặc ngày khác."
+      },
+      "message": {
+        "title": "Tin nhắn giữ chỗ đã soạn sẵn",
+        "lead": "Gửi tin này cho Gành Sớm bằng một trong các cách dưới đây. Chúng tôi gọi lại số của bạn để xác nhận trong ngày.",
+        "template": "Gành Sớm ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {room} từ {checkIn} đến {checkOut} ({nights} đêm), {guests} khách. Tạm tính {total}.",
+        "sms": "Gửi tin nhắn",
+        "call": "Gọi {phone}",
+        "copy": "Chép nội dung",
+        "copied": "Đã chép",
+        "edit": "Sửa lại thông tin"
+      }
+    },
     { "type": "faq", "id": "hoi-dap" }
   ],
   "footer": {

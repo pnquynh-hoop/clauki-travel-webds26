@@ -1,0 +1,286 @@
+/* booking.css - giao diện của <wl-booking>. Màu, font, bo góc lấy từ biến CSS; class booking--<variant> quyết định kiểu. */
+
+.booking__head {
+  max-width: 36rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.booking__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.booking__title {
+  margin: 0;
+}
+
+.booking__lead {
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* Thẻ đặt chỗ: form bên trái, tạm tính bên phải (điện thoại thì xếp dọc). Khung tin nhắn dùng chung kiểu thẻ. */
+.booking__card,
+.booking__message {
+  max-width: 64rem;
+  margin-inline: auto;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.booking__card {
+  display: grid;
+}
+
+.booking__card[hidden],
+.booking__message[hidden] {
+  display: none;
+}
+
+.booking__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1rem;
+  padding: 1.75rem 1.25rem;
+}
+
+/* Mỗi ô chiếm cả hàng; từ 480px ô "half" chia đôi hàng với ô bên cạnh (điện thoại hẹp thì ô ngày không đủ chỗ). */
+.booking__field {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.4rem;
+  align-content: start;
+}
+
+@media (min-width: 480px) {
+  .booking__field--half {
+    grid-column: span 1;
+  }
+}
+
+.booking__field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* min-width: 0 vì ô ngày của trình duyệt có bề rộng tối thiểu riêng, làm tràn cột. */
+.booking__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 3rem;
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 45%, var(--color-surface));
+  border-radius: calc(var(--radius) * 0.6);
+}
+
+.booking__input[aria-invalid='true'] {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.booking__error {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-accent);
+}
+
+/* Tạm tính: nền pha màu trang cho tách khỏi phần form, đọc như một tờ hoá đơn. */
+.booking__summary {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.75rem 1.25rem;
+  background: color-mix(in srgb, var(--color-bg) 55%, var(--color-surface));
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.booking__summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.booking__summary-title {
+  margin: 0;
+  font-weight: 800;
+}
+
+.booking__badge {
+  margin: 0;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+  border-radius: var(--radius);
+}
+
+.booking__badge.is-out {
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.booking__badge[hidden] {
+  display: none;
+}
+
+.booking__lines {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.booking__line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.booking__line dt {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.booking__line-label {
+  font-weight: 600;
+}
+
+.booking__line-detail {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.booking__line dd {
+  margin: 0;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.booking__line--saving,
+.booking__line--saving .booking__line-detail {
+  color: var(--color-accent);
+}
+
+.booking__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+.booking__total-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.booking__total strong {
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem);
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.booking__includes {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.booking__submit {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Nút bị khoá khi hạng đã chọn hết phòng: nhạt đi và không bấm được. */
+.booking__submit:disabled {
+  color: var(--color-muted);
+  background: color-mix(in srgb, var(--color-ink) 12%, var(--color-surface));
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Khung tin nhắn đã soạn: đoạn tin đặt trong hộp nền màu trang, bên dưới là các cách gửi. */
+.booking__message {
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+  padding: 2rem 1.5rem;
+}
+
+.booking__message-title {
+  margin: 0;
+}
+
+.booking__message-lead {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.booking__draft {
+  margin: 0;
+  padding: 1.25rem;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background: var(--color-bg);
+  border-radius: calc(var(--radius) * 0.6);
+}
+
+.booking__message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.booking__edit {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+@media (min-width: 760px) {
+  .booking__card {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .booking__fields,
+  .booking__summary {
+    padding: 2.25rem 2rem;
+  }
+
+  .booking__summary {
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  }
+
+  .booking__message {
+    padding: 2.5rem;
+  }
+}
