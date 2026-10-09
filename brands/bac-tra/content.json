@@ -116,6 +116,12 @@
         }
       ],
       "note": "Độ cao làm tròn, theo báo chí và dữ liệu địa hình.",
+      "planLabel": "Ở đây làm gì?",
+      "finish": {
+        "eyebrow": "Hết bốn ngày, xe về tới Hà Nội",
+        "title": "Chuyến gần nhất: thứ Năm 13/05/2027, còn 12 chỗ",
+        "text": "Giữ chỗ trước 31/12/2026: giảm 500.000đ mỗi khách"
+      },
       "stops": [
         {
           "time": "Ngày 1 · 09:45",
@@ -125,7 +131,33 @@
           "image": {
             "src": "images/journey-1.jpg",
             "alt": "Hồ Thác Bà nhìn từ trên cao với nhiều đảo nhỏ xanh"
-          }
+          },
+          "plan": [
+            {
+              "time": "06:00",
+              "text": "Xe 16 chỗ đón ở phố cổ Hà Nội, đi khoảng 3 tiếng tới hồ."
+            },
+            {
+              "time": "09:45",
+              "text": "Lên thuyền khoảng 2 tiếng, len qua các đảo nhỏ giữa hồ.",
+              "image": {
+                "src": "images/plan-boat.jpg",
+                "alt": "Thuyền du lịch neo bên một đảo trên hồ Thác Bà"
+              }
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa với cá hồ.",
+              "image": {
+                "src": "images/plan-grilled-fish.jpg",
+                "alt": "Cá nướng đặt trên lá chuối"
+              }
+            },
+            {
+              "time": "13:30",
+              "text": "Lên xe đi Nghĩa Lộ."
+            }
+          ]
         },
         {
           "time": "Ngày 1 · 16:30",
@@ -136,7 +168,30 @@
           "image": {
             "src": "images/journey-2.jpg",
             "alt": "Cánh đồng lúa Mường Lò chín vàng, phía xa là nhà dân và dãy núi"
-          }
+          },
+          "plan": [
+            {
+              "time": "16:30",
+              "text": "Tới bản người Thái, đi dạo bờ ruộng Mường Lò lúc chiều xuống."
+            },
+            {
+              "time": "19:30",
+              "text": "Ăn tối, xem múa xòe Thái. Nghệ thuật Xòe Thái được UNESCO ghi danh năm 2021.",
+              "image": {
+                "src": "images/plan-xoe-dance.jpg",
+                "alt": "Thiếu nữ Thái múa xòe quạt trong nhà sàn"
+              }
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 1",
+              "text": "Ngủ nhà sàn của một gia đình người Thái.",
+              "image": {
+                "src": "images/plan-stilt-house.jpg",
+                "alt": "Nhà sàn gỗ bên cánh đồng lúa ở Nghĩa Lộ"
+              }
+            }
+          ]
         },
         {
           "time": "Ngày 2 · 05:00",
@@ -146,7 +201,42 @@
           "image": {
             "src": "images/journey-3.jpg",
             "alt": "Cây chè Shan tuyết cổ thụ cành xoè rộng ở Suối Giàng"
-          }
+          },
+          "plan": [
+            {
+              "time": "05:00",
+              "text": "Lên đồi ngắm mây buổi sớm, ở độ cao khoảng 1.400 m.",
+              "image": {
+                "src": "images/plan-sea-of-clouds.jpg",
+                "alt": "Một người đứng ngắm biển mây phủ kín các dãy núi"
+              }
+            },
+            {
+              "time": "08:00",
+              "text": "Hái chè Shan tuyết cùng một gia đình người H'Mông.",
+              "image": {
+                "src": "images/plan-tea-picking.jpg",
+                "alt": "Người phụ nữ đeo túi vải hái chè giữa vườn chè cây cao"
+              }
+            },
+            {
+              "time": "Sau đó",
+              "text": "Xem sao chè bằng tay trong chảo gang, uống chén trà vừa làm.",
+              "image": {
+                "src": "images/tea-dry.jpg",
+                "alt": "Chè Shan tuyết đã sao khô"
+              },
+              "link": {
+                "label": "Xem cách làm trà",
+                "href": "#tu-bup-den-chen"
+              }
+            },
+            {
+              "kind": "tip",
+              "time": "Mang theo",
+              "text": "Áo ấm: buổi sáng trên đồi chè lạnh hơn dưới thung lũng."
+            }
+          ]
         },
         {
           "time": "Ngày 2 · 16:00",
@@ -157,7 +247,31 @@
           "image": {
             "src": "images/journey-4.jpg",
             "alt": "Thung lũng Tú Lệ mùa nước đổ, ruộng bậc thang loang loáng nước dưới nắng chiều"
-          }
+          },
+          "plan": [
+            {
+              "time": "16:00",
+              "text": "Tắm suối khoáng nóng khoảng 35 độ C, ở khu dành cho khách."
+            },
+            {
+              "time": "19:00",
+              "text": "Ăn tối với xôi nếp Tú Lệ và các món địa phương.",
+              "image": {
+                "src": "images/plan-sticky-rice.jpg",
+                "alt": "Xôi nếp trắng trong giỏ mây đan của người Thái"
+              }
+            },
+            {
+              "kind": "tip",
+              "time": "Mang theo",
+              "text": "Đồ bơi cho suối khoáng."
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 2",
+              "text": "Ngủ nhà sàn ở Tú Lệ."
+            }
+          ]
         },
         {
           "time": "Ngày 3 · 07:30",
@@ -167,7 +281,25 @@
           "image": {
             "src": "images/journey-5.jpg",
             "alt": "Ruộng bậc thang xanh dưới chân đèo Khau Phạ nhìn từ trên cao"
-          }
+          },
+          "plan": [
+            {
+              "time": "07:30",
+              "text": "Qua đèo dài khoảng 30 km, xe dừng ở chỗ ngắm thung lũng.",
+              "image": {
+                "src": "images/plan-khau-pha.jpg",
+                "alt": "Thung lũng ruộng bậc thang dưới đèo Khau Phạ, mây vắt ngang núi"
+              }
+            },
+            {
+              "time": "Quãng đường",
+              "text": "Tú Lệ đến Mù Cang Chải khoảng 60 km."
+            },
+            {
+              "time": "10:00",
+              "text": "Tới Mù Cang Chải."
+            }
+          ]
         },
         {
           "time": "Ngày 3 · 10:30",
@@ -178,7 +310,38 @@
           "image": {
             "src": "images/journey-6.jpg",
             "alt": "Mây trắng trôi qua sườn đồi ruộng bậc thang La Pán Tẩn"
-          }
+          },
+          "plan": [
+            {
+              "time": "10:30",
+              "text": "Đi bộ giữa ruộng bậc thang mùa nước đổ cùng người dẫn đường trong bản.",
+              "image": {
+                "src": "images/plan-terrace-walk.jpg",
+                "alt": "Người đi trên bờ ruộng bậc thang mùa nước đổ"
+              }
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa ở bản."
+            },
+            {
+              "time": "14:30",
+              "text": "Thăm thác Pú Nhu, cách trung tâm Mù Cang Chải khoảng 10 km.",
+              "image": {
+                "src": "images/plan-waterfall.jpg",
+                "alt": "Thác nước trắng đổ xuống vách núi, du khách đứng trên cầu sắt"
+              }
+            },
+            {
+              "kind": "night",
+              "time": "Đêm 3",
+              "text": "17:30 về nhà một gia đình người H'Mông, ăn tối và ngủ lại.",
+              "image": {
+                "src": "images/plan-hmong-house.jpg",
+                "alt": "Phụ nữ H'Mông nện đất trình tường dựng nhà"
+              }
+            }
+          ]
         },
         {
           "time": "Ngày 4 · 06:00",
@@ -188,7 +351,29 @@
           "image": {
             "src": "images/journey-7.jpg",
             "alt": "Ruộng bậc thang uốn quanh sườn núi ở Chế Cu Nha, Mù Cang Chải"
-          }
+          },
+          "plan": [
+            {
+              "time": "06:00",
+              "text": "Ngắm ruộng bậc thang lúc sáng sớm.",
+              "image": {
+                "src": "images/plan-morning-mist.jpg",
+                "alt": "Sương sớm vắt ngang thung lũng ruộng bậc thang Mù Cang Chải"
+              }
+            },
+            {
+              "time": "08:00",
+              "text": "Ăn sáng, rời Mù Cang Chải. Đường về khoảng 300 km."
+            },
+            {
+              "time": "12:00",
+              "text": "Ăn trưa dọc đường."
+            },
+            {
+              "time": "18:00 đến 19:00",
+              "text": "Về tới phố cổ Hà Nội."
+            }
+          ]
         }
       ]
     },
@@ -525,6 +710,78 @@
       "author": "VuThiAnh",
       "license": "Phạm vi công cộng",
       "source": "https://commons.wikimedia.org/wiki/File:Che_Shan_tuyet.JPG"
+    },
+    {
+      "file": "images/plan-boat.jpg",
+      "author": "Kiếm Anh",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Th%C3%A1c_B%C3%A0_lake.jpg"
+    },
+    {
+      "file": "images/plan-grilled-fish.jpg",
+      "author": "Phương Huy",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khu_%E1%BA%A9m_th%E1%BB%B1c_B%E1%BA%BFn_Ngh%C3%A9_ng13th8n2023_(c%C3%A1_n%C6%B0%E1%BB%9Bng_T%C3%A2y_B%E1%BA%AFc_Pa_t%E1%BB%89nh_t%E1%BB%99p)_(7).jpg"
+    },
+    {
+      "file": "images/plan-xoe-dance.jpg",
+      "author": "RG72",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Distrikto_Mai_Chau,_Vjetnamio_20.jpg"
+    },
+    {
+      "file": "images/plan-stilt-house.jpg",
+      "author": "Velvet",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Nghia_Lo_maisons_tradi.jpg"
+    },
+    {
+      "file": "images/plan-sea-of-clouds.jpg",
+      "author": "Linh Pham",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Man_alone_in_T%E1%BA%A3_X%C3%B9a_03-03-2017.jpg"
+    },
+    {
+      "file": "images/plan-tea-picking.jpg",
+      "author": "Benjamin Smith",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:L%C3%B9ng_V%C3%A0i,_H%C3%A0_Giang,_Vietnam_-_3.jpg"
+    },
+    {
+      "file": "images/plan-sticky-rice.jpg",
+      "author": "Hà Nghĩa VN",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:X%C3%B4i_n%E1%BA%BFp_c%E1%BB%A7a_ng%C6%B0%E1%BB%9Di_Th%C3%A1i_b%E1%BA%A3n_Phe.jpg"
+    },
+    {
+      "file": "images/plan-khau-pha.jpg",
+      "author": "Victor311",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao.jpg"
+    },
+    {
+      "file": "images/plan-terrace-walk.jpg",
+      "author": "Vũ Hùng",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:WAVES_-_panoramio.jpg"
+    },
+    {
+      "file": "images/plan-waterfall.jpg",
+      "author": "Lori_NY",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Thacbac3.jpg"
+    },
+    {
+      "file": "images/plan-hmong-house.jpg",
+      "author": "Alfred Boc",
+      "license": "Phạm vi công cộng",
+      "source": "https://commons.wikimedia.org/wiki/File:HouseBuildingInNorthernVietnam.jpg"
+    },
+    {
+      "file": "images/plan-morning-mist.jpg",
+      "author": "Vũ Hùng",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:S%C3%81NG_S%E1%BB%9AM_%E1%BB%9E_M%C3%99_CANG_CH%E1%BA%A2I_-_panoramio.jpg"
     }
   ]
 }

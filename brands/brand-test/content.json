@@ -77,6 +77,11 @@
         { "title": "Ngày 4", "text": "Về Hà Nội" }
       ],
       "note": "Độ cao trong dữ liệu mẫu chỉ để thử.",
+      "planLabel": "Xem từng giờ",
+      "finish": {
+        "eyebrow": "Hết bốn ngày, về tới Hà Nội",
+        "title": "Đoàn gần nhất khởi hành thứ Sáu tuần sau, còn 6 chỗ"
+      },
       "stops": [
         {
           "time": "Ngày 1 · 06:00",
@@ -91,14 +96,24 @@
           "altitude": 1100,
           "text": "Ngắm núi Đôi lúc hoàng hôn, tối nghỉ trong nhà trình tường của một gia đình người Tày.",
           "night": "Đêm 1: nhà trình tường ở Quản Bạ",
-          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" }
+          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" },
+          "plan": [
+            { "time": "16:30", "text": "Dừng ở điểm ngắm núi Đôi, chụp ảnh lúc hoàng hôn." },
+            { "time": "18:30", "text": "Ăn tối cùng gia chủ người Tày." },
+            { "kind": "tip", "time": "Mang theo", "text": "Áo khoác gió: trên cổng trời về chiều gió lạnh." },
+            { "kind": "night", "time": "Đêm 1", "text": "Ngủ nhà trình tường, chăn đệm do gia chủ chuẩn bị." }
+          ]
         },
         {
           "time": "Ngày 2 · 08:00",
           "title": "Dốc Thẩm Mã",
           "altitude": 1200,
           "text": "Đi bộ một đoạn dốc ngắn, ghé chợ nhỏ ven đường của người H'Mông.",
-          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" }
+          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" },
+          "plan": [
+            { "time": "08:00", "text": "Đi bộ lên dốc khoảng 40 phút, có nghỉ giữa chừng." },
+            { "text": "Mốc này không có giờ, chỉ có chữ, để thử trường time bị thiếu." }
+          ]
         },
         {
           "time": "Ngày 2 · 15:00",
