@@ -55,7 +55,7 @@
     {
       "type": "room-view",
       "id": "nhin-ra",
-      "variant": "coverflow",
+      "variant": "flip",
       "eyebrow": "Nhìn từ ban công",
       "title": "Mỗi hạng nhà một khung cửa ra biển",
       "lead": "Chọn hạng nhà để xem cảnh bạn thấy khi mở cửa.",
