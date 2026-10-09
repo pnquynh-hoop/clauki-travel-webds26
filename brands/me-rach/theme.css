@@ -2,16 +2,16 @@
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
 @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap');
 
-/* Mé Rạch: homestay nhà vườn ven rạch Cần Thơ. Nền tối xanh dừa nước để ảnh xanh mướt nổi lên,
-   khối nổi màu nâu gỗ xuồng, nút vàng nắng, điểm nhấn hồng bông súng. Mọi cặp chữ đạt AA. */
+/* Mé Rạch: homestay nhà vườn ven rạch Cần Thơ. Nền giấy kem ấm, nút và mặt sông xanh ngọc như nước rạch
+   (khác xanh lá của Bậc Trà), chữ xanh lá rất đậm, nhấn cam hoàng hôn. Mọi cặp chữ đạt AA. */
 :root {
-  --color-primary: #f0a93b;
-  --color-on-primary: #1d1407;
-  --color-bg: #0f2a20;
-  --color-surface: #3a2517;
-  --color-ink: #f4ecdc;
-  --color-muted: #b9c4b1;
-  --color-accent: #f28aa5;
+  --color-primary: #17666f;
+  --color-on-primary: #ffffff;
+  --color-bg: #f8f1e3;
+  --color-surface: #efe3cc;
+  --color-ink: #1f3328;
+  --color-muted: #56655a;
+  --color-accent: #a8491a;
   --font-heading: 'Bitter', Georgia, serif;
   --font-body: 'Quicksand', system-ui, sans-serif;
   --radius: 0.375rem;
