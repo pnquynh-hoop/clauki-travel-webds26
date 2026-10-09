@@ -7,26 +7,35 @@
 
 ## Prompt (tóm tắt)
 
-Điền đầy đủ `brands/bac-tra/content.json` theo tài liệu kế hoạch và bản phác 2: `meta`, `brand`, `cta`,
-`nav`, thông tin liên hệ giả, và nội dung từng section theo sườn trang. Viết `theme.css` theo mục 7.
-Tìm ảnh thật đúng địa danh, giấy phép dùng được (CC0, phạm vi công cộng, CC BY, CC BY-SA), nén dưới 300 KB,
-mỗi ảnh một dòng `credits`. Kiểm chứng độ cao từng trạm và ghi nguồn; trạm chưa tra được thì để trống,
-không đoán. Cập nhật mục 6 và mục 8 của tài liệu kế hoạch theo bản phác 2.
+Bạn là kỹ sư frontend kiêm người soạn nội dung trong đội làm landing page white label. Hãy điền dữ liệu cho
+thương hiệu Bậc Trà theo tài liệu kế hoạch và bản phác 2:
 
-Các lần yêu cầu chỉnh sau đó:
+1. điền đầy đủ `brands/bac-tra/content.json`: `meta`, `brand`, `cta`, `nav`, thông tin liên hệ giả, và nội
+   dung từng section theo sườn trang;
+2. viết `theme.css` theo mục 7 của tài liệu kế hoạch;
+3. tìm ảnh thật đúng địa danh, giấy phép dùng được (CC0, phạm vi công cộng, CC BY, CC BY-SA), nén dưới 300 KB,
+   mỗi ảnh một dòng `credits`;
+4. kiểm chứng độ cao từng trạm và ghi nguồn vào mục 4 của tài liệu kế hoạch; trạm chưa tra được thì để trống,
+   không đoán;
+5. cập nhật mục 6 và mục 8 của tài liệu kế hoạch theo bản phác 2.
 
-- "Dữ liệu của Bậc Trà còn quá ít thông tin để hiển thị, không đủ theo issue": tra thêm độ cao cho đủ 7
-  trạm, tìm ảnh Mường Lò và Tú Lệ, thêm danh sách các ngày cho đồng hồ.
-- "Dùng ảnh này làm logo, ảnh này làm favicon, chuyển vào thư mục ảnh của Bậc Trà".
+Sau khi xem bản đầu, yêu cầu chỉnh thêm:
 
-## Kết quả và phần tự làm
+6. dữ liệu còn quá ít thông tin để hiển thị, chưa đủ theo issue: tra thêm độ cao cho đủ 7 trạm, tìm ảnh
+   Mường Lò và Tú Lệ, thêm danh sách các ngày cho đồng hồ;
+7. dùng hai ảnh tự tạo làm logo và favicon: bỏ nền giấy, cắt sát, xuất PNG, giữ lại ảnh gốc, đặt vào thư mục
+   ảnh của Bậc Trà.
 
-- Tự chọn email liên hệ `clauki@bactra.example`; yêu cầu không gắn ảnh sai địa danh.
-- Tự tạo logo (tỉ lệ 16:9) và favicon (tỉ lệ 1:1) bằng Gemini, theo gợi ý tỉ lệ của AI. AI bỏ nền giấy, làm
-  trong suốt lòng các chữ, giữ nguyên phần trong vòng tròn, cắt sát rồi xuất PNG; hai ảnh gốc giữ lại với tên
-  `logo-goc.jpg`, `favicon-goc.jpg`.
-- AI tìm ảnh trên Wikimedia Commons, kiểm giấy phép trên trang ảnh, nén lại và ghi `credits`.
-- AI tra độ cao trên báo (Tạp chí Công Thương, VnExpress, mia.vn) và Wikipedia; Tú Lệ và La Pán Tẩn không có
-  bài viết nêu số khớp nhau nên lấy theo dữ liệu địa hình Open-Meteo. Bảng độ cao và nguồn ghi ở mục 4 của
-  `docs/ke-hoach-thuong-hieu-bac-tra.md`.
-- AI cập nhật mục 4, 6, 8 và nguồn tham khảo của tài liệu kế hoạch; mình đọc lại trước khi dùng.
+Yêu cầu:
+
+- không gắn ảnh sai địa danh; ảnh không có logo hay biển hiệu thương hiệu thật;
+- thông tin liên hệ đều giả;
+- chữ trong `content.json` là chữ thường, không chứa HTML.
+
+## Phần tự quyết định
+
+- Chọn email liên hệ `clauki@bactra.example`.
+- Yêu cầu không gắn ảnh sai địa danh.
+- Tự tạo logo (tỉ lệ 16:9) và favicon (tỉ lệ 1:1) bằng Gemini, theo gợi ý tỉ lệ của AI.
+- Chỉ ra dữ liệu còn quá ít so với issue và yêu cầu bổ sung.
+- Đọc lại phần tài liệu kế hoạch được cập nhật (mục 4, 6, 8 và nguồn tham khảo) trước khi dùng.
