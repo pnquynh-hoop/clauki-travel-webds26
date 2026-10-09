@@ -1,7 +1,9 @@
 /* wl-journey.js - lịch trình chuyến đi: các trạm xếp theo thứ tự, mỗi trạm có giờ, tên, độ cao,
    một câu mô tả, ảnh và nơi ngủ (nếu là trạm cuối của một ngày).
    Kiểu "road": các trạm nằm dọc một con đường chữ S, chiếc xe chạy theo khi cuộn trang,
-   trời đổi màu theo giờ của trạm, bên cạnh có đồng hồ độ cao, dưới nền có núi chìm dần khi xe lên cao. */
+   trời đổi màu theo giờ của trạm, bên cạnh có đồng hồ độ cao, dưới nền có núi chìm dần khi xe lên cao.
+   Trạm có `plan` thì rê chuột vào ảnh (hoặc bấm nút trên ảnh) sẽ hiện các đám mây kể việc làm theo giờ.
+   Có `finish` thì con đường dừng ở một ô cuối có nút giữ chỗ. */
 import { asset } from '../core.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -49,8 +51,9 @@ function skyOf(time) {
 }
 
 // Trạm không có ảnh thì không có khung ảnh, thẻ chỉ còn phần chữ. Ảnh hỏng (sai đường dẫn, chưa có tệp)
-// thì gỡ cả khung, để không còn một ô trống giữa thẻ. Lớp mây phủ lên ảnh, tan dần khi trạm vào khung nhìn.
-function photoEl(image) {
+// thì gỡ cả khung, để không còn một ô trống giữa thẻ; onError báo cho thẻ biết để dời nút mở mây xuống phần chữ.
+// Lớp mây phủ lên ảnh, tan dần khi trạm vào khung nhìn.
+function photoEl(image, onError) {
   if (!image?.src) return null;
   const box = document.createElement('div');
   box.className = 'journey__photo';
@@ -58,14 +61,89 @@ function photoEl(image) {
   img.src = asset(image.src);
   img.alt = image.alt ?? '';
   img.loading = 'lazy';
-  img.addEventListener('error', () => box.remove(), { once: true });
+  img.addEventListener('error', () => {
+    box.remove();
+    onError();
+  }, { once: true });
   const veil = document.createElement('div');
   veil.className = 'journey__veil';
   box.append(img, veil);
   return box;
 }
 
-function stopEl(stop) {
+// Đám mây kể việc ở từng trạm (`plan`): mỗi đám là một mốc giờ, có thể kèm ảnh hoạt động.
+// Loại mây chỉ nhận hai giá trị đã có CSS: chỗ ngủ (night) và đồ nên mang (tip).
+const PUFF_KINDS = ['night', 'tip'];
+let planCount = 0;
+
+function puffImageEl(image) {
+  if (!image?.src) return null;
+  const img = document.createElement('img');
+  img.className = 'journey__puff-img';
+  img.src = asset(image.src);
+  img.alt = image.alt ?? '';
+  img.loading = 'lazy';
+  img.addEventListener('error', () => img.remove(), { once: true });
+  return img;
+}
+
+// Liên kết tuỳ chọn ở cuối đám mây, ví dụ dẫn sang khối làm trà để xem kỹ việc vừa kể.
+function puffLinkEl(link) {
+  if (!link?.label || !link.href) return null;
+  const a = document.createElement('a');
+  a.className = 'journey__puff-link';
+  a.href = link.href;
+  a.textContent = link.label;
+  return a;
+}
+
+// Thân mây là một lớp riêng nằm sau chữ, chỉ để nhìn; hình mây do CSS cắt theo ảnh mặt nạ.
+function puffEl(item, index) {
+  const li = document.createElement('li');
+  li.className = PUFF_KINDS.includes(item.kind) ? `journey__puff journey__puff--${item.kind}` : 'journey__puff';
+  li.style.setProperty('--i', index);
+  const cloud = document.createElement('span');
+  cloud.className = 'journey__puff-cloud';
+  cloud.setAttribute('aria-hidden', 'true');
+  const text = document.createElement('p');
+  text.className = 'journey__puff-text';
+  text.append(...[
+    textEl('span', 'journey__puff-time', item.time),
+    item.text ? document.createTextNode(item.text) : null,
+    puffLinkEl(item.link),
+  ].filter(Boolean));
+  li.append(...[cloud, puffImageEl(item.image), text].filter(Boolean));
+  return li;
+}
+
+// Tên danh sách cho trình đọc màn hình ghép từ chữ của nút và tên trạm, ví dụ "Ở đây làm gì? Hồ Thác Bà".
+function planEl(stop, label, id) {
+  const list = document.createElement('ul');
+  list.className = 'journey__plan';
+  list.id = id;
+  list.setAttribute('aria-label', [label, stop.title].filter(Boolean).join(' '));
+  list.append(...stop.plan.map(puffEl));
+  return list;
+}
+
+function moreEl(label, id) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'journey__more';
+  button.textContent = label;
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', id);
+  return button;
+}
+
+// Phần tử đang được rê chuột thuộc vùng nào: ảnh trạm (rê vào thì mở mây) hay chính đám mây (giữ mây mở).
+function planZone(node) {
+  return node instanceof Element ? node.closest('.journey__photo, .journey__plan') : null;
+}
+
+// label là chữ của nút mở mây (`planLabel` của khối). Thiếu chữ thì không có nút để bấm,
+// nên bỏ luôn phần mây, thẻ trạm vẫn hiện như cũ.
+function stopEl(stop, label) {
   const li = document.createElement('li');
   li.className = 'journey__stop';
 
@@ -90,12 +168,42 @@ function stopEl(stop) {
     textEl('p', 'journey__night', stop.night),
   ].filter(Boolean));
 
+  const hasPlan = Boolean(label && stop.plan?.length);
+  planCount += 1;
+  const id = `journey-plan-${planCount}`;
+  const more = hasPlan ? moreEl(label, id) : null;
+  // Nút nằm ở góc ảnh; trạm không có ảnh, hoặc ảnh hỏng, thì nút xuống dưới phần chữ.
+  const photo = photoEl(stop.image, () => { if (more) body.append(more); });
+  if (more) (photo ?? body).append(more);
+
   const card = document.createElement('article');
   card.className = 'journey__card';
-  card.append(...[photoEl(stop.image), body].filter(Boolean));
+  card.append(...[photo, body].filter(Boolean));
 
-  li.append(dot, card);
+  li.append(...[dot, card, hasPlan ? planEl(stop, label, id) : null].filter(Boolean));
   return li;
+}
+
+// Ô cuối con đường (`finish`, tuỳ chọn). Người xem vừa đọc hết lịch trình, lúc muốn đi nhất,
+// nên đặt nút kêu gọi ở đây. Nút lấy chữ và đích từ site.cta như mọi nút khác của trang.
+function finishEl(finish, cta) {
+  if (!finish) return null;
+  let button = null;
+  if (cta?.label && cta.href) {
+    button = document.createElement('a');
+    button.className = 'btn journey__finish-cta';
+    button.href = cta.href;
+    button.textContent = cta.label;
+  }
+  const box = document.createElement('div');
+  box.className = 'journey__finish';
+  box.append(...[
+    textEl('p', 'journey__finish-eyebrow', finish.eyebrow),
+    textEl('p', 'journey__finish-title', finish.title),
+    button,
+    textEl('p', 'journey__finish-text', finish.text),
+  ].filter(Boolean));
+  return box.childElementCount ? box : null;
 }
 
 // Ba dải núi (xa, giữa, gần) vẽ trong khung 1440 x 400, kéo giãn theo bề ngang màn hình.
@@ -234,21 +342,32 @@ function meterEl(section, stops) {
 // Các điểm đường phải đi qua. Màn rộng: giữa hai trạm thêm một điểm vòng sâu sang cột trống
 // bên cạnh thẻ (thẻ trái thì vòng sang phải, thẻ phải thì vòng sang trái), như khúc cua đường đèo.
 // Điện thoại không có cột trống, nên đường chỉ đi qua các chấm và uốn nhẹ.
-function wayPoints(points, width, height) {
+// Có ô cuối đường (end) thì đường dừng ở mép trên của ô, và từ trạm cuối tới ô cũng có một khúc cua;
+// không có thì đường chạy thẳng tới đáy khung.
+function wayPoints(points, width, height, end) {
   const first = { x: points[0].x, y: 0 };
-  const last = { x: points[points.length - 1].x, y: height };
+  const last = end ?? { x: points[points.length - 1].x, y: height };
   if (!wideScreen.matches) return [first, ...points, last];
 
   const center = width / 2;
   const swing = width * 0.3;
+  const route = end ? [...points, end] : points;
   const out = [first];
-  points.forEach((point, i) => {
+  route.forEach((point, i) => {
     out.push(point);
-    const next = points[i + 1];
+    const next = route[i + 1];
     if (next) out.push({ x: center + swing * (i % 2 === 0 ? 1 : -1), y: (point.y + next.y) / 2 });
   });
-  out.push(last);
+  if (!end) out.push(last);
   return out;
+}
+
+// Chỗ đường dừng ở ô cuối: màn rộng ô nằm giữa trang nên đường vào giữa mép trên của ô;
+// điện thoại đường chạy dọc mép trái, nên đi thẳng xuống từ trạm cuối tới ngang mép trên của ô.
+function finishPoint(finish, box, points) {
+  const r = finish.getBoundingClientRect();
+  const x = wideScreen.matches ? r.left + r.width / 2 - box.left : points[points.length - 1].x;
+  return { x, y: r.top - box.top + 2 };
 }
 
 // Nối các điểm bằng đường cong. Tại mỗi điểm đường đi thẳng đứng, nên ở chấm trạm và ở đỉnh
@@ -268,10 +387,14 @@ function roadPath(all) {
 export class WlJourney extends HTMLElement {
   // Hai thứ làm khối phải vẽ lại: kích thước khối đổi (bề ngang màn hình, font tải xong) thì vẽ lại đường;
   // trang cuộn thì xe, trời, đồng hồ cập nhật. Cuộn rất dày nên gom về một lần mỗi khung hình.
+  // Mây ở điện thoại nằm ngay dưới thẻ, mở ra làm khối dài thêm: ResizeObserver tự vẽ lại đường.
   connectedCallback() {
     this._resize = new ResizeObserver(() => this.drawRoad());
     this._resize.observe(this);
     this._onScroll = () => {
+      // Nhớ lúc cuộn để phần rê chuột bỏ qua sự kiện sinh ra khi ảnh trôi qua dưới con trỏ.
+      this._lastScroll = performance.now();
+      this.cancelPlanIntent();
       if (this._ticking) return;
       this._ticking = true;
       requestAnimationFrame(() => {
@@ -279,13 +402,29 @@ export class WlJourney extends HTMLElement {
         this.update();
       });
     };
+    this._onClick = (e) => this.onPlanClick(e);
+    this._onHover = (e) => this.onPlanHover(e);
+    this._onLeave = (e) => this.onPlanLeave(e);
+    this._onKey = (e) => this.onPlanKey(e);
     addEventListener('scroll', this._onScroll, { passive: true });
+    addEventListener('keydown', this._onKey);
+    this.addEventListener('click', this._onClick);
+    this.addEventListener('pointerover', this._onHover);
+    this.addEventListener('pointermove', this._onHover);
+    this.addEventListener('pointerout', this._onLeave);
   }
 
   // core.js thay cả <main> khi đổi thương hiệu; gỡ hết bộ theo dõi để khối cũ không còn chạy ngầm.
   disconnectedCallback() {
     this._resize?.disconnect();
     removeEventListener('scroll', this._onScroll);
+    removeEventListener('keydown', this._onKey);
+    this.removeEventListener('click', this._onClick);
+    this.removeEventListener('pointerover', this._onHover);
+    this.removeEventListener('pointermove', this._onHover);
+    this.removeEventListener('pointerout', this._onLeave);
+    this.cancelPlanIntent();
+    clearTimeout(this._planClose);
   }
 
   // core.js gán el.data mỗi lần đổi thương hiệu; lưu lại rồi vẽ lại từ đầu.
@@ -300,6 +439,9 @@ export class WlJourney extends HTMLElement {
     this._stops = stops;
     this._active = -1;
     this._total = 0;
+    this._pinned = null;
+    this.cancelPlanIntent();
+    clearTimeout(this._planClose);
     // Khoảng độ cao của cả tour: để quy độ cao đang đi về 0 (trạm thấp nhất) tới 1 (trạm cao nhất),
     // nên thương hiệu nào có số độ cao khác cũng chạy đúng, không ghi cứng mốc nào.
     const alts = stops.map((s) => s.altitude).filter((a) => typeof a === 'number');
@@ -318,12 +460,13 @@ export class WlJourney extends HTMLElement {
     // Danh sách có thứ tự vì lịch trình đi theo thứ tự; không có trạm thì vẫn ra khối rỗng, không lỗi.
     const list = document.createElement('ol');
     list.className = 'journey__stops';
-    list.append(...stops.map(stopEl));
+    list.append(...stops.map((stop) => stopEl(stop, section.planLabel)));
 
     // Đường và danh sách nằm chung một khung, để toạ độ chấm và toạ độ đường cùng gốc.
+    // Ô cuối đường cũng nằm trong khung này, để đường đo được chỗ dừng.
     const track = document.createElement('div');
     track.className = 'journey__track';
-    track.append(roadEl(), list);
+    track.append(...[roadEl(), list, finishEl(section.finish, this.site?.cta)].filter(Boolean));
 
     const layout = document.createElement('div');
     layout.className = 'journey__layout';
@@ -353,16 +496,19 @@ export class WlJourney extends HTMLElement {
       return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
     });
 
+    const finish = track.querySelector('.journey__finish');
+    const end = finish ? finishPoint(finish, box, points) : null;
     const svg = track.querySelector('.journey__road');
     svg.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
-    const d = roadPath(wayPoints(points, box.width, box.height));
+    const d = roadPath(wayPoints(points, box.width, box.height, end));
     svg.querySelectorAll('path:not(.journey__beam)').forEach((path) => path.setAttribute('d', d));
 
     const done = svg.querySelector('.journey__road-done');
     this._total = done.getTotalLength();
     done.style.strokeDasharray = `${this._total} ${this._total}`;
     this._lens = this.lengthsAt(done, points);
-    this._lastY = points[points.length - 1].y;
+    // Chỗ cuối cùng xe cần tới: ô cuối đường nếu có, không thì trạm cuối.
+    this._lastY = (end ?? points[points.length - 1]).y;
     this._skyKeys = this.skyKeys();
     this.update();
   }
@@ -416,7 +562,7 @@ export class WlJourney extends HTMLElement {
   // Mốc của xe trên màn hình. Bình thường là giữa màn hình. Nhưng khi khối nằm gần cuối trang, trang có thể
   // hết chỗ cuộn trước khi trạm cuối lên tới giữa màn hình (thẻ cuối ngắn, phía sau không còn khối nào),
   // nên xe không bao giờ tới trạm cuối. Khi đó, trong nửa màn hình cuộn cuối cùng, kéo dần mốc xuống chỗ
-  // trạm cuối sẽ nằm lúc hết trang: cuộn hết trang là xe vừa tới trạm cuối, dữ liệu dài ngắn thế nào cũng vậy.
+  // trạm cuối (hoặc ô cuối đường) sẽ nằm lúc hết trang: cuộn hết trang là xe vừa tới nơi, dữ liệu dài ngắn thế nào cũng vậy.
   anchorY(rect) {
     const middle = innerHeight * 0.5;
     const left = document.documentElement.scrollHeight - innerHeight - scrollY;
@@ -427,6 +573,7 @@ export class WlJourney extends HTMLElement {
 
   // Đường vòng sang hai bên nên chiều dài không tỉ lệ với độ cuộn; nhưng đường luôn đi xuống,
   // nên độ cao tăng dần theo chiều dài. Tìm nhị phân trong các mẫu rồi nội suy giữa hai mẫu kề nhau.
+  // Có ô cuối đường thì khung cao hơn chỗ đường dừng: mốc xuống quá cuối đường thì xe đứng ở cuối đường.
   lengthAtY(y) {
     const s = this._samples;
     let lo = 0;
@@ -437,7 +584,7 @@ export class WlJourney extends HTMLElement {
       else hi = mid;
     }
     const span = s[hi].y - s[lo].y;
-    return s[lo].len + (span > 0 ? (y - s[lo].y) / span : 0) * (s[hi].len - s[lo].len);
+    return Math.min(this._total, s[lo].len + (span > 0 ? (y - s[lo].y) / span : 0) * (s[hi].len - s[lo].len));
   }
 
   stopIndexAt(len) {
@@ -531,5 +678,87 @@ export class WlJourney extends HTMLElement {
       const img = photo.querySelector('img');
       if (img) img.style.transform = calm ? '' : `translateY(${(r.top + r.height / 2 - innerHeight / 2) * -0.06}px)`;
     });
+  }
+
+  // Mở mây của một trạm và đóng các trạm khác (mỗi lúc chỉ một trạm mở); truyền null để đóng hết.
+  openPlan(li) {
+    this.querySelectorAll('.journey__stop.is-open').forEach((open) => { if (open !== li) this.setPlanOpen(open, false); });
+    if (li) this.setPlanOpen(li, true);
+  }
+
+  setPlanOpen(li, open) {
+    if (open) this.hideDeadLinks(li);
+    li.classList.toggle('is-open', open);
+    li.querySelector('.journey__more')?.setAttribute('aria-expanded', String(open));
+  }
+
+  // Liên kết trong mây có thể trỏ tới một khối khác của trang. Khối đó bị ẩn (`hidden`) hoặc chưa có
+  // component thì không có trên trang, nên ẩn liên kết để không bấm vào chỗ không có gì.
+  // Xét lúc mở chứ không lúc vẽ, vì khi khối này vẽ, các khối phía sau chưa được gắn vào trang.
+  hideDeadLinks(li) {
+    li.querySelectorAll('.journey__puff-link').forEach((a) => {
+      const href = a.getAttribute('href');
+      a.hidden = href.startsWith('#') && !document.getElementById(href.slice(1));
+    });
+  }
+
+  cancelPlanIntent() {
+    clearTimeout(this._planIntent);
+    this._intentStop = null;
+  }
+
+  // Bấm nút: mở và giữ mở, dùng được trên điện thoại và bằng bàn phím; bấm lại thì đóng.
+  onPlanClick(e) {
+    const button = e.target.closest('.journey__more');
+    if (!button) return;
+    const li = button.closest('.journey__stop');
+    if (this._pinned === li) {
+      this._pinned = null;
+      this.setPlanOpen(li, false);
+    } else {
+      this._pinned = li;
+      this.openPlan(li);
+    }
+  }
+
+  // Rê chuột (chỉ với chuột, từ 760px mới có chỗ trống cho mây): vào ảnh và dừng một nhịp ngắn thì mở.
+  // Đang cuộn hoặc vừa cuộn xong thì bỏ qua: ảnh trôi qua dưới con trỏ đứng yên cũng sinh sự kiện
+  // rê chuột, không chặn thì mây mở rồi đóng liên tục khi cuộn, nhìn như chớp.
+  onPlanHover(e) {
+    if (e.pointerType !== 'mouse' || !wideScreen.matches) return;
+    const zone = planZone(e.target);
+    if (!zone) return;
+    clearTimeout(this._planClose);
+    const li = zone.closest('.journey__stop');
+    const idle = performance.now() - (this._lastScroll ?? 0) > 500;
+    if (!idle || li.classList.contains('is-open') || this._intentStop === li || !zone.matches('.journey__photo')) return;
+    this.cancelPlanIntent();
+    this._intentStop = li;
+    this._planIntent = setTimeout(() => {
+      this._intentStop = null;
+      this._pinned = null;
+      this.openPlan(li);
+    }, 150);
+  }
+
+  // Rời cả ảnh lẫn mây thì đợi một nhịp mới đóng, để kịp đưa chuột từ ảnh sang mây.
+  // Đi giữa các phần tử bên trong cùng một trạm (ảnh sang nút, mây này sang mây kia) thì không tính là rời.
+  onPlanLeave(e) {
+    if (e.pointerType !== 'mouse' || !wideScreen.matches) return;
+    const from = planZone(e.target);
+    const to = planZone(e.relatedTarget);
+    if (!from || (to && to.closest('.journey__stop') === from.closest('.journey__stop'))) return;
+    this.cancelPlanIntent();
+    clearTimeout(this._planClose);
+    this._planClose = setTimeout(() => { if (!this._pinned) this.openPlan(null); }, 380);
+  }
+
+  // Esc đóng mây; nếu mây mở bằng nút thì đưa focus về lại nút đó.
+  onPlanKey(e) {
+    if (e.key !== 'Escape' || !this.querySelector('.journey__stop.is-open')) return;
+    const button = this._pinned?.querySelector('.journey__more');
+    this._pinned = null;
+    this.openPlan(null);
+    button?.focus();
   }
 }

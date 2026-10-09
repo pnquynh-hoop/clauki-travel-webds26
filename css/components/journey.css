@@ -20,6 +20,9 @@
 
   position: relative;
   isolation: isolate;
+  /* Mép đám mây kể việc tràn ra ngoài khung trang trên điện thoại: cắt ở mép khối để trang không rộng
+     ra theo chiều ngang. Dùng clip vì clip không tạo vùng cuộn, đồng hồ độ cao vẫn dính được. */
+  overflow-x: clip;
   color: var(--color-ink);
 }
 
@@ -132,12 +135,14 @@
   margin-bottom: 2.5rem;
 }
 
+/* Dòng nhỏ nằm thẳng trên nền trời, không trên nền của trang: màu nhấn trên trời xanh chỉ đạt 3,69:1,
+   chưa đủ 4,5:1 cho chữ nhỏ, nên dùng màu chữ chính như lời dẫn. */
 .journey__eyebrow {
   margin-bottom: 0.5rem;
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-ink);
 }
 
 .journey__title {
@@ -438,11 +443,326 @@
   color: var(--color-surface);
 }
 
+/* Đám mây kể việc ở từng trạm (trường plan). Rê chuột vào ảnh, hoặc bấm nút trên ảnh, thì mây hiện ra. */
+
+/* Mây đang mở thì ảnh trạm phóng nhẹ, cho biết ảnh nào đang được xem. */
+.journey__photo img {
+  transition: scale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.journey__stop.is-open .journey__photo img {
+  scale: 1.06;
+}
+
+/* Nút mở mây (chữ lấy từ planLabel) ở góc dưới ảnh: kính mờ để nổi trên mọi ảnh. */
+.journey__more {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 0.8rem;
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-surface) 70%, transparent),
+    0 0 24px color-mix(in srgb, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color var(--duration) ease, color var(--duration) ease;
+}
+
+/* Trạm không có ảnh: nút nằm dưới phần chữ, có viền mảnh vì nền thẻ cùng màu với nút. */
+.journey__body .journey__more {
+  position: static;
+  margin-top: 0.9rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.journey__more:hover,
+.journey__stop.is-open .journey__more {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* Danh sách mây. Điện thoại: xếp ngay dưới thẻ, mở thì đẩy trạm sau xuống.
+   Lúc đóng, danh sách còn hiện thêm 0,55 giây (allow-discrete giữ display tới hết thời gian),
+   đủ để từng đám mây trôi về phía thẻ và mờ đi rồi mới ẩn hẳn. */
+.journey__plan {
+  display: none;
+  gap: 3rem;
+  margin-top: 3rem;
+  padding: 0;
+  list-style: none;
+  transition: display 0.55s allow-discrete;
+}
+
+.journey__stop.is-open .journey__plan {
+  display: grid;
+}
+
+/* Mỗi đám mây không có khung: thân mây (journey__puff-cloud) là một màu, cắt theo ảnh mặt nạ vẽ sẵn
+   trong thư mục journey/ (các cụm mây chồng nhau, mép tơi, nhoè). Vẽ sẵn thay vì dùng bộ lọc SVG lúc
+   chạy, vì bộ lọc phải tính lại mỗi khung hình, làm mây chớp. Màu thân mây đổi qua --journey-puff. */
+.journey__puff {
+  --journey-puff: var(--color-surface);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 1.2rem;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translate(var(--journey-puff-from, 0), 0.75rem) scale(0.85);
+  /* Lúc đóng: cả cụm cùng trôi về phía thẻ, thu nhỏ và mờ đi, nhanh hơn lúc mở. */
+  transition: opacity 0.4s ease, transform 0.55s ease-in;
+  /* Nhấp nhô chạy cả lúc đang đóng (lúc đó danh sách ẩn nên không tốn gì), để khi đóng mây không bị khựng. */
+  animation: journey-puff-bob 6s ease-in-out calc(var(--i) * -1.4s) infinite alternate;
+  will-change: transform, opacity;
+}
+
+.journey__puff-cloud {
+  position: absolute;
+  inset: -3.1rem -3.9rem;
+  z-index: -1;
+  background: var(--journey-puff);
+  pointer-events: none;
+  mask: url("journey/cloud-1.png") center / 100% 100% no-repeat;
+}
+
+.journey__puff:nth-child(3n + 2) .journey__puff-cloud {
+  mask-image: url("journey/cloud-2.png");
+}
+
+.journey__puff:nth-child(3n) .journey__puff-cloud {
+  mask-image: url("journey/cloud-3.png");
+}
+
+/* Lõi sáng ngay sau chữ, rộng hơn khối chữ một chút: mép mây tơi đến đâu chữ vẫn có nền đủ tương phản. */
+.journey__puff::before {
+  content: "";
+  position: absolute;
+  inset: 0.3rem 0.4rem;
+  z-index: -1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--journey-puff) 90%, transparent);
+  filter: blur(10px);
+}
+
+/* Bóng mờ bên dưới: mây như đang lơ lửng phía trên con đường. */
+.journey__puff::after {
+  content: "";
+  position: absolute;
+  right: 14%;
+  bottom: -2.4rem;
+  left: 14%;
+  z-index: -2;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  filter: blur(9px);
+}
+
+/* Ảnh hoạt động tròn, mép mờ dần vào mây, lấn ra ngoài mép trái của đám mây. */
+.journey__puff-img {
+  flex: none;
+  width: 6.6rem;
+  height: 6.6rem;
+  margin: -1.6rem 0 -1.6rem -2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  mask-image: radial-gradient(closest-side, #000 82%, transparent 100%);
+}
+
+.journey__puff-text {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.journey__puff-time {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Liên kết ở cuối đám mây (ví dụ sang khối làm trà): xuống dòng riêng, đậm để thấy bấm được. */
+.journey__puff-link {
+  display: block;
+  width: fit-content;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+}
+
+/* display: block ở trên đè mất kiểu ẩn mặc định của thuộc tính hidden, nên phải ghi lại. */
+.journey__puff-link[hidden] {
+  display: none;
+}
+
+/* Mây chỗ ngủ ánh xanh như trăng, mây đồ nên mang ánh màu nhấn: chỉ đổi màu thân mây. */
+.journey__puff--night {
+  --journey-puff: color-mix(in srgb, var(--journey-morning-top) 50%, var(--color-surface));
+}
+
+.journey__puff--tip {
+  --journey-puff: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+
+/* Trên nền mây có màu, màu nhấn chỉ còn khoảng 4,5:1 (sát ngưỡng cho chữ nhỏ), trên trời đêm còn thấp hơn;
+   pha thêm màu chữ chính cho đậm lại, giữ trên 4,8:1. */
+.journey__puff--night .journey__puff-time,
+.journey__puff--tip .journey__puff-time {
+  color: color-mix(in srgb, var(--color-accent) 75%, var(--color-ink));
+}
+
+/* Lúc mở: mây trôi từ phía thẻ sang, lớn dần, chậm lại ở cuối; đám sau trễ hơn đám trước.
+   Dùng transition chứ không dùng keyframes, nên rê vào rồi rời ra giữa chừng thì mây quay đầu từ
+   đúng chỗ đang dừng, không nhảy. Chỉ đổi opacity và transform (không làm nhoè bằng filter),
+   vì hai thuộc tính này trình duyệt chạy mượt mà không phải vẽ lại. */
+.journey__stop.is-open .journey__puff {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease calc(var(--i) * 90ms),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 90ms);
+}
+
+/* Danh sách vừa chuyển từ ẩn sang hiện: báo cho trình duyệt điểm bắt đầu của hiệu ứng. */
+@starting-style {
+  .journey__stop.is-open .journey__puff {
+    opacity: 0;
+    transform: translate(var(--journey-puff-from, 0), 0.75rem) scale(0.85);
+  }
+}
+
+@keyframes journey-puff-bob {
+  from {
+    translate: 0 -4px;
+  }
+
+  to {
+    translate: 0 5px;
+  }
+}
+
+/* Giảm chuyển động: mây chỉ hiện và mờ đi tại chỗ, không trôi, không nhấp nhô, ảnh không phóng. */
+@media (prefers-reduced-motion: reduce) {
+  .journey__puff,
+  .journey__stop.is-open .journey__puff {
+    transform: none;
+    transition: opacity 0.2s ease;
+    animation: none;
+  }
+
+  .journey__photo img {
+    transition: none;
+  }
+}
+
+/* Ô cuối con đường: chuyến gần nhất và nút giữ chỗ. Điện thoại: thẳng hàng với thẻ trạm, chừa làn
+   bên trái cho đường. Ô nằm trên lớp con đường, nên đầu đường chui vào dưới mép trên của ô. */
+.journey__finish {
+  position: relative;
+  z-index: 1;
+  margin: clamp(3.5rem, 8vw, 5.5rem) 0 0 3.5rem;
+  padding: 1.4rem 1.5rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+.journey__finish-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.journey__finish-title {
+  margin: 0.35rem 0 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.journey__finish-text {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
 /* Từ 760px: thẻ xen kẽ hai bên; bên cạnh mỗi thẻ là cột trống để con đường vòng sang. */
 @media (min-width: 760px) {
+  /* Ô cuối nằm giữa trang, đường vòng qua cột trống rồi vào giữa mép trên của ô. */
+  .journey__finish {
+    width: min(26rem, 100%);
+    margin-inline: auto;
+    text-align: center;
+  }
+
   .journey__stops {
     gap: 4.5rem;
     padding-left: 0;
+  }
+
+  /* Mây bay sang cột trống bên kia con đường, nằm đè lên đường như mây vắt qua đèo.
+     Trạm đang mở nổi lên trên các trạm khác để mây không bị thẻ trạm sau che. Lúc đóng, giữ lớp
+     nổi thêm 0,55 giây cho mây mờ hết, nếu không mây đang mờ dần sẽ tụt xuống dưới thẻ trạm sau. */
+  /* z-index đổi giữa auto và 3 là đổi rời rạc, cần allow-discrete thì độ trễ mới có tác dụng. */
+  .journey__stop {
+    transition: z-index 0s linear 0.55s allow-discrete;
+  }
+
+  .journey__stop.is-open {
+    z-index: 3;
+    transition-delay: 0s;
+  }
+
+  /* Cột mây có thể dài hơn thẻ (thẻ không ảnh, nhiều mốc) và lấn xuống thẻ trạm sau.
+     Khi một trạm đang mở, các thẻ khác mờ đi để chữ trong mây không lẫn với chữ của thẻ phía dưới. */
+  .journey__card {
+    transition: box-shadow var(--duration) ease, transform var(--duration) ease, opacity 0.4s ease;
+  }
+
+  .journey__stops:has(.is-open) .journey__stop:not(.is-open) .journey__card {
+    opacity: 0.3;
+  }
+
+  .journey__plan {
+    position: absolute;
+    top: 1rem;
+    width: min(23rem, calc(100% + 3rem));
+    margin: 0;
+  }
+
+  .journey__stop:nth-child(odd) .journey__plan {
+    --journey-puff-from: -4rem;
+
+    left: calc(100% + 4.5rem);
+  }
+
+  .journey__stop:nth-child(even) .journey__plan {
+    --journey-puff-from: 4rem;
+
+    right: calc(100% + 4.5rem);
+  }
+
+  .journey__puff:nth-child(odd) {
+    margin-right: 1.8rem;
+  }
+
+  .journey__puff:nth-child(even) {
+    margin-left: 1.8rem;
   }
 
   .journey__stop {
