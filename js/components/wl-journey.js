@@ -1,24 +1,26 @@
-/* wl-journey.js - lịch trình chuyến đi: các trạm xếp theo thứ tự, mỗi trạm có giờ, tên, độ cao,
-   một câu mô tả, ảnh và nơi ngủ (nếu là trạm cuối của một ngày).
-   Kiểu "road": các trạm nằm dọc một con đường chữ S, chiếc xe chạy theo khi cuộn trang,
-   trời đổi màu theo giờ của trạm, bên cạnh có đồng hồ độ cao, dưới nền có núi chìm dần khi xe lên cao.
-   Trạm có `plan` thì rê chuột vào ảnh (hoặc bấm nút trên ảnh) sẽ hiện các đám mây kể việc làm theo giờ.
-   Có `finish` thì con đường dừng ở một ô cuối có nút giữ chỗ. */
+/* wl-journey.js - khối lịch trình: các trạm của chuyến đi nằm dọc một con đường.
+   Cuộn trang thì xe chạy theo, trời đổi màu theo giờ, đồng hồ báo độ cao, núi chìm dần khi lên cao.
+   Rê chuột vào ảnh trạm thì mây bay ra kể việc làm ở đó. Cuối đường có ô giữ chỗ.
+   Chữ và ảnh đều lấy từ content.json nên thương hiệu nào cũng dùng được. */
 import { asset } from '../core.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+// Năm khoảng trời trong ngày; mỗi khoảng là một lớp màu trong CSS.
 const SKIES = ['dawn', 'morning', 'noon', 'afternoon', 'night'];
+// Người xem bật "giảm chuyển động" trong máy thì xe, mây, núi đứng yên.
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-// Cùng điểm ngắt với journey.css: từ 760px thẻ mới xen kẽ hai bên, có cột trống cho đường vòng sang.
+// Màn hình từ 760px (giống journey.css): thẻ xen kẽ hai bên, có chỗ trống cho mây và khúc cua.
 const wideScreen = matchMedia('(min-width: 760px)');
 
+// Giữ một số nằm trong khoảng từ min tới max.
 const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+// Đi dần từ 0 lên 1, chậm ở hai đầu, để chuyển động không bị giật.
 const smooth = (from, to, x) => {
   const t = clamp((x - from) / (to - from), 0, 1);
   return t * t * (3 - 2 * t);
 };
 
-// Trường nào trống thì trả về null để bỏ qua, không tạo thẻ rỗng.
+// Tạo một thẻ chữ. Chữ trống thì trả về null để bỏ qua, không tạo ô rỗng.
 function textEl(tag, className, text) {
   if (!text) return null;
   const el = document.createElement(tag);
@@ -27,18 +29,19 @@ function textEl(tag, className, text) {
   return el;
 }
 
+// Tạo một hình vẽ SVG (đường, xe, núi, biểu đồ).
 function svgEl(tag, className) {
   const el = document.createElementNS(SVG_NS, tag);
   if (className) el.setAttribute('class', className);
   return el;
 }
 
-// Độ cao là số mét; viết theo cách viết số của tiếng Việt, ví dụ 1.400.
+// Viết độ cao kiểu Việt Nam, làm tròn tới chục mét: 1400 thành "1.400".
 function formatMeters(altitude) {
   return (Math.round(altitude / 10) * 10).toLocaleString('vi-VN');
 }
 
-// Màu trời lấy theo giờ ghi ở trạm ("Ngày 2 · 05:00" là bình minh). Không có giờ thì coi là ban ngày.
+// Đoán màu trời từ giờ ghi ở trạm ("Ngày 2 · 05:00" là bình minh). Không có giờ thì coi là ban ngày.
 function skyOf(time) {
   const match = /(\d{1,2}):\d{2}/.exec(time ?? '');
   if (!match) return 'noon';
@@ -50,9 +53,8 @@ function skyOf(time) {
   return 'night';
 }
 
-// Trạm không có ảnh thì không có khung ảnh, thẻ chỉ còn phần chữ. Ảnh hỏng (sai đường dẫn, chưa có tệp)
-// thì gỡ cả khung, để không còn một ô trống giữa thẻ; onError báo cho thẻ biết để dời nút mở mây xuống phần chữ.
-// Lớp mây phủ lên ảnh, tan dần khi trạm vào khung nhìn.
+// Khung ảnh của trạm, có lớp mây phủ lên để tan dần khi cuộn tới.
+// Không có ảnh thì không có khung; ảnh hỏng thì gỡ khung để thẻ không còn ô trống.
 function photoEl(image, onError) {
   if (!image?.src) return null;
   const box = document.createElement('div');
@@ -71,11 +73,12 @@ function photoEl(image, onError) {
   return box;
 }
 
-// Đám mây kể việc ở từng trạm (`plan`): mỗi đám là một mốc giờ, có thể kèm ảnh hoạt động.
-// Loại mây chỉ nhận hai giá trị đã có CSS: chỗ ngủ (night) và đồ nên mang (tip).
+// Hai loại mây có màu riêng trong CSS: chỗ ngủ (night) và đồ nên mang (tip).
 const PUFF_KINDS = ['night', 'tip'];
+// Đếm để mỗi danh sách mây có một mã riêng, nhờ đó nút biết mình mở danh sách nào.
 let planCount = 0;
 
+// Ảnh nhỏ trong đám mây, cho thấy hoạt động. Ảnh hỏng thì bỏ ảnh, chữ vẫn còn.
 function puffImageEl(image) {
   if (!image?.src) return null;
   const img = document.createElement('img');
@@ -87,7 +90,7 @@ function puffImageEl(image) {
   return img;
 }
 
-// Liên kết tuỳ chọn ở cuối đám mây, ví dụ dẫn sang khối làm trà để xem kỹ việc vừa kể.
+// Liên kết ở cuối đám mây, dẫn sang khối khác của trang (ví dụ khối làm trà).
 function puffLinkEl(link) {
   if (!link?.label || !link.href) return null;
   const a = document.createElement('a');
@@ -97,10 +100,12 @@ function puffLinkEl(link) {
   return a;
 }
 
-// Thân mây là một lớp riêng nằm sau chữ, chỉ để nhìn; hình mây do CSS cắt theo ảnh mặt nạ.
+// Một đám mây: mốc giờ, việc làm, ảnh và liên kết (nếu có).
+// Hình đám mây là một lớp riêng nằm sau chữ, chỉ để trang trí.
 function puffEl(item, index) {
   const li = document.createElement('li');
   li.className = PUFF_KINDS.includes(item.kind) ? `journey__puff journey__puff--${item.kind}` : 'journey__puff';
+  // Số thứ tự của đám mây: CSS dùng để các đám bay ra nối tiếp nhau và bập bềnh lệch nhịp.
   li.style.setProperty('--i', index);
   const cloud = document.createElement('span');
   cloud.className = 'journey__puff-cloud';
@@ -116,7 +121,7 @@ function puffEl(item, index) {
   return li;
 }
 
-// Tên danh sách cho trình đọc màn hình ghép từ chữ của nút và tên trạm, ví dụ "Ở đây làm gì? Hồ Thác Bà".
+// Danh sách các đám mây của một trạm. Tên đọc cho trình đọc màn hình ghép từ chữ trên nút và tên trạm.
 function planEl(stop, label, id) {
   const list = document.createElement('ul');
   list.className = 'journey__plan';
@@ -126,6 +131,7 @@ function planEl(stop, label, id) {
   return list;
 }
 
+// Nút "Ở đây làm gì?" trên ảnh trạm: bấm để mở hoặc đóng mây; báo cho trình đọc màn hình biết mây đang mở hay đóng.
 function moreEl(label, id) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -136,22 +142,23 @@ function moreEl(label, id) {
   return button;
 }
 
-// Phần tử đang được rê chuột thuộc vùng nào: ảnh trạm (rê vào thì mở mây) hay chính đám mây (giữ mây mở).
+// Chuột đang ở trên ảnh trạm (rê vào thì mở mây) hay trên chính đám mây (giữ mây mở).
 function planZone(node) {
   return node instanceof Element ? node.closest('.journey__photo, .journey__plan') : null;
 }
 
-// label là chữ của nút mở mây (`planLabel` của khối). Thiếu chữ thì không có nút để bấm,
-// nên bỏ luôn phần mây, thẻ trạm vẫn hiện như cũ.
+// Dựng một trạm: chấm trên đường, thẻ (ảnh, giờ, độ cao, tên, mô tả, nơi ngủ) và mây kể việc.
+// Mây chỉ có khi khối có chữ cho nút mở (planLabel) và trạm có danh sách việc (plan).
 function stopEl(stop, label) {
   const li = document.createElement('li');
   li.className = 'journey__stop';
 
-  // Chấm trên đường chỉ để nhìn; người dùng trình đọc màn hình đã có thứ tự của danh sách.
+  // Chấm trên đường chỉ để nhìn nên ẩn với trình đọc màn hình.
   const dot = document.createElement('span');
   dot.className = 'journey__dot';
   dot.setAttribute('aria-hidden', 'true');
 
+  // Dòng giờ và độ cao trên tên trạm; trạm không có độ cao thì chỉ có giờ.
   const meta = document.createElement('p');
   meta.className = 'journey__meta';
   meta.append(...[
@@ -172,7 +179,7 @@ function stopEl(stop, label) {
   planCount += 1;
   const id = `journey-plan-${planCount}`;
   const more = hasPlan ? moreEl(label, id) : null;
-  // Nút nằm ở góc ảnh; trạm không có ảnh, hoặc ảnh hỏng, thì nút xuống dưới phần chữ.
+  // Nút nằm ở góc ảnh; trạm không có ảnh hoặc ảnh hỏng thì nút xuống dưới phần chữ.
   const photo = photoEl(stop.image, () => { if (more) body.append(more); });
   if (more) (photo ?? body).append(more);
 
@@ -184,8 +191,8 @@ function stopEl(stop, label) {
   return li;
 }
 
-// Ô cuối con đường (`finish`, tuỳ chọn). Người xem vừa đọc hết lịch trình, lúc muốn đi nhất,
-// nên đặt nút kêu gọi ở đây. Nút lấy chữ và đích từ site.cta như mọi nút khác của trang.
+// Ô cuối con đường: báo chuyến gần nhất và có nút đặt chỗ, đúng lúc người xem vừa đọc hết lịch trình.
+// Nút lấy chữ và đích từ nút chính của trang (site.cta) để cả trang thống nhất.
 function finishEl(finish, cta) {
   if (!finish) return null;
   let button = null;
@@ -206,15 +213,15 @@ function finishEl(finish, cta) {
   return box.childElementCount ? box : null;
 }
 
-// Ba dải núi (xa, giữa, gần) vẽ trong khung 1440 x 400, kéo giãn theo bề ngang màn hình.
+// Hình ba dải núi xa, giữa, gần, vẽ trong khung 1440 x 400 rồi kéo giãn theo bề ngang màn hình.
 const RIDGES = {
   far: 'M0 400 V170 C120 150 180 90 260 100 C340 110 380 160 470 150 C560 140 600 60 700 70 C800 80 830 150 930 140 C1030 130 1080 70 1180 80 C1280 90 1350 140 1440 130 V400Z',
   mid: 'M0 400 V240 C100 220 170 170 250 180 C340 192 380 250 480 240 C580 230 640 170 740 180 C840 190 880 250 990 240 C1090 230 1150 180 1250 190 C1340 198 1400 230 1440 230 V400Z',
   near: 'M0 400 V320 C140 290 260 280 380 300 C520 322 600 340 720 330 C860 318 940 280 1080 290 C1220 300 1320 330 1440 320 V400Z',
 };
 
-// Núi ở đáy màn hình, nằm sau thẻ và con đường. Mỗi dải là một SVG riêng để CSS đẩy từng dải xuống
-// một quãng khác nhau theo độ cao (dải gần chìm nhiều nhất, tạo chiều sâu). Biển mây nằm trên các dải núi.
+// Núi ở đáy màn hình, nằm sau thẻ. Mỗi dải là một hình riêng để khi xe lên cao, dải gần chìm nhiều hơn dải xa,
+// tạo chiều sâu. Lớp biển mây nằm trên núi, hiện ra ở trạm cao nhất.
 function hillsEl() {
   const hills = document.createElement('div');
   hills.className = 'journey__hills';
@@ -233,7 +240,8 @@ function hillsEl() {
   return hills;
 }
 
-// Mỗi khoảng trời là một lớp nền; JS chỉ đổi độ mờ của các lớp, còn màu nằm trong CSS.
+// Nền trời của khối: mỗi khoảng trời một lớp màu, thêm lớp sao và núi.
+// Mã chỉ đổi độ đậm nhạt của từng lớp để trời chuyển màu dần; màu nằm trong CSS.
 function skyEl() {
   const sky = document.createElement('div');
   sky.className = 'journey__sky';
@@ -250,7 +258,8 @@ function skyEl() {
   return sky;
 }
 
-// Con đường gồm mặt đường, vạch kẻ giữa, phần đã đi và chiếc xe. Chỉ để nhìn nên ẩn với trình đọc màn hình.
+// Con đường và chiếc xe: viền đường, mặt đường, vạch giữa, phần đường đã đi (tô màu).
+// Chỉ để nhìn nên ẩn với trình đọc màn hình.
 function roadEl() {
   const svg = svgEl('svg', 'journey__road');
   svg.setAttribute('aria-hidden', 'true');
@@ -261,10 +270,11 @@ function roadEl() {
     svgEl('path', 'journey__road-done'),
   );
 
-  // Xe vẽ đầu hướng sang phải (trục x); khi chạy sẽ được xoay theo hướng của đường.
+  // Xe vẽ đầu quay sang phải, khi chạy được xoay theo hướng đường. Phía trước có luồng đèn pha, chỉ sáng lúc đêm.
   const car = svgEl('g', 'journey__car');
   const beam = svgEl('path', 'journey__beam');
   beam.setAttribute('d', 'M14 -6 L120 -46 L120 46 L14 6 Z');
+  // Thân, mui, kính xe: mỗi phần một hình chữ nhật bo góc (vị trí x, y, rộng, cao, độ bo).
   const parts = [['journey__car-body', -16, -9, 32, 18, 5], ['journey__car-roof', -12, -7, 13, 14, 2], ['journey__car-glass', 4, -7, 8, 14, 2]];
   car.append(beam, ...parts.map(([cls, x, y, w, h, r]) => {
     const rect = svgEl('rect', cls);
@@ -276,10 +286,11 @@ function roadEl() {
 }
 
 // Biểu đồ độ cao nhỏ của cả chuyến: đường lên xuống, vùng tô bên dưới, mỗi trạm một chấm.
-// Cần ít nhất hai trạm có độ cao mới vẽ được; thiếu thì không vẽ.
+// Cần ít nhất hai trạm có độ cao mới vẽ được; thiếu thì bỏ.
 function profileEl(stops) {
   const known = stops.map((s, i) => ({ i, altitude: s.altitude })).filter((s) => typeof s.altitude === 'number');
   if (known.length < 2) return null;
+  // Đổi độ cao thành vị trí trong khung 220 x 64: trạm thấp nhất nằm dưới, trạm cao nhất nằm trên.
   const low = Math.min(...known.map((s) => s.altitude));
   const high = Math.max(...known.map((s) => s.altitude));
   const span = high - low || 1;
@@ -301,26 +312,37 @@ function profileEl(stops) {
   return svg;
 }
 
-// Danh sách các ngày (tuỳ chọn): mỗi ngày một dòng tên ngày và nơi đi qua; ngày xe đang chạy được tô nền.
-function daysEl(days) {
+// Tìm trạm mở đầu mỗi ngày: ngày 1 bắt đầu ở trạm đầu, qua mỗi đêm ngủ là sang ngày mới.
+// Cách đếm giống chỗ tô ngày (setActive), nên bấm ngày nào thì tô đúng ngày đó.
+function dayStarts(stops) {
+  const starts = stops.length ? [0] : [];
+  stops.forEach((stop, i) => { if (stop.night && i < stops.length - 1) starts.push(i + 1); });
+  return starts;
+}
+
+// Danh sách các ngày ở cột đồng hồ. Mỗi ngày là một liên kết tới trạm đầu của ngày đó.
+// Ngày không tìm được trạm (dữ liệu ghi thừa ngày) thì vẫn hiện chữ nhưng không bấm được.
+function daysEl(days, targets) {
   if (!days?.length) return null;
   const list = document.createElement('ol');
   list.className = 'journey__days';
-  list.append(...days.map((day) => {
+  list.append(...days.map((day, i) => {
+    const link = document.createElement('a');
+    link.className = 'journey__day-link';
+    if (targets[i]) link.href = `#${targets[i]}`;
+    link.append(...[textEl('strong', 'journey__day-title', day.title), textEl('span', 'journey__day-text', day.text)].filter(Boolean));
     const li = document.createElement('li');
-    li.className = 'journey__day';
-    li.append(...[textEl('strong', 'journey__day-title', day.title), textEl('span', 'journey__day-text', day.text)].filter(Boolean));
+    li.append(link);
     return li;
   }));
   return list;
 }
 
-// Đồng hồ bên cạnh: trạm đang tới, độ cao chạy số, biểu đồ độ cao, các ngày và ghi chú nguồn độ cao.
-// Mọi thứ ở đây đều đã có trong danh sách trạm, nên cả khối ẩn với trình đọc màn hình để khỏi đọc hai lần.
-function meterEl(section, stops) {
+// Cột đồng hồ cạnh con đường: trạm đang tới, độ cao, biểu đồ, các ngày và ghi chú nguồn độ cao.
+// Phần đã có trong thẻ trạm thì ẩn với trình đọc màn hình để khỏi đọc hai lần; danh sách ngày giữ lại vì bấm được.
+function meterEl(section, stops, dayTargets) {
   const meter = document.createElement('aside');
   meter.className = 'journey__meter';
-  meter.setAttribute('aria-hidden', 'true');
 
   const alt = document.createElement('p');
   alt.className = 'journey__meter-alt';
@@ -328,27 +350,29 @@ function meterEl(section, stops) {
   num.className = 'journey__meter-num';
   alt.append(num, textEl('span', 'journey__meter-unit', 'm'));
 
-  meter.append(...[
+  const echoes = [
     textEl('p', 'journey__meter-time', ' '),
     textEl('p', 'journey__meter-place', ' '),
     alt,
     profileEl(stops),
-    daysEl(section.days),
-    textEl('p', 'journey__meter-note', section.note),
-  ].filter(Boolean));
+  ].filter(Boolean);
+  echoes.forEach((node) => node.setAttribute('aria-hidden', 'true'));
+  const note = textEl('p', 'journey__meter-note', section.note);
+  note?.setAttribute('aria-hidden', 'true');
+
+  meter.append(...[...echoes, daysEl(section.days, dayTargets), note].filter(Boolean));
   return meter;
 }
 
-// Các điểm đường phải đi qua. Màn rộng: giữa hai trạm thêm một điểm vòng sâu sang cột trống
-// bên cạnh thẻ (thẻ trái thì vòng sang phải, thẻ phải thì vòng sang trái), như khúc cua đường đèo.
-// Điện thoại không có cột trống, nên đường chỉ đi qua các chấm và uốn nhẹ.
-// Có ô cuối đường (end) thì đường dừng ở mép trên của ô, và từ trạm cuối tới ô cũng có một khúc cua;
-// không có thì đường chạy thẳng tới đáy khung.
+// Chọn các điểm con đường phải đi qua: tâm từng chấm trạm.
+// Màn rộng thì giữa hai trạm thêm một khúc cua sang cột trống, như đường đèo; điện thoại thì đi qua các chấm.
 function wayPoints(points, width, height, end) {
+  // Có ô cuối thì đường dừng ở mép trên của ô; không có thì chạy tới đáy khối.
   const first = { x: points[0].x, y: 0 };
   const last = end ?? { x: points[points.length - 1].x, y: height };
   if (!wideScreen.matches) return [first, ...points, last];
 
+  // Khúc cua lần lượt sang phải rồi sang trái, cách giữa khối 30% bề ngang.
   const center = width / 2;
   const swing = width * 0.3;
   const route = end ? [...points, end] : points;
@@ -362,17 +386,16 @@ function wayPoints(points, width, height, end) {
   return out;
 }
 
-// Chỗ đường dừng ở ô cuối: màn rộng ô nằm giữa trang nên đường vào giữa mép trên của ô;
-// điện thoại đường chạy dọc mép trái, nên đi thẳng xuống từ trạm cuối tới ngang mép trên của ô.
+// Chỗ con đường dừng ở ô cuối: màn rộng thì vào giữa mép trên của ô; điện thoại thì đi thẳng xuống từ trạm cuối.
 function finishPoint(finish, box, points) {
   const r = finish.getBoundingClientRect();
   const x = wideScreen.matches ? r.left + r.width / 2 - box.left : points[points.length - 1].x;
   return { x, y: r.top - box.top + 2 };
 }
 
-// Nối các điểm bằng đường cong. Tại mỗi điểm đường đi thẳng đứng, nên ở chấm trạm và ở đỉnh
-// khúc cua nét cong đều, không bị gãy góc.
+// Nối các điểm thành một đường cong mềm, đi qua chấm trạm và khúc cua mà không gãy góc.
 function roadPath(all) {
+  // Làm tròn tới một chữ số lẻ cho dữ liệu đường ngắn gọn.
   const round = (n) => Math.round(n * 10) / 10;
   let d = `M ${round(all[0].x)} ${round(all[0].y)}`;
   for (let i = 1; i < all.length; i += 1) {
@@ -384,17 +407,18 @@ function roadPath(all) {
   return d;
 }
 
+// Thẻ <wl-journey>: core.js tạo thẻ này cho mỗi khối lịch trình trong content.json.
 export class WlJourney extends HTMLElement {
-  // Hai thứ làm khối phải vẽ lại: kích thước khối đổi (bề ngang màn hình, font tải xong) thì vẽ lại đường;
-  // trang cuộn thì xe, trời, đồng hồ cập nhật. Cuộn rất dày nên gom về một lần mỗi khung hình.
-  // Mây ở điện thoại nằm ngay dưới thẻ, mở ra làm khối dài thêm: ResizeObserver tự vẽ lại đường.
+  // Khi khối được gắn vào trang: bắt đầu theo dõi cuộn, chuột, phím và cỡ khối.
+  // Khối đổi cỡ (xoay màn hình, font tải xong, mây mở trên điện thoại) thì vẽ lại đường.
   connectedCallback() {
     this._resize = new ResizeObserver(() => this.drawRoad());
     this._resize.observe(this);
     this._onScroll = () => {
-      // Nhớ lúc cuộn để phần rê chuột bỏ qua sự kiện sinh ra khi ảnh trôi qua dưới con trỏ.
+      // Nhớ lúc vừa cuộn, để không mở mây khi ảnh tự trôi qua dưới chuột đang đứng yên.
       this._lastScroll = performance.now();
       this.cancelPlanIntent();
+      // Cuộn báo về rất nhiều lần; gom lại, mỗi khung hình chỉ cập nhật một lần cho mượt.
       if (this._ticking) return;
       this._ticking = true;
       requestAnimationFrame(() => {
@@ -402,7 +426,11 @@ export class WlJourney extends HTMLElement {
         this.update();
       });
     };
-    this._onClick = (e) => this.onPlanClick(e);
+    // Một lần bấm có thể là bấm vào ngày hoặc bấm nút mở mây.
+    this._onClick = (e) => {
+      this.onDayClick(e);
+      this.onPlanClick(e);
+    };
     this._onHover = (e) => this.onPlanHover(e);
     this._onLeave = (e) => this.onPlanLeave(e);
     this._onKey = (e) => this.onPlanKey(e);
@@ -414,7 +442,7 @@ export class WlJourney extends HTMLElement {
     this.addEventListener('pointerout', this._onLeave);
   }
 
-  // core.js thay cả <main> khi đổi thương hiệu; gỡ hết bộ theo dõi để khối cũ không còn chạy ngầm.
+  // Khi khối bị gỡ khỏi trang (đổi thương hiệu): tắt hết theo dõi để khối cũ không chạy ngầm.
   disconnectedCallback() {
     this._resize?.disconnect();
     removeEventListener('scroll', this._onScroll);
@@ -427,28 +455,31 @@ export class WlJourney extends HTMLElement {
     clearTimeout(this._planClose);
   }
 
-  // core.js gán el.data mỗi lần đổi thương hiệu; lưu lại rồi vẽ lại từ đầu.
+  // core.js đưa dữ liệu vào đây mỗi lần đổi thương hiệu; mỗi lần đều dựng lại từ đầu.
   set data(section) {
     this._data = section;
     this.render();
   }
 
+  // Dựng toàn bộ khối từ dữ liệu: tiêu đề, cột đồng hồ, con đường, các trạm, ô cuối.
   render() {
     const section = this._data;
     const stops = section.stops ?? [];
+    // Xoá trạng thái của lần dựng trước: trạm đang sáng, mây đang mở, lượt chờ mở mây.
     this._stops = stops;
     this._active = -1;
     this._total = 0;
     this._pinned = null;
     this.cancelPlanIntent();
     clearTimeout(this._planClose);
-    // Khoảng độ cao của cả tour: để quy độ cao đang đi về 0 (trạm thấp nhất) tới 1 (trạm cao nhất),
-    // nên thương hiệu nào có số độ cao khác cũng chạy đúng, không ghi cứng mốc nào.
+    // Độ cao thấp nhất và cao nhất của chuyến, để biết xe đang cao tới đâu (núi chìm theo đó).
+    // Tính từ dữ liệu nên thương hiệu nào cũng đúng, không ghi cứng con số nào.
     const alts = stops.map((s) => s.altitude).filter((a) => typeof a === 'number');
     this._altLow = alts.length ? Math.min(...alts) : 0;
     this._altSpan = alts.length ? Math.max(...alts) - this._altLow : 0;
     this.className = `journey journey--${section.variant ?? 'road'}`;
 
+    // Phần đầu khối: dòng nhỏ, tiêu đề, câu dẫn; trường nào trống thì bỏ.
     const head = document.createElement('div');
     head.className = 'journey__head';
     head.append(...[
@@ -457,45 +488,55 @@ export class WlJourney extends HTMLElement {
       textEl('p', 'journey__lead', section.lead),
     ].filter(Boolean));
 
-    // Danh sách có thứ tự vì lịch trình đi theo thứ tự; không có trạm thì vẫn ra khối rỗng, không lỗi.
+    // Các trạm theo đúng thứ tự trong dữ liệu. Mỗi trạm có mã riêng (ví dụ lich-trinh-3)
+    // để danh sách ngày dẫn tới; ghép với mã của khối để không trùng với khối khác.
+    const stopId = (i) => `${this.id || 'journey'}-${i + 1}`;
     const list = document.createElement('ol');
     list.className = 'journey__stops';
-    list.append(...stops.map((stop) => stopEl(stop, section.planLabel)));
+    list.append(...stops.map((stop, i) => {
+      const li = stopEl(stop, section.planLabel);
+      li.id = stopId(i);
+      return li;
+    }));
 
-    // Đường và danh sách nằm chung một khung, để toạ độ chấm và toạ độ đường cùng gốc.
-    // Ô cuối đường cũng nằm trong khung này, để đường đo được chỗ dừng.
+    // Đường, các trạm và ô cuối nằm chung một khung, để đo vị trí chấm và vẽ đường cho khớp.
+    const finish = finishEl(section.finish, this.site?.cta);
     const track = document.createElement('div');
     track.className = 'journey__track';
-    track.append(...[roadEl(), list, finishEl(section.finish, this.site?.cta)].filter(Boolean));
+    track.append(...[roadEl(), list, finish].filter(Boolean));
 
+    // Bố cục: cột đồng hồ và con đường.
     const layout = document.createElement('div');
     layout.className = 'journey__layout';
-    layout.append(meterEl(section, stops), track);
+    layout.append(meterEl(section, stops, dayStarts(stops).map(stopId)), track);
 
+    // Không có trạm nào thì không có đường để đi: chỉ giữ tiêu đề và ô cuối (nếu có).
     const inner = document.createElement('div');
     inner.className = 'container';
-    inner.append(head, layout);
+    inner.append(...[head, stops.length ? layout : finish].filter(Boolean));
 
-    // Thay toàn bộ nội dung cũ, nên đổi thương hiệu bao nhiêu lần cũng không bị lặp trạm.
+    // Thay toàn bộ nội dung cũ, nên đổi thương hiệu bao nhiêu lần cũng không bị lặp.
     this.replaceChildren(skyEl(), inner);
 
-    // Lần đầu core.js gán dữ liệu khi khối chưa nằm trên trang, chưa đo được; khi đó
-    // ResizeObserver sẽ vẽ ngay lúc khối được gắn vào. Nếu khối đã nằm trên trang thì vẽ ở khung hình kế tiếp.
+    // Khối đã nằm trên trang thì vẽ đường ở khung hình kế tiếp; chưa nằm trên trang thì đợi lúc được gắn vào.
     if (this.isConnected) requestAnimationFrame(() => this.drawRoad());
   }
 
-  // Đo tâm từng chấm trạm so với khung, vẽ đường đi qua các tâm đó, rồi tính các mốc trên đường.
+  // Đo vị trí từng chấm trạm rồi vẽ con đường đi qua các chấm đó.
+  // Chạy lại mỗi khi khối đổi cỡ, vì thẻ xê dịch thì đường phải theo.
   drawRoad() {
     const track = this.querySelector('.journey__track');
     const dots = [...this.querySelectorAll('.journey__dot')];
     if (!track || dots.length === 0) return;
 
+    // Tâm từng chấm, tính từ góc trên trái của khung.
     const box = track.getBoundingClientRect();
     const points = dots.map((dot) => {
       const r = dot.getBoundingClientRect();
       return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
     });
 
+    // Bốn lớp của con đường (viền, mặt, vạch, phần đã đi) dùng chung một hình.
     const finish = track.querySelector('.journey__finish');
     const end = finish ? finishPoint(finish, box, points) : null;
     const svg = track.querySelector('.journey__road');
@@ -503,6 +544,7 @@ export class WlJourney extends HTMLElement {
     const d = roadPath(wayPoints(points, box.width, box.height, end));
     svg.querySelectorAll('path:not(.journey__beam)').forEach((path) => path.setAttribute('d', d));
 
+    // Đo chiều dài đường và vị trí từng trạm trên đường, để biết cuộn tới đâu thì xe ở đâu.
     const done = svg.querySelector('.journey__road-done');
     this._total = done.getTotalLength();
     done.style.strokeDasharray = `${this._total} ${this._total}`;
@@ -513,8 +555,8 @@ export class WlJourney extends HTMLElement {
     this.update();
   }
 
-  // Quãng đường từ đầu đường tới từng trạm: lấy mẫu dọc đường, chọn điểm gần tâm chấm nhất.
-  // Cần con số này để biết cuộn tới đâu thì xe đã qua trạm nào. Giữ lại các mẫu để tìm điểm theo độ cao.
+  // Tính mỗi trạm nằm ở quãng thứ bao nhiêu trên con đường, để biết xe đã qua trạm nào.
+  // Cách làm: lấy 400 điểm dọc đường, chọn điểm gần chấm trạm nhất. Giữ các điểm này để dùng khi cuộn.
   lengthsAt(path, points) {
     const samples = Array.from({ length: 401 }, (_, i) => {
       const len = (this._total * i) / 400;
@@ -528,7 +570,8 @@ export class WlJourney extends HTMLElement {
     }, { dist: Infinity, len: 0 }).len);
   }
 
-  // Các mốc màu trời dọc đường: mỗi trạm theo giờ của nó; trạm có ghi nơi ngủ thì đoạn giữa chặng sau là đêm.
+  // Đặt các mốc màu trời dọc đường: tới trạm nào thì trời theo giờ của trạm đó.
+  // Trạm có nơi ngủ thì khoảng giữa chặng sau là đêm.
   skyKeys() {
     const stops = this._stops;
     const keys = [{ len: 0, sky: skyOf(stops[0]?.time) }];
@@ -543,10 +586,10 @@ export class WlJourney extends HTMLElement {
     return keys;
   }
 
-  // Mỗi lần cuộn: xe nằm ngang mốc trên màn hình (thường là giữa màn hình). Lấy độ cao của mốc trong khung,
-  // tìm điểm trên đường có cùng độ cao, rồi cập nhật từng phần theo vị trí đó.
+  // Chạy mỗi lần cuộn: tìm xe đang ở đâu trên đường, rồi cập nhật xe, trời, trạm đang tới, độ cao, mây trên ảnh.
   update() {
     if (!this._total) return;
+    // Khối còn ở quá xa màn hình thì bỏ qua cho đỡ tốn máy.
     const rect = this.querySelector('.journey__track').getBoundingClientRect();
     if (rect.bottom < -innerHeight || rect.top > innerHeight * 2) return;
     const len = this.lengthAtY(clamp(this.anchorY(rect) - rect.top, 0, rect.height));
@@ -559,10 +602,8 @@ export class WlJourney extends HTMLElement {
     this.clearClouds();
   }
 
-  // Mốc của xe trên màn hình. Bình thường là giữa màn hình. Nhưng khi khối nằm gần cuối trang, trang có thể
-  // hết chỗ cuộn trước khi trạm cuối lên tới giữa màn hình (thẻ cuối ngắn, phía sau không còn khối nào),
-  // nên xe không bao giờ tới trạm cuối. Khi đó, trong nửa màn hình cuộn cuối cùng, kéo dần mốc xuống chỗ
-  // trạm cuối (hoặc ô cuối đường) sẽ nằm lúc hết trang: cuộn hết trang là xe vừa tới nơi, dữ liệu dài ngắn thế nào cũng vậy.
+  // Chỗ xe nằm trên màn hình: bình thường là giữa màn hình. Gần cuối trang có thể hết chỗ cuộn trước khi
+  // trạm cuối lên tới giữa, nên kéo dần chỗ này xuống để cuộn hết trang là xe vừa tới nơi.
   anchorY(rect) {
     const middle = innerHeight * 0.5;
     const left = document.documentElement.scrollHeight - innerHeight - scrollY;
@@ -571,9 +612,8 @@ export class WlJourney extends HTMLElement {
     return middle + (lastAtEnd - middle) * smooth(0, 1, 1 - left / middle);
   }
 
-  // Đường vòng sang hai bên nên chiều dài không tỉ lệ với độ cuộn; nhưng đường luôn đi xuống,
-  // nên độ cao tăng dần theo chiều dài. Tìm nhị phân trong các mẫu rồi nội suy giữa hai mẫu kề nhau.
-  // Có ô cuối đường thì khung cao hơn chỗ đường dừng: mốc xuống quá cuối đường thì xe đứng ở cuối đường.
+  // Đổi một độ cao trong khung thành quãng đường xe đã đi. Đường luôn đi xuống nên tìm nhanh được
+  // trong các điểm đã lấy; xuống quá cuối đường thì xe dừng ở cuối đường.
   lengthAtY(y) {
     const s = this._samples;
     let lo = 0;
@@ -587,13 +627,15 @@ export class WlJourney extends HTMLElement {
     return Math.min(this._total, s[lo].len + (span > 0 ? (y - s[lo].y) / span : 0) * (s[hi].len - s[lo].len));
   }
 
+  // Trạm xa nhất mà xe đã tới (lệch 2px vẫn tính là tới).
   stopIndexAt(len) {
     let index = 0;
     this._lens.forEach((stopLen, i) => { if (stopLen <= len + 2) index = i; });
     return index;
   }
 
-  // Đặt xe vào điểm trên đường và xoay theo hướng đường tại đó; phần đường đã đi được tô màu.
+  // Đặt xe vào đúng điểm trên đường và tô màu đoạn đường đã đi.
+  // Lấy hai điểm sát trước và sau xe để biết đường đang hướng về đâu, rồi xoay xe theo.
   moveCar(len) {
     const svg = this.querySelector('.journey__road');
     const done = svg.querySelector('.journey__road-done');
@@ -605,7 +647,8 @@ export class WlJourney extends HTMLElement {
     svg.querySelector('.journey__car').setAttribute('transform', `translate(${at.x} ${at.y}) rotate(${angle})`);
   }
 
-  // Trộn hai khoảng trời liền kề theo vị trí xe giữa hai mốc; mức "đêm" dùng cho sao và đèn xe.
+  // Trộn hai màu trời liền kề theo vị trí xe, để trời chuyển màu dần.
+  // Mức "đêm" dùng để hiện sao, bật đèn xe và đổi chữ tiêu đề sang màu sáng.
   paintSky(len) {
     const keys = this._skyKeys;
     let i = 0;
@@ -621,6 +664,7 @@ export class WlJourney extends HTMLElement {
     this.classList.toggle('is-night', weight.night > 0.5);
   }
 
+  // Làm sáng trạm xe vừa tới và cập nhật đồng hồ: giờ, tên trạm, chấm trên biểu đồ, ngày đang đi.
   setActive(index) {
     if (index === this._active) return;
     this._active = index;
@@ -629,12 +673,15 @@ export class WlJourney extends HTMLElement {
     this.querySelector('.journey__meter-time').textContent = stop.time ?? '';
     this.querySelector('.journey__meter-place').textContent = stop.title ?? '';
     this.querySelectorAll('.journey__profile-dot').forEach((dot) => dot.classList.toggle('is-active', Number(dot.dataset.stop) === index));
-    // Mỗi đêm ngủ là hết một ngày: trạm đứng sau bao nhiêu trạm có ghi nơi ngủ thì thuộc ngày thứ bấy nhiêu cộng một.
+    // Mỗi đêm ngủ là hết một ngày: đếm số đêm trước trạm này là ra đang ở ngày thứ mấy.
     const day = this._stops.slice(0, index).filter((s) => s.night).length;
-    this.querySelectorAll('.journey__day').forEach((li, i) => li.classList.toggle('is-active', i === day));
+    this.querySelectorAll('.journey__day-link').forEach((link, i) => {
+      if (i === day) link.setAttribute('aria-current', 'step');
+      else link.removeAttribute('aria-current');
+    });
   }
 
-  // Độ cao chạy số giữa hai trạm khi cả hai đều có số; trạm không có số thì ẩn, không đoán.
+  // Cho đồng hồ chạy số độ cao giữa hai trạm. Trạm không có số thì ẩn số, không đoán.
   showAltitude(len, index) {
     const stops = this._stops;
     const here = stops[index]?.altitude;
@@ -652,9 +699,8 @@ export class WlJourney extends HTMLElement {
     this.sinkHills(value);
   }
 
-  // Núi chìm theo độ cao xe đang đi. --journey-high bằng 0 ở trạm thấp nhất (núi đứng cao quanh mình),
-  // bằng 1 ở trạm cao nhất (núi chìm dưới chân, biển mây hiện ra). Chặng không có độ cao thì giữ mức cũ.
-  // Giảm chuyển động thì núi đứng yên ở mức giữa.
+  // Núi chìm dần khi xe lên cao: ở trạm thấp nhất núi đứng cao quanh mình, ở trạm cao nhất núi chìm dưới chân.
+  // Chặng không có độ cao thì giữ nguyên; người xem bật giảm chuyển động thì núi đứng yên ở mức giữa.
   sinkHills(value) {
     if (reduceMotion.matches) {
       this.style.setProperty('--journey-high', '0.5');
@@ -664,12 +710,13 @@ export class WlJourney extends HTMLElement {
     this.style.setProperty('--journey-high', clamp((value - this._altLow) / this._altSpan, 0, 1).toFixed(3));
   }
 
-  // Mây phủ ảnh trạm khi trạm còn ở dưới màn hình, tan dần khi trạm đi lên giữa màn hình.
-  // Ảnh trong khung trôi chậm hơn khung một chút, tạo cảm giác có chiều sâu.
+  // Mây phủ ảnh trạm tan dần khi trạm đi lên giữa màn hình, như xe đi xuyên qua mây.
+  // Ảnh trôi chậm hơn khung một chút để có cảm giác chiều sâu.
   clearClouds() {
     const calm = reduceMotion.matches;
     this.querySelectorAll('.journey__photo').forEach((photo) => {
       const r = photo.getBoundingClientRect();
+      // Ảnh còn ở quá xa màn hình thì bỏ qua.
       if (r.top > innerHeight * 1.5 || r.bottom < -innerHeight * 0.5) return;
       const seen = clamp((innerHeight - r.top) / (innerHeight * 0.6), 0, 1);
       const veil = photo.querySelector('.journey__veil');
@@ -680,21 +727,21 @@ export class WlJourney extends HTMLElement {
     });
   }
 
-  // Mở mây của một trạm và đóng các trạm khác (mỗi lúc chỉ một trạm mở); truyền null để đóng hết.
+  // Mở mây của một trạm và đóng các trạm khác, mỗi lúc chỉ một trạm mở; truyền null để đóng hết.
   openPlan(li) {
     this.querySelectorAll('.journey__stop.is-open').forEach((open) => { if (open !== li) this.setPlanOpen(open, false); });
     if (li) this.setPlanOpen(li, true);
   }
 
+  // Mở hoặc đóng mây của một trạm, và báo cho trình đọc màn hình biết nút đang ở trạng thái nào.
   setPlanOpen(li, open) {
     if (open) this.hideDeadLinks(li);
     li.classList.toggle('is-open', open);
     li.querySelector('.journey__more')?.setAttribute('aria-expanded', String(open));
   }
 
-  // Liên kết trong mây có thể trỏ tới một khối khác của trang. Khối đó bị ẩn (`hidden`) hoặc chưa có
-  // component thì không có trên trang, nên ẩn liên kết để không bấm vào chỗ không có gì.
-  // Xét lúc mở chứ không lúc vẽ, vì khi khối này vẽ, các khối phía sau chưa được gắn vào trang.
+  // Ẩn liên kết trong mây nếu khối nó dẫn tới không có trên trang (bị ẩn hoặc chưa làm), để không bấm vào chỗ trống.
+  // Xét lúc mở mây chứ không lúc vẽ, vì lúc vẽ khối này thì các khối phía sau chưa có.
   hideDeadLinks(li) {
     li.querySelectorAll('.journey__puff-link').forEach((a) => {
       const href = a.getAttribute('href');
@@ -702,12 +749,25 @@ export class WlJourney extends HTMLElement {
     });
   }
 
+  // Huỷ lượt chờ mở mây đang đếm giờ (khi chuột rời đi hoặc trang bắt đầu cuộn).
   cancelPlanIntent() {
     clearTimeout(this._planIntent);
     this._intentStop = null;
   }
 
-  // Bấm nút: mở và giữ mở, dùng được trên điện thoại và bằng bàn phím; bấm lại thì đóng.
+  // Bấm một ngày: cuộn mượt tới khi chấm trạm đầu ngày đó nằm ngay chỗ xe (giữa màn hình), xe chạy qua đoạn ở giữa.
+  // Cách này tới đúng trạm dù thẻ dài hay ngắn. Người xem bật giảm chuyển động thì nhảy thẳng tới.
+  onDayClick(e) {
+    const link = e.target.closest('.journey__day-link[href]');
+    const dot = link && document.getElementById(link.hash.slice(1))?.querySelector('.journey__dot');
+    if (!dot) return;
+    e.preventDefault();
+    const r = dot.getBoundingClientRect();
+    // Cộng 8px để xe đi quá chấm một chút, chắc chắn được tính là đã tới trạm.
+    scrollTo({ top: scrollY + r.top + r.height / 2 - innerHeight / 2 + 8, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  }
+
+  // Bấm nút: mở mây và giữ mở (dùng được trên điện thoại và bằng bàn phím); bấm lần nữa thì đóng.
   onPlanClick(e) {
     const button = e.target.closest('.journey__more');
     if (!button) return;
@@ -721,9 +781,8 @@ export class WlJourney extends HTMLElement {
     }
   }
 
-  // Rê chuột (chỉ với chuột, từ 760px mới có chỗ trống cho mây): vào ảnh và dừng một nhịp ngắn thì mở.
-  // Đang cuộn hoặc vừa cuộn xong thì bỏ qua: ảnh trôi qua dưới con trỏ đứng yên cũng sinh sự kiện
-  // rê chuột, không chặn thì mây mở rồi đóng liên tục khi cuộn, nhìn như chớp.
+  // Rê chuột vào ảnh và dừng một nhịp ngắn (150ms) thì mở mây; chỉ với chuột, trên màn từ 760px.
+  // Đang cuộn thì bỏ qua: ảnh trôi qua dưới chuột cũng tính là rê vào, không chặn thì mây chớp liên tục.
   onPlanHover(e) {
     if (e.pointerType !== 'mouse' || !wideScreen.matches) return;
     const zone = planZone(e.target);
@@ -741,8 +800,8 @@ export class WlJourney extends HTMLElement {
     }, 150);
   }
 
-  // Rời cả ảnh lẫn mây thì đợi một nhịp mới đóng, để kịp đưa chuột từ ảnh sang mây.
-  // Đi giữa các phần tử bên trong cùng một trạm (ảnh sang nút, mây này sang mây kia) thì không tính là rời.
+  // Chuột rời cả ảnh lẫn mây thì đợi một nhịp (380ms) mới đóng, để kịp đưa chuột từ ảnh sang mây.
+  // Đi qua lại bên trong cùng một trạm thì không tính là rời.
   onPlanLeave(e) {
     if (e.pointerType !== 'mouse' || !wideScreen.matches) return;
     const from = planZone(e.target);
@@ -753,7 +812,7 @@ export class WlJourney extends HTMLElement {
     this._planClose = setTimeout(() => { if (!this._pinned) this.openPlan(null); }, 380);
   }
 
-  // Esc đóng mây; nếu mây mở bằng nút thì đưa focus về lại nút đó.
+  // Nhấn Esc thì đóng mây; nếu mây mở bằng nút thì đưa con trỏ bàn phím về lại nút đó.
   onPlanKey(e) {
     if (e.key !== 'Escape' || !this.querySelector('.journey__stop.is-open')) return;
     const button = this._pinned?.querySelector('.journey__more');

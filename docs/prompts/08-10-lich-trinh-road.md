@@ -17,35 +17,33 @@ Bạn là kỹ sư frontend trong đội làm landing page white label. Làm iss
 5. thêm, bớt, đổi thứ tự trạm thì đường tự vẽ lại; đổi thương hiệu bằng nút của BTC không bị nhân đôi khối;
    đúng ở 390px và 1440px.
 
-Yêu cầu: làm và thử trên `brand-test` trước, giữ tên trường đang có; ghi trường riêng vào mục 12 của
-`AGENTS.md`; không ghi cứng chữ, màu; chưa commit.
+Sau khi xem bản đầu, yêu cầu chỉnh thêm:
 
-Các lần yêu cầu chỉnh sau đó:
+6. khối chưa giống bản thiết kế, còn ít thông tin, CSS chưa đẹp bằng: đưa về đúng bản phác 2 (màu trời theo
+   giờ, mặt đường nhựa sẫm, đèn xe, danh sách các ngày và ghi chú nguồn độ cao dưới đồng hồ);
+7. nền phía sau các thẻ còn đơn giản: thêm một lớp nền gắn với cả tour; làm thử các kiểu nền trên bản phác
+   trước, có nút để chọn, kiểu nào được duyệt mới đưa vào repo;
+8. bỏ con số độ cao viền rỗng phía sau thẻ;
+9. trên `brand-test` xe không tới được trạm cuối như Bậc Trà, tức chưa đảm bảo white label: tìm nguyên nhân
+   và sửa cho mọi bộ dữ liệu.
 
-- "Giao diện không giống bản thiết kế, ít thông tin, CSS không đẹp bằng": đưa khối về đúng bản phác 2 (màu
-  trời thật theo giờ, mặt đường nhựa sẫm, đèn xe, danh sách các ngày và ghi chú nguồn độ cao dưới đồng hồ).
-- "Nền phía sau các thẻ còn đơn giản, thêm gì liên quan tới cả tour": AI thử lần lượt đường đồng mức, hoa
-  văn hình thoi, họa tiết lá chè, bông lúa, mây, nước, rồi ảnh trạm làm nhoè; mình thấy đều không đẹp và yêu
-  cầu khôi phục lại ban đầu.
-- "Sửa background trên bản thiết kế để tôi coi trước, khi nào thấy ổn thì áp lên repo": AI làm 4 kiểu nền
-  chọn bằng nút trên bản phác (biển mây, núi theo độ cao, tên địa danh, theo ngày).
-- Chọn "núi theo độ cao", hỏi lại cơ chế cho tới khi hiểu, rồi cho đưa vào repo.
-- "Bỏ con số độ cao phía sau tấm ảnh".
-- "Test trên brand-test thì xe không đi tới được trạm cuối như Bậc Trà, vậy là chưa đảm bảo white label":
-  AI dựng lại lỗi (cả Bậc Trà cũng thiếu một đoạn), tìm ra nguyên nhân là khối nằm cuối trang nên trang hết
-  chỗ cuộn trước khi trạm cuối lên giữa màn hình; sửa bằng cách kéo dần mốc của xe xuống ở nửa màn hình cuộn
-  cuối cùng (commit 0bc94a2).
+Yêu cầu:
 
-## Kết quả và phần tự làm
+- làm và thử trên `brand-test` trước, giữ tên trường đang có; ghi trường riêng vào mục 12 của `AGENTS.md`;
+- không ghi cứng chữ, màu; chữ lấy từ `content.json`, màu và font lấy từ biến CSS;
+- chạy thử sau mỗi lần sửa: chặng đêm, giảm chuyển động, đổi thương hiệu qua lại, không cuộn ngang ở 390px
+  và 1440px, không có lỗi JS;
+- chưa commit khi chưa được duyệt.
 
-- Ý tưởng con đường chữ S và chiếc xe chạy theo cuộn là của mình từ lúc brainstorm (bản phác 2).
+## Phần tự quyết định
+
+- Đưa ra ý tưởng con đường chữ S và chiếc xe chạy theo cuộn từ lúc brainstorm (bản phác 2).
 - Tự đối chiếu khối với issue #13 và với bản phác, chỉ ra chỗ thiếu thông tin và chỗ CSS chưa đẹp.
-- Tự thử trên `brand-test` và phát hiện xe không tới được trạm cuối.
-- Tự xem từng bản trên trình duyệt và quyết định giữ hay bỏ: bỏ các kiểu nền thử trong repo, chuyển sang thử
-  trên bản phác trước; chọn kiểu núi theo độ cao trong 4 kiểu; bỏ số độ cao viền rỗng sau thẻ.
-- AI viết `js/components/wl-journey.js`, `css/components/journey.css`, đăng ký trong `js/app.js` và
-  `css/components.css`, sửa dữ liệu journey của `brand-test` (kiểu `road`, `altitude`, `night`,
-  `days`, `note`), ghi dòng `journey` vào mục 12 của `AGENTS.md`.
-- AI chạy thử bằng Chrome headless sau mỗi lần sửa: chặng đêm, giảm chuyển động, đổi thương hiệu qua lại,
-  không cuộn ngang ở 390px và 1440px, không có lỗi JS.
-- Bản phác 2 và 4 kiểu nền thử lưu ở máy (`bac-tra-phac-thao-v2`), không nằm trong repo.
+- Xem các kiểu nền thử trong repo (đường đồng mức, hoa văn hình thoi, họa tiết lá chè, bông lúa, mây, nước,
+  ảnh trạm làm nhoè), thấy đều không đẹp nên cho khôi phục lại ban đầu và chuyển sang thử trên bản phác.
+- Chọn kiểu núi theo độ cao trong 4 kiểu nền thử trên bản phác (biển mây, núi theo độ cao, tên địa danh, theo
+  ngày), hỏi lại cơ chế cho tới khi hiểu rồi mới cho đưa vào repo.
+- Bỏ số độ cao viền rỗng sau thẻ.
+- Tự thử trên `brand-test` và phát hiện xe không tới được trạm cuối. Nguyên nhân là khối nằm cuối trang nên
+  trang hết chỗ cuộn trước khi trạm cuối lên tới giữa màn hình; lỗi được sửa ở commit 0bc94a2.
+- Giữ bản phác 2 và các kiểu nền thử ở máy (`bac-tra-phac-thao-v2`), không đưa vào repo.

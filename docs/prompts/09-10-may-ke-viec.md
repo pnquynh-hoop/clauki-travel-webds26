@@ -6,37 +6,33 @@
 
 ## Prompt (tóm tắt)
 
-Các câu mình gõ, theo thứ tự:
+Bạn là kỹ sư frontend kiêm người thiết kế giao diện. Lịch trình kiểu `road` của Bậc Trà (#13) mới cho biết xe
+đi qua những nơi nào; người xem chưa biết ở mỗi nơi sẽ làm gì và chưa thấy ảnh hoạt động nào. Hãy bổ sung phần
+này, thử trên bản phác 2 trước, duyệt xong mới đưa vào `wl-journey`:
 
-- "Có sử dụng đa kiểu chữ và độ tương phản đúng với đã khai báo trên comment chưa": AI đo lại tương phản,
-  dòng nhỏ trên tiêu đề lịch trình chưa đủ trên nền trời nên đổi sang màu chữ chính.
-- "Giao diện hiện tại đã đủ nhưng vẫn ít thông tin về tour quá, có những hành động gì của chuyến đi, không
-  có hình ảnh thể hiện các hoạt động... đọc xong thì chỉ biết sẽ đi qua các địa điểm nào thôi."
-- "Ví dụ như là hover vô cái hình địa điểm thì nó hiển thị ra các đám mây nói thêm những thông tin, những
-  việc sẽ làm cụ thể ở địa chỉ đó."
-- "Hiệu ứng thì được rồi nhưng hình dạng đám mây xấu quá, tôi muốn hiệu ứng mây lơ lửng chứ không phải một
-  khối đặc màu trắng."
-- "Sao trên giao diện mấy cái đám mây bị chớp chớp?"
-- "Tôi đồng ý áp dụng cho code repo, thêm những cái vừa thêm trong thiết kế."
-- "Độ mượt khi hover và bỏ hover chưa ok."
-- "Áp dụng phần vừa cập nhật cho wl-journey của repo" (ô chuyến gần nhất ở cuối đường, liên kết sang khối
-  làm trà trong mây Suối Giàng).
-- "Kiểm tra lại các AC coi đã đủ điều kiện đóng issue chưa", rồi "commit và push lên PR".
+1. kiểm tra trang đã dùng đủ các kiểu chữ và đạt độ tương phản như đã khai báo trong comment Bậc Trà ở issue #3;
+   chỗ nào chưa đạt thì sửa;
+2. rê chuột vào ảnh một trạm thì các đám mây bay ra, kể những việc cụ thể sẽ làm ở trạm đó theo từng mốc giờ,
+   kèm ảnh hoạt động;
+3. đám mây phải trông như mây lơ lửng, mép mềm, không phải một khối trắng đặc;
+4. mây không được chớp khi cuộn trang; mở và đóng mây phải mượt cả lúc rê chuột vào lẫn lúc rời ra;
+5. đưa vào `wl-journey` phần mới trên bản phác: ô chuyến gần nhất ở cuối con đường, liên kết từ mây ở Suối Giàng
+   sang khối làm trà;
+6. thêm dữ liệu cho Bậc Trà: việc làm và mốc giờ lấy từ mục 4 của tài liệu kế hoạch, ảnh hoạt động có giấy phép;
+7. kiểm tra lại các tiêu chí của issue #13 xem đã đủ điều kiện đóng chưa, sau đó commit và push lên PR.
 
-Cách làm: thử trên bản phác 2 trước, mình xem và duyệt rồi mới đưa vào repo.
+Yêu cầu (theo `AGENTS.md`):
 
-## Kết quả và phần tự làm
+- chữ và ảnh lấy từ `content.json`, màu và font chỉ lấy từ biến CSS; thương hiệu khác thêm khối này vẫn chạy đúng;
+- mỗi ảnh có giấy phép dùng được và một dòng trong `credits`;
+- dùng được bằng bàn phím, tôn trọng giảm chuyển động;
+- chạy thử ở 1440px và 390px, console không lỗi.
 
-- Ý tưởng rê chuột vào ảnh trạm thì mây bay ra kể việc làm theo giờ là của mình.
-- Tự xem trên trình duyệt và chỉ ra chỗ chưa ổn: mây là khối trắng đặc, mây chớp khi cuộn, mở và đóng mây
-  chưa mượt.
-- AI thêm vào `wl-journey`: trường `plan` cho từng trạm và `planLabel` cho nút mở mây; mây mở khi rê chuột
-  hoặc bấm nút, Esc thì đóng; bỏ qua sự kiện rê chuột lúc đang cuộn để hết chớp; mở và đóng bằng transition
-  nên đổi hướng giữa chừng không bị giật. Hình mây là ba ảnh mặt nạ vẽ sẵn trong
-  `css/components/journey/`.
-- AI thêm ô cuối đường (`finish`): nút lấy từ `site.cta`, con đường dừng ở mép trên của ô; liên kết trong
-  mây (`link`) tự ẩn khi khối đích chưa có trên trang.
-- AI thêm dữ liệu Bậc Trà: các mốc giờ chép từ mục 4 của tài liệu kế hoạch, 12 ảnh hoạt động trên Wikimedia
-  Commons kèm `credits` (5 ảnh đúng nơi, 7 ảnh thay thế, ghi rõ ở mục 8 của tài liệu kế hoạch).
-- AI chạy thử bằng Chrome headless: 1440px rê chuột, 390px bấm nút, Esc, `brand-test`, đổi thương hiệu
-  qua lại; kiểm lại 5 tiêu chí của issue #13 bằng script, cả 5 đều đạt.
+## Phần tự quyết định
+
+- Đưa ra ý tưởng rê chuột vào ảnh trạm thì mây bay ra kể việc làm theo giờ.
+- Thử trên bản phác 2 trước, xem và duyệt rồi mới cho đưa vào repo.
+- Tự xem trên trình duyệt và chỉ ra chỗ chưa ổn để sửa: mây là khối trắng đặc, mây chớp khi cuộn, mở và đóng
+  mây chưa mượt.
+- Quyết định đưa ô chuyến gần nhất và liên kết sang khối làm trà vào repo.
+- Cho commit và push sau khi kiểm lại 5 tiêu chí của issue #13, cả 5 đều đạt.
