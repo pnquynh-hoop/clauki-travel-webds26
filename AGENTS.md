@@ -134,6 +134,8 @@ export class WlHero extends HTMLElement {
 - `--font-heading`, `--font-body`;
 - `--radius`.
 
+**Màu nào được làm màu chữ:** `--color-primary` có thể là màu sáng chỉ hợp làm nền nút, nên không dùng làm màu chữ trên nền trang. Chữ cần màu thương hiệu (liên kết, nhãn nhỏ, chữ của nút viền) dùng `--color-accent`. Vì vậy mỗi thương hiệu phải chọn `--color-accent` đạt tương phản AA (từ 4,5) trên `--color-bg`.
+
 ## 6. CSS
 
 - `base.css` khai báo giá trị mặc định của mọi biến; style component chỉ đọc biến (được dùng `color-mix()` với biến).
