@@ -695,13 +695,14 @@ theo mức độ cuộn trang.
 }
 
 /* Chữ nằm sát đáy ảnh; màn thấp mà chữ dài thì dồn lên trên thay vì tràn ra ngoài. Phía trên chừa chỗ cho header. */
+/* Đệm đáy 4rem như đệm các khối khác, để dải mây ở chỗ nối với khối sau không che hàng số liệu. */
 .hero--full .hero__inner {
   position: relative;
   z-index: 2;
   align-content: safe end;
   gap: 1rem;
   height: 100%;
-  padding-block: 6rem 1.25rem;
+  padding-block: 6rem 4rem;
 }
 
 .hero--full .hero__copy {
