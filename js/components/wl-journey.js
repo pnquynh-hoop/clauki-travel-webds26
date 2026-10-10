@@ -3,6 +3,9 @@
    Rê chuột vào ảnh trạm thì mây bay ra kể việc làm ở đó. Cuối đường có ô giữ chỗ.
    Chữ và ảnh đều lấy từ content.json nên thương hiệu nào cũng dùng được. */
 import { asset } from '../core.js';
+// Hàm dùng chung trong dom.js: textEl tạo thẻ chữ (chữ trống thì bỏ qua), clamp giữ số trong khoảng,
+// smooth đi dần từ 0 lên 1 cho chuyển động không bị giật.
+import { textEl, clamp, smooth } from '../dom.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 // Năm khoảng trời trong ngày; mỗi khoảng là một lớp màu trong CSS.
@@ -11,23 +14,6 @@ const SKIES = ['dawn', 'morning', 'noon', 'afternoon', 'night'];
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 // Màn hình từ 760px (giống journey.css): thẻ xen kẽ hai bên, có chỗ trống cho mây và khúc cua.
 const wideScreen = matchMedia('(min-width: 760px)');
-
-// Giữ một số nằm trong khoảng từ min tới max.
-const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-// Đi dần từ 0 lên 1, chậm ở hai đầu, để chuyển động không bị giật.
-const smooth = (from, to, x) => {
-  const t = clamp((x - from) / (to - from), 0, 1);
-  return t * t * (3 - 2 * t);
-};
-
-// Tạo một thẻ chữ. Chữ trống thì trả về null để bỏ qua, không tạo ô rỗng.
-function textEl(tag, className, text) {
-  if (!text) return null;
-  const el = document.createElement(tag);
-  el.className = className;
-  el.textContent = text;
-  return el;
-}
 
 // Tạo một hình vẽ SVG (đường, xe, núi, biểu đồ).
 function svgEl(tag, className) {
