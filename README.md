@@ -15,8 +15,53 @@ python3 -m http.server 5500
 
 Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
-Đổi thương hiệu bằng nút tròn ở góc dưới phải (của BTC, trong `wd2026.js`), hoặc bằng tham số trên
+Đổi thương hiệu bằng nút tròn ở góc dưới trái (của BTC, trong `wd2026.js`), hoặc bằng tham số trên
 địa chỉ: `index.html?brand=ganh-som`.
+
+## Một component, nhiều cách hiển thị
+
+Ba thương hiệu dùng chung một bộ component `<wl-*>`. Cùng một component nhưng mỗi thương hiệu trông khác
+nhau nhờ ba lớp, đều nằm ngoài mã nguồn:
+
+1. **Kiểu trình bày (`variant`)** trong `content.json`: component gắn class `<khối>--<variant>`, CSS và JS của
+   kiểu đó đổi bố cục, hiệu ứng. Ví dụ `hero` có `full`, `coverflow`, `stacked`.
+2. **Dữ liệu**: trường nào có thì hiện phần đó, thiếu thì bỏ. Ví dụ cả ba footer cùng kiểu `columns`, nhưng mỗi
+   bên có ảnh nền, lời hẹn, dòng chữ chạy riêng; chỉ Bậc Trà bật `clouds` (mây trôi), chỉ Mé Rạch có
+   `directions` (đường về vườn).
+3. **Biến CSS** trong `theme.css`: màu, font, bo góc, và vài biến tuỳ chọn như `--color-tint` (màu tấm thông
+   tin ở footer), `--font-hand` (chữ viết tay).
+
+Muốn đổi cách một thương hiệu hiển thị thì sửa một trong ba chỗ trên, không sửa component. Ngược lại, sửa CSS
+của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiểu đó cùng đổi.
+
+### Component dùng chung
+
+| Component | Bậc Trà | Gành Sớm | Mé Rạch |
+| --------- | ------- | -------- | ------- |
+| `header` (cố định) | `overlay`: trong suốt đè lên hero | `solid`: nền màu trang hơi trong | `center`: tên thương hiệu đứng giữa |
+| `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` |
+| `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng |
+| `faq` | `chat` | `chat` | `chat` |
+| `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn |
+| `to-top` (cố định) | có | có | có |
+| `reviews` | `postcard` | `postcard` | |
+| `gallery` | | `slices` | `slices` |
+
+Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau nằm ở dữ liệu và biến màu, font.
+
+### Component đặc trưng riêng
+
+| Thương hiệu | Component | Nội dung |
+| ----------- | --------- | -------- |
+| Bậc Trà (tour núi) | `journey` (`road`) | lịch trình con đường chữ S, xe chạy theo cuộn |
+| | `process` (`morph`) | từ búp đến chén, hình đổi dáng qua từng bước |
+| | `cloud-band` | dải mây che chỗ nối giữa hai khối |
+| Gành Sớm (nghỉ dưỡng biển) | `stays` (`headland`) | ba hạng nhà trên mỏm gành, bấm mốc hiện cảnh nhìn ra |
+| | `offer` (`postcard`) | bưu thiếp ưu đãi hè 2027, dấu bưu điện đếm ngược |
+| Mé Rạch (homestay miệt vườn) | `host` (`tv`) | tivi đời cũ kể chuyện chủ nhà |
+| | `day-plan` | một ngày ở vườn, xuồng trôi theo cuộn |
+
+Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 
 ## Cấu trúc
 
