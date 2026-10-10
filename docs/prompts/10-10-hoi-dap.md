@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 2ca961f, e04d044, 6254d80, 17f7590
+- Kết quả: commit 2ca961f, e04d044, 6254d80, 17f7590, f218acb
 
 ## Prompt (tóm tắt)
 
@@ -40,6 +40,7 @@ thành kiểu `chat`:
 
 Ở màn rộng 1024px trang Gành Sớm cuộn ngang khoảng 18px. Tìm phần tử gây tràn rồi sửa, không đổi giao diện ở màn rộng.
 Kết quả: tấm nền nghiêng sau khung nhắn tin thò ra ngoài lề phải khi lề trang chỉ còn 1rem; cắt phần thừa theo chiều ngang.
+Ở điện thoại 360px, thẻ gọi hotline rộng hơn cột 2px vì aspect-ratio đổi min-height thành bề ngang tối thiểu; đặt bề ngang bằng cột.
 
 ## Phần tự quyết định (sửa lỗi)
 
