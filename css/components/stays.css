@@ -143,8 +143,6 @@
 .stays--headland {
   --w: 15rem;
   padding-block: 0;
-  /* Bấm menu nhảy tới đây thì khối nằm ngay dưới header, không bị header che mép trên. */
-  scroll-margin-top: 4.5rem;
 }
 
 .stays__head {

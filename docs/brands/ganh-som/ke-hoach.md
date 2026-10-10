@@ -86,7 +86,7 @@ Cảnh nhìn ra từ ban công của mỗi hạng (trường `view` trong khối
 
 Khối `features` (giá đã gồm) dùng 4 mục đánh số: đón sân bay, bữa sáng địa phương, xe đạp, chèo ván lúc bình minh.
 
-Khối `intro` ("Ở chậm") nói về cách nghỉ ở Gành Sớm: không lịch trình, không loa nhạc, giờ giấc theo mặt trời.
+Khối `intro` ("Ở chậm") nói về cách nghỉ ở Gành Sớm: không lịch trình, không loa nhạc, giờ giấc theo mặt trời. Đang ẩn (`hidden: true`), giữ nội dung để bật lại khi có kiểu trình bày hợp hơn.
 
 Khối `faq`, các câu hỏi dự kiến:
 
@@ -129,7 +129,7 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | đặc trưng |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
 | 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
-| 6 | `intro` | mặc định, căn trái | dùng lại |
+| 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
 | 7 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | 8 | `faq` (#15) | mặc định | dùng lại |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |

@@ -151,7 +151,7 @@
         { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời", "caption": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng lúc mặt trời xuống thấp.", "credit": "Ảnh: PattayaPatrol, CC BY-SA 4.0" }
       ]
     },
-    { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
+    { "type": "intro", "id": "o-cham", "hidden": true, "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
     {
       "type": "booking",
       "id": "dat-phong",

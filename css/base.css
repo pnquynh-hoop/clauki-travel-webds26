@@ -81,6 +81,19 @@ body {
   background: var(--color-bg);
 }
 
+/* Bấm link tới một khối (menu, nút đặt phòng): trang cuộn mượt tới đó, chừa chỗ cho header đang dính ở mép trên.
+   --header-stuck do wl-header đo, vì mỗi thương hiệu một kiểu header, cao thấp khác nhau; chưa có header thì không chừa.
+   Bật giảm chuyển động thì nhảy thẳng như cũ. */
+html {
+  scroll-padding-top: var(--header-stuck, 0px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Kiểu chữ. */
 
 h1,

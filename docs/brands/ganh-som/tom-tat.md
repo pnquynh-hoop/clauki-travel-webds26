@@ -35,7 +35,7 @@ Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và
 | 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | **đặc trưng** |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | **riêng** |
 | 5 | `gallery` | `strip`: dải ảnh vuốt ngang | dùng lại |
-| 6 | `intro` | mặc định, căn trái | dùng lại |
+| 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
 | 7 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | 8 | `faq` | mặc định | dùng lại |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
@@ -70,7 +70,7 @@ Khối chỉ Gành Sớm dùng: `stays`, `features`. `room-view` đã gộp vào
     { "type": "room-view", "id": "nhin-ra", "variant": "climb", "hidden": true },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
-    { "type": "intro", "id": "o-cham" },
+    { "type": "intro", "id": "o-cham", "hidden": true },
     { "type": "booking", "id": "dat-phong", "variant": "stay" },
     { "type": "faq", "id": "hoi-dap" }
   ],

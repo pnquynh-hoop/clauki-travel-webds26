@@ -25,6 +25,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 10/10 | Claude Code (Claude Opus 5.5) | Khối hỏi đáp (#15): component `wl-faq` (dạng cơ bản bằng thẻ `details`) và kiểu `chat` cho Gành Sớm (khung nhắn tin với chủ nhà, câu hỏi là nút gợi ý), câu hỏi của Gành Sớm | Tóm tắt dạng prompt: [docs/prompts/10-10-hoi-dap.md](prompts/10-10-hoi-dap.md) | 2ca961f, e04d044, 6254d80 |
 | 10/10 | Claude Code (Claude Opus 5.5) | Khối thư viện ảnh (#12): component `wl-gallery` (lưới cơ bản) và kiểu `slices` cho Gành Sớm (dải ảnh xoè như tấm bình phong), 6 ảnh mới có giấy phép | Tóm tắt dạng prompt: [docs/prompts/10-10-thu-vien-anh.md](prompts/10-10-thu-vien-anh.md) | b0b8e45 |
 | 10/10 | Claude Code (Claude Opus 5.5) | Khối các hạng nhà (#16): component `wl-stays` (lưới cơ bản) và kiểu `headland` cho Gành Sớm (ảnh mỏm gành tách nền có mốc ba hạng nhà, bấm mốc thì ảnh cảnh nhìn ra từ ban công hiện ngay trên mốc); gộp khối nhìn từ ban công vào đây, ẩn `room-view`; khối đặt chỗ chọn sẵn hạng qua sự kiện `wl:choose-room` | Tóm tắt dạng prompt: [docs/prompts/10-10-hang-nha.md](prompts/10-10-hang-nha.md) | 3fc7d91, 9f4e595, 75a9d3d |
+| 10/10 | Claude Code (Claude Opus 5.5) | Ẩn khối `intro` ("Ở chậm") của Gành Sớm; bấm link tới khối (menu, nút đặt chỗ) thì cuộn mượt, `wl-header` đo chiều cao thanh đang dính ghi vào `--header-stuck`, `base.css` dùng làm `scroll-padding-top` | (tóm tắt) Bỏ khối "Ở chậm" vì đang không đẹp; các nút bấm link cần cuộn mượt chứ không nhảy thẳng | 0ae6bcb, ff2fa51 |
 
 ## Mị Nương
 
