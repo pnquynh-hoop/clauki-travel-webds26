@@ -669,6 +669,256 @@ export class WlBooking extends HTMLElement {
     this._messageTitle.focus();
   }
 
+  /* ========= KIỂU CALENDAR =========
+     Tour theo lịch khởi hành cố định, giá tính theo khách. Bên trái là các thẻ ngày khởi hành như tờ lịch (hết chỗ thì khoá),
+     danh sách đã gồm, chưa gồm và các điều khoản; bên phải là form giữ chỗ (họ tên, số điện thoại, số khách, tạm tính).
+     Gửi form thì in ra phiếu giữ chỗ có dấu "chờ xác nhận", không báo đặt thành công vì chưa ai nhận. */
+
+  // Ưu đãi còn hạn: có số tiền giảm và hôm nay chưa qua ngày hết hạn (không ghi ngày hết hạn thì luôn còn).
+  dealActive() {
+    const deal = this._data.deal;
+    return Boolean(deal?.amount) && (!deal.until || todayIso() <= deal.until);
+  }
+
+  // Một thẻ ngày: thứ, ngày, tháng và năm, số chỗ còn. Còn ít chỗ (từ fewSeats trở xuống) thì dòng số chỗ đổi màu nhấn.
+  departureEl(dep) {
+    const section = this._data;
+    const labels = section.labels ?? {};
+    const date = new Date(dayNumber(dep.date) * DAY);
+    const weekday = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', timeZone: 'UTC' }).format(date);
+    const seats = dep.seats > 0 ? fill(labels.seats, { n: dep.seats }) : labels.soldOut;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'booking__date';
+    button.disabled = !(dep.seats > 0);
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', `${weekday} ${viDate(dep.date)}, ${String(seats ?? '').toLowerCase()}`);
+    const few = dep.seats > 0 && dep.seats <= (section.fewSeats ?? 4);
+    button.append(...[
+      textEl('span', 'booking__date-dow', weekday.charAt(0).toUpperCase() + weekday.slice(1)),
+      textEl('span', 'booking__date-day', dep.date.slice(8, 10)),
+      textEl('span', 'booking__date-month', fill(labels.month, { m: Number(dep.date.slice(5, 7)), y: dep.date.slice(0, 4) })),
+      textEl('span', few ? 'booking__date-seats booking__date-seats--few' : 'booking__date-seats', seats),
+    ].filter(Boolean));
+    button.addEventListener('click', () => {
+      this._departure = dep;
+      this.updateCalendar();
+    });
+    return button;
+  }
+
+  // Danh sách có tiêu đề (đã gồm, chưa gồm). Danh sách trống thì bỏ cả cột.
+  listEl(title, items = [], className) {
+    if (!items.length) return null;
+    const ul = document.createElement('ul');
+    ul.className = className;
+    ul.append(...items.map((item) => textEl('li', '', item)));
+    return groupEl('booking__term', [textEl('h3', 'booking__term-title', title), ul]);
+  }
+
+  // Một điều khoản: tiêu đề, các dòng "nhãn in đậm: nội dung", ghi chú cuối (nếu có).
+  policyEl(policy) {
+    const ul = document.createElement('ul');
+    ul.append(...(policy.items ?? []).filter((item) => item.text).map((item) => {
+      const li = document.createElement('li');
+      if (item.label) li.append(textEl('strong', '', `${item.label}:`), ' ');
+      li.append(item.text);
+      return li;
+    }));
+    return groupEl('booking__policy', [
+      textEl('h3', 'booking__term-title', policy.title),
+      ul.childElementCount ? ul : null,
+      textEl('p', 'booking__policy-note', policy.note),
+    ]);
+  }
+
+  // Một dòng tạm tính: nhãn bên trái, số tiền bên phải.
+  sumRow(className) {
+    const row = document.createElement('div');
+    row.className = `booking__sum-row ${className}`;
+    const term = document.createElement('dt');
+    const value = document.createElement('dd');
+    row.append(term, value);
+    return { row, term, value };
+  }
+
+  calendarEl() {
+    const section = this._data;
+    const labels = section.labels ?? {};
+    const prefix = this.id || 'booking';
+    const departures = (section.departures ?? []).filter((dep) => dep.date);
+    if (!section.price || !departures.length) return null;
+
+    // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn để vừa mở đã thấy tạm tính.
+    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
+    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
+    const dates = groupEl('booking__dates', this._dateButtons.map(({ button }) => button));
+    dates.setAttribute('role', 'group');
+    if (labels.departures) dates.setAttribute('aria-label', labels.departures);
+
+    const info = groupEl('booking__info', [
+      dates,
+      groupEl('booking__terms', [
+        this.listEl(labels.includesTitle, section.includes, 'booking__included'),
+        this.listEl(labels.excludesTitle, section.excludes, 'booking__included booking__included--no'),
+      ]),
+      ...(section.policies ?? []).map((policy) => this.policyEl(policy)),
+    ]);
+
+    this._fields = {
+      name: fieldEl(`${prefix}-name`, labels.name, inputEl('text', { autocomplete: 'name' })),
+      phone: fieldEl(`${prefix}-phone`, labels.phone, inputEl('tel', { autocomplete: 'tel', inputmode: 'tel', ...(labels.phoneExample ? { placeholder: labels.phoneExample } : {}) })),
+      guests: this.counterEl(`${prefix}-guests`, labels.guests, labels.guestsLess, labels.guestsMore, 1, section.defaultGuests ?? 2),
+    };
+    const price = document.createElement('p');
+    price.className = 'booking__hold-price';
+    price.append(textEl('strong', '', this.money(section.price)), ` ${section.priceNote ?? ''}`);
+    this._sum = { base: this.sumRow('booking__sum-row--base'), deal: this.sumRow('booking__sum-row--deal'), total: this.sumRow('booking__sum-row--total'), deposit: this.sumRow('booking__sum-row--deposit') };
+    const sum = document.createElement('dl');
+    sum.className = 'booking__sum';
+    sum.append(...Object.values(this._sum).map((line) => line.row));
+    this._submit = document.createElement('button');
+    this._submit.type = 'submit';
+    this._submit.className = 'btn booking__submit';
+    this._submit.textContent = this.site?.cta?.label ?? '';
+
+    this._form = document.createElement('form');
+    this._form.className = 'booking__hold';
+    this._form.noValidate = true;
+    this._form.append(...[
+      price,
+      this.dealActive() ? textEl('p', 'booking__hold-deal', section.deal.label) : null,
+      ...Object.values(this._fields).map((ref) => ref.field),
+      sum,
+      this._submit,
+    ].filter(Boolean));
+    this._form.addEventListener('input', () => this.updateCalendar());
+    this._form.addEventListener('submit', (e) => this.submitCalendar(e));
+
+    this._ticket = this.ticketEl();
+    return groupEl('booking__body', [groupEl('booking__layout', [info, this._form]), this._ticket]);
+  }
+
+  // Tạm tính theo số khách: giá một khách nhân số khách, trừ ưu đãi mỗi khách nếu còn hạn; tiền cọc tính riêng.
+  quoteCalendar() {
+    const section = this._data;
+    const guests = Number(this._fields.guests.control.value) || 0;
+    const base = section.price * guests;
+    const discount = this.dealActive() ? section.deal.amount * guests : 0;
+    return { guests, base, discount, total: base - discount, deposit: (section.deposit ?? 0) * guests };
+  }
+
+  // Số khách không vượt số chỗ còn của chuyến đang chọn; đổi chuyến thì số khách tự thu lại cho vừa.
+  updateCalendar() {
+    const section = this._data;
+    const labels = section.labels ?? {};
+    const dep = this._departure;
+    this._dateButtons.forEach(({ dep: d, button }) => button.setAttribute('aria-pressed', String(d === dep)));
+    const g = this._fields.guests;
+    const max = dep?.seats ?? 0;
+    const value = Math.min(Math.max(g.min, Number(g.control.value) || 0), Math.max(max, g.min));
+    g.control.value = String(value);
+    g.less.disabled = value <= g.min;
+    g.more.disabled = value >= max;
+    this._submit.disabled = !dep;
+    if (this._fields.name.control.value.trim()) showError(this._fields.name, '');
+    if (validPhone(this._fields.phone.control.value.trim())) showError(this._fields.phone, '');
+
+    const q = this.quoteCalendar();
+    const s = this._sum;
+    s.base.term.textContent = fill(labels.baseLine, { price: this.money(section.price), guests: q.guests });
+    s.base.value.textContent = this.money(q.base);
+    s.deal.row.hidden = !q.discount;
+    s.deal.term.textContent = labels.dealLine ?? '';
+    s.deal.value.textContent = `− ${this.money(q.discount)}`;
+    s.total.term.textContent = labels.total ?? '';
+    s.total.value.textContent = this.money(q.total);
+    s.deposit.row.hidden = !q.deposit;
+    s.deposit.term.textContent = labels.deposit ?? '';
+    s.deposit.value.textContent = this.money(q.deposit);
+  }
+
+  // Phiếu giữ chỗ: tên, chặng đi, bốn ô thông tin, tin nhắn soạn sẵn; cuống phiếu có dấu "chờ xác nhận" và các nút gửi.
+  ticketEl() {
+    const m = this._data.message ?? {};
+    const hotline = this.site?.contact?.phone;
+    this._ticketInfo = {};
+    const info = document.createElement('dl');
+    info.className = 'booking__ticket-info';
+    for (const key of ['guest', 'date', 'seats', 'total']) {
+      const value = document.createElement('dd');
+      this._ticketInfo[key] = value;
+      info.append(groupEl('booking__ticket-cell', [textEl('dt', '', m[key]), value]));
+    }
+    this._messageTitle = textEl('p', 'booking__ticket-brand', m.brand) ?? document.createElement('p');
+    this._messageTitle.tabIndex = -1;
+    // Vạch nét đứt nối điểm đi với điểm đến chỉ để trang trí, trình đọc màn hình bỏ qua.
+    const line = document.createElement('span');
+    line.className = 'booking__ticket-line';
+    line.setAttribute('aria-hidden', 'true');
+    const route = groupEl('booking__ticket-route', [textEl('span', '', m.from), m.from && m.to ? line : null, textEl('span', '', m.to)]);
+    this._draft = document.createElement('p');
+    this._draft.className = 'booking__ticket-msg';
+
+    this._sms = hotline && m.sms ? Object.assign(document.createElement('a'), { className: 'btn booking__sms', href: '#', textContent: m.sms }) : null;
+    const call = hotline && m.call ? Object.assign(document.createElement('a'), { className: 'btn btn--ghost booking__call', href: telHref(hotline), textContent: fill(m.call, { phone: hotline }) }) : null;
+    let copy = null;
+    if (m.copy) {
+      copy = Object.assign(document.createElement('button'), { type: 'button', className: 'btn btn--ghost booking__copy', textContent: m.copy });
+      copy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(this._draft.textContent);
+          copy.textContent = m.copied ?? m.copy;
+          setTimeout(() => { copy.textContent = m.copy; }, 2000);
+        } catch {
+          getSelection().selectAllChildren(this._draft);
+        }
+      });
+    }
+    const ticket = groupEl('booking__ticket', [
+      groupEl('booking__ticket-main', [this._messageTitle, route, info, this._draft]),
+      groupEl('booking__ticket-stub', [textEl('p', 'booking__ticket-stamp', m.stamp), this._sms, call, copy]),
+    ]);
+    ticket.hidden = true;
+    return ticket;
+  }
+
+  // Bấm giữ chỗ: kiểm tra họ tên, số điện thoại; hợp lệ thì điền phiếu, soạn tin nhắn và hiện phiếu ngay dưới form.
+  submitCalendar(e) {
+    e.preventDefault();
+    const section = this._data;
+    const errors = section.errors ?? {};
+    const f = this._fields;
+    const name = f.name.control.value.trim();
+    const phone = f.phone.control.value.trim();
+    showError(f.name, name ? '' : errors.name);
+    showError(f.phone, validPhone(phone) ? '' : errors.phone);
+    const invalid = [f.name, f.phone].find((ref) => !ref.error.hidden);
+    if (invalid || !this._departure) {
+      invalid?.control.focus();
+      return;
+    }
+    const q = this.quoteCalendar();
+    const date = viDate(this._departure.date);
+    const values = { name, phone, date, guests: q.guests, total: this.money(q.total) };
+    const t = this._ticketInfo;
+    t.guest.textContent = name;
+    t.date.textContent = date;
+    t.seats.textContent = fill(section.labels?.guestsValue ?? '{guests}', values);
+    t.total.textContent = values.total;
+    const text = fill(section.message?.template, values);
+    this._draft.textContent = text;
+    const digits = this.site?.contact?.phone?.replace(/\s/g, '');
+    if (this._sms) this._sms.href = `sms:${digits}?body=${encodeURIComponent(text)}`;
+    // Ẩn rồi hiện lại để dấu "chờ xác nhận" đóng lại mỗi lần gửi.
+    this._ticket.hidden = true;
+    void this._ticket.offsetWidth;
+    this._ticket.hidden = false;
+    this._messageTitle.focus({ preventScroll: true });
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this._ticket.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
+  }
+
   render() {
     const section = this._data;
     const variant = section.variant ?? 'calendar';
@@ -679,11 +929,12 @@ export class WlBooking extends HTMLElement {
       textEl('h2', 'booking__title', section.title),
       textEl('p', 'booking__lead', section.lead),
     ]);
-    const build = { stay: () => this.stayEl(), request: () => this.requestEl() }[variant];
+    const build = { stay: () => this.stayEl(), request: () => this.requestEl(), calendar: () => this.calendarEl() }[variant];
     const body = build ? build() : null;
     if (!body) console.warn(`Khối đặt chỗ: kiểu "${variant}" chưa có hoặc thiếu dữ liệu.`);
 
     this.replaceChildren(...[groupEl('booking__inner container', [head, body])].filter(Boolean));
-    if (body) (variant === 'stay' ? this.updateStay() : this.updateRequest());
+    const update = { stay: () => this.updateStay(), request: () => this.updateRequest(), calendar: () => this.updateCalendar() }[variant];
+    if (body) update();
   }
 }
