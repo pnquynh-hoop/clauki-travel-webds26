@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 5c4120d; làm lại giao diện ngày 10/10: d1cd35c
+- Kết quả: commit 5c4120d; làm lại giao diện ngày 10/10: d1cd35c, 4ebf7ca
 
 ## Prompt (tóm tắt)
 
@@ -35,8 +35,10 @@ Khối đặt phòng nhìn còn đơn giản. Giữ nguyên logic tính tiền, 
 - bên trái là ảnh lớn của hạng đang chọn, kèm tên, diện tích, sức chứa, giá; đổi hạng thì ảnh đổi;
 - chọn hạng bằng ba thẻ ảnh (vẫn là nhóm radio dùng được bằng bàn phím), mỗi thẻ ghi số căn còn theo ngày;
 - số khách có nút bớt, thêm; tạm tính có dòng "{n} đêm, {n} lần thức dậy cùng bình minh";
-- không tràn ngang ở 360px.
+- không tràn ngang ở 360px;
+- trên máy tính, cả khối nằm trọn một màn hình từ 1366x768: tiêu đề một hàng, ô nhập hai hàng, tạm tính chia hai cột.
 
 ## Phần tự quyết định (10/10)
 
 - Thấy bản đầu đơn giản, chọn hướng "ảnh hạng nhà và thẻ chọn" trong hai phương án.
+- Yêu cầu khối nằm trọn trong khung nhìn.
