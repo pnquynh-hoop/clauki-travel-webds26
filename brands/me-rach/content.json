@@ -1,13 +1,13 @@
 {
   "id": "me-rach",
   "meta": {
-    "title": "Mé Rạch · Ở nhà vườn ven rạch Cần Thơ, sáng đi chợ nổi Cái Răng",
+    "title": "Mé Rạch - Trải nghiệm ở nhà vườn ven rạch Cần Thơ",
     "description": "Homestay 5 phòng trong nhà gỗ của một gia đình làm vườn ba đời. Sáng đi ghe ra chợ nổi, trưa hái trái, chiều chèo xuồng, tối ăn cơm chung mâm.",
-    "favicon": ""
+    "favicon": "images/favicon.png"
   },
   "brand": {
     "name": "Mé Rạch",
-    "logo": "",
+    "logo": "images/logo-merach.webp",
     "slogan": "Sáng ra chợ nổi, chiều về mé rạch"
   },
   "cta": {
@@ -295,7 +295,10 @@
     {
       "type": "gallery",
       "id": "thu-vien",
-      "variant": "mosaic",
+      "variant": "slices",
+      "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+      "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+      "listLabel": "Sáu ảnh quanh nhà vườn, mỗi lần mở một ảnh",
       "eyebrow": "Quanh nhà vườn",
       "title": "Miền Tây theo con nước",
       "images": [
@@ -452,10 +455,26 @@
     }
   ],
   "footer": {
-    "variant": "directions",
+    "variant": "columns",
+    "image": {
+      "src": "images/hoang-hon-song.webp",
+      "alt": "Mặt trời lặn đỏ trên sông, một chiếc phà đi qua"
+    },
+    "title": "Hẹn bạn",
+    "titleAccent": "dưới mé rạch",
+    "marquee": [
+      "Bến Ninh Kiều",
+      "Chợ nổi Cái Răng",
+      "Rạch dừa nước",
+      "Vườn măng cụt",
+      "Cầu khỉ",
+      "Xuồng ba lá",
+      "Mâm cơm chung"
+    ],
+    "navTitle": "Khám phá",
+    "contactTitle": "Liên hệ",
+    "addressTitle": "Nhà vườn",
     "directionsTitle": "Đường về vườn",
-    "note": "Mé Rạch là thương hiệu giả tưởng, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
-    "creditsTitle": "Nguồn ảnh",
     "directions": [
       {
         "place": "TP.HCM",
@@ -469,7 +488,9 @@
         "place": "Mé Rạch",
         "how": "Cập bến ngay sau vườn nhà chú Sáu."
       }
-    ]
+    ],
+    "note": "Mé Rạch là thương hiệu giả tưởng, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
+    "creditsTitle": "Nguồn ảnh"
   },
   "credits": [
     {
