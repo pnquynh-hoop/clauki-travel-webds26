@@ -362,6 +362,8 @@
   position: relative;
   display: grid;
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  /* Bề ngang luôn bằng cột: để tự tính thì aspect-ratio đổi min-height thành bề ngang 21.6rem, rộng hơn cột ở màn 360px. */
+  width: 100%;
   min-height: 13.5rem;
   margin: 0;
   overflow: hidden;
@@ -459,6 +461,11 @@
 
   .faq__chat {
     height: 40rem;
+  }
+
+  /* Tấm nền nghiêng thò ra ngoài lề phải; lề trang hẹp (tới khoảng 1280px) thì làm trang cuộn ngang, nên cắt phần thừa. */
+  .faq--chat {
+    overflow-x: clip;
   }
 
   .faq__chat-wrap::before {
