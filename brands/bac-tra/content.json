@@ -638,8 +638,37 @@
     {
       "type": "faq",
       "id": "hoi-dap",
+      "variant": "chat",
       "eyebrow": "Hỏi đáp",
       "title": "Trước khi lên đường",
+      "lead": "Hỏi như đang nhắn tin với trưởng đoàn: chọn một câu gợi ý, Bậc Trà trả lời ngay.",
+      "chat": {
+        "label": "Nhắn tin với Bậc Trà",
+        "avatar": {
+          "src": "images/favicon.png",
+          "alt": ""
+        },
+        "tagline": "Trưởng đoàn trả lời trong ngày",
+        "cover": {
+          "src": "images/season-water.jpg",
+          "alt": "Ruộng bậc thang đầy nước phản chiếu bầu trời"
+        },
+        "greeting": "Chào bạn, Bậc Trà đây. Bạn băn khoăn gì trước chuyến đi, cứ chọn một câu bên dưới nhé.",
+        "pick": "Chọn câu bạn muốn hỏi",
+        "done": "Bạn đã hỏi hết các câu gợi ý",
+        "reset": "Bắt đầu lại",
+        "again": "Hỏi lại từ đầu",
+        "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho Bậc Trà nhé:",
+        "you": "Bạn hỏi:"
+      },
+      "ask": {
+        "text": "Chưa thấy điều bạn cần?",
+        "action": "Gọi",
+        "image": {
+          "src": "images/window-1.jpg",
+          "alt": "Dãy núi xanh trùng điệp nhìn từ đèo Khau Phạ"
+        }
+      },
       "items": [
         {
           "question": "Chưa đi núi bao giờ thì có theo được không?",
