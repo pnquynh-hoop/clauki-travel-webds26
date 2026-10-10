@@ -1,0 +1,387 @@
+/* stays.css - giao diện của <wl-stays>. Màu, font, bo góc lấy từ biến CSS; class stays--<variant> quyết định kiểu.
+   Không có variant: lưới thẻ, dạng cơ bản. Kiểu riêng của từng thương hiệu viết thành khối .stays--<variant>. */
+
+.stays__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.stays__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.stays__title {
+  margin: 0;
+}
+
+.stays__lead {
+  max-width: 36rem;
+  margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.stays__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1.25rem;
+}
+
+.stays__card,
+.stays__detail-card {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: var(--radius);
+}
+
+.stays__card img,
+.stays__detail-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.stays__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+
+.stays__name {
+  margin: 0;
+}
+
+.stays__text {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.stays__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding-block: 0.75rem;
+  border-block: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.stays__fact dt {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.stays__fact dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.stays__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.stays__amount {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.stays__per {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.stays__book {
+  font-weight: 600;
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+/* Cảnh nhìn ra từ ban công: câu tả cảnh chữ nghiêng, giờ đẹp nhất chữ nhỏ màu nhấn. */
+.stays__view {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--color-primary);
+}
+
+.stays__view-text {
+  margin: 0;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.stays__best {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-accent);
+}
+
+.stays__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* Kiểu headland (Gành Sớm): ảnh mỏm gành thật đã tách nền đặt thẳng lên nền trang, có mốc của từng hạng nhà.
+   Khung ảnh cảnh nhìn ra từ ban công nằm ngay trên mép trên ảnh mỏm đá, thẳng phía trên mốc đang chọn, nối xuống mốc
+   bằng vạch màu chủ đạo. Điện thoại (viết trước): tiêu đề, cảnh, thẻ xếp dọc. Màn rộng: cột trái là tiêu đề và thẻ,
+   cột phải là cảnh, mỏm đá tràn tới mép phải màn hình (mép phải ảnh là vết cắt thẳng).
+   --w là bề ngang khung ảnh; cảnh chừa sẵn phía trên mỏm đá một khoảng theo --w nên khung ảnh không bao giờ bị cắt,
+   dù màn hình thấp hay trình duyệt đang phóng to. */
+.stays--headland {
+  --w: 15rem;
+  padding-block: 0;
+  /* Bấm menu nhảy tới đây thì khối nằm ngay dưới header, không bị header che mép trên. */
+  scroll-margin-top: 4.5rem;
+}
+
+.stays__head {
+  padding: 3rem 1rem 0;
+}
+
+/* Chỗ chừa phía trên mỏm đá: ảnh 16:10 cao bằng --w * 0.625, cộng khoảng 8.5rem cho dòng chú thích, viền, khoảng hở. */
+.stays__scene {
+  padding-top: calc(var(--w) * 0.625 + 8.5rem);
+}
+
+.stays__land {
+  position: relative;
+  width: 100%;
+}
+
+.stays__land-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Mốc trên mỏm đá: chấm tròn có viền sáng; tên hạng chỉ hiện từ 760px (điện thoại hẹp thì tên ở mép bị cắt);
+   số căn chỉ để trình đọc màn hình đọc (thẻ chi tiết đã ghi). Mốc nằm trên vạch nối nên vạch chạy sau tên hạng. */
+.stays__pin {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  font: inherit;
+  color: var(--color-bg);
+  background: none;
+  border: 0;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+}
+
+.stays__pin::after {
+  content: '';
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--color-bg);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--color-bg) 45%, transparent), 0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 45%, transparent);
+  transition: background-color 0.3s ease;
+}
+
+.stays__pin[aria-pressed='true']::after {
+  background: var(--color-primary);
+}
+
+.stays__pin-name {
+  display: none;
+}
+
+.stays__pin-count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Tên hạng: chữ sáng trên nền tối mờ. Hạng đang chọn thì ẩn tên (khung ảnh và thẻ bên trái đã cho biết đang xem hạng nào),
+   để vạch nối chạy thẳng xuống chấm. Ẩn bằng opacity chứ không dùng display hay visibility, vì tên này cũng là
+   tên của nút cho trình đọc màn hình. */
+.stays__pin-name {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-bg) 30%, transparent);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.25s ease;
+}
+
+.stays__pin[aria-pressed='true'] .stays__pin-name {
+  opacity: 0;
+}
+
+/* Vạch nối: từ đáy khung ảnh (cao hơn mép trên ảnh mỏm đá 0.75rem) chạy thẳng xuống chấm của mốc đang chọn.
+   top và height tính bằng phần trăm chiều cao lớp mỏm đá, cùng hệ toạ độ với --y của mốc. */
+.stays__leader {
+  position: absolute;
+  left: var(--x);
+  top: -0.75rem;
+  width: 2px;
+  height: calc(var(--y) + 0.75rem - 0.4rem);
+  background: var(--color-primary);
+  transform: translateX(-50%);
+  transform-origin: bottom;
+}
+
+/* Khung ảnh như một tấm ảnh in viền trắng, đáy cách mép trên ảnh mỏm đá 0.75rem. Mép trái đặt lùi 1.5rem so với mốc
+   để vạch nối rơi gần góc trái khung; clamp giữ khung trong bề ngang lớp mỏm đá ở cả mốc sát mép. */
+.stays__window {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: clamp(0.75rem, var(--x) - 1.5rem, 100% - var(--w) - 0.75rem);
+  z-index: 2;
+  width: var(--w);
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 0.25rem solid var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 1.25rem 2.5rem -1rem color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+
+.stays__window-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: calc(var(--radius) * 0.75);
+}
+
+.stays__window-caption {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem 0.6rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stays__window {
+    animation: stays-window 0.45s ease both;
+  }
+
+  .stays__leader {
+    animation: stays-leader 0.35s ease both;
+  }
+}
+
+@keyframes stays-window {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+@keyframes stays-leader {
+  from {
+    transform: translateX(-50%) scaleY(0);
+  }
+}
+
+.stays__bottom {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.stays__hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+/* Thẻ chi tiết: không có ảnh (ảnh đã ở khung trên mốc), chỉ tên, mô tả, các con số và dòng giá. */
+.stays__detail-card .stays__body {
+  gap: 0.5rem;
+}
+
+.stays__detail-card .stays__facts {
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+}
+
+.stays__detail-card .stays__amount {
+  display: inline;
+  margin-right: 0.35rem;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 760px) {
+  .stays__pin-name {
+    display: block;
+  }
+
+  .stays--headland {
+    --w: clamp(16rem, 26vw, 26rem);
+  }
+
+}
+
+/* Màn rộng: lưới hai cột. Cột trái (thẳng lề với các khối khác) là tiêu đề ở trên, thẻ hạng nhà ở dưới;
+   cột phải là cảnh, chân mỏm đá chạm đáy khối. Khối cao theo phần nào cao hơn, nên chữ và khung ảnh không đè nhau. */
+@media (min-width: 1024px) {
+  .stays__stage {
+    display: grid;
+    grid-template-columns: min(28rem, 34vw) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 2rem;
+    padding-left: max(1rem, (100% - var(--container)) / 2);
+  }
+
+  .stays__head {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 2.5rem 0 0;
+  }
+
+  .stays__bottom {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    padding: 1.5rem 0 2rem;
+  }
+
+  .stays__scene {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: end;
+  }
+
+  /* Màn rất rộng: mỏm đá không rộng quá 60rem, vẫn sát mép phải. */
+  .stays__land {
+    width: min(100%, 60rem);
+    margin-left: auto;
+  }
+
+  .stays__head .stays__title {
+    font-size: clamp(2rem, 1.3rem + 1.6vw, 3rem);
+  }
+
+  .stays__head .stays__lead {
+    font-size: 1rem;
+  }
+}
