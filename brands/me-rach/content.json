@@ -335,6 +335,62 @@
       ]
     },
     {
+      "type": "reviews",
+      "id": "khach-ke",
+      "variant": "postcard",
+      "eyebrow": "Khách ghé vườn",
+      "title": "Thư gửi về từ mé rạch",
+      "lead": "Mùa trái chín 2026: 148 lượt khách, điểm trung bình 4,9 trên 5.",
+      "scoreLabel": "điểm",
+      "dateLabel": "Ngày đến",
+      "items": [
+        {
+          "rating": 5,
+          "text": "Năm giờ sáng đã ngồi trên ghe ra chợ nổi, mua tô hủ tiếu ngay trên sông. Về tới vườn vẫn còn kịp phụ chú Sáu hái măng cụt.",
+          "name": "Lan Phương",
+          "from": "Hà Nội, đi cùng mẹ",
+          "stamp": {
+            "value": "05:00",
+            "label": "Chợ nổi Cái Răng"
+          },
+          "date": "14.06.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Hai đứa nhỏ mặc áo phao chèo xuồng cùng cô Út, cười suốt buổi chiều. Tối cả nhà ngồi đổ bánh xèo, tụi nhỏ đòi ở thêm.",
+          "name": "Trọng Nghĩa",
+          "from": "TP.HCM, đi cùng vợ con",
+          "stamp": {
+            "value": "15:00",
+            "label": "Chèo xuồng"
+          },
+          "date": "05.07.2026"
+        },
+        {
+          "rating": 4,
+          "text": "Chạng vạng muỗi nhiều thật, may cô Út đã dặn trước và nhà có đốt lá xả. Bù lại đêm ngủ trong mùng nghe tiếng ếch, ngủ ngon hơn ở nhà.",
+          "name": "Hải Yến",
+          "from": "Đà Nẵng, đi một mình",
+          "stamp": {
+            "value": "20:00",
+            "label": "Tiếng ếch"
+          },
+          "date": "22.07.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Trưa được vào bếp nấu cá kho với cô Út, rau hái ngay sau nhà. Ăn chung một mâm với cả nhà, thấy như về quê ngoại.",
+          "name": "Quốc Bảo",
+          "from": "Hải Phòng, đi cùng bạn bè",
+          "stamp": {
+            "value": "12:00",
+            "label": "Cơm chung mâm"
+          },
+          "date": "09.08.2026"
+        }
+      ]
+    },
+    {
       "type": "booking",
       "id": "giu-phong",
       "variant": "request",
