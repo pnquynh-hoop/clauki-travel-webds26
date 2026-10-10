@@ -40,11 +40,21 @@ export class WlHeader extends HTMLElement {
     this._onScroll = () => this.classList.toggle('is-scrolled', window.scrollY > 8);
     document.addEventListener('keydown', this._onKey);
     window.addEventListener('scroll', this._onScroll, { passive: true });
+    // Thanh chính là phần còn dính trên màn hình khi cuộn (dải thông tin phía trên trượt khuất), nên đo nó.
+    this._resize = new ResizeObserver(() => this.saveStuckHeight());
   }
 
   disconnectedCallback() {
     document.removeEventListener('keydown', this._onKey);
     window.removeEventListener('scroll', this._onScroll);
+    this._resize.disconnect();
+  }
+
+  // Ghi chiều cao thanh chính vào biến --header-stuck trên <html>; base.css dùng nó để link nhảy tới khối không bị header che.
+  // Lúc menu điện thoại đang mở thì giữ số cũ: bấm một mục là menu đóng lại trước khi trang cuộn.
+  saveStuckHeight() {
+    if (!this._bar || this.classList.contains('is-open')) return;
+    document.documentElement.style.setProperty('--header-stuck', `${this._bar.offsetHeight}px`);
   }
 
   set data(content) {
@@ -86,6 +96,10 @@ export class WlHeader extends HTMLElement {
     const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn header__cta');
     // Nút Menu đứng ngay sau tên thương hiệu: điện thoại thì cùng hàng, phím Tab đi qua nút trước rồi mới tới menu.
     bar.append(...[brandEl(content.brand ?? {}), toggle, nav, cta].filter(Boolean));
+    // Đổi thương hiệu thì thanh cũ bị thay: theo dõi thanh mới (đổi bề ngang màn hình thì thanh cũng đổi cao).
+    this._bar = bar;
+    this._resize?.disconnect();
+    this._resize?.observe(bar);
 
     this.replaceChildren(...[topbarEl(header.note, content.contact?.phone), bar].filter(Boolean));
     // Gán className ở trên đã xoá is-open, is-scrolled; đặt lại cho khớp trạng thái hiện tại.
