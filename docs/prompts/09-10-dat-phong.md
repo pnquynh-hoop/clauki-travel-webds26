@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 5c4120d
+- Kết quả: commit 5c4120d; làm lại giao diện ngày 10/10: d1cd35c
 
 ## Prompt (tóm tắt)
 
@@ -27,3 +27,16 @@ Yêu cầu:
 
 - Chọn làm #14 trước các khối khác vì mọi nút "Đặt phòng ngay" đều dẫn tới khối này.
 - Duyệt nội dung đặt phòng của Gành Sớm theo bản kế hoạch thương hiệu (giá, ưu đãi, lịch còn phòng mẫu).
+
+## Làm lại giao diện ngày 10/10 (tóm tắt prompt)
+
+Khối đặt phòng nhìn còn đơn giản. Giữ nguyên logic tính tiền, kiểm lỗi, soạn tin nhắn; làm lại giao diện kiểu `stay`:
+
+- bên trái là ảnh lớn của hạng đang chọn, kèm tên, diện tích, sức chứa, giá; đổi hạng thì ảnh đổi;
+- chọn hạng bằng ba thẻ ảnh (vẫn là nhóm radio dùng được bằng bàn phím), mỗi thẻ ghi số căn còn theo ngày;
+- số khách có nút bớt, thêm; tạm tính có dòng "{n} đêm, {n} lần thức dậy cùng bình minh";
+- không tràn ngang ở 360px.
+
+## Phần tự quyết định (10/10)
+
+- Thấy bản đầu đơn giản, chọn hướng "ảnh hạng nhà và thẻ chọn" trong hai phương án.
