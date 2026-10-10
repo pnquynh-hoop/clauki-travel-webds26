@@ -39,9 +39,30 @@ Kết quả:
 - sông 6 lớp (bờ cỏ, bùn, mép sẫm, nước sâu, nước giữa, dải trời), 3 vệt dòng chảy, ánh lấp lánh, bóng xuồng;
 - sửa điểm ngắt về 1024px và màu chữ về `--color-accent` cho đúng AGENTS.md.
 
+## Lần 3 (10/10): chỉnh theo từng chỗ thấy chưa đẹp khi xem thử
+
+Prompt (tóm tắt), theo thứ tự:
+
+1. Ở brand-test, số, ảnh, chữ của day-plan không còn bình thường.
+2. CSS các số 01, 02 chưa đẹp, đặt ở đâu của ảnh cho hợp lý, không cần màu cũng được.
+3. Số đang bị ảnh đè.
+4. Màu sắc và cách phối dòng sông chưa đẹp.
+5. Chỗ loang ra của dòng sông và nền của section khác nhau nên bị lộ, cho nền khớp để trông thật hơn.
+
+Kết quả:
+
+- brand-test chưa có ảnh nên khung ảnh co lại, số đè lên chữ thay thế: chuyển tỉ lệ khung 16:10 sang khung bao,
+  ảnh lỗi thì khung vẫn giữ hình;
+- số thứ tự bỏ kiểu nét viền nước dâng, thành số đặc màu chữ pha nhạt, đứng trên mép ảnh ở góc phía ngoài
+  (xa sông), trồi lên từ sau ảnh theo độ cuộn;
+- bờ sông bị cắt thành cạnh thẳng vì vùng bộ lọc tính theo khung bao của đường: đổi sang tính theo cả khung vẽ;
+  bỏ dải bùn màu cam, phối lại các lớp nước sáng dần từ mép vào giữa, dải trời phản chiếu lệch một bên;
+- màu sông pha với nền theo giờ (`--day-bg`) thay vì nền gốc; mặt nạ SVG làm hai đầu sông mờ dần,
+  xuồng chỉ đi trong khúc sông còn rõ.
+
 ## Phần tự làm và tự kiểm tra
 
-- Chọn ý tưởng xuồng trôi trên sông, chọn tấm mô tả phủ lên ảnh và kiểu số nước dâng.
+- Chọn ý tưởng xuồng trôi trên sông, chọn tấm mô tả phủ lên ảnh; tự xem từng lần sửa và chỉ ra chỗ chưa đẹp.
 - Xem trên trình duyệt ở `?brand=me-rach`; thử chép khối sang Gành Sớm (có ảnh, không mô tả, không ảnh,
   chữ dài) và Bậc Trà (không có `place`) để xem khối theo màu, font thương hiệu đó và không lỗi.
 - Nội dung `details` của 6 bến do AI viết nháp, tự sửa lại cho đúng ý.
