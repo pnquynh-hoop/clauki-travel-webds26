@@ -32,17 +32,16 @@ Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và
 | | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
 | 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `headland`: ảnh mỏm gành tách nền, bấm mốc của một hạng thì ngay trên mốc hiện ảnh cảnh nhìn ra từ ban công | **riêng** |
-| 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | **đặc trưng** |
-| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số; đang ẩn tới khi có component (phần giá đã gồm ghi ở dòng giá của các hạng nhà) | **riêng** |
-| 5 | `gallery` | `slices`: sáu ảnh là các dải hẹp trong khung trắng, rê chuột hoặc bấm thì một dải mở lớn | dùng lại |
-| 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
-| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | **riêng** |
-| 8 | `faq` | `chat`: nhắn tin với chủ nhà, câu hỏi là nút gợi ý; đặt trước form để khách hỏi xong rồi mới đặt | dùng lại |
-| 9 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
-| | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
+| 3 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số; đang ẩn tới khi có component (phần giá đã gồm ghi ở dòng giá của các hạng nhà) | **riêng** |
+| 4 | `gallery` | `slices`: sáu ảnh là các dải hẹp trong khung trắng, rê chuột hoặc bấm thì một dải mở lớn | dùng lại |
+| 5 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
+| 6 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | **riêng** |
+| 7 | `faq` | `chat`: nhắn tin với chủ nhà, câu hỏi là nút gợi ý; đặt trước form để khách hỏi xong rồi mới đặt | dùng lại |
+| 8 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
+| | `footer` | `columns` (dùng chung kiểu với Bậc Trà, Mé Rạch: ảnh bình minh, lời hẹn chữ viết tay, dòng tên các bãi chạy ngang, tấm thông tin màu nền trang) | cố định |
 | | `sticky-cta` | | cố định |
 
-Khối chỉ Gành Sớm dùng: `stays`, `offer`, `features` (chưa có). `room-view` đã gộp vào `stays` nên đang ẩn.
+Khối chỉ Gành Sớm dùng: `stays`, `offer`, `features` (chưa có). `room-view` đã gộp vào `stays` và gỡ khỏi mã nguồn.
 
 ### Khung `content.json`
 
@@ -68,7 +67,6 @@ Khối chỉ Gành Sớm dùng: `stays`, `offer`, `features` (chưa có). `room-
   "sections": [
     { "type": "hero", "id": "gioi-thieu", "variant": "coverflow" },
     { "type": "stays", "id": "hang-nha", "variant": "headland" },
-    { "type": "room-view", "id": "nhin-ra", "variant": "climb", "hidden": true },
     { "type": "features", "id": "trong-gia", "hidden": true, "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "slices" },
     { "type": "intro", "id": "o-cham", "hidden": true },
