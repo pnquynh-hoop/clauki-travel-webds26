@@ -94,6 +94,17 @@ html {
   }
 }
 
+/* Nút tròn đổi thương hiệu của BTC (wd2026.js tự chèn, không sửa tệp đó): BTC đặt ở góc dưới phải và để trong suốt
+   tới khi rê chuột vào. Đội chuyển sang góc dưới trái và cho nút tròn luôn hiện, để BGK thấy ngay; nút
+   "Đổi dữ liệu demo" vẫn chỉ hiện khi rê chuột hoặc bấm vào nút tròn, nằm bên phải nút.
+   Có html phía trước để mạnh hơn style wd2026.js chèn vào sau base.css. */
+html .wd2026-fab-wrap {
+  right: auto;
+  left: 10px;
+  flex-direction: row;
+  opacity: 1;
+}
+
 /* Kiểu chữ. */
 
 h1,
