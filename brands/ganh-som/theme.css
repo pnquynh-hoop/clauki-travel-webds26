@@ -10,6 +10,8 @@
   --color-ink: #1d1b18;
   --color-muted: #5f5850;
   --color-accent: #a3431a;
+  /* Nền phụ (tấm thông tin ở footer): dùng luôn màu nền trang, không pha cam để khỏi ngả hồng trên ảnh tối. */
+  --color-tint: #f3eee6;
   --font-heading: 'Montserrat', system-ui, sans-serif;
   --font-body: 'Montserrat', system-ui, sans-serif;
   /* Chữ viết tay cho lời nhắn trên bưu thiếp (khối offer); có hỗ trợ dấu tiếng Việt. */
