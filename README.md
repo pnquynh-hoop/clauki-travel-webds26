@@ -86,6 +86,17 @@ docs/ai-log.md          nhật ký dùng AI
 docs/prompts/           prompt đầy đủ của các lần dùng AI, link từ ai-log.md
 ```
 
+## Thêm thương hiệu mới
+
+1. Tạo thư mục `brands/<id>/` gồm `content.json`, `theme.css`, `images/`.
+2. Thêm một dòng `{ "id": "<id>", "label": "<tên>" }` vào `brands/brands.json`.
+3. Mở `index.html?brand=<id>`. Không cần sửa HTML, CSS quy tắc hay JavaScript.
+
+Có thể nhờ AI viết `content.json` và `theme.css` bằng prompt mẫu ở
+[docs/prompts/tao-thuong-hieu-moi.md](docs/prompts/tao-thuong-hieu-moi.md): prompt nói rõ khối nào dùng để nói ý
+gì, kiểu nào hợp loại hình nào, và bắt AI ghi lý do chọn. Người chạy prompt tự tìm ảnh có giấy phép, kiểm tra
+lại theo danh sách cuối file rồi ghi vào `docs/ai-log.md`.
+
 ## Quy ước
 
 - Component không ghi cứng chữ, màu hay đường dẫn ảnh: mọi thứ lấy từ `content.json` và biến CSS.
