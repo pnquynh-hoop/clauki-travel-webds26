@@ -54,6 +54,8 @@
       "type": "hero",
       "id": "gioi-thieu",
       "variant": "stacked",
+      "effect": "reveal",
+      "revealHint": "Cuộn xuống để xuôi theo con rạch",
       "eyebrow": "Nhà vườn ven rạch, Cần Thơ",
       "title": "Sáng ra chợ nổi, chiều về mé rạch",
       "lead": "Ở cùng gia đình chú Sáu và sống theo nhịp một ngày của nhà vườn miền Tây.",

@@ -413,3 +413,115 @@
     max-width: none;
   }
 }
+
+/* Kiểu stacked (Mé Rạch): các lớp chồng lên nhau như bờ rạch. Hàng chữ ở trên, ảnh tràn hết bề ngang màn hình,
+   ba con số nằm trên một tấm thẻ đè lên mép dưới của ảnh. Cùng HTML với mọi kiểu, chỉ khác CSS.
+   .hero__copy dùng display: contents để các phần bên trong (tiêu đề, nút, con số) thành ô lưới của .hero__inner,
+   nhờ vậy xếp được con số xuống dưới ảnh dù trong HTML chúng nằm trước ảnh. */
+.hero--stacked {
+  /* Ảnh tràn ra hai mép màn hình; cắt phần dư (bề rộng thanh cuộn) để trang không cuộn ngang. */
+  overflow-x: clip;
+}
+
+.hero--stacked .hero__inner {
+  gap: 0;
+  align-items: start;
+}
+
+.hero--stacked .hero__copy {
+  display: contents;
+}
+
+.hero--stacked .hero__title {
+  font-size: clamp(2.75rem, 1.4rem + 5vw, 5.75rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+/* Ảnh tràn mép: lề âm bằng nửa phần chênh giữa bề ngang màn hình và khung nội dung.
+   Trong HTML ảnh đứng sau con số; order đưa ảnh lên trước để thẻ số đè lên mép dưới ảnh. */
+.hero--stacked .hero__media {
+  order: 1;
+  margin: 2.5rem calc(50% - 50vw) 0;
+  aspect-ratio: 4 / 5;
+  border-radius: 0;
+}
+
+/* Tấm thẻ con số đè lên mép dưới của ảnh. */
+.hero--stacked .hero__stats {
+  order: 2;
+  position: relative;
+  z-index: 1;
+  margin: -3rem 0 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 1.25rem 2.5rem -1.25rem color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+
+.hero--stacked .hero__stat-value {
+  font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem);
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Ảnh thu nhẹ về cỡ thật, thẻ số trượt lên: trang như vừa mở ra, chỉ chạy một lần khi tải. */
+  .hero--stacked .hero__media img {
+    animation: hero-stacked-settle 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .hero--stacked .hero__stats {
+    animation: hero-stacked-rise 0.9s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+}
+
+@keyframes hero-stacked-settle {
+  from { scale: 1.08; }
+}
+
+@keyframes hero-stacked-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@media (min-width: 760px) {
+  /* Ảnh cao vừa phần màn hình còn lại dưới hàng chữ (khoảng 31rem gồm header và tiêu đề),
+     để màn hình đầu thấy trọn ảnh; màn rất cao thì dừng ở 40rem. */
+  .hero--stacked .hero__media {
+    aspect-ratio: auto;
+    height: clamp(20rem, 100svh - 31rem, 40rem);
+  }
+
+  /* Khung ngang cắt bớt trên dưới; ảnh phong cảnh thường có người, thuyền ở nửa dưới nên giữ phần đó. */
+  .hero--stacked .hero__media img {
+    object-position: 50% 70%;
+  }
+
+  .hero--stacked .hero__stats {
+    justify-self: start;
+    min-width: min(36rem, 100%);
+    margin-left: 2rem;
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Màn rộng: tiêu đề cột trái; đoạn dẫn, nút, dòng giá cột phải, căn theo đáy tiêu đề.
+   Hàng thứ hai (1fr) là khoảng đệm: tiêu đề cao hơn cột phải thì phần dư dồn vào đó, đẩy cột phải xuống đáy. */
+@media (min-width: 1024px) {
+  .hero--stacked .hero__inner {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto auto auto auto auto;
+    column-gap: 4rem;
+  }
+
+  .hero--stacked .hero__eyebrow { grid-area: 1 / 1; }
+  .hero--stacked .hero__title { grid-area: 2 / 1 / 6 / 2; align-self: end; }
+  .hero--stacked .hero__lead { grid-area: 3 / 2; margin-top: 0; }
+  .hero--stacked .hero__actions { grid-area: 4 / 2; margin-top: 1.5rem; }
+  .hero--stacked .hero__note { grid-area: 5 / 2; }
+  .hero--stacked .hero__media { grid-area: 6 / 1 / 7 / 3; margin-top: 3.5rem; }
+  .hero--stacked .hero__stats { grid-area: 7 / 1 / 8 / 3; }
+}
