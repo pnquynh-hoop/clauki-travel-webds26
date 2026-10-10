@@ -52,7 +52,10 @@ function navButton(label, className, onClick) {
 // Bộ đếm hiện hai chữ số, ví dụ "01 / 05".
 const pad = (n) => String(n).padStart(2, '0');
 
-/* Bắt đầu kiểu full: các hằng số và hàm phụ. */
+/* =========================================================
+VARIANT: FULL - HẰNG SỐ VÀ HÀM PHỤ
+Các hằng số và hàm nhỏ chỉ kiểu full dùng.
+========================================================= */
 
 // Người xem bật "giảm chuyển động" trong máy thì ảnh đứng yên, sương mở sẵn, không có mây.
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -76,8 +79,6 @@ function decorEl(className) {
   el.setAttribute('aria-hidden', 'true');
   return el;
 }
-
-/* Hết phần hàm phụ của kiểu full. */
 
 export class WlHero extends HTMLElement {
   set data(section) {
@@ -344,8 +345,6 @@ export class WlHero extends HTMLElement {
       cloud.node.style.opacity = still ? '0' : String(fade * (0.45 + 0.55 * (1 - open * 0.6)));
     });
   }
-
-  /* Hết phần kiểu full. */
 
   render() {
     const section = this._data;
