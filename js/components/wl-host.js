@@ -1,7 +1,9 @@
 /* wl-host.js - giới thiệu chủ nhà: ảnh lớn kèm một ảnh nhỏ, vài đoạn chuyện ngắn, câu nói của chủ nhà, vài con số.
-   Tên khối theo chức năng, nên thương hiệu nào cũng dùng được để giới thiệu chủ nhà hay người dẫn đường. */
+   Tên khối theo chức năng, nên thương hiệu nào cũng dùng được để giới thiệu chủ nhà hay người dẫn đường.
+   Kiểu "tv" có HTML và hành vi khác hẳn (tivi đời cũ kể chuyện theo cuộn), nên nằm ở tệp riêng host-tv.js. */
 import { asset } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
+import { buildTv } from './host-tv.js';
 
 function imageEl(image, className) {
   if (!image?.src) return null;
@@ -48,9 +50,22 @@ export class WlHost extends HTMLElement {
     this.render();
   }
 
+  // Kiểu tv gắn listener cuộn vào window; khối bị gỡ (đổi thương hiệu) thì gỡ theo.
+  disconnectedCallback() {
+    this._detachTv?.();
+    this._detachTv = null;
+  }
+
   render() {
     const section = this._data;
     this.className = section.variant ? `host host--${section.variant}` : 'host';
+    this._detachTv?.();
+    this._detachTv = null;
+    // Kiểu tv thiếu dữ liệu câu chuyện thì buildTv trả về null, khối quay về kiểu mặc định bên dưới.
+    if (section.variant === 'tv') {
+      this._detachTv = buildTv(this, section);
+      if (this._detachTv) return;
+    }
 
     const media = groupEl('host__media', [
       imageEl(section.image, 'host__main'),
