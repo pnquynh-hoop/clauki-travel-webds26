@@ -117,7 +117,7 @@ export class WlHero extends HTMLElement {
 - **Ảnh** luôn là object `{ "src", "alt" }`, đường dẫn tính từ thư mục thương hiệu.
 - **Chữ:** chữ thường, không chứa HTML. Ít chữ: tiêu đề ngắn, mỗi đoạn tối đa khoảng 2 câu.
 - **Mỗi thương hiệu một sườn trang riêng**, không chỉ đổi màu và chữ:
-  - phần dùng chung (header, hero, đặt chỗ, footer) chọn `variant` khác nhau giữa các thương hiệu;
+  - phần dùng chung (header, hero, đặt chỗ) chọn `variant` khác nhau giữa các thương hiệu; footer có thể dùng chung kiểu nhưng ảnh, lời hẹn, chữ chạy phải riêng;
   - mỗi thương hiệu có ít nhất 2 section mà hai thương hiệu kia không dùng, gắn với loại hình của nó;
   - thương hiệu nào dùng section nào ghi ở cột "Thương hiệu dùng" trong bảng mục 12.
 
