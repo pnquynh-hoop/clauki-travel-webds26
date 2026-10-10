@@ -14,6 +14,7 @@ import { WlBooking } from './components/wl-booking.js';
 import { WlFaq } from './components/wl-faq.js';
 import { WlGallery } from './components/wl-gallery.js';
 import { WlStays } from './components/wl-stays.js';
+import { WlOffer } from './components/wl-offer.js';
 import { WlToTop } from './components/wl-to-top.js';
 
 // Phải đăng ký trước khi core.js tạo khối, nếu không core.js bỏ qua khối đó.
@@ -30,6 +31,7 @@ customElements.define('wl-booking', WlBooking);
 customElements.define('wl-faq', WlFaq);
 customElements.define('wl-gallery', WlGallery);
 customElements.define('wl-stays', WlStays);
+customElements.define('wl-offer', WlOffer);
 customElements.define('wl-to-top', WlToTop);
 
 start();

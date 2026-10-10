@@ -36,12 +36,13 @@ Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | **riêng** |
 | 5 | `gallery` | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
-| 7 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
-| 8 | `faq` | mặc định | dùng lại |
+| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | **riêng** |
+| 8 | `booking` | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
+| 9 | `faq` | mặc định | dùng lại |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
-Khối chỉ Gành Sớm dùng: `stays`, `features`. `room-view` đã gộp vào `stays` nên đang ẩn.
+Khối chỉ Gành Sớm dùng: `stays`, `offer`, `features` (chưa có). `room-view` đã gộp vào `stays` nên đang ẩn.
 
 ### Khung `content.json`
 
@@ -58,7 +59,7 @@ Khối chỉ Gành Sớm dùng: `stays`, `features`. `room-view` đã gộp vào
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
     { "label": "Thư viện ảnh", "href": "#thu-vien" },
-    { "label": "Giá đã gồm", "href": "#trong-gia" },
+    { "label": "Ưu đãi", "href": "#uu-dai" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
   "header": { "variant": "solid" },
@@ -71,6 +72,7 @@ Khối chỉ Gành Sớm dùng: `stays`, `features`. `room-view` đã gộp vào
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham", "hidden": true },
+    { "type": "offer", "id": "uu-dai", "variant": "postcard" },
     { "type": "booking", "id": "dat-phong", "variant": "stay" },
     { "type": "faq", "id": "hoi-dap" }
   ],

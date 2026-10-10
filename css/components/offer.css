@@ -1,0 +1,725 @@
+/* offer.css - giao diện của <wl-offer>. Màu, font, bo góc lấy từ biến CSS; class offer--<variant> quyết định kiểu.
+   Không có variant: dạng cơ bản, hai mặt bưu thiếp là hai thẻ phẳng, tem viền thường.
+   Kiểu riêng của từng thương hiệu viết thành khối .offer--<variant> ở cuối tệp. */
+
+.offer {
+  --offer-paper: var(--color-surface);
+  --offer-line: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  --offer-rule: color-mix(in srgb, var(--color-ink) 32%, transparent);
+  display: block;
+  padding-block: var(--space-section);
+  /* Kiểu postcard xoay nghiêng các thẻ, góc thẻ có thể thò ra mép màn hình: cắt theo chiều ngang, bóng đổ dọc vẫn hiện. */
+  overflow-x: clip;
+}
+
+.offer__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Đầu khối: tiêu đề và lời dẫn, bên cạnh là dải tháng của biển. */
+.offer__head {
+  display: grid;
+  gap: 1.5rem 4rem;
+  margin-bottom: clamp(2rem, 3.5vw, 3rem);
+}
+
+.offer__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.offer__title {
+  max-width: 15ch;
+  margin: 0;
+}
+
+.offer__title-accent {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+.offer__lead {
+  max-width: 40ch;
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+}
+
+.offer__seasons {
+  max-width: 34rem;
+}
+
+.offer__seasons-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__chart {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 2px;
+}
+
+.offer__month {
+  grid-row: 1;
+  padding-block: 0.3rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--color-ink) 8%, var(--color-bg));
+}
+
+.offer__month:first-child {
+  border-radius: 3px 0 0 3px;
+}
+
+.offer__month:nth-child(12) {
+  border-radius: 0 3px 3px 0;
+}
+
+/* Màu theo kiểu biển; dùng chung cho ô tháng và ô màu trong chú thích. */
+.offer__month--windy {
+  background: color-mix(in srgb, var(--color-muted) 20%, var(--color-bg));
+}
+
+.offer__month--calm {
+  background: color-mix(in srgb, var(--color-primary) 42%, var(--color-bg));
+}
+
+.offer__month--stormy {
+  background: color-mix(in srgb, var(--color-ink) 26%, var(--color-bg));
+}
+
+/* Ngoặc dưới các tháng của mùa ưu đãi (JS đặt grid-column theo from, to). */
+.offer__window {
+  grid-row: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0.35rem 0 0;
+  padding-top: 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--color-accent);
+}
+
+.offer__window::before {
+  content: '';
+  position: absolute;
+  inset: 0 1px auto;
+  height: 0.35rem;
+  border: 2px solid currentColor;
+  border-top: 0;
+}
+
+.offer__legend {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.offer__legend li {
+  display: grid;
+  grid-template-columns: 0.75rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.offer__legend b {
+  font-weight: 600;
+}
+
+.offer__swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  transform: translateY(0.1rem);
+}
+
+/* Hai mặt bưu thiếp. */
+.offer__table {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.offer__card {
+  position: relative;
+  margin: 0;
+  background: var(--offer-paper);
+  border: 1px solid var(--offer-line);
+  border-radius: calc(var(--radius) * 0.5);
+}
+
+.offer__front {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.75rem 0;
+}
+
+.offer__photo {
+  position: relative;
+  flex: 1 1 auto;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-ink) 12%, var(--color-bg));
+}
+
+.offer__photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 52%;
+}
+
+.offer__caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  padding: 0.7rem 0.15rem 0.8rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.offer__caption strong {
+  font-weight: 600;
+}
+
+.offer__caption span {
+  color: var(--color-muted);
+}
+
+/* Mặt sau: điện thoại xếp dọc (tem và dấu trước, lời nhắn, rồi các dòng điều kiện); từ 640px chia đôi như bưu thiếp thật. */
+.offer__back {
+  display: grid;
+  grid-template-areas: 'post' 'msg' 'facts';
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.offer__msg {
+  grid-area: msg;
+  display: flex;
+  flex-direction: column;
+}
+
+.offer__msg-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__note {
+  margin: 0.85rem 0 0;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.offer__note + .offer__note {
+  margin-top: 0.35rem;
+}
+
+.offer__sign {
+  align-self: flex-end;
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.offer__post {
+  grid-area: post;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+/* Dấu bưu điện: vòng mực màu nhấn, ngày hạn và thời gian còn lại ở giữa. */
+.offer__postmark {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 10.5rem;
+  aspect-ratio: 1;
+  margin-right: -1.25rem;
+  color: var(--color-accent);
+}
+
+.offer__postmark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.offer__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+}
+
+.offer__ring--inner {
+  stroke-width: 1.2;
+}
+
+.offer__postmark text {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  fill: currentColor;
+}
+
+.offer__postmark-center {
+  position: absolute;
+  inset: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer__pm-date {
+  width: 86%;
+  margin-bottom: 0.35rem;
+  padding-block: 0.2rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  border-block: 1.5px solid currentColor;
+}
+
+.offer__pm-days {
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.offer__pm-hm {
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.offer__postmark.is-expired .offer__pm-days {
+  max-width: 6rem;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
+
+/* Con tem dán trên mặt sau: ảnh hạng đang chọn, dải màu chủ đạo in giá ưu đãi. */
+.offer__stamp {
+  flex: none;
+  width: 6.75rem;
+  margin-top: 2.25rem;
+  padding: 0.4rem;
+  background: var(--offer-paper);
+  border: 1px solid var(--offer-line);
+}
+
+.offer__stamp-img {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+}
+
+.offer__stamp-value {
+  display: grid;
+  padding: 0.35rem 0.25rem 0.4rem;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.offer__stamp-value span {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.offer__stamp-value strong {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* Các dòng điều kiện, kẻ như dòng địa chỉ. */
+.offer__facts {
+  grid-area: facts;
+  align-self: end;
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.offer__facts div {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--offer-rule);
+}
+
+.offer__facts dt {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__facts dd {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Chọn hạng bằng các con tem, bên cạnh là phiếu giá. */
+.offer__desk {
+  display: grid;
+  gap: 2.25rem;
+  margin-top: clamp(2.25rem, 3.5vw, 2.5rem);
+}
+
+.offer__rooms {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.offer__rooms-label {
+  margin-bottom: 1rem;
+  padding: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.offer__room-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 9.5rem));
+  gap: clamp(0.6rem, 2.5vw, 1.4rem);
+}
+
+.offer__room {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+/* Radio thật nằm ẩn giữa tem: bàn phím, trình đọc màn hình vẫn dùng như nhóm radio bình thường. */
+.offer__room-input {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.offer__room-face {
+  display: block;
+  padding: 0.4rem;
+  background: var(--offer-paper);
+  border: 1px solid var(--offer-line);
+  transition: transform var(--duration) ease, filter var(--duration) ease;
+}
+
+.offer__room-inner {
+  display: block;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition: outline-color var(--duration) ease;
+}
+
+.offer__room-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.offer__room-name {
+  display: block;
+  padding: 0.45rem 0.3rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.offer__room-price {
+  display: block;
+  padding: 0.1rem 0.3rem 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--color-muted);
+}
+
+.offer__room-input:checked + .offer__room-face .offer__room-inner {
+  outline-color: var(--color-accent);
+}
+
+.offer__room-input:focus-visible + .offer__room-face {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+.offer__slip {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.offer__slip-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.offer__sum {
+  margin: 0;
+}
+
+.offer__sum div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 1rem;
+  padding-block: 0.45rem;
+  border-top: 1px solid var(--offer-line);
+}
+
+.offer__sum dt {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.offer__sum dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer__sum s {
+  color: var(--color-muted);
+  text-decoration-thickness: 1.5px;
+}
+
+.offer__sum .is-pay dt {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.offer__sum .is-pay dd {
+  font-size: 1.375rem;
+  font-weight: 800;
+}
+
+.offer__book {
+  width: 100%;
+}
+
+/* Điện thoại hẹp: ba con tem vẫn một hàng, chữ nhỏ lại cho tên hạng không bị ngắt. */
+@media (max-width: 400px) {
+  .offer__room-row {
+    gap: 0.5rem;
+  }
+
+  .offer__room-name {
+    font-size: 0.75rem;
+  }
+
+  .offer__room-price {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (min-width: 560px) {
+  .offer__book {
+    justify-self: start;
+    width: auto;
+  }
+}
+
+@media (min-width: 640px) {
+  .offer__back {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 'msg post' 'msg facts';
+    gap: 0.9rem 0;
+    padding: 1.5rem 1.6rem 1.6rem;
+  }
+
+  .offer__msg {
+    margin-right: 1.6rem;
+    padding-right: 1.6rem;
+    border-right: 1px solid var(--offer-line);
+  }
+}
+
+@media (min-width: 960px) {
+  .offer__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+
+  .offer__table {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .offer__desk {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 3.5rem;
+    align-items: start;
+  }
+}
+
+/* Kiểu postcard (Gành Sớm): tấm bưu thiếp đặt nghiêng trên nền cát, giấy có bóng đổ, lời nhắn viết tay (--font-hand,
+   thương hiệu không khai báo thì dùng font chữ thường), dấu bưu điện nghiêng, tem răng cưa nghiêng mỗi con một chút.
+   Từ 960px hai mặt chồng mép lên nhau, mặt sau nằm trên. */
+.offer--postcard {
+  --offer-shadow:
+    0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
+    0 2px 6px color-mix(in srgb, var(--color-ink) 6%, transparent),
+    0 22px 40px -18px color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
+.offer--postcard .offer__title {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.offer--postcard .offer__card {
+  border: 0;
+  border-radius: calc(var(--radius) * 0.2);
+  box-shadow: var(--offer-shadow);
+}
+
+.offer--postcard .offer__front {
+  transform: rotate(-1.5deg);
+}
+
+.offer--postcard .offer__back {
+  transform: rotate(0.8deg);
+}
+
+.offer--postcard .offer__caption {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.offer--postcard .offer__msg-label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.offer--postcard .offer__note {
+  font-family: var(--font-hand, var(--font-body));
+  font-size: clamp(1.2rem, 1.05rem + 0.45vw, 1.4rem);
+  line-height: 1.38;
+}
+
+.offer--postcard .offer__sign {
+  font-family: var(--font-hand, var(--font-body));
+  font-size: clamp(1.3rem, 1.1rem + 0.5vw, 1.55rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.offer--postcard .offer__postmark {
+  transform: rotate(-8deg);
+}
+
+.offer--postcard .offer__facts dt {
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Răng cưa của tem: lớp nền chấm tròn trong suốt xếp quanh mép, lớp giấy đặc ở giữa; nhìn xuyên qua lỗ thấy nền phía sau. */
+.offer--postcard .offer__stamp,
+.offer--postcard .offer__room-face {
+  --r: 4px;
+  padding: calc(var(--r) * 2);
+  background:
+    radial-gradient(var(--r), transparent 96%, var(--offer-paper)) round
+      calc(var(--r) * -1.5) calc(var(--r) * -1.5) / calc(var(--r) * 3) calc(var(--r) * 3),
+    linear-gradient(var(--offer-paper) 0 0) no-repeat 50% / calc(100% - var(--r) * 3) calc(100% - var(--r) * 3);
+  border: 0;
+  filter:
+    drop-shadow(0 1px 1px color-mix(in srgb, var(--color-ink) 22%, transparent))
+    drop-shadow(0 6px 8px color-mix(in srgb, var(--color-ink) 14%, transparent));
+}
+
+.offer--postcard .offer__stamp {
+  transform: rotate(2.5deg);
+}
+
+.offer--postcard .offer__stamp.is-new {
+  animation: offer-stamp calc(var(--duration) * 2.5) ease-out;
+}
+
+@keyframes offer-stamp {
+  from {
+    opacity: 0.4;
+    transform: rotate(2.5deg) scale(1.08);
+  }
+}
+
+.offer--postcard .offer__room:nth-child(1) .offer__room-face {
+  transform: rotate(-2deg);
+}
+
+.offer--postcard .offer__room:nth-child(2) .offer__room-face {
+  transform: rotate(1.5deg);
+}
+
+.offer--postcard .offer__room:nth-child(3) .offer__room-face {
+  transform: rotate(-1deg);
+}
+
+.offer--postcard .offer__room:hover .offer__room-face {
+  transform: translateY(-0.2rem) rotate(0deg);
+}
+
+.offer--postcard .offer__room-input:checked + .offer__room-face {
+  transform: translateY(-0.45rem) rotate(0deg);
+  filter:
+    drop-shadow(0 2px 2px color-mix(in srgb, var(--color-ink) 22%, transparent))
+    drop-shadow(0 14px 14px color-mix(in srgb, var(--color-ink) 18%, transparent));
+}
+
+@media (min-width: 960px) {
+  .offer--postcard .offer__table {
+    gap: 0;
+    padding-block: 0.5rem;
+  }
+
+  .offer--postcard .offer__front {
+    transform: translateX(1.75rem) rotate(-2.5deg);
+  }
+
+  .offer--postcard .offer__back {
+    z-index: 1;
+    transform: translateX(-1.75rem) translateY(0.75rem) rotate(1.4deg);
+  }
+
+  .offer--postcard .offer__slip {
+    padding-left: 1.75rem;
+  }
+}

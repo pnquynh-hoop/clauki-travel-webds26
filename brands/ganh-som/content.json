@@ -10,7 +10,7 @@
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
     { "label": "Thư viện ảnh", "href": "#thu-vien" },
-    { "label": "Giá đã gồm", "href": "#trong-gia" },
+    { "label": "Ưu đãi", "href": "#uu-dai" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
   "header": { "variant": "solid", "menu": "Menu" },
@@ -152,6 +152,69 @@
       ]
     },
     { "type": "intro", "id": "o-cham", "hidden": true, "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
+    {
+      "type": "offer",
+      "id": "uu-dai",
+      "variant": "postcard",
+      "eyebrow": "Đặt sớm hè 2027",
+      "title": "Hẹn bạn hè 2027: ở 4 đêm,",
+      "titleAccent": "chỉ trả 3",
+      "lead": "Gửi trước một mùa hè. Chọn con tem cho hạng phòng bạn thích, giá ưu đãi in ngay trên mặt tem.",
+      "deadline": "2026-12-31T23:59:59+07:00",
+      "from": "2027-04-01",
+      "to": "2027-08-31",
+      "nights": 4,
+      "freeNights": 1,
+      "currency": "đồng",
+      "image": { "src": "images/hero-veranda.webp", "alt": "Lan can gỗ ngoài hiên nhà ánh màu nắng, mặt trời sát mặt biển" },
+      "caption": "Bình minh ngay hiên nhà",
+      "captionPlace": "Gành Sớm, Quy Nhơn",
+      "note": {
+        "label": "Bưu thiếp, hè 2027",
+        "greeting": "Bạn thân mến,",
+        "text": "Hè năm sau biển lại lặng, nắng lên sớm. Ở bốn đêm, bạn chỉ trả ba, đêm còn lại để Gành Sớm mời. Hẹn bạn ở hiên nhà, lúc mặt trời lên.",
+        "sign": "Thân, Gành Sớm"
+      },
+      "facts": [
+        { "label": "Hạn đặt, giờ Việt Nam", "value": "23:59 ngày 31/12/2026" },
+        { "label": "Kỳ nghỉ", "value": "Từ 1/4/2027 đến 31/8/2027" },
+        { "label": "Ưu đãi", "value": "Ở từ 4 đêm, tặng 1 đêm" }
+      ],
+      "rooms": [
+        { "id": "villa", "label": "Villa sát biển", "price": 6200000, "image": { "src": "images/hero-pool.webp", "alt": "hồ bơi tràn bờ nhìn xuống vịnh nhỏ" } },
+        { "id": "nha-doi", "label": "Nhà đồi", "price": 3900000, "image": { "src": "images/view-hill.webp", "alt": "vịnh biển, làng chài và bãi cát cong nhìn từ đỉnh đồi" } },
+        { "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000, "image": { "src": "images/view-garden.webp", "alt": "hàng dừa nghiêng trên bãi cát trắng cạnh biển xanh" } }
+      ],
+      "sea": [
+        { "months": [1, 2], "kind": "windy", "label": "cuối mùa mưa, biển còn gió" },
+        { "months": [3, 4, 5, 6, 7, 8], "kind": "calm", "label": "mùa khô, biển lặng" },
+        { "months": [9, 10, 11, 12], "kind": "stormy", "label": "mùa mưa, có thể có bão" }
+      ],
+      "labels": {
+        "seasons": "Biển Quy Nhơn theo tháng",
+        "window": "Kỳ nghỉ ưu đãi: tháng {from} đến {to}",
+        "monthOne": "Tháng {n}",
+        "monthRange": "Tháng {from} đến {to}",
+        "back": "Mặt sau bưu thiếp",
+        "postmarkTop": "Hạn đặt 23:59",
+        "postmarkBottom": "Gành Sớm, Quy Nhơn",
+        "date": "31/12/2026",
+        "daysLeft": "còn {d} ngày",
+        "timeLeft": "{h} giờ {m} phút",
+        "countdownSr": "Hạn đặt sớm 23:59 ngày 31/12/2026, giờ Việt Nam. Còn {d} ngày {h} giờ {m} phút.",
+        "ended": "Ưu đãi đặt sớm đã hết hạn.",
+        "stamp": "4 đêm, trả 3",
+        "stampAlt": "Tem hạng {room}: {alt}",
+        "million": "{n} triệu",
+        "perNight": "một đêm",
+        "roomFact": "Hạng phòng",
+        "room": "Chọn con tem, cũng là chọn hạng phòng",
+        "slip": "Kỳ nghỉ 4 đêm, {room}",
+        "full": "Giá 4 đêm",
+        "pay": "Bạn trả (3 đêm)",
+        "perNightTotal": "Tính ra mỗi đêm"
+      }
+    },
     {
       "type": "booking",
       "id": "dat-phong",
