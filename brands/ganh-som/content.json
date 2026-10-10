@@ -7,6 +7,7 @@
   },
   "brand": { "name": "Gành Sớm", "logo": "images/logo.svg", "slogan": "Bình minh ngay hiên nhà" },
   "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
+  "toTop": { "label": "Lên đầu trang" },
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
     { "label": "Thư viện ảnh", "href": "#thu-vien" },
