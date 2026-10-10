@@ -86,6 +86,28 @@ function imageEl(image, className, lazy) {
 }
 
 export class WlBooking extends HTMLElement {
+  // Khối các hạng nhà phát wl:choose-room khi khách bấm "đặt hạng này": chọn sẵn hạng đó trong form.
+  connectedCallback() {
+    this._onChoose = (e) => this.chooseRoom(e.detail?.id);
+    document.addEventListener('wl:choose-room', this._onChoose);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('wl:choose-room', this._onChoose);
+  }
+
+  chooseRoom(id) {
+    const input = this._roomInputs?.find((radio) => radio.value === id);
+    if (!input) return;
+    input.checked = true;
+    // Khách đang xem tin nhắn đã soạn thì quay về form để thấy hạng vừa chọn.
+    if (this._form?.hidden) {
+      this._message.hidden = true;
+      this._form.hidden = false;
+    }
+    this.updateStay();
+  }
+
   set data(section) {
     this._data = section;
     this.render();
