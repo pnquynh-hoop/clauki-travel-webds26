@@ -10,6 +10,7 @@ import { WlFooter } from './components/wl-footer.js';
 import { WlRoomView } from './components/wl-room-view.js';
 import { WlHost } from './components/wl-host.js';
 import { WlDayPlan } from './components/wl-day-plan.js';
+import { WlBooking } from './components/wl-booking.js';
 
 // Phải đăng ký trước khi core.js tạo khối, nếu không core.js bỏ qua khối đó.
 // Đặt sau start() hiện vẫn chạy vì start() còn chờ tải brands.json; đặt trước thì không phụ thuộc vào việc đó.
@@ -21,5 +22,6 @@ customElements.define('wl-footer', WlFooter);
 customElements.define('wl-room-view', WlRoomView);
 customElements.define('wl-host', WlHost);
 customElements.define('wl-day-plan', WlDayPlan);
+customElements.define('wl-booking', WlBooking);
 
 start();
