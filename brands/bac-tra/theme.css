@@ -15,4 +15,6 @@
   --font-heading: 'Lora', Georgia, serif;
   --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
   --radius: 1rem;
+  /* Nền phụ màu matcha: xanh ngả vàng của bột trà, sáng hơn xanh chè của nút để nút nổi lên. */
+  --color-tint: #c9d7a4;
 }

@@ -399,3 +399,100 @@
 .header__phone:hover {
   text-decoration: underline;
 }
+
+/* =========================================================
+VARIANT: OVERLAY
+Header trong suốt, nằm đè lên ảnh đầu trang thay vì chiếm
+một hàng riêng phía trên. Cuộn xuống hoặc mở menu thì có
+nền màu trang hơi trong để chữ không lẫn vào nội dung.
+========================================================= */
+
+/* Ghim ở mép trên màn hình và không chiếm chỗ, nên khối đầu tiên của trang bắt đầu từ mép trên, nằm dưới header. */
+.header--overlay {
+  position: fixed;
+  inset: 0 0 auto;
+  border-bottom: 1px solid transparent;
+  transition: background-color var(--duration) ease, border-color var(--duration) ease, transform var(--duration) ease;
+}
+
+.header--overlay.is-scrolled,
+.header--overlay.is-open {
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.header--overlay.is-scrolled {
+  border-bottom-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+/* Có dải thông tin: header đứng yên một chỗ nên dải không tự trượt khuất như kiểu solid.
+   Cuộn xuống thì đẩy cả header lên đúng bằng chiều cao dải; dùng transform nên nội dung bên dưới không bị xô. */
+.header--overlay:has(.header__topbar) {
+  top: 0;
+}
+
+.header--overlay.is-scrolled:has(.header__topbar) {
+  transform: translateY(calc(-1 * var(--topbar-h)));
+}
+
+/* Điện thoại: một hàng gồm logo, nút giữ chỗ, nút Menu; menu mở ra nằm hàng dưới. */
+.header--overlay .header__bar {
+  gap: 0.5rem;
+  min-height: 4rem;
+}
+
+/* Tên thương hiệu nhường chỗ cho hai nút: tên dài thì cắt bằng dấu ba chấm, không đẩy nút Menu xuống hàng dưới. */
+.header--overlay .header__brand {
+  order: -2;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.header--overlay .header__brand img {
+  height: 2.75rem;
+}
+
+.header--overlay .header__cta {
+  order: -1;
+  display: inline-flex;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.875rem;
+}
+
+.header--overlay .header__toggle {
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+  font-size: 0.875rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+}
+
+.header--overlay .header__toggle[aria-expanded='true'] {
+  color: var(--color-bg);
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+@media (min-width: 1024px) {
+  .header--overlay .header__bar {
+    gap: 0.75rem 2rem;
+    min-height: 4.5rem;
+  }
+
+  .header--overlay .header__brand,
+  .header--overlay .header__cta {
+    order: 0;
+  }
+
+  .header--overlay .header__brand img {
+    height: 3.25rem;
+  }
+
+  .header--overlay .header__cta {
+    padding-inline: 1.3rem;
+  }
+}

@@ -403,3 +403,398 @@
     column-gap: 2rem;
   }
 }
+
+/* =========================================================
+ẢNH KHÉP TRANG, LỜI HẸN, DÒNG CHỮ CHẠY
+Có ở mọi kiểu khi dữ liệu ghi footer.image hoặc footer.title:
+ảnh phủ kín footer, lời hẹn chữ lớn màu sáng trên ảnh,
+phần thông tin nằm trên một tấm đè lên phần dưới ảnh.
+========================================================= */
+
+.footer:has(> .footer__scene) {
+  padding-block: 0;
+}
+
+.footer__scene {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Ảnh dày hơn khung 8% mỗi đầu để JS cho ảnh trôi chậm hơn trang mà không lộ mép. */
+.footer__photo {
+  position: absolute;
+  inset: -8% 0;
+  z-index: -2;
+  width: 100%;
+  height: 116%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Lớp tối phủ trên ảnh: trên đậm, giữa nhạt, dưới đậm, để chữ sáng của lời hẹn nổi lên
+   và tấm thông tin đứng trên nền đủ trầm. */
+.footer__scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--color-ink) 50%, transparent),
+    color-mix(in srgb, var(--color-ink) 12%, transparent) 40%,
+    color-mix(in srgb, var(--color-ink) 60%, transparent));
+}
+
+/* Lớp mây trôi ngang qua ảnh, ở khoảng 1/3 chiều cao tính từ trên. Hai dải mây lặp liền mạch theo chiều ngang:
+   dải rộng gấp đôi một ô, trôi đúng một ô rồi lặp lại nên không thấy chỗ nối. Dải sau mỏng hơn, nằm cao hơn,
+   trôi chậm hơn cho có chiều sâu. Mép trên, mép dưới tan dần để mây không bị cắt thẳng. */
+.footer__clouds {
+  --cloud-tile: max(100vw, 90rem);
+  --cloud-h: clamp(10rem, 24vw, 20rem);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 36%;
+  z-index: 0;
+  height: var(--cloud-h);
+  margin-top: calc(var(--cloud-h) / -2);
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, transparent, #000 24%, #000 76%, transparent);
+}
+
+.footer__cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--cloud-tile) * 2);
+  height: 100%;
+  background: var(--color-surface);
+  opacity: 0.4;
+  mask: url("footer/cloud-band-1.png") 0 0 / var(--cloud-tile) 100% repeat-x;
+  animation: footer-cloud 46s linear infinite;
+  will-change: transform;
+}
+
+.footer__cloud--back {
+  top: -6%;
+  background: color-mix(in srgb, var(--color-surface) 90%, var(--color-ink));
+  opacity: 0.28;
+  mask-image: url("footer/cloud-band-2.png");
+  animation-duration: 83s;
+}
+
+@keyframes footer-cloud {
+  to {
+    transform: translateX(calc(var(--cloud-tile) * -1));
+  }
+}
+
+/* Mép trên ảnh tan dần vào màu nền trang như sương, để khối phía trên chuyển sang ảnh không thành một đường cắt ngang. */
+.footer__scene::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: clamp(4rem, 10vw, 8rem);
+  background: linear-gradient(180deg, var(--color-bg), transparent);
+  pointer-events: none;
+}
+
+/* Chữ trên ảnh nằm trên lớp mây. */
+.footer__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(2.5rem, 7vw, 5rem);
+  padding-block: clamp(4.5rem, 14vh, 9rem) 2.5rem;
+  color: var(--color-bg);
+}
+
+.footer__heading {
+  margin: 0;
+  font-size: clamp(3.2rem, 10vw, 8rem);
+  line-height: 0.92;
+  color: var(--color-bg);
+  text-shadow: 0 0.06em 0.45em color-mix(in srgb, var(--color-ink) 45%, transparent);
+}
+
+.footer__heading-accent {
+  display: block;
+  font-weight: 500;
+}
+
+/* Dòng chữ chạy: chữ in hoa giãn rộng, ngăn nhau bằng vạch mảnh, hai mép mờ dần.
+   Chạy chậm một vòng 90 giây; JS cho nhanh lên khi cuộn rồi chậm lại. */
+.footer__ticker {
+  overflow: hidden;
+  padding-block: 0.4rem;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Trên ảnh thì dòng chữ tràn hết bề ngang màn hình (lề âm bằng nửa màn hình trừ nửa khung). */
+.footer__inner .footer__ticker {
+  margin-inline: calc(50% - 50vw);
+}
+
+.footer__ticker-track {
+  display: flex;
+  width: max-content;
+  animation: footer-ticker 90s linear infinite;
+}
+
+@keyframes footer-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.footer__ticker-item {
+  display: flex;
+  align-items: center;
+  flex: none;
+  font-size: clamp(0.82rem, 1.15vw, 1rem);
+  line-height: 1;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.footer__ticker-item::after {
+  content: '';
+  width: clamp(2rem, 4vw, 3.5rem);
+  height: 1px;
+  margin-inline: 1.6rem;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.footer__inner .footer__ticker-item {
+  text-shadow: 0 1px 0.6rem color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
+/* Không có ảnh: dòng chữ chạy nằm trên cùng footer, cách phần thông tin một khoảng và một vạch mảnh. */
+.footer > .footer__ticker {
+  margin-bottom: 2.5rem;
+  padding-block: 0 1.25rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+/* Có lời hẹn mà không có ảnh: nền trang, lời hẹn và dòng chữ chạy màu mực, bỏ lớp tối và mép sương,
+   tấm thông tin màu nền phụ nổi lên trên nền trang như một tấm thẻ. */
+.footer:has(> .footer__scene--plain) {
+  background: var(--color-bg);
+}
+
+.footer__scene--plain::before,
+.footer__scene--plain::after {
+  display: none;
+}
+
+.footer__scene--plain .footer__inner {
+  padding-top: var(--space-section);
+  color: var(--color-ink);
+}
+
+.footer__scene--plain .footer__heading,
+.footer__scene--plain .footer__ticker-item {
+  color: var(--color-ink);
+  text-shadow: none;
+}
+
+/* Tấm thông tin: nền màu nền phụ (--color-tint) gần đặc, làm mờ ảnh phía sau, bóng đổ mềm để tách khỏi ảnh. */
+.footer__panel {
+  padding: 2rem 1.5rem 0.25rem;
+  border-radius: calc(var(--radius) * 1.5);
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-tint) 93%, transparent);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: 0 1.5rem 3.5rem color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+@media (min-width: 760px) {
+  .footer__panel {
+    padding: 2.75rem 3rem 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__ticker-track,
+  .footer__cloud {
+    animation: none;
+  }
+}
+
+/* =========================================================
+VARIANT: COLUMNS
+Nền màu nền phụ (--color-tint), chữ màu mực. Có ảnh khép trang
+thì phần thông tin nằm trên tấm nền phụ đè lên ảnh. Bên trái là
+khẩu hiệu chữ lớn, nút giữ chỗ lớn, dòng giá; bên phải các cột
+menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập sẵn.
+========================================================= */
+
+/* Chữ phụ pha 78% màu mực với nền phụ để nhạt hơn chữ chính mà vẫn đạt tương phản AA. */
+.footer--columns {
+  --footer-soft: color-mix(in srgb, var(--color-ink) 78%, var(--color-tint));
+  --footer-line: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  color: var(--color-ink);
+  background: var(--color-tint);
+}
+
+/* Trên tấm thông tin, tên thương hiệu đã có ở header và lời hẹn trên ảnh, nên chỉ giữ khẩu hiệu. */
+.footer--columns .footer__panel .footer__name {
+  display: none;
+}
+
+.footer--columns .footer__slogan {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  max-width: 11em;
+  text-wrap: balance;
+}
+
+.footer--columns .footer__top {
+  gap: 1.75rem;
+}
+
+.footer--columns .footer__action {
+  gap: 0.75rem;
+}
+
+/* Nút giữ chỗ lớn: cùng màu với mọi nút giữ chỗ trên trang, chỉ to hơn và chữ dùng font tiêu đề.
+   Cứ vài giây một vệt sáng lướt qua như nắng trên lá, đủ để mắt dừng lại mà không chói.
+   Rê chuột thì nút nhô lên, hiện một viền mảnh tách khỏi nút (vòng màu nền phụ ở giữa tạo khe hở). */
+.footer--columns .footer__cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 3.9rem;
+  padding: 0 2.6rem;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  box-shadow: 0 0.7rem 1.6rem color-mix(in srgb, var(--color-primary) 28%, transparent);
+  transition: transform calc(var(--duration) * 1.5) ease, box-shadow calc(var(--duration) * 1.5) ease,
+    background-color var(--duration) ease;
+}
+
+.footer--columns .footer__cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 30%, color-mix(in srgb, var(--color-on-primary) 30%, transparent) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: footer-sheen 5.5s ease-in-out 1s infinite;
+}
+
+@keyframes footer-sheen {
+  0%,
+  72% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.footer--columns .footer__cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 5px var(--color-tint), 0 0 0 6.5px var(--color-primary),
+    0 1.1rem 2rem color-mix(in srgb, var(--color-primary) 32%, transparent);
+}
+
+.footer--columns .footer__cta:active {
+  transform: none;
+}
+
+.footer--columns .footer__cta-note,
+.footer--columns .footer__col-title,
+.footer--columns .footer__stop-how,
+.footer--columns .footer__fine {
+  color: var(--footer-soft);
+}
+
+.footer--columns .footer__col-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footer--columns .footer__link,
+.footer--columns .footer__address {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Các cột rộng theo chữ của chính nó: email hay địa chỉ dài thì cột tự rộng ra, hết chỗ thì cả cột xuống hàng dưới,
+   không cắt chữ giữa chừng. Chỉ khi một từ dài hơn cả bề ngang khung mới ngắt từ (min-width: 0 cùng break-word). */
+.footer--columns .footer__cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.footer--columns .footer__col {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.footer--columns .footer__fine {
+  border-top-color: var(--footer-line);
+}
+
+/* Màu nhấn trên nền phụ không đủ tương phản cho chữ nhỏ, nên liên kết nguồn ảnh dùng màu mực, có gạch chân. */
+.footer--columns .footer__credits-title,
+.footer--columns .footer__credit-link {
+  color: var(--color-ink);
+}
+
+/* Giữ tam giác mở ra đóng lại của thẻ summary để khách biết dòng này bấm được. */
+.footer--columns .footer__credits-title {
+  display: list-item;
+  width: fit-content;
+  min-height: 0;
+  padding-block: 0.65rem;
+}
+
+/* Khẩu hiệu và nút một bên, các cột một bên; đường tới chỗ ở (nếu có) và dòng cuối trải hết bề ngang bên dưới. */
+@media (min-width: 760px) {
+  .footer--columns .footer__main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 2.5rem 4rem;
+  }
+
+  .footer--columns .footer__top {
+    grid-area: 1 / 1;
+    align-content: start;
+  }
+
+  .footer--columns .footer__cols {
+    grid-area: 1 / 2;
+    justify-content: space-between;
+    padding-top: 0.4rem;
+  }
+
+  .footer--columns .footer__directions,
+  .footer--columns .footer__fine {
+    grid-column: 1 / -1;
+  }
+
+  .footer--columns .footer__credits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer--columns .footer__cta::before {
+    animation: none;
+  }
+}
