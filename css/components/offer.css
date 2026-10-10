@@ -1,0 +1,394 @@
+/* offer.css - giao diện của <wl-offer>. Màu, font, bo góc lấy từ biến CSS; class offer--<variant> quyết định kiểu.
+   Không có variant: dạng cơ bản, các phần xếp dọc. Kiểu riêng của từng thương hiệu viết thành khối .offer--<variant>. */
+
+.offer {
+  display: block;
+  padding-block: var(--space-section);
+}
+
+.offer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.offer__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.offer__title {
+  margin: 0;
+}
+
+.offer__lead {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* Đếm ngược: số lớn, chữ đơn vị nhỏ bên dưới; số dùng tabular-nums để không xô khi đổi. */
+.offer__countdown-label,
+.offer__deadline {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.offer__clock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.offer__unit {
+  display: grid;
+}
+
+.offer__num {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer__unit-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__ended {
+  font-weight: 700;
+}
+
+/* Tính thử: thẻ sáng gồm các nút chọn hạng, các ô đêm (đêm được tặng tô màu chủ đạo), dòng tổng và nút đặt. */
+.offer__calc {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: calc(var(--radius) * 1.2);
+}
+
+.offer__calc-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.offer__rooms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.offer__rooms-label {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__room {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color var(--duration) ease, border-color var(--duration) ease, color var(--duration) ease;
+}
+
+.offer__room:hover {
+  border-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
+.offer__room:has(:checked) {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.offer__room:has(:focus-visible) {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.offer__room-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.offer__nights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offer__night {
+  display: grid;
+  align-content: start;
+  gap: 0.15rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: calc(var(--radius) * 0.7);
+}
+
+.offer__night-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.offer__night-price {
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer__night.is-free {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.offer__night.is-free .offer__night-name,
+.offer__night-was {
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--color-on-primary) 72%, transparent);
+}
+
+.offer__night.is-free .offer__night-price {
+  font-size: 1.125rem;
+}
+
+.offer__sum {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.offer__sum-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.offer__sum dt {
+  color: var(--color-muted);
+}
+
+.offer__sum dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.offer__sum strong {
+  font-size: 1.125rem;
+}
+
+.offer__book {
+  justify-self: start;
+}
+
+/* Lịch biển: lưới 12 cột. Dải mùa ưu đãi phủ từ hàng nhãn xuống tới hàng số tháng; sóng nằm hàng 2;
+   số tháng hàng 3 (mỗi số ghi rõ cột của nó, nên được nằm chồng lên dải); chú thích mùa ở hàng cuối. */
+.offer__calendar-title {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+/* Điện thoại: 12 tháng dồn vào bề ngang hẹp nên sóng thấp hơn, không bị nhọn. */
+.offer__sea {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 2.5rem auto auto;
+}
+
+.offer__window {
+  grid-column: var(--from) / var(--to);
+  grid-row: 1 / 4;
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.offer__window-label {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.offer__wave {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.offer__wave-back {
+  fill: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.offer__wave-front {
+  fill: color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+.offer__month {
+  grid-row: 3;
+  padding: 0.4rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.offer__month.is-offer {
+  color: var(--color-accent);
+}
+
+.offer__legend {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offer__season {
+  display: grid;
+  align-content: start;
+  gap: 0.1rem;
+  font-size: 0.875rem;
+}
+
+.offer__season-text {
+  color: var(--color-muted);
+}
+
+/* Từ 760px chú thích mỗi mùa nằm dưới đúng các tháng của mùa đó, ngăn bằng một đường kẻ trên. */
+@media (min-width: 760px) {
+  .offer__sea {
+    grid-template-rows: auto 3.5rem auto auto;
+  }
+
+  .offer__nights {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .offer__legend {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .offer__season {
+    grid-column: var(--from) / var(--to);
+    padding: 0.75rem 1rem 0 0;
+    border-top: 2px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+}
+
+/* Màn rộng: tiêu đề và đếm ngược cột trái, thẻ tính thử cột phải, lịch biển trải hết bề ngang bên dưới. */
+@media (min-width: 1024px) {
+  .offer__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+    grid-template-areas:
+      'head calc'
+      'clock calc'
+      'sea sea';
+    align-items: start;
+    gap: 2.5rem 4rem;
+  }
+
+  .offer__head { grid-area: head; }
+  .offer__countdown { grid-area: clock; }
+  .offer__calc { grid-area: calc; }
+  .offer__calendar { grid-area: sea; }
+}
+
+/* Kiểu tide (Gành Sớm): dải nền tối ngả nâu ấm giữa trang màu cát, chữ sáng; số đếm ngược rất lớn, ngăn bằng vạch mảnh;
+   thẻ tính thử giữ nền sáng; sóng và dải mùa ưu đãi pha sáng trên nền tối. */
+.offer--tide {
+  color: var(--color-bg);
+  background: color-mix(in srgb, var(--color-ink) 92%, var(--color-primary));
+}
+
+.offer--tide .offer__eyebrow,
+.offer--tide .offer__window-label,
+.offer--tide .offer__month.is-offer {
+  color: color-mix(in srgb, var(--color-primary) 55%, var(--color-bg));
+}
+
+.offer--tide .offer__title {
+  font-size: clamp(2.25rem, 1.4rem + 3vw, 3.75rem);
+  line-height: 1.08;
+  color: var(--color-bg);
+}
+
+.offer--tide .offer__lead,
+.offer--tide .offer__countdown-label,
+.offer--tide .offer__deadline,
+.offer--tide .offer__unit-name,
+.offer--tide .offer__month,
+.offer--tide .offer__season-text {
+  color: color-mix(in srgb, var(--color-bg) 72%, transparent);
+}
+
+.offer--tide .offer__num {
+  font-size: clamp(3rem, 2rem + 4vw, 5.5rem);
+  color: var(--color-bg);
+}
+
+.offer--tide .offer__unit + .offer__unit {
+  padding-left: 1.5rem;
+  border-left: 1px solid color-mix(in srgb, var(--color-bg) 20%, transparent);
+}
+
+.offer--tide .offer__calc {
+  border: 0;
+  box-shadow: 0 2rem 4rem -1.5rem color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.offer--tide .offer__window {
+  background: color-mix(in srgb, var(--color-primary) 24%, transparent);
+}
+
+.offer--tide .offer__wave-back {
+  fill: color-mix(in srgb, var(--color-bg) 10%, transparent);
+}
+
+.offer--tide .offer__wave-front {
+  fill: color-mix(in srgb, var(--color-bg) 20%, transparent);
+}
+
+.offer--tide .offer__season {
+  border-color: color-mix(in srgb, var(--color-bg) 20%, transparent);
+}

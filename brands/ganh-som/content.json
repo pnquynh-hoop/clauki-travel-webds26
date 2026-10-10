@@ -10,7 +10,7 @@
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
     { "label": "Thư viện ảnh", "href": "#thu-vien" },
-    { "label": "Giá đã gồm", "href": "#trong-gia" },
+    { "label": "Ưu đãi", "href": "#uu-dai" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
   "header": { "variant": "solid", "menu": "Menu" },
@@ -152,6 +152,50 @@
       ]
     },
     { "type": "intro", "id": "o-cham", "hidden": true, "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
+    {
+      "type": "offer",
+      "id": "uu-dai",
+      "variant": "tide",
+      "eyebrow": "Đặt sớm hè 2027",
+      "title": "Ở 4 đêm, chỉ trả tiền 3 đêm",
+      "lead": "Đặt trước 31/12/2026 cho kỳ nghỉ từ tháng 4 tới tháng 8 năm 2027, đúng mùa biển lặng ở Quy Nhơn. Đêm thứ tư Gành Sớm tặng.",
+      "deadline": "2026-12-31T23:59:59+07:00",
+      "from": "2027-04-01",
+      "to": "2027-08-31",
+      "nights": 4,
+      "freeNights": 1,
+      "currency": "đồng",
+      "rooms": [
+        { "id": "villa", "label": "Villa sát biển", "price": 6200000 },
+        { "id": "nha-doi", "label": "Nhà đồi", "price": 3900000 },
+        { "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000 }
+      ],
+      "sea": [
+        { "months": [1, 2], "level": 2, "label": "Cuối mùa mưa, biển còn gió" },
+        { "months": [3, 4, 5, 6, 7, 8], "level": 0, "label": "Mùa khô, biển lặng, hợp tắm biển và chèo ván" },
+        { "months": [9, 10, 11, 12], "level": 3, "label": "Mùa mưa, có thể có bão" }
+      ],
+      "labels": {
+        "countdown": "Hạn đặt còn",
+        "days": "ngày",
+        "hours": "giờ",
+        "minutes": "phút",
+        "deadline": "Hạn chót 23:59 ngày 31/12/2026",
+        "ended": "Ưu đãi đặt sớm đã hết hạn.",
+        "calc": "Tính thử 4 đêm",
+        "room": "Chọn hạng nhà",
+        "night": "Đêm {n}",
+        "free": "Tặng",
+        "million": "{n} triệu",
+        "full": "Giá 4 đêm",
+        "pay": "Bạn trả",
+        "perNight": "Tính ra mỗi đêm",
+        "calendar": "Lịch biển 2027",
+        "window": "Mùa ưu đãi",
+        "monthOne": "Tháng {n}",
+        "months": "Tháng {from} đến {to}"
+      }
+    },
     {
       "type": "booking",
       "id": "dat-phong",

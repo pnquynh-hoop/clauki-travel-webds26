@@ -56,7 +56,7 @@ Nội dung gửi BTC khi đã chốt:
 | Tiêu đề tab trình duyệt (`meta.title`) | Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn |
 | Mô tả khi chia sẻ trang (`meta.description`) | 24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư. |
 | Logo và biểu tượng tab (`brand.logo`, `meta.favicon`) | Logo tự vẽ bằng SVG: chữ "Gành Sớm" kèm nửa mặt trời trên đường chân trời và một mỏm đá. Không dùng logo có sẵn. |
-| Menu (`nav`) | Các hạng nhà, Thư viện ảnh, Giá đã gồm, Hỏi đáp |
+| Menu (`nav`) | Các hạng nhà, Thư viện ảnh, Ưu đãi, Hỏi đáp (thêm lại Giá đã gồm khi khối `features` xong) |
 | Dòng giá trên thanh đặt phòng (`cta.note`) | Từ 2.800.000 đồng một đêm |
 
 Giá đã gồm:
@@ -130,12 +130,13 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
 | 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
-| 7 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
-| 8 | `faq` (#15) | mặc định | dùng lại |
+| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `tide`: dải nền tối; đếm ngược tới hạn đặt, tính thử 4 đêm trả 3, lịch biển 12 tháng tô mùa ưu đãi | riêng |
+| 8 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
+| 9 | `faq` (#15) | mặc định | dùng lại |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
-So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Khối riêng là `stays` và `features`; `room-view` đã gộp vào `stays` nên đang ẩn.
+So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Khối riêng là `stays`, `offer` và `features` (chưa có); `room-view` đã gộp vào `stays` nên đang ẩn.
 
 ### Khung `content.json`
 
