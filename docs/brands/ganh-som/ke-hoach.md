@@ -56,7 +56,7 @@ Nội dung gửi BTC khi đã chốt:
 | Tiêu đề tab trình duyệt (`meta.title`) | Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn |
 | Mô tả khi chia sẻ trang (`meta.description`) | 24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư. |
 | Logo và biểu tượng tab (`brand.logo`, `meta.favicon`) | Logo tự vẽ bằng SVG: chữ "Gành Sớm" kèm nửa mặt trời trên đường chân trời và một mỏm đá. Không dùng logo có sẵn. |
-| Menu (`nav`) | Các hạng nhà, Nhìn từ ban công, Giá đã gồm, Hỏi đáp |
+| Menu (`nav`) | Các hạng nhà, Thư viện ảnh, Giá đã gồm, Hỏi đáp |
 | Dòng giá trên thanh đặt phòng (`cta.note`) | Từ 2.800.000 đồng một đêm |
 
 Giá đã gồm:
@@ -76,7 +76,7 @@ Giá chưa gồm: bữa trưa, bữa tối, đồ uống, và các chuyến đi 
 | Nhà đồi | 10 | 45 m² | 3 | Cả vịnh, từ trên dốc nhìn xuống qua rặng dừa | 3.900.000 đồng |
 | Phòng vườn | 6 | 32 m² | 2 | Vườn dừa, thấy biển qua kẽ thân dừa, nghe rõ tiếng sóng | 2.800.000 đồng |
 
-Nội dung cho khối `room-view` (nhìn từ ban công), mỗi hạng một thẻ:
+Cảnh nhìn ra từ ban công của mỗi hạng (trường `view` trong khối `stays`; khối `room-view` riêng đã gộp vào đây nên đang ẩn):
 
 | Hạng | Ảnh nhìn ra | Một câu mô tả | Giờ đẹp nhất |
 |---|---|---|---|
@@ -125,8 +125,8 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 |---|---|---|---|
 | | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
 | 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
-| 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | riêng |
-| 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra | đặc trưng |
+| 2 | `stays`: ba hạng nhà (#16) | `headland`: ảnh mỏm gành tách nền, bấm mốc của một hạng thì ngay trên mốc hiện ảnh cảnh nhìn ra từ ban công | riêng |
+| 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | đặc trưng |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
 | 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái | dùng lại |
@@ -135,7 +135,7 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
-So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Ba khối riêng là `stays`, `room-view`, `features`; chỉ `room-view` là khối mới.
+So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Khối riêng là `stays` và `features`; `room-view` đã gộp vào `stays` nên đang ẩn.
 
 ### Khung `content.json`
 
@@ -206,9 +206,9 @@ Cần khoảng 15 ảnh và một logo tự vẽ. Ảnh đặt trong `brands/gan
 | `stay-villa.jpg` | Villa nhỏ sát biển, có bể ngâm | stays | beach villa plunge pool, seaside bungalow |
 | `stay-hill.jpg` | Nhà trên sườn đồi nhìn xuống vịnh | stays | hillside bungalow sea view |
 | `stay-garden.jpg` | Phòng giữa vườn dừa | stays | garden bungalow coconut trees |
-| `view-villa.jpg` | Biển nhìn từ hiên sát mép nước lúc bình minh | room-view | sunrise from veranda sea |
-| `view-hill.jpg` | Toàn cảnh vịnh nhìn từ trên cao | room-view | bay view from hill Vietnam |
-| `view-garden.jpg` | Biển nhìn qua hàng dừa | room-view | sea through coconut palms |
+| `view-villa.jpg` | Biển nhìn từ hiên sát mép nước lúc bình minh | stays (cảnh nhìn ra) | sunrise from veranda sea |
+| `view-hill.jpg` | Toàn cảnh vịnh nhìn từ trên cao | stays (cảnh nhìn ra) | bay view from hill Vietnam |
+| `view-garden.jpg` | Biển nhìn qua hàng dừa | stays (cảnh nhìn ra) | sea through coconut palms |
 | `intro.jpg` | Hiên gỗ, ghế, tách cà phê buổi sáng | intro | wooden veranda morning coffee sea |
 | `gallery-1.jpg` đến `gallery-6.jpg` | Eo Gió, Kỳ Co, Ghềnh Ráng, bãi đá, thuyền thúng, chợ cá buổi sáng | gallery | Eo Gio, Ky Co beach, Ghenh Rang, basket boat Vietnam, fishing village morning |
 
@@ -228,7 +228,7 @@ Quy tắc khi chọn ảnh:
 - [ ] Báo người làm các issue chung về kiểu trình bày Gành Sớm cần: #7 (`solid`, `card`), #11 (`numbered`), #12 (`strip`), #14 (`stay`), #16 (`rows`). Hạn: 08/10/2026.
 - [x] Viết khung `brands/ganh-som/content.json` theo mục 6 (logo và favicon để trống tới khi có `logo.svg`). Xong 08/10/2026.
 - [x] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Xong 08/10/2026.
-- [ ] Tạo issue cho khối mới `room-view` (nhìn từ ban công). Hạn: 09/10/2026.
+- [x] Khối `room-view` (nhìn từ ban công): làm ở PR #37, sau gộp vào `stays` (PR #54) nên đang ẩn.
 - [ ] Tìm đủ ảnh theo mục 8, kèm dòng `credits`. Hạn: 09/10/2026.
 - [ ] Vẽ logo `logo.svg` theo mô tả ở mục 3. Hạn: 09/10/2026.
 - [ ] Gửi BTC tên doanh nghiệp và sản phẩm (soạn sẵn ở mục 2), ghi ngày gửi vào issue #3. Hạn: trước 14:00 ngày 11/10/2026.

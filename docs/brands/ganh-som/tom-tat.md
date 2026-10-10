@@ -31,8 +31,8 @@ Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và
 |---|---|---|---|
 | | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
 | 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
-| 2 | `stays`: ba hạng nhà (#16) | `rows`: hàng lớn ảnh và chữ xen kẽ trái phải | **riêng** |
-| 3 | `room-view`: nhìn từ ban công | `tabs`: bấm hạng nhà thì đổi ảnh toàn cảnh nhìn ra từ ban công | **đặc trưng** |
+| 2 | `stays`: ba hạng nhà (#16) | `headland`: ảnh mỏm gành tách nền, bấm mốc của một hạng thì ngay trên mốc hiện ảnh cảnh nhìn ra từ ban công | **riêng** |
+| 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | **đặc trưng** |
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | **riêng** |
 | 5 | `gallery` | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái | dùng lại |
@@ -41,7 +41,7 @@ Font: Montserrat cho cả tiêu đề và nội dung. Mọi cặp màu chữ và
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
-Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room-view` là khối mới, cần tạo issue.
+Khối chỉ Gành Sớm dùng: `stays`, `features`. `room-view` đã gộp vào `stays` nên đang ẩn.
 
 ### Khung `content.json`
 
@@ -57,7 +57,7 @@ Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room
   "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
-    { "label": "Nhìn từ ban công", "href": "#nhin-ra" },
+    { "label": "Thư viện ảnh", "href": "#thu-vien" },
     { "label": "Giá đã gồm", "href": "#trong-gia" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
@@ -66,8 +66,8 @@ Ba khối chỉ Gành Sớm dùng: `stays`, `room-view`, `features`. Chỉ `room
   "place": { "name": "Quy Nhơn", "lat": 13.70, "lon": 109.23, "timezone": "Asia/Ho_Chi_Minh" },
   "sections": [
     { "type": "hero", "id": "gioi-thieu", "variant": "coverflow" },
-    { "type": "stays", "id": "hang-nha", "variant": "rows" },
-    { "type": "room-view", "id": "nhin-ra", "variant": "tabs" },
+    { "type": "stays", "id": "hang-nha", "variant": "headland" },
+    { "type": "room-view", "id": "nhin-ra", "variant": "climb", "hidden": true },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham" },
