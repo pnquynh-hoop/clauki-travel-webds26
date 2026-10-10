@@ -20,6 +20,9 @@
     "address": "Hoàn Kiếm, Hà Nội",
     "hours": "8:00 đến 20:00, cả tuần"
   },
+  "toTop": {
+    "label": "Lên đầu trang"
+  },
   "place": {
     "name": "Đồng Văn, Hà Giang",
     "lat": 23.2786,

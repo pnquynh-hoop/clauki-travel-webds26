@@ -460,6 +460,26 @@
   box-shadow: 0 1.25rem 2.5rem -1.25rem color-mix(in srgb, var(--color-ink) 45%, transparent);
 }
 
+/* Các con số chia cột đều nhau, mỗi cột canh giữa và đệm hai bên như nhau (cột đầu cũng vậy),
+   để thẻ cân đối dù nhãn dài ngắn khác nhau. */
+.hero--stacked .hero__stats {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+
+.hero--stacked .hero__stat,
+.hero--stacked .hero__stat:first-child {
+  align-items: center;
+  min-width: 0;
+  padding-inline: 0.75rem;
+  text-align: center;
+}
+
+.hero--stacked .hero__stat-label {
+  text-wrap: balance;
+}
+
 .hero--stacked .hero__stat-value {
   font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem);
   color: var(--color-accent);
@@ -500,11 +520,16 @@
     object-position: 50% 70%;
   }
 
+  /* Thẻ số nằm giữa theo bề ngang, đè lên mép dưới ảnh. */
   .hero--stacked .hero__stats {
-    justify-self: start;
-    min-width: min(36rem, 100%);
-    margin-left: 2rem;
-    padding: 1.5rem 2rem;
+    justify-self: center;
+    min-width: min(42rem, 100%);
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero--stacked .hero__stat,
+  .hero--stacked .hero__stat:first-child {
+    padding-inline: 1.25rem;
   }
 }
 

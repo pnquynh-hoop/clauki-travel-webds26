@@ -1,0 +1,78 @@
+/* to-top.css - giao diện của <wl-to-top>. Màu lấy từ biến của thương hiệu.
+   Nút tròn 44px nằm ngay phía trên nút tròn 52px của BTC (BTC đặt cách mép phải 10px, cách đáy 10px):
+   tâm hai nút thẳng hàng (10px + (52px - 44px) / 2 = 14px), cách nhau 10px (10px + 52px + 10px = 72px).
+   z-index thấp hơn nút của BTC để nút BTC luôn ở trên cùng. */
+
+.to-top {
+  position: fixed;
+  right: 14px;
+  bottom: 72px;
+  z-index: 50;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 0.75rem;
+  transition: opacity 0.3s ease, translate 0.3s ease, visibility 0s 0.3s;
+}
+
+/* Hiện thì mới nhận chuột và phím Tab (visibility: hidden làm nút ra khỏi thứ tự Tab). */
+.to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition: opacity 0.3s ease, translate 0.3s ease;
+}
+
+/* Vòng tiến độ: nền hình nón tô màu nhấn theo --progress, phần giữa che bằng màu khối nổi nên chỉ còn viền vòng. */
+.to-top__button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--color-ink);
+  background: conic-gradient(var(--color-accent) calc(var(--progress, 0) * 1turn), color-mix(in srgb, var(--color-ink) 15%, transparent) 0);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0.5rem 1.25rem -0.5rem color-mix(in srgb, var(--color-ink) 50%, transparent);
+  cursor: pointer;
+  transition: scale 0.15s ease;
+}
+
+.to-top__button::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--color-surface);
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+/* Mũi tên lên: hai cạnh của một hình vuông nhỏ xoay 45 độ. */
+.to-top__button::after {
+  content: '';
+  position: relative;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  translate: 0 0.15rem;
+  rotate: 45deg;
+}
+
+.to-top__button:hover::before {
+  background: color-mix(in srgb, var(--color-surface) 85%, var(--color-accent));
+}
+
+.to-top__button:active {
+  scale: 0.92;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .to-top,
+  .to-top.is-visible {
+    translate: none;
+    transition: none;
+  }
+}

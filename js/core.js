@@ -7,7 +7,7 @@ const BRAND_LIST_URL = 'brands/brands.json';
 const STORAGE_KEY = 'wd2026_active_file';
 const CHANGE_EVENT = 'webdesign2026:datachange';
 // Ba khối luôn có sẵn trong index.html, không nằm trong danh sách sections.
-const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-sticky-cta'];
+const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-sticky-cta', 'wl-to-top'];
 
 let currentId = null;
 
