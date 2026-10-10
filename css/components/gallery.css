@@ -54,8 +54,17 @@
   color: var(--color-muted);
 }
 
-/* Kiểu slices (Gành Sớm): khung trắng chứa các dải ảnh như tấm bình phong.
-   Điện thoại (viết trước): các dải nằm ngang xếp dọc, dải đóng cao --band, dải mở cao --open-h. */
+/* Bấm menu nhảy tới đây thì bỏ qua phần lớn khoảng trống phía trên, tiêu đề nằm ngay dưới header. */
+.gallery--slices {
+  scroll-margin-top: calc(1.5rem - var(--space-section));
+}
+
+/* Đoạn dẫn, chú thích ảnh: trình duyệt cân lại mấy dòng cuối, không để một chữ đứng trơ trọi ở dòng cuối. */
+.gallery--slices .gallery__lead,
+.gallery__cap {
+  text-wrap: pretty;
+}
+
 .gallery__hint {
   margin: 0.75rem 0 0;
   font-size: 0.8125rem;
@@ -72,6 +81,8 @@
   .gallery__hint-key { display: none; }
 }
 
+/* Kiểu slices (Gành Sớm): khung trắng chứa các dải ảnh như tấm bình phong.
+   Điện thoại (viết trước): các dải nằm ngang xếp dọc, dải đóng cao --band, dải mở cao --open-h. */
 .gallery__screen {
   --gap: 0.375rem;
   --band: 2.75rem;
@@ -152,10 +163,6 @@
 .gallery__shade::after {
   background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 82%, transparent), color-mix(in srgb, var(--color-ink) 55%, transparent) 30%, transparent 62%);
   opacity: 0;
-}
-
-.gallery__shade {
-  color: transparent;
 }
 
 .gallery__slice.is-open .gallery__shade::before { opacity: 0; }
@@ -291,7 +298,8 @@
     --strip: 3.5rem;
     --panel-w: calc(100cqw - (var(--count, 8) - 1) * (var(--strip) + var(--gap)));
     flex-direction: row;
-    height: clamp(26rem, 64vh, 38rem);
+    /* Trừ header và phần tiêu đề, để bấm menu nhảy tới thì cả khung ảnh nằm trong màn hình laptop. */
+    height: clamp(24rem, 100svh - 18rem, 38rem);
   }
 
   .gallery__slice {
@@ -318,14 +326,12 @@
     background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 82%, transparent), color-mix(in srgb, var(--color-ink) 50%, transparent) 26%, transparent 52%);
   }
 
-  /* Số trên dải đóng xoay dọc, kèm một vạch mảnh phía trên. */
+  /* Số trên dải đóng xoay dọc, đọc từ dưới lên. */
   .gallery__tab {
     top: auto;
     right: 0;
     bottom: 1.25rem;
     left: 0;
-    flex-direction: column-reverse;
-    gap: 0.875rem;
     height: auto;
     writing-mode: vertical-rl;
     transform: rotate(180deg);

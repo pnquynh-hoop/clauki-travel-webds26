@@ -121,7 +121,7 @@ export class WlBooking extends HTMLElement {
 
   room() {
     const id = this._roomInputs.find((input) => input.checked)?.value;
-    return this._data.rooms.find((r) => r.id === id) ?? this._data.rooms[0];
+    return this._rooms.find((r) => r.id === id) ?? this._rooms[0];
   }
 
   // Số căn còn trống của một hạng, theo khoảng ngày chứa ngày nhận phòng; ngoài các khoảng đã ghi thì không biết.
@@ -164,7 +164,7 @@ export class WlBooking extends HTMLElement {
       if (this.offerFor(f.checkIn.control.value, nights)) {
         const amount = room.price * (section.offer.freeNights ?? 1);
         total -= amount;
-        lines.push([section.offer.label, section.offer.note, `-${this.money(amount)}`, true]);
+        lines.push([section.offer.label, section.offer.note, `−${this.money(amount)}`, true]);
       }
     }
     return { room, guests, nights, left, lines, total };
@@ -197,14 +197,14 @@ export class WlBooking extends HTMLElement {
 
     // Ảnh lớn bên trái và chú thích đổi theo hạng đang chọn; mỗi thẻ hạng ghi số căn còn theo ngày nhận phòng.
     this._shots.forEach((shot, i) => {
-      const on = section.rooms[i] === q.room;
+      const on = this._rooms[i] === q.room;
       shot.classList.toggle('is-active', on);
       shot.setAttribute('aria-hidden', String(!on));
     });
     this._showName.textContent = q.room.label;
     this._showFacts.textContent = fill(labels.capacity, { area: q.room.area, max: q.room.maxGuests });
     this._showPrice.textContent = fill(labels.perNight, { price: this.money(q.room.price) });
-    section.rooms.forEach((room, i) => {
+    this._rooms.forEach((room, i) => {
       const left = this.roomsLeft(room.id, f.checkIn.control.value);
       const tag = this._roomTags[i];
       tag.textContent = left === undefined ? '' : left === 0 ? labels.soldOut : fill(labels.left, { n: left });
@@ -216,7 +216,7 @@ export class WlBooking extends HTMLElement {
     showError(this._roomRef, soldOut ? section.errors?.soldOut : '');
     this._submit.disabled = soldOut;
 
-    this._sunrise.textContent = q.nights > 0 ? fill(labels.sunrises, { nights: q.nights }) : '';
+    this._nightsNote.textContent = q.nights > 0 ? fill(labels.nightsNote, { nights: q.nights }) : '';
     this._lines.replaceChildren(...q.lines.map(([label, detail, amount, saving]) => {
       const row = document.createElement('div');
       row.className = saving ? 'booking__line booking__line--saving' : 'booking__line';
@@ -414,7 +414,9 @@ export class WlBooking extends HTMLElement {
     const section = this._data;
     const labels = section.labels ?? {};
     const prefix = this.id || 'booking';
-    const rooms = section.rooms ?? [];
+    // Bỏ hạng thiếu giá hoặc sức chứa: thiếu một trong hai thì không tính được tiền, không giới hạn được số khách.
+    const rooms = (section.rooms ?? []).filter((r) => r.id && r.label && r.price > 0 && r.maxGuests > 0);
+    this._rooms = rooms;
     if (!rooms.length) return null;
 
     const dates = section.defaultDates ?? {};
@@ -436,8 +438,8 @@ export class WlBooking extends HTMLElement {
     Object.entries(f).forEach(([key, ref]) => ref.field.classList.add(`booking__field--${key.toLowerCase()}`));
     const fields = groupEl('booking__fields', Object.values(f).map((ref) => ref.field));
 
-    this._sunrise = document.createElement('p');
-    this._sunrise.className = 'booking__sunrise';
+    this._nightsNote = document.createElement('p');
+    this._nightsNote.className = 'booking__nights-note';
     this._lines = document.createElement('dl');
     this._lines.className = 'booking__lines';
     this._total = document.createElement('strong');
@@ -450,7 +452,7 @@ export class WlBooking extends HTMLElement {
 
     const summary = groupEl('booking__summary', [
       textEl('p', 'booking__summary-title', labels.summary),
-      this._sunrise,
+      this._nightsNote,
       this._lines,
       groupEl('booking__total', [textEl('span', 'booking__total-label', labels.total), this._total]),
       textEl('p', 'booking__includes', labels.includes),
@@ -462,8 +464,8 @@ export class WlBooking extends HTMLElement {
     // Tự kiểm tra và báo lỗi bằng chữ trong content.json thay cho bong bóng lỗi mặc định của trình duyệt.
     this._form.noValidate = true;
     this._form.append(this.showcaseEl(rooms), groupEl('booking__panel', [picker, fields, summary]));
+    // Ô ngày, nút radio, ô chữ đều bắn input mỗi khi đổi, nên một sự kiện là đủ (nghe thêm change thì tính hai lần).
     this._form.addEventListener('input', () => this.updateStay());
-    this._form.addEventListener('change', () => this.updateStay());
     this._form.addEventListener('submit', (e) => this.submitStay(e));
 
     this._message = this.messageEl();

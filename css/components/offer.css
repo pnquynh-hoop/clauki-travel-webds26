@@ -7,9 +7,10 @@
   --offer-line: color-mix(in srgb, var(--color-ink) 14%, transparent);
   --offer-rule: color-mix(in srgb, var(--color-ink) 32%, transparent);
   display: block;
-  padding-block: var(--space-section);
   /* Kiểu postcard xoay nghiêng các thẻ, góc thẻ có thể thò ra mép màn hình: cắt theo chiều ngang, bóng đổ dọc vẫn hiện. */
   overflow-x: clip;
+  /* Bấm menu nhảy tới đây thì bỏ qua phần lớn khoảng trống phía trên, tiêu đề nằm ngay dưới header. */
+  scroll-margin-top: calc(1.5rem - var(--space-section));
 }
 
 .offer__sr {
@@ -36,7 +37,7 @@
 }
 
 .offer__title {
-  max-width: 15ch;
+  max-width: 22ch;
   margin: 0;
 }
 
@@ -48,6 +49,9 @@
 .offer__lead {
   max-width: 40ch;
   margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  text-wrap: pretty;
   color: var(--color-muted);
 }
 
@@ -368,7 +372,7 @@
   margin: 0;
 }
 
-.offer__facts div {
+.offer__fact {
   padding-bottom: 0.3rem;
   border-bottom: 1px solid var(--offer-rule);
 }
@@ -491,7 +495,7 @@
   margin: 0;
 }
 
-.offer__sum div {
+.offer__sum-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -517,12 +521,12 @@
   text-decoration-thickness: 1.5px;
 }
 
-.offer__sum .is-pay dt {
+.offer__sum-row.is-pay dt {
   font-weight: 600;
   color: var(--color-ink);
 }
 
-.offer__sum .is-pay dd {
+.offer__sum-row.is-pay dd {
   font-size: 1.375rem;
   font-weight: 800;
 }
@@ -546,14 +550,12 @@
   }
 }
 
-@media (min-width: 560px) {
+@media (min-width: 760px) {
   .offer__book {
     justify-self: start;
     width: auto;
   }
-}
 
-@media (min-width: 640px) {
   .offer__back {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto 1fr;
@@ -569,7 +571,7 @@
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1024px) {
   .offer__head {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: end;
@@ -589,17 +591,12 @@
 
 /* Kiểu postcard (Gành Sớm): tấm bưu thiếp đặt nghiêng trên nền cát, giấy có bóng đổ, lời nhắn viết tay (--font-hand,
    thương hiệu không khai báo thì dùng font chữ thường), dấu bưu điện nghiêng, tem răng cưa nghiêng mỗi con một chút.
-   Từ 960px hai mặt chồng mép lên nhau, mặt sau nằm trên. */
+   Từ 1024px hai mặt chồng mép lên nhau, mặt sau nằm trên. */
 .offer--postcard {
   --offer-shadow:
     0 1px 1px color-mix(in srgb, var(--color-ink) 10%, transparent),
     0 2px 6px color-mix(in srgb, var(--color-ink) 6%, transparent),
     0 22px 40px -18px color-mix(in srgb, var(--color-ink) 40%, transparent);
-}
-
-.offer--postcard .offer__title {
-  font-weight: 600;
-  letter-spacing: -0.02em;
 }
 
 .offer--postcard .offer__card {
@@ -704,7 +701,7 @@
     drop-shadow(0 14px 14px color-mix(in srgb, var(--color-ink) 18%, transparent));
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1024px) {
   .offer--postcard .offer__table {
     gap: 0;
     padding-block: 0.5rem;

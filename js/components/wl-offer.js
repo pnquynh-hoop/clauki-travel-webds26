@@ -100,10 +100,10 @@ export class WlOffer extends HTMLElement {
     });
     const from = monthOf(this._data.from);
     const to = monthOf(this._data.to);
-    const window = from && to && to >= from ? textEl('p', 'offer__window', fill(this.labels.window, { from, to })) : null;
-    if (window) {
-      window.style.gridColumn = `${from} / ${to + 1}`;
-      chart.append(window);
+    const bracket = from && to && to >= from ? textEl('p', 'offer__window', fill(this.labels.window, { from, to })) : null;
+    if (bracket) {
+      bracket.style.gridColumn = `${from} / ${to + 1}`;
+      chart.append(bracket);
     }
 
     const legend = document.createElement('ul');
@@ -159,7 +159,7 @@ export class WlOffer extends HTMLElement {
     if (rows.length) {
       facts = document.createElement('dl');
       facts.className = 'offer__facts';
-      facts.append(...rows.map(([term, dd]) => groupEl('', [textEl('dt', '', term), dd])));
+      facts.append(...rows.map(([term, dd]) => groupEl('offer__fact', [textEl('dt', '', term), dd])));
     }
 
     const back = document.createElement('article');
@@ -278,9 +278,9 @@ export class WlOffer extends HTMLElement {
     const sum = document.createElement('dl');
     sum.className = 'offer__sum';
     sum.append(...[
-      [this.labels.full, full, ''],
-      [this.labels.pay, this._pay, 'is-pay'],
-      [this.labels.perNightTotal, this._per, ''],
+      [this.labels.full, full, 'offer__sum-row'],
+      [this.labels.pay, this._pay, 'offer__sum-row is-pay'],
+      [this.labels.perNightTotal, this._per, 'offer__sum-row'],
     ].filter(([term]) => term).map(([term, dd, className]) => groupEl(className, [textEl('dt', '', term), dd])));
     const live = groupEl('', [this._slipTitle, sum]);
     live.setAttribute('aria-live', 'polite');

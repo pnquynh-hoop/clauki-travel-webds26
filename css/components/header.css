@@ -6,7 +6,6 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  transition: box-shadow var(--duration) ease;
 }
 
 /* Có dải thông tin thì ghim header ở vị trí âm đúng bằng chiều cao dải: cuộn xuống, dải tự trượt khuất phía trên,
@@ -84,7 +83,7 @@
   color: var(--color-accent);
 }
 
-/* Nút CTA trên thanh chỉ hiện ở màn rộng; điện thoại dùng thanh CTA dính đáy. */
+/* Nút CTA trên thanh mặc định chỉ hiện ở màn rộng; kiểu nào cần hiện cả trên điện thoại thì tự bật (như solid). */
 .header__cta {
   display: none;
 }
@@ -146,10 +145,13 @@
   border-bottom-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
 }
 
-/* Điện thoại hẹp nhất (360px) vẫn phải đủ một hàng cho tên, nút đặt phòng và nút Menu, nên khoảng cách và chữ thu nhỏ. */
+/* Điện thoại hẹp nhất (360px) vẫn phải đủ một hàng cho tên, nút đặt phòng và nút Menu, nên khoảng cách và chữ thu nhỏ.
+   align-content: flex-start: mở menu thì thanh có thêm hàng dưới, hàng trên vẫn đứng yên chứ không bị giãn ra. */
 .header--solid .header__bar {
+  align-content: flex-start;
   gap: 0.5rem;
   min-height: 4rem;
+  padding-block: 0.625rem;
 }
 
 /* Điện thoại: thứ tự tên, nút đặt phòng, nút Menu; menu mở ra nằm hàng dưới. */
@@ -161,17 +163,26 @@
   text-transform: uppercase;
 }
 
+/* Logo (nếu thương hiệu có): điện thoại chỉ hiện phần dấu hình ở đầu logo (logo đặt dấu hình bên trái, rộng chừng
+   1,25 lần chiều cao), cắt bằng object-fit để nút đặt phòng và nút Menu còn đủ chỗ; từ 760px hiện cả logo. */
+.header--solid .header__brand img {
+  width: 2.25rem;
+  height: 1.75rem;
+  object-fit: cover;
+  object-position: left center;
+}
+
 .header--solid .header__cta {
   order: -1;
   display: inline-flex;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   padding: 0.6rem 0.8rem;
   font-size: 0.8125rem;
   font-weight: 800;
 }
 
 .header--solid .header__toggle {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   padding: 0 0.8rem;
   font-size: 0.8125rem;
   border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
@@ -188,10 +199,23 @@
   font-weight: 800;
 }
 
+@media (min-width: 760px) {
+  .header--solid .header__brand img {
+    width: auto;
+    height: 1.25rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .header--solid .header__bar {
+    align-content: center;
     gap: 0.75rem 2rem;
     min-height: 4.5rem;
+    padding-block: 0;
+  }
+
+  .header--solid .header__brand img {
+    height: 1.5rem;
   }
 
   .header--solid .header__brand,

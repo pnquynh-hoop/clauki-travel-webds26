@@ -54,7 +54,7 @@ Nội dung gửi BTC khi đã chốt:
 | Ưu đãi (giả định) | Đặt trước 31/12/2026 cho kỳ nghỉ từ tháng 4 đến tháng 8/2027: ở 4 đêm chỉ trả tiền 3 đêm |
 | Liên hệ (giả) | Điện thoại 0123 456 789, email dat-phong@ganhsom.clauki |
 | Tiêu đề tab trình duyệt (`meta.title`) | Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn |
-| Mô tả khi chia sẻ trang (`meta.description`) | 24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư. |
+| Mô tả khi chia sẻ trang (`meta.description`) | 24 căn nhà trên mỏm gành phía nam Quy Nhơn, quay mặt ra biển hướng đông. Đặt trước 31/12/2026 cho kỳ nghỉ hè 2027: ở 4 đêm, chỉ trả 3. |
 | Logo và biểu tượng tab (`brand.logo`, `meta.favicon`) | Logo tự vẽ bằng SVG: chữ "Gành Sớm" kèm nửa mặt trời trên đường chân trời và một mỏm đá. Không dùng logo có sẵn. |
 | Menu (`nav`) | Các hạng nhà, Thư viện ảnh, Ưu đãi, Hỏi đáp (thêm lại Giá đã gồm khi khối `features` xong) |
 | Dòng giá trên thanh đặt phòng (`cta.note`) | Từ 2.800.000 đồng một đêm |
@@ -127,12 +127,12 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `headland`: ảnh mỏm gành tách nền, bấm mốc của một hạng thì ngay trên mốc hiện ảnh cảnh nhìn ra từ ban công | riêng |
 | 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | đặc trưng |
-| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
-| 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
+| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số; đang ẩn tới khi có component (phần giá đã gồm ghi ở dòng giá của các hạng nhà) | riêng |
+| 5 | `gallery` (#12) | `slices`: sáu ảnh là các dải hẹp trong khung trắng, rê chuột hoặc bấm thì một dải mở lớn | dùng lại |
 | 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
 | 7 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | riêng |
-| 8 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
-| 9 | `faq` (#15) | mặc định | dùng lại |
+| 8 | `faq` (#15) | `chat`: nhắn tin với chủ nhà, câu hỏi là nút gợi ý; đặt trước form để khách hỏi xong rồi mới đặt | dùng lại |
+| 9 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
 | | `sticky-cta` | | cố định |
 
@@ -231,7 +231,7 @@ Quy tắc khi chọn ảnh:
 - [x] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Xong 08/10/2026.
 - [x] Khối `room-view` (nhìn từ ban công): làm ở PR #37, sau gộp vào `stays` (PR #54) nên đang ẩn.
 - [ ] Tìm đủ ảnh theo mục 8, kèm dòng `credits`. Hạn: 09/10/2026.
-- [ ] Vẽ logo `logo.svg` theo mô tả ở mục 3. Hạn: 09/10/2026.
+- [x] Vẽ logo `logo.svg` theo mô tả ở mục 3 (chữ Montserrat đổi thành nét, giấy phép OFL), kèm `favicon.svg` là riêng phần dấu hình. Xong 10/10/2026.
 - [ ] Gửi BTC tên doanh nghiệp và sản phẩm (soạn sẵn ở mục 2), ghi ngày gửi vào issue #3. Hạn: trước 14:00 ngày 11/10/2026.
 
 ## 10. Những điều cần kiểm tra lại

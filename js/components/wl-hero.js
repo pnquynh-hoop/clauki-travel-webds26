@@ -134,6 +134,7 @@ export class WlHero extends HTMLElement {
     deck.className = 'hero__deck';
     // tabindex để dùng được phím mũi tên trái phải khi Tab tới chồng ảnh.
     deck.tabIndex = 0;
+    deck.setAttribute('role', 'group');
     if (section.slidesLabel) deck.setAttribute('aria-label', section.slidesLabel);
 
     slides.forEach((slide, i) => {

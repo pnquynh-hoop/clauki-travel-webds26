@@ -15,4 +15,6 @@
   /* Chữ viết tay cho lời nhắn trên bưu thiếp (khối offer); có hỗ trợ dấu tiếng Việt. */
   --font-hand: 'Mynerve', cursive;
   --radius: 1.25rem;
+  /* Khoảng cách trên, dưới mỗi khối: co giãn theo bề ngang, để hai khối liền nhau cách đều khoảng 6rem đến 9rem. */
+  --space-section: clamp(3rem, 2rem + 3vw, 4.5rem);
 }

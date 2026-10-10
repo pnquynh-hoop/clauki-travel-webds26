@@ -64,6 +64,7 @@ export class WlStays extends HTMLElement {
     if (!room.price) return null;
     return groupEl('stays__price', [
       textEl('strong', 'stays__amount', this.money(room.price)),
+      ' ',
       textEl('span', 'stays__per', this._data.labels?.perNight),
     ]);
   }
@@ -137,7 +138,10 @@ export class WlStays extends HTMLElement {
       pin.style.setProperty('--x', `${room.x ?? 50}%`);
       pin.style.setProperty('--y', `${room.y ?? 50}%`);
       const count = textEl('span', 'stays__pin-count', room.count && fill(section.labels?.countValue, { n: room.count }));
-      pin.append(...[textEl('span', 'stays__pin-name', room.label), count].filter(Boolean));
+      // Tên ngắn chỉ để nhìn trên điện thoại; tên đầy đủ (stays__pin-name) mới là tên của nút.
+      const short = textEl('span', 'stays__pin-short', room.short);
+      short?.setAttribute('aria-hidden', 'true');
+      pin.append(...[textEl('span', 'stays__pin-name', room.label), short, count].filter(Boolean));
       pin.addEventListener('click', () => this.select(i));
       return pin;
     });

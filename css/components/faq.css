@@ -81,7 +81,12 @@
 }
 
 /* Kiểu chat (Gành Sớm): tiêu đề, khung nhắn tin với chủ nhà, thẻ ảnh mời gọi hotline.
+   Bấm menu nhảy tới đây thì bỏ qua phần lớn khoảng trống phía trên (scroll-margin-top âm), tiêu đề nằm ngay dưới header.
    Điện thoại xếp dọc; màn rộng thì tiêu đề và thẻ ảnh cột trái, khung nhắn tin cột phải. */
+.faq--chat {
+  scroll-margin-top: calc(1.5rem - var(--space-section));
+}
+
 .faq--chat .faq__inner {
   gap: 2.5rem;
   grid-template-areas: 'head' 'chat' 'call';
@@ -93,6 +98,8 @@
 
 .faq--chat .faq__lead {
   max-width: 28rem;
+  font-size: 1.0625rem;
+  text-wrap: pretty;
 }
 
 .faq__sr {
@@ -118,8 +125,8 @@
   border: 1px solid color-mix(in srgb, var(--color-ink) 11%, transparent);
   border-radius: calc(var(--radius) * 1.4);
   box-shadow:
-    0 2.5rem 5rem -2rem color-mix(in srgb, var(--color-ink) 38%, transparent),
-    0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 7%, transparent);
+    0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--color-ink) 28%, transparent),
+    0 0.25rem 0.75rem color-mix(in srgb, var(--color-ink) 6%, transparent);
 }
 
 /* Đầu khung: ảnh bình minh phủ lớp tối, ảnh đại diện chữ tắt, tên và khẩu hiệu thương hiệu, nút bắt đầu lại. */
@@ -168,6 +175,10 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-bg) 90%, transparent);
 }
 
+.faq__avatar--img {
+  object-fit: cover;
+}
+
 .faq__chat-who {
   min-width: 0;
 }
@@ -195,10 +206,9 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-bg);
-  background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  background: color-mix(in srgb, var(--color-ink) 72%, transparent);
   border: 1px solid color-mix(in srgb, var(--color-bg) 45%, transparent);
   border-radius: var(--radius);
-  backdrop-filter: blur(6px);
   cursor: pointer;
 }
 
@@ -215,7 +225,8 @@
   overscroll-behavior: contain;
   background: color-mix(in srgb, var(--color-bg) 62%, var(--color-surface));
   scrollbar-width: thin;
-  mask-image: linear-gradient(transparent, #000 1rem);
+  /* Mặt nạ chỉ đọc độ trong suốt, màu nào cũng được; dùng biến cho khỏi có mã màu trong CSS. */
+  mask-image: linear-gradient(transparent, var(--color-ink) 1rem);
 }
 
 .faq__log {
@@ -286,8 +297,6 @@
 .faq__dot {
   width: 0.45rem;
   height: 0.45rem;
-  overflow: hidden;
-  color: transparent;
   background: var(--color-muted);
   border-radius: 50%;
   opacity: 0.55;
@@ -402,9 +411,17 @@
 }
 
 .faq__call a {
+  position: relative;
   color: inherit;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.22em;
+}
+
+/* Vùng bấm trong suốt nới ra quanh số điện thoại cho đủ cao 2.75rem, không làm xê dịch chữ. */
+.faq__call a::after {
+  content: '';
+  position: absolute;
+  inset: -0.5rem -0.25rem;
 }
 
 .faq__call a:focus-visible {
@@ -445,9 +462,9 @@
   30% { transform: translateY(-0.25rem); opacity: 1; }
 }
 
-/* Màn rộng: tiêu đề trên, thẻ ảnh dưới ở cột trái; khung nhắn tin cột phải, phía sau lót một tấm thẻ nghiêng
-   màu chủ đạo nhạt, nhắc lại chồng thẻ ở hero. Câu gợi ý xuống dòng thay vì cuộn ngang. */
-@media (min-width: 960px) {
+/* Màn rộng: tiêu đề trên, thẻ ảnh dưới ở cột trái, thẻ ảnh cao kín phần còn lại của cột cho bằng đáy khung nhắn tin;
+   khung nhắn tin cột phải. Câu gợi ý xuống dòng thay vì cuộn ngang. */
+@media (min-width: 1024px) {
   .faq--chat .faq__inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 33rem);
     grid-template-rows: auto 1fr;
@@ -457,24 +474,10 @@
   }
 
   .faq--chat .faq__head { padding-top: 1.5rem; }
-  .faq--chat .faq__call { align-self: end; }
+  .faq--chat .faq__call { align-self: stretch; aspect-ratio: auto; }
 
   .faq__chat {
     height: 40rem;
-  }
-
-  /* Tấm nền nghiêng thò ra ngoài lề phải; lề trang hẹp (tới khoảng 1280px) thì làm trang cuộn ngang, nên cắt phần thừa. */
-  .faq--chat {
-    overflow-x: clip;
-  }
-
-  .faq__chat-wrap::before {
-    content: '';
-    position: absolute;
-    inset: 1.5rem -1.25rem -1.25rem 1.5rem;
-    background: color-mix(in srgb, var(--color-primary) 22%, var(--color-bg));
-    border-radius: calc(var(--radius) * 1.6);
-    transform: rotate(2.5deg);
   }
 
   .faq__chips {

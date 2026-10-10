@@ -92,7 +92,11 @@ export class WlFaq extends HTMLElement {
     msg.setAttribute('aria-hidden', 'true');
     const bubble = document.createElement('p');
     bubble.className = 'faq__bubble';
-    bubble.append(...[0, 1, 2].map(() => textEl('span', 'faq__dot', ' ')));
+    bubble.append(...[0, 1, 2].map(() => {
+      const dot = document.createElement('span');
+      dot.className = 'faq__dot';
+      return dot;
+    }));
     msg.append(bubble);
     this._log.append(msg);
     this.toBottom(false);
@@ -124,30 +128,34 @@ export class WlFaq extends HTMLElement {
 
   // Lần lượt trả lời các câu khách đã bấm: hiện câu hỏi, chờ một chút, ba chấm "đang nhập", rồi câu trả lời.
   // Thời gian gõ dài theo độ dài câu trả lời cho giống người thật, nhưng không quá 1,6 giây.
+  // Bắt đầu lại giữa chừng (run đổi) thì dừng ngay; finally luôn nhả cờ _busy cho lần hỏi sau.
   async pump() {
     if (this._busy) return;
     this._busy = true;
     const run = this._run;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    while (this._queue.length) {
-      const item = this._items[this._queue.shift()];
-      this.message('guest', item.question);
-      await wait(reduce ? 200 : 420);
-      if (run !== this._run) return;
-      const dots = this.typing();
-      await wait(reduce ? 650 : Math.min(1600, 650 + item.answer.length * 5));
-      if (run !== this._run) return;
-      dots.remove();
-      this.message('host', item.answer);
-      if (this._asked.size === this._items.length && !this._queue.length) {
-        await wait(reduce ? 300 : 700);
+    try {
+      while (this._queue.length) {
+        const item = this._items[this._queue.shift()];
+        this.message('guest', item.question);
+        await wait(reduce ? 200 : 420);
         if (run !== this._run) return;
-        const phone = this.site?.contact?.phone;
-        const closing = this._data.chat?.closing;
-        if (closing && phone) this.message('host', [`${closing} `, phoneLink(phone)]);
+        const dots = this.typing();
+        await wait(reduce ? 650 : Math.min(1600, 650 + item.answer.length * 5));
+        if (run !== this._run) return;
+        dots.remove();
+        this.message('host', item.answer);
+        if (this._asked.size === this._items.length && !this._queue.length) {
+          await wait(reduce ? 300 : 700);
+          if (run !== this._run) return;
+          const phone = this.site?.contact?.phone;
+          const closing = this._data.chat?.closing;
+          if (closing && phone) this.message('host', [`${closing} `, phoneLink(phone)]);
+        }
       }
+    } finally {
+      if (run === this._run) this._busy = false;
     }
-    this._busy = false;
   }
 
   // Bắt đầu lại cuộc trò chuyện: huỷ tin đang chờ, xoá khung, chủ nhà chào trước.
@@ -168,6 +176,8 @@ export class WlFaq extends HTMLElement {
     this._asked.add(i);
     this._queue.push(i);
     chip.remove();
+    // Khách đã tự hỏi thì mới có gì để bắt đầu lại.
+    if (this._reset) this._reset.hidden = false;
     // Đưa con trỏ bàn phím sang nút kế bên, để người dùng bàn phím hỏi tiếp không phải Tab lại từ đầu.
     const rest = [...this._chips.children];
     if (rest.length) {
@@ -183,21 +193,27 @@ export class WlFaq extends HTMLElement {
     const chat = this._data.chat ?? {};
     const brand = this.site?.brand ?? {};
 
+    // Ảnh đại diện: ảnh trong dữ liệu (chat.avatar) nếu có, không thì chữ tắt của tên; chỉ để nhìn nên ẩn với trình đọc màn hình.
+    const avatar = imageEl(chat.avatar, 'faq__avatar faq__avatar--img', false) ?? textEl('span', 'faq__avatar', initials(brand.name));
+    avatar.setAttribute('aria-hidden', 'true');
     const head = groupEl('faq__chat-head', [
       imageEl(chat.cover, 'faq__chat-cover', true),
-      textEl('span', 'faq__avatar', initials(brand.name)),
-      groupEl('faq__chat-who', [textEl('p', 'faq__chat-name', brand.name), textEl('p', 'faq__chat-tag', brand.slogan)]),
+      avatar,
+      groupEl('faq__chat-who', [textEl('p', 'faq__chat-name', brand.name), textEl('p', 'faq__chat-tag', chat.tagline ?? brand.slogan)]),
     ]);
-    head.querySelector('.faq__avatar')?.setAttribute('aria-hidden', 'true');
-    const reset = document.createElement('button');
-    reset.type = 'button';
-    reset.className = 'faq__reset';
-    reset.textContent = chat.reset ?? '';
-    reset.addEventListener('click', () => {
-      this.restart(false);
-      this.renderChips();
-    });
-    if (chat.reset) head.append(reset);
+    this._reset = null;
+    if (chat.reset) {
+      this._reset = document.createElement('button');
+      this._reset.type = 'button';
+      this._reset.className = 'faq__reset';
+      this._reset.textContent = chat.reset;
+      this._reset.addEventListener('click', () => {
+        this.restart(false);
+        this.renderChips();
+        this._reset.hidden = true;
+      });
+      head.append(this._reset);
+    }
 
     // Khung tin nhắn là role="log": trình đọc màn hình đọc từng tin mới thêm vào.
     this._log = document.createElement('div');
@@ -240,8 +256,9 @@ export class WlFaq extends HTMLElement {
     if (!ask?.text || !phone) return null;
     const text = document.createElement('p');
     text.className = 'faq__call-text';
-    const line = textEl('span', 'faq__call-line', ask.action ? `${ask.action} ` : ' ');
-    line.append(phoneLink(phone));
+    const line = document.createElement('span');
+    line.className = 'faq__call-line';
+    line.append(...[ask.action && `${ask.action} `, phoneLink(phone)].filter(Boolean));
     text.append(textEl('span', 'faq__call-ask', ask.text), line);
     const figure = document.createElement('figure');
     figure.className = 'faq__call';
@@ -271,6 +288,7 @@ export class WlFaq extends HTMLElement {
     this.replaceChildren(inner);
     // Mở sẵn: lời chào và câu đầu tiên đã được trả lời, để khách thấy ngay cách dùng.
     this.restart(true);
+    if (this._reset) this._reset.hidden = true;
     this._asked.add(0);
     this.message('guest', this._items[0].question, true);
     this.message('host', this._items[0].answer, true);
