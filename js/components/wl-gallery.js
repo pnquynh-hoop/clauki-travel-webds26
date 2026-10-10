@@ -53,7 +53,10 @@ export class WlGallery extends HTMLElement {
     button.setAttribute('aria-controls', `${prefix}-cap-${i}`);
     const tab = textEl('span', 'gallery__tab', pad(i + 1));
     tab.setAttribute('aria-hidden', 'true');
-    button.append(imgEl(image, i > 0), textEl('span', 'gallery__shade', ' '), tab);
+    // Lớp tối trên ảnh (vẽ bằng ::before, ::after), chỉ để nhìn.
+    const shade = document.createElement('span');
+    shade.className = 'gallery__shade';
+    button.append(imgEl(image, i > 0), shade, tab);
     button.addEventListener('click', () => this.open(i));
     button.addEventListener('focus', () => this.open(i));
     // Rê chuột qua thì mở sau một nhịp ngắn, để lướt chuột ngang qua nhiều dải không làm cả hàng giật liên tục.

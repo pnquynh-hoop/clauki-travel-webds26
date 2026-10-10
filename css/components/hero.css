@@ -111,7 +111,7 @@
   isolation: isolate;
   display: grid;
   align-items: center;
-  min-height: min(100svh - 4.5rem, 64rem);
+  min-height: min(100svh - var(--header-stuck, 4.5rem), 64rem);
   padding-block: 1.5rem 3rem;
   overflow: clip;
 }

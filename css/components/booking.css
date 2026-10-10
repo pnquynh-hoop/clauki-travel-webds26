@@ -1,9 +1,15 @@
 /* booking.css - giao diện của <wl-booking>. Màu, font, bo góc lấy từ biến CSS; class booking--<variant> quyết định kiểu. */
 
+/* Bấm menu hoặc nút đặt phòng nhảy tới đây thì bỏ qua phần lớn khoảng trống phía trên: tiêu đề nằm ngay dưới header,
+   cả form vừa màn hình laptop. */
+.booking--stay {
+  scroll-margin-top: calc(1.5rem - var(--space-section));
+}
+
+/* Tiêu đề canh trái, thẳng lề với tiêu đề của các khối khác. */
 .booking__head {
   max-width: 36rem;
-  margin: 0 auto 2.5rem;
-  text-align: center;
+  margin: 0 0 2.5rem;
 }
 
 .booking__eyebrow {
@@ -19,7 +25,7 @@
 
 .booking__lead {
   margin: 1rem 0 0;
-  font-size: 1.1rem;
+  font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--color-muted);
 }
@@ -27,7 +33,7 @@
 /* Thẻ đặt chỗ: ảnh hạng đang chọn và phần chọn, nhập. Khung tin nhắn dùng chung kiểu thẻ. */
 .booking__card,
 .booking__message {
-  max-width: 72rem;
+  max-width: var(--container);
   margin-inline: auto;
   overflow: hidden;
   background: var(--color-surface);
@@ -120,18 +126,22 @@
   font-weight: 600;
 }
 
+/* Điện thoại một cột (ba thẻ cạnh nhau thì tên hạng và giá bị ngắt chữ), từ 760px ba cột. */
 .booking__room-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.6rem;
 }
 
+/* Thẻ hạng: ảnh vuông nhỏ bên trái, tên, giá, số căn còn xếp bên phải. */
 .booking__room {
   position: relative;
   display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
   align-content: start;
-  gap: 0.2rem;
-  padding: 0.45rem 0.45rem 0.7rem;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+  padding: 0.4rem;
   border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
   border-radius: calc(var(--radius) * 0.8);
   cursor: pointer;
@@ -162,9 +172,9 @@
 }
 
 .booking__room-thumb {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  margin-bottom: 0.35rem;
+  grid-row: 1 / 4;
+  width: 3rem;
+  height: 3rem;
   object-fit: cover;
   border-radius: calc(var(--radius) * 0.55);
 }
@@ -301,7 +311,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.85rem;
-  padding: 1.25rem;
+  padding: 1rem;
   background: color-mix(in srgb, var(--color-bg) 60%, var(--color-surface));
   border-radius: var(--radius);
 }
@@ -311,13 +321,13 @@
   font-weight: 800;
 }
 
-.booking__sunrise {
+.booking__nights-note {
   margin: 0;
   font-weight: 600;
   color: var(--color-accent);
 }
 
-.booking__sunrise:empty {
+.booking__nights-note:empty {
   display: none;
 }
 
@@ -327,11 +337,13 @@
   margin: 0;
 }
 
+/* Điện thoại hẹp: nhãn chiếm hàng trên, con số xuống hàng dưới nhưng vẫn nằm sát phải (margin-left: auto). */
 .booking__line {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  gap: 1rem;
+  gap: 0.25rem 1rem;
 }
 
 .booking__line dt {
@@ -349,7 +361,7 @@
 }
 
 .booking__line dd {
-  margin: 0;
+  margin: 0 0 0 auto;
   font-weight: 600;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -451,6 +463,14 @@
 }
 
 @media (min-width: 760px) {
+  .booking__room-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .booking__summary {
+    padding: 1.25rem;
+  }
+
   .booking__showcase {
     min-height: 22rem;
   }
@@ -488,7 +508,6 @@
     grid-row: 1 / 3;
     align-self: end;
     margin: 0;
-    font-size: 1rem;
   }
 
   .booking__card {
@@ -510,21 +529,6 @@
 
   .booking__input {
     min-height: 2.75rem;
-  }
-
-  .booking__room {
-    grid-template-columns: 3rem minmax(0, 1fr);
-    column-gap: 0.6rem;
-    align-items: center;
-    padding: 0.4rem;
-  }
-
-  .booking__room-thumb {
-    grid-row: 1 / 4;
-    width: 3rem;
-    height: 3rem;
-    margin: 0;
-    aspect-ratio: 1;
   }
 
   .booking__fields {
@@ -552,7 +556,7 @@
   }
 
   .booking__summary-title,
-  .booking__sunrise,
+  .booking__nights-note,
   .booking__lines {
     grid-column: 1;
   }
@@ -564,7 +568,7 @@
   }
 
   .booking__summary-title { grid-row: 1; }
-  .booking__sunrise { grid-row: 2; }
+  .booking__nights-note { grid-row: 2; }
   .booking__lines { grid-row: 3 / 5; }
   .booking__total { grid-row: 1 / 3; }
   .booking__includes { grid-row: 3; }
