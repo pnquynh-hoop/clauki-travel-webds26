@@ -4,6 +4,7 @@
    hero.css đổi bố cục theo class hero--<variant>. */
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl } from '../dom.js';
+import { attachReveal } from '../effects/hero-reveal.js';
 
 function statsEl(stats) {
   if (!stats?.length) return null;
@@ -55,6 +56,18 @@ export class WlHero extends HTMLElement {
   set data(section) {
     this._data = section;
     this.render();
+  }
+
+  // Gỡ hiệu ứng (nếu có) khi hero bị gỡ khỏi trang, ví dụ lúc đổi thương hiệu.
+  disconnectedCallback() {
+    this._detachEffect?.();
+    this._detachEffect = null;
+  }
+
+  // Hiệu ứng bật thêm lên bố cục, tách tệp riêng; dựng lại hero thì gỡ hiệu ứng cũ trước khi gắn lại.
+  attachEffect(section) {
+    this._detachEffect?.();
+    this._detachEffect = section.effect === 'reveal' ? attachReveal(this, section, this.site) : null;
   }
 
   // Đặt từng thẻ theo khoảng cách tới thẻ đang xem: 0 ở giữa, số âm bên trái, số dương bên phải.
@@ -181,11 +194,13 @@ export class WlHero extends HTMLElement {
       inner.append(deck, controls);
       this.replaceChildren(backdrop, inner);
       this.select(0);
+      this.attachEffect(section);
       return;
     }
 
     const media = imageEl(section.image ?? slides[0]?.image);
     if (media) inner.append(media);
     this.replaceChildren(inner);
+    this.attachEffect(section);
   }
 }

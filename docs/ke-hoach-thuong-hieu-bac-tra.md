@@ -132,6 +132,20 @@ Quãng đường: Mù Cang Chải cách Hà Nội khoảng 300 km. Thời gian �
 | 12:00 | Ăn trưa dọc đường. |
 | 18:00 đến 19:00 | Về tới Hà Nội. |
 
+### Độ cao các trạm
+
+Số trên trang là số làm tròn, đủ để khách hình dung đường lên xuống dốc. Nơi nào chưa có bài viết nêu số, hoặc các bài nêu lệch nhau, thì lấy theo dữ liệu địa hình: Open-Meteo Elevation API (mô hình Copernicus DEM, ô 90 m), tra ngày 08/10/2026.
+
+| Trạm | Độ cao trên trang | Nguồn |
+|---|---|---|
+| Hồ Thác Bà | 58 m | Mực nước dâng bình thường của hồ là 58 m (Tạp chí Công Thương) |
+| Cánh đồng Mường Lò | 250 m | Cánh đồng nằm ở độ cao dưới 250 m (Tạp chí Công Thương); dữ liệu địa hình ở Nghĩa Lộ khoảng 270 m |
+| Suối Giàng | 1.400 m | Khoảng 1.400 m (VnExpress) |
+| Tú Lệ | 660 m | Chưa thấy bài viết nêu số; dữ liệu địa hình tại toạ độ xã Tú Lệ trên Wikipedia là 657 m |
+| Đèo Khau Phạ | 1.200 m | Cao hơn 1.200 m (mia.vn); Wikipedia ghi 1.200 đến 1.500 m |
+| La Pán Tẩn | 1.240 m | Các bài viết lệch nhau, từ 1.000 đến hơn 2.000 m; dữ liệu địa hình tại chỗ chụp ảnh `journey-6.jpg` là 1.239 m |
+| Mù Cang Chải | 1.000 m | Trên 1.000 m (Wikipedia); dữ liệu địa hình ở trung tâm xã Mù Cang Chải khoảng 1.020 m |
+
 ## 5. Mùa vụ và chiến dịch cho landing page
 
 Chiến dịch trên landing page: **"Mùa nước đổ 2027, mở giữ chỗ sớm"**.
@@ -167,26 +181,33 @@ Bảng dưới là thứ tự các khối trên trang, từ trên xuống. Các 
 
 Hai khối chỉ Bậc Trà có là `process` và `seasons`. Tên khối đặt theo chức năng (các bước làm ra một thứ gì đó), không theo trà, để thương hiệu khác cũng dùng được. Lớp săn mây dùng chung cho cả ba thương hiệu.
 
+Ý tưởng chung: cuộn trang giống như đang đi chuyến này. Mở đầu đứng trong mây, mây vén ra thì thấy ruộng bậc thang; sau đó theo con đường qua từng trạm, ghé làm trà, ngồi xe qua đèo, chọn mùa rồi giữ chỗ. Mỗi chuyển động đều gắn với một việc có thật trong chuyến đi.
+
 | Thứ tự | Khối (`type`) | Kiểu trình bày (`variant`) | Nội dung chính | Loại |
 |---|---|---|---|---|
 | 1 | `header` | `overlay`: trong suốt, nằm đè lên ảnh hero | Logo, menu, nút "Giữ chỗ" | chung |
-| 2 | `hero` | `full`: ảnh phủ kín màn hình | Ruộng bậc thang mùa nước đổ, tên tour, nút "Giữ chỗ" | chung |
-| 2a | Lớp "săn mây" gắn trên hero | | Trời thật ở Mù Cang Chải lúc này: giờ, nhiệt độ, mây | chung |
-| 3 | `intro` | `center` | Một câu tuyên ngôn về cách đi chậm | dùng lại |
-| 4 | `journey` | `road`: con đường chữ S uốn qua từng trạm, chiếc xe chạy theo khi cuộn trang, bên trái có đường dẫn nhỏ cho biết đang ở trạm nào | Lịch trình 4 ngày; mỗi trạm có số thứ tự, tên, độ cao, một câu mô tả và ảnh | dùng lại, kiểu `road` là của Bậc Trà |
-| 5 | `process` (khối mới) | `steps`: các bước xếp thành hàng ngang, trên điện thoại vuốt ngang | "Từ búp chè đến chén trà": các bước hái, làm héo, sao, vò, sấy khô, mỗi bước một ảnh và một câu | **đặc trưng** |
-| 6 | `gallery` | `mosaic`: lưới ô to nhỏ xen kẽ | 5 ảnh đẹp nhất của tuyến | dùng lại |
-| 7 | `seasons` (khối mới) | `strip`: một dải 12 ô tháng, bấm vào tháng nào thì hiện cảnh của tháng đó | Tháng nào ruộng đổ nước, tháng nào lúa chín, mùa hái chè; đặt ngay trước phần đặt chỗ để khách chọn mùa rồi giữ chỗ | **đặc trưng** |
-| 8 | `booking` | `calendar`: các ngày khởi hành xếp thành thẻ như tờ lịch, form giữ chỗ nằm bên cạnh | Giá, những gì đã gồm, lịch khởi hành, form giữ chỗ | chung |
+| 2 | `hero` | `full`: ảnh tách ba lớp xa, giữa, gần. Lúc mở trang mây phủ kín, chữ màu mực; cuộn xuống thì máy quay bay xuyên qua các lớp ảnh, hai mảng sương dạt sang hai bên, mây bay qua ống kính, chữ chuyển sang trắng. Rê chuột thì góc nhìn lệch theo, vệt nắng trễ một nhịp | Khẩu hiệu, nút "Giữ chỗ" và "Xem lịch trình" | chung |
+| 2a | Lớp "săn mây" gắn trên hero | | Trời thật ở Mù Cang Chải lúc này (giờ, nhiệt độ, phần trăm mây) và chỉ số săn mây lúc 05:00 sáng mai ở Suối Giàng, tính từ dự báo mây tầng thấp, độ ẩm và gió. Lớp sương còn lại trên ảnh dày hay mỏng theo phần trăm mây thật | chung |
+| 3 | `intro` | mặc định, căn trái; chữ sáng dần theo nhịp cuộn | Một câu về cách đi chậm | dùng lại |
+| 4 | `journey` | `road`: con đường chữ S qua từng trạm, xe chạy theo khi cuộn. Màu trời đổi theo giờ của từng trạm: bình minh, sáng, chiều, qua chặng "Đêm" thì tối hẳn, có sao và xe bật đèn. Bên cạnh có đồng hồ độ cao chạy số và biểu đồ độ cao nhỏ. Ảnh trạm bị mây phủ, tới nơi thì mây tan. Nền có ba dải núi ở đáy màn hình, chìm dần khi xe lên cao, trạm cao nhất có biển mây. Rê chuột vào ảnh trạm (hoặc bấm nút "Ở đây làm gì?" trên ảnh) thì các đám mây bay ra, mỗi đám là một mốc giờ: làm gì, ăn gì, ngủ đâu, nên mang gì, có ảnh hoạt động. Mây sao chè ở Suối Giàng có liên kết sang khối làm trà. Cuối đường là ô chuyến gần nhất có nút Giữ chỗ, con đường dừng ở mép trên của ô | Lịch trình 4 ngày; mỗi trạm có giờ, tên, độ cao, một câu mô tả, ảnh và các mốc giờ chi tiết lấy từ mục 4 | dùng lại, kiểu `road` là của Bậc Trà |
+| 5 | `process` (khối mới) | `morph`: khối ghim lại khi cuộn, một hình đổi dáng và màu qua từng bước. Ở Bậc Trà là chiếc lá: tươi có giọt sương, héo, sao trên chảo có hơi nóng, vò xoăn, sấy khô rồi rơi vào chén, nước trà dâng lên. Danh sách bước bên cạnh, bước đang tới sáng lên | "Từ búp chè đến chén trà": 5 bước hái, làm héo, sao, vò, sấy khô; mỗi bước một câu và một ảnh thật nhỏ | **đặc trưng** |
+| 6 | `gallery` | `window`: ngồi trong xe 16 chỗ nhìn ra. Khung xe đứng yên giữa màn hình, cảnh trượt ngang sau các ô cửa, cọc tiêu bên đường chạy nhanh hơn cảnh xa; kính có bụi và giọt nước ở mép; khoang xe nghiêng chậm khi vào cua và thỉnh thoảng xóc nhẹ | 5 ảnh dọc đèo Khau Phạ và Mù Cang Chải, mỗi ảnh một biển tên địa điểm | dùng lại; kiểu `window` cần bàn với người làm gallery |
+| 7 | `seasons` (khối mới) | `slider`: thanh kéo 12 tháng. Ảnh đổi theo mùa; sơ đồ sáu tầng ruộng (kéo dài từ logo ba bậc) đổi màu theo tháng, tầng trên đổi trước như nước chảy từ trên xuống. Tháng có chuyến thì hiện nút giữ chỗ | Mùa hái chè, mùa nước đổ, lúa xanh, lúa chín, ruộng nghỉ; đặt ngay trước phần đặt chỗ để khách chọn mùa rồi giữ chỗ | **đặc trưng** |
+| 8 | `booking` | `calendar`: các ngày khởi hành xếp thành tờ lịch, form giữ chỗ nằm bên cạnh. Gửi form thì hiện phiếu giữ chỗ có dấu "Chờ xác nhận" | Giá, những gì đã gồm và chưa gồm, lịch khởi hành, form giữ chỗ | chung |
 | 9 | `faq` | mặc định | 4 đến 6 câu hỏi thường gặp | dùng lại |
-| 10 | `footer` | `columns`: nhiều cột | Liên hệ, nguồn ảnh, ghi chú thương hiệu giả tưởng | chung |
+| 10 | `banner` (khối mới, làm nếu kịp) | ảnh phủ kín trôi chậm hơn trang, một câu kết lớn và nút giữ chỗ | "Hẹn bạn trên mây" | dùng lại |
+| 11 | `footer` | `columns`: nhiều cột | Liên hệ, nguồn ảnh, ghi chú thương hiệu giả tưởng | chung |
 
-Thêm thanh "Giữ chỗ" dính ở đáy màn hình trên điện thoại.
+Thêm thanh "Giữ chỗ" dính ở đáy màn hình trên điện thoại, và một vạch mảnh trên cùng cho biết đã đọc tới đâu.
 
 Ghi chú về sườn trang:
 
 - Nơi ngủ mỗi đêm ghi ngay trong lịch trình, nên trang không có khối nơi nghỉ riêng.
 - Khối đặt chỗ dùng chế độ `calendar`: khách chọn một chuyến khởi hành có sẵn, không chọn khoảng ngày tuỳ ý.
+- Mọi chuyển động chạy chung một vòng `requestAnimationFrame`; vị trí cuộn được làm mượt nhẹ để trang có cảm giác có trọng lượng.
+- Khi người xem bật giảm chuyển động (`prefers-reduced-motion`), các khối hiện ở trạng thái tĩnh và vẫn đọc đủ nội dung.
+- Con đường, chiếc lá và sơ đồ bậc ruộng là hình kể quá trình; ảnh thật vẫn là chủ đạo. Khung xe, viền kính chỉ nằm ở mép, không vẽ đè lên giữa ảnh.
+- Phần riêng của Bậc Trà như dáng lá, màu từng mùa, toạ độ săn mây khai báo trong `content.json`; component chỉ đọc và nội suy, nên thương hiệu khác dùng lại được với dữ liệu của mình.
 
 ### Khung `content.json`
 
@@ -210,23 +231,32 @@ Ghi chú về sườn trang:
   ],
   "header": { "variant": "overlay" },
   "contact": { "phone": "", "email": "", "address": "" },
-  "place": { "name": "", "lat": 0, "lon": 0, "timezone": "Asia/Ho_Chi_Minh" },
+  "place": {
+    "name": "Mù Cang Chải", "lat": 21.85, "lon": 104.09, "timezone": "Asia/Ho_Chi_Minh",
+    "hunt": { "name": "Suối Giàng", "lat": 21.62, "lon": 104.47 }   // điểm tính chỉ số săn mây; toạ độ gần đúng, cần kiểm tra
+  },
   "sections": [
-    { "type": "hero",    "id": "gioi-thieu",      "variant": "full" },
-    { "type": "intro",   "id": "cach-di",         "variant": "center" },
-    { "type": "journey", "id": "lich-trinh",      "variant": "road" },     // con đường chữ S qua từng trạm, xe chạy theo khi cuộn, mỗi trạm ghi độ cao, cuối mỗi ngày ghi nơi ngủ
-    { "type": "process", "id": "tu-bup-den-chen", "variant": "steps" },    // 5 bước hái, làm héo, sao, vò, sấy khô; mỗi bước một ảnh, một câu
-    { "type": "gallery", "id": "thu-vien",        "variant": "mosaic" },
-    { "type": "seasons", "id": "lich-mua",        "variant": "strip" },    // dải 12 tháng: mùa nước đổ, lúa chín, mùa hái chè; khách chọn mùa rồi giữ chỗ
-    { "type": "booking", "id": "dat-cho",         "variant": "calendar" },
-    { "type": "faq",     "id": "hoi-dap" }
+    { "type": "hero",    "id": "gioi-thieu",      "variant": "full" },     // ba lớp ảnh, mây vén khi cuộn, lớp săn mây
+    { "type": "intro",   "id": "cach-di" },                                // chữ sáng dần theo nhịp cuộn
+    { "type": "journey", "id": "lich-trinh",      "variant": "road" },     // xe chạy theo cuộn, trời đổi theo giờ từng trạm, đồng hồ độ cao
+    { "type": "process", "id": "tu-bup-den-chen", "variant": "morph" },    // chiếc lá đổi dáng qua 5 bước rồi thành chén trà
+    { "type": "gallery", "id": "thu-vien",        "variant": "window" },   // nhìn qua cửa xe 16 chỗ khi qua đèo
+    { "type": "seasons", "id": "lich-mua",        "variant": "slider" },   // kéo 12 tháng, sáu tầng ruộng đổi màu
+    { "type": "booking", "id": "dat-cho",         "variant": "calendar" }, // tờ lịch và phiếu giữ chỗ "Chờ xác nhận"
+    { "type": "faq",     "id": "hoi-dap" },
+    { "type": "banner",  "id": "hen-tren-may" }                            // khối kết, làm nếu kịp
   ],
   "footer": { "variant": "columns" },
   "credits": []
 }
 ```
 
-Dữ liệu mỗi trạm cho kiểu `road`: nhãn thời gian (ví dụ "Ngày 2 · 05:00"), tên trạm, độ cao tính bằng mét, một câu mô tả, một ảnh. Trạm cuối của mỗi ngày ghi thêm nơi ngủ đêm đó, ví dụ "Đêm 1: nhà sàn người Thái ở Nghĩa Lộ". Độ cao từng trạm cần kiểm tra lại.
+Dữ liệu từng khối:
+
+- **`journey` kiểu `road`:** mỗi trạm có nhãn thời gian (ví dụ "Ngày 2 · 05:00"), tên trạm, độ cao tính bằng mét, một câu mô tả, một ảnh. Trạm cuối của mỗi ngày ghi thêm nơi ngủ đêm đó, ví dụ "Đêm 1: nhà sàn người Thái ở Nghĩa Lộ". Màu trời lấy theo giờ ghi trong nhãn thời gian, không cần khai báo thêm. Độ cao từng trạm và nguồn ghi ở mục 4. Mỗi trạm có thêm danh sách mốc giờ (`plan`) chép từ bảng giờ ở mục 4, để khách đọc xong biết cụ thể sẽ làm gì ở từng nơi; mốc chỗ ngủ và mốc đồ nên mang có màu mây riêng. Chữ của nút mở mây là "Ở đây làm gì?". Mốc sao chè ở Suối Giàng có `link` "Xem cách làm trà" trỏ tới `#tu-bup-den-chen`. Ô cuối đường (`finish`) ghi "Hết bốn ngày, xe về tới Hà Nội", chuyến gần nhất và số chỗ còn, dòng ưu đãi; các con số này chép từ khối đặt chỗ, đổi ngày hay số chỗ ở đó thì sửa cả ở đây.
+- **`process` kiểu `morph`:** mỗi bước có tên, một câu, một ảnh thật nhỏ, dáng hình (một đường SVG, các bước dùng cùng cấu trúc lệnh để nội suy được) và màu. Các lớp phụ như chảo, hơi nóng, chén trà cũng khai báo trong dữ liệu kèm bước nào thì hiện.
+- **`gallery` kiểu `window`:** mỗi ảnh có `src`, `alt` và chữ trên biển tên địa điểm.
+- **`seasons` kiểu `slider`:** mỗi mùa có tên, các tháng, màu, một câu, một ảnh, và `trip: true` nếu mùa đó có chuyến. Tháng không thuộc mùa nào lấy theo một mùa "nghỉ" khai báo riêng.
 
 ## 7. Nhận diện thương hiệu
 
@@ -299,7 +329,48 @@ Cần khoảng 20 ảnh và một logo tự vẽ. Tên tệp dưới đây là t
 | `tea-roast.jpg` | Sao chè trong chảo gang | process | pan roasting tea |
 | `tea-roll.jpg` | Vò chè bằng tay | process | hand rolling tea |
 | `tea-dry.jpg` | Chè đã sấy khô hoặc chén trà nóng | process | dried tea leaves, cup of green tea |
-| `gallery-1.jpg` đến `gallery-4.jpg` | Ảnh đẹp nhất của tuyến: mây, ruộng, chè, bản làng | gallery | kết hợp các từ khoá trên |
+| `window-1.jpg` đến `window-5.jpg` | Cảnh dọc đèo Khau Phạ và Mù Cang Chải, chụp ngang như nhìn qua cửa xe | gallery (kiểu `window`) | Khau Pha pass, Mu Cang Chai terraces |
+| `closing.jpg` | Mây trôi qua ruộng bậc thang, dùng cho khối kết | banner | Mu Cang Chai clouds terraces |
+
+Ảnh đã tìm được trên Wikimedia Commons (giấy phép lấy từ trang ảnh, cần mở lại trang nguồn để kiểm tra trước khi dùng):
+
+| Dùng cho | Tên ảnh trên Commons | Tác giả | Giấy phép |
+|---|---|---|---|
+| `hero.jpg` | [Steadywhenwalking.jpg](https://commons.wikimedia.org/wiki/File:Steadywhenwalking.jpg): ruộng bậc thang xanh trong sương, có chòi nhỏ; chưa rõ địa điểm | Sasint | CC0 |
+| `journey-1.jpg` | [Thác Bà lake - panorama.jpg](https://commons.wikimedia.org/wiki/File:Th%C3%A1c_B%C3%A0_lake_-_panorama.jpg) | Kiếm Anh | CC BY-SA 4.0 |
+| `journey-2.jpg` | [Cánh đồng Mường Lò vào vụ.jpg](https://commons.wikimedia.org/wiki/File:C%C3%A1nh_%C4%91%E1%BB%93ng_M%C6%B0%E1%BB%9Dng_L%C3%B2_v%C3%A0o_v%E1%BB%A5.jpg): lúa chín, phía xa là nhà dân và núi; ảnh rộng 960 pixel | Saokim999 | CC BY-SA 4.0 |
+| `journey-3.jpg` | [Suoi Giang tea.JPG](https://commons.wikimedia.org/wiki/File:Suoi_Giang_tea.JPG): cây chè cổ thụ | Viethavvh | Phạm vi công cộng |
+| `journey-4.jpg` | [Tu Le, Yen Bai.jpg](https://commons.wikimedia.org/wiki/File:Tu_Le,_Yen_Bai.jpg): thung lũng Tú Lệ mùa nước đổ, có chữ ký tác giả ở góc dưới | An Bui | CC BY 2.0 |
+| `journey-5.jpg` | [Khau Phạ Pass, Vietnam (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_Pass,_Vietnam_(Unsplash).jpg) | Doan Tuan | CC0 |
+| `journey-6.jpg`, `closing.jpg` | [La Pán Tẩn Agriculture (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:La_P%C3%A1n_T%E1%BA%A9n_Agriculture_(Unsplash).jpg): mây trôi qua ruộng bậc thang | Văn Ngọc Tăng | CC0 |
+| `season-water.jpg` | [KHAU PHẠ MÙA NƯỚC ĐỔ - panoramio.jpg](https://commons.wikimedia.org/wiki/File:KHAU_PH%E1%BA%A0_M%C3%99A_N%C6%AF%E1%BB%9AC_%C4%90%E1%BB%94_-_panoramio.jpg) | Vũ Hùng | CC BY-SA 3.0 |
+| `season-green.jpg` | [Limmong1.jpg](https://commons.wikimedia.org/wiki/File:Limmong1.jpg): ruộng lúa xanh ở Lìm Mông | jihadv | CC BY 2.0 |
+| `season-gold.jpg` | [Golden-terraced-fields-in-Mu-Cang-Chai.jpg](https://commons.wikimedia.org/wiki/File:Golden-terraced-fields-in-Mu-Cang-Chai.jpg) | Malock2589 | CC0 |
+| `tea-dry.jpg` | [Che Shan tuyet.JPG](https://commons.wikimedia.org/wiki/File:Che_Shan_tuyet.JPG): chè Shan tuyết đã sấy | VuThiAnh | Phạm vi công cộng |
+| `window-1.jpg` | [Khau Phạ.jpg](https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1.jpg): dãy núi nhìn từ đèo | Viethavvh | Phạm vi công cộng |
+| `window-5.jpg`, mùa "ruộng nghỉ" | [Terraces in Che Cu Nha commune, Mu Cang Chai (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Terraces_in_Che_Cu_Nha_commune,_Mu_Cang_Chai_(Unsplash).jpg) | Doan Tuan | CC0 |
+
+Ảnh hoạt động trong các đám mây của lịch trình: cắt vuông quanh người hoặc vật chính, thu về 320 pixel (hiện thành hình tròn khoảng 106 pixel). Trên Commons gần như không có ảnh hoạt động ở Yên Bái, nên 7 ảnh là ảnh thay thế: cùng loại hoạt động nhưng chụp nơi khác. Câu mô tả của các ảnh này chỉ tả đúng những gì trong ảnh, không ghi là chụp ở trạm đó.
+
+| Tệp | Mốc trong mây | Tên ảnh trên Commons | Nơi chụp | Tác giả | Giấy phép |
+|---|---|---|---|---|---|
+| `plan-boat.jpg` | Hồ Thác Bà, 09:45 đi thuyền | [Thác Bà lake.jpg](https://commons.wikimedia.org/wiki/File:Th%C3%A1c_B%C3%A0_lake.jpg) | đúng nơi | Kiếm Anh | CC BY-SA 4.0 |
+| `plan-grilled-fish.jpg` | Hồ Thác Bà, 12:00 ăn trưa với cá hồ | [Khu ẩm thực Bến Nghé ... cá nướng Tây Bắc (7).jpg](https://commons.wikimedia.org/wiki/File:Khu_%E1%BA%A9m_th%E1%BB%B1c_B%E1%BA%BFn_Ngh%C3%A9_ng13th8n2023_(c%C3%A1_n%C6%B0%E1%BB%9Bng_T%C3%A2y_B%E1%BA%AFc_Pa_t%E1%BB%89nh_t%E1%BB%99p)_(7).jpg) | thay thế, TP.HCM | Phương Huy | CC BY-SA 4.0 |
+| `plan-xoe-dance.jpg` | Mường Lò, 19:30 xem múa xòe | [Distrikto Mai Chau, Vjetnamio 20.jpg](https://commons.wikimedia.org/wiki/File:Distrikto_Mai_Chau,_Vjetnamio_20.jpg) | thay thế, Mai Châu | RG72 | CC BY-SA 4.0 |
+| `plan-stilt-house.jpg` | Mường Lò, đêm 1 nhà sàn | [Nghia Lo maisons tradi.jpg](https://commons.wikimedia.org/wiki/File:Nghia_Lo_maisons_tradi.jpg) | đúng nơi | Velvet | CC BY-SA 4.0 |
+| `plan-sea-of-clouds.jpg` | Suối Giàng, 05:00 ngắm mây | [Man alone in Tả Xùa 03-03-2017.jpg](https://commons.wikimedia.org/wiki/File:Man_alone_in_T%E1%BA%A3_X%C3%B9a_03-03-2017.jpg) | thay thế, Tà Xùa | Linh Pham | CC0 |
+| `plan-tea-picking.jpg` | Suối Giàng, 08:00 hái chè | [Lùng Vài, Hà Giang, Vietnam - 3.jpg](https://commons.wikimedia.org/wiki/File:L%C3%B9ng_V%C3%A0i,_H%C3%A0_Giang,_Vietnam_-_3.jpg) | thay thế, Hà Giang | Benjamin Smith | CC BY-SA 4.0 |
+| `tea-dry.jpg` | Suối Giàng, xem sao chè | đã có ở bảng trên | | | |
+| `plan-sticky-rice.jpg` | Tú Lệ, 19:00 xôi nếp | [Xôi nếp của người Thái bản Phe.jpg](https://commons.wikimedia.org/wiki/File:X%C3%B4i_n%E1%BA%BFp_c%E1%BB%A7a_ng%C6%B0%E1%BB%9Di_Th%C3%A1i_b%E1%BA%A3n_Phe.jpg) | thay thế, Thanh Hoá | Hà Nghĩa VN | CC BY-SA 4.0 |
+| `plan-khau-pha.jpg` | Khau Phạ, 07:30 dừng ngắm thung lũng | [Khau Phạ nhìn từ trên cao.jpg](https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao.jpg) | đúng nơi | Victor311 | CC BY 4.0 |
+| `plan-terrace-walk.jpg` | La Pán Tẩn, 10:30 đi bộ giữa ruộng | [WAVES - panoramio.jpg](https://commons.wikimedia.org/wiki/File:WAVES_-_panoramio.jpg) | cùng vùng, Văn Chấn, mùa nước đổ | Vũ Hùng | CC BY-SA 3.0 |
+| `plan-waterfall.jpg` | La Pán Tẩn, 14:30 thác Pú Nhu | [Thacbac3.jpg](https://commons.wikimedia.org/wiki/File:Thacbac3.jpg) | thay thế, thác Bạc ở Sa Pa | Lori_NY | CC BY-SA 2.0 |
+| `plan-hmong-house.jpg` | La Pán Tẩn, đêm 3 nhà người H'Mông | [HouseBuildingInNorthernVietnam.jpg](https://commons.wikimedia.org/wiki/File:HouseBuildingInNorthernVietnam.jpg) | thay thế, miền núi phía Bắc | Alfred Boc | Phạm vi công cộng |
+| `plan-morning-mist.jpg` | Mù Cang Chải, 06:00 ngắm ruộng sáng sớm | [SÁNG SỚM Ở MÙ CANG CHẢI - panoramio.jpg](https://commons.wikimedia.org/wiki/File:S%C3%81NG_S%E1%BB%9AM_%E1%BB%9E_M%C3%99_CANG_CH%E1%BA%A2I_-_panoramio.jpg) | đúng nơi | Vũ Hùng | CC BY-SA 3.0 |
+
+Chưa có ảnh cho mốc tắm suối khoáng Tú Lệ: trên Commons không có ảnh nào đạt yêu cầu. Mốc nào không có ảnh thì đám mây chỉ có chữ.
+
+Còn thiếu ảnh: các bước làm chè (hái, làm héo, sao, vò). Ảnh CC BY và CC BY-SA bắt buộc ghi tên tác giả và giấy phép; ảnh CC BY-SA nếu cắt hay chỉnh sửa thì bản đã sửa cũng phải để giấy phép CC BY-SA. Ảnh tải từ Commons đang rộng 1600 pixel, cần nén lại cho dưới 300 KB.
 
 Cách chọn ảnh:
 
@@ -329,4 +400,9 @@ Tra cứu ngày 08/10/2026.
 - [UNESCO ghi danh Nghệ thuật Xòe Thái (Báo Quốc tế)](https://baoquocte.vn/unesco-ghi-danh-nghe-thuat-xoe-thai-tang-su-hien-dien-cua-viet-nam-tren-ban-do-van-hoa-the-gioi-199461.html)
 - [Lễ vinh danh Nghệ thuật Xòe Thái ở Nghĩa Lộ (Báo Văn hóa)](https://baovanhoa.vn/doi-song-van-hoa/yen-bai-le-vinh-danh-nghe-thuat-xoe-thai-se-dien-ra-tai-thi-xa-nghia-lo-21413.html)
 - [Mường Lò, cánh đồng lúa lớn thứ hai Tây Bắc (VnExpress)](https://vnexpress.net/muong-lo-canh-dong-lua-lon-thu-hai-tay-bac-3642014.html)
+- [Mực nước hồ thủy điện ngày 6/11 (Tạp chí Công Thương)](https://tapchicongthuong.vn/muc-nuoc-ho-thuy-dien-ngay-6-11--mien-bac-co-mua-song-muc-nuoc-ho-thac-ba-chua-the-cai-thien-113418.htm): mực nước dâng bình thường của hồ Thác Bà là 58 m.
+- [Nức danh gạo Séng Cù Mường Lò (Tạp chí Công Thương)](https://tapchicongthuong.vn/magazine/nuc-danh-gao-seng-cu-muong-lo-112814.htm): cánh đồng Mường Lò ở độ cao dưới 250 m.
+- [Đèo Khau Phạ (mia.vn)](https://mia.vn/cam-nang-du-lich/hung-vi-deo-khau-pha-duong-dan-den-cong-troi-noi-vung-cao-yen-bai-4148): đèo cao hơn 1.200 m.
+- [Khau Phạ Pass (Wikipedia)](https://en.wikipedia.org/wiki/Khau_Ph%E1%BA%A1_Pass): độ cao 1.200 đến 1.500 m.
+- [Open-Meteo Elevation API](https://open-meteo.com/en/docs/elevation-api): độ cao theo toạ độ, dùng cho Tú Lệ, La Pán Tẩn và để đối chiếu các trạm khác.
 - [Danh sách 34 tỉnh thành sau sáp nhập (Thư viện Pháp luật)](https://thuvienphapluat.vn/hoi-dap-phap-luat/danh-sach-34-tinh-thanh-sau-sap-nhap-tu-bac-vao-nam-gom-nhung-tinh-thanh-nao-138070718.html): Lào Cai và Yên Bái hợp thành tỉnh Lào Cai năm 2025.

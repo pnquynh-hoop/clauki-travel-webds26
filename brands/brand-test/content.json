@@ -52,6 +52,24 @@
       "lead": "Không chạy đua điểm check-in. Mỗi ngày chỉ hai chặng chính, còn lại là thời gian dừng, ngắm và trò chuyện với người bản địa."
     },
     {
+      "type": "host",
+      "id": "nguoi-dan-duong",
+      "eyebrow": "Người dẫn đường",
+      "title": "Anh Páo, sinh ra dưới chân đèo Mã Pì Lèng",
+      "story": [
+        "Anh Páo dẫn khách đi những con đường anh đi học hồi nhỏ.",
+        "Mỗi đoàn anh chỉ nhận 10 người, để ai cũng hỏi được chuyện bản."
+      ],
+      "quote": { "text": "Đi chậm thì mới gặp được người.", "by": "Anh Páo, hướng dẫn viên" },
+      "facts": [
+        { "value": "12", "label": "năm dẫn đoàn" },
+        { "value": "3", "label": "thứ tiếng" },
+        { "value": "10", "label": "khách mỗi đoàn" }
+      ],
+      "image": { "src": "images/host-1.jpg", "alt": "Người đàn ông đứng trên con đường đèo, sau lưng là núi đá" },
+      "imageSecond": { "src": "images/host-2.jpg", "alt": "Ngôi nhà trình tường giữa ruộng ngô" }
+    },
+    {
       "type": "features",
       "id": "vi-sao",
       "variant": "grid",
@@ -65,40 +83,91 @@
       ]
     },
     {
+      "type": "day-plan",
+      "id": "mot-ngay-tren-deo",
+      "eyebrow": "Một ngày trên đèo",
+      "title": "Từ sương sớm tới bếp lửa",
+      "nowLabel": "Trên đèo lúc này",
+      "liveLabel": "Đang diễn ra",
+      "hint": "Cuộn xuống để đi qua từng chặng",
+      "moreLabel": "Xem chi tiết",
+      "stops": [
+        { "time": "06:00", "title": "Ngắm sương ở Quản Bạ", "text": "Uống trà nóng trước hiên nhà trình tường.", "image": { "src": "images/day-1.jpg", "alt": "Thung lũng phủ sương lúc sáng sớm" },
+          "details": [
+            { "label": "Bao lâu", "value": "Khoảng 1 tiếng" },
+            { "label": "Mang theo", "value": "Áo ấm, sáng sớm trên đèo chỉ chừng 10 độ" },
+            { "value": "Dòng thiếu nhãn để thử: dòng này phải bị bỏ qua." }
+          ] },
+        { "time": "11:30", "title": "Ăn trưa ở chợ phiên", "text": "Thắng cố, mèn mén và bánh tam giác mạch.", "image": { "src": "images/day-2.jpg", "alt": "Chợ phiên vùng cao đông người" } },
+        { "time": "16:00", "title": "Đi bộ trên Mã Pì Lèng", "text": "Đoạn đường men vách đá, nhìn xuống sông Nho Quế.", "image": { "src": "images/day-3.jpg", "alt": "Con đường men vách núi đá" } },
+        { "time": "20:00", "title": "Bếp lửa nhà dân", "text": "Ngồi quanh bếp nghe chuyện bản.", "image": { "src": "images/day-4.jpg", "alt": "Bếp lửa trong ngôi nhà gỗ" } }
+      ]
+    },
+    {
       "type": "journey",
       "id": "lich-trinh",
-      "variant": "sticky",
+      "variant": "road",
       "eyebrow": "Lịch trình",
       "title": "Bốn ngày, sáu chặng",
+      "days": [
+        { "title": "Ngày 1", "text": "Hà Nội, Quản Bạ" },
+        { "title": "Ngày 2", "text": "Dốc Thẩm Mã, Đồng Văn" },
+        { "title": "Ngày 3", "text": "Đèo Mã Pì Lèng, Mèo Vạc" },
+        { "title": "Ngày 4", "text": "Về Hà Nội" }
+      ],
+      "note": "Độ cao trong dữ liệu mẫu chỉ để thử.",
+      "planLabel": "Xem từng giờ",
+      "finish": {
+        "eyebrow": "Hết bốn ngày, về tới Hà Nội",
+        "title": "Đoàn gần nhất khởi hành thứ Sáu tuần sau, còn 6 chỗ"
+      },
       "stops": [
         {
           "time": "Ngày 1 · 06:00",
           "title": "Rời Hà Nội",
+          "altitude": 20,
           "text": "Xe limousine đón ở phố cổ, trưa tới thành phố Hà Giang, chiều đổi sang xe nhỏ lên Quản Bạ.",
           "image": { "src": "images/journey-1.jpg", "alt": "Xe chạy trên con đường đèo quanh co giữa núi" }
         },
         {
           "time": "Ngày 1 · 16:30",
           "title": "Cổng trời Quản Bạ",
+          "altitude": 1100,
           "text": "Ngắm núi Đôi lúc hoàng hôn, tối nghỉ trong nhà trình tường của một gia đình người Tày.",
-          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" }
+          "night": "Đêm 1: nhà trình tường ở Quản Bạ",
+          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" },
+          "plan": [
+            { "time": "16:30", "text": "Dừng ở điểm ngắm núi Đôi, chụp ảnh lúc hoàng hôn." },
+            { "time": "18:30", "text": "Ăn tối cùng gia chủ người Tày." },
+            { "kind": "tip", "time": "Mang theo", "text": "Áo khoác gió: trên cổng trời về chiều gió lạnh." },
+            { "kind": "night", "time": "Đêm 1", "text": "Ngủ nhà trình tường, chăn đệm do gia chủ chuẩn bị." }
+          ]
         },
         {
           "time": "Ngày 2 · 08:00",
           "title": "Dốc Thẩm Mã",
+          "altitude": 1200,
           "text": "Đi bộ một đoạn dốc ngắn, ghé chợ nhỏ ven đường của người H'Mông.",
-          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" }
+          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" },
+          "plan": [
+            { "time": "08:00", "text": "Đi bộ lên dốc khoảng 40 phút, có nghỉ giữa chừng." },
+            { "text": "Mốc này không có giờ, chỉ có chữ, để thử trường time bị thiếu." }
+          ]
         },
         {
           "time": "Ngày 2 · 15:00",
           "title": "Phố cổ Đồng Văn",
+          "altitude": 1050,
           "text": "Chiều dạo phố đá, tối ăn món bản địa cùng gia chủ.",
+          "night": "Đêm 2: nhà người dân ở phố cổ Đồng Văn",
           "image": { "src": "images/journey-4.jpg", "alt": "Dãy nhà cổ lợp ngói âm dương trong phố cổ Đồng Văn" }
         },
         {
           "time": "Ngày 3 · 07:00",
           "title": "Đèo Mã Pì Lèng",
+          "altitude": 1500,
           "text": "Đi bộ trên con đường men vách đá, nhìn xuống dòng Nho Quế xanh ngọc phía dưới.",
+          "night": "Đêm 3: homestay ở Mèo Vạc",
           "image": { "src": "images/journey-5.jpg", "alt": "Dòng sông xanh ngọc chảy dưới hẻm núi sâu" }
         },
         {

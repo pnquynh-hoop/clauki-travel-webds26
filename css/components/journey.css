@@ -1,0 +1,913 @@
+/* journey.css - giao diện khối lịch trình: trời, núi, con đường, xe, các trạm, mây kể việc, ô cuối đường.
+   Màu trời ghi sẵn ở đây vì pha từ màu thương hiệu thì trời ra xám. Phần còn lại dùng màu và font của thương hiệu. */
+
+/* Cả khối: khai báo màu trời của từng buổi và màu mặt đường, dùng lại ở bên dưới. */
+.journey {
+  --journey-dawn-top: #f0b7a4;
+  --journey-dawn-bottom: #efe1ea;
+  --journey-morning-top: #b9d8e6;
+  --journey-morning-bottom: #eef3ec;
+  --journey-noon-top: #cfe5ef;
+  --journey-noon-bottom: #f3f5ef;
+  --journey-afternoon-top: #efc684;
+  --journey-afternoon-bottom: #f7ead0;
+  --journey-night-top: #0b1626;
+  --journey-night-bottom: #1b2f45;
+  /* Màu mặt đường: sẫm, pha từ màu chữ của thương hiệu; viền chấm trạm cũng dùng màu này. */
+  --journey-road: color-mix(in srgb, var(--color-ink) 70%, var(--color-bg));
+
+  position: relative;
+  /* Giữ lớp trời nằm trong khối, không lọt xuống dưới cả trang. */
+  isolation: isolate;
+  /* Cắt phần mây tràn ra mép trên điện thoại để trang không bị kéo ngang.
+     Cách cắt này không làm hỏng việc đồng hồ độ cao dính lại khi cuộn. */
+  overflow-x: clip;
+  color: var(--color-ink);
+}
+
+/* Trời: năm lớp màu (bình minh, sáng, trưa, chiều, đêm) chồng lên nhau, nằm sau mọi thứ trong khối.
+   Phần thừa bị cắt theo cách không làm hỏng việc dải núi bên trong dính ở đáy màn hình. */
+.journey__sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  background: var(--color-bg);
+}
+
+/* Mỗi lớp trời mặc định ẩn; mã JS cho lớp đúng giờ hiện dần lên khi cuộn. */
+.journey__sky-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+/* Màu từng buổi: đậm ở trên, nhạt dần xuống dưới như trời thật. */
+.journey__sky-layer--dawn {
+  background: linear-gradient(180deg, var(--journey-dawn-top), var(--journey-dawn-bottom));
+}
+
+.journey__sky-layer--morning {
+  background: linear-gradient(180deg, var(--journey-morning-top), var(--journey-morning-bottom));
+}
+
+.journey__sky-layer--noon {
+  background: linear-gradient(180deg, var(--journey-noon-top), var(--journey-noon-bottom));
+}
+
+.journey__sky-layer--afternoon {
+  background: linear-gradient(180deg, var(--journey-afternoon-top), var(--journey-afternoon-bottom));
+}
+
+.journey__sky-layer--night {
+  background: linear-gradient(180deg, var(--journey-night-top), var(--journey-night-bottom));
+}
+
+/* Sao: các chấm sáng nhỏ lặp lại khắp nền, chỉ hiện khi trời tối. */
+.journey__stars {
+  position: absolute;
+  inset: 0;
+  opacity: var(--journey-night, 0);
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, var(--color-surface), transparent),
+    radial-gradient(1px 1px at 33% 42%, var(--color-surface), transparent),
+    radial-gradient(1.5px 1.5px at 57% 12%, var(--color-surface), transparent),
+    radial-gradient(1px 1px at 78% 33%, var(--color-surface), transparent),
+    radial-gradient(1.3px 1.3px at 91% 8%, var(--color-surface), transparent),
+    radial-gradient(1px 1px at 24% 71%, var(--color-surface), transparent),
+    radial-gradient(1.2px 1.2px at 68% 64%, var(--color-surface), transparent),
+    radial-gradient(1px 1px at 46% 88%, var(--color-surface), transparent);
+  background-size: 320px 260px;
+}
+
+/* Khung núi cao bằng màn hình, dính theo khi cuộn qua khối, nên núi luôn nằm ở đáy màn hình. */
+.journey__hills {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ba dải núi xa, giữa, gần. Xe lên càng cao thì núi càng chìm xuống; đêm thì núi tối đi. */
+.journey__ridge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 34vh;
+  filter: brightness(calc(1 - var(--journey-night, 0) * 0.55));
+}
+
+/* Dải càng gần càng đậm màu và chìm càng sâu, tạo cảm giác xa gần. */
+.journey__ridge--far {
+  fill: color-mix(in srgb, var(--color-primary) 28%, var(--color-bg));
+  transform: translateY(calc(var(--journey-high, 0) * 9vh));
+}
+
+.journey__ridge--mid {
+  fill: color-mix(in srgb, var(--color-primary) 55%, var(--color-bg));
+  transform: translateY(calc(var(--journey-high, 0) * 18vh));
+}
+
+.journey__ridge--near {
+  fill: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink));
+  transform: translateY(calc(var(--journey-high, 0) * 30vh));
+}
+
+/* Biển mây phủ lên chân núi: chỉ rõ ở các trạm cao nhất, đêm thì nhạt đi. */
+.journey__sea {
+  position: absolute;
+  right: -10%;
+  bottom: -4vh;
+  left: -10%;
+  height: 24vh;
+  background:
+    radial-gradient(30% 50% at 15% 60%, color-mix(in srgb, var(--color-surface) 90%, transparent), transparent 72%),
+    radial-gradient(35% 55% at 50% 55%, color-mix(in srgb, var(--color-surface) 85%, transparent), transparent 72%),
+    radial-gradient(30% 50% at 85% 60%, color-mix(in srgb, var(--color-surface) 90%, transparent), transparent 72%);
+  filter: blur(12px);
+  opacity: calc(var(--journey-high, 0) * var(--journey-high, 0) * (1 - var(--journey-night, 0) * 0.6));
+}
+
+/* Phần tiêu đề của khối: giới hạn bề ngang để dòng chữ không quá dài. */
+.journey__head {
+  max-width: 40rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Dòng chữ nhỏ trên tiêu đề. Dùng màu chữ chính vì màu nhấn trên nền trời xanh không đủ rõ. */
+.journey__eyebrow {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+/* Tiêu đề lớn, tự co giãn theo bề ngang màn hình. */
+.journey__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.15;
+}
+
+/* Lời dẫn: dùng màu chữ chính để đủ rõ trên nền trời. */
+.journey__lead {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  color: var(--color-ink);
+}
+
+/* Trời tối thì chữ tiêu đề đổi sang màu sáng để vẫn đọc được. */
+.journey.is-night .journey__head,
+.journey.is-night .journey__eyebrow,
+.journey.is-night .journey__lead {
+  color: var(--color-surface);
+}
+
+/* Bố cục đồng hồ và con đường: điện thoại xếp chồng, màn rộng chia hai cột (ở cuối tệp). */
+.journey__layout {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Đồng hồ độ cao. Điện thoại: một thanh gọn dính ở trên khi cuộn qua lịch trình. */
+.journey__meter {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.1rem 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+/* Giờ của trạm đang tới: chữ nhỏ in hoa, màu nhấn. */
+.journey__meter-time {
+  grid-column: 1;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Tên trạm đang tới. */
+.journey__meter-place {
+  grid-column: 1;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+/* Số độ cao lớn ở bên phải. Các chữ số rộng bằng nhau để số không nhảy qua lại khi đang chạy. */
+.journey__meter-alt {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chữ "m" nhỏ cạnh số độ cao. */
+.journey__meter-unit {
+  margin-left: 0.2rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+/* Điện thoại chỉ có thanh gọn: ẩn biểu đồ, các ngày và ghi chú, để dành cho màn rộng. */
+.journey__profile,
+.journey__days,
+.journey__meter-note {
+  display: none;
+}
+
+/* Biểu đồ độ cao: vùng tô nhạt, đường lên xuống, mỗi trạm một chấm. */
+.journey__profile-area {
+  fill: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.journey__profile-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  stroke-width: 2;
+}
+
+.journey__profile-dot {
+  fill: var(--color-surface);
+  stroke: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  stroke-width: 2;
+}
+
+/* Chấm của trạm đang tới đổi sang màu nhấn. */
+.journey__profile-dot.is-active {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+/* Khung chung của con đường và các trạm, để đường vẽ đúng chỗ các chấm trạm. */
+.journey__track {
+  position: relative;
+}
+
+/* Hình con đường phủ kín khung. Không nhận chuột để không chặn việc bấm vào thẻ trạm. */
+.journey__road {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Con đường gồm nhiều nét chồng lên nhau: viền mép, mặt đường, vạch giữa. Đầu nét bo tròn cho mềm. */
+.journey__road-edge,
+.journey__road-base,
+.journey__road-lane,
+.journey__road-done {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Viền mép: nét rộng nhất, nhạt, giúp đường rõ khi uốn cong. */
+.journey__road-edge {
+  stroke: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  stroke-width: 26;
+}
+
+/* Mặt đường sẫm. */
+.journey__road-base {
+  stroke: var(--journey-road);
+  stroke-width: 20;
+}
+
+/* Vạch đứt giữa đường: đoạn vạch 12, khoảng trống 14, cho biết đây là đường xe chạy. */
+.journey__road-lane {
+  stroke: var(--color-surface);
+  stroke-width: 2;
+  stroke-dasharray: 12 14;
+}
+
+/* Phần đường xe đã đi qua: vạch giữa đổi sang màu nhấn, dài dần theo độ cuộn. */
+.journey__road-done {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+}
+
+/* Chiếc xe: thân sáng viền tối, mui và kính. */
+.journey__car-body {
+  fill: var(--color-surface);
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+}
+
+.journey__car-roof {
+  fill: color-mix(in srgb, var(--color-ink) 12%, var(--color-surface));
+}
+
+.journey__car-glass {
+  fill: color-mix(in srgb, var(--color-ink) 80%, var(--color-primary));
+}
+
+/* Đèn xe: chỉ sáng khi trời tối, nhoè mép để giống vệt sáng chứ không phải hình tam giác. */
+.journey__beam {
+  fill: color-mix(in srgb, var(--color-surface) 70%, var(--color-accent));
+  fill-opacity: 0.55;
+  opacity: var(--journey-night, 0);
+  filter: blur(4px);
+}
+
+/* Danh sách trạm. Điện thoại: chừa một làn bên trái cho con đường. */
+.journey__stops {
+  position: relative;
+  display: grid;
+  gap: 3rem;
+  padding: 0 0 0 3.5rem;
+  list-style: none;
+}
+
+/* Mỗi trạm làm mốc để đặt chấm và mây theo. */
+.journey__stop {
+  position: relative;
+}
+
+/* Chấm trạm nằm trên mặt đường, ngang phần trên của thẻ, viền cùng màu mặt đường. */
+.journey__dot {
+  position: absolute;
+  top: 1.5rem;
+  left: -2rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 4px solid var(--journey-road);
+  border-radius: 50%;
+  background: var(--color-surface);
+  transform: translateX(-50%);
+  transition: background-color var(--duration) ease, box-shadow var(--duration) ease;
+}
+
+/* Chấm của trạm thứ chẵn lệch vào trong một chút, để đường trên điện thoại uốn nhẹ. */
+.journey__stop:nth-child(even) .journey__dot {
+  left: -1.25rem;
+}
+
+/* Trạm xe vừa tới: chấm đổi sang màu nhấn, có vòng sáng quanh. */
+.journey__stop.is-active .journey__dot {
+  border-color: var(--color-surface);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent);
+}
+
+/* Thẻ trạm: nền sáng bo góc, đổ bóng nhẹ để nổi trên nền trời. */
+.journey__card {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  transition: box-shadow var(--duration) ease, transform var(--duration) ease;
+}
+
+/* Trạm xe vừa tới: thẻ nhấc lên một chút, bóng đậm hơn. */
+.journey__stop.is-active .journey__card {
+  transform: translateY(-0.25rem);
+  box-shadow: 0 24px 50px color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+/* Khung ảnh giữ tỉ lệ cố định, nên ảnh chưa tải thì thẻ cũng không bị co lại. */
+.journey__photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: color-mix(in srgb, var(--color-primary) 18%, var(--color-bg));
+}
+
+/* Ảnh cao hơn khung một chút để còn chỗ trôi chậm hơn khung khi cuộn. */
+.journey__photo img {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+}
+
+/* Lớp mây phủ ảnh: tan dần khi trạm đi lên giữa màn hình. */
+.journey__veil {
+  position: absolute;
+  inset: -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 30% 45%, color-mix(in srgb, var(--color-surface) 96%, transparent), transparent 72%),
+    radial-gradient(55% 45% at 72% 60%, color-mix(in srgb, var(--color-surface) 92%, transparent), transparent 72%),
+    color-mix(in srgb, var(--color-surface) 65%, transparent);
+  filter: blur(4px);
+}
+
+/* Phần chữ của thẻ. */
+.journey__body {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+/* Hàng trên cùng: giờ bên trái, độ cao bên phải; hẹp quá thì xuống dòng. */
+.journey__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Giờ dùng màu nhấn cho nổi, độ cao dùng màu chữ phụ. */
+.journey__time {
+  color: var(--color-accent);
+}
+
+.journey__altitude {
+  color: var(--color-muted);
+}
+
+/* Tên trạm. */
+.journey__name {
+  margin-block: 0.35rem 0.4rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--color-ink);
+}
+
+/* Câu mô tả trạm. */
+.journey__text {
+  color: var(--color-muted);
+}
+
+/* Nơi ngủ đêm đó: nền tối như trời đêm, nhìn lướt cũng biết chặng nào hết một ngày. */
+.journey__night {
+  margin-top: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: calc(var(--radius) / 2);
+  background: var(--journey-night-top);
+  font-size: 0.9rem;
+  color: var(--color-surface);
+}
+
+/* Mây kể việc: rê chuột vào ảnh trạm, hoặc bấm nút trên ảnh, thì các đám mây kể việc làm theo giờ hiện ra. */
+
+/* Mây đang mở thì ảnh trạm phóng to nhẹ, cho biết đang xem trạm nào. */
+.journey__photo img {
+  transition: scale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.journey__stop.is-open .journey__photo img {
+  scale: 1.06;
+}
+
+/* Nút mở mây ở góc dưới ảnh: nền sáng hơi trong, làm mờ ảnh phía sau để nổi trên mọi ảnh. */
+.journey__more {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 0.8rem;
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-surface) 70%, transparent),
+    0 0 24px color-mix(in srgb, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color var(--duration) ease, color var(--duration) ease;
+}
+
+/* Trạm không có ảnh: nút nằm dưới phần chữ, thêm viền mảnh để thấy được trên nền thẻ. */
+.journey__body .journey__more {
+  position: static;
+  margin-top: 0.9rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+/* Rê chuột vào nút, hoặc mây đang mở: nút đổi sang màu chủ đạo. */
+.journey__more:hover,
+.journey__stop.is-open .journey__more {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* Danh sách mây. Điện thoại: xếp ngay dưới thẻ, mở ra thì đẩy trạm sau xuống.
+   Lúc đóng, danh sách còn hiện thêm 0,55 giây cho mây kịp trôi về và mờ đi rồi mới ẩn hẳn. */
+.journey__plan {
+  display: none;
+  gap: 3rem;
+  margin-top: 3rem;
+  padding: 0;
+  list-style: none;
+  transition: display 0.55s allow-discrete;
+}
+
+/* Trạm đang mở thì hiện danh sách mây. */
+.journey__stop.is-open .journey__plan {
+  display: grid;
+}
+
+/* Một đám mây: ảnh và chữ nằm cạnh nhau. Lúc chưa mở thì ẩn, thu nhỏ, lùi về phía thẻ.
+   Màu thân mây đặt ở --journey-puff để từng loại mây đổi màu cho dễ. */
+.journey__puff {
+  --journey-puff: var(--color-surface);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.7rem 1.2rem;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translate(var(--journey-puff-from, 0), 0.75rem) scale(0.85);
+  /* Lúc đóng: mây trôi về phía thẻ, thu nhỏ và mờ đi, nhanh hơn lúc mở. */
+  transition: opacity 0.4s ease, transform 0.55s ease-in;
+  /* Mây nhấp nhô lên xuống, mỗi đám lệch nhịp. Chạy cả lúc đóng để mây không khựng khi đang mờ đi. */
+  animation: journey-puff-bob 6s ease-in-out calc(var(--i) * -1.4s) infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* Thân mây: một mảng màu cắt theo hình mây vẽ sẵn (ảnh trong thư mục journey/).
+   Dùng hình vẽ sẵn vì tạo mây bằng bộ lọc lúc chạy làm mây chớp. */
+.journey__puff-cloud {
+  position: absolute;
+  inset: -3.1rem -3.9rem;
+  z-index: -1;
+  background: var(--journey-puff);
+  pointer-events: none;
+  mask: url("journey/cloud-1.png") center / 100% 100% no-repeat;
+}
+
+/* Ba hình mây dùng xen kẽ để các đám không giống hệt nhau. */
+.journey__puff:nth-child(3n + 2) .journey__puff-cloud {
+  mask-image: url("journey/cloud-2.png");
+}
+
+.journey__puff:nth-child(3n) .journey__puff-cloud {
+  mask-image: url("journey/cloud-3.png");
+}
+
+/* Lõi sáng ngay sau chữ: mép mây mỏng đến đâu thì chữ vẫn có nền đủ rõ. */
+.journey__puff::before {
+  content: "";
+  position: absolute;
+  inset: 0.3rem 0.4rem;
+  z-index: -1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--journey-puff) 90%, transparent);
+  filter: blur(10px);
+}
+
+/* Bóng mờ phía dưới: mây như đang lơ lửng trên con đường. */
+.journey__puff::after {
+  content: "";
+  position: absolute;
+  right: 14%;
+  bottom: -2.4rem;
+  left: 14%;
+  z-index: -2;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  filter: blur(9px);
+}
+
+/* Ảnh hoạt động: hình tròn, mép mờ dần vào mây, lấn ra ngoài mép trái của đám mây. */
+.journey__puff-img {
+  flex: none;
+  width: 6.6rem;
+  height: 6.6rem;
+  margin: -1.6rem 0 -1.6rem -2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  mask-image: radial-gradient(closest-side, #000 82%, transparent 100%);
+}
+
+/* Chữ trong mây. */
+.journey__puff-text {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* Mốc giờ: chữ nhỏ in hoa, màu nhấn, nằm riêng một dòng trên câu. */
+.journey__puff-time {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Liên kết cuối đám mây (ví dụ sang khối làm trà): dòng riêng, chữ đậm để thấy bấm được. */
+.journey__puff-link {
+  display: block;
+  width: fit-content;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+}
+
+/* Liên kết bị đánh dấu ẩn thì phải ẩn thật; kiểu ở trên làm nó luôn hiện nên ghi lại ở đây. */
+.journey__puff-link[hidden] {
+  display: none;
+}
+
+/* Mây chỗ ngủ ánh xanh như trăng, mây đồ nên mang ánh màu nhấn: chỉ đổi màu thân mây. */
+.journey__puff--night {
+  --journey-puff: color-mix(in srgb, var(--journey-morning-top) 50%, var(--color-surface));
+}
+
+.journey__puff--tip {
+  --journey-puff: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+
+/* Mốc giờ trên mây có màu: pha thêm màu chữ chính cho đậm hơn, để chữ nhỏ vẫn đủ rõ. */
+.journey__puff--night .journey__puff-time,
+.journey__puff--tip .journey__puff-time {
+  color: color-mix(in srgb, var(--color-accent) 75%, var(--color-ink));
+}
+
+/* Lúc mở: mây trôi từ phía thẻ sang, lớn dần, chậm lại ở cuối; đám sau trễ hơn đám trước một nhịp.
+   Rê vào rồi rời ra giữa chừng thì mây quay đầu từ chỗ đang dừng, không bị giật. */
+.journey__stop.is-open .journey__puff {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease calc(var(--i) * 90ms),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 90ms);
+}
+
+/* Điểm xuất phát của hiệu ứng mở, lúc danh sách mây vừa chuyển từ ẩn sang hiện. */
+@starting-style {
+  .journey__stop.is-open .journey__puff {
+    opacity: 0;
+    transform: translate(var(--journey-puff-from, 0), 0.75rem) scale(0.85);
+  }
+}
+
+/* Nhịp nhấp nhô của mây: lên 4px rồi xuống 5px. */
+@keyframes journey-puff-bob {
+  from {
+    translate: 0 -4px;
+  }
+
+  to {
+    translate: 0 5px;
+  }
+}
+
+/* Người dùng bật giảm chuyển động: mây chỉ hiện và mờ tại chỗ, không trôi, không nhấp nhô, ảnh không phóng. */
+@media (prefers-reduced-motion: reduce) {
+  .journey__puff,
+  .journey__stop.is-open .journey__puff {
+    transform: none;
+    transition: opacity 0.2s ease;
+    animation: none;
+  }
+
+  .journey__photo img {
+    transition: none;
+  }
+}
+
+/* Ô cuối con đường: chuyến gần nhất và nút giữ chỗ, nằm đè lên đầu đường nên đường khuất dưới mép ô.
+   Điện thoại: thẳng hàng với thẻ trạm, chừa làn bên trái cho đường. */
+.journey__finish {
+  position: relative;
+  z-index: 1;
+  margin: clamp(3.5rem, 8vw, 5.5rem) 0 0 3.5rem;
+  padding: 1.4rem 1.5rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+/* Lịch trình không có trạm: ô cuối đứng ngay dưới tiêu đề, không có đường bên trái nên không chừa lề. */
+.journey__head + .journey__finish {
+  margin-inline: auto;
+}
+
+/* Dòng chữ nhỏ in hoa ở đầu ô. */
+.journey__finish-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Tiêu đề của ô, chữ lớn. */
+.journey__finish-title {
+  margin: 0.35rem 0 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Dòng ghi chú nhỏ dưới nút. */
+.journey__finish-text {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* Từ 760px: thẻ xen kẽ hai bên đường, cạnh mỗi thẻ là cột trống để đường vòng sang và mây bay ra. */
+@media (min-width: 760px) {
+  /* Ô cuối nằm giữa, chữ căn giữa; đường đi vào giữa mép trên của ô. */
+  .journey__finish {
+    width: min(26rem, 100%);
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  /* Bỏ làn bên trái, các trạm cách nhau xa hơn. */
+  .journey__stops {
+    gap: 4.5rem;
+    padding-left: 0;
+  }
+
+  /* Trạm đang mở mây nổi lên trên các trạm khác, để mây không bị thẻ phía sau che.
+     Lúc đóng, giữ nổi thêm 0,55 giây cho mây mờ hết rồi mới hạ xuống. */
+  .journey__stop {
+    transition: z-index 0s linear 0.55s allow-discrete;
+  }
+
+  .journey__stop.is-open {
+    z-index: 3;
+    transition-delay: 0s;
+  }
+
+  /* Khi một trạm đang mở mây, các thẻ khác mờ đi để chữ trong mây không lẫn với chữ của thẻ. */
+  .journey__card {
+    transition: box-shadow var(--duration) ease, transform var(--duration) ease, opacity 0.4s ease;
+  }
+
+  .journey__stops:has(.is-open) .journey__stop:not(.is-open) .journey__card {
+    opacity: 0.3;
+  }
+
+  /* Cột mây nằm ở cột trống bên kia đường, ngang phần trên của thẻ, đè lên đường như mây vắt qua đèo. */
+  .journey__plan {
+    position: absolute;
+    top: 1rem;
+    width: min(23rem, calc(100% + 3rem));
+    margin: 0;
+  }
+
+  /* Thẻ bên trái thì mây sang phải, thẻ bên phải thì mây sang trái; mây trôi ra từ phía thẻ. */
+  .journey__stop:nth-child(odd) .journey__plan {
+    --journey-puff-from: -4rem;
+
+    left: calc(100% + 4.5rem);
+  }
+
+  .journey__stop:nth-child(even) .journey__plan {
+    --journey-puff-from: 4rem;
+
+    right: calc(100% + 4.5rem);
+  }
+
+  /* Các đám mây lệch trái phải xen kẽ cho tự nhiên, không xếp thẳng hàng. */
+  .journey__puff:nth-child(odd) {
+    margin-right: 1.8rem;
+  }
+
+  .journey__puff:nth-child(even) {
+    margin-left: 1.8rem;
+  }
+
+  /* Mỗi thẻ rộng gần nửa khung: trạm lẻ bên trái, trạm chẵn bên phải. */
+  .journey__stop {
+    width: calc(50% - 4.5rem);
+  }
+
+  .journey__stop:nth-child(odd) {
+    margin-right: auto;
+  }
+
+  .journey__stop:nth-child(even) {
+    margin-left: auto;
+  }
+
+  /* Chấm cách thẻ 2rem về phía giữa trang, để con đường chạy giữa hai hàng thẻ. */
+  .journey__stop:nth-child(odd) .journey__dot {
+    left: calc(100% + 2rem);
+  }
+
+  .journey__stop:nth-child(even) .journey__dot {
+    left: -2rem;
+  }
+
+  /* Màn rộng thì núi và biển mây cao hơn. */
+  .journey__ridge {
+    height: 50vh;
+  }
+
+  .journey__sea {
+    height: 34vh;
+  }
+}
+
+/* Từ 1024px: đồng hồ thành cột riêng bên trái, dính lại khi cuộn, hiện thêm biểu đồ, các ngày và ghi chú. */
+@media (min-width: 1024px) {
+  /* Hai cột: đồng hồ hẹp bên trái, con đường bên phải. */
+  .journey__layout {
+    grid-template-columns: 15.5rem 1fr;
+    align-items: start;
+    gap: 2.5rem;
+  }
+
+  /* Đồng hồ dính cách đầu màn hình 6rem, các dòng xếp dọc. */
+  .journey__meter {
+    top: 6rem;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1.2rem;
+  }
+
+  /* Số độ cao to hơn, nằm riêng một dòng. */
+  .journey__meter-alt {
+    grid-column: 1;
+    grid-row: auto;
+    font-size: 3rem;
+  }
+
+  /* Tên trạm to hơn. */
+  .journey__meter-place {
+    font-size: 1.25rem;
+  }
+
+  /* Hiện biểu đồ độ cao, rộng bằng đồng hồ. */
+  .journey__profile {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Danh sách các ngày, có đường kẻ ngăn với biểu đồ phía trên. */
+  .journey__days {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.8rem 0 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    list-style: none;
+  }
+
+  /* Mỗi ngày là một liên kết: tên ngày và nơi đi qua; bấm vào thì cuộn tới trạm đầu ngày đó. */
+  .journey__day-link {
+    display: grid;
+    padding: 0.35rem 0.55rem;
+    border-radius: calc(var(--radius) / 2);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: background-color var(--duration) ease;
+  }
+
+  /* Tên ngày đậm hơn dòng nơi đi qua. */
+  .journey__day-title {
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  /* Ngày bấm được: rê chuột thì gạch chân tên ngày, như các liên kết khác. */
+  .journey__day-link[href]:hover .journey__day-title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Ngày xe đang chạy: nền màu chủ đạo nhạt, tên ngày đổi sang màu chủ đạo. */
+  .journey__day-link[aria-current='step'] {
+    background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  }
+
+  .journey__day-link[aria-current='step'] .journey__day-title {
+    color: var(--color-primary);
+  }
+
+  /* Ghi chú nguồn độ cao, chữ nhỏ ở cuối đồng hồ. */
+  .journey__meter-note {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+}
