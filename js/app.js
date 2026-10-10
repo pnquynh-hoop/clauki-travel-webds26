@@ -13,6 +13,7 @@ import { WlDayPlan } from './components/wl-day-plan.js';
 import { WlBooking } from './components/wl-booking.js';
 import { WlFaq } from './components/wl-faq.js';
 import { WlGallery } from './components/wl-gallery.js';
+import { WlStays } from './components/wl-stays.js';
 
 // Phải đăng ký trước khi core.js tạo khối, nếu không core.js bỏ qua khối đó.
 // Đặt sau start() hiện vẫn chạy vì start() còn chờ tải brands.json; đặt trước thì không phụ thuộc vào việc đó.
@@ -27,5 +28,6 @@ customElements.define('wl-day-plan', WlDayPlan);
 customElements.define('wl-booking', WlBooking);
 customElements.define('wl-faq', WlFaq);
 customElements.define('wl-gallery', WlGallery);
+customElements.define('wl-stays', WlStays);
 
 start();

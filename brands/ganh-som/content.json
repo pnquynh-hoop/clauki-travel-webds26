@@ -9,7 +9,7 @@
   "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
-    { "label": "Nhìn từ ban công", "href": "#nhin-ra" },
+    { "label": "Thư viện ảnh", "href": "#thu-vien" },
     { "label": "Giá đã gồm", "href": "#trong-gia" },
     { "label": "Hỏi đáp", "href": "#hoi-dap" }
   ],
@@ -51,10 +51,54 @@
         }
       ]
     },
-    { "type": "stays", "id": "hang-nha", "variant": "rows" },
+    {
+      "type": "stays",
+      "id": "hang-nha",
+      "variant": "headland",
+      "eyebrow": "Các hạng nhà",
+      "title": "Ba cách ở bên biển",
+      "lead": "Cả 24 căn trên mỏm gành đều quay về hướng đông. Khác nhau ở chỗ bạn muốn gần sóng tới đâu.",
+      "hint": "Bấm một mốc trên mỏm đá để xem hạng nhà đó và cảnh nhìn ra từ ban công.",
+      "scene": {
+        "image": { "src": "images/headland.webp", "alt": "Mỏm đá granite nhô ra biển, sườn đồi phủ cỏ và cây bụi thấp, dốc từ đỉnh đá cao xuống mép nước" }
+      },
+      "currency": "đồng",
+      "priceNote": "Giá cho 2 khách, có bữa sáng.",
+      "labels": {
+        "count": "Số căn",
+        "countValue": "{n} căn",
+        "area": "Diện tích",
+        "guests": "Tối đa",
+        "guestsValue": "{n} khách",
+        "perNight": "một đêm",
+        "book": "Đặt hạng này",
+        "best": "Đẹp nhất lúc"
+      },
+      "rooms": [
+        {
+          "id": "villa", "label": "Villa sát biển", "x": 11, "y": 76, "count": 8, "area": "70 m²", "maxGuests": 4, "price": 6200000,
+          "text": "Hiên gỗ sát mép nước, bể ngâm riêng nhìn thẳng ra chỗ mặt trời lên.",
+          "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" },
+          "view": { "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" }, "text": "Mở cửa là chạm vào tiếng sóng.", "best": "bình minh" }
+        },
+        {
+          "id": "phong-vuon", "label": "Phòng vườn", "x": 27, "y": 50, "count": 6, "area": "32 m²", "maxGuests": 2, "price": 2800000,
+          "text": "Giữa vườn dừa, thấy biển qua kẽ lá và nghe rõ tiếng sóng.",
+          "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" },
+          "view": { "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" }, "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.", "best": "buổi trưa" }
+        },
+        {
+          "id": "nha-doi", "label": "Nhà đồi", "x": 46, "y": 20, "count": 10, "area": "45 m²", "maxGuests": 3, "price": 3900000,
+          "text": "Ngồi trên dốc nhìn xuống cả vịnh qua rặng dừa.",
+          "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" },
+          "view": { "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" }, "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.", "best": "bình minh và hoàng hôn" }
+        }
+      ]
+    },
     {
       "type": "room-view",
       "id": "nhin-ra",
+      "hidden": true,
       "variant": "climb",
       "eyebrow": "Nhìn từ ban công",
       "title": "Mỗi hạng nhà một khung cửa ra biển",
@@ -322,6 +366,13 @@
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Paddleboarding_at_Sunset_(55014274704).jpg",
       "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/headland.webp",
+      "author": "Phương Huy",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:V%E1%BB%8Bnh_V%C4%A9nh_Hy_%E1%BB%9F_Ninh_Thu%E1%BA%ADn,_th%C3%A1ng_7_n%C4%83m_2012_(14).jpg",
+      "note": "Chụp ở vịnh Vĩnh Hy, Ninh Thuận; đã cắt khung, tách nền trời và biển, thu nhỏ"
     }
   ]
 }
