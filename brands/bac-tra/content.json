@@ -86,13 +86,7 @@
         }
       ]
     },
-    {
-      "type": "intro",
-      "id": "cach-di",
-      "eyebrow": "Cách Bậc Trà đi",
-      "title": "Bốn ngày không vội",
-      "lead": "Mỗi ngày một chặng ngắn, ngủ nhà người dân, ăn cơm cùng chủ nhà. Đủ chậm để thấy mây lên từ thung lũng."
-    },
+    { "type": "cloud-band" },
     {
       "type": "journey",
       "id": "lich-trinh",
@@ -380,6 +374,7 @@
         }
       ]
     },
+    { "type": "cloud-band" },
     {
       "type": "process",
       "id": "tu-bup-den-chen",
@@ -608,20 +603,23 @@
           "answer": "Được. Đoàn tối đa 12 khách, có trưởng đoàn đi cùng suốt bốn ngày."
         }
       ]
-    },
-    {
-      "type": "banner",
-      "id": "hen-tren-may",
-      "title": "Hẹn bạn trên mây",
-      "image": {
-        "src": "images/journey-6.jpg",
-        "alt": "Mây trắng trôi qua ruộng bậc thang La Pán Tẩn"
-      }
     }
   ],
   "footer": {
     "variant": "columns",
-    "note": "Bậc Trà là thương hiệu giả tưởng, mọi thông tin chỉ để minh hoạ."
+    "image": {
+      "src": "images/footer.jpg",
+      "alt": "Mây trắng vắt ngang các dãy núi trên thung lũng ruộng bậc thang dưới đèo Khau Phạ"
+    },
+    "title": "Hẹn bạn",
+    "titleAccent": "trên mây",
+    "clouds": true,
+    "marquee": ["Hồ Thác Bà", "Mường Lò", "Suối Giàng", "Tú Lệ", "Đèo Khau Phạ", "La Pán Tẩn", "Mù Cang Chải"],
+    "navTitle": "Khám phá",
+    "contactTitle": "Liên hệ",
+    "addressTitle": "Văn phòng",
+    "note": "Bậc Trà là thương hiệu giả tưởng, mọi thông tin chỉ để minh hoạ.",
+    "creditsTitle": "Nguồn ảnh"
   },
   "credits": [
     {
@@ -785,6 +783,12 @@
       "author": "Vũ Hùng",
       "license": "CC BY-SA 3.0",
       "source": "https://commons.wikimedia.org/wiki/File:S%C3%81NG_S%E1%BB%9AM_%E1%BB%9E_M%C3%99_CANG_CH%E1%BA%A2I_-_panoramio.jpg"
+    },
+    {
+      "file": "images/footer.jpg",
+      "author": "Victor311",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao.jpg"
     }
   ]
 }
