@@ -201,7 +201,9 @@ export class WlFooter extends HTMLElement {
       this.replaceChildren(...[tickerEl(footer.marquee), groupEl('footer__main container', parts)].filter(Boolean));
     } else {
       const inner = groupEl('footer__inner container', [heading, tickerEl(footer.marquee), groupEl('footer__main footer__panel', parts)]);
-      this.replaceChildren(groupEl('footer__scene', [photo, cloudsEl(footer.clouds), inner]));
+      // Có lời hẹn mà không có ảnh thì thêm lớp --plain để CSS đổi sang nền trang, chữ màu mực.
+      const sceneClass = photo ? 'footer__scene' : 'footer__scene footer__scene--plain';
+      this.replaceChildren(groupEl(sceneClass, [photo, cloudsEl(footer.clouds), inner]));
     }
     this._ticker = this.querySelector('.footer__ticker-track');
     this._photo = this.querySelector('.footer__photo');

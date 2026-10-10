@@ -573,6 +573,35 @@ phần thông tin nằm trên một tấm đè lên phần dưới ảnh.
   text-shadow: 0 1px 0.6rem color-mix(in srgb, var(--color-ink) 40%, transparent);
 }
 
+/* Không có ảnh: dòng chữ chạy nằm trên cùng footer, cách phần thông tin một khoảng và một vạch mảnh. */
+.footer > .footer__ticker {
+  margin-bottom: 2.5rem;
+  padding-block: 0 1.25rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+/* Có lời hẹn mà không có ảnh: nền trang, lời hẹn và dòng chữ chạy màu mực, bỏ lớp tối và mép sương,
+   tấm thông tin màu nền phụ nổi lên trên nền trang như một tấm thẻ. */
+.footer:has(> .footer__scene--plain) {
+  background: var(--color-bg);
+}
+
+.footer__scene--plain::before,
+.footer__scene--plain::after {
+  display: none;
+}
+
+.footer__scene--plain .footer__inner {
+  padding-top: var(--space-section);
+  color: var(--color-ink);
+}
+
+.footer__scene--plain .footer__heading,
+.footer__scene--plain .footer__ticker-item {
+  color: var(--color-ink);
+  text-shadow: none;
+}
+
 /* Tấm thông tin: nền màu nền phụ (--color-tint) gần đặc, làm mờ ảnh phía sau, bóng đổ mềm để tách khỏi ảnh. */
 .footer__panel {
   padding: 2rem 1.5rem 0.25rem;
