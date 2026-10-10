@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 2ca961f, e04d044, 6254d80
+- Kết quả: commit 2ca961f, e04d044, 6254d80, 17f7590
 
 ## Prompt (tóm tắt)
 
@@ -35,3 +35,12 @@ thành kiểu `chat`:
 ## Phần tự quyết định (làm lại)
 
 - Thấy kiểu danh sách đơn điệu, yêu cầu làm nhiều mẫu; chọn mẫu "Nhắn tin với Gành Sớm".
+
+## Sửa lỗi cuộn ngang (tóm tắt prompt)
+
+Ở màn rộng 1024px trang Gành Sớm cuộn ngang khoảng 18px. Tìm phần tử gây tràn rồi sửa, không đổi giao diện ở màn rộng.
+Kết quả: tấm nền nghiêng sau khung nhắn tin thò ra ngoài lề phải khi lề trang chỉ còn 1rem; cắt phần thừa theo chiều ngang.
+
+## Phần tự quyết định (sửa lỗi)
+
+- Đồng ý sửa lỗi cuộn ngang ở màn 1024px.
