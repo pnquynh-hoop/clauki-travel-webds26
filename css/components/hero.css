@@ -526,9 +526,14 @@
   .hero--stacked .hero__stats { grid-area: 7 / 1 / 8 / 3; }
 }
 
-/* Bắt đầu kiểu full.
-   Ảnh phủ kín màn hình, phủ một lớp sương. Khối cao 2,4 màn hình, phần ảnh dính lại trong lúc cuộn;
-   JS đổi vị trí ảnh, độ dày sương, mây và màu chữ theo độ cuộn. */
+/* =========================================================
+VARIANT: FULL
+Ảnh phủ kín màn hình, có lớp sương phủ bên trên.
+Khối cao 2,4 màn hình, ảnh được giữ cố định khi cuộn.
+JS điều chỉnh vị trí ảnh, độ dày sương, mây và màu chữ
+theo mức độ cuộn trang.
+========================================================= */
+
 .hero--full {
   height: 240svh;
   padding-block: 0;

@@ -189,10 +189,15 @@ export class WlHero extends HTMLElement {
     return { backdrop, deck, controls };
   }
 
-  /* Bắt đầu kiểu full.
-     Ảnh phủ kín màn hình, phủ một lớp sương. Khối cao hơn màn hình, phần ảnh dính lại khi cuộn:
-     cuộn tới đâu thì ảnh tiến lại gần như máy quay bay vào, sương dạt ra hai bên, mây bay qua, chữ đổi sang màu sáng.
-     Người xem bật giảm chuyển động thì ảnh đứng yên, sương mở sẵn, không có mây. */
+  /* =========================================================
+  VARIANT: FULL
+  Ảnh phủ kín màn hình, có lớp sương phủ bên trên.
+  Khối cao hơn màn hình, ảnh được giữ cố định khi cuộn.
+  Khi cuộn: ảnh phóng gần dần, sương tách sang hai bên,
+  mây bay qua, chữ chuyển sang màu sáng.
+  Giảm chuyển động: ảnh đứng yên, sương mở sẵn, không có mây.
+  ========================================================= */
+
 
   // Khi khối được gắn vào trang: kiểu full bắt đầu chạy chuyển động. Khi bị gỡ thì disconnectedCallback ở trên tắt.
   connectedCallback() {
