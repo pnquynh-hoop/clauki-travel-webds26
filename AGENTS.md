@@ -121,7 +121,7 @@ export class WlHero extends HTMLElement {
   - mỗi thương hiệu có ít nhất 2 section mà hai thương hiệu kia không dùng, gắn với loại hình của nó;
   - thương hiệu nào dùng section nào ghi ở cột "Thương hiệu dùng" trong bảng mục 12.
 
-**`brands/brand-test/`: bộ dữ liệu chung của cả đội khi phát triển** (công ty tour núi giả tưởng "Lối Mây"), có đủ các loại section dự kiến.
+**`brands/brand-test/`: "Lượn Vịnh", bản cấu hình do AI viết theo [prompt mẫu](docs/prompts/tao-thuong-hieu-moi.md)** (bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè), chỉ dùng các khối chạy bằng dữ liệu thuần; minh chứng đổi file cấu hình là ra landing page mới. Bộ dữ liệu thử cũ "Lối Mây" (đủ mọi loại section) còn trong lịch sử Git.
 - Viết component mới thì thử trên `?brand=brand-test` trước. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
 - Không nộp cho BGK: gỡ khỏi `brands/brands.json` trước khi nộp (xem mục 11).
 

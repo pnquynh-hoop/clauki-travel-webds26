@@ -1,17 +1,21 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,600;0,700;1,500&family=Nunito+Sans:wght@400;600;700&display=swap');
 
-/* brand-test: công ty tour núi giả tưởng, chỉ dùng khi phát triển. Màu rừng thông, giấy dó, vàng ruộng bậc thang. */
+/* brand-test "Lượn Vịnh": bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè. Dữ liệu do AI viết theo
+   docs/prompts/tao-thuong-hieu-moi.md. Màu trời buổi sáng trên vịnh, xanh ngọc của nước, giấy trắng của cánh máy bay.
+   Tương phản (WCAG): chữ nút trên --color-primary 7.09; --color-ink trên nền 14.83; --color-muted trên nền 6.39;
+   --color-accent trên nền 5.72, trên thẻ trắng 6.4; --color-ink trên --color-tint 13.12. */
 :root {
-  --color-primary: #2e4a3b;
+  --color-primary: #1d5d86;
   --color-on-primary: #ffffff;
-  --color-bg: #f4efe6;
+  --color-bg: #eef3f5;
   --color-surface: #ffffff;
-  --color-ink: #1f2622;
-  --color-muted: #5a635d;
-  --color-accent: #8c5a14;
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
-  --radius: 0.75rem;
+  --color-ink: #132029;
+  --color-muted: #4a5a64;
+  --color-accent: #0d6b5e;
+  --color-tint: #d9e7ee;
+  --font-heading: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Nunito Sans', system-ui, sans-serif;
+  --radius: 0.875rem;
 }
