@@ -1,0 +1,160 @@
+/* features.css - giao diện của <wl-features>. Màu, font, bo góc lấy từ biến CSS; class features--<variant> quyết định kiểu.
+   Không có variant: lưới thẻ, dạng cơ bản. Kiểu riêng của từng thương hiệu viết thành khối .features--<variant>. */
+
+.features__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.features__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.features__title {
+  margin: 0;
+}
+
+.features__lead {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.features__card {
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: var(--radius);
+}
+
+.features__value {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.features__name {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.features__text {
+  margin: 0.35rem 0 0;
+  color: var(--color-muted);
+}
+
+.features__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* Kiểu cutout (Gành Sớm): ảnh thuyền thúng đã tách nền đặt thật to, tràn ra mép trái màn hình;
+   bên cạnh là danh sách đánh số những thứ đã gồm trong giá. --spin do JS đặt theo vị trí cuộn. */
+.features--cutout {
+  overflow-x: clip;
+}
+
+.features__art {
+  position: relative;
+  isolation: isolate;
+  width: 115%;
+  margin: 0 0 0 -7.5%;
+}
+
+.features__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: rotate(var(--spin, -4deg));
+  filter: drop-shadow(0 1.5rem 1.25rem color-mix(in srgb, var(--color-ink) 22%, transparent));
+}
+
+/* Vệt bóng mờ hình bầu dục dưới thúng, như thúng đang nằm trên mặt nước. */
+.features__art::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: 8%;
+  bottom: -4%;
+  left: 18%;
+  height: 22%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-ink) 16%, transparent), transparent);
+  border-radius: 50%;
+}
+
+.features__side {
+  display: grid;
+  gap: 1.75rem;
+  align-content: center;
+}
+
+.features__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+.features__item {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+.features__num {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.features--cutout .features__name {
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+/* Thúng chòng chành nhẹ lên xuống; dùng thuộc tính translate riêng để không đè lên góc xoay theo cuộn. */
+@media (prefers-reduced-motion: no-preference) {
+  .features__art {
+    animation: features-bob 5s ease-in-out infinite;
+  }
+}
+
+@keyframes features-bob {
+  50% {
+    translate: 0 -0.6rem;
+  }
+}
+
+/* Màn rộng: thúng cột trái, rộng hơn cột và tràn ra mép trái; tiêu đề, danh sách cột phải. */
+@media (min-width: 1024px) {
+  .features--cutout .features__inner {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    column-gap: 3rem;
+    align-items: center;
+  }
+
+  .features__art {
+    width: 175%;
+    margin-left: -75%;
+  }
+}

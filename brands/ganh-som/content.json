@@ -85,7 +85,23 @@
         }
       ]
     },
-    { "type": "features", "id": "trong-gia", "variant": "numbered" },
+    {
+      "type": "features",
+      "id": "trong-gia",
+      "variant": "cutout",
+      "eyebrow": "Giá đã gồm",
+      "title": "Đến tay không, mọi thứ có sẵn",
+      "lead": "Năm thứ đã nằm trong giá phòng, không tính thêm.",
+      "image": { "src": "images/thung.webp", "alt": "Chiếc thuyền thúng đan tre màu đen, vành quấn xơ dừa và băng dây xanh, kèm một mái chèo" },
+      "items": [
+        { "title": "Một buổi sáng trên thuyền thúng", "text": "Ra khơi cùng ngư dân lúc sớm, xem kéo lưới rồi ghé chợ cá ngay trên bãi." },
+        { "title": "Đón và tiễn sân bay Phù Cát", "text": "Xe chờ sẵn khi bạn hạ cánh, hôm về đưa ra lại sân bay." },
+        { "title": "Bữa sáng địa phương", "text": "Bánh xèo tôm nhảy, bánh hỏi và vài món theo mùa, mỗi sáng." },
+        { "title": "Xe đạp dùng tự do", "text": "Đạp ra chợ cá buổi sớm hay men theo đường ven biển." },
+        { "title": "Chèo ván lúc bình minh", "text": "Một buổi chèo ván đứng có người hướng dẫn, vào sáng biển lặng." }
+      ],
+      "note": "Chưa gồm: bữa trưa, bữa tối, đồ uống, chuyến thuyền ra đảo."
+    },
     { "type": "gallery", "id": "thu-vien", "variant": "strip" },
     { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
     {
@@ -260,6 +276,13 @@
       "license": "CC BY 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Corong_Corong_Beach,_Coconut_palm_trees,_El_Nido,_Palawan_Island,_Philippines.jpg",
       "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/thung.webp",
+      "author": "Violetbonmua",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Thuy%E1%BB%81n_th%C3%BAng_Vi%E1%BB%87t_Nam.JPG",
+      "note": "Đã tách nền và thu nhỏ"
     }
   ]
 }

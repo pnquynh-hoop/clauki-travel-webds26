@@ -11,7 +11,7 @@ Kế hoạch đầy đủ: [ke-hoach.md](ke-hoach.md).
 | Sản phẩm | 24 căn nhà trên một mỏm gành phía nam Quy Nhơn, nhìn về hướng đông: 8 villa sát biển có bể ngâm, 10 nhà đồi, 6 phòng vườn |
 | Chiến dịch trên landing page | Đặt sớm hè 2027 (tháng 4 đến tháng 8, mùa biển lặng): đặt trước 31/12/2026, ở 3 đêm tặng đêm thứ tư |
 | Giá (giả định, 2 khách, có bữa sáng) | Phòng vườn 2.800.000 đồng, nhà đồi 3.900.000 đồng, villa sát biển 6.200.000 đồng một đêm |
-| Có sẵn trong giá | Đón sân bay Phù Cát, bữa sáng, xe đạp, chèo ván đứng (SUP) buổi sáng |
+| Có sẵn trong giá | Một buổi đi thuyền thúng cùng ngư dân, đón sân bay Phù Cát, bữa sáng, xe đạp, chèo ván đứng (SUP) buổi sáng |
 | Khẩu hiệu | Bình minh ngay hiên nhà |
 | Nút kêu gọi hành động | "Đặt phòng ngay", dẫn tới `#dat-phong` |
 

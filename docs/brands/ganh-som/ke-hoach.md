@@ -65,6 +65,7 @@ Giá đã gồm:
 - Bữa sáng mỗi ngày, có món địa phương như bánh xèo tôm nhảy, bánh hỏi.
 - Xe đạp dùng tự do.
 - Một buổi chèo ván đứng (SUP) lúc bình minh, có người hướng dẫn.
+- Một buổi sáng ra khơi bằng thuyền thúng cùng ngư dân, xem kéo lưới rồi ghé chợ cá (thêm ngày 10/10).
 
 Giá chưa gồm: bữa trưa, bữa tối, đồ uống, và các chuyến đi thuyền ra đảo.
 
@@ -84,7 +85,7 @@ Nội dung cho khối `room-view` (nhìn từ ban công), mỗi hạng một th�
 | Nhà đồi | Toàn cảnh vịnh và mỏm gành từ trên cao | Thấy cả vịnh đổi màu từ tím sang vàng. | Bình minh và hoàng hôn |
 | Phòng vườn | Hàng dừa, khoảng biển xanh giữa các thân cây | Bóng dừa che nắng trưa, biển vẫn ở ngay đó. | Buổi trưa |
 
-Khối `features` (giá đã gồm) dùng 4 mục đánh số: đón sân bay, bữa sáng địa phương, xe đạp, chèo ván lúc bình minh.
+Khối `features` (giá đã gồm) kiểu `cutout`: ảnh thuyền thúng tách nền đặt thật to, bên cạnh là 5 mục đánh số: thuyền thúng, đón sân bay, bữa sáng địa phương, xe đạp, chèo ván lúc bình minh.
 
 Khối `intro` ("Ở chậm") nói về cách nghỉ ở Gành Sớm: không lịch trình, không loa nhạc, giờ giấc theo mặt trời.
 
