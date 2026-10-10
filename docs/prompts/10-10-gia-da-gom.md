@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit 713c7de
+- Kết quả: commit 713c7de, 4e8ab8b
 
 ## Prompt (tóm tắt)
 
@@ -16,7 +16,13 @@ Bạn là kỹ sư frontend kiêm người thiết kế giao diện. Trang Gành
 
 Yêu cầu: màu, font chỉ lấy từ biến CSS; tắt chuyển động khi bật giảm chuyển động; kiểm ở 390px và 1440px.
 
+## Làm thêm (tóm tắt prompt)
+
+Chỉ đặt ảnh tách nền lên trang thì chưa thú vị. Cho khách chơi với thúng: kéo ngang để nghiêng thúng, thả ra thì thúng
+lắc vài nhịp như trên sóng rồi dừng (lò xo có ma sát), gợn nước loang dưới đáy; có nút cho bàn phím; tắt khi bật giảm chuyển động.
+
 ## Phần tự quyết định
 
 - Đưa thuyền thúng vào gói "giá đã gồm" (thay đổi về sản phẩm của thương hiệu).
 - Không dùng sơ đồ vẽ nét; yêu cầu ảnh thật tách nền đặt thật to trên trang.
+- Thấy chỉ đặt ảnh lên trang thì chưa thú vị, chọn thêm tương tác cho khách chơi với thúng.
