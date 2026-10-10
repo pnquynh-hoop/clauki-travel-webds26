@@ -417,13 +417,14 @@ phần thông tin nằm trên một tấm đè lên phần dưới ảnh.
   pointer-events: none;
 }
 
-/* Chữ trên ảnh nằm trên lớp mây. */
+/* Chữ trên ảnh nằm trên lớp mây. Khoảng trên lời hẹn và khoảng giữa lời hẹn, chữ chạy, tấm thông tin
+   đổi được qua biến tuỳ chọn --footer-top, --footer-gap trong theme.css. */
 .footer__inner {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: clamp(2.5rem, 7vw, 5rem);
-  padding-block: clamp(4.5rem, 14vh, 9rem) 2.5rem;
+  gap: var(--footer-gap, clamp(2.5rem, 7vw, 5rem));
+  padding-block: var(--footer-top, clamp(4.5rem, 14vh, 9rem)) 2.5rem;
   color: var(--color-bg);
 }
 
@@ -435,9 +436,13 @@ phần thông tin nằm trên một tấm đè lên phần dưới ảnh.
   text-shadow: 0 0.06em 0.45em color-mix(in srgb, var(--color-ink) 45%, transparent);
 }
 
+/* Thương hiệu có chữ viết tay (--font-hand) thì dòng sau dùng chữ đó. Không cho trình duyệt tự bẻ nghiêng, tự tô đậm
+   khi font thiếu kiểu nghiêng, kiểu đậm (chữ giả trông méo); font có sẵn kiểu nghiêng như Lora thì vẫn nghiêng. */
 .footer__heading-accent {
   display: block;
+  font-family: var(--font-hand, inherit);
   font-weight: 500;
+  font-synthesis: none;
 }
 
 /* Dòng chữ chạy: chữ in hoa giãn rộng, ngăn nhau bằng vạch mảnh, hai mép mờ dần.

@@ -134,7 +134,7 @@ export class WlHero extends HTMLElement {
 - `--font-heading`, `--font-body`;
 - `--radius`.
 
-**Biến CSS tuỳ chọn:** `--color-tint` (nền phụ cho khối cần nổi khỏi nền trang, ví dụ tấm thông tin ở footer kiểu `columns`); thương hiệu không khai báo thì `base.css` pha sẵn từ `--color-primary` và `--color-bg`.
+**Biến CSS tuỳ chọn:** `--color-tint` (nền phụ cho khối cần nổi khỏi nền trang, ví dụ tấm thông tin ở footer kiểu `columns`); thương hiệu không khai báo thì `base.css` pha sẵn từ `--color-primary` và `--color-bg`. `--font-hand` (chữ viết tay: lời nhắn bưu thiếp ở offer, dòng sau của lời hẹn ở footer), `--footer-top`, `--footer-gap` (khoảng trên lời hẹn và khoảng giữa lời hẹn, chữ chạy, tấm thông tin ở footer): không khai báo thì component dùng giá trị sẵn có.
 
 **Màu nào được làm màu chữ:** `--color-primary` có thể là màu sáng chỉ hợp làm nền nút, nên không dùng làm màu chữ trên nền trang. Chữ cần màu thương hiệu (liên kết, nhãn nhỏ, chữ của nút viền) dùng `--color-accent`. Vì vậy mỗi thương hiệu phải chọn `--color-accent` đạt tương phản AA (từ 4,5) trên `--color-bg`.
 

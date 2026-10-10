@@ -17,4 +17,7 @@
   --radius: 1.25rem;
   /* Khoảng cách trên, dưới mỗi khối: co giãn theo bề ngang, để hai khối liền nhau cách đều khoảng 6rem đến 9rem. */
   --space-section: clamp(3rem, 2rem + 3vw, 4.5rem);
+  /* Footer: lời hẹn gần chữ chạy và tấm thông tin hơn mặc định, footer gọn lại. */
+  --footer-top: clamp(4rem, 10vh, 6.5rem);
+  --footer-gap: clamp(1.5rem, 3.5vw, 2.75rem);
 }
