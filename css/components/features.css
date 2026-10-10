@@ -76,11 +76,25 @@
   margin: 0 0 0 -7.5%;
 }
 
+/* Kéo ngang để lắc: con trỏ thành bàn tay; vuốt dọc trên điện thoại vẫn cuộn trang bình thường. */
+.features__art {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.features__art.is-dragging {
+  cursor: grabbing;
+}
+
+/* Góc nghiêng = nghiêng theo cuộn (--spin) cộng nghiêng do lắc (--rock); xoay quanh đáy thúng (ảnh có mái chèo bên trái
+   nên tâm thúng lệch về bên phải). */
 .features__art img {
   display: block;
   width: 100%;
   height: auto;
-  transform: rotate(var(--spin, -4deg));
+  transform: rotate(calc(var(--spin, -4deg) + var(--rock, 0deg)));
+  transform-origin: 62% 85%;
   filter: drop-shadow(0 1.5rem 1.25rem color-mix(in srgb, var(--color-ink) 22%, transparent));
 }
 
@@ -95,6 +109,64 @@
   height: 22%;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--color-ink) 16%, transparent), transparent);
   border-radius: 50%;
+}
+
+/* Gợn nước: vòng bầu dục dưới đáy thúng, loang rộng rồi mờ đi; JS thêm mỗi lần thúng lắc qua điểm giữa. */
+.features__ripple {
+  position: absolute;
+  z-index: -1;
+  left: 62%;
+  bottom: 2%;
+  width: 45%;
+  aspect-ratio: 4 / 1;
+  border: 2px solid color-mix(in srgb, var(--color-ink) 28%, transparent);
+  border-radius: 50%;
+  transform: translate(-50%, 50%) scale(0.4);
+  animation: features-ripple 1.4s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes features-ripple {
+  to {
+    opacity: 0;
+    transform: translate(-50%, 50%) scale(1.7);
+  }
+}
+
+.features__stage {
+  display: grid;
+  gap: 1rem;
+}
+
+.features__play {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.features__hint {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.features__push {
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.features__push:hover {
+  background: var(--color-surface);
 }
 
 .features__side {

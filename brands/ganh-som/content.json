@@ -93,6 +93,8 @@
       "title": "Đến tay không, mọi thứ có sẵn",
       "lead": "Năm thứ đã nằm trong giá phòng, không tính thêm.",
       "image": { "src": "images/thung.webp", "alt": "Chiếc thuyền thúng đan tre màu đen, vành quấn xơ dừa và băng dây xanh, kèm một mái chèo" },
+      "hint": "Kéo ngang để lắc thúng như trên sóng.",
+      "pushLabel": "Lắc thúng",
       "items": [
         { "title": "Một buổi sáng trên thuyền thúng", "text": "Ra khơi cùng ngư dân lúc sớm, xem kéo lưới rồi ghé chợ cá ngay trên bãi." },
         { "title": "Đón và tiễn sân bay Phù Cát", "text": "Xe chờ sẵn khi bạn hạ cánh, hôm về đưa ra lại sân bay." },
