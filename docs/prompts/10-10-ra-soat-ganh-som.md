@@ -2,7 +2,7 @@
 
 - Người dùng AI: Gia Huy
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: commit e118a27 (giao diện, code), 0491575 (nội dung, ảnh, logo)
+- Kết quả: commit e118a27 (giao diện, code), 0491575 (nội dung, ảnh, logo), e522095 (thu các chỉnh sửa về kiểu riêng của Gành Sớm)
 
 ## Prompt (tóm tắt)
 
@@ -33,6 +33,12 @@ Sau đó sửa theo thứ tự lỗi nặng trước:
 - câu chữ: thương hiệu tự xưng "Gành Sớm" thay "Chúng tôi", câu trả lời hỏi đáp rõ hơn, tiêu đề thư viện ảnh khớp ảnh;
 - AGENTS.md mục 12 và tài liệu thương hiệu cập nhật theo.
 
+Sau khi main nhận thêm khối của các bạn (kiểu `request` của đặt phòng, nút lên đầu trang): merge main vào nhánh, gộp dòng
+`booking` trong AGENTS.md; đo lại Bậc Trà và Mé Rạch so với main ở 360, 390, 768, 1440px, chỉnh sửa nào làm đổi giao diện hai
+thương hiệu này (class dùng chung của đặt phòng, chân trang, `text-wrap` trong `base.css`) thì thu về kiểu riêng của Gành Sớm.
+Riêng kiểu `chat` của hỏi đáp Mé Rạch cũng dùng, nên các sửa của kiểu này áp cho cả hai.
+
 ## Phần tự quyết định
 
 - Yêu cầu rà soát toàn bộ trang Gành Sớm: responsive, code sạch, độ rộng, AI slop, quy định BTC, bố cục, thứ tự khối, khoảng trống, câu chữ, lỗi UI/UX.
+- Phần của thương hiệu khác thì để nguyên.
