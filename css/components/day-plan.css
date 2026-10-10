@@ -4,7 +4,6 @@
 .day-plan {
   --day-bg: var(--color-bg);
   --day-muted: var(--color-muted);
-  --day-water: color-mix(in srgb, var(--color-primary) 70%, var(--color-bg));
   display: block;
   background: var(--day-bg);
   transition: background-color 1.1s ease;
@@ -86,31 +85,36 @@
   stroke-linejoin: round;
 }
 
-/* Sông nhìn từ trên xuống, các lớp chồng từ ngoài vào trong (bề rộng do JS đặt):
-   bờ cỏ nhoè, dải bùn phù sa pha từ màu nhấn, mép sẫm nơi nước sâu dần, lòng sông sẫm,
-   nước giữa sáng hơn, dải trời phản chiếu ở tim sông. Mọi màu pha từ biến của thương hiệu. */
-.day-plan__grass { stroke: color-mix(in srgb, var(--color-primary) 20%, var(--color-bg)); opacity: 0.8; }
-.day-plan__mud { stroke: color-mix(in srgb, var(--color-accent) 22%, var(--color-surface)); }
-.day-plan__rim { stroke: color-mix(in srgb, var(--color-primary) 60%, var(--color-ink)); opacity: 0.55; }
-.day-plan__deep { stroke: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink)); }
-.day-plan__mid { stroke: color-mix(in srgb, var(--color-primary) 72%, var(--color-bg)); }
-.day-plan__light { stroke: color-mix(in srgb, var(--color-primary) 35%, var(--color-bg)); opacity: 0.75; }
+/* Sông nhìn từ trên xuống, các lớp chồng từ ngoài vào trong (bề rộng do JS đặt), kiểu tranh màu nước tươi sáng:
+   bờ cây chỉ là quầng màu chủ đạo rất nhạt; bờ cát ướt màu khối nổi sẫm nhẹ, trung tính để không lạc tông;
+   nước sát bờ đậm nhất rồi sáng dần vào giữa; dải trời phản chiếu gần như màu nền, lệch về một bên bờ.
+   Mọi màu pha từ biến của thương hiệu, không pha với màu chữ để nước không bị xỉn.
+   Pha với --day-bg (nền theo giờ) chứ không với --color-bg, để quầng bờ sông luôn cùng tông với nền section,
+   và đổi màu chậm cùng lúc với nền. */
+.day-plan__layer { transition: stroke 1.1s ease; }
+
+.day-plan__bank { stroke: color-mix(in srgb, var(--color-primary) 14%, var(--day-bg)); }
+.day-plan__shore { stroke: color-mix(in srgb, var(--color-surface) 82%, var(--color-ink)); opacity: 0.5; }
+.day-plan__edge { stroke: color-mix(in srgb, var(--color-primary) 70%, var(--day-bg)); }
+.day-plan__water { stroke: color-mix(in srgb, var(--color-primary) 52%, var(--day-bg)); }
+.day-plan__center { stroke: color-mix(in srgb, var(--color-primary) 34%, var(--day-bg)); }
+.day-plan__sky { stroke: color-mix(in srgb, var(--day-bg) 85%, var(--color-primary)); opacity: 0.8; }
 
 /* Vệt dòng chảy: ba đường mảnh nét đứt trôi xuôi với tốc độ khác nhau, để mặt nước không chạy đều như băng chuyền. */
 .day-plan__flow {
-  stroke: color-mix(in srgb, var(--color-bg) 70%, transparent);
-  stroke-width: 1.4;
+  stroke: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  stroke-width: 1.2;
   animation: day-plan-flow linear infinite;
 }
 
 .day-plan__flow--1 { stroke-dasharray: 14 46; animation-duration: 12s; }
-.day-plan__flow--2 { stroke-dasharray: 26 70; stroke-width: 1.8; animation-duration: 16s; }
+.day-plan__flow--2 { stroke-dasharray: 26 70; stroke-width: 1.5; animation-duration: 16s; }
 .day-plan__flow--3 { stroke-dasharray: 10 38; animation-duration: 10s; }
 
 /* Ánh nắng lấp lánh: chấm sáng thưa trôi chậm và nhấp nháy. */
 .day-plan__glint {
   stroke: var(--color-bg);
-  stroke-width: 2.6;
+  stroke-width: 2.2;
   stroke-dasharray: 2 118;
   animation: day-plan-flow 22s linear infinite, day-plan-glint 2.2s ease-in-out infinite;
 }
@@ -224,39 +228,46 @@
 .day-plan__media,
 .day-plan__body { --p: 0; }
 
-.day-plan__frame { position: relative; }
+/* isolation tạo lớp xếp chồng riêng cho từng khung, để số (z-index âm) nằm sau ảnh nhưng vẫn trên nền khối. */
+.day-plan__frame {
+  position: relative;
+  isolation: isolate;
+}
 
-/* Số thứ tự chỉ có nét viền; nước dâng từ đáy lên lấp đầy con số theo --p.
-   Nền gradient cắt theo hình chữ (background-clip: text), phần chưa có nước để trong suốt.
-   Số đè lên mép trên của ảnh nên kéo ảnh lên bằng lề âm. */
+/* Số thứ tự rất lớn, màu chữ pha thật nhạt, đặt ở góc trên phía ngoài (xa sông) để không chen vào sông và xuồng.
+   Chân số chạm đúng mép trên của ảnh (lề âm bù phần khoảng trống dưới chữ số). Số nằm sau ảnh,
+   nên lúc chưa cuộn tới thì số dời xuống và khuất sau ảnh, cuộn tới thì trồi lên trọn vẹn theo --p. */
 .day-plan__num {
   position: relative;
-  z-index: 1;
+  z-index: -1;
   display: block;
-  margin-bottom: -0.42em;
+  margin-bottom: -0.08em;
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: clamp(4.5rem, 3rem + 6vw, 8.5rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--color-accent);
-  background: linear-gradient(to top, var(--day-water) calc(15% + var(--p) * 75%), transparent 0);
-  -webkit-background-clip: text;
-  background-clip: text;
+  font-size: clamp(5rem, 3.5rem + 7vw, 10rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-align: right;
+  color: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  translate: 0 calc((1 - var(--p)) * 30%);
   pointer-events: none;
 }
 
+/* Tỉ lệ khung đặt ở khung bao chứ không ở ảnh: ảnh tải lỗi thì khung vẫn giữ đúng hình, nền màu khối nổi,
+   số thứ tự không đè lên dòng chữ thay thế. Khung có sẵn chiều cao nên khối không đổi cao khi ảnh tải xong,
+   sông khỏi phải vẽ lại. */
 .day-plan__media {
   position: relative;
   display: block;
   width: 100%;
+  aspect-ratio: 16 / 10;
   padding: 0;
   overflow: hidden;
   font: inherit;
   color: inherit;
   text-align: inherit;
-  background: none;
+  background: var(--color-surface);
   border: 0;
   border-radius: var(--radius);
 }
@@ -264,12 +275,14 @@
 .day-plan__media--button { cursor: pointer; }
 
 /* Ảnh mở từ trên xuống, cùng chiều với phần ảnh đang lộ ra khi cuộn, và thu nhẹ về cỡ thật.
-   Đặt sẵn tỉ lệ khung để khối không đổi chiều cao khi ảnh tải xong, sông khỏi phải vẽ lại. */
+   Chữ thay thế (khi ảnh lỗi) nhỏ và nhạt, nằm trong khung. */
 .day-plan__img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  height: 100%;
   object-fit: cover;
+  font-size: 0.8rem;
+  color: var(--color-muted);
   clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0);
   scale: calc(1.12 - var(--p) * 0.12);
   transition: filter 0.3s ease;
@@ -389,12 +402,15 @@
   .day-plan__river { --river-w: 9rem; }
   .day-plan__stops { grid-template-columns: 1fr var(--river-w) 1fr; row-gap: 1rem; }
   .day-plan__stop:nth-child(odd) { grid-column: 1; text-align: right; }
+  /* Bến bờ trái thì phía ngoài là bên trái; bến bờ phải giữ số bên phải như trên điện thoại. */
+  .day-plan__stop:nth-child(odd) .day-plan__num { text-align: left; }
   .day-plan__stop:nth-child(odd) .day-plan__text { margin-left: auto; }
   .day-plan__stop:nth-child(even) { grid-column: 3; margin-top: 9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .day-plan,
+  .day-plan__layer,
   .day-plan__img,
   .day-plan__more,
   .day-plan__note { transition: none; }

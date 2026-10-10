@@ -13,11 +13,14 @@ const NS = 'http://www.w3.org/2000/svg';
 const REVEAL_DISTANCE = 0.35;
 // Xuồng ở chỗ sông cắt ngang giữa màn hình; bến có tâm gần vạch này nhất là bến đang tới.
 const BOAT_LINE = 0.5;
-// Các lớp của dòng sông từ ngoài vào trong, số là bề rộng so với lòng sông: bờ cỏ, bờ bùn, mép sẫm, nước sâu,
-// nước giữa, dải trời phản chiếu. Chồng nhiều nét rồi làm mờ nhẹ thì màu chuyển dần như nước thật.
-const LAYERS = [['grass', 2.2], ['mud', 1.34], ['rim', 1.08], ['deep', 1], ['mid', 0.66], ['light', 0.3]];
+// Các lớp của dòng sông từ ngoài vào trong: [tên, bề rộng so với lòng sông, độ lệch khỏi tim sông].
+// Bờ cây nhoè rộng, bờ cát ướt, nước sát bờ sẫm hơn, nước giữa sáng dần, dải trời phản chiếu lệch về một bên bờ.
+// Chồng nhiều nét rồi làm mờ nhẹ thì màu chuyển dần từ mép vào giữa như nước thật.
+const LAYERS = [['bank', 2.6, 0], ['shore', 1.22, 0], ['edge', 1, 0], ['water', 0.74, 0], ['center', 0.42, 0.04], ['sky', 0.12, -0.2]];
 // Vệt dòng chảy song song với sông, lệch khỏi tim sông theo tỉ lệ bề rộng.
 const FLOWS = [-0.28, 0.06, 0.3];
+// Phần đầu và cuối sông mờ dần vào nền (tỉ lệ theo chiều cao sông); xuồng chỉ đi trong khúc giữa còn rõ.
+const FADE = 0.07;
 let instance = 0;
 
 const toMinutes = (hhmm) => {
@@ -104,8 +107,10 @@ function smoothPath(points) {
   return d;
 }
 
+// Vùng của bộ lọc tính theo cả khung vẽ (userSpaceOnUse), không theo khung bao của đường:
+// khung bao không tính bề rộng nét, nên tính theo nó thì phần nét tràn ra bị cắt thành cạnh thẳng.
 function filterEl(id, ...primitives) {
-  const filter = svgEl('filter', { id, x: '-30%', y: '-2%', width: '160%', height: '104%' });
+  const filter = svgEl('filter', { id, filterUnits: 'userSpaceOnUse', x: '-20%', y: '-2%', width: '140%', height: '104%' });
   filter.append(...primitives);
   return filter;
 }
@@ -113,19 +118,21 @@ function filterEl(id, ...primitives) {
 function riverSvg(filterId) {
   const svg = svgEl('svg', { class: 'day-plan__svg', 'aria-hidden': 'true', focusable: 'false' });
   // Hai bộ lọc, mỗi khối một id riêng để không trùng nếu trang có hai khối:
-  // bờ cỏ nhoè rộng; lòng sông có mép lượn không đều như bờ đất thật rồi làm mờ nhẹ để các lớp màu hoà vào nhau.
+  // bờ cây nhoè rộng; lòng sông có mép lượn không đều như bờ đất thật rồi làm mờ để các lớp màu hoà vào nhau.
   const softId = `${filterId}-soft`;
+  const fadeId = `${filterId}-fade`;
   const defs = svgEl('defs');
   defs.append(
-    filterEl(softId, svgEl('feGaussianBlur', { stdDeviation: 8 })),
+    fadeMaskEl(fadeId),
+    filterEl(softId, svgEl('feGaussianBlur', { stdDeviation: 12 })),
     filterEl(
       filterId,
-      svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.02 0.04', numOctaves: 3, seed: 7, result: 'noise' }),
-      svgEl('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 9, xChannelSelector: 'R', yChannelSelector: 'G', result: 'wobble' }),
-      svgEl('feGaussianBlur', { in: 'wobble', stdDeviation: 2.2 }),
+      svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.015 0.03', numOctaves: 3, seed: 7, result: 'noise' }),
+      svgEl('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 7, xChannelSelector: 'R', yChannelSelector: 'G', result: 'wobble' }),
+      svgEl('feGaussianBlur', { in: 'wobble', stdDeviation: 3 }),
     ),
   );
-  const layer = ([name, ratio]) => svgEl('path', { class: `day-plan__layer day-plan__${name}`, 'data-w': ratio });
+  const layer = ([name, ratio, dx]) => svgEl('path', { class: `day-plan__layer day-plan__${name}`, 'data-w': ratio, 'data-dx': dx });
   const banks = svgEl('g', { filter: `url(#${softId})` });
   banks.append(layer(LAYERS[0]));
   const paint = svgEl('g', { filter: `url(#${filterId})` });
@@ -135,8 +142,24 @@ function riverSvg(filterId) {
     ...FLOWS.map((dx, i) => svgEl('path', { class: `day-plan__flow day-plan__flow--${i + 1}`, 'data-dx': dx })),
     svgEl('path', { class: 'day-plan__glint', 'data-dx': -0.05 }),
   );
-  svg.append(defs, banks, paint, flows, svgEl('path', { class: 'day-plan__wake' }), svgEl('g', { class: 'day-plan__docks' }), boatEl());
+  // Mặt nạ chỉ áp lên sông, không áp lên chấm bến và xuồng, để xuồng ở đầu sông vẫn rõ.
+  const river = svgEl('g', { mask: `url(#${fadeId})` });
+  river.append(banks, paint, flows, svgEl('path', { class: 'day-plan__wake' }));
+  svg.append(defs, river, svgEl('g', { class: 'day-plan__docks' }), boatEl());
   return svg;
+}
+
+// Mặt nạ làm hai đầu sông mờ dần vào nền section: sông như chảy từ xa tới rồi chảy tiếp,
+// không bắt đầu và kết thúc bằng một khối bo tròn. Trắng là hiện, đen là ẩn; tính theo cả khung vẽ.
+function fadeMaskEl(id) {
+  const gradId = `${id}-grad`;
+  const grad = svgEl('linearGradient', { id: gradId, x1: 0, y1: 0, x2: 0, y2: 1 });
+  [[0, 0], [FADE, 1], [1 - FADE, 1], [1, 0]].forEach(([offset, opacity]) => {
+    grad.append(svgEl('stop', { offset, 'stop-color': '#fff', 'stop-opacity': opacity }));
+  });
+  const mask = svgEl('mask', { id, maskUnits: 'userSpaceOnUse', x: '-20%', y: '0', width: '140%', height: '100%' });
+  mask.append(grad, svgEl('rect', { x: '-20%', y: '0', width: '140%', height: '100%', fill: `url(#${gradId})` }));
+  return mask;
 }
 
 // Tấm mô tả: chỉ lấy dòng có đủ nhãn và nội dung, để <dl> luôn đúng cặp dt, dd.
@@ -372,13 +395,12 @@ export class WlDayPlan extends HTMLElement {
     // Sông chủ yếu chạy dọc, nên dời ngang cả đường là có một đường gần như song song (dùng cho vệt dòng chảy).
     const pathAt = (dx) => smoothPath(points.map(([x, y]) => [x + dx, y]));
     const d = pathAt(0);
-    const width = wide ? 64 : 30;
+    const width = wide ? 64 : 32;
 
+    this._svg.querySelectorAll('[data-dx]').forEach((line) => line.setAttribute('d', pathAt(width * Number(line.dataset.dx))));
     this._svg.querySelectorAll('.day-plan__layer').forEach((layer) => {
-      layer.setAttribute('d', d);
       layer.style.strokeWidth = width * Number(layer.dataset.w);
     });
-    this._svg.querySelectorAll('[data-dx]').forEach((line) => line.setAttribute('d', pathAt(width * Number(line.dataset.dx))));
     const wake = this._svg.querySelector('.day-plan__wake');
     wake.setAttribute('d', d);
 
@@ -418,7 +440,7 @@ export class WlDayPlan extends HTMLElement {
     const item = this._items[this._liveIndex];
     const y = reduce && item
       ? item.offsetTop + item.offsetHeight / 2
-      : clamp(innerHeight * BOAT_LINE - this._river.getBoundingClientRect().top, 0, this._river.offsetHeight);
+      : clamp(innerHeight * BOAT_LINE - this._river.getBoundingClientRect().top, this._river.offsetHeight * FADE, this._river.offsetHeight * (1 - FADE));
     this._target = this.lengthAtY(y);
     if (snap || reduce || this._boatLength === undefined) {
       this._boatLength = this._target;
