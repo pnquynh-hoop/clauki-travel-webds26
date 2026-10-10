@@ -300,6 +300,12 @@
   text-transform: uppercase;
 }
 
+/* Logo (nếu thương hiệu có) đứng giữa như con dấu trên biển hiệu: cao hơn logo kiểu solid vì logo tròn
+   nhiều chi tiết; thanh header cao theo logo. */
+.header--center .header__brand img {
+  height: 3.25rem;
+}
+
 .header--center .header__cta {
   grid-column: 3;
   grid-row: 1;
@@ -327,6 +333,10 @@
   .header--center .header__bar {
     min-height: 0;
     padding-top: 0.9rem;
+  }
+
+  .header--center .header__brand img {
+    height: 4.5rem;
   }
 
   .header--center .header__brand {
