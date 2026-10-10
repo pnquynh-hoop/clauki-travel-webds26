@@ -24,6 +24,7 @@
   font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--color-muted);
+  text-wrap: pretty;
 }
 
 .stays__grid {

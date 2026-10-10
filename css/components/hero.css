@@ -181,6 +181,12 @@
   max-width: 31rem;
   margin-top: 1.25rem;
   font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  /* Trình duyệt cân lại mấy dòng cuối, không để một chữ đứng trơ trọi ở dòng cuối. */
+  text-wrap: pretty;
+}
+
+.hero--coverflow .hero__eyebrow {
+  text-wrap: balance;
 }
 
 /* Điện thoại: hai nút xếp dọc, rộng bằng nhau. */

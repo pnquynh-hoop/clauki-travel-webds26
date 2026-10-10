@@ -59,6 +59,12 @@
   scroll-margin-top: calc(1.5rem - var(--space-section));
 }
 
+/* Đoạn dẫn, chú thích ảnh: trình duyệt cân lại mấy dòng cuối, không để một chữ đứng trơ trọi ở dòng cuối. */
+.gallery--slices .gallery__lead,
+.gallery__cap {
+  text-wrap: pretty;
+}
+
 .gallery__hint {
   margin: 0.75rem 0 0;
   font-size: 0.8125rem;

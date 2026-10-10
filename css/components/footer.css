@@ -106,11 +106,11 @@
   margin: 0;
 }
 
-/* summary giữ display: list-item để còn dấu tam giác mở, đóng của trình duyệt (khách biết bấm được);
-   padding cho đủ cao 2.75rem, dễ bấm trên điện thoại. */
+/* summary cao 2.75rem để dễ bấm trên điện thoại. */
 .footer__credits-title {
-  display: list-item;
-  padding-block: 0.7rem;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
   font-size: 0.875rem;
   font-weight: 800;
   color: var(--color-ink);
@@ -357,6 +357,14 @@
 
 .footer--card .footer__cols {
   padding-block: 2rem;
+}
+
+/* Kiểu card: "Nguồn ảnh" giữ display: list-item để còn dấu tam giác mở, đóng của trình duyệt (khách biết bấm được);
+   padding cho đủ cao 2.75rem. */
+.footer--card .footer__credits-title {
+  display: list-item;
+  min-height: 0;
+  padding-block: 0.7rem;
 }
 
 /* Điện thoại: liên kết trong chân trang cao đủ 2.75rem để dễ chạm; màn rộng dùng chuột nên trả lại khoảng gọn. */

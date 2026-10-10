@@ -22,7 +22,7 @@
 
 .faq__lead {
   margin: 1rem 0 0;
-  font-size: 1.0625rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   color: var(--color-muted);
 }
@@ -98,6 +98,8 @@
 
 .faq--chat .faq__lead {
   max-width: 28rem;
+  font-size: 1.0625rem;
+  text-wrap: pretty;
 }
 
 .faq__sr {

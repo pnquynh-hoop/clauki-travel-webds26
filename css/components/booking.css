@@ -6,10 +6,21 @@
   scroll-margin-top: calc(1.5rem - var(--space-section));
 }
 
-/* Tiêu đề canh trái, thẳng lề với tiêu đề của các khối khác. */
 .booking__head {
   max-width: 36rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+/* Kiểu stay: tiêu đề canh trái, thẳng lề với tiêu đề của các khối khác trên trang; đoạn dẫn cùng cỡ các khối khác. */
+.booking--stay .booking__head {
   margin: 0 0 2.5rem;
+  text-align: left;
+}
+
+.booking--stay .booking__lead {
+  font-size: 1.0625rem;
+  text-wrap: pretty;
 }
 
 .booking__eyebrow {
@@ -25,7 +36,7 @@
 
 .booking__lead {
   margin: 1rem 0 0;
-  font-size: 1.0625rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   color: var(--color-muted);
 }
@@ -311,7 +322,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.85rem;
-  padding: 1rem;
+  padding: 1.25rem;
   background: color-mix(in srgb, var(--color-bg) 60%, var(--color-surface));
   border-radius: var(--radius);
 }
@@ -321,13 +332,17 @@
   font-weight: 800;
 }
 
-.booking__nights-note {
+/* Dòng nhỏ màu nhấn trên tạm tính: kiểu stay ghi số đêm, số lần bình minh (booking__nights-note);
+   kiểu request dùng cùng kiểu chữ cho dòng ưu đãi (booking__sunrise). */
+.booking__nights-note,
+.booking__sunrise {
   margin: 0;
   font-weight: 600;
   color: var(--color-accent);
 }
 
-.booking__nights-note:empty {
+.booking__nights-note:empty,
+.booking__sunrise:empty {
   display: none;
 }
 
@@ -337,13 +352,26 @@
   margin: 0;
 }
 
-/* Điện thoại hẹp: nhãn chiếm hàng trên, con số xuống hàng dưới nhưng vẫn nằm sát phải (margin-left: auto). */
 .booking__line {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
+  gap: 1rem;
+}
+
+/* Kiểu stay, điện thoại hẹp: nhãn chiếm hàng trên, con số xuống hàng dưới nhưng vẫn nằm sát phải (margin-left: auto);
+   hộp tạm tính bớt đệm cho rộng chỗ chữ. */
+.booking--stay .booking__summary {
+  padding: 1rem;
+}
+
+.booking--stay .booking__line {
+  flex-wrap: wrap;
   gap: 0.25rem 1rem;
+}
+
+.booking--stay .booking__line dd {
+  margin-left: auto;
 }
 
 .booking__line dt {
@@ -361,7 +389,7 @@
 }
 
 .booking__line dd {
-  margin: 0 0 0 auto;
+  margin: 0;
   font-weight: 600;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -467,7 +495,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .booking__summary {
+  .booking--stay .booking__summary {
     padding: 1.25rem;
   }
 
@@ -561,6 +589,7 @@
 
   .booking__summary-title,
   .booking__nights-note,
+  .booking__sunrise,
   .booking__lines {
     grid-column: 1;
   }
@@ -572,7 +601,8 @@
   }
 
   .booking__summary-title { grid-row: 1; }
-  .booking__nights-note { grid-row: 2; }
+  .booking__nights-note,
+  .booking__sunrise { grid-row: 2; }
   .booking__lines { grid-row: 3 / 5; }
   .booking__total { grid-row: 1 / 3; }
   .booking__includes { grid-row: 3; }

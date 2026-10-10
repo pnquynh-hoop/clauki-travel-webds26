@@ -51,6 +51,7 @@
   margin: 1rem 0 0;
   font-size: 1.0625rem;
   line-height: 1.6;
+  text-wrap: pretty;
   color: var(--color-muted);
 }
 

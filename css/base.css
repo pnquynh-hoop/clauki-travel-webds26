@@ -115,13 +115,6 @@ h2 {
   font-size: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
 }
 
-/* Đoạn văn, chú thích: trình duyệt cân lại vài dòng cuối để không còn một chữ đứng trơ trọi ở dòng cuối. */
-p,
-li,
-figcaption {
-  text-wrap: pretty;
-}
-
 h3 {
   font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
 }
