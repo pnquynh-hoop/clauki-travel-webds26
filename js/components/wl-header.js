@@ -3,7 +3,9 @@
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
 
-// Có logo thì dùng ảnh, chưa có thì hiện tên thương hiệu bằng font tiêu đề.
+// Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
+// Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);
+// kiểu header nào chỉ muốn thấy logo thì CSS ẩn chữ khỏi mắt nhưng vẫn giữ cho trình đọc màn hình.
 function brandEl(brand) {
   const a = document.createElement('a');
   a.className = 'header__brand';
@@ -11,8 +13,8 @@ function brandEl(brand) {
   if (brand.logo) {
     const img = document.createElement('img');
     img.src = asset(brand.logo);
-    img.alt = brand.name ?? '';
-    a.append(img);
+    img.alt = '';
+    a.append(img, textEl('span', 'header__brand-name', brand.name) ?? '');
   } else {
     a.textContent = brand.name ?? '';
   }
