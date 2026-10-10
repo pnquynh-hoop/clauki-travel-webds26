@@ -1,317 +1,391 @@
 {
   "id": "brand-test",
   "meta": {
-    "title": "Lối Mây · Hà Giang 4 ngày 3 đêm mùa tam giác mạch",
-    "description": "Tour đoàn nhỏ tối đa 10 khách qua cổng trời Quản Bạ, phố cổ Đồng Văn và đèo Mã Pì Lèng, ngủ nhà dân, đi cùng hướng dẫn viên người địa phương.",
+    "title": "Lượn Vịnh - Bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè",
+    "description": "Hai mươi lăm phút bay thấp từ Tuần Châu sang vịnh Lan Hạ, hạ cánh trước nhà bè, ngủ một đêm giữa núi đá, sáng chèo kayak rồi theo tàu về.",
     "favicon": ""
   },
-  "brand": { "name": "Lối Mây", "logo": "", "slogan": "Đi chậm qua những cung đèo" },
-  "cta": { "label": "Giữ chỗ", "href": "#dat-cho", "note": "Từ 6.490.000đ / khách" },
-  "nav": [
-    { "label": "Hành trình", "href": "#lich-trinh" },
-    { "label": "Nơi nghỉ", "href": "#noi-nghi" },
-    { "label": "Ảnh", "href": "#thu-vien" },
-    { "label": "Hỏi đáp", "href": "#hoi-dap" }
-  ],
-  "header": { "variant": "overlay" },
-  "contact": {
-    "phone": "0123 456 789",
-    "email": "xin-chao@loimay.example",
-    "address": "Hoàn Kiếm, Hà Nội",
-    "hours": "8:00 đến 20:00, cả tuần"
+  "brand": {
+    "name": "Lượn Vịnh",
+    "logo": "",
+    "slogan": "Ngắm vịnh từ trên mây, ngủ lại bên sóng"
+  },
+  "cta": {
+    "label": "Giữ ghế",
+    "href": "#giu-ghe",
+    "note": "6.900.000 đồng mỗi khách, gồm chuyến bay và một đêm nhà bè"
   },
   "toTop": {
     "label": "Lên đầu trang"
   },
+  "nav": [
+    {
+      "label": "Chuyến bay",
+      "href": "#chuyen-bay"
+    },
+    {
+      "label": "Ảnh",
+      "href": "#thu-vien"
+    },
+    {
+      "label": "Khách kể",
+      "href": "#khach-ke"
+    },
+    {
+      "label": "Hỏi đáp",
+      "href": "#hoi-dap"
+    }
+  ],
+  "header": {
+    "variant": "solid",
+    "menu": "Menu"
+  },
+  "contact": {
+    "phone": "0123 456 789",
+    "email": "giu-ghe@luonvinh.clauki",
+    "address": "Bến bay Tuần Châu, Hạ Long"
+  },
   "place": {
-    "name": "Đồng Văn, Hà Giang",
-    "lat": 23.2786,
-    "lon": 105.3622,
-    "timezone": "Asia/Ho_Chi_Minh",
-    "sunrise": "05:58",
-    "sunset": "17:31"
+    "name": "Hạ Long",
+    "lat": 20.93,
+    "lon": 107.0,
+    "timezone": "Asia/Ho_Chi_Minh"
   },
   "sections": [
     {
       "type": "hero",
       "id": "gioi-thieu",
-      "variant": "full",
-      "eyebrow": "Hà Giang · 4 ngày 3 đêm · Mùa tam giác mạch",
-      "title": "Đi qua cổng trời",
-      "lead": "Bốn ngày theo cung đường đá từ Quản Bạ lên Đồng Văn, ngủ nhà dân và đi chậm qua đèo Mã Pì Lèng.",
-      "image": { "src": "images/hero.jpg", "alt": "Ruộng bậc thang và núi đá tai mèo trong sương sớm ở Hà Giang" },
-      "link": { "label": "Xem lịch trình", "href": "#lich-trinh" },
-      "stats": [
-        { "value": "4N3Đ", "label": "khởi hành từ Hà Nội" },
-        { "value": "10", "label": "khách tối đa mỗi đoàn" },
-        { "value": "3", "label": "đêm ngủ nhà dân" }
+      "variant": "coverflow",
+      "eyebrow": "Thuỷ phi cơ, vịnh Hạ Long và Lan Hạ",
+      "title": "Ngắm vịnh từ trên mây",
+      "lead": "Hai mươi lăm phút bay thấp qua hàng nghìn đảo đá, hạ cánh ngay trước nhà bè và ở lại một đêm giữa vịnh.",
+      "link": {
+        "label": "Xem chuyến bay",
+        "href": "#chuyen-bay"
+      },
+      "slidesLabel": "Ảnh chuyến bay Lượn Vịnh, dùng phím mũi tên trái phải để đổi ảnh",
+      "prevLabel": "Trước",
+      "nextLabel": "Sau",
+      "slides": [
+        {
+          "image": {
+            "src": "images/nui-da-lan-ha.webp",
+            "alt": "Những núi đá vôi phủ cây xanh mọc thẳng từ mặt vịnh lặng"
+          },
+          "caption": "Núi đá Lan Hạ"
+        },
+        {
+          "image": {
+            "src": "images/hero.webp",
+            "alt": "Thuỷ phi cơ cánh đỏ trắng bay thấp sát mặt nước xanh, phía sau là bờ rừng thông"
+          },
+          "caption": "Bay thấp sát mặt nước"
+        },
+        {
+          "image": {
+            "src": "images/cheo-kayak.webp",
+            "alt": "Khách chèo kayak vàng trên làn nước xanh ngọc giữa các đảo đá"
+          },
+          "caption": "Sáng chèo kayak"
+        }
       ]
     },
     {
       "type": "intro",
-      "id": "cach-di",
-      "eyebrow": "Cách Lối Mây đi",
-      "title": "Có những con đèo phải đi chậm mới thấy hết",
-      "lead": "Không chạy đua điểm check-in. Mỗi ngày chỉ hai chặng chính, còn lại là thời gian dừng, ngắm và trò chuyện với người bản địa."
-    },
-    {
-      "type": "host",
-      "id": "nguoi-dan-duong",
-      "eyebrow": "Người dẫn đường",
-      "title": "Anh Páo, sinh ra dưới chân đèo Mã Pì Lèng",
-      "story": [
-        "Anh Páo dẫn khách đi những con đường anh đi học hồi nhỏ.",
-        "Mỗi đoàn anh chỉ nhận 10 người, để ai cũng hỏi được chuyện bản."
-      ],
-      "quote": { "text": "Đi chậm thì mới gặp được người.", "by": "Anh Páo, hướng dẫn viên" },
-      "facts": [
-        { "value": "12", "label": "năm dẫn đoàn" },
-        { "value": "3", "label": "thứ tiếng" },
-        { "value": "10", "label": "khách mỗi đoàn" }
-      ],
-      "image": { "src": "images/host-1.jpg", "alt": "Người đàn ông đứng trên con đường đèo, sau lưng là núi đá" },
-      "imageSecond": { "src": "images/host-2.jpg", "alt": "Ngôi nhà trình tường giữa ruộng ngô" }
-    },
-    {
-      "type": "features",
-      "id": "vi-sao",
-      "variant": "grid",
-      "eyebrow": "Vì sao chọn chuyến này",
-      "title": "Nhỏ, chậm và có người dẫn đường bản địa",
-      "items": [
-        { "value": "10", "title": "Khách tối đa mỗi đoàn", "text": "Đoàn nhỏ nên dừng được ở những khúc cua mà xe lớn phải bỏ qua." },
-        { "value": "3", "title": "Đêm ngủ nhà dân", "text": "Nhà trình tường ở Quản Bạ, nhà cổ ở Đồng Văn, nhà gỗ nhìn xuống thung lũng Mèo Vạc." },
-        { "value": "1:5", "title": "Hướng dẫn viên trên số khách", "text": "Người dẫn đường sinh ra ở Hà Giang, nói được tiếng H'Mông." },
-        { "value": "0đ", "title": "Phí đổi ngày", "text": "Đổi sang chuyến khác miễn phí nếu báo trước 7 ngày." }
-      ]
-    },
-    {
-      "type": "day-plan",
-      "id": "mot-ngay-tren-deo",
-      "eyebrow": "Một ngày trên đèo",
-      "title": "Từ sương sớm tới bếp lửa",
-      "nowLabel": "Trên đèo lúc này",
-      "liveLabel": "Đang diễn ra",
-      "hint": "Cuộn xuống để đi qua từng chặng",
-      "moreLabel": "Xem chi tiết",
-      "stops": [
-        { "time": "06:00", "title": "Ngắm sương ở Quản Bạ", "text": "Uống trà nóng trước hiên nhà trình tường.", "image": { "src": "images/day-1.jpg", "alt": "Thung lũng phủ sương lúc sáng sớm" },
-          "details": [
-            { "label": "Bao lâu", "value": "Khoảng 1 tiếng" },
-            { "label": "Mang theo", "value": "Áo ấm, sáng sớm trên đèo chỉ chừng 10 độ" },
-            { "value": "Dòng thiếu nhãn để thử: dòng này phải bị bỏ qua." }
-          ] },
-        { "time": "11:30", "title": "Ăn trưa ở chợ phiên", "text": "Thắng cố, mèn mén và bánh tam giác mạch.", "image": { "src": "images/day-2.jpg", "alt": "Chợ phiên vùng cao đông người" } },
-        { "time": "16:00", "title": "Đi bộ trên Mã Pì Lèng", "text": "Đoạn đường men vách đá, nhìn xuống sông Nho Quế.", "image": { "src": "images/day-3.jpg", "alt": "Con đường men vách núi đá" } },
-        { "time": "20:00", "title": "Bếp lửa nhà dân", "text": "Ngồi quanh bếp nghe chuyện bản.", "image": { "src": "images/day-4.jpg", "alt": "Bếp lửa trong ngôi nhà gỗ" } }
-      ]
-    },
-    {
-      "type": "journey",
-      "id": "lich-trinh",
-      "variant": "road",
-      "eyebrow": "Lịch trình",
-      "title": "Bốn ngày, sáu chặng",
-      "days": [
-        { "title": "Ngày 1", "text": "Hà Nội, Quản Bạ" },
-        { "title": "Ngày 2", "text": "Dốc Thẩm Mã, Đồng Văn" },
-        { "title": "Ngày 3", "text": "Đèo Mã Pì Lèng, Mèo Vạc" },
-        { "title": "Ngày 4", "text": "Về Hà Nội" }
-      ],
-      "note": "Độ cao trong dữ liệu mẫu chỉ để thử.",
-      "planLabel": "Xem từng giờ",
-      "finish": {
-        "eyebrow": "Hết bốn ngày, về tới Hà Nội",
-        "title": "Đoàn gần nhất khởi hành thứ Sáu tuần sau, còn 6 chỗ"
-      },
-      "stops": [
-        {
-          "time": "Ngày 1 · 06:00",
-          "title": "Rời Hà Nội",
-          "altitude": 20,
-          "text": "Xe limousine đón ở phố cổ, trưa tới thành phố Hà Giang, chiều đổi sang xe nhỏ lên Quản Bạ.",
-          "image": { "src": "images/journey-1.jpg", "alt": "Xe chạy trên con đường đèo quanh co giữa núi" }
-        },
-        {
-          "time": "Ngày 1 · 16:30",
-          "title": "Cổng trời Quản Bạ",
-          "altitude": 1100,
-          "text": "Ngắm núi Đôi lúc hoàng hôn, tối nghỉ trong nhà trình tường của một gia đình người Tày.",
-          "night": "Đêm 1: nhà trình tường ở Quản Bạ",
-          "image": { "src": "images/journey-2.jpg", "alt": "Hai ngọn núi tròn giữa thung lũng Quản Bạ lúc chiều muộn" },
-          "plan": [
-            { "time": "16:30", "text": "Dừng ở điểm ngắm núi Đôi, chụp ảnh lúc hoàng hôn." },
-            { "time": "18:30", "text": "Ăn tối cùng gia chủ người Tày." },
-            { "kind": "tip", "time": "Mang theo", "text": "Áo khoác gió: trên cổng trời về chiều gió lạnh." },
-            { "kind": "night", "time": "Đêm 1", "text": "Ngủ nhà trình tường, chăn đệm do gia chủ chuẩn bị." }
-          ]
-        },
-        {
-          "time": "Ngày 2 · 08:00",
-          "title": "Dốc Thẩm Mã",
-          "altitude": 1200,
-          "text": "Đi bộ một đoạn dốc ngắn, ghé chợ nhỏ ven đường của người H'Mông.",
-          "image": { "src": "images/journey-3.jpg", "alt": "Con dốc ngoằn ngoèo uốn quanh sườn núi đá" },
-          "plan": [
-            { "time": "08:00", "text": "Đi bộ lên dốc khoảng 40 phút, có nghỉ giữa chừng." },
-            { "text": "Mốc này không có giờ, chỉ có chữ, để thử trường time bị thiếu." }
-          ]
-        },
-        {
-          "time": "Ngày 2 · 15:00",
-          "title": "Phố cổ Đồng Văn",
-          "altitude": 1050,
-          "text": "Chiều dạo phố đá, tối ăn món bản địa cùng gia chủ.",
-          "night": "Đêm 2: nhà người dân ở phố cổ Đồng Văn",
-          "image": { "src": "images/journey-4.jpg", "alt": "Dãy nhà cổ lợp ngói âm dương trong phố cổ Đồng Văn" }
-        },
-        {
-          "time": "Ngày 3 · 07:00",
-          "title": "Đèo Mã Pì Lèng",
-          "altitude": 1500,
-          "text": "Đi bộ trên con đường men vách đá, nhìn xuống dòng Nho Quế xanh ngọc phía dưới.",
-          "night": "Đêm 3: homestay ở Mèo Vạc",
-          "image": { "src": "images/journey-5.jpg", "alt": "Dòng sông xanh ngọc chảy dưới hẻm núi sâu" }
-        },
-        {
-          "time": "Ngày 4 · 08:00",
-          "title": "Chợ Mèo Vạc rồi về",
-          "text": "Ghé chợ buổi sáng, trưa xuống núi, tối về tới Hà Nội.",
-          "image": { "src": "images/journey-6.jpg", "alt": "Khu chợ vùng cao đông người mặc trang phục truyền thống" }
-        }
-      ]
-    },
-    {
-      "type": "process",
-      "id": "chuan-bi",
-      "variant": "morph",
-      "eyebrow": "Trước ngày đi",
-      "title": "Ba bước chuẩn bị",
-      "lead": "Khối thử với ba bước, hình tròn dẹt dần thành giọt nước.",
-      "steps": [
-        {
-          "name": "Đặt chỗ",
-          "text": "Chọn ngày đi và giữ chỗ trước một tuần.",
-          "color": "#3f6f86",
-          "shape": "M -120 0 C -120 -90 120 -90 120 0 C 120 90 -120 90 -120 0 Z",
-          "dew": true
-        },
-        {
-          "name": "Soạn đồ",
-          "text": "Mang áo ấm, giày đi bộ và áo mưa mỏng.",
-          "color": "#2e4a3b",
-          "shape": "M -100 20 C -110 -70 90 -110 110 -10 C 120 70 -80 100 -100 20 Z",
-          "heat": true
-        },
-        {
-          "name": "Lên xe",
-          "text": "Xe đón lúc sáu giờ sáng ở điểm hẹn.",
-          "color": "#b5651d",
-          "shape": "M 0 -110 C 60 -40 90 20 60 70 C 30 110 -30 110 -60 70 Z"
-        }
-      ]
-    },
-    {
-      "type": "stays",
-      "id": "noi-nghi",
-      "variant": "rows",
-      "eyebrow": "Nơi nghỉ",
-      "title": "Ba đêm, ba mái nhà",
-      "items": [
-        {
-          "kind": "Đêm 1",
-          "name": "Nhà trình tường ở Quản Bạ",
-          "text": "Tường đất dày giữ ấm, phòng chung có rèm riêng cho từng giường.",
-          "amenities": ["Chăn ấm", "Nước nóng", "Bữa tối cùng gia chủ"],
-          "image": { "src": "images/stay-1.jpg", "alt": "Ngôi nhà tường đất mái ngói nằm giữa ruộng ngô" }
-        },
-        {
-          "kind": "Đêm 2",
-          "name": "Nhà cổ trong phố đá Đồng Văn",
-          "text": "Phòng đôi trên gác gỗ, mở cửa sổ là thấy mái ngói âm dương.",
-          "amenities": ["Phòng đôi", "Nước nóng", "Sân thượng ngắm sao"],
-          "image": { "src": "images/stay-2.jpg", "alt": "Gác gỗ nhìn xuống con phố lát đá" }
-        },
-        {
-          "kind": "Đêm 3",
-          "name": "Nhà gỗ trên đồi Mèo Vạc",
-          "text": "Ban công nhìn thẳng xuống thung lũng, sáng sớm có hôm gặp biển mây.",
-          "amenities": ["Phòng đôi", "Ban công", "Bếp lửa"],
-          "image": { "src": "images/stay-3.jpg", "alt": "Ban công gỗ nhìn ra thung lũng phủ mây" }
-        }
-      ]
+      "id": "chuyen-bay",
+      "variant": "center",
+      "eyebrow": "Chuyến bay",
+      "title": "Cất cánh ở Tuần Châu, hạ cánh trước cửa nhà bè",
+      "lead": "Máy bay bay ở độ cao vài trăm mét, đủ thấp để thấy rõ làng chài. Tối ăn hải sản trên bè, sáng chèo kayak rồi theo tàu về."
     },
     {
       "type": "gallery",
       "id": "thu-vien",
-      "variant": "mosaic",
-      "eyebrow": "Ảnh từ các chuyến trước",
-      "title": "Hà Giang qua ống kính khách đi cùng",
+      "variant": "slices",
+      "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+      "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+      "listLabel": "Năm ảnh của chuyến đi, mỗi lần mở một ảnh",
+      "eyebrow": "Từ buồng lái tới mặt nước",
+      "title": "Một ngày nhìn vịnh từ hai phía",
       "images": [
-        { "src": "images/gallery-1.jpg", "alt": "Hoa tam giác mạch màu hồng phủ kín sườn đồi", "caption": "Tam giác mạch nở cuối tháng 10" },
-        { "src": "images/gallery-2.jpg", "alt": "Hai người đi bộ trên con đường men vách núi đá", "caption": "Đoạn đi bộ trên Mã Pì Lèng" },
-        { "src": "images/gallery-3.jpg", "alt": "Biển mây phủ kín thung lũng lúc bình minh", "caption": "Sáng sớm ở Mèo Vạc" },
-        { "src": "images/gallery-4.jpg", "alt": "Mái ngói âm dương phủ rêu trong phố cổ", "caption": "Phố cổ Đồng Văn" },
-        { "src": "images/gallery-5.jpg", "alt": "Bữa tối bên bếp lửa trong một ngôi nhà gỗ", "caption": "Bữa tối cùng gia chủ" }
+        {
+          "src": "images/buong-lai.webp",
+          "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
+          "caption": "Ngồi sau buồng lái"
+        },
+        {
+          "src": "images/lang-be.webp",
+          "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
+          "caption": "Làng chài trên bè"
+        },
+        {
+          "src": "images/nha-be.webp",
+          "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
+          "caption": "Nhà bè giữa vịnh"
+        },
+        {
+          "src": "images/kayak-nui-da.webp",
+          "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
+          "caption": "Len giữa các đảo"
+        },
+        {
+          "src": "images/thuyen-hoang-hon.webp",
+          "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
+          "caption": "Chiều trên vịnh"
+        }
       ]
     },
     {
-      "type": "booking",
-      "id": "dat-cho",
-      "eyebrow": "Giữ chỗ",
-      "title": "Chọn ngày khởi hành",
-      "lead": "Giữ chỗ trước, Lối Mây gọi lại xác nhận trong 2 giờ rồi mới nhận cọc 30%.",
-      "price": 6490000,
-      "priceNote": "mỗi khách, đã gồm xe, ăn, ngủ và vé tham quan",
-      "includes": [
-        "Xe limousine Hà Nội và Hà Giang, khứ hồi",
-        "3 đêm nhà dân",
-        "Các bữa chính trong hành trình",
-        "Hướng dẫn viên người địa phương",
-        "Vé tham quan",
-        "Bảo hiểm du lịch"
-      ],
-      "departures": [
-        { "date": "2026-10-16", "seats": 4 },
-        { "date": "2026-10-23", "seats": 0 },
-        { "date": "2026-10-30", "seats": 7 },
-        { "date": "2026-11-06", "seats": 10 },
-        { "date": "2026-11-13", "seats": 2 }
-      ],
-      "hotline": "0123 456 789"
+      "type": "reviews",
+      "id": "khach-ke",
+      "variant": "postcard",
+      "eyebrow": "Khách đã bay",
+      "title": "Bưu thiếp gửi về từ trên mây",
+      "lead": "Mùa hè 2026: 96 chuyến bay, 1.104 khách, điểm trung bình 4,8 trên 5.",
+      "scoreLabel": "điểm",
+      "dateLabel": "Ngày bay",
+      "items": [
+        {
+          "rating": 5,
+          "text": "Lúc máy bay nghiêng cánh qua làng chài, cả khoang cùng nín thở. Tối nằm trên bè nghe sóng vỗ, không tin vừa bay qua chỗ đó.",
+          "name": "Thanh Tâm",
+          "from": "Hà Nội, đi cùng chồng",
+          "stamp": {
+            "value": 300,
+            "unit": "m",
+            "label": "Ba Trái Đào"
+          },
+          "date": "18.06.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Con trai mười tuổi được ngồi ghế đầu, nhìn thẳng vào buồng lái suốt chuyến. Sáng hôm sau cả nhà chèo kayak qua hang tới trưa.",
+          "name": "Minh Đức",
+          "from": "TP.HCM, đi cùng vợ con",
+          "stamp": {
+            "value": 450,
+            "unit": "m",
+            "label": "Vịnh Lan Hạ"
+          },
+          "date": "02.07.2026"
+        },
+        {
+          "rating": 4,
+          "text": "Hôm đó gió mạnh nên chuyến bay dời sang chiều, phải chờ hơn ba tiếng. Bù lại bay lúc hoàng hôn, nước vịnh đỏ rực dưới cánh.",
+          "name": "Phương Linh",
+          "from": "Đà Nẵng, đi cùng bạn thân",
+          "stamp": {
+            "value": 250,
+            "unit": "m",
+            "label": "Hang Sáng Tối"
+          },
+          "date": "27.07.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Bữa tối hải sản dọn ngay trên bè, mực câu lúc chiều. Đêm vịnh tối hẳn, thấy cả sao, sáng ra sương phủ kín núi đá.",
+          "name": "Gia Bảo",
+          "from": "Cần Thơ, đi một mình",
+          "stamp": {
+            "value": 400,
+            "unit": "m",
+            "label": "Cái Bèo"
+          },
+          "date": "14.08.2026"
+        }
+      ]
     },
     {
       "type": "faq",
       "id": "hoi-dap",
       "eyebrow": "Hỏi đáp",
-      "title": "Trước khi lên đường",
+      "title": "Trước khi lên máy bay",
+      "lead": "Những điều khách hay hỏi nhất về chuyến bay và đêm trên bè.",
+      "ask": {
+        "text": "Chưa thấy điều bạn cần?",
+        "action": "Gọi"
+      },
       "items": [
         {
-          "question": "Không biết đi xe máy thì có tham gia được không?",
-          "answer": "Được. Cả đoàn đi xe 16 chỗ; đoạn đi bộ trên Mã Pì Lèng ai mệt có thể ngồi xe chờ ở điểm dừng kế tiếp."
+          "question": "Gió to hay trời mưa thì sao?",
+          "answer": "Phi công quyết định cất cánh theo thời tiết lúc bay. Chuyến bị huỷ thì bạn chọn bay ngày khác hoặc nhận lại toàn bộ tiền."
         },
         {
-          "question": "Tháng 10, tháng 11 trên Hà Giang có lạnh không?",
-          "answer": "Ban ngày khoảng 18 đến 24 độ, đêm có thể xuống dưới 12 độ. Nên mang áo khoác gió và một lớp áo giữ nhiệt."
+          "question": "Có giới hạn hành lý không?",
+          "answer": "Mỗi khách mang tối đa 10 kg lên máy bay. Hành lý lớn hơn gửi theo tàu sang bè, tới nơi trước bữa tối."
         },
         {
-          "question": "Trẻ em và người lớn tuổi đi được không?",
-          "answer": "Phù hợp với trẻ từ 8 tuổi và người đi bộ được khoảng 2 km. Đường đèo nhiều khúc cua, ai dễ say xe nên mang thuốc."
+          "question": "Trẻ em đi được không?",
+          "answer": "Trẻ từ 2 tuổi trở lên được bay, ngồi ghế riêng và thắt dây an toàn. Trẻ dưới 12 tuổi tính giá trẻ em."
         },
         {
-          "question": "Hủy chuyến thì tiền cọc xử lý thế nào?",
-          "answer": "Hủy trước 7 ngày được hoàn toàn bộ tiền cọc. Hủy sát ngày hơn thì tiền cọc được chuyển sang một chuyến khác trong 6 tháng."
+          "question": "Nhà bè có điều hoà và phòng tắm riêng không?",
+          "answer": "Mỗi phòng trên bè có điều hoà và phòng tắm riêng, nước nóng chạy bằng điện mặt trời."
         },
         {
-          "question": "Có phòng riêng không?",
-          "answer": "Đêm 2 và đêm 3 là phòng đôi. Đêm 1 ở nhà trình tường là phòng chung, mỗi giường có rèm riêng."
+          "question": "Về lại Tuần Châu bằng gì?",
+          "answer": "Trưa hôm sau tàu của bè đưa bạn về bến Tuần Châu, khoảng hai tiếng rưỡi đi giữa các đảo."
         }
       ]
+    },
+    {
+      "type": "booking",
+      "id": "giu-ghe",
+      "variant": "request",
+      "eyebrow": "Giữ ghế",
+      "title": "Giữ ghế cho chuyến bay của bạn",
+      "lead": "Mỗi chuyến chỉ 12 ghế. Trang soạn sẵn tin nhắn, Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
+      "image": {
+        "src": "images/nha-be.webp",
+        "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
+      },
+      "price": 6900000,
+      "currency": "đồng",
+      "childPrice": 4900000,
+      "maxGuests": 12,
+      "maxNights": 1,
+      "defaultAdults": 2,
+      "defaultDates": {
+        "checkIn": "2027-06-12",
+        "checkOut": "2027-06-13"
+      },
+      "perks": [
+        {
+          "minNights": 1,
+          "months": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "text": "Bay từ tháng 5 đến tháng 8: tặng một buổi câu mực đêm trên bè."
+        }
+      ],
+      "labels": {
+        "place": "Lượn Vịnh",
+        "placeFacts": "Bay Tuần Châu sang Lan Hạ, một đêm nhà bè",
+        "perGuest": "{price} mỗi khách, gồm bay và một đêm",
+        "checkIn": "Ngày bay",
+        "checkOut": "Ngày về",
+        "adults": "Người lớn",
+        "adultsLess": "Bớt một người lớn",
+        "adultsMore": "Thêm một người lớn",
+        "children": "Trẻ 2 đến 11 tuổi",
+        "childrenLess": "Bớt một trẻ",
+        "childrenMore": "Thêm một trẻ",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "summary": "Tạm tính",
+        "guestLine": "Người lớn",
+        "guestDetail": "{adults} khách × {nights} đêm × {price}",
+        "childLine": "Trẻ em",
+        "childDetail": "{children} trẻ",
+        "free": "Miễn phí",
+        "total": "Tổng cộng",
+        "includes": "Đã gồm chuyến bay 25 phút, một đêm nhà bè, bữa tối hải sản, bữa sáng, kayak và tàu về Tuần Châu."
+      },
+      "errors": {
+        "dates": "Ngày về phải là ngày ngay sau ngày bay; gói này ở một đêm.",
+        "name": "Bạn nhập họ tên để Lượn Vịnh giữ đúng ghế.",
+        "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
+      },
+      "message": {
+        "title": "Tin nhắn giữ ghế đã soạn sẵn",
+        "lead": "Gửi tin này bằng một trong các cách dưới đây. Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
+        "template": "Chào Lượn Vịnh, tôi là {name}, số {phone}. Tôi muốn giữ ghế bay ngày {checkIn}, về ngày {checkOut} ({nights} đêm nhà bè), {adults} người lớn và {children} trẻ em. Tạm tính {total}.",
+        "sms": "Gửi tin nhắn",
+        "call": "Gọi {phone}",
+        "copy": "Chép nội dung",
+        "copied": "Đã chép",
+        "edit": "Sửa lại thông tin"
+      }
     }
   ],
   "footer": {
     "variant": "columns",
-    "note": "Lối Mây là thương hiệu giả tưởng, chỉ dùng làm dữ liệu thử khi phát triển trang cho cuộc thi Web Design 2026."
+    "image": {
+      "src": "images/hoang-hon.webp",
+      "alt": "Mặt trời lặn đỏ cam trên vịnh, một con tàu nhỏ đi qua dưới dãy núi đá"
+    },
+    "title": "Mai bay sớm,",
+    "titleAccent": "vịnh còn sương",
+    "marquee": [
+      "Tuần Châu",
+      "Ba Trái Đào",
+      "Vịnh Lan Hạ",
+      "Làng chài Cái Bèo",
+      "Hang Sáng Tối",
+      "Đảo Cát Bà"
+    ],
+    "navTitle": "Khám phá",
+    "contactTitle": "Liên hệ",
+    "addressTitle": "Bến bay",
+    "note": "Lượn Vịnh là thương hiệu giả tưởng; dữ liệu trang này do AI viết theo prompt mẫu của đội, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
+    "creditsTitle": "Nguồn ảnh"
   },
-  "credits": []
+  "credits": [
+    {
+      "file": "images/hero.webp",
+      "author": "Andrew W (Tawker)",
+      "license": "CC BY 2.5",
+      "source": "https://commons.wikimedia.org/wiki/File:SeaPlane_SaltSpring_Island.jpg",
+      "note": "Chụp ở đảo Salt Spring, Canada; đã thu nhỏ"
+    },
+    {
+      "file": "images/buong-lai.webp",
+      "author": "Tony Webster from Minneapolis, Minnesota, United States",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:N17CJ_-_1968_Cessna_206_Seaplane_(49044266068).jpg",
+      "note": "Chụp ở Mỹ; đã thu nhỏ"
+    },
+    {
+      "file": "images/nui-da-lan-ha.webp",
+      "author": "Christophe95",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_05.jpg",
+      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
+    },
+    {
+      "file": "images/lang-be.webp",
+      "author": "Christophe95",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_14.jpg",
+      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
+    },
+    {
+      "file": "images/cheo-kayak.webp",
+      "author": "Christophe95",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Kayaking_in_Ha_Long_Bay_2.jpg",
+      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
+    },
+    {
+      "file": "images/kayak-nui-da.webp",
+      "author": "Arian Zwegers",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Halong_Bay,_kayaking_(6225416547).jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/thuyen-hoang-hon.webp",
+      "author": "Vyacheslav Argenberg",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ha_Long_Bay,_Vietnam,_Sunset_in_Ha_Long_Bay.jpg",
+      "note": "Đã thu nhỏ"
+    },
+    {
+      "file": "images/nha-be.webp",
+      "author": "Christophe95",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Kayaks_in_Ha_Long_Bay.jpg",
+      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
+    },
+    {
+      "file": "images/hoang-hon.webp",
+      "author": "Mustang Joe",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ha_Long_Bay_Sunset,_Vietnam.jpg",
+      "note": "Đã thu nhỏ"
+    }
+  ]
 }
