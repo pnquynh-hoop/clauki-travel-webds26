@@ -295,7 +295,10 @@
     {
       "type": "gallery",
       "id": "thu-vien",
-      "variant": "mosaic",
+      "variant": "slices",
+      "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+      "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+      "listLabel": "Sáu ảnh quanh nhà vườn, mỗi lần mở một ảnh",
       "eyebrow": "Quanh nhà vườn",
       "title": "Miền Tây theo con nước",
       "images": [
