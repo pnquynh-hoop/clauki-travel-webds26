@@ -408,6 +408,8 @@ export class WlBooking extends HTMLElement {
     };
     const f = this._fields;
     [f.checkIn, f.checkOut, f.name, f.phone].forEach((ref) => ref.field.classList.add('booking__field--half'));
+    // Mỗi ô một class theo tên, để màn rộng xếp ngày nhận, ngày trả, số khách một hàng và tên, số điện thoại một hàng.
+    Object.entries(f).forEach(([key, ref]) => ref.field.classList.add(`booking__field--${key.toLowerCase()}`));
     const fields = groupEl('booking__fields', Object.values(f).map((ref) => ref.field));
 
     this._sunrise = document.createElement('p');

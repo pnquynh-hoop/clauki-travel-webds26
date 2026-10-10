@@ -145,7 +145,7 @@
         "extraLine": "Thêm khách",
         "extraDetail": "{guests} khách × {nights} đêm × {price}",
         "total": "Tổng cộng",
-        "includes": "Giá gồm bữa sáng cho 2 khách. Trang chưa gửi gì đi cho tới khi bạn gửi tin nhắn.",
+        "includes": "Giá gồm bữa sáng cho 2 khách.",
         "left": "Còn {n} căn",
         "soldOut": "Hết phòng"
       },

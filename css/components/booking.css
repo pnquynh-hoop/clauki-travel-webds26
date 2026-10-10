@@ -464,10 +464,35 @@
   }
 }
 
-/* Màn rộng: ảnh lớn cột trái cao hết thẻ, phần chọn và nhập cột phải. */
+/* Màn rộng: cả khối phải nằm trọn trong một màn hình (khoảng 1366x768 trở lên), nên tiêu đề và đoạn dẫn xếp một hàng;
+   trong thẻ, ảnh lớn cột trái; cột phải từ trên xuống: hàng thẻ chọn hạng (ảnh vuông nhỏ bên trái chữ),
+   hai hàng ô nhập, rồi tạm tính chia đôi: các dòng tiền bên trái, tổng tiền và nút đặt bên phải. */
 @media (min-width: 1024px) {
+  .booking--stay .booking__head {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: 3rem;
+    align-items: end;
+    max-width: 72rem;
+    margin-bottom: 1.25rem;
+    text-align: left;
+  }
+
+  .booking--stay .booking__eyebrow,
+  .booking--stay .booking__title {
+    grid-column: 1;
+  }
+
+  .booking--stay .booking__lead {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: end;
+    margin: 0;
+    font-size: 1rem;
+  }
+
   .booking__card {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
   }
 
   .booking__showcase {
@@ -475,6 +500,85 @@
   }
 
   .booking__panel {
-    padding: 2.25rem 2.5rem;
+    gap: 1rem;
+    padding: 1rem 2rem;
+  }
+
+  .booking__field {
+    gap: 0.3rem;
+  }
+
+  .booking__input {
+    min-height: 2.75rem;
+  }
+
+  .booking__room {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    column-gap: 0.6rem;
+    align-items: center;
+    padding: 0.4rem;
+  }
+
+  .booking__room-thumb {
+    grid-row: 1 / 4;
+    width: 3rem;
+    height: 3rem;
+    margin: 0;
+    aspect-ratio: 1;
+  }
+
+  .booking__fields {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .booking__field--checkin,
+  .booking__field--checkout,
+  .booking__field--guests {
+    grid-column: span 2;
+  }
+
+  .booking__field--name,
+  .booking__field--phone {
+    grid-column: span 3;
+  }
+
+  .booking__summary {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+    column-gap: 2rem;
+    row-gap: 0.6rem;
+    align-items: start;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .booking__summary-title,
+  .booking__sunrise,
+  .booking__lines {
+    grid-column: 1;
+  }
+
+  .booking__total,
+  .booking__includes,
+  .booking__submit {
+    grid-column: 2;
+  }
+
+  .booking__summary-title { grid-row: 1; }
+  .booking__sunrise { grid-row: 2; }
+  .booking__lines { grid-row: 3 / 5; }
+  .booking__total { grid-row: 1 / 3; }
+  .booking__includes { grid-row: 3; }
+  .booking__submit { grid-row: 4; align-self: end; }
+
+  /* Cột phải hẹp: chữ "Tổng cộng" nằm trên, con số nằm dưới. */
+  .booking__total {
+    display: grid;
+    gap: 0.1rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .booking__total strong {
+    font-size: 1.5rem;
   }
 }
