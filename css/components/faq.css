@@ -461,6 +461,12 @@
     height: 40rem;
   }
 
+  /* Tấm nền nghiêng sau khung nhắn tin thò ra ngoài mép phải khung khoảng 2rem. Từ 960px tới khoảng 1280px lề trang
+     chỉ còn 1rem nên phần thò ra làm cả trang cuộn ngang: cắt phần thừa theo chiều ngang, chiều dọc vẫn để bóng đổ hiện đủ. */
+  .faq--chat {
+    overflow-x: clip;
+  }
+
   .faq__chat-wrap::before {
     content: '';
     position: absolute;
