@@ -93,8 +93,78 @@
     {
       "type": "host",
       "id": "nha-chu-sau",
+      "variant": "tv",
       "eyebrow": "Nhà chú Sáu",
-      "title": "Ba đời làm vườn bên mé rạch",
+      "title": "Những câu chuyện về chú Sáu",
+      "tv": {
+        "hint": "Lướt xuống để bật tivi",
+        "channelHint": "Chuyển kênh để xem tiếp",
+        "offHint": "Hết kênh thì tivi tự tắt",
+        "power": "Bật, tắt tivi",
+        "channel": "Kênh {n}: {title}"
+      },
+      "stories": [
+        {
+          "title": "Con mương đầu tiên",
+          "text": "Ông nội chú Sáu đào con mương đầu tiên quanh vườn bằng tay. Ba đời sau, nước vẫn theo đúng con mương đó vào từng gốc cây.",
+          "quote": {
+            "text": "Đất lành thì cây mới tốt.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/nha-san-vuon.webp",
+            "alt": "Căn nhà sàn gỗ mái ngói đỏ giữa vườn cây, trước sân có lu nước và bồn hoa"
+          }
+        },
+        {
+          "title": "Mùa măng cụt",
+          "text": "Tới mùa, chú dậy từ lúc trời còn tối để hái trái. Khách ở nhà thì hái tới đâu ăn tới đó.",
+          "quote": {
+            "text": "Vườn có gì thì khách ăn nấy.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/mang-cut.webp",
+            "alt": "Trái măng cụt chín tím trên cành giữa lá xanh"
+          }
+        },
+        {
+          "title": "Cây cầu khỉ sau nhà",
+          "text": "Cây cầu khỉ bắc qua rạch là chú tự làm từ tre trong vườn. Khách nào đi qua được thì chú thưởng một ly trà.",
+          "quote": {
+            "text": "Đi chậm thôi, cầu nó quen chân người nhà.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/cau-khi.webp",
+            "alt": "Cây cầu khỉ bằng tre bắc qua con rạch giữa vườn cây"
+          }
+        },
+        {
+          "title": "Chèo xuồng như đi bộ",
+          "text": "Chú chèo xuồng từ năm lên bảy. Giờ chiều nào chú cũng chở khách len vô mấy con rạch nhỏ dưới tán dừa nước.",
+          "quote": {
+            "text": "Ở miền Tây, xuồng là đôi chân.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/cheo-xuong-non-la.webp",
+            "alt": "Người đội nón lá đứng chèo xuồng gỗ trên con rạch, sau lưng là rặng cây"
+          }
+        },
+        {
+          "title": "Mâm cơm chung",
+          "text": "Tối nào cả nhà cũng ngồi chung một mâm với khách. Cô Út nấu, chú Sáu kể chuyện vườn.",
+          "quote": {
+            "text": "Khách tới thì ăn chung mâm.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/mam-com.webp",
+            "alt": "Mâm cơm gia đình với tô canh, đĩa thịt kho, rau xào và chén nước mắm"
+          }
+        }
+      ],
       "story": [
         "Ông nội chú Sáu đào con mương đầu tiên quanh vườn. Giờ thì chú giữ vườn, cô Út sẽ lo phần giữ bếp.",
         "Năm phòng cho khách nằm ngay trong căn nhà gỗ, cửa sổ nhìn ra rạch."
