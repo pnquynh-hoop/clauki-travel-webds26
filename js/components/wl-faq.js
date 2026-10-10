@@ -1,6 +1,7 @@
 /* wl-faq.js - hỏi đáp: tiêu đề, đoạn dẫn, một dòng mời gọi hotline, rồi danh sách câu hỏi mở và đóng được.
    Mỗi câu là một thẻ <details>: bàn phím (Enter, Space) và trình đọc màn hình dùng được sẵn, không cần JS bắt phím.
-   Các thẻ cùng thuộc tính name nên mở câu này thì câu đang mở tự đóng. Chuyển động mở, đóng nằm trong faq.css. */
+   Các thẻ cùng thuộc tính name nên mở câu này thì câu đang mở tự đóng. Chuyển động mở, đóng nằm trong faq.css.
+   Kiểu split (Gành Sớm): tiêu đề trái, câu hỏi phải, mỗi câu một thẻ có nút tròn cộng trừ. */
 import { textEl, groupEl, telHref } from '../dom.js';
 
 function itemEl(item, group) {
@@ -33,7 +34,8 @@ export class WlFaq extends HTMLElement {
 
   render() {
     const section = this._data;
-    this.className = `faq faq--${section.variant ?? 'split'}`;
+    // Không có variant thì chỉ là dạng cơ bản một cột; mỗi thương hiệu tự thêm kiểu riêng qua class faq--<variant>.
+    this.className = section.variant ? `faq faq--${section.variant}` : 'faq';
 
     const head = groupEl('faq__head', [
       textEl('p', 'faq__eyebrow', section.eyebrow),

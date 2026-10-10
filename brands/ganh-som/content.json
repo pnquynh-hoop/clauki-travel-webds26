@@ -169,6 +169,7 @@
     {
       "type": "faq",
       "id": "hoi-dap",
+      "variant": "split",
       "eyebrow": "Hỏi đáp",
       "title": "Trước khi bạn đặt",
       "askLabel": "Chưa thấy điều bạn cần? Gọi",

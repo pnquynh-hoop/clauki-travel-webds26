@@ -1,4 +1,6 @@
-/* faq.css - giao diện của <wl-faq>. Màu, font, bo góc lấy từ biến CSS; class faq--<variant> quyết định kiểu. */
+/* faq.css - giao diện của <wl-faq>. Màu, font, bo góc lấy từ biến CSS; class faq--<variant> quyết định kiểu.
+   Không có variant: dạng cơ bản một cột, các câu ngăn bằng đường kẻ, dùng tam giác mặc định của <summary>.
+   Kiểu riêng của từng thương hiệu viết thành khối .faq--<variant> bên dưới. */
 
 .faq__inner {
   display: grid;
@@ -33,68 +35,22 @@
 }
 
 .faq__list {
-  display: grid;
-  gap: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
 }
 
-/* Mỗi câu là một thẻ nền thẻ, viền mảnh; câu đang mở viền đậm hơn. */
 .faq__item {
-  overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
-  border-radius: var(--radius);
-  transition: border-color var(--duration) ease;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
 }
 
-.faq__item[open] {
-  border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
-}
-
-/* Bỏ tam giác mặc định của <summary>, thay bằng nút tròn dấu cộng ở bên phải; mở ra thì thành dấu trừ trên nền màu chủ đạo. */
 .faq__question {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.5rem;
-  padding: 1rem 1.25rem;
+  padding: 1rem 0;
   font-weight: 600;
   line-height: 1.4;
-  list-style: none;
   cursor: pointer;
 }
 
-.faq__question::-webkit-details-marker {
-  display: none;
-}
-
-.faq__question:hover {
-  color: var(--color-accent);
-}
-
-.faq__question::after {
-  content: '';
-  flex: none;
-  width: 2rem;
-  height: 2rem;
-  color: var(--color-ink);
-  background:
-    linear-gradient(currentColor, currentColor) center / 0.75rem 2px no-repeat,
-    linear-gradient(currentColor, currentColor) center / 2px 0.75rem no-repeat;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 30%, transparent);
-}
-
-.faq__item[open] .faq__question::after {
-  color: var(--color-on-primary);
-  background:
-    linear-gradient(currentColor, currentColor) center / 0.75rem 2px no-repeat,
-    var(--color-primary);
-  box-shadow: none;
-}
-
 .faq__answer {
-  padding: 0 1.25rem 1.25rem;
+  padding: 0 0 1rem;
 }
 
 .faq__answer-text {
@@ -122,7 +78,70 @@
   }
 }
 
-/* Kiểu split (mặc định), màn rộng: tiêu đề và dòng mời gọi bên trái, danh sách câu hỏi bên phải. */
+/* Kiểu split (Gành Sớm): mỗi câu là một thẻ nền thẻ, viền mảnh; câu đang mở viền đậm hơn.
+   Bỏ tam giác mặc định, thay bằng nút tròn dấu cộng bên phải; mở ra thì thành dấu trừ trên nền màu chủ đạo.
+   Màn rộng: tiêu đề và dòng mời gọi bên trái, danh sách câu hỏi bên phải. */
+.faq--split .faq__list {
+  display: grid;
+  gap: 0.75rem;
+  border-top: 0;
+}
+
+.faq--split .faq__item {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: var(--radius);
+  transition: border-color var(--duration) ease;
+}
+
+.faq--split .faq__item[open] {
+  border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.faq--split .faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: 1rem 1.25rem;
+  list-style: none;
+}
+
+.faq--split .faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq--split .faq__question:hover {
+  color: var(--color-accent);
+}
+
+.faq--split .faq__question::after {
+  content: '';
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-ink);
+  background:
+    linear-gradient(currentColor, currentColor) center / 0.75rem 2px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 2px 0.75rem no-repeat;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.faq--split .faq__item[open] .faq__question::after {
+  color: var(--color-on-primary);
+  background:
+    linear-gradient(currentColor, currentColor) center / 0.75rem 2px no-repeat,
+    var(--color-primary);
+  box-shadow: none;
+}
+
+.faq--split .faq__answer {
+  padding: 0 1.25rem 1.25rem;
+}
+
 @media (min-width: 1024px) {
   .faq--split .faq__inner {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
