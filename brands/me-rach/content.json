@@ -15,6 +15,9 @@
     "href": "#giu-phong",
     "note": "690.000 đồng một khách một đêm"
   },
+  "toTop": {
+    "label": "Lên đầu trang"
+  },
   "nav": [
     {
       "label": "Nhà chú Sáu",
@@ -35,7 +38,6 @@
   ],
   "header": {
     "variant": "center",
-    "note": "Ghe nhà đón ở bến Ninh Kiều",
     "menu": "Menu"
   },
   "contact": {
@@ -85,6 +87,7 @@
     {
       "type": "intro",
       "id": "khong-phai-khach-san",
+      "hidden": true,
       "variant": "center",
       "eyebrow": "Mé Rạch",
       "title": "Chuyến trải nghiệm lần này ta không ở khách sạn",
@@ -402,8 +405,32 @@
     {
       "type": "faq",
       "id": "hoi-dap",
+      "variant": "chat",
       "eyebrow": "Hỏi đáp",
       "title": "Trước khi xuống miền Tây",
+      "lead": "Hỏi như đang nhắn tin với cô Út: chọn một câu gợi ý trong khung chat, cô trả lời liền.",
+      "chat": {
+        "label": "Nhắn tin với cô Út",
+        "cover": {
+          "src": "images/nha-ben-ao.webp",
+          "alt": "Nhà gỗ nằm bên ao, hàng dừa soi bóng xuống mặt nước"
+        },
+        "greeting": "Chào con, cô Út đây. Con muốn hỏi gì trước khi xuống vườn thì chọn một câu bên dưới nghen.",
+        "pick": "Chọn câu con muốn hỏi",
+        "done": "Con đã hỏi hết các câu gợi ý rồi",
+        "reset": "Bắt đầu lại",
+        "again": "Hỏi lại từ đầu",
+        "closing": "Còn gì chưa rõ thì con gọi thẳng cho cô nghen:",
+        "you": "Bạn hỏi:"
+      },
+      "ask": {
+        "text": "Chưa thấy điều bạn cần?",
+        "action": "Gọi",
+        "image": {
+          "src": "images/cheo-xuong-non-la.webp",
+          "alt": "Người đội nón lá đứng chèo xuồng gỗ trên con rạch, sau lưng là rặng cây"
+        }
+      },
       "items": [
         {
           "question": "Ở vườn có nhiều muỗi không?",
