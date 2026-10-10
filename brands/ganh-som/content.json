@@ -96,6 +96,66 @@
         }
       ]
     },
+    {
+      "type": "reviews",
+      "id": "danh-gia",
+      "variant": "postcard",
+      "eyebrow": "Khách đã ở",
+      "title": "Bưu thiếp gửi về từ mỏm gành",
+      "lead": "Hè 2026: 212 lượt khách, điểm trung bình 4,8 trên 5.",
+      "scoreLabel": "điểm",
+      "dateLabel": "Ngày đến",
+      "items": [
+        {
+          "rating": 5,
+          "text": "Sáng nào cũng thức dậy trước năm giờ rưỡi, ngâm mình trong bể ở hiên mà nhìn mặt trời nhô lên khỏi biển. Bốn đêm mà như một tuần nghỉ thật.",
+          "name": "Thu Hà",
+          "from": "Hà Nội, đi cùng chồng",
+          "stamp": {
+            "value": 4,
+            "unit": "đêm",
+            "label": "Villa sát biển"
+          },
+          "date": "12.06.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Xe đón tận sân bay Phù Cát nên hai đứa nhỏ không phải chờ. Chiều nào cả nhà cũng ra bãi Đá Trứng nhặt sỏi, tối ngủ nghe tiếng sóng qua vườn dừa.",
+          "name": "Đức Anh",
+          "from": "TP.HCM, đi cùng vợ con",
+          "stamp": {
+            "value": 3,
+            "unit": "đêm",
+            "label": "Phòng vườn"
+          },
+          "date": "28.06.2026"
+        },
+        {
+          "rating": 4,
+          "text": "Tháng chín trời mưa vài buổi nên buổi chèo ván bị dời. Bù lại chủ nhà đưa đi chợ cá Nhơn Lý, sáng hôm sau nắng đẹp, từ nhà đồi thấy cả vịnh.",
+          "name": "Bảo Ngọc",
+          "from": "Đà Nẵng, đi một mình",
+          "stamp": {
+            "value": 2,
+            "unit": "đêm",
+            "label": "Nhà đồi"
+          },
+          "date": "15.09.2026"
+        },
+        {
+          "rating": 5,
+          "text": "Lần đầu ngồi thúng chai ra Kỳ Co, nước trong tới mức thấy cá bơi dưới chân. Về tới nhà đã có bữa tối hải sản dọn sẵn ngoài hiên.",
+          "name": "Minh Khoa",
+          "from": "Cần Thơ, đi cùng bạn bè",
+          "stamp": {
+            "value": 4,
+            "unit": "đêm",
+            "label": "Nhà đồi"
+          },
+          "date": "03.07.2026"
+        }
+      ]
+    },
     { "type": "features", "id": "trong-gia", "hidden": true, "variant": "numbered" },
     {
       "type": "gallery",
