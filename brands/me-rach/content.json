@@ -93,8 +93,78 @@
     {
       "type": "host",
       "id": "nha-chu-sau",
+      "variant": "tv",
       "eyebrow": "Nhà chú Sáu",
-      "title": "Ba đời làm vườn bên mé rạch",
+      "title": "Những câu chuyện về chú Sáu",
+      "tv": {
+        "hint": "Lướt xuống để bật tivi",
+        "channelHint": "Chuyển kênh để xem tiếp",
+        "offHint": "Hết kênh thì tivi tự tắt",
+        "power": "Bật, tắt tivi",
+        "channel": "Kênh {n}: {title}"
+      },
+      "stories": [
+        {
+          "title": "Con mương đầu tiên",
+          "text": "Ông nội chú Sáu đào con mương đầu tiên quanh vườn bằng tay. Ba đời sau, nước vẫn theo đúng con mương đó vào từng gốc cây.",
+          "quote": {
+            "text": "Đất lành thì cây mới tốt.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/nha-san-vuon.webp",
+            "alt": "Căn nhà sàn gỗ mái ngói đỏ giữa vườn cây, trước sân có lu nước và bồn hoa"
+          }
+        },
+        {
+          "title": "Mùa măng cụt",
+          "text": "Tới mùa, chú dậy từ lúc trời còn tối để hái trái. Khách ở nhà thì hái tới đâu ăn tới đó.",
+          "quote": {
+            "text": "Vườn có gì thì khách ăn nấy.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/mang-cut.webp",
+            "alt": "Trái măng cụt chín tím trên cành giữa lá xanh"
+          }
+        },
+        {
+          "title": "Cây cầu khỉ sau nhà",
+          "text": "Cây cầu khỉ bắc qua rạch là chú tự làm từ tre trong vườn. Khách nào đi qua được thì chú thưởng một ly trà.",
+          "quote": {
+            "text": "Đi chậm thôi, cầu nó quen chân người nhà.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/cau-khi.webp",
+            "alt": "Cây cầu khỉ bằng tre bắc qua con rạch giữa vườn cây"
+          }
+        },
+        {
+          "title": "Chèo xuồng như đi bộ",
+          "text": "Chú chèo xuồng từ năm lên bảy. Giờ chiều nào chú cũng chở khách len vô mấy con rạch nhỏ dưới tán dừa nước.",
+          "quote": {
+            "text": "Ở miền Tây, xuồng là đôi chân.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/cheo-xuong-non-la.webp",
+            "alt": "Người đội nón lá đứng chèo xuồng gỗ trên con rạch, sau lưng là rặng cây"
+          }
+        },
+        {
+          "title": "Mâm cơm chung",
+          "text": "Tối nào cả nhà cũng ngồi chung một mâm với khách. Cô Út nấu, chú Sáu kể chuyện vườn.",
+          "quote": {
+            "text": "Khách tới thì ăn chung mâm.",
+            "by": "Chú Sáu"
+          },
+          "image": {
+            "src": "images/mam-com.webp",
+            "alt": "Mâm cơm gia đình với tô canh, đĩa thịt kho, rau xào và chén nước mắm"
+          }
+        }
+      ],
       "story": [
         "Ông nội chú Sáu đào con mương đầu tiên quanh vườn. Giờ thì chú giữ vườn, cô Út sẽ lo phần giữ bếp.",
         "Năm phòng cho khách nằm ngay trong căn nhà gỗ, cửa sổ nhìn ra rạch."
@@ -265,16 +335,69 @@
       "eyebrow": "Giữ phòng",
       "title": "Gửi yêu cầu, cô Út gọi lại trong ngày",
       "lead": "Chưa cần trả trước. Trang soạn sẵn tin nhắn để bạn gửi cho nhà.",
+      "image": {
+        "src": "images/ghe-bong-sung.webp",
+        "alt": "Những chiếc xuồng chở bó bông súng hồng giữa đầm nước xanh"
+      },
       "price": 690000,
-      "priceNote": "mỗi khách một đêm; trẻ dưới 6 tuổi miễn phí",
-      "includes": [
-        "Bữa tối cùng nhà",
-        "Bữa sáng",
-        "Ghe đi chợ nổi lúc 5 giờ sáng",
-        "Xuồng chèo trong rạch",
-        "Xe đạp"
+      "currency": "đồng",
+      "childPrice": 0,
+      "maxGuests": 10,
+      "maxNights": 2,
+      "defaultAdults": 2,
+      "defaultDates": {
+        "checkIn": "2027-07-10",
+        "checkOut": "2027-07-12"
+      },
+      "perks": [
+        {
+          "minNights": 2,
+          "months": [
+            6,
+            7,
+            8
+          ],
+          "text": "Ở 2 đêm mùa trái chín: được tự hái một giỏ trái mang về."
+        }
       ],
-      "hotline": "0123 456 789"
+      "labels": {
+        "place": "Nhà chú Sáu",
+        "placeFacts": "5 phòng trong căn nhà gỗ ven rạch",
+        "perGuest": "{price} mỗi khách một đêm",
+        "checkIn": "Ngày đến",
+        "checkOut": "Ngày về",
+        "adults": "Người lớn",
+        "adultsLess": "Bớt một người lớn",
+        "adultsMore": "Thêm một người lớn",
+        "children": "Trẻ dưới 6 tuổi",
+        "childrenLess": "Bớt một trẻ",
+        "childrenMore": "Thêm một trẻ",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "summary": "Tạm tính",
+        "guestLine": "Tiền ở",
+        "guestDetail": "{adults} khách × {nights} đêm × {price}",
+        "childLine": "Trẻ dưới 6 tuổi",
+        "childDetail": "{children} bé",
+        "free": "Miễn phí",
+        "total": "Tổng cộng",
+        "includes": "Đã gồm bữa tối cùng nhà, bữa sáng, ghe đi chợ nổi, xuồng chèo và xe đạp."
+      },
+      "errors": {
+        "dates": "Ngày về phải sau ngày đến; nhà nhận ở 1 hoặc 2 đêm.",
+        "name": "Bạn nhập họ tên để cô Út biết gọi ai.",
+        "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
+      },
+      "message": {
+        "title": "Tin nhắn giữ phòng đã soạn sẵn",
+        "lead": "Gửi tin này cho cô Út bằng một trong các cách dưới đây. Cô gọi lại xác nhận trong ngày.",
+        "template": "Chào cô Út, tôi là {name}, số {phone}. Tôi muốn giữ phòng ở Mé Rạch từ {checkIn} đến {checkOut} ({nights} đêm), {adults} người lớn và {children} trẻ dưới 6 tuổi. Tạm tính {total}.",
+        "sms": "Gửi tin nhắn",
+        "call": "Gọi {phone}",
+        "copy": "Chép nội dung",
+        "copied": "Đã chép",
+        "edit": "Sửa lại thông tin"
+      }
     },
     {
       "type": "faq",
