@@ -35,6 +35,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 10/10 | Claude Code (Claude Opus 5.5) | Rà component thừa trên main; gỡ khối `room-view` của Gành Sớm (đã gộp vào `stays`, section ẩn): xoá `wl-room-view.js`, `room-view.css`, import, dữ liệu, dòng AGENTS.md; sửa tài liệu Gành Sớm; thử ba thương hiệu không lỗi console | (tóm tắt) Có component nào đang rác không; dọn phần của Gành Sớm | 5d7ae60 |
 | 10/10 | Claude Code (Claude Opus 5.5) | Khối đánh giá `reviews` (component của Như Quỳnh) cho Gành Sớm: viết bốn lời kể khớp thông tin trang, tem số đêm và hạng nhà, đặt sau các hạng nhà; tải Montserrat nghiêng thật; rút nhãn dấu bưu điện; thử ở 390px và 1440px | (tóm tắt) Áp component feedback cho Gành Sớm | b3609d9 |
 | 10/10 | Claude Code (Claude Opus 5.5) | README: mục giải thích một component nhiều cách hiển thị (variant, dữ liệu, biến CSS), bảng component dùng chung và đặc trưng riêng theo dữ liệu thật trên main; sửa vị trí nút đổi thương hiệu | (tóm tắt) README giải thích component dùng chung nhưng khác cách hiển thị; bảng component dùng chung, đặc trưng riêng | e1b1360 |
+| 11/10 | Claude Code (Claude Opus 5.5) | Prompt mẫu nhờ AI viết `content.json`, `theme.css` cho thương hiệu mới: bảng chọn khối (ý của từng khối, kiểu hợp loại hình nào, mạch trang), ràng buộc dữ liệu, danh sách người kiểm tra lại; mục "Thêm thương hiệu mới" trong README | [docs/prompts/tao-thuong-hieu-moi.md](prompts/tao-thuong-hieu-moi.md) | 4380d84 |
 
 ## Mị Nương
 
