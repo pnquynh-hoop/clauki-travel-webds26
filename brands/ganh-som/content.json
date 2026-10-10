@@ -96,40 +96,6 @@
         }
       ]
     },
-    {
-      "type": "room-view",
-      "id": "nhin-ra",
-      "hidden": true,
-      "variant": "climb",
-      "eyebrow": "Nhìn từ ban công",
-      "title": "Mỗi hạng nhà một khung cửa ra biển",
-      "lead": "Cuộn xuống để đi từ mép nước lên đỉnh dốc, xem cảnh mỗi hạng nhà nhìn ra.",
-      "hint": "Cuộn để lên dốc",
-      "bestLabel": "Đẹp nhất lúc",
-      "views": [
-        {
-          "label": "Villa sát biển",
-          "level": "Mép nước",
-          "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dãy đảo, nắng cam phản chiếu trên mặt biển phẳng lặng" },
-          "text": "Sóng vỗ ngay dưới chân hiên.",
-          "best": "bình minh"
-        },
-        {
-          "label": "Phòng vườn",
-          "level": "Giữa vườn dừa",
-          "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" },
-          "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.",
-          "best": "buổi trưa"
-        },
-        {
-          "label": "Nhà đồi",
-          "level": "Trên đỉnh dốc",
-          "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" },
-          "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.",
-          "best": "bình minh và hoàng hôn"
-        }
-      ]
-    },
     { "type": "features", "id": "trong-gia", "hidden": true, "variant": "numbered" },
     {
       "type": "gallery",

@@ -76,7 +76,7 @@ Giá chưa gồm: bữa trưa, bữa tối, đồ uống, và các chuyến đi 
 | Nhà đồi | 10 | 45 m² | 3 | Cả vịnh, từ trên dốc nhìn xuống qua rặng dừa | 3.900.000 đồng |
 | Phòng vườn | 6 | 32 m² | 2 | Vườn dừa, thấy biển qua kẽ thân dừa, nghe rõ tiếng sóng | 2.800.000 đồng |
 
-Cảnh nhìn ra từ ban công của mỗi hạng (trường `view` trong khối `stays`; khối `room-view` riêng đã gộp vào đây nên đang ẩn):
+Cảnh nhìn ra từ ban công của mỗi hạng (trường `view` trong khối `stays`; khối `room-view` riêng đã gộp vào đây và gỡ khỏi mã nguồn):
 
 | Hạng | Ảnh nhìn ra | Một câu mô tả | Giờ đẹp nhất |
 |---|---|---|---|
@@ -126,14 +126,13 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | | `header` | `solid` (nền màu cát hơi trong, nút đặt phòng nhỏ hiện cả trên điện thoại) | cố định |
 | 1 | `hero` + lớp trời thật (#9) | `coverflow` (chồng 5 thẻ ảnh xoay vòng, tiêu đề lớn đè lên giữa) | chung |
 | 2 | `stays`: ba hạng nhà (#16) | `headland`: ảnh mỏm gành tách nền, bấm mốc của một hạng thì ngay trên mốc hiện ảnh cảnh nhìn ra từ ban công | riêng |
-| 3 | `room-view`: nhìn từ ban công | `climb`; đang ẩn vì cảnh nhìn ra đã gộp vào `stays` | đặc trưng |
-| 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số; đang ẩn tới khi có component (phần giá đã gồm ghi ở dòng giá của các hạng nhà) | riêng |
-| 5 | `gallery` (#12) | `slices`: sáu ảnh là các dải hẹp trong khung trắng, rê chuột hoặc bấm thì một dải mở lớn | dùng lại |
-| 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
-| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | riêng |
-| 8 | `faq` (#15) | `chat`: nhắn tin với chủ nhà, câu hỏi là nút gợi ý; đặt trước form để khách hỏi xong rồi mới đặt | dùng lại |
-| 9 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
-| | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
+| 3 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số; đang ẩn tới khi có component (phần giá đã gồm ghi ở dòng giá của các hạng nhà) | riêng |
+| 4 | `gallery` (#12) | `slices`: sáu ảnh là các dải hẹp trong khung trắng, rê chuột hoặc bấm thì một dải mở lớn | dùng lại |
+| 5 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
+| 6 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | riêng |
+| 7 | `faq` (#15) | `chat`: nhắn tin với chủ nhà, câu hỏi là nút gợi ý; đặt trước form để khách hỏi xong rồi mới đặt | dùng lại |
+| 8 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
+| | `footer` | `columns` (dùng chung kiểu với Bậc Trà, Mé Rạch: ảnh bình minh, lời hẹn chữ viết tay, dòng tên các bãi chạy ngang, tấm thông tin màu nền trang) | cố định |
 | | `sticky-cta` | | cố định |
 
 So với Bậc Trà: header `solid` thay cho `overlay`, hero `coverflow` thay cho `full`, gallery `strip` thay cho `mosaic`, intro căn trái thay cho căn giữa, booking `stay` thay cho `calendar`, footer `card` thay cho `columns`. Khối riêng là `stays`, `offer` và `features` (chưa có); `room-view` đã gộp vào `stays` nên đang ẩn.
@@ -229,7 +228,7 @@ Quy tắc khi chọn ảnh:
 - [ ] Báo người làm các issue chung về kiểu trình bày Gành Sớm cần: #7 (`solid`, `card`), #11 (`numbered`), #12 (`strip`), #14 (`stay`), #16 (`rows`). Hạn: 08/10/2026.
 - [x] Viết khung `brands/ganh-som/content.json` theo mục 6 (logo và favicon để trống tới khi có `logo.svg`). Xong 08/10/2026.
 - [x] Viết `brands/ganh-som/theme.css` theo bản nháp ở mục 7. Xong 08/10/2026.
-- [x] Khối `room-view` (nhìn từ ban công): làm ở PR #37, sau gộp vào `stays` (PR #54) nên đang ẩn.
+- [x] Khối `room-view` (nhìn từ ban công): làm ở PR #37, sau gộp vào `stays` (PR #54), đã gỡ khỏi mã nguồn.
 - [ ] Tìm đủ ảnh theo mục 8, kèm dòng `credits`. Hạn: 09/10/2026.
 - [x] Vẽ logo `logo.svg` theo mô tả ở mục 3 (chữ Montserrat đổi thành nét, giấy phép OFL), kèm `favicon.svg` là riêng phần dấu hình. Xong 10/10/2026.
 - [ ] Gửi BTC tên doanh nghiệp và sản phẩm (soạn sẵn ở mục 2), ghi ngày gửi vào issue #3. Hạn: trước 14:00 ngày 11/10/2026.
