@@ -369,3 +369,119 @@
     margin-top: 0.5rem;
   }
 }
+
+/* Kiểu mosaic (Mé Rạch): lưới ô to nhỏ xen kẽ như ghép gạch, ảnh lấp kín ô, chú thích đè lên đáy ảnh.
+   Cùng HTML lưới mặc định, chỉ khác CSS. Cách xếp lặp theo nhóm 6 ảnh (nth-child(6n + k));
+   grid-auto-flow: dense tự lấp chỗ trống, nên số ảnh khác 6 vẫn khít.
+   Điện thoại (viết trước): 2 cột; ảnh đầu mỗi nhóm chiếm 2 x 2, ảnh thứ tư cao gấp đôi. */
+.gallery--mosaic .gallery__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 9rem;
+  grid-auto-flow: dense;
+  gap: 0.6rem;
+}
+
+.gallery--mosaic .gallery__figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--radius) * 2);
+  isolation: isolate;
+}
+
+.gallery--mosaic .gallery__figure:nth-child(6n + 1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery--mosaic .gallery__figure:nth-child(6n + 4) {
+  grid-row: span 2;
+}
+
+/* Ảnh lấp kín ô (bỏ tỉ lệ 4:3 của lưới mặc định), bo góc nằm ở khung ngoài. */
+.gallery--mosaic .gallery__figure img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+  transition: scale 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Lớp tối mờ dần từ đáy ảnh lên, để chú thích chữ sáng đọc rõ trên mọi ảnh. */
+.gallery--mosaic .gallery__figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 75%, transparent), transparent 55%);
+  transition: opacity 0.4s ease;
+}
+
+.gallery--mosaic .gallery__caption {
+  position: absolute;
+  inset: auto 0.85rem 0.7rem;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-bg);
+  transition: translate 0.4s ease;
+}
+
+/* Rê chuột: ảnh phóng nhẹ, chú thích nhích lên, lớp tối đậm hơn một chút. */
+@media (hover: hover) {
+  .gallery--mosaic .gallery__figure:hover img {
+    scale: 1.06;
+  }
+
+  .gallery--mosaic .gallery__figure:hover .gallery__caption {
+    translate: 0 -0.25rem;
+  }
+}
+
+/* Màn vừa trở lên: 4 cột. Nhóm 6 ảnh xếp khít:
+   ảnh 1 chiếm 2 x 2 bên trái; ảnh 3 cao gấp đôi bên phải; ảnh 2, 4 chồng nhau ở giữa; ảnh 5, 6 trải ngang hàng dưới. */
+@media (min-width: 760px) {
+  .gallery--mosaic .gallery__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 11rem;
+    gap: 0.75rem;
+  }
+
+  .gallery--mosaic .gallery__figure:nth-child(6n + 3) {
+    grid-row: span 2;
+  }
+
+  .gallery--mosaic .gallery__figure:nth-child(6n + 4) {
+    grid-row: auto;
+  }
+
+  .gallery--mosaic .gallery__figure:nth-child(6n + 5),
+  .gallery--mosaic .gallery__figure:nth-child(6n) {
+    grid-column: span 2;
+  }
+
+  .gallery--mosaic .gallery__caption {
+    inset: auto 1.1rem 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery--mosaic .gallery__grid {
+    grid-auto-rows: 14rem;
+    gap: 1rem;
+  }
+
+  .gallery--mosaic .gallery__figure:nth-child(6n + 1) .gallery__caption {
+    font-size: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery--mosaic .gallery__figure img,
+  .gallery--mosaic .gallery__caption {
+    transition: none;
+  }
+}
