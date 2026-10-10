@@ -34,7 +34,7 @@
     }
   ],
   "header": {
-    "variant": "solid",
+    "variant": "center",
     "note": "Ghe nhà đón ở bến Ninh Kiều",
     "menu": "Menu"
   },
@@ -302,7 +302,8 @@
     }
   ],
   "footer": {
-    "variant": "card",
+    "variant": "directions",
+    "directionsTitle": "Đường về vườn",
     "note": "Mé Rạch là thương hiệu giả tưởng, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
     "creditsTitle": "Nguồn ảnh",
     "directions": [
