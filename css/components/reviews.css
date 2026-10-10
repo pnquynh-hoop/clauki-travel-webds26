@@ -1,0 +1,307 @@
+/* reviews.css - giao diện của <wl-reviews>. Kiểu postcard: mỗi đánh giá là một tấm bưu thiếp nghiêng nhẹ.
+   Điện thoại: các tấm xếp hàng ngang, vuốt để xem. Từ 1024px: hai cột, cột phải lệch xuống như bày trên bàn. */
+
+.reviews {
+  --reviews-paper: color-mix(in srgb, var(--color-surface) 96%, var(--color-accent));
+  display: block;
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-bg));
+}
+
+.reviews__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.reviews__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.reviews__lead {
+  max-width: 38rem;
+  margin: 1rem 0 0;
+  font-size: 1.08rem;
+  color: var(--color-muted);
+}
+
+.reviews__list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(88%, 26rem);
+  gap: 1.25rem;
+  margin: 2rem 0 0;
+  padding: 0 0 0.5rem;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+/* Tấm lẻ nghiêng trái, tấm chẵn nghiêng phải. */
+.reviews__item {
+  --tilt: -1.5deg;
+  padding: 0.6rem 0.3rem 1rem;
+  scroll-snap-align: start;
+}
+
+.reviews__item:nth-child(even) {
+  --tilt: 1.2deg;
+}
+
+/* Tem đổi màu xoay vòng theo bốn màu pha từ màu của thương hiệu. */
+.reviews__item:nth-child(4n + 1) { --stamp: var(--color-primary); }
+.reviews__item:nth-child(4n + 2) { --stamp: var(--color-accent); }
+.reviews__item:nth-child(4n + 3) { --stamp: color-mix(in srgb, var(--color-primary) 55%, var(--color-ink)); }
+.reviews__item:nth-child(4n + 4) { --stamp: color-mix(in srgb, var(--color-primary) 60%, var(--color-accent)); }
+
+.reviews__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 6.5rem;
+  gap: 1.1rem;
+  height: 100%;
+  padding: 1.25rem 1.2rem 1.1rem;
+  border-radius: 0.5rem;
+  color: var(--color-ink);
+  background: var(--reviews-paper);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent), 0 16px 34px color-mix(in srgb, var(--color-ink) 14%, transparent);
+  transform: rotate(var(--tilt));
+  transition: transform calc(var(--duration) * 2.25) cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow calc(var(--duration) * 2.25);
+}
+
+/* Vạch chia giữa lời nhắn và phần tem. */
+.reviews__card::after {
+  content: '';
+  position: absolute;
+  top: 1.2rem;
+  bottom: 1.2rem;
+  right: calc(6.5rem + 1.75rem);
+  width: 1px;
+  background: color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.reviews__card:hover {
+  transform: rotate(0) translateY(-6px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent), 0 26px 50px color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.reviews__msg {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding-right: 0.9rem;
+}
+
+.reviews__score,
+.reviews__from {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.reviews__score strong {
+  margin-right: 0.15rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.reviews__text {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.reviews__from strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.reviews__side {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.8rem;
+}
+
+/* Tem có răng cưa ở mép. Mặt nạ gồm hai lớp cộng lại: lớp chấm tròn lặp khắp tem (lỗ đục) và một hình chữ nhật
+   đặc nhỏ hơn tem 10px; phần giữa bị hình chữ nhật lấp kín, chỉ còn lỗ đục ở viền 5px quanh mép. */
+.reviews__stamp {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.1rem;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  padding: 0.6rem;
+  color: var(--color-on-primary);
+  background: var(--stamp);
+  mask:
+    radial-gradient(circle 3px, transparent 96%, #000) -5px -5px / 10px 10px round,
+    linear-gradient(#000 0 0) center / calc(100% - 10px) calc(100% - 10px) no-repeat;
+}
+
+.reviews__stamp-value {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reviews__stamp-unit {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.reviews__stamp-label {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.reviews__mark {
+  position: absolute;
+  top: 6.4rem;
+  left: -1.7rem;
+  display: grid;
+  place-content: center;
+  gap: 0.1rem;
+  width: 4.6rem;
+  height: 4.6rem;
+  margin: 0;
+  border: 2px solid color-mix(in srgb, var(--color-ink) 45%, transparent);
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  background: color-mix(in srgb, var(--reviews-paper) 55%, transparent);
+  transform: rotate(-14deg);
+}
+
+.reviews__date {
+  font-size: 0.7rem;
+  letter-spacing: 0;
+}
+
+.reviews__lines {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.reviews__lines span {
+  height: 1px;
+  background: color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+/* Rơi xuống bàn khi danh sách vào màn hình, tấm sau trễ hơn tấm trước. Animation chạy một lần với fill backwards:
+   chạy xong thì trả lại kiểu thường, nên hiệu ứng rê chuột ở trên vẫn dùng được. */
+.reviews__list:not(.is-in) .reviews__card {
+  opacity: 0;
+}
+
+.reviews__list.is-in .reviews__card {
+  animation: reviews-drop 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+  animation-delay: calc(var(--i) * 120ms);
+}
+
+@keyframes reviews-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-2.5rem) rotate(calc(var(--tilt) * 4));
+  }
+}
+
+/* Điện thoại: bưu thiếp hẹp nên tem nhỏ lại, bỏ các dòng kẻ địa chỉ. */
+@media (max-width: 759px) {
+  .reviews__card {
+    grid-template-columns: 1fr 4.6rem;
+    gap: 0.9rem;
+    padding: 1.1rem 1rem 1rem;
+  }
+
+  .reviews__card::after {
+    right: calc(4.6rem + 1.45rem);
+  }
+
+  .reviews__msg {
+    padding-right: 0.6rem;
+  }
+
+  .reviews__text {
+    font-size: 0.98rem;
+  }
+
+  .reviews__stamp-value {
+    font-size: 1.15rem;
+  }
+
+  .reviews__stamp-label {
+    font-size: 0.6rem;
+  }
+
+  .reviews__mark {
+    top: 4.7rem;
+    left: -1.2rem;
+    width: 3.7rem;
+    height: 3.7rem;
+    font-size: 0.5rem;
+  }
+
+  .reviews__date {
+    font-size: 0.58rem;
+  }
+
+  .reviews__lines {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .reviews__list {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 2.5rem;
+    overflow: visible;
+  }
+
+  .reviews__item:nth-child(even) {
+    transform: translateY(2.2rem);
+  }
+}
+
+/* Giảm chuyển động: bưu thiếp nằm thẳng, không rơi, không nhấc lên khi rê chuột. */
+@media (prefers-reduced-motion: reduce) {
+  .reviews__card,
+  .reviews__card:hover {
+    transform: none;
+    transition: none;
+  }
+
+  .reviews__list.is-in .reviews__card {
+    animation: none;
+  }
+
+  .reviews__list:not(.is-in) .reviews__card {
+    opacity: 1;
+  }
+}
