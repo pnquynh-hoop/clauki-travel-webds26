@@ -1,12 +1,12 @@
 /* to-top.css - giao diện của <wl-to-top>. Màu lấy từ biến của thương hiệu.
-   Nút tròn 44px nằm ngay phía trên nút tròn 52px của BTC (BTC đặt cách mép phải 10px, cách đáy 10px):
-   tâm hai nút thẳng hàng (10px + (52px - 44px) / 2 = 14px), cách nhau 10px (10px + 52px + 10px = 72px).
+   Nút tròn 44px ở góc dưới phải (nút tròn 52px của BTC đã chuyển sang góc dưới trái, xem base.css); cách mép 14px
+   để tâm nút ngang hàng với tâm nút BTC (BTC cách đáy 10px: 10px + (52px - 44px) / 2 = 14px).
    z-index thấp hơn nút của BTC để nút BTC luôn ở trên cùng. */
 
 .to-top {
   position: fixed;
   right: 14px;
-  bottom: 72px;
+  bottom: 14px;
   z-index: 50;
   display: block;
   opacity: 0;
