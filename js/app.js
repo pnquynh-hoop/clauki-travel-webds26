@@ -17,6 +17,7 @@ import { WlStays } from './components/wl-stays.js';
 import { WlOffer } from './components/wl-offer.js';
 import { WlToTop } from './components/wl-to-top.js';
 import { WlCloudBand } from './components/wl-cloud-band.js';
+import { WlProcess } from './components/wl-process.js';
 
 // Phải đăng ký trước khi core.js tạo khối, nếu không core.js bỏ qua khối đó.
 // Đặt sau start() hiện vẫn chạy vì start() còn chờ tải brands.json; đặt trước thì không phụ thuộc vào việc đó.
@@ -35,5 +36,6 @@ customElements.define('wl-stays', WlStays);
 customElements.define('wl-offer', WlOffer);
 customElements.define('wl-to-top', WlToTop);
 customElements.define('wl-cloud-band', WlCloudBand);
+customElements.define('wl-process', WlProcess);
 
 start();
