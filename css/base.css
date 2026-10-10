@@ -113,6 +113,14 @@ html .wd2026-fab-wrap {
   opacity: 1;
 }
 
+/* Đổi thương hiệu xong, wd2026.js hiện màn hỏi "tải lại trang?"; core.js bấm giúp "Để sau" nhưng hộp thoại của BTC
+   mờ dần 0,2 giây nên câu hỏi vẫn hiện thoáng qua. Hộp thoại đang ở màn đó thì ẩn ngay, không chạy hiệu ứng mờ;
+   lần mở sau wd2026.js vẽ lại danh sách nên hộp thoại hiện bình thường. */
+html .wd2026-overlay:has(.wd2026-confirm) {
+  visibility: hidden;
+  transition: none;
+}
+
 /* Kiểu chữ. */
 
 h1,
