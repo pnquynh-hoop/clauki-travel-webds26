@@ -1,0 +1,407 @@
+/* day-plan.css - giao diện của <wl-day-plan>. Mọi màu pha từ biến của thương hiệu (color-mix),
+   nên sông, xuồng, nền theo giờ đều đổi theo theme.css. Đệm trên dưới của khối do base.css lo. */
+
+.day-plan {
+  --day-bg: var(--color-bg);
+  --day-muted: var(--color-muted);
+  --day-water: color-mix(in srgb, var(--color-primary) 70%, var(--color-bg));
+  display: block;
+  background: var(--day-bg);
+  transition: background-color 1.1s ease;
+  /* Sông và bờ loang ra ngoài khung SVG một chút; cắt ở mép khối để trang không cuộn ngang. */
+  overflow: clip;
+}
+
+/* Màu nền theo giờ của bến đang tới (JS đặt data-phase). Chiều tối và đêm nền sẫm hơn,
+   nên chữ phụ đậm thêm để vẫn đạt tương phản AA. */
+.day-plan[data-phase='dawn'] { --day-bg: color-mix(in srgb, var(--color-bg) 90%, var(--color-accent)); }
+.day-plan[data-phase='noon'] { --day-bg: color-mix(in srgb, var(--color-bg) 92%, var(--color-surface)); }
+.day-plan[data-phase='afternoon'] { --day-bg: color-mix(in srgb, var(--color-bg) 90%, var(--color-primary)); }
+.day-plan[data-phase='evening'] {
+  --day-bg: color-mix(in srgb, var(--color-bg) 82%, var(--color-accent));
+  --day-muted: color-mix(in srgb, var(--color-muted) 55%, var(--color-ink));
+}
+.day-plan[data-phase='night'] {
+  --day-bg: color-mix(in srgb, var(--color-bg) 80%, var(--color-ink));
+  --day-muted: color-mix(in srgb, var(--color-muted) 40%, var(--color-ink));
+}
+
+.day-plan__head {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  max-width: 46rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.day-plan__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.day-plan__now {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 999px;
+}
+
+.day-plan__now-time {
+  font-family: var(--font-heading);
+  color: var(--color-accent);
+}
+
+.day-plan__hint {
+  font-size: 0.85rem;
+  color: var(--day-muted);
+}
+
+.day-plan__river {
+  --river-w: 3.5rem;
+  position: relative;
+  margin-top: 3.5rem;
+}
+
+.day-plan__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.day-plan__svg path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sông nhìn từ trên xuống, các lớp chồng từ ngoài vào trong (bề rộng do JS đặt):
+   bờ cỏ nhoè, dải bùn phù sa pha từ màu nhấn, mép sẫm nơi nước sâu dần, lòng sông sẫm,
+   nước giữa sáng hơn, dải trời phản chiếu ở tim sông. Mọi màu pha từ biến của thương hiệu. */
+.day-plan__grass { stroke: color-mix(in srgb, var(--color-primary) 20%, var(--color-bg)); opacity: 0.8; }
+.day-plan__mud { stroke: color-mix(in srgb, var(--color-accent) 22%, var(--color-surface)); }
+.day-plan__rim { stroke: color-mix(in srgb, var(--color-primary) 60%, var(--color-ink)); opacity: 0.55; }
+.day-plan__deep { stroke: color-mix(in srgb, var(--color-primary) 85%, var(--color-ink)); }
+.day-plan__mid { stroke: color-mix(in srgb, var(--color-primary) 72%, var(--color-bg)); }
+.day-plan__light { stroke: color-mix(in srgb, var(--color-primary) 35%, var(--color-bg)); opacity: 0.75; }
+
+/* Vệt dòng chảy: ba đường mảnh nét đứt trôi xuôi với tốc độ khác nhau, để mặt nước không chạy đều như băng chuyền. */
+.day-plan__flow {
+  stroke: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  stroke-width: 1.4;
+  animation: day-plan-flow linear infinite;
+}
+
+.day-plan__flow--1 { stroke-dasharray: 14 46; animation-duration: 12s; }
+.day-plan__flow--2 { stroke-dasharray: 26 70; stroke-width: 1.8; animation-duration: 16s; }
+.day-plan__flow--3 { stroke-dasharray: 10 38; animation-duration: 10s; }
+
+/* Ánh nắng lấp lánh: chấm sáng thưa trôi chậm và nhấp nháy. */
+.day-plan__glint {
+  stroke: var(--color-bg);
+  stroke-width: 2.6;
+  stroke-dasharray: 2 118;
+  animation: day-plan-flow 22s linear infinite, day-plan-glint 2.2s ease-in-out infinite;
+}
+
+/* Vệt bọt sau xuồng: phần sông xuồng đã đi qua. */
+.day-plan__wake {
+  stroke: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  stroke-width: 2;
+}
+
+.day-plan__boat-shadow { fill: color-mix(in srgb, var(--color-ink) 30%, transparent); }
+
+.day-plan__dock {
+  fill: var(--color-bg);
+  stroke: var(--color-primary);
+  stroke-width: 3;
+  transition: fill 0.4s, stroke 0.4s;
+}
+
+.day-plan__dock.is-active {
+  fill: var(--color-accent);
+  stroke: var(--color-bg);
+}
+
+/* Xuồng gỗ: nâu pha từ màu nhấn và màu chữ, nón lá màu rơm pha từ màu khối nổi. */
+.day-plan__hull {
+  fill: color-mix(in srgb, var(--color-accent) 55%, var(--color-ink));
+  stroke: color-mix(in srgb, var(--color-accent) 30%, var(--color-ink));
+  stroke-width: 1.5;
+}
+
+.day-plan__deck { fill: color-mix(in srgb, var(--color-accent) 50%, var(--color-surface)); }
+
+.day-plan__seat {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-accent) 40%, var(--color-ink));
+  stroke-width: 2;
+}
+
+.day-plan__hat {
+  fill: color-mix(in srgb, var(--color-surface) 70%, var(--color-accent));
+  stroke: color-mix(in srgb, var(--color-accent) 45%, var(--color-ink));
+  stroke-width: 1;
+}
+
+.day-plan__hat-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-accent) 35%, var(--color-ink));
+  stroke-width: 0.8;
+  opacity: 0.7;
+}
+
+/* Xuồng bơi: thân bập bềnh, mái chèo khua, vệt sóng chữ V trôi ra sau, gợn nước lan ở đuôi. */
+.day-plan__boat-body {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: day-plan-bob 2.6s ease-in-out infinite;
+}
+
+.day-plan__paddle {
+  stroke: color-mix(in srgb, var(--color-accent) 35%, var(--color-ink));
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: 100% 0;
+  animation: day-plan-paddle 1.7s ease-in-out infinite;
+}
+
+.day-plan__boat-wake path {
+  stroke: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+  animation: day-plan-wake 1.1s linear infinite;
+}
+
+.day-plan__ripple {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: day-plan-ripple 2.4s ease-out infinite;
+}
+
+.day-plan__ripple--late { animation-delay: 1.2s; }
+
+/* 480 chia hết mọi chu kỳ nét đứt ở trên (60, 96, 48, 120), nên lúc vòng lặp bắt đầu lại không bị giật. */
+@keyframes day-plan-flow { to { stroke-dashoffset: -480; } }
+@keyframes day-plan-glint { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+@keyframes day-plan-bob { 0%, 100% { rotate: -3deg; translate: 0 -0.6px; } 50% { rotate: 3deg; translate: 0 0.6px; } }
+@keyframes day-plan-paddle { 0%, 100% { rotate: -16deg; } 50% { rotate: 24deg; } }
+@keyframes day-plan-wake { to { stroke-dashoffset: -14; } }
+@keyframes day-plan-ripple { 0% { scale: 0.3; opacity: 0.9; } 100% { scale: 2.3; opacity: 0; } }
+
+/* Điện thoại: sông chạy dọc mép trái, các bến xếp một cột bên phải. */
+.day-plan__stops {
+  display: grid;
+  grid-template-columns: var(--river-w) 1fr;
+  row-gap: 3.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Số, khung ảnh, phần chữ mỗi phần có --p riêng (0 tới 1), JS gán theo vị trí của chính phần đó:
+   0 khi vừa ló khỏi đáy màn hình, 1 sau khi cuộn thêm khoảng một phần ba màn hình. */
+.day-plan__stop { grid-column: 2; }
+
+.day-plan__num,
+.day-plan__media,
+.day-plan__body { --p: 0; }
+
+.day-plan__frame { position: relative; }
+
+/* Số thứ tự chỉ có nét viền; nước dâng từ đáy lên lấp đầy con số theo --p.
+   Nền gradient cắt theo hình chữ (background-clip: text), phần chưa có nước để trong suốt.
+   Số đè lên mép trên của ảnh nên kéo ảnh lên bằng lề âm. */
+.day-plan__num {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-bottom: -0.42em;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--color-accent);
+  background: linear-gradient(to top, var(--day-water) calc(15% + var(--p) * 75%), transparent 0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+}
+
+.day-plan__media {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  background: none;
+  border: 0;
+  border-radius: var(--radius);
+}
+
+.day-plan__media--button { cursor: pointer; }
+
+/* Ảnh mở từ trên xuống, cùng chiều với phần ảnh đang lộ ra khi cuộn, và thu nhẹ về cỡ thật.
+   Đặt sẵn tỉ lệ khung để khối không đổi chiều cao khi ảnh tải xong, sông khỏi phải vẽ lại. */
+.day-plan__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  clip-path: inset(0 0 calc((1 - var(--p)) * 100%) 0);
+  scale: calc(1.12 - var(--p) * 0.12);
+  transition: filter 0.3s ease;
+}
+
+.day-plan__media--button:hover .day-plan__img { filter: brightness(1.06); }
+
+.day-plan__more {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border-radius: 999px;
+  /* Nhãn nằm ở góc dưới, chỉ hiện khi ảnh đã mở gần hết. */
+  opacity: clamp(0, calc(var(--p) * 5 - 4), 1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.day-plan__media--button:hover .day-plan__more {
+  color: var(--color-on-primary);
+  background: var(--color-accent);
+}
+
+/* Tấm mô tả trượt lên phủ phần dưới ảnh. Không nhận chuột, để bấm vào tấm là bấm trúng nút ảnh bên dưới,
+   tức bấm lần nữa là đóng. Lúc đóng thì ẩn hẳn (visibility) để trình đọc màn hình bỏ qua. */
+.day-plan__note {
+  position: absolute;
+  inset-inline: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 2;
+  padding: 1rem 1.1rem;
+  text-align: left;
+  background: color-mix(in srgb, var(--color-surface) 95%, transparent);
+  border-radius: var(--radius);
+  box-shadow: 0 0.8rem 1.6rem -0.8rem color-mix(in srgb, var(--color-ink) 45%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 1rem;
+  pointer-events: none;
+  transition: opacity 0.35s ease, translate 0.35s ease, visibility 0s 0.35s;
+}
+
+.day-plan__frame.is-open .day-plan__note {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition: opacity 0.35s ease, translate 0.35s ease;
+}
+
+.day-plan__frame.is-open .day-plan__more { opacity: 0; }
+
+.day-plan__details {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.day-plan__detail {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.day-plan__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.day-plan__value {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+/* Dời các dòng con chứ không dời cả khối, để JS đo vị trí khối không bị lệch theo chính hiệu ứng. */
+.day-plan__body > * {
+  opacity: var(--p);
+  translate: 0 calc((1 - var(--p)) * 1.5rem);
+}
+
+.day-plan__time {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.day-plan__title { margin-top: 0.25rem; }
+
+.day-plan__text {
+  margin-top: 0.35rem;
+  max-width: 36ch;
+  color: var(--day-muted);
+}
+
+.day-plan__live {
+  display: inline-flex;
+  margin-top: 0.9rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-on-primary);
+  background: var(--color-accent);
+  border-radius: 999px;
+}
+
+/* Màn rộng: sông chảy giữa, bến xen kẽ hai bờ. Bến bờ trái căn về phía sông, nên số thứ tự cũng nằm sát sông. */
+@media (min-width: 1024px) {
+  .day-plan__river { --river-w: 9rem; }
+  .day-plan__stops { grid-template-columns: 1fr var(--river-w) 1fr; row-gap: 1rem; }
+  .day-plan__stop:nth-child(odd) { grid-column: 1; text-align: right; }
+  .day-plan__stop:nth-child(odd) .day-plan__text { margin-left: auto; }
+  .day-plan__stop:nth-child(even) { grid-column: 3; margin-top: 9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day-plan,
+  .day-plan__img,
+  .day-plan__more,
+  .day-plan__note { transition: none; }
+  .day-plan__flow,
+  .day-plan__glint,
+  .day-plan__boat-body,
+  .day-plan__paddle,
+  .day-plan__boat-wake path { animation: none; }
+  .day-plan__ripple { display: none; }
+}
