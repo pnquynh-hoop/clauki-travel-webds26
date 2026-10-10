@@ -28,8 +28,12 @@
       "href": "#tu-bup-den-chen"
     },
     {
-      "label": "Lịch mùa",
-      "href": "#lich-mua"
+      "label": "Đánh giá",
+      "href": "#danh-gia"
+    },
+    {
+      "label": "Đặt lịch",
+      "href": "#dat-cho"
     },
     {
       "label": "Hỏi đáp",
@@ -379,6 +383,9 @@
       "type": "process",
       "id": "tu-bup-den-chen",
       "variant": "morph",
+      "cup": {
+        "color": "#b98328"
+      },
       "eyebrow": "Làm trà cùng người H'Mông",
       "title": "Từ búp chè đến chén trà",
       "lead": "Ở Suối Giàng, bạn tự tay làm cả năm bước. Chén trà cuối cùng uống ngay tại bản.",
@@ -387,25 +394,43 @@
           "name": "Hái",
           "text": "Hái một tôm hai lá non bằng tay, lúc sương còn đọng.",
           "color": "#6f9c3f",
-          "shape": "M -150 0 C -90 -100 75 -108 150 0 C 75 108 -90 100 -150 0 Z"
+          "shape": "M -150 0 C -90 -100 75 -108 150 0 C 75 108 -90 100 -150 0 Z",
+          "image": {
+            "src": "images/process-hai.jpg",
+            "alt": "Người phụ nữ đeo túi vải hái chè giữa vườn chè cây cao"
+          },
+          "dew": true
         },
         {
           "name": "Làm héo",
           "text": "Rải mỏng búp chè cho bớt nước, lá mềm ra.",
           "color": "#8b9546",
-          "shape": "M -140 12 C -82 -74 62 -84 138 30 C 66 88 -84 86 -140 12 Z"
+          "shape": "M -140 12 C -82 -74 62 -84 138 30 C 66 88 -84 86 -140 12 Z",
+          "image": {
+            "src": "images/process-lam-heo.jpg",
+            "alt": "Búp chè tươi rải mỏng trên nong tre phủ lưới để làm héo"
+          }
         },
         {
           "name": "Sao",
           "text": "Đảo chè trong chảo gang nóng để giữ màu xanh.",
           "color": "#6c6430",
-          "shape": "M -128 10 C -74 -60 52 -70 122 24 C 56 74 -76 72 -128 10 Z"
+          "shape": "M -128 10 C -74 -60 52 -70 122 24 C 56 74 -76 72 -128 10 Z",
+          "image": {
+            "src": "images/process-sao.jpg",
+            "alt": "Bàn tay đeo găng đảo búp chè trong chảo gang lớn"
+          },
+          "heat": true
         },
         {
           "name": "Vò",
           "text": "Vò bằng tay cho lá xoăn lại, hương chè dậy lên.",
           "color": "#4e4a27",
-          "shape": "M -122 8 C -64 -26 50 -34 116 6 C 52 28 -64 32 -122 8 Z"
+          "shape": "M -122 8 C -64 -26 50 -34 116 6 C 52 28 -64 32 -122 8 Z",
+          "image": {
+            "src": "images/process-vo.jpg",
+            "alt": "Bàn tay vò lá chè trên mặt bàn gỗ, lá xoăn lại thành sợi"
+          }
         },
         {
           "name": "Sấy khô",
@@ -420,111 +445,68 @@
       ]
     },
     {
-      "type": "gallery",
-      "id": "thu-vien",
-      "variant": "window",
-      "eyebrow": "Ngồi bên cửa sổ",
-      "title": "Đèo Khau Phạ qua kính xe 16 chỗ",
-      "images": [
+      "type": "reviews",
+      "id": "danh-gia",
+      "variant": "postcard",
+      "eyebrow": "Khách đã đi",
+      "title": "Bưu thiếp gửi về từ Tây Bắc",
+      "lead": "Mùa 2026: 9 chuyến, 86 khách, điểm trung bình 4,9 trên 5.",
+      "scoreLabel": "điểm",
+      "dateLabel": "Ngày đi",
+      "items": [
         {
-          "src": "images/window-1.jpg",
-          "alt": "Dãy núi xanh trùng điệp nhìn từ đèo Khau Phạ",
-          "caption": "Đèo Khau Phạ"
+          "rating": 5,
+          "text": "Năm giờ sáng đứng trên đồi chè, mây trắng phủ kín thung lũng dưới chân. Chiều được chị chủ nhà dạy sao chè, mang về một túi chè tự tay làm.",
+          "name": "Minh Thư",
+          "from": "TP.HCM",
+          "note": "đi cùng bạn thân",
+          "stamp": {
+            "value": 1400,
+            "unit": "m",
+            "label": "Suối Giàng"
+          },
+          "date": "15.05.2026"
         },
         {
-          "src": "images/season-water.jpg",
-          "alt": "Ruộng bậc thang đầy nước dưới chân đèo Khau Phạ",
-          "caption": "Khau Phạ mùa nước đổ"
+          "rating": 5,
+          "text": "Bố mẹ tôi lần đầu đi tour mà không thấy mệt, vì mỗi ngày chỉ một chặng ngắn. Tối ở nhà sàn, cả nhà chủ kéo mọi người vào vòng xòe.",
+          "name": "Quang Huy",
+          "from": "Đà Nẵng",
+          "note": "đi cùng bố mẹ",
+          "stamp": {
+            "value": 250,
+            "unit": "m",
+            "label": "Mường Lò"
+          },
+          "date": "14.05.2026"
         },
         {
-          "src": "images/journey-5.jpg",
-          "alt": "Ruộng bậc thang xanh nhìn từ trên cao",
-          "caption": "Thung lũng dưới chân đèo"
+          "rating": 4,
+          "text": "Đèo nhiều khúc cua nên tôi hơi say xe. Trưởng đoàn có sẵn gừng và cho dừng nghỉ đều, lên tới đỉnh vẫn kịp ngắm cả thung lũng.",
+          "name": "Ngọc Anh",
+          "from": "Hà Nội",
+          "note": "đi một mình",
+          "stamp": {
+            "value": 1200,
+            "unit": "m",
+            "label": "Khau Phạ"
+          },
+          "date": "06.06.2026"
         },
         {
-          "src": "images/journey-6.jpg",
-          "alt": "Mây trôi qua ruộng bậc thang La Pán Tẩn",
-          "caption": "La Pán Tẩn"
-        },
-        {
-          "src": "images/journey-7.jpg",
-          "alt": "Ruộng bậc thang uốn quanh sườn núi ở Chế Cu Nha",
-          "caption": "Chế Cu Nha, Mù Cang Chải"
+          "rating": 5,
+          "text": "Đoàn có mười người nên đi bộ giữa ruộng không phải chen. Anh dẫn đường trong bản chỉ cho từng con mương đưa nước lên các tầng ruộng.",
+          "name": "Hoàng Nam",
+          "from": "Cần Thơ",
+          "note": "đi cùng vợ",
+          "stamp": {
+            "value": 1240,
+            "unit": "m",
+            "label": "La Pán Tẩn"
+          },
+          "date": "30.05.2026"
         }
       ]
-    },
-    {
-      "type": "seasons",
-      "id": "lich-mua",
-      "variant": "slider",
-      "eyebrow": "Lịch mùa",
-      "title": "Kéo một năm qua ruộng",
-      "lead": "Kéo thanh tháng để thấy nước đổ từ tầng ruộng trên cùng xuống, lúa lên xanh rồi chín vàng.",
-      "month": 5,
-      "seasons": [
-        {
-          "name": "Hái chè xuân",
-          "months": [
-            3,
-            4
-          ],
-          "color": "#2f5d46",
-          "text": "Búp chè Shan tuyết non lên sau mùa đông, phủ một lớp lông tơ trắng.",
-          "image": {
-            "src": "images/journey-3.jpg",
-            "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-          }
-        },
-        {
-          "name": "Mùa nước đổ",
-          "months": [
-            5,
-            6
-          ],
-          "color": "#7fb4c6",
-          "trip": true,
-          "text": "Nước dẫn về từng tầng ruộng, mặt ruộng soi cả bầu trời. Các chuyến năm 2027 đi đúng mùa này.",
-          "image": {
-            "src": "images/season-water.jpg",
-            "alt": "Ruộng bậc thang đầy nước phản chiếu bầu trời"
-          }
-        },
-        {
-          "name": "Lúa xanh",
-          "months": [
-            7,
-            8
-          ],
-          "color": "#6f9a3e",
-          "text": "Lúa lên đều, các tầng ruộng xanh mướt từ chân đồi tới đỉnh.",
-          "image": {
-            "src": "images/season-green.jpg",
-            "alt": "Ruộng lúa xanh trên sườn đồi ở Lìm Mông"
-          }
-        },
-        {
-          "name": "Lúa chín",
-          "months": [
-            9,
-            10
-          ],
-          "color": "#d4a43a",
-          "text": "Ruộng chuyển vàng, mùa đông khách nhất trong năm.",
-          "image": {
-            "src": "images/season-gold.jpg",
-            "alt": "Người dân gặt lúa trên ruộng bậc thang vàng"
-          }
-        }
-      ],
-      "rest": {
-        "name": "Ruộng nghỉ",
-        "color": "#a3865f",
-        "text": "Sau mùa gặt, ruộng để nghỉ. Bậc Trà chưa mở chuyến vào những tháng này.",
-        "image": {
-          "src": "images/journey-7.jpg",
-          "alt": "Ruộng bậc thang sau mùa gặt"
-        }
-      }
     },
     {
       "type": "booking",
@@ -532,25 +514,27 @@
       "variant": "calendar",
       "eyebrow": "Mùa nước đổ 2027 · Mở giữ chỗ sớm",
       "title": "Chọn chuyến, giữ chỗ",
-      "lead": "Năm chuyến, đều khởi hành thứ Năm và về Hà Nội chiều Chủ nhật. Bậc Trà gọi lại xác nhận rồi mới nhận cọc.",
+      "lead": "Năm chuyến, đều khởi hành thứ Năm và về Hà Nội chiều Chủ nhật.",
       "price": 5490000,
-      "priceNote": "mỗi khách, đã gồm xe, ăn, ngủ và vé tham quan",
+      "priceNote": "một khách",
       "deal": {
         "amount": 500000,
         "until": "2026-12-31",
-        "label": "Giữ chỗ trước 31/12/2026: giảm 500.000đ mỗi khách"
+        "label": "Giữ chỗ trước 31/12/2026: giảm 500.000 đ mỗi khách"
       },
       "includes": [
-        "Xe đưa đón từ phố cổ Hà Nội và trở về",
-        "3 đêm ngủ nhà sàn, nhà người dân",
-        "Các bữa chính trong hành trình",
-        "Thuyền hồ Thác Bà, vé suối khoáng Tú Lệ",
-        "Trưởng đoàn, người dẫn đường địa phương, bảo hiểm du lịch"
+        "Xe đưa đón từ phố cổ Hà Nội",
+        "3 đêm nhà sàn, nhà người dân",
+        "Các bữa chính",
+        "Thuyền hồ Thác Bà, suối khoáng Tú Lệ",
+        "Trưởng đoàn, dẫn đường địa phương, bảo hiểm"
       ],
       "excludes": [
+        "Vé máy bay hoặc tàu ra Hà Nội",
+        "Phụ thu phòng riêng",
         "Đồ uống gọi thêm",
         "Chi tiêu cá nhân",
-        "Bay dù lượn tự chọn"
+        "Hoạt động tự chọn ngoài lịch trình"
       ],
       "departures": [
         {
@@ -574,7 +558,82 @@
           "seats": 12
         }
       ],
-      "hotline": "0123 456 789"
+      "hotline": "0123 456 789",
+      "currency": "đ",
+      "deposit": 1500000,
+      "fewSeats": 4,
+      "defaultGuests": 2,
+      "labels": {
+        "departures": "Ngày khởi hành",
+        "month": "tháng {m} · {y}",
+        "seats": "Còn {n} chỗ",
+        "soldOut": "Hết chỗ",
+        "includesTitle": "Đã gồm",
+        "excludesTitle": "Chưa gồm",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "phoneExample": "0123 456 789",
+        "guests": "Số khách",
+        "guestsLess": "Bớt một khách",
+        "guestsMore": "Thêm một khách",
+        "guestsValue": "{guests} khách",
+        "baseLine": "{price} × {guests} khách",
+        "dealLine": "Ưu đãi giữ chỗ sớm",
+        "total": "Tạm tính",
+        "deposit": "Cọc khi được gọi xác nhận"
+      },
+      "policies": [
+        {
+          "title": "Cọc và thanh toán",
+          "items": [
+            {
+              "label": "Cọc",
+              "text": "1.500.000 đ mỗi khách, chuyển khoản sau khi Bậc Trà gọi xác nhận còn chỗ."
+            },
+            {
+              "label": "Phần còn lại",
+              "text": "trả trước ngày khởi hành 14 ngày, chuyển khoản hoặc tiền mặt ở văn phòng."
+            }
+          ]
+        },
+        {
+          "title": "Đổi, huỷ và thời tiết",
+          "items": [
+            {
+              "label": "Đổi chuyến",
+              "text": "miễn phí nếu báo trước ngày khởi hành 14 ngày."
+            },
+            {
+              "label": "Huỷ",
+              "text": "trước 14 ngày hoàn toàn bộ tiền cọc; từ 7 đến 13 ngày hoàn một nửa."
+            },
+            {
+              "label": "Mưa lớn, sạt lở",
+              "text": "trưởng đoàn đổi sang lộ trình an toàn; chặng nào không đi được thì hoàn tiền chặng đó."
+            }
+          ],
+          "note": "Đi cùng đoàn suốt 4 ngày có một trưởng đoàn; ở Suối Giàng và La Pán Tẩn có thêm người dẫn đường là người trong bản."
+        }
+      ],
+      "errors": {
+        "name": "Bạn nhập họ tên giúp Bậc Trà nhé.",
+        "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+      },
+      "message": {
+        "brand": "Bậc Trà · Phiếu giữ chỗ",
+        "from": "Hà Nội",
+        "to": "Mù Cang Chải",
+        "guest": "Khách",
+        "date": "Khởi hành",
+        "seats": "Số chỗ",
+        "total": "Tạm tính",
+        "stamp": "Chờ xác nhận",
+        "template": "Bậc Trà ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {guests} chỗ chuyến Tây Bắc khởi hành ngày {date}. Tạm tính {total}.",
+        "sms": "Gửi tin nhắn",
+        "call": "Gọi Bậc Trà",
+        "copy": "Chép nội dung",
+        "copied": "Đã chép"
+      }
     },
     {
       "type": "faq",
@@ -789,6 +848,34 @@
       "author": "Victor311",
       "license": "CC BY 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Khau_Ph%E1%BA%A1_nh%C3%ACn_t%E1%BB%AB_tr%C3%AAn_cao.jpg"
+    },
+    {
+      "file": "images/process-hai.jpg",
+      "author": "Benjamin Smith",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:L%C3%B9ng_V%C3%A0i,_H%C3%A0_Giang,_Vietnam_-_3.jpg",
+      "note": "đã cắt"
+    },
+    {
+      "file": "images/process-lam-heo.jpg",
+      "author": "KZZZ01",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:White_Tea_Withering.jpg",
+      "note": "đã cắt"
+    },
+    {
+      "file": "images/process-sao.jpg",
+      "author": "Jessie csz",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:A_man_who_is_frying_tea.jpg",
+      "note": "đã cắt"
+    },
+    {
+      "file": "images/process-vo.jpg",
+      "author": "spinster cardigan",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:%E6%89%8B%E3%82%82%E3%81%BF%E8%8C%B6_(9290717337).jpg",
+      "note": "đã cắt"
     }
   ]
 }

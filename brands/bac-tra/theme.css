@@ -17,4 +17,6 @@
   --radius: 1rem;
   /* Nền phụ màu matcha: xanh ngả vàng của bột trà, sáng hơn xanh chè của nút để nút nổi lên. */
   --color-tint: #c9d7a4;
+  /* Khung nội dung rộng hơn mặc định một chút, khớp bản thiết kế: năm thẻ ngày khởi hành nằm vừa một hàng. */
+  --container: 76rem;
 }
