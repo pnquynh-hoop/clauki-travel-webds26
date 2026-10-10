@@ -169,10 +169,26 @@
     {
       "type": "faq",
       "id": "hoi-dap",
-      "variant": "split",
+      "variant": "chat",
       "eyebrow": "Hỏi đáp",
       "title": "Trước khi bạn đặt",
-      "askLabel": "Chưa thấy điều bạn cần? Gọi",
+      "lead": "Hỏi như đang nhắn tin với chủ nhà: chọn một câu gợi ý trong khung chat, Gành Sớm trả lời ngay.",
+      "chat": {
+        "label": "Nhắn tin với Gành Sớm",
+        "cover": { "src": "images/hero-sunrise.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" },
+        "greeting": "Chào bạn, Gành Sớm đây. Bạn cần biết gì trước khi đặt, cứ chọn một câu bên dưới nhé.",
+        "pick": "Chọn câu bạn muốn hỏi",
+        "done": "Bạn đã hỏi hết các câu gợi ý",
+        "reset": "Bắt đầu lại",
+        "again": "Hỏi lại từ đầu",
+        "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho Gành Sớm nhé:",
+        "you": "Bạn hỏi:"
+      },
+      "ask": {
+        "text": "Chưa thấy điều bạn cần?",
+        "action": "Gọi",
+        "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" }
+      },
       "items": [
         { "question": "Mấy giờ nhận và trả phòng?", "answer": "Nhận phòng từ 14:00, trả phòng trước 12:00. Cần đổi giờ thì báo trước, Gành Sớm sẽ cố xếp." },
         { "question": "Có nhận trẻ em không?", "answer": "Có. Trẻ dưới 6 tuổi ngủ chung giường với bố mẹ thì không tính tiền; từ 6 tuổi tính như thêm khách, 450.000 đồng một đêm, gồm bữa sáng." },
