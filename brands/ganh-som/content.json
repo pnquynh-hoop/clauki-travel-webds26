@@ -2,10 +2,10 @@
   "id": "ganh-som",
   "meta": {
     "title": "Gành Sớm - Nhà nghỉ trên mỏm gành phía nam Quy Nhơn",
-    "description": "24 căn nhà nhìn thẳng ra biển hướng đông, mở cửa là thấy mặt trời mọc. Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư.",
-    "favicon": ""
+    "description": "24 căn nhà trên mỏm gành phía nam Quy Nhơn, quay mặt ra biển hướng đông. Đặt trước 31/12/2026 cho kỳ nghỉ hè 2027: ở 4 đêm, chỉ trả 3.",
+    "favicon": "images/favicon.svg"
   },
-  "brand": { "name": "Gành Sớm", "logo": "", "slogan": "Bình minh ngay hiên nhà" },
+  "brand": { "name": "Gành Sớm", "logo": "images/logo.svg", "slogan": "Bình minh ngay hiên nhà" },
   "cta": { "label": "Đặt phòng ngay", "href": "#dat-phong", "note": "Từ 2.800.000 đồng một đêm" },
   "nav": [
     { "label": "Các hạng nhà", "href": "#hang-nha" },
@@ -21,16 +21,16 @@
       "type": "hero",
       "id": "gioi-thieu",
       "variant": "coverflow",
-      "eyebrow": "Đặt sớm hè 2027: ở 3 đêm, tặng đêm thứ tư",
+      "eyebrow": "Đặt sớm hè 2027: ở 4 đêm, chỉ trả 3",
       "title": "Bình\u00a0minh ngay hiên\u00a0nhà",
-      "lead": "24 căn nhà trên mỏm gành phía nam Quy Nhơn. Mở cửa là thấy mặt trời lên khỏi biển.",
+      "lead": "24 căn nhà nghỉ trên mỏm gành phía nam Quy Nhơn, cho cặp đôi và gia đình nhỏ muốn ở yên vài ngày. Mở cửa là thấy mặt trời lên khỏi biển.",
       "link": { "label": "Xem các hạng nhà", "href": "#hang-nha" },
       "slidesLabel": "Ảnh Gành Sớm, dùng phím mũi tên trái phải để đổi ảnh",
       "prevLabel": "Trước",
       "nextLabel": "Sau",
       "slides": [
         {
-          "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và vài tảng đá nhô lên ngoài xa" },
+          "image": { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và một tảng đá nhô lên ngoài xa" },
           "caption": "Nắng sớm trên bờ sỏi"
         },
         {
@@ -46,8 +46,8 @@
           "caption": "Mặt trời lên sau dải mây"
         },
         {
-          "image": { "src": "images/hero-pool.webp", "alt": "Mép hồ bơi tràn lát gạch xanh trên sườn đồi, nhìn xuống vịnh nhỏ và biển xa" },
-          "caption": "Hồ bơi nhìn xuống vịnh"
+          "image": { "src": "images/ky-co.webp", "alt": "Bãi cát trắng dưới chân vách đá, nước biển xanh ngọc và vài chiếc thuyền nhỏ ở Kỳ Co, nhìn từ trên đèo" },
+          "caption": "Bãi Kỳ Co mùa biển lặng"
         }
       ]
     },
@@ -60,10 +60,10 @@
       "lead": "Cả 24 căn trên mỏm gành đều quay về hướng đông. Khác nhau ở chỗ bạn muốn gần sóng tới đâu.",
       "hint": "Bấm một mốc trên mỏm đá để xem hạng nhà đó và cảnh nhìn ra từ ban công.",
       "scene": {
-        "image": { "src": "images/headland.webp", "alt": "Mỏm đá granite nhô ra biển, sườn đồi phủ cỏ và cây bụi thấp, dốc từ đỉnh đá cao xuống mép nước" }
+        "image": { "src": "images/headland.webp", "alt": "Mỏm đá granit nhô ra biển, sườn phủ cỏ và cây bụi thấp, dốc từ đỉnh xuống mép nước" }
       },
       "currency": "đồng",
-      "priceNote": "Giá cho 2 khách, có bữa sáng.",
+      "priceNote": "Giá cho 2 khách, gồm bữa sáng, xe đón sân bay Phù Cát, xe đạp và một buổi chèo ván lúc bình minh.",
       "labels": {
         "count": "Số căn",
         "countValue": "{n} căn",
@@ -76,22 +76,22 @@
       },
       "rooms": [
         {
-          "id": "villa", "label": "Villa sát biển", "x": 11, "y": 76, "count": 8, "area": "70 m²", "maxGuests": 4, "price": 6200000,
+          "id": "villa", "label": "Villa sát biển", "short": "Villa", "x": 11, "y": 76, "count": 8, "area": "70 m²", "maxGuests": 4, "price": 6200000,
           "text": "Hiên gỗ sát mép nước, bể ngâm riêng nhìn thẳng ra chỗ mặt trời lên.",
           "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" },
-          "view": { "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" }, "text": "Mở cửa là chạm vào tiếng sóng.", "best": "bình minh" }
+          "view": { "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" }, "text": "Sóng vỗ ngay dưới chân hiên.", "best": "bình minh" }
         },
         {
-          "id": "phong-vuon", "label": "Phòng vườn", "x": 27, "y": 50, "count": 6, "area": "32 m²", "maxGuests": 2, "price": 2800000,
+          "id": "phong-vuon", "label": "Phòng vườn", "short": "Vườn", "x": 27, "y": 50, "count": 6, "area": "32 m²", "maxGuests": 2, "price": 2800000,
           "text": "Giữa vườn dừa, thấy biển qua kẽ lá và nghe rõ tiếng sóng.",
           "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" },
           "view": { "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" }, "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.", "best": "buổi trưa" }
         },
         {
-          "id": "nha-doi", "label": "Nhà đồi", "x": 46, "y": 20, "count": 10, "area": "45 m²", "maxGuests": 3, "price": 3900000,
-          "text": "Ngồi trên dốc nhìn xuống cả vịnh qua rặng dừa.",
+          "id": "nha-doi", "label": "Nhà đồi", "short": "Đồi", "x": 46, "y": 20, "count": 10, "area": "45 m²", "maxGuests": 3, "price": 3900000,
+          "text": "Nhà trên dốc, nhìn xuống cả vịnh qua rặng dừa.",
           "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" },
-          "view": { "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" }, "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.", "best": "bình minh và hoàng hôn" }
+          "view": { "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" }, "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.", "best": "bình minh và chiều muộn" }
         }
       ]
     },
@@ -110,7 +110,7 @@
           "label": "Villa sát biển",
           "level": "Mép nước",
           "image": { "src": "images/view-villa.webp", "alt": "Mặt trời lên sau dãy đảo, nắng cam phản chiếu trên mặt biển phẳng lặng" },
-          "text": "Mở cửa là chạm vào tiếng sóng.",
+          "text": "Sóng vỗ ngay dưới chân hiên.",
           "best": "bình minh"
         },
         {
@@ -129,26 +129,24 @@
         }
       ]
     },
-    { "type": "features", "id": "trong-gia", "variant": "numbered" },
+    { "type": "features", "id": "trong-gia", "hidden": true, "variant": "numbered" },
     {
       "type": "gallery",
       "id": "thu-vien",
       "variant": "slices",
       "eyebrow": "Thư viện ảnh",
-      "title": "Biển miền Trung, từ sáng tới tối",
-      "lead": "Dọc dải bờ biển này, bạn sẽ gặp bờ sỏi đón nắng sớm, bến cá, thuyền thúng nằm trên cát và những ghềnh đá nhô ra sóng.",
-      "hint": "Rê chuột hoặc chọn một tấm để mở lớn, phím mũi tên để chuyển tấm.",
+      "title": "Dọc bờ biển miền Trung",
+      "lead": "Bến cá họp từ sáng sớm, thuyền thúng phơi trên cát, đường mòn ra Eo Gió, gành đá bazan, bánh xèo bữa sáng và buổi chèo ván lúc biển lặng.",
+      "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
       "touchHint": "Chạm vào một dải để mở ảnh lớn.",
-      "listLabel": "Tám ảnh biển, mỗi lần mở một ảnh",
+      "listLabel": "Sáu ảnh, mỗi lần mở một ảnh",
       "images": [
-        { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và vài tảng đá nhô lên ngoài xa", "caption": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn.", "credit": "Ảnh: Lê Hồ Bắc, CC BY-SA 4.0" },
         { "src": "images/fish-market.webp", "alt": "Bến cá trên bãi biển buổi sáng, người đội nón lá gánh hàng, rổ nhựa trên bạt và thuyền đánh cá neo ngoài khơi", "caption": "Bến cá buổi sáng, người đội nón lá gánh hàng giữa những rổ nhựa.", "credit": "Ảnh: Erwin Verbruggen, CC BY-SA 2.0" },
         { "src": "images/basket-boat.webp", "alt": "Những chiếc thuyền thúng tròn nằm trên bãi cát, xa xa là người dân và thuyền nhỏ trên mặt biển", "caption": "Những chiếc thuyền thúng tròn nằm phơi trên bãi cát.", "credit": "Ảnh: CEphoto, Uwe Aranas, CC BY-SA 3.0" },
         { "src": "images/eo-gio.webp", "alt": "Đường mòn băng qua sườn đồi cỏ dẫn ra những mỏm đá ven biển ở Eo Gió, Quy Nhơn", "caption": "Đường mòn qua sườn đồi cỏ ra những mỏm đá ở Eo Gió, Quy Nhơn.", "credit": "Ảnh: Hưng Hồ Bá, CC BY 2.0" },
-        { "src": "images/rocks-sea.webp", "alt": "Ghềnh đá bazan xếp thành từng cột đen nhô ra biển ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ vào chân đá", "caption": "Ghềnh đá bazan xếp cột ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ chân đá.", "credit": "Ảnh: Đông Hồ, CC BY-SA 2.0" },
+        { "src": "images/rocks-sea.webp", "alt": "Gành đá bazan xếp thành từng cột đen nhô ra biển ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ vào chân đá", "caption": "Gành đá bazan xếp cột ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ chân đá.", "credit": "Ảnh: Đông Hồ, CC BY-SA 2.0" },
         { "src": "images/breakfast.webp", "alt": "Đĩa bánh xèo vàng gấp đôi đặt trên lá chuối, bên cạnh rau sống, cà chua, dưa leo và đồ chua", "caption": "Bánh xèo gấp đôi trên lá chuối, kèm rau sống và đồ chua.", "credit": "Ảnh: pelican, CC BY-SA 2.0" },
-        { "src": "images/sup.webp", "alt": "Một người đứng chèo ván trên mặt biển phẳng lúc mặt trời sát chân trời, phía sau là cụm đá tối màu", "caption": "Một người chèo ván trên mặt biển phẳng khi mặt trời sát chân trời.", "credit": "Ảnh: Enoch Leung, CC BY-SA 4.0" },
-        { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời", "caption": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng lúc mặt trời xuống thấp.", "credit": "Ảnh: PattayaPatrol, CC BY-SA 4.0" }
+        { "src": "images/sup.webp", "alt": "Một người đứng chèo ván trên mặt biển phẳng lúc mặt trời sát chân trời, phía sau là cụm đá tối màu", "caption": "Một người chèo ván trên mặt biển phẳng khi mặt trời sát chân trời.", "credit": "Ảnh: Enoch Leung, CC BY-SA 4.0" }
       ]
     },
     { "type": "intro", "id": "o-cham", "hidden": true, "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
@@ -157,18 +155,18 @@
       "id": "uu-dai",
       "variant": "postcard",
       "eyebrow": "Đặt sớm hè 2027",
-      "title": "Hẹn bạn hè 2027: ở 4 đêm,",
+      "title": "Hẹn bạn mùa hè tới: ở 4 đêm,",
       "titleAccent": "chỉ trả 3",
-      "lead": "Gửi trước một mùa hè. Chọn con tem cho hạng phòng bạn thích, giá ưu đãi in ngay trên mặt tem.",
+      "lead": "Đặt trước 31/12/2026 cho kỳ nghỉ từ tháng 4 đến tháng 8/2027. Chọn con tem của hạng nhà bạn thích để xem giá 4 đêm.",
       "deadline": "2026-12-31T23:59:59+07:00",
       "from": "2027-04-01",
       "to": "2027-08-31",
       "nights": 4,
       "freeNights": 1,
       "currency": "đồng",
-      "image": { "src": "images/hero-veranda.webp", "alt": "Lan can gỗ ngoài hiên nhà ánh màu nắng, mặt trời sát mặt biển" },
-      "caption": "Bình minh ngay hiên nhà",
-      "captionPlace": "Gành Sớm, Quy Nhơn",
+      "image": { "src": "images/nhon-ly.webp", "alt": "Thuyền đánh cá sơn xanh đỏ neo kín mặt biển xanh ở Nhơn Lý, sườn đồi cỏ và trời trong phía sau" },
+      "caption": "Hè ở biển Quy Nhơn",
+      "captionPlace": "Làng chài Nhơn Lý",
       "note": {
         "label": "Bưu thiếp, hè 2027",
         "greeting": "Bạn thân mến,",
@@ -177,16 +175,16 @@
       },
       "facts": [
         { "label": "Hạn đặt, giờ Việt Nam", "value": "23:59 ngày 31/12/2026" },
-        { "label": "Kỳ nghỉ", "value": "Từ 1/4/2027 đến 31/8/2027" },
-        { "label": "Ưu đãi", "value": "Ở từ 4 đêm, tặng 1 đêm" }
+        { "label": "Ngày nhận phòng", "value": "Từ 01/04/2027 đến 31/08/2027" },
+        { "label": "Ưu đãi", "value": "Ở từ 4 đêm, miễn tiền 1 đêm" }
       ],
       "rooms": [
-        { "id": "villa", "label": "Villa sát biển", "price": 6200000, "image": { "src": "images/hero-pool.webp", "alt": "hồ bơi tràn bờ nhìn xuống vịnh nhỏ" } },
+        { "id": "villa", "label": "Villa sát biển", "price": 6200000, "image": { "src": "images/hero-veranda.webp", "alt": "hiên gỗ có mái che nhìn ra biển" } },
         { "id": "nha-doi", "label": "Nhà đồi", "price": 3900000, "image": { "src": "images/view-hill.webp", "alt": "vịnh biển, làng chài và bãi cát cong nhìn từ đỉnh đồi" } },
         { "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000, "image": { "src": "images/view-garden.webp", "alt": "hàng dừa nghiêng trên bãi cát trắng cạnh biển xanh" } }
       ],
       "sea": [
-        { "months": [1, 2], "kind": "windy", "label": "cuối mùa mưa, biển còn gió" },
+        { "months": [1, 2], "kind": "windy", "label": "gió mùa đông bắc, biển còn động" },
         { "months": [3, 4, 5, 6, 7, 8], "kind": "calm", "label": "mùa khô, biển lặng" },
         { "months": [9, 10, 11, 12], "kind": "stormy", "label": "mùa mưa, có thể có bão" }
       ],
@@ -205,10 +203,10 @@
         "ended": "Ưu đãi đặt sớm đã hết hạn.",
         "stamp": "4 đêm, trả 3",
         "stampAlt": "Tem hạng {room}: {alt}",
-        "million": "{n} triệu",
-        "perNight": "một đêm",
-        "roomFact": "Hạng phòng",
-        "room": "Chọn con tem, cũng là chọn hạng phòng",
+        "million": "{n}\u00a0triệu",
+        "perNight": "một\u00a0đêm",
+        "roomFact": "Hạng nhà",
+        "room": "Chọn tem để chọn hạng nhà",
         "slip": "Kỳ nghỉ 4 đêm, {room}",
         "full": "Giá 4 đêm",
         "pay": "Bạn trả (3 đêm)",
@@ -216,12 +214,45 @@
       }
     },
     {
+      "type": "faq",
+      "id": "hoi-dap",
+      "variant": "chat",
+      "eyebrow": "Hỏi đáp",
+      "title": "Trước khi bạn đặt",
+      "lead": "Hỏi như đang nhắn tin với chủ nhà: chọn một câu gợi ý, Gành Sớm trả lời ngay.",
+      "chat": {
+        "label": "Nhắn tin với Gành Sớm",
+        "avatar": { "src": "images/favicon.svg", "alt": "" },
+        "tagline": "Chủ nhà trả lời trong ngày",
+        "cover": { "src": "images/bai-bien-quy-nhon.webp", "alt": "Bãi cát vàng vắng người, biển lặng và dãy núi xanh bên kia vịnh Quy Nhơn" },
+        "greeting": "Chào bạn, Gành Sớm đây. Bạn cần biết gì trước khi đặt, cứ chọn một câu bên dưới nhé.",
+        "pick": "Chọn câu bạn muốn hỏi",
+        "done": "Bạn đã hỏi hết các câu gợi ý",
+        "reset": "Bắt đầu lại",
+        "again": "Hỏi lại từ đầu",
+        "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho Gành Sớm nhé:",
+        "you": "Bạn hỏi:"
+      },
+      "ask": {
+        "text": "Chưa thấy điều bạn cần?",
+        "action": "Gọi",
+        "image": { "src": "images/da-trung.webp", "alt": "Những hòn đá tròn nhẵn xếp kín bờ biển, sóng nhẹ và gành đá phủ cây xanh ở Bãi Đá Trứng, Quy Nhơn" }
+      },
+      "items": [
+        { "question": "Mấy giờ nhận và trả phòng?", "answer": "Nhận phòng từ 14:00, trả phòng trước 12:00. Muốn nhận sớm hay trả muộn, bạn báo trước để Gành Sớm sắp xếp." },
+        { "question": "Có nhận trẻ em không?", "answer": "Có. Trẻ dưới 6 tuổi ngủ chung giường với bố mẹ thì không tính tiền; từ 6 tuổi tính như thêm khách, 450.000 đồng mỗi khách một đêm, gồm bữa sáng." },
+        { "question": "Huỷ phòng thế nào?", "answer": "Huỷ trước ngày nhận phòng ít nhất 14 ngày thì không mất phí. Huỷ sau mốc đó, phí huỷ bằng tiền một đêm." },
+        { "question": "Đi từ sân bay Phù Cát thế nào?", "answer": "Xe Gành Sớm đón bạn ở sân bay Phù Cát và đưa ra lại khi về, đã gồm trong giá phòng. Bạn chỉ cần gửi giờ hạ cánh khi đặt." },
+        { "question": "Tháng 9 đến tháng 12 có mở cửa không?", "answer": "Có, Gành Sớm mở quanh năm. Khoảng thời gian này là mùa mưa, biển có thể động nên buổi chèo ván sẽ dời sang ngày biển lặng." }
+      ]
+    },
+    {
       "type": "booking",
       "id": "dat-phong",
       "variant": "stay",
       "eyebrow": "Đặt phòng",
       "title": "Giữ chỗ cho mùa hè 2027",
-      "lead": "Chọn ngày và hạng nhà, trang soạn sẵn tin nhắn để bạn gửi cho Gành Sớm. Chúng tôi gọi lại xác nhận trong ngày.",
+      "lead": "Chọn ngày và hạng nhà, trang soạn sẵn tin nhắn để bạn gửi. Gành Sớm gọi lại xác nhận trong ngày.",
       "currency": "đồng",
       "rooms": [
         {
@@ -242,7 +273,7 @@
       "defaultDates": { "checkIn": "2027-05-12", "checkOut": "2027-05-16" },
       "offer": {
         "label": "Ưu đãi đặt sớm",
-        "note": "Hè 2027, ở từ 4 đêm tặng 1 đêm",
+        "note": "Hè 2027, ở từ 4 đêm miễn tiền 1 đêm",
         "bookBy": "2026-12-31",
         "from": "2027-04-01",
         "to": "2027-08-31",
@@ -263,7 +294,7 @@
         "guestsMore": "Thêm một khách",
         "capacity": "{area}, tối đa {max} khách",
         "perNight": "{price} một đêm",
-        "sunrises": "{nights} đêm, {nights} lần thức dậy cùng bình minh",
+        "nightsNote": "{nights} đêm, {nights} lần thức dậy cùng bình minh",
         "name": "Họ tên",
         "phone": "Số điện thoại",
         "summary": "Tạm tính",
@@ -284,7 +315,7 @@
       },
       "message": {
         "title": "Tin nhắn giữ chỗ đã soạn sẵn",
-        "lead": "Gửi tin này cho Gành Sớm bằng một trong các cách dưới đây. Chúng tôi gọi lại số của bạn để xác nhận trong ngày.",
+        "lead": "Gửi tin này bằng một trong các cách dưới đây. Gành Sớm sẽ gọi lại số của bạn để xác nhận trong ngày.",
         "template": "Gành Sớm ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {room} từ {checkIn} đến {checkOut} ({nights} đêm), {guests} khách. Tạm tính {total}.",
         "sms": "Gửi tin nhắn",
         "call": "Gọi {phone}",
@@ -292,37 +323,6 @@
         "copied": "Đã chép",
         "edit": "Sửa lại thông tin"
       }
-    },
-    {
-      "type": "faq",
-      "id": "hoi-dap",
-      "variant": "chat",
-      "eyebrow": "Hỏi đáp",
-      "title": "Trước khi bạn đặt",
-      "lead": "Hỏi như đang nhắn tin với chủ nhà: chọn một câu gợi ý trong khung chat, Gành Sớm trả lời ngay.",
-      "chat": {
-        "label": "Nhắn tin với Gành Sớm",
-        "cover": { "src": "images/hero-sunrise.webp", "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời" },
-        "greeting": "Chào bạn, Gành Sớm đây. Bạn cần biết gì trước khi đặt, cứ chọn một câu bên dưới nhé.",
-        "pick": "Chọn câu bạn muốn hỏi",
-        "done": "Bạn đã hỏi hết các câu gợi ý",
-        "reset": "Bắt đầu lại",
-        "again": "Hỏi lại từ đầu",
-        "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho Gành Sớm nhé:",
-        "you": "Bạn hỏi:"
-      },
-      "ask": {
-        "text": "Chưa thấy điều bạn cần?",
-        "action": "Gọi",
-        "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" }
-      },
-      "items": [
-        { "question": "Mấy giờ nhận và trả phòng?", "answer": "Nhận phòng từ 14:00, trả phòng trước 12:00. Cần đổi giờ thì báo trước, Gành Sớm sẽ cố xếp." },
-        { "question": "Có nhận trẻ em không?", "answer": "Có. Trẻ dưới 6 tuổi ngủ chung giường với bố mẹ thì không tính tiền; từ 6 tuổi tính như thêm khách, 450.000 đồng một đêm, gồm bữa sáng." },
-        { "question": "Huỷ phòng thế nào?", "answer": "Huỷ trước ngày nhận phòng 14 ngày thì không mất phí. Sau mốc đó, Gành Sớm giữ lại tiền một đêm." },
-        { "question": "Đi từ sân bay Phù Cát thế nào?", "answer": "Xe của Gành Sớm đón bạn ở sân bay, đã có trong giá phòng. Bạn chỉ cần gửi giờ hạ cánh khi đặt." },
-        { "question": "Tháng 9 đến tháng 12 có mở cửa không?", "answer": "Có, Gành Sớm mở quanh năm. Khoảng thời gian này là mùa mưa, biển có thể động nên buổi chèo ván sẽ dời sang ngày biển lặng." }
-      ]
     }
   ],
   "footer": {
@@ -362,13 +362,6 @@
       "note": "Đã cắt khung và thu nhỏ"
     },
     {
-      "file": "images/hero-pool.webp",
-      "author": "Cosmic Timetraveler",
-      "license": "CC0",
-      "source": "https://commons.wikimedia.org/wiki/File:Round_infinity_pool_(Unsplash).jpg",
-      "note": "Đã cắt khung và thu nhỏ"
-    },
-    {
       "file": "images/view-villa.webp",
       "author": "ChiLam Ly",
       "license": "CC BY 2.0",
@@ -379,7 +372,8 @@
       "file": "images/view-hill.webp",
       "author": "Boconganh Phan",
       "license": "Phạm vi công cộng",
-      "source": "https://commons.wikimedia.org/wiki/File:Ky_Co_-_Nhon_Ly_-_Quy_Nhon_-_Binh_Dinh_-_Viet_Nam.jpg"
+      "source": "https://commons.wikimedia.org/wiki/File:Ky_Co_-_Nhon_Ly_-_Quy_Nhon_-_Binh_Dinh_-_Viet_Nam.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
     },
     {
       "file": "images/view-garden.webp",
@@ -436,6 +430,34 @@
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:V%E1%BB%8Bnh_V%C4%A9nh_Hy_%E1%BB%9F_Ninh_Thu%E1%BA%ADn,_th%C3%A1ng_7_n%C4%83m_2012_(14).jpg",
       "note": "Chụp ở vịnh Vĩnh Hy, Ninh Thuận; đã cắt khung, tách nền trời và biển, thu nhỏ"
+    },
+    {
+      "file": "images/ky-co.webp",
+      "author": "Lê Hồ Bắc",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ky_Co_beach,_Quy_Nhon_city,_Binh_Dinh_province,_Vietnam.jpg",
+      "note": "Chụp ở bãi Kỳ Co, Nhơn Lý; đã cắt khung (bỏ dòng chữ ghi tên ảnh) và thu nhỏ"
+    },
+    {
+      "file": "images/nhon-ly.webp",
+      "author": "Pulencio",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Nhon_Ly,_Quy_Nhon,_Vietnam_(53001404016).jpg",
+      "note": "Chụp ở Nhơn Lý, Quy Nhơn; đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/da-trung.webp",
+      "author": "Thuydaonguyen",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C3%A3i_%C4%90%C3%A1_Tr%E1%BB%A9ng.jpg",
+      "note": "Chụp ở Bãi Đá Trứng, Quy Nhơn; đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/bai-bien-quy-nhon.webp",
+      "author": "Kelisi",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:QuyNhonBeach1.jpg",
+      "note": "Chụp ở bãi biển Quy Nhơn; đã cắt khung và thu nhỏ"
     }
   ]
 }
