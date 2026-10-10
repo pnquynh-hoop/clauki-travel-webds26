@@ -166,7 +166,20 @@
         "edit": "Sửa lại thông tin"
       }
     },
-    { "type": "faq", "id": "hoi-dap" }
+    {
+      "type": "faq",
+      "id": "hoi-dap",
+      "eyebrow": "Hỏi đáp",
+      "title": "Trước khi bạn đặt",
+      "askLabel": "Chưa thấy điều bạn cần? Gọi",
+      "items": [
+        { "question": "Mấy giờ nhận và trả phòng?", "answer": "Nhận phòng từ 14:00, trả phòng trước 12:00. Cần đổi giờ thì báo trước, Gành Sớm sẽ cố xếp." },
+        { "question": "Có nhận trẻ em không?", "answer": "Có. Trẻ dưới 6 tuổi ngủ chung giường với bố mẹ thì không tính tiền; từ 6 tuổi tính như thêm khách, 450.000 đồng một đêm, gồm bữa sáng." },
+        { "question": "Huỷ phòng thế nào?", "answer": "Huỷ trước ngày nhận phòng 14 ngày thì không mất phí. Sau mốc đó, Gành Sớm giữ lại tiền một đêm." },
+        { "question": "Đi từ sân bay Phù Cát thế nào?", "answer": "Xe của Gành Sớm đón bạn ở sân bay, đã có trong giá phòng. Bạn chỉ cần gửi giờ hạ cánh khi đặt." },
+        { "question": "Tháng 9 đến tháng 12 có mở cửa không?", "answer": "Có, Gành Sớm mở quanh năm. Khoảng thời gian này là mùa mưa, biển có thể động nên buổi chèo ván sẽ dời sang ngày biển lặng." }
+      ]
+    }
   ],
   "footer": {
     "variant": "card",
