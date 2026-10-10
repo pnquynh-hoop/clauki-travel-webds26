@@ -83,6 +83,27 @@
       ]
     },
     {
+      "type": "day-plan",
+      "id": "mot-ngay-tren-deo",
+      "eyebrow": "Một ngày trên đèo",
+      "title": "Từ sương sớm tới bếp lửa",
+      "nowLabel": "Trên đèo lúc này",
+      "liveLabel": "Đang diễn ra",
+      "hint": "Cuộn xuống để đi qua từng chặng",
+      "moreLabel": "Xem chi tiết",
+      "stops": [
+        { "time": "06:00", "title": "Ngắm sương ở Quản Bạ", "text": "Uống trà nóng trước hiên nhà trình tường.", "image": { "src": "images/day-1.jpg", "alt": "Thung lũng phủ sương lúc sáng sớm" },
+          "details": [
+            { "label": "Bao lâu", "value": "Khoảng 1 tiếng" },
+            { "label": "Mang theo", "value": "Áo ấm, sáng sớm trên đèo chỉ chừng 10 độ" },
+            { "value": "Dòng thiếu nhãn để thử: dòng này phải bị bỏ qua." }
+          ] },
+        { "time": "11:30", "title": "Ăn trưa ở chợ phiên", "text": "Thắng cố, mèn mén và bánh tam giác mạch.", "image": { "src": "images/day-2.jpg", "alt": "Chợ phiên vùng cao đông người" } },
+        { "time": "16:00", "title": "Đi bộ trên Mã Pì Lèng", "text": "Đoạn đường men vách đá, nhìn xuống sông Nho Quế.", "image": { "src": "images/day-3.jpg", "alt": "Con đường men vách núi đá" } },
+        { "time": "20:00", "title": "Bếp lửa nhà dân", "text": "Ngồi quanh bếp nghe chuyện bản.", "image": { "src": "images/day-4.jpg", "alt": "Bếp lửa trong ngôi nhà gỗ" } }
+      ]
+    },
+    {
       "type": "journey",
       "id": "lich-trinh",
       "variant": "road",
