@@ -123,7 +123,7 @@ export class WlHero extends HTMLElement {
 
 **`brands/brand-test/`: "Lượn Vịnh", bản cấu hình do AI viết theo [prompt mẫu](docs/prompts/tao-thuong-hieu-moi.md)** (bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè), chỉ dùng các khối chạy bằng dữ liệu thuần; minh chứng đổi file cấu hình là ra landing page mới. Bộ dữ liệu thử cũ "Lối Mây" (đủ mọi loại section) còn trong lịch sử Git.
 - Viết component mới thì thử trên `?brand=brand-test` trước. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
-- Không nộp cho BGK: gỡ khỏi `brands/brands.json` trước khi nộp (xem mục 11).
+- Có trong nút đổi thương hiệu với nhãn "Lượn Vịnh (AI tạo)" để BGK thấy thương hiệu sinh từ cấu hình; thông tin gửi BTC ghi rõ đây là bản AI tạo, ngoài ba thương hiệu chính.
 
 **`brands/<id>/theme.css`**
 - chỉ có `@import` Google Fonts (nếu cần) và một khối `:root { }`;
@@ -201,7 +201,7 @@ export class WlHero extends HTMLElement {
 - [ ] Hiển thị đúng ở bề ngang 390px và 1440px.
 - [ ] Ảnh mới có `alt` và có dòng trong `credits`.
 - [ ] Người viết giải thích được từng dòng mình vừa thêm.
-- [ ] Bản nộp vòng loại: đã gỡ `brand-test` khỏi `brands/brands.json`, nút đổi thương hiệu chỉ còn 3 thương hiệu thật.
+- [ ] Bản nộp vòng loại: nút đổi thương hiệu có 3 thương hiệu chính và "Lượn Vịnh (AI tạo)"; thông tin gửi BTC đã nhắc bản AI tạo.
 
 ## 12. Trường riêng của từng section
 
