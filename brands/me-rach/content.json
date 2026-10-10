@@ -131,6 +131,8 @@
       "title": "Từ lúc gà gáy tới khi nghe tiếng ếch",
       "nowLabel": "Ở vườn lúc này",
       "liveLabel": "Đang diễn ra ở vườn",
+      "hint": "Cuộn xuống để xuồng xuôi dòng qua từng bến",
+      "moreLabel": "Ở bến này có gì",
       "stops": [
         {
           "time": "05:00",
@@ -139,7 +141,12 @@
           "image": {
             "src": "images/cho-noi-sang.webp",
             "alt": "Ghe xuồng nối nhau trên sông ở chợ nổi buổi sáng"
-          }
+          },
+          "details": [
+            { "label": "Bao lâu", "value": "Khoảng 2 tiếng, về kịp ăn sáng" },
+            { "label": "Mang theo", "value": "Áo khoác mỏng, tiền lẻ mua đồ trên ghe" },
+            { "label": "Lưu ý", "value": "Ghe nhà chở tối đa 6 khách một chuyến" }
+          ]
         },
         {
           "time": "09:00",
@@ -148,7 +155,12 @@
           "image": {
             "src": "images/mang-cut.webp",
             "alt": "Trái măng cụt chín tím trên cành giữa lá xanh"
-          }
+          },
+          "details": [
+            { "label": "Mùa trái", "value": "Măng cụt, chôm chôm từ tháng 5 tới tháng 8" },
+            { "label": "Mang theo", "value": "Nón, dép dễ lội vì lối vườn có mương nhỏ" },
+            { "label": "Được mang về", "value": "Một giỏ trái tự hái" }
+          ]
         },
         {
           "time": "12:00",
@@ -157,7 +169,11 @@
           "image": {
             "src": "images/mam-com.webp",
             "alt": "Mâm cơm gia đình với tô canh, đĩa thịt kho, rau xào và chén nước mắm"
-          }
+          },
+          "details": [
+            { "label": "Cùng làm", "value": "Hái rau, làm cá, kho nồi cá bằng bếp củi" },
+            { "label": "Ăn kiêng", "value": "Báo trước nếu ăn chay hay dị ứng món nào" }
+          ]
         },
         {
           "time": "15:00",
@@ -166,7 +182,12 @@
           "image": {
             "src": "images/cheo-xuong-non-la.webp",
             "alt": "Người đội nón lá đứng chèo xuồng gỗ trên con rạch, sau lưng là rặng cây"
-          }
+          },
+          "details": [
+            { "label": "Bao lâu", "value": "Chừng 1 tiếng, chú Sáu chèo cùng" },
+            { "label": "An toàn", "value": "Có áo phao cho mọi người, trẻ nhỏ ngồi giữa xuồng" },
+            { "label": "Lưu ý", "value": "Nước lớn thì đi rạch nhỏ, nước ròng thì đi sông" }
+          ]
         },
         {
           "time": "18:00",
@@ -175,7 +196,11 @@
           "image": {
             "src": "images/banh-xeo.webp",
             "alt": "Bánh xèo vàng giòn bày trên lá chuối cạnh rổ rau sống"
-          }
+          },
+          "details": [
+            { "label": "Cùng làm", "value": "Tự đổ một cái bánh trên chảo gang" },
+            { "label": "Rau ăn kèm", "value": "Hơn mười loại rau hái trong vườn" }
+          ]
         },
         {
           "time": "20:00",
@@ -184,7 +209,11 @@
           "image": {
             "src": "images/hoang-hon-song.webp",
             "alt": "Mặt trời lặn đỏ trên sông, một chiếc phà đi qua"
-          }
+          },
+          "details": [
+            { "label": "Chỗ ngủ", "value": "Giường có mùng, quạt, cửa sổ nhìn ra rạch" },
+            { "label": "Lưu ý", "value": "Nhà tắt đèn ngoài hiên lúc 22:00 để khỏi hút muỗi" }
+          ]
         }
       ]
     },
