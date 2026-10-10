@@ -31,7 +31,8 @@ function topbarEl(note, phone) {
 
 export class WlHeader extends HTMLElement {
   connectedCallback() {
-    // Phím Escape đóng menu điện thoại. Cuộn khỏi đầu trang thì bật lớp is-scrolled để CSS thu gọn header.
+    // Phím Escape đóng menu điện thoại. Cuộn khỏi đầu trang thì bật lớp is-scrolled để CSS hiện đường kẻ dưới header.
+    // Lớp này chỉ được đổi màu, không được đổi chiều cao header (xem chú thích đầu header.css).
     // Hai listener gắn vào document và window nên phải gỡ khi khối bị gỡ.
     this._onKey = (e) => {
       if (e.key === 'Escape') this.setOpen(false);
