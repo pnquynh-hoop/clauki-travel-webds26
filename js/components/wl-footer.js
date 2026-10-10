@@ -172,7 +172,7 @@ export class WlFooter extends HTMLElement {
   render() {
     const content = this._data;
     const footer = content.footer ?? {};
-    this.className = `footer footer--${footer.variant ?? 'card'}`;
+    this.className = `footer footer--${footer.variant ?? 'columns'}`;
 
     const brand = groupEl('footer__brand', [
       textEl('p', 'footer__name', content.brand?.name),
