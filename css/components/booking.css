@@ -468,7 +468,8 @@
    trong thẻ, ảnh lớn cột trái; cột phải từ trên xuống: hàng thẻ chọn hạng (ảnh vuông nhỏ bên trái chữ),
    hai hàng ô nhập, rồi tạm tính chia đôi: các dòng tiền bên trái, tổng tiền và nút đặt bên phải. */
 @media (min-width: 1024px) {
-  .booking--stay .booking__head {
+  .booking--stay .booking__head,
+  .booking--request .booking__head {
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     column-gap: 3rem;
@@ -479,11 +480,14 @@
   }
 
   .booking--stay .booking__eyebrow,
-  .booking--stay .booking__title {
+  .booking--stay .booking__title,
+  .booking--request .booking__eyebrow,
+  .booking--request .booking__title {
     grid-column: 1;
   }
 
-  .booking--stay .booking__lead {
+  .booking--stay .booking__lead,
+  .booking--request .booking__lead {
     grid-column: 2;
     grid-row: 1 / 3;
     align-self: end;
@@ -580,5 +584,11 @@
 
   .booking__total strong {
     font-size: 1.5rem;
+  }
+
+  /* Kiểu request không có hàng thẻ chọn hạng, nên sáu ô xếp ba hàng, mỗi hàng hai ô:
+     ngày đến, ngày về; người lớn, trẻ em; họ tên, số điện thoại. */
+  .booking--request .booking__fields .booking__field {
+    grid-column: span 3;
   }
 }
