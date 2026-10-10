@@ -362,6 +362,9 @@
   position: relative;
   display: grid;
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  /* Bề ngang luôn bằng cột. Nếu để tự tính, aspect-ratio đổi min-height thành bề ngang 13.5rem x 1.6 = 21.6rem,
+     rộng hơn cột ở điện thoại 360px và làm trang cuộn ngang; khi cột hẹp, min-height thắng và khung thấp hơn 16:10 một chút. */
+  width: 100%;
   min-height: 13.5rem;
   margin: 0;
   overflow: hidden;
