@@ -110,6 +110,18 @@ function renderFixed(data) {
   }
 }
 
+// Trang đã dựng lại xong ngay khi đổi thương hiệu (không cần tải lại), nên bỏ qua câu hỏi "tải lại trang?" của wd2026.js:
+// chờ hộp thoại vẽ xong màn xác nhận rồi bấm giúp nút "Để sau" (chỉ đóng hộp, không sửa wd2026.js), đưa trang về đầu
+// để thấy thương hiệu mới từ hero. Lần nạp đầu không có hộp thoại nên không làm gì.
+function skipReloadPrompt() {
+  setTimeout(() => {
+    const later = document.getElementById('wd2026BtnLater');
+    if (!later) return;
+    later.click();
+    scrollTo({ top: 0, behavior: 'instant' });
+  });
+}
+
 export async function start() {
   try {
     const list = await loadBrandList();
@@ -123,6 +135,7 @@ export async function start() {
         applyBrand(e.detail);
         renderSections(e.detail);
         renderFixed(e.detail);
+        skipReloadPrompt();
       } catch (err) {
         showError(err);
       }
