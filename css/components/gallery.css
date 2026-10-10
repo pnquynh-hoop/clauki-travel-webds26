@@ -1,0 +1,365 @@
+/* gallery.css - giao diện của <wl-gallery>. Màu, font, bo góc lấy từ biến CSS; class gallery--<variant> quyết định kiểu.
+   Không có variant: lưới ảnh có chú thích, dạng cơ bản. Kiểu riêng của từng thương hiệu viết thành khối .gallery--<variant>. */
+
+.gallery__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+}
+
+.gallery__head {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.gallery__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.gallery__title {
+  margin: 0;
+}
+
+.gallery__lead {
+  max-width: 34rem;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.gallery__figure {
+  margin: 0;
+}
+
+.gallery__figure img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.gallery__caption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* Kiểu slices (Gành Sớm): khung trắng chứa các dải ảnh như tấm bình phong.
+   Điện thoại (viết trước): các dải nằm ngang xếp dọc, dải đóng cao --band, dải mở cao --open-h. */
+.gallery__hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.gallery__hint-touch {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gallery__hint-touch { display: inline; }
+  .gallery__hint-key { display: none; }
+}
+
+.gallery__screen {
+  --gap: 0.375rem;
+  --band: 2.75rem;
+  --open-h: 21rem;
+  --inner-r: calc(var(--radius) * 0.6);
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0.5rem;
+  overflow: hidden;
+  list-style: none;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--color-ink) 8%, transparent),
+    0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--color-ink) 28%, transparent);
+  container-type: inline-size;
+}
+
+.gallery__slice {
+  position: relative;
+  flex: 0 0 var(--band);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-ink);
+  border-radius: var(--inner-r);
+}
+
+.gallery__slice.is-open {
+  flex-basis: var(--open-h);
+}
+
+.gallery__btn {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: var(--color-bg);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.gallery__slice.is-open .gallery__btn {
+  cursor: default;
+}
+
+/* Ảnh luôn có kích thước của dải lúc mở và nằm giữa dải, nên khi dải hẹp lại ảnh không bị co méo mà chỉ bị che bớt. */
+.gallery__btn img {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: var(--open-h);
+  object-fit: cover;
+  transform: translateY(-50%);
+}
+
+/* Hai lớp tối: lớp của dải đóng đậm ở phía có số, lớp của dải mở đậm ở đáy cho chú thích. */
+.gallery__shade::before,
+.gallery__shade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gallery__shade::before {
+  background: linear-gradient(to right, color-mix(in srgb, var(--color-ink) 62%, transparent), color-mix(in srgb, var(--color-ink) 18%, transparent) 45%);
+}
+
+.gallery__shade::after {
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 82%, transparent), color-mix(in srgb, var(--color-ink) 55%, transparent) 30%, transparent 62%);
+  opacity: 0;
+}
+
+.gallery__shade {
+  color: transparent;
+}
+
+.gallery__slice.is-open .gallery__shade::before { opacity: 0; }
+.gallery__slice.is-open .gallery__shade::after { opacity: 1; }
+
+/* Số thứ tự trên dải đóng. */
+.gallery__tab {
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  height: var(--band);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery__slice.is-open .gallery__tab {
+  opacity: 0;
+}
+
+/* Viền tiêu điểm hai lớp (sáng bên trong, tối bên ngoài) để thấy rõ trên mọi ảnh. */
+.gallery__btn:focus-visible {
+  outline: none;
+}
+
+.gallery__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0.3rem;
+  border: 3px solid var(--color-bg);
+  border-radius: calc(var(--inner-r) - 0.25rem);
+  box-shadow: 0 0 0 2px var(--color-ink), inset 0 0 0 2px var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gallery__btn:focus-visible::after {
+  opacity: 1;
+}
+
+/* Chú thích của dải đang mở: số lớn, câu tả ảnh, tên tác giả. */
+.gallery__cap {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1.25rem 1.25rem 1.125rem;
+  color: var(--color-bg);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gallery__slice.is-open .gallery__cap {
+  visibility: visible;
+  opacity: 1;
+}
+
+.gallery__num {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery__total {
+  margin-left: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  vertical-align: 0.25em;
+}
+
+.gallery__cap-text {
+  max-width: 30rem;
+  margin: 0.625rem 0 0;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.gallery__credit {
+  margin: 0.375rem 0 0;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--color-bg) 86%, transparent);
+}
+
+@media (hover: hover) {
+  .gallery__slice:not(.is-open) .gallery__btn:hover .gallery__shade::before {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gallery__slice {
+    transition: flex-basis 0.7s var(--ease);
+  }
+
+  .gallery__shade::before,
+  .gallery__shade::after,
+  .gallery__tab {
+    transition: opacity 0.35s ease;
+  }
+
+  /* Đóng: chú thích tắt nhanh. Mở: chú thích hiện sau khi dải đã xoè gần xong. */
+  .gallery__cap {
+    transform: translateY(0.75rem);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+  }
+
+  .gallery__slice.is-open .gallery__cap {
+    transform: none;
+    transition: opacity 0.45s ease 0.32s, transform 0.55s var(--ease) 0.32s, visibility 0s;
+  }
+}
+
+/* Màn rộng: tiêu đề và đoạn dẫn một hàng; các dải đứng dọc cạnh nhau, dải đóng rộng --strip, dải mở chiếm phần còn lại.
+   --count (số ảnh) do JS đặt, nên thêm bớt ảnh trong content.json thì bề rộng dải mở tự tính lại. */
+@media (min-width: 1024px) {
+  .gallery--slices .gallery__head {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 3rem;
+  }
+
+  .gallery__screen {
+    --strip: 3.5rem;
+    --panel-w: calc(100cqw - (var(--count, 8) - 1) * (var(--strip) + var(--gap)));
+    flex-direction: row;
+    height: clamp(26rem, 64vh, 38rem);
+  }
+
+  .gallery__slice {
+    flex: 0 0 var(--strip);
+  }
+
+  .gallery__slice.is-open {
+    flex-basis: var(--panel-w);
+  }
+
+  .gallery__btn img {
+    top: 0;
+    left: 50%;
+    width: var(--panel-w);
+    height: 100%;
+    transform: translateX(-50%);
+  }
+
+  .gallery__shade::before {
+    background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 66%, transparent), color-mix(in srgb, var(--color-ink) 20%, transparent) 38%);
+  }
+
+  .gallery__shade::after {
+    background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 82%, transparent), color-mix(in srgb, var(--color-ink) 50%, transparent) 26%, transparent 52%);
+  }
+
+  /* Số trên dải đóng xoay dọc, kèm một vạch mảnh phía trên. */
+  .gallery__tab {
+    top: auto;
+    right: 0;
+    bottom: 1.25rem;
+    left: 0;
+    flex-direction: column-reverse;
+    gap: 0.875rem;
+    height: auto;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .gallery__cap {
+    right: auto;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1.75rem;
+    align-items: end;
+    width: var(--panel-w);
+    padding: 2rem 2.25rem 1.875rem;
+  }
+
+  .gallery__num {
+    grid-row: 1 / span 2;
+    font-size: clamp(4.5rem, 6vw, 6rem);
+  }
+
+  .gallery__total {
+    display: block;
+    margin: 0.5rem 0 0;
+    font-size: 0.8125rem;
+    vertical-align: 0;
+  }
+
+  .gallery__cap-text {
+    max-width: 26rem;
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .gallery__credit {
+    margin-top: 0.5rem;
+  }
+}

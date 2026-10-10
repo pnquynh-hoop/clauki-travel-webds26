@@ -23,6 +23,7 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 09/10 | Claude Code (Claude Opus 5.5) | Giao diện mới cho Gành Sớm (#7, #10): hero kiểu `coverflow`, header `solid` làm lại, footer kiểu `card`, theme nền cát và font Montserrat, 4 ảnh hero có giấy phép; sửa `base.css` để liên kết và nút viền dùng màu nhấn | Tóm tắt dạng prompt: [docs/prompts/09-10-giao-dien-ganh-som.md](prompts/09-10-giao-dien-ganh-som.md) | b00fb35, a9c0170 |
 | 09/10 | Claude Code (Claude Opus 5.5) | Khối đặt chỗ (#14) kiểu `stay` cho Gành Sớm: form ngày, hạng nhà, số khách, tạm tính có ưu đãi, số căn còn, báo lỗi dưới ô, tin nhắn soạn sẵn gửi SMS, gọi, chép; ngày 10/10 làm lại giao diện với ảnh lớn của hạng và thẻ ảnh chọn hạng, thu gọn cho vừa một màn hình | Tóm tắt dạng prompt: [docs/prompts/09-10-dat-phong.md](prompts/09-10-dat-phong.md) | 5c4120d, d1cd35c, 4ebf7ca |
 | 10/10 | Claude Code (Claude Opus 5.5) | Khối hỏi đáp (#15): component `wl-faq` (dạng cơ bản bằng thẻ `details`) và kiểu `chat` cho Gành Sớm (khung nhắn tin với chủ nhà, câu hỏi là nút gợi ý), câu hỏi của Gành Sớm | Tóm tắt dạng prompt: [docs/prompts/10-10-hoi-dap.md](prompts/10-10-hoi-dap.md) | 2ca961f, e04d044, 6254d80 |
+| 10/10 | Claude Code (Claude Opus 5.5) | Khối thư viện ảnh (#12): component `wl-gallery` (lưới cơ bản) và kiểu `slices` cho Gành Sớm (dải ảnh xoè như tấm bình phong), 6 ảnh mới có giấy phép | Tóm tắt dạng prompt: [docs/prompts/10-10-thu-vien-anh.md](prompts/10-10-thu-vien-anh.md) | b0b8e45 |
 
 ## Mị Nương
 

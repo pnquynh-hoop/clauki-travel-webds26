@@ -86,7 +86,27 @@
       ]
     },
     { "type": "features", "id": "trong-gia", "variant": "numbered" },
-    { "type": "gallery", "id": "thu-vien", "variant": "strip" },
+    {
+      "type": "gallery",
+      "id": "thu-vien",
+      "variant": "slices",
+      "eyebrow": "Thư viện ảnh",
+      "title": "Biển miền Trung, từ sáng tới tối",
+      "lead": "Dọc dải bờ biển này, bạn sẽ gặp bờ sỏi đón nắng sớm, bến cá, thuyền thúng nằm trên cát và những ghềnh đá nhô ra sóng.",
+      "hint": "Rê chuột hoặc chọn một tấm để mở lớn, phím mũi tên để chuyển tấm.",
+      "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+      "listLabel": "Tám ảnh biển, mỗi lần mở một ảnh",
+      "images": [
+        { "src": "images/hero.webp", "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và vài tảng đá nhô lên ngoài xa", "caption": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn.", "credit": "Ảnh: Lê Hồ Bắc, CC BY-SA 4.0" },
+        { "src": "images/fish-market.webp", "alt": "Bến cá trên bãi biển buổi sáng, người đội nón lá gánh hàng, rổ nhựa trên bạt và thuyền đánh cá neo ngoài khơi", "caption": "Bến cá buổi sáng, người đội nón lá gánh hàng giữa những rổ nhựa.", "credit": "Ảnh: Erwin Verbruggen, CC BY-SA 2.0" },
+        { "src": "images/basket-boat.webp", "alt": "Những chiếc thuyền thúng tròn nằm trên bãi cát, xa xa là người dân và thuyền nhỏ trên mặt biển", "caption": "Những chiếc thuyền thúng tròn nằm phơi trên bãi cát.", "credit": "Ảnh: CEphoto, Uwe Aranas, CC BY-SA 3.0" },
+        { "src": "images/eo-gio.webp", "alt": "Đường mòn băng qua sườn đồi cỏ dẫn ra những mỏm đá ven biển ở Eo Gió, Quy Nhơn", "caption": "Đường mòn qua sườn đồi cỏ ra những mỏm đá ở Eo Gió, Quy Nhơn.", "credit": "Ảnh: Hưng Hồ Bá, CC BY 2.0" },
+        { "src": "images/rocks-sea.webp", "alt": "Ghềnh đá bazan xếp thành từng cột đen nhô ra biển ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ vào chân đá", "caption": "Ghềnh đá bazan xếp cột ở Gành Đá Đĩa, Phú Yên, sóng trắng vỗ chân đá.", "credit": "Ảnh: Đông Hồ, CC BY-SA 2.0" },
+        { "src": "images/breakfast.webp", "alt": "Đĩa bánh xèo vàng gấp đôi đặt trên lá chuối, bên cạnh rau sống, cà chua, dưa leo và đồ chua", "caption": "Bánh xèo gấp đôi trên lá chuối, kèm rau sống và đồ chua.", "credit": "Ảnh: pelican, CC BY-SA 2.0" },
+        { "src": "images/sup.webp", "alt": "Một người đứng chèo ván trên mặt biển phẳng lúc mặt trời sát chân trời, phía sau là cụm đá tối màu", "caption": "Một người chèo ván trên mặt biển phẳng khi mặt trời sát chân trời.", "credit": "Ảnh: Enoch Leung, CC BY-SA 4.0" },
+        { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời", "caption": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng lúc mặt trời xuống thấp.", "credit": "Ảnh: PattayaPatrol, CC BY-SA 4.0" }
+      ]
+    },
     { "type": "intro", "id": "o-cham", "eyebrow": "Ở chậm", "title": "Không lịch trình, giờ giấc theo mặt trời", "lead": "Sáng xem bình minh, chiều nằm đọc sách. Ở Gành Sớm không có loa nhạc, chỉ có tiếng sóng." },
     {
       "type": "booking",
@@ -259,6 +279,48 @@
       "author": "Vyacheslav Argenberg",
       "license": "CC BY 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Corong_Corong_Beach,_Coconut_palm_trees,_El_Nido,_Palawan_Island,_Philippines.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/fish-market.webp",
+      "author": "Erwin Verbruggen",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Fishing_village_(14428786839).jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/basket-boat.webp",
+      "author": "CEphoto, Uwe Aranas",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Da-Nang_Vietnam_Coracles-01.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/eo-gio.webp",
+      "author": "Hưng Hồ Bá",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Eo_Gi%C3%B3_-_Nh%C6%A1n_L%C3%BD.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/rocks-sea.webp",
+      "author": "Đông Hồ",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:G%C3%A0nh_%C4%90%C3%A1_%C4%90%C4%A9a.jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/breakfast.webp",
+      "author": "pelican",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C3%A1nh_x%C3%A8o_(15826153307).jpg",
+      "note": "Đã cắt khung và thu nhỏ"
+    },
+    {
+      "file": "images/sup.webp",
+      "author": "Enoch Leung",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Paddleboarding_at_Sunset_(55014274704).jpg",
       "note": "Đã cắt khung và thu nhỏ"
     }
   ]
