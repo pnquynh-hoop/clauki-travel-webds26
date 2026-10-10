@@ -1,8 +1,9 @@
 /* wl-booking.js - khối đặt chỗ: khách chọn ngày và hạng, điền tên, số điện thoại, xem tạm tính.
    Không có máy chủ nên "đặt" nghĩa là soạn sẵn tin nhắn để khách gửi cho hotline (SMS, gọi, hoặc chép);
    trang không báo đặt thành công khi chưa ai nhận.
-   Mỗi kiểu trình bày có ô nhập khác nhau nên rẽ nhánh JS theo variant: stay (ngày nhận, trả phòng, hạng nhà, số khách);
-   calendar (chọn chuyến khởi hành) và request (gửi yêu cầu giữ phòng) do người phụ trách Bậc Trà, Mé Rạch thêm. */
+   Mỗi kiểu trình bày có ô nhập khác nhau nên rẽ nhánh JS theo variant. Kiểu stay: bên trái là ảnh lớn của hạng đang chọn,
+   bên phải là thẻ ảnh để chọn hạng, ngày nhận và trả phòng, số khách, họ tên, số điện thoại và tạm tính. */
+import { asset } from '../core.js';
 import { textEl, groupEl, telHref } from '../dom.js';
 
 const DAY = 86400000;
@@ -38,20 +39,25 @@ function validPhone(text) {
   return /^(0|\+84)\d{9}$/.test(text.replace(/[\s.]/g, ''));
 }
 
+function errorEl(id) {
+  const error = document.createElement('p');
+  error.className = 'booking__error';
+  error.id = id;
+  error.hidden = true;
+  return error;
+}
+
 // Một ô nhập: nhãn, ô, dòng báo lỗi ngay dưới ô (ẩn khi không có lỗi). aria-describedby nối ô với dòng lỗi.
-function fieldEl(id, label, control) {
+function fieldEl(id, label, control, extra) {
   const field = document.createElement('div');
   field.className = 'booking__field';
   const labelEl = document.createElement('label');
   labelEl.htmlFor = id;
   labelEl.textContent = label ?? '';
   control.id = id;
-  const error = document.createElement('p');
-  error.className = 'booking__error';
-  error.id = `${id}-error`;
-  error.hidden = true;
+  const error = errorEl(`${id}-error`);
   control.setAttribute('aria-describedby', error.id);
-  field.append(labelEl, control, error);
+  field.append(labelEl, extra ?? control, error);
   return { field, control, error };
 }
 
@@ -63,18 +69,20 @@ function inputEl(type, attrs = {}) {
   return input;
 }
 
-function selectEl(options) {
-  const select = document.createElement('select');
-  select.className = 'booking__input';
-  select.append(...options.map(([value, text]) => new Option(text, value)));
-  return select;
-}
-
 function showError(ref, message) {
   ref.error.textContent = message ?? '';
   ref.error.hidden = !message;
   if (message) ref.control.setAttribute('aria-invalid', 'true');
   else ref.control.removeAttribute('aria-invalid');
+}
+
+function imageEl(image, className, lazy) {
+  const img = document.createElement('img');
+  img.className = className;
+  img.src = asset(image.src);
+  img.alt = image.alt ?? '';
+  if (lazy) img.loading = 'lazy';
+  return img;
 }
 
 export class WlBooking extends HTMLElement {
@@ -87,7 +95,12 @@ export class WlBooking extends HTMLElement {
     return `${amount.toLocaleString('vi-VN')} ${this._data.currency ?? ''}`.trim();
   }
 
-  // Số căn còn trống của hạng đã chọn, theo khoảng ngày chứa ngày nhận phòng; ngoài các khoảng đã ghi thì không biết.
+  room() {
+    const id = this._roomInputs.find((input) => input.checked)?.value;
+    return this._data.rooms.find((r) => r.id === id) ?? this._data.rooms[0];
+  }
+
+  // Số căn còn trống của một hạng, theo khoảng ngày chứa ngày nhận phòng; ngoài các khoảng đã ghi thì không biết.
   roomsLeft(roomId, checkIn) {
     const day = dayNumber(checkIn);
     const period = (this._data.availability ?? []).find((p) => day >= dayNumber(p.from) && day <= dayNumber(p.to));
@@ -109,7 +122,7 @@ export class WlBooking extends HTMLElement {
     const section = this._data;
     const f = this._fields;
     const labels = section.labels ?? {};
-    const room = section.rooms.find((r) => r.id === f.room.control.value) ?? section.rooms[0];
+    const room = this.room();
     const guests = Number(f.guests.control.value);
     const nights = dayNumber(f.checkOut.control.value) - dayNumber(f.checkIn.control.value);
     const left = this.roomsLeft(room.id, f.checkIn.control.value);
@@ -133,22 +146,23 @@ export class WlBooking extends HTMLElement {
     return { room, guests, nights, left, lines, total };
   }
 
-  // Đổi hạng thì số khách tối đa đổi theo; giữ số khách đang chọn nếu hạng mới còn chứa được.
-  syncGuests(room) {
-    const select = this._fields.guests.control;
-    const current = Number(select.value) || this._data.includedGuests || 1;
-    const unit = this._data.labels?.guestUnit ?? '';
-    const options = Array.from({ length: room.maxGuests }, (_, i) => [String(i + 1), `${i + 1} ${unit}`.trim()]);
-    select.replaceChildren(...options.map(([value, text]) => new Option(text, value)));
-    select.value = String(Math.min(current, room.maxGuests));
+  // Số khách luôn nằm trong khoảng 1 tới sức chứa của hạng đang chọn; đổi sang hạng nhỏ hơn thì tự giảm.
+  setGuests(value) {
+    const room = this.room();
+    const input = this._fields.guests.control;
+    const guests = Math.min(room.maxGuests, Math.max(1, Number(value) || 1));
+    input.max = String(room.maxGuests);
+    input.value = String(guests);
+    this._less.disabled = guests <= 1;
+    this._more.disabled = guests >= room.maxGuests;
   }
 
   updateStay() {
     const section = this._data;
+    const labels = section.labels ?? {};
     const f = this._fields;
-    // Cập nhật danh sách số khách theo hạng trước khi tính tiền, để tạm tính không dùng số khách vượt sức chứa.
-    const room = section.rooms.find((r) => r.id === f.room.control.value) ?? section.rooms[0];
-    if (f.guests.control.options.length !== room.maxGuests) this.syncGuests(room);
+    // Cập nhật số khách theo hạng trước khi tính tiền, để tạm tính không dùng số khách vượt sức chứa.
+    this.setGuests(f.guests.control.value);
     const q = this.quote();
     // Ngày trả phòng sớm nhất là sau ngày nhận một đêm.
     if (f.checkIn.control.value) f.checkOut.control.min = isoAfter(f.checkIn.control.value, 1);
@@ -157,14 +171,28 @@ export class WlBooking extends HTMLElement {
     if (f.name.control.value.trim()) showError(f.name, '');
     if (validPhone(f.phone.control.value.trim())) showError(f.phone, '');
 
-    const labels = section.labels ?? {};
+    // Ảnh lớn bên trái và chú thích đổi theo hạng đang chọn; mỗi thẻ hạng ghi số căn còn theo ngày nhận phòng.
+    this._shots.forEach((shot, i) => {
+      const on = section.rooms[i] === q.room;
+      shot.classList.toggle('is-active', on);
+      shot.setAttribute('aria-hidden', String(!on));
+    });
+    this._showName.textContent = q.room.label;
+    this._showFacts.textContent = fill(labels.capacity, { area: q.room.area, max: q.room.maxGuests });
+    this._showPrice.textContent = fill(labels.perNight, { price: this.money(q.room.price) });
+    section.rooms.forEach((room, i) => {
+      const left = this.roomsLeft(room.id, f.checkIn.control.value);
+      const tag = this._roomTags[i];
+      tag.textContent = left === undefined ? '' : left === 0 ? labels.soldOut : fill(labels.left, { n: left });
+      tag.hidden = left === undefined;
+      tag.classList.toggle('is-out', left === 0);
+    });
+
     const soldOut = q.left === 0;
-    this._badge.textContent = q.left === undefined ? '' : soldOut ? labels.soldOut : fill(labels.left, { n: q.left });
-    this._badge.hidden = q.left === undefined;
-    this._badge.classList.toggle('is-out', soldOut);
-    showError(f.room, soldOut ? section.errors?.soldOut : '');
+    showError(this._roomRef, soldOut ? section.errors?.soldOut : '');
     this._submit.disabled = soldOut;
 
+    this._sunrise.textContent = q.nights > 0 ? fill(labels.sunrises, { nights: q.nights }) : '';
     this._lines.replaceChildren(...q.lines.map(([label, detail, amount, saving]) => {
       const row = document.createElement('div');
       row.className = saving ? 'booking__line booking__line--saving' : 'booking__line';
@@ -191,9 +219,13 @@ export class WlBooking extends HTMLElement {
     showError(f.checkOut, q.nights > 0 ? '' : errors.dates);
     showError(f.name, name ? '' : errors.name);
     showError(f.phone, validPhone(phone) ? '' : errors.phone);
+    if (q.left === 0) {
+      this._roomInputs.find((input) => input.checked)?.focus();
+      return;
+    }
     const invalid = Object.values(f).find((ref) => !ref.error.hidden);
-    if (invalid || q.left === 0) {
-      (invalid ?? f.room).control.focus();
+    if (invalid) {
+      invalid.control.focus();
       return;
     }
 
@@ -208,8 +240,7 @@ export class WlBooking extends HTMLElement {
       total: this.money(q.total),
     });
     this._draft.textContent = text;
-    const hotline = this.site?.contact?.phone;
-    const digits = hotline?.replace(/\s/g, '');
+    const digits = this.site?.contact?.phone?.replace(/\s/g, '');
     if (this._sms) this._sms.href = `sms:${digits}?body=${encodeURIComponent(text)}`;
     this._form.hidden = true;
     this._message.hidden = false;
@@ -271,6 +302,90 @@ export class WlBooking extends HTMLElement {
     return box;
   }
 
+  // Ảnh lớn của hạng đang chọn: mỗi hạng một ảnh chồng lên nhau, ảnh đang chọn hiện rõ; chú thích ghi tên, sức chứa, giá.
+  showcaseEl(rooms) {
+    this._shots = rooms.map((room, i) => (room.image?.src ? imageEl(room.image, 'booking__shot', i > 0) : document.createElement('span')));
+    this._showName = document.createElement('p');
+    this._showName.className = 'booking__show-name';
+    this._showFacts = document.createElement('p');
+    this._showFacts.className = 'booking__show-facts';
+    this._showPrice = document.createElement('p');
+    this._showPrice.className = 'booking__show-price';
+    const caption = document.createElement('figcaption');
+    caption.className = 'booking__show-caption';
+    caption.append(this._showName, this._showFacts, this._showPrice);
+    const figure = document.createElement('figure');
+    figure.className = 'booking__showcase';
+    figure.append(...this._shots, caption);
+    return figure;
+  }
+
+  // Chọn hạng bằng thẻ ảnh: mỗi thẻ là một nút radio thật bọc trong label, nên dùng được phím mũi tên như nhóm radio.
+  roomPickerEl(rooms, prefix) {
+    const labels = this._data.labels ?? {};
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'booking__rooms';
+    const legend = document.createElement('legend');
+    legend.className = 'booking__legend';
+    legend.textContent = labels.room ?? '';
+    const list = document.createElement('div');
+    list.className = 'booking__room-list';
+    this._roomInputs = [];
+    this._roomTags = [];
+    rooms.forEach((room, i) => {
+      const card = document.createElement('label');
+      card.className = 'booking__room';
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `${prefix}-room`;
+      input.value = room.id;
+      input.className = 'booking__room-input';
+      input.checked = i === 0;
+      const tag = document.createElement('span');
+      tag.className = 'booking__room-tag';
+      tag.hidden = true;
+      card.append(...[
+        input,
+        room.image?.src ? imageEl({ src: room.image.src, alt: '' }, 'booking__room-thumb', true) : null,
+        textEl('span', 'booking__room-name', room.label),
+        textEl('span', 'booking__room-price', this.money(room.price)),
+        tag,
+      ].filter(Boolean));
+      list.append(card);
+      this._roomInputs.push(input);
+      this._roomTags.push(tag);
+    });
+    const error = errorEl(`${prefix}-room-error`);
+    this._roomRef = { control: fieldset, error };
+    fieldset.setAttribute('aria-describedby', error.id);
+    fieldset.append(legend, list, error);
+    return fieldset;
+  }
+
+  // Số khách: ô số kèm hai nút bớt, thêm hai bên; nút chỉ có dấu nên cần aria-label lấy từ content.json.
+  guestsEl(prefix) {
+    const labels = this._data.labels ?? {};
+    const input = inputEl('number', { min: '1', inputmode: 'numeric' });
+    input.classList.add('booking__count');
+    const step = (className, text, label, delta) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `booking__step ${className}`;
+      button.textContent = text;
+      if (label) button.setAttribute('aria-label', label);
+      button.addEventListener('click', () => {
+        this.setGuests(Number(input.value) + delta);
+        this.updateStay();
+      });
+      return button;
+    };
+    this._less = step('booking__step--less', '−', labels.guestsLess, -1);
+    this._more = step('booking__step--more', '+', labels.guestsMore, 1);
+    const stepper = groupEl('booking__stepper', [this._less, input, this._more]);
+    input.value = String(this._data.includedGuests ?? 1);
+    return fieldEl(`${prefix}-guests`, labels.guests, input, stepper);
+  }
+
   stayEl() {
     const section = this._data;
     const labels = section.labels ?? {};
@@ -283,24 +398,20 @@ export class WlBooking extends HTMLElement {
     checkIn.value = dates.checkIn ?? '';
     const checkOut = inputEl('date', { required: '' });
     checkOut.value = dates.checkOut ?? '';
+    const picker = this.roomPickerEl(rooms, prefix);
     this._fields = {
       checkIn: fieldEl(`${prefix}-checkin`, labels.checkIn, checkIn),
       checkOut: fieldEl(`${prefix}-checkout`, labels.checkOut, checkOut),
-      room: fieldEl(`${prefix}-room`, labels.room, selectEl(rooms.map((r) => [r.id, r.label]))),
-      guests: fieldEl(`${prefix}-guests`, labels.guests, selectEl([])),
+      guests: this.guestsEl(prefix),
       name: fieldEl(`${prefix}-name`, labels.name, inputEl('text', { autocomplete: 'name' })),
       phone: fieldEl(`${prefix}-phone`, labels.phone, inputEl('tel', { autocomplete: 'tel', inputmode: 'tel' })),
     };
-    this.syncGuests(rooms[0]);
     const f = this._fields;
-    f.checkIn.field.classList.add('booking__field--half');
-    f.checkOut.field.classList.add('booking__field--half');
-    f.name.field.classList.add('booking__field--half');
-    f.phone.field.classList.add('booking__field--half');
+    [f.checkIn, f.checkOut, f.name, f.phone].forEach((ref) => ref.field.classList.add('booking__field--half'));
     const fields = groupEl('booking__fields', Object.values(f).map((ref) => ref.field));
 
-    this._badge = document.createElement('p');
-    this._badge.className = 'booking__badge';
+    this._sunrise = document.createElement('p');
+    this._sunrise.className = 'booking__sunrise';
     this._lines = document.createElement('dl');
     this._lines.className = 'booking__lines';
     this._total = document.createElement('strong');
@@ -312,7 +423,8 @@ export class WlBooking extends HTMLElement {
     this._submit.textContent = this.site?.cta?.label ?? '';
 
     const summary = groupEl('booking__summary', [
-      groupEl('booking__summary-head', [textEl('p', 'booking__summary-title', labels.summary), this._badge]),
+      textEl('p', 'booking__summary-title', labels.summary),
+      this._sunrise,
       this._lines,
       groupEl('booking__total', [textEl('span', 'booking__total-label', labels.total), this._total]),
       textEl('p', 'booking__includes', labels.includes),
@@ -323,7 +435,7 @@ export class WlBooking extends HTMLElement {
     this._form.className = 'booking__card';
     // Tự kiểm tra và báo lỗi bằng chữ trong content.json thay cho bong bóng lỗi mặc định của trình duyệt.
     this._form.noValidate = true;
-    this._form.append(fields, summary);
+    this._form.append(this.showcaseEl(rooms), groupEl('booking__panel', [picker, fields, summary]));
     this._form.addEventListener('input', () => this.updateStay());
     this._form.addEventListener('change', () => this.updateStay());
     this._form.addEventListener('submit', (e) => this.submitStay(e));

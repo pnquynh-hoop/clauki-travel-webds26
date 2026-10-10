@@ -97,9 +97,18 @@
       "lead": "Chọn ngày và hạng nhà, trang soạn sẵn tin nhắn để bạn gửi cho Gành Sớm. Chúng tôi gọi lại xác nhận trong ngày.",
       "currency": "đồng",
       "rooms": [
-        { "id": "villa", "label": "Villa sát biển", "price": 6200000, "maxGuests": 4 },
-        { "id": "nha-doi", "label": "Nhà đồi", "price": 3900000, "maxGuests": 3 },
-        { "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000, "maxGuests": 2 }
+        {
+          "id": "villa", "label": "Villa sát biển", "price": 6200000, "maxGuests": 4, "area": "70 m²",
+          "image": { "src": "images/hero-veranda.webp", "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời" }
+        },
+        {
+          "id": "nha-doi", "label": "Nhà đồi", "price": 3900000, "maxGuests": 3, "area": "45 m²",
+          "image": { "src": "images/view-hill.webp", "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi" }
+        },
+        {
+          "id": "phong-vuon", "label": "Phòng vườn", "price": 2800000, "maxGuests": 2, "area": "32 m²",
+          "image": { "src": "images/view-garden.webp", "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau" }
+        }
       ],
       "includedGuests": 2,
       "extraGuestPrice": 450000,
@@ -121,9 +130,13 @@
       "labels": {
         "checkIn": "Ngày nhận phòng",
         "checkOut": "Ngày trả phòng",
-        "room": "Hạng nhà",
+        "room": "Chọn hạng nhà",
         "guests": "Số khách",
-        "guestUnit": "khách",
+        "guestsLess": "Bớt một khách",
+        "guestsMore": "Thêm một khách",
+        "capacity": "{area}, tối đa {max} khách",
+        "perNight": "{price} một đêm",
+        "sunrises": "{nights} đêm, {nights} lần thức dậy cùng bình minh",
         "name": "Họ tên",
         "phone": "Số điện thoại",
         "summary": "Tạm tính",
