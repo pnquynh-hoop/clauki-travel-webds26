@@ -18,4 +18,4 @@ Yêu cầu: màu, font chỉ lấy từ biến CSS; chạy đúng với cả ba 
 
 ## Phần tự quyết định
 
-- Giữ kiểu mặc định cho cả ba thương hiệu vì còn ít thời gian trước hạn nộp.
+- Duyệt thứ tự việc trong ngày: làm #15 ngay sau #14.
