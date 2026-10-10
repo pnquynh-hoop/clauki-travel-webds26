@@ -1,0 +1,322 @@
+/* process.css - giao diện của <wl-process>: quy trình từng bước, một hình đổi dáng và màu khi cuộn.
+   Khối cao theo số bước (mỗi bước nửa màn hình, cộng một màn hình), phần sân khấu dính ở đầu màn hình
+   trong lúc cuộn qua. Màu nền là màu nền trang pha nhẹ màu của bước đang tới (JS đặt --process-tint). */
+
+.process {
+  display: block;
+  height: calc(var(--process-steps, 5) * 50svh + 100svh);
+  padding-block: 0;
+}
+
+.process__stage {
+  --process-tint: var(--color-primary);
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--process-tint) 12%, var(--color-bg));
+}
+
+/* Chừa phía trên một khoảng bằng header để header dính không đè lên tiêu đề. */
+.process__inner {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  height: 100%;
+  padding-top: var(--header-stuck, 4rem);
+}
+
+.process__eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.process__title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.process__lead {
+  margin: 0 0 1.1rem;
+  max-width: 34rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.process__steps {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Bước chưa tới mờ đi; bước đang tới sáng lên và hiện câu mô tả. */
+.process__step {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.1rem 0.6rem;
+  opacity: 0.32;
+  transition: opacity calc(var(--duration) * 1.75) ease;
+}
+
+.process__step.is-active {
+  opacity: 1;
+}
+
+.process__num {
+  grid-row: span 2;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+
+.process__name {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.process__desc {
+  display: none;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+.process__step.is-active .process__desc {
+  display: block;
+}
+
+/* Hình nhỏ và ảnh trong từng bước chỉ dùng khi bật giảm chuyển động (xem cuối tệp). */
+.process__mini,
+.process__step-photo {
+  display: none;
+}
+
+/* Ảnh thật của bước đang tới, nằm dưới danh sách. */
+.process__photo {
+  width: min(15rem, 100%);
+  aspect-ratio: 4 / 3;
+  margin: 1.2rem 0 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+.process__photo[hidden] {
+  display: none;
+}
+
+.process__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hình đổi dáng. Màu thân hình lấy từ dữ liệu từng bước (JS đặt); viền, gân, giọt nước pha từ biến của thương hiệu. */
+.process__art {
+  width: min(46vh, 80vw);
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.process__body {
+  fill: var(--color-primary);
+  stroke: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  stroke-width: 1.5;
+}
+
+.process__shine-from {
+  stop-color: var(--color-surface);
+  stop-opacity: 0.35;
+}
+
+.process__shine-to {
+  stop-color: var(--color-surface);
+  stop-opacity: 0;
+}
+
+.process__rib {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.process__dew {
+  fill: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  stroke: color-mix(in srgb, var(--color-surface) 90%, transparent);
+}
+
+.process__pan path {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+/* Hơi nóng bốc lên từng làn, làn sau trễ hơn làn trước. */
+.process__steam path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  filter: blur(1.5px);
+  animation: process-steam 3s ease-in-out infinite;
+}
+
+.process__steam path:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.process__steam path:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+@keyframes process-steam {
+  0% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+}
+
+.process__cup-line {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.process__liquid {
+  fill: var(--color-accent);
+}
+
+/* Thanh tiến độ mảnh ở đáy sân khấu. */
+.process__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2rem;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.process__progress span {
+  display: block;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--color-accent);
+}
+
+/* Điện thoại: ảnh nhỏ lại để danh sách bước, ảnh và hình cùng vừa một màn hình. */
+@media (max-width: 759px) {
+  .process__photo {
+    width: 10rem;
+  }
+
+  .process__lead {
+    display: none;
+  }
+}
+
+@media (min-width: 760px) {
+  .process__inner {
+    grid-template-columns: 1fr 1.1fr;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .process__art {
+    width: min(72vh, 40vw);
+  }
+
+  .process__steps {
+    gap: 0.6rem;
+  }
+}
+
+/* Giảm chuyển động (hoặc dữ liệu không đổi dáng được): không ghim, mọi bước hiện đủ cùng lúc,
+   mỗi bước kèm hình nhỏ và ảnh của bước đó; bỏ hình lớn, thanh tiến độ và khung ảnh chung. */
+.process.is-static {
+  height: auto;
+  padding-block: var(--space-section);
+}
+
+.process.is-static .process__stage {
+  position: static;
+  height: auto;
+  overflow: visible;
+}
+
+.process.is-static .process__inner {
+  display: block;
+  height: auto;
+  padding-top: 0;
+}
+
+.process.is-static .process__art,
+.process.is-static .process__progress,
+.process.is-static .process__photo {
+  display: none;
+}
+
+.process.is-static .process__steps {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1.5rem;
+}
+
+.process.is-static .process__step {
+  align-content: start;
+  opacity: 1;
+}
+
+.process.is-static .process__desc,
+.process.is-static .process__lead {
+  display: block;
+}
+
+.process.is-static .process__mini {
+  display: block;
+  grid-column: 1 / -1;
+  width: 6rem;
+  height: auto;
+  order: -1;
+}
+
+.process.is-static .process__step-photo {
+  display: block;
+  grid-column: 1 / -1;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-top: 0.6rem;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process__steam path {
+    animation: none;
+  }
+}
