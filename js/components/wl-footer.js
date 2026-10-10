@@ -26,22 +26,6 @@ function columnsEl(content, footer) {
   ]);
 }
 
-// Đường tới chỗ ở: mỗi chặng một nơi (place) và cách đi tới đó (how), theo đúng thứ tự trong dữ liệu.
-// Chạy theo dữ liệu, không theo kiểu trình bày: thương hiệu nào ghi footer.directions thì có phần này.
-function directionsEl(title, directions = []) {
-  const stops = directions.filter((stop) => stop.place);
-  if (!stops.length) return null;
-  const list = document.createElement('ol');
-  list.className = 'footer__route';
-  for (const stop of stops) {
-    const item = document.createElement('li');
-    item.className = 'footer__stop';
-    item.append(...[textEl('p', 'footer__stop-place', stop.place), textEl('p', 'footer__stop-how', stop.how)].filter(Boolean));
-    list.append(item);
-  }
-  return groupEl('footer__directions', [textEl('p', 'footer__directions-title', title), list]);
-}
-
 // Ảnh CC BY và CC BY-SA bắt buộc ghi tên tác giả, giấy phép và nguồn trên trang, nên mỗi ảnh một dòng.
 // Đặt trong <details> đóng sẵn: footer gọn, ai cần thì bấm "Nguồn ảnh" để mở danh sách.
 function creditsEl(title, credits = []) {
@@ -189,7 +173,6 @@ export class WlFooter extends HTMLElement {
     ]);
     const parts = [
       groupEl('footer__top', [brand, action]),
-      directionsEl(footer.directionsTitle, footer.directions),
       columnsEl(content, footer),
       fine,
     ];

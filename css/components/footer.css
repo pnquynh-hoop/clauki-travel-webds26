@@ -135,191 +135,6 @@
   text-underline-offset: 0.2em;
 }
 
-/* Đường tới chỗ ở (chỉ có khi dữ liệu ghi footer.directions). Mỗi chặng một chấm tròn, nối với chặng sau
-   bằng đường nét đứt. Điện thoại: các chặng xếp dọc, đường chạy dọc bên trái. Màn rộng: xếp ngang, đường chạy ngang.
-   Màu chấm và đường lấy theo màu chữ (currentColor), nên đặt trên nền sáng hay nền màu đều hợp. */
-.footer__directions {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.footer__directions-title {
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-
-.footer__route {
-  display: grid;
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.footer__stop {
-  position: relative;
-  padding-left: 1.9rem;
-}
-
-.footer__stop::before {
-  content: '';
-  position: absolute;
-  top: 0.3rem;
-  left: 0;
-  width: 0.85rem;
-  height: 0.85rem;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-}
-
-/* Chặng cuối là nơi ở: chấm đặc, như điểm đến trên bản đồ. */
-.footer__stop:last-child::before {
-  background: currentColor;
-}
-
-/* Đường nối từ chấm này tới chấm sau, dài qua cả khoảng cách giữa hai chặng. */
-.footer__stop:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 1.35rem;
-  bottom: -1.3rem;
-  left: calc(0.425rem - 1px);
-  border-left: 2px dashed color-mix(in srgb, currentColor 45%, transparent);
-}
-
-.footer__stop-place {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
-.footer__stop-how {
-  max-width: 22rem;
-  margin: 0.3rem 0 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--color-muted);
-}
-
-@media (min-width: 760px) {
-  .footer__route {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(0, 1fr);
-    gap: 2rem;
-  }
-
-  .footer__stop {
-    padding: 1.9rem 0 0;
-  }
-
-  .footer__stop:not(:last-child)::after {
-    top: calc(0.425rem - 1px);
-    bottom: auto;
-    left: 1.35rem;
-    right: -1.6rem;
-    border-left: 0;
-    border-top: 2px dashed color-mix(in srgb, currentColor 45%, transparent);
-  }
-}
-
-/* Kiểu directions (Mé Rạch): cả chân trang nền màu chủ đạo, chữ màu chữ-trên-nền-chủ-đạo (tương phản đã kiểm ở theme).
-   Hàng trên là tên thương hiệu lớn và nút CTA; giữa là "đường về", các chặng nối nhau như dòng sông;
-   rồi ba cột menu, liên hệ, địa chỉ; cuối là ghi chú và nguồn ảnh.
-   Chữ phụ pha 80% màu chữ với màu nền để nhạt hơn mà vẫn đạt tương phản AA. */
-.footer--directions {
-  --footer-soft: color-mix(in srgb, var(--color-on-primary) 80%, var(--color-primary));
-  --footer-line: color-mix(in srgb, var(--color-on-primary) 25%, transparent);
-  padding-block: 4rem 2rem;
-  color: var(--color-on-primary);
-  background: var(--color-primary);
-}
-
-.footer--directions :focus-visible {
-  outline-color: var(--color-on-primary);
-}
-
-.footer--directions .footer__main {
-  gap: 0;
-}
-
-.footer--directions .footer__top {
-  gap: 1.75rem;
-  padding-bottom: 2.5rem;
-}
-
-.footer--directions .footer__name {
-  font-size: clamp(2.5rem, 1.5rem + 4.5vw, 5rem);
-  line-height: 1;
-}
-
-.footer--directions .footer__slogan,
-.footer--directions .footer__cta-note,
-.footer--directions .footer__col-title,
-.footer--directions .footer__stop-how,
-.footer--directions .footer__fine {
-  color: var(--footer-soft);
-}
-
-/* Nút CTA đảo màu: nền sáng, chữ màu chủ đạo, để nổi trên nền màu chủ đạo. */
-.footer--directions .footer__cta {
-  color: var(--color-primary);
-  background: var(--color-on-primary);
-  border-color: var(--color-on-primary);
-}
-
-.footer--directions .footer__cta:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 88%, var(--color-primary));
-  border-color: color-mix(in srgb, var(--color-on-primary) 88%, var(--color-primary));
-}
-
-.footer--directions .footer__directions {
-  padding-block: 2.5rem;
-  border-block: 1px solid var(--footer-line);
-}
-
-.footer--directions .footer__directions-title {
-  color: var(--footer-soft);
-}
-
-.footer--directions .footer__cols {
-  padding-block: 2.5rem;
-}
-
-.footer--directions .footer__fine {
-  border-top-color: var(--footer-line);
-}
-
-.footer--directions .footer__credits-title,
-.footer--directions .footer__credit-link {
-  color: var(--color-on-primary);
-}
-
-@media (min-width: 760px) {
-  .footer--directions .footer__top {
-    grid-template-columns: 1fr auto;
-    align-items: end;
-  }
-
-  .footer--directions .footer__action {
-    justify-items: end;
-    text-align: right;
-  }
-
-  .footer--directions .footer__cols {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .footer--directions .footer__credits {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2rem;
-  }
-}
-
 /* =========================================================
 ẢNH KHÉP TRANG, LỜI HẸN, DÒNG CHỮ CHẠY
 Có ở mọi kiểu khi dữ liệu ghi footer.image hoặc footer.title:
@@ -639,7 +454,6 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 
 .footer--columns .footer__cta-note,
 .footer--columns .footer__col-title,
-.footer--columns .footer__stop-how,
 .footer--columns .footer__fine {
   color: var(--footer-soft);
 }
@@ -705,7 +519,6 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
     padding-top: 0.4rem;
   }
 
-  .footer--columns .footer__directions,
   .footer--columns .footer__fine {
     grid-column: 1 / -1;
   }
