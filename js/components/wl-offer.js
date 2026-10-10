@@ -1,7 +1,11 @@
-/* wl-offer.js - khối chiến dịch ưu đãi: tiêu đề, đếm ngược tới hạn đặt, phép tính "ở N đêm, chỉ trả N - k đêm",
-   lịch biển 12 tháng có tô khoảng mùa ưu đãi. Mọi kiểu dùng chung một cấu trúc HTML, variant chỉ đổi CSS
-   (tide của Gành Sớm: dải nền tối, đường sóng cao thấp theo độ động của biển từng tháng).
-   Nút đặt lấy từ site.cta; bấm nút thì phát wl:choose-room để khối đặt chỗ chọn sẵn hạng đang tính thử. */
+/* wl-offer.js - khối chiến dịch ưu đãi đặt sớm, dựng như một tấm bưu thiếp hai mặt:
+   - đầu khối: tiêu đề, lời dẫn, dải 12 tháng của biển có ngoặc đánh dấu mùa ưu đãi;
+   - mặt trước: ảnh và dòng chú thích; mặt sau: lời nhắn, dấu bưu điện đếm ngược tới hạn đặt, con tem in giá ưu đãi
+     của hạng đang chọn, các dòng điều kiện;
+   - bên dưới: chọn hạng bằng các con tem (nhóm radio), phiếu giá (giá thường, số tiền trả, giá tính ra mỗi đêm), nút đặt.
+   Mọi kiểu dùng chung cấu trúc này, variant chỉ đổi CSS (postcard của Gành Sớm: bưu thiếp nghiêng, tem răng cưa, chữ viết tay).
+   Nút đặt lấy từ site.cta; bấm thì phát wl:choose-room để khối đặt chỗ chọn sẵn hạng đang chọn. */
+import { asset } from '../core.js';
 import { textEl, groupEl, clamp } from '../dom.js';
 
 const MINUTE = 60 * 1000;
@@ -17,24 +21,20 @@ function monthOf(iso) {
   return month >= 1 && month <= 12 ? month : null;
 }
 
-// Đường sóng của lịch biển trong khung width x height: biên độ theo độ động của từng tháng (level 0 lặng tới 3 động),
-// chuyển mượt giữa hai tháng liền nhau; mỗi tháng một con sóng. phase dời sóng sang ngang để vẽ thêm lớp sóng phía sau.
-// Đóng đường ở đáy khung để tô được phần nước.
-function wavePath(levels, width, height, phase) {
-  const step = width / levels.length;
-  const base = height * 0.62;
-  const amplitude = (x) => {
-    const pos = x / step - 0.5;
-    const i = clamp(Math.floor(pos), 0, levels.length - 1);
-    const j = clamp(i + 1, 0, levels.length - 1);
-    const t = clamp(pos - i, 0, 1);
-    return 1.5 + (levels[i] * (1 - t) + levels[j] * t) * 5.5;
-  };
-  const points = [];
-  for (let x = 0; x <= width; x += 4) {
-    points.push(`L${x} ${(base - amplitude(x) * Math.sin((x / step + phase) * Math.PI * 2)).toFixed(1)}`);
-  }
-  return `M0 ${height} ${points.join(' ')} L${width} ${height} Z`;
+function imgEl(image, className) {
+  if (!image?.src) return null;
+  const img = document.createElement('img');
+  img.className = className;
+  img.src = asset(image.src);
+  img.alt = image.alt ?? '';
+  img.loading = 'lazy';
+  return img;
+}
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(SVG_NS, tag);
+  Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+  return el;
 }
 
 export class WlOffer extends HTMLElement {
@@ -51,36 +51,162 @@ export class WlOffer extends HTMLElement {
     return this._data.labels ?? {};
   }
 
+  // Tiền tố cho id bên trong khối (đường chữ của dấu bưu điện, tên các con tem), để hai khối trên một trang không trùng id.
+  get uid() {
+    return this.id || 'offer';
+  }
+
   money(amount) {
     return `${amount.toLocaleString('vi-VN')} ${this._data.currency ?? ''}`.trim();
   }
 
-  // Giá gọn trong ô đêm (ví dụ "6,2 triệu") cho vừa bốn ô một hàng; dữ liệu không có nhãn million thì ghi đủ.
+  // Giá gọn trên tem (ví dụ "6,2 triệu"); dữ liệu không có nhãn million thì ghi đủ.
   short(amount) {
     if (!this.labels.million) return this.money(amount);
     return fill(this.labels.million, { n: (amount / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) });
   }
 
-  /* ---------- Đếm ngược ---------- */
+  /* ---------- Đầu khối ---------- */
 
+  headEl() {
+    const section = this._data;
+    const title = textEl('h2', 'offer__title', section.title);
+    const accent = textEl('em', 'offer__title-accent', section.titleAccent);
+    if (title && accent) title.append(' ', accent);
+    const intro = groupEl('offer__intro', [
+      textEl('p', 'offer__eyebrow', section.eyebrow),
+      title,
+      textEl('p', 'offer__lead', section.lead),
+    ]);
+    return groupEl('offer__head', [intro, this.seasonsEl()]);
+  }
+
+  // Dải 12 tháng: mỗi ô tô theo kiểu biển của tháng (kind: calm, windy, stormy); ngoặc dưới các tháng của mùa ưu đãi.
+  // Dải màu chỉ để nhìn nhanh nên ẩn với trình đọc màn hình; chú thích bằng chữ bên dưới nói đủ.
+  seasonsEl() {
+    const groups = (this._data.sea ?? []).filter((g) => Array.isArray(g.months) && g.months.length);
+    if (!groups.length) return null;
+    const kinds = Array(12).fill('');
+    groups.forEach((g) => g.months.forEach((m) => {
+      if (m >= 1 && m <= 12) kinds[m - 1] = g.kind ?? '';
+    }));
+
+    const chart = document.createElement('div');
+    chart.className = 'offer__chart';
+    kinds.forEach((kind, i) => {
+      const cell = textEl('span', kind ? `offer__month offer__month--${kind}` : 'offer__month', String(i + 1));
+      cell.setAttribute('aria-hidden', 'true');
+      chart.append(cell);
+    });
+    const from = monthOf(this._data.from);
+    const to = monthOf(this._data.to);
+    const window = from && to && to >= from ? textEl('p', 'offer__window', fill(this.labels.window, { from, to })) : null;
+    if (window) {
+      window.style.gridColumn = `${from} / ${to + 1}`;
+      chart.append(window);
+    }
+
+    const legend = document.createElement('ul');
+    legend.className = 'offer__legend';
+    legend.append(...groups.map((g) => {
+      const first = Math.min(...g.months);
+      const last = Math.max(...g.months);
+      const range = first === last ? fill(this.labels.monthOne, { n: first }) : fill(this.labels.monthRange, { from: first, to: last });
+      const swatch = document.createElement('span');
+      swatch.className = g.kind ? `offer__swatch offer__month--${g.kind}` : 'offer__swatch';
+      swatch.setAttribute('aria-hidden', 'true');
+      const text = document.createElement('span');
+      text.append(...[textEl('b', '', range && `${range}:`), g.label && ` ${g.label}`].filter(Boolean));
+      const li = document.createElement('li');
+      li.append(swatch, text);
+      return li;
+    }));
+
+    return groupEl('offer__seasons', [textEl('p', 'offer__seasons-title', this.labels.seasons), chart, legend]);
+  }
+
+  /* ---------- Tấm bưu thiếp ---------- */
+
+  frontEl() {
+    const img = imgEl(this._data.image, 'offer__photo-img');
+    if (!img) return null;
+    const figure = document.createElement('figure');
+    figure.className = 'offer__card offer__front';
+    const caption = document.createElement('figcaption');
+    caption.className = 'offer__caption';
+    caption.append(...[textEl('strong', '', this._data.caption), textEl('span', '', this._data.captionPlace)].filter(Boolean));
+    figure.append(...[groupEl('offer__photo', [img]), caption.childElementCount ? caption : null].filter(Boolean));
+    return figure;
+  }
+
+  backEl() {
+    const note = this._data.note ?? {};
+    const msg = groupEl('offer__msg', [
+      textEl('p', 'offer__msg-label', note.label),
+      textEl('p', 'offer__note', note.greeting),
+      textEl('p', 'offer__note', note.text),
+      textEl('p', 'offer__sign', note.sign),
+    ]);
+
+    // Các dòng điều kiện như dòng địa chỉ; dòng cuối là hạng đang chọn, đổi theo con tem.
+    const rows = (this._data.facts ?? []).filter((f) => f.label && f.value).map((f) => [f.label, textEl('dd', '', f.value)]);
+    this._roomFact = null;
+    if (this._rooms.length && this.labels.roomFact) {
+      this._roomFact = document.createElement('dd');
+      rows.push([this.labels.roomFact, this._roomFact]);
+    }
+    let facts = null;
+    if (rows.length) {
+      facts = document.createElement('dl');
+      facts.className = 'offer__facts';
+      facts.append(...rows.map(([term, dd]) => groupEl('', [textEl('dt', '', term), dd])));
+    }
+
+    const back = document.createElement('article');
+    back.className = 'offer__card offer__back';
+    if (this.labels.back) back.setAttribute('aria-label', this.labels.back);
+    back.append(...[msg, groupEl('offer__post', [this.postmarkEl(), this.stampEl()]), facts].filter(Boolean));
+    return back.childElementCount ? back : null;
+  }
+
+  // Dấu bưu điện: hai vòng mực, chữ chạy theo vòng (trên, dưới), giữa là ngày hạn và thời gian còn lại.
   // Hạn đặt ghi kèm múi giờ (ví dụ 2026-12-31T23:59:59+07:00) nên máy ở múi giờ nào cũng đếm đúng.
-  countdownEl() {
+  postmarkEl() {
     const deadline = new Date(this._data.deadline ?? '');
     if (Number.isNaN(deadline.getTime())) return null;
     this._deadline = deadline;
-    this._clock = document.createElement('p');
-    this._clock.className = 'offer__clock';
-    const box = groupEl('offer__countdown', [
-      textEl('p', 'offer__countdown-label', this.labels.countdown),
-      this._clock,
-      textEl('p', 'offer__deadline', this.labels.deadline),
-    ]);
-    // role="timer": trình đọc màn hình không đọc lại mỗi lần số đổi.
-    box.setAttribute('role', 'timer');
+
+    const top = `${this.uid}-pm-top`;
+    const bottom = `${this.uid}-pm-bottom`;
+    const svg = svgEl('svg', { viewBox: '0 0 160 160', 'aria-hidden': 'true', focusable: 'false' });
+    const defs = svgEl('defs', {});
+    defs.append(svgEl('path', { id: top, d: 'M 18 80 A 62 62 0 0 1 142 80' }), svgEl('path', { id: bottom, d: 'M 9 80 A 71 71 0 0 0 151 80' }));
+    svg.append(defs, svgEl('circle', { cx: 80, cy: 80, r: 77, class: 'offer__ring' }), svgEl('circle', { cx: 80, cy: 80, r: 56, class: 'offer__ring offer__ring--inner' }));
+    [[top, this.labels.postmarkTop], [bottom, this.labels.postmarkBottom]].forEach(([id, text]) => {
+      if (!text) return;
+      const path = svgEl('textPath', { href: `#${id}`, startOffset: '50%', 'text-anchor': 'middle' });
+      path.textContent = text;
+      const el = svgEl('text', {});
+      el.append(path);
+      svg.append(el);
+    });
+
+    this._days = document.createElement('span');
+    this._days.className = 'offer__pm-days';
+    this._hm = document.createElement('span');
+    this._hm.className = 'offer__pm-hm';
+    const center = groupEl('offer__postmark-center', [textEl('span', 'offer__pm-date', this.labels.date), this._days, this._hm]);
+    center.setAttribute('aria-hidden', 'true');
+    // Trình đọc màn hình đọc câu đầy đủ này thay cho các số trong vòng; role="timer" để không đọc lại mỗi lần số đổi.
+    this._sr = document.createElement('span');
+    this._sr.className = 'offer__sr';
+
+    this._postmark = groupEl('offer__postmark', [svg, center, this._sr]);
+    this._postmark.setAttribute('role', 'timer');
     this.tick();
     // Chỉ hiện tới phút nên nửa phút cập nhật một lần là đủ.
     this._timer = setInterval(() => this.tick(), MINUTE / 2);
-    return box;
+    return this._postmark;
   }
 
   // Số ngày, giờ, phút còn lại; hết hạn thì thay bằng câu báo hết hạn và thôi đếm.
@@ -88,52 +214,76 @@ export class WlOffer extends HTMLElement {
     const left = this._deadline.getTime() - Date.now();
     if (left <= 0) {
       clearInterval(this._timer);
-      this._clock.replaceChildren(...[textEl('span', 'offer__ended', this.labels.ended)].filter(Boolean));
+      this._postmark.classList.add('is-expired');
+      this._days.textContent = this.labels.ended ?? '';
+      this._hm.textContent = '';
+      this._sr.textContent = this.labels.ended ?? '';
       return;
     }
     const minutes = Math.floor(left / MINUTE);
-    const parts = [
-      [Math.floor(minutes / 1440), this.labels.days],
-      [Math.floor(minutes / 60) % 24, this.labels.hours],
-      [minutes % 60, this.labels.minutes],
-    ];
-    this._clock.replaceChildren(...parts.map(([n, unit]) => groupEl('offer__unit', [
-      textEl('strong', 'offer__num', String(n).padStart(2, '0')),
-      textEl('span', 'offer__unit-name', unit),
-    ])));
+    const time = { d: Math.floor(minutes / 1440), h: Math.floor(minutes / 60) % 24, m: minutes % 60 };
+    this._days.textContent = fill(this.labels.daysLeft, time);
+    this._hm.textContent = fill(this.labels.timeLeft, time);
+    this._sr.textContent = fill(this.labels.countdownSr, time);
   }
 
-  /* ---------- Tính thử ---------- */
+  // Con tem dán trên mặt sau: ảnh của hạng đang chọn và giá ưu đãi; update() điền nội dung.
+  stampEl() {
+    if (!this._rooms.length) return null;
+    this._stampImg = document.createElement('img');
+    this._stampImg.className = 'offer__stamp-img';
+    this._stampPrice = document.createElement('strong');
+    const value = groupEl('offer__stamp-value', [textEl('span', '', this.labels.stamp), this._stampPrice]);
+    this._stamp = groupEl('offer__stamp', [this._stampImg, value]);
+    return this._stamp;
+  }
 
-  calcEl(rooms) {
-    const nights = this._data.nights ?? 0;
-    if (!rooms.length || nights < 1) return null;
-    this._rooms = rooms;
+  /* ---------- Chọn hạng và phiếu giá ---------- */
 
+  roomEl(room, i) {
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.className = 'offer__room-input';
+    input.name = `${this.uid}-room`;
+    input.value = String(i);
+    input.checked = i === 0;
+    input.addEventListener('change', () => this.update(true));
+    // Tên của nút chỉ gồm tên hạng và giá, không đọc thêm alt của ảnh trên tem.
+    const name = textEl('span', 'offer__room-name', room.label);
+    name.id = `${this.uid}-room-${i}`;
+    const price = textEl('span', 'offer__room-price', [this.short(room.price), this.labels.perNight].filter(Boolean).join(' '));
+    price.id = `${this.uid}-price-${i}`;
+    input.setAttribute('aria-labelledby', `${name.id} ${price.id}`);
+    const label = document.createElement('label');
+    label.className = 'offer__room';
+    label.append(input, groupEl('offer__room-face', [groupEl('offer__room-inner', [imgEl(room.image, 'offer__room-img'), name, price])]));
+    return label;
+  }
+
+  deskEl() {
+    if (!this._rooms.length) return null;
     const fieldset = document.createElement('fieldset');
     fieldset.className = 'offer__rooms';
-    const legend = textEl('legend', 'offer__rooms-label', this.labels.room);
-    if (legend) fieldset.append(legend);
-    rooms.forEach((room, i) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.className = 'offer__room-input';
-      input.name = `${this.id || 'offer'}-room`;
-      input.value = String(i);
-      input.checked = i === 0;
-      input.addEventListener('change', () => this.updateCalc());
-      const chip = document.createElement('label');
-      chip.className = 'offer__room';
-      chip.append(input, textEl('span', '', room.label));
-      fieldset.append(chip);
-    });
-    this._roomInputs = [...fieldset.querySelectorAll('input')];
+    const rooms = this._rooms.map((room, i) => this.roomEl(room, i));
+    this._inputs = rooms.map((label) => label.querySelector('input'));
+    fieldset.append(...[textEl('legend', 'offer__rooms-label', this.labels.room), groupEl('offer__room-row', rooms)].filter(Boolean));
 
-    this._nights = document.createElement('ol');
-    this._nights.className = 'offer__nights';
-    this._sum = document.createElement('dl');
-    this._sum.className = 'offer__sum';
-    this._sum.setAttribute('aria-live', 'polite');
+    this._slipTitle = document.createElement('p');
+    this._slipTitle.className = 'offer__slip-title';
+    this._full = document.createElement('s');
+    this._pay = document.createElement('dd');
+    this._per = document.createElement('dd');
+    const full = document.createElement('dd');
+    full.append(this._full);
+    const sum = document.createElement('dl');
+    sum.className = 'offer__sum';
+    sum.append(...[
+      [this.labels.full, full, ''],
+      [this.labels.pay, this._pay, 'is-pay'],
+      [this.labels.perNightTotal, this._per, ''],
+    ].filter(([term]) => term).map(([term, dd, className]) => groupEl(className, [textEl('dt', '', term), dd])));
+    const live = groupEl('', [this._slipTitle, sum]);
+    live.setAttribute('aria-live', 'polite');
 
     const cta = this.site?.cta;
     let book = null;
@@ -142,132 +292,58 @@ export class WlOffer extends HTMLElement {
       book.className = 'btn offer__book';
       book.href = cta.href;
       book.textContent = cta.label;
-      // Khối đặt chỗ (nếu có trên trang) chọn sẵn hạng đang tính; liên kết vẫn nhảy tới khối đặt chỗ như thường.
+      // Khối đặt chỗ (nếu có trên trang) chọn sẵn hạng đang chọn; liên kết vẫn nhảy tới khối đặt chỗ như thường.
       book.addEventListener('click', () => {
         const room = this.currentRoom();
         if (room.id) document.dispatchEvent(new CustomEvent('wl:choose-room', { detail: { id: room.id } }));
       });
     }
-
-    this.updateCalc();
-    return groupEl('offer__calc', [textEl('h3', 'offer__calc-title', this.labels.calc), fieldset, this._nights, this._sum, book]);
+    return groupEl('offer__desk', [fieldset, groupEl('offer__slip', [live, book])]);
   }
 
   currentRoom() {
-    const checked = this._roomInputs.find((input) => input.checked);
+    const checked = this._inputs.find((input) => input.checked);
     return this._rooms[Number(checked?.value ?? 0)];
   }
 
-  // Vẽ lại các ô đêm và dòng tổng theo hạng đang chọn. Các đêm cuối là đêm được tặng.
-  updateCalc() {
+  // Điền lại phiếu giá, dòng hạng phòng và con tem theo hạng đang chọn. Các đêm cuối là đêm được tặng.
+  // animate = true khi khách tự đổi tem: con tem trên bưu thiếp "đóng" lại một lần.
+  update(animate) {
     const room = this.currentRoom();
-    const nights = this._data.nights;
+    const nights = this._data.nights ?? 1;
     const paid = nights - clamp(this._data.freeNights ?? 0, 0, nights);
-    const items = Array.from({ length: nights }, (_, i) => {
-      const free = i + 1 > paid;
-      const li = document.createElement('li');
-      li.className = free ? 'offer__night is-free' : 'offer__night';
-      li.append(...[
-        textEl('span', 'offer__night-name', fill(this.labels.night, { n: i + 1 })),
-        textEl('strong', 'offer__night-price', free ? this.labels.free : this.short(room.price)),
-        free ? textEl('s', 'offer__night-was', this.short(room.price)) : null,
-      ].filter(Boolean));
-      return li;
-    });
-    this._nights.replaceChildren(...items);
-
+    const pay = room.price * paid;
+    this._slipTitle.textContent = fill(this.labels.slip, { room: room.label });
+    this._full.textContent = this.money(room.price * nights);
+    this._pay.textContent = this.money(pay);
     // Làm tròn tới nghìn đồng cho dễ đọc.
-    const perNight = Math.round((room.price * paid) / nights / 1000) * 1000;
-    const rows = [
-      [this.labels.full, textEl('s', '', this.money(room.price * nights))],
-      [this.labels.pay, textEl('strong', '', this.money(room.price * paid))],
-      [this.labels.perNight, textEl('span', '', this.money(perNight))],
-    ].filter(([term]) => term);
-    this._sum.replaceChildren(...rows.map(([term, value]) => {
-      const dd = document.createElement('dd');
-      dd.append(value);
-      return groupEl('offer__sum-row', [textEl('dt', '', term), dd]);
-    }));
-  }
-
-  /* ---------- Lịch biển ---------- */
-
-  // Lưới 12 cột: dải tô khoảng mùa ưu đãi, đường sóng, số tháng, rồi chú thích từng mùa nằm dưới đúng các tháng của nó.
-  seaEl() {
-    const groups = (this._data.sea ?? []).filter((g) => Array.isArray(g.months) && g.months.length);
-    if (!groups.length) return null;
-    const levels = Array(12).fill(0);
-    groups.forEach((g) => g.months.forEach((m) => {
-      if (m >= 1 && m <= 12) levels[m - 1] = g.level ?? 0;
-    }));
-
-    const sea = document.createElement('div');
-    sea.className = 'offer__sea';
-
-    const from = monthOf(this._data.from);
-    const to = monthOf(this._data.to);
-    if (from && to && to >= from) {
-      const band = document.createElement('div');
-      band.className = 'offer__window';
-      band.append(...[textEl('span', 'offer__window-label', this.labels.window)].filter(Boolean));
-      band.style.setProperty('--from', from);
-      band.style.setProperty('--to', to + 1);
-      sea.append(band);
+    this._per.textContent = this.money(Math.round(pay / nights / 1000) * 1000);
+    if (this._roomFact) this._roomFact.textContent = room.label;
+    if (!this._stamp) return;
+    this._stampImg.hidden = !room.image?.src;
+    if (room.image?.src) {
+      this._stampImg.src = asset(room.image.src);
+      this._stampImg.alt = fill(this.labels.stampAlt, { room: room.label, alt: room.image.alt ?? '' });
     }
-
-    // Đường sóng chỉ để nhìn nhanh; chữ chú thích bên dưới đã nói đủ, nên ẩn với trình đọc màn hình.
-    const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', 'offer__wave');
-    svg.setAttribute('viewBox', '0 0 1200 60');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    svg.setAttribute('aria-hidden', 'true');
-    // Hai lớp: lớp sau lệch nửa con sóng và mờ hơn, cho mặt nước có chiều sâu.
-    [['offer__wave-back', 0.5], ['offer__wave-front', 0]].forEach(([className, phase]) => {
-      const path = document.createElementNS(SVG_NS, 'path');
-      path.setAttribute('class', className);
-      path.setAttribute('d', wavePath(levels, 1200, 60, phase));
-      svg.append(path);
-    });
-    sea.append(svg);
-
-    for (let m = 1; m <= 12; m += 1) {
-      const cell = document.createElement('span');
-      cell.className = from && to && m >= from && m <= to ? 'offer__month is-offer' : 'offer__month';
-      cell.textContent = String(m);
-      cell.style.gridColumn = String(m);
-      cell.setAttribute('aria-hidden', 'true');
-      sea.append(cell);
+    this._stampPrice.textContent = this.short(pay);
+    if (animate) {
+      this._stamp.classList.remove('is-new');
+      void this._stamp.offsetWidth;
+      this._stamp.classList.add('is-new');
     }
-
-    const legend = document.createElement('ul');
-    legend.className = 'offer__legend';
-    legend.append(...groups.map((g) => {
-      const first = Math.min(...g.months);
-      const last = Math.max(...g.months);
-      const li = document.createElement('li');
-      li.className = 'offer__season';
-      li.style.setProperty('--from', first);
-      li.style.setProperty('--to', last + 1);
-      const range = first === last ? fill(this.labels.monthOne, { n: first }) : fill(this.labels.months, { from: first, to: last });
-      li.append(...[textEl('strong', 'offer__season-range', range), textEl('span', 'offer__season-text', g.label)].filter(Boolean));
-      return li;
-    }));
-    sea.append(legend);
-
-    return groupEl('offer__calendar', [textEl('h3', 'offer__calendar-title', this.labels.calendar), sea]);
   }
 
   render() {
     clearInterval(this._timer);
     const section = this._data;
     this.className = section.variant ? `offer offer--${section.variant}` : 'offer';
-    const rooms = (section.rooms ?? []).filter((room) => room.label && room.price > 0);
+    this._rooms = (section.rooms ?? []).filter((room) => room.label && room.price > 0);
+    this._stamp = null;
+    this._inputs = [];
 
-    const head = groupEl('offer__head', [
-      textEl('p', 'offer__eyebrow', section.eyebrow),
-      textEl('h2', 'offer__title', section.title),
-      textEl('p', 'offer__lead', section.lead),
-    ]);
-    this.replaceChildren(...[groupEl('offer__inner container', [head, this.countdownEl(), this.calcEl(rooms), this.seaEl()])].filter(Boolean));
+    const table = groupEl('offer__table', [this.frontEl(), this.backEl()]);
+    const desk = this.deskEl();
+    this.replaceChildren(...[groupEl('offer__inner container', [this.headEl(), table, desk])].filter(Boolean));
+    if (this._rooms.length) this.update(false);
   }
 }

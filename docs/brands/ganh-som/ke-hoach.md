@@ -130,7 +130,7 @@ Quy tắc tạm tính trong khối đặt phòng (kiểu `stay`): số đêm nh�
 | 4 | `features`: giá đã gồm (#11) | `numbered`: hàng đánh số | riêng |
 | 5 | `gallery` (#12) | `strip`: dải ảnh vuốt ngang | dùng lại |
 | 6 | `intro` | mặc định, căn trái; đang ẩn vì chỉ có chữ, lạc giữa hai khối nhiều ảnh | dùng lại |
-| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `tide`: dải nền tối; đếm ngược tới hạn đặt, tính thử 4 đêm trả 3, lịch biển 12 tháng tô mùa ưu đãi | riêng |
+| 7 | `offer`: ưu đãi đặt sớm hè 2027 | `postcard`: bưu thiếp hẹn hè 2027, dấu bưu điện đếm ngược tới hạn đặt, chọn hạng bằng con tem in giá 4 đêm trả 3, dải tháng của biển | riêng |
 | 8 | `booking` (#14) | `stay`: chọn ngày nhận và trả phòng, hạng nhà, số khách | chung |
 | 9 | `faq` (#15) | mặc định | dùng lại |
 | | `footer` | `card` (một thẻ trắng: tên lớn, nút đặt phòng, ba cột menu, liên hệ, địa chỉ) | cố định |
