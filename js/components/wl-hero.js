@@ -205,7 +205,7 @@ export class WlHero extends HTMLElement {
     if (this._stage) this.play();
   }
 
-  // Dựng sân khấu: ba lớp ảnh, vệt nắng, sương, hai mảng sương, mây, lớp tối, rồi tới phần chữ và dòng gợi ý cuộn.
+  // Dựng sân khấu: ba lớp ảnh, vệt nắng, sương, hai mảng sương, mây, lớp tối, rồi tới phần chữ.
   stageEl(section, inner) {
     const image = section.image ?? (section.slides ?? []).find((slide) => slide.image?.src)?.image;
     // Cùng một ảnh đặt ở ba độ sâu. Lớp xa là ảnh thật (có alt); hai lớp sau chỉ để tạo chiều sâu nên ẩn với trình đọc màn hình.
@@ -232,7 +232,6 @@ export class WlHero extends HTMLElement {
     this._glow = decorEl('hero__glow');
     this._veil = decorEl('hero__veil');
     this._banks = [decorEl('hero__bank hero__bank--left'), decorEl('hero__bank hero__bank--right')];
-    this._hint = textEl('p', 'hero__hint', section.hint);
     // Vị trí chuột từ -1 tới 1; góc nhìn và vệt nắng đuổi theo nó với tốc độ khác nhau.
     this._pointer = { x: 0, y: 0 };
     this._view = { x: 0, y: 0 };
@@ -246,7 +245,6 @@ export class WlHero extends HTMLElement {
       groupEl('hero__clouds', this._clouds.map((cloud) => cloud.node)),
       decorEl('hero__shade'),
       inner,
-      this._hint,
     ]);
   }
 
@@ -314,7 +312,7 @@ export class WlHero extends HTMLElement {
     });
   }
 
-  // Sương mỏng dần, hai mảng sương dạt ra hai bên, dòng gợi ý mờ đi ngay khi bắt đầu cuộn.
+  // Sương mỏng dần, hai mảng sương dạt ra hai bên.
   // Lớp tối dưới chữ hiện dần trong khoảng 10% tới 26% quãng cuộn. Chữ đổi sang màu sáng một lần khi lớp tối
   // đã hiện được nửa, thay vì đổi dần qua màu xám khó đọc.
   clearMist(open, progress, still) {
@@ -325,7 +323,6 @@ export class WlHero extends HTMLElement {
     const light = still ? 1 : smooth(0.1, 0.26, progress);
     this.style.setProperty('--hero-light', light.toFixed(3));
     this.classList.toggle('is-light', light > 0.5);
-    if (this._hint) this._hint.style.opacity = String(1 - clamp(progress * 5, 0, 1));
   }
 
   // Mây trôi về phía người xem, cộng thêm quãng máy quay đã bay; bay qua ống kính thì quay lại phía xa ở chỗ mới.

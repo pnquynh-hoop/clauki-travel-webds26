@@ -740,13 +740,7 @@ theo mức độ cuộn trang.
   opacity: 0.85;
 }
 
-/* Dòng gợi ý cuộn ở giữa đáy màn hình, kèm một vạch dọc co giãn; JS làm nó mờ đi khi bắt đầu cuộn.
-   Điện thoại chật nên không hiện. */
-.hero__hint {
-  display: none;
-}
-
-/* Giảm chuyển động (lớp is-static do JS bật): không ghim, khối cao một màn hình, không có mây và dòng gợi ý. */
+/* Giảm chuyển động (lớp is-static do JS bật): không ghim, khối cao một màn hình, không có mây. */
 .hero--full.is-static {
   height: auto;
 }
@@ -755,22 +749,8 @@ theo mức độ cuộn trang.
   position: relative;
 }
 
-.is-static .hero__clouds,
-.is-static .hero__hint {
+.is-static .hero__clouds {
   display: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero__hint::after {
-    animation: hero-hint 1.8s ease-in-out infinite;
-  }
-}
-
-/* Vạch dọc dưới dòng gợi ý dài ra rồi rút xuống, như mời cuộn xuống. */
-@keyframes hero-hint {
-  0% { transform: scaleY(0); }
-  50% { transform: scaleY(1); }
-  100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
 @media (min-width: 760px) {
@@ -789,29 +769,6 @@ theo mức độ cuộn trang.
 
   .hero--full .hero__actions {
     margin-top: 1.75rem;
-  }
-
-  .hero--full .hero__hint {
-    position: absolute;
-    left: 50%;
-    bottom: 1.25rem;
-    z-index: 3;
-    display: grid;
-    justify-items: center;
-    gap: 0.4rem;
-    margin: 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    transform: translateX(-50%);
-  }
-
-  .hero__hint::after {
-    content: '';
-    width: 1px;
-    height: 2.4rem;
-    background: currentColor;
-    transform-origin: top;
   }
 }
 
