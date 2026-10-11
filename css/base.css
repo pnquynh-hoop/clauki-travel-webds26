@@ -94,6 +94,27 @@ body {
    Bật giảm chuyển động thì nhảy thẳng như cũ. */
 html {
   scroll-padding-top: var(--header-stuck, 0px);
+  /* Thanh cuộn của trang: mảnh, màu chủ đạo của thương hiệu trên nền trong suốt.
+     Firefox và Chrome mới đọc hai thuộc tính chuẩn này; Safari đọc các quy tắc ::-webkit-scrollbar bên dưới. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-primary) 80%, var(--color-ink));
 }
 
 @media (prefers-reduced-motion: no-preference) {
