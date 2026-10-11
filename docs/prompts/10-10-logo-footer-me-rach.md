@@ -23,6 +23,23 @@
 - footer `columns`: ảnh hoàng hôn trên sông, lời hẹn "Hẹn bạn dưới mé rạch", dòng chữ chạy các địa danh, giữ phần
   "Đường về vườn"; chỉ đổi dữ liệu.
 
+## Lần sau (10 tới 11/10): bỏ phần đường về vườn, đổi ảnh hero
+
+Prompt (tóm tắt):
+
+1. Phần "đường về vườn" giờ có dùng nữa không, không dùng thì xoá luôn; sau đó: bỏ luôn.
+2. Dùng ảnh mới thay cho ảnh hero hiện tại (thử vài ảnh, chọn ảnh đường hầm dừa nước).
+
+Kết quả:
+
+- xoá kiểu footer `directions` (không thương hiệu nào dùng), hàm `directionsEl` trong `wl-footer.js`, các lớp
+  `.footer__directions`, `.footer__route`, `.footer__stop` trong `footer.css`, dữ liệu `directions` của Mé Rạch,
+  các trường đó trong AGENTS.md;
+- ảnh hero đổi sang `hero-duong-dua.webp` (thu về 1600px, nén dưới 300KB), sửa `alt`, xoá các ảnh hero thử và ảnh cũ;
+  một ảnh thử bị loại vì có logo của công ty du lịch có thật ở góc ảnh;
+- hero `stacked`: hạ khung cắt ảnh (`object-position` 92%) để người chèo xuồng nằm trên thẻ con số.
+- Các thay đổi này nằm chung một commit.
+
 ## Phần tự làm và tự kiểm tra
 
 - Tự làm ảnh logo (nguồn ảnh logo ghi riêng nếu có dùng công cụ tạo ảnh); chọn dùng footer của Quỳnh dù trùng kiểu.
