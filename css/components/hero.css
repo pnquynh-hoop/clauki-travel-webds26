@@ -521,10 +521,10 @@
     height: clamp(20rem, 100svh - 31rem, 40rem);
   }
 
-  /* Khung ngang cắt bớt trên dưới; ảnh phong cảnh thường có người, thuyền ở gần đáy nên giữ phần đó,
-     cắt thấp để người, thuyền nằm trên thẻ con số đè mép dưới ảnh. */
+  /* Khung ngang cắt bớt trên dưới; giữ phần giữa hơi thấp, nơi ảnh phong cảnh thường có người, thuyền,
+     để người nằm trên thẻ con số đè mép dưới ảnh mà vẫn thấy cảnh phía trên. */
   .hero--stacked .hero__media img {
-    object-position: 50% 92%;
+    object-position: 50% 62%;
   }
 
   /* Thẻ số nằm giữa theo bề ngang, đè lên mép dưới ảnh. */

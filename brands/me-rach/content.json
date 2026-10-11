@@ -62,8 +62,8 @@
       "title": "Sáng ra chợ nổi, chiều về mé rạch",
       "lead": "Ở cùng gia đình chú Sáu và sống theo nhịp một ngày của nhà vườn miền Tây.",
       "image": {
-        "src": "images/hero-duong-dua.webp",
-        "alt": "Người đội nón lá đứng chèo xuồng dưới đường hầm dừa nước, nắng xuyên qua tán lá xuống con rạch"
+        "src": "images/hero-rach-dua-nuoc.webp",
+        "alt": "Người phụ nữ đội nón lá ngồi trên chiếc xuồng xanh, trôi dưới rặng dừa nước hai bên rạch"
       },
       "link": {
         "label": "Xem một ngày ở vườn",
@@ -535,7 +535,7 @@
   },
   "credits": [
     {
-      "file": "images/hero-duong-dua.webp",
+      "file": "images/hero-rach-dua-nuoc.webp",
       "author": "Esin Üstün",
       "license": "CC BY 2.0",
       "source": "https://commons.wikimedia.org/wiki/File:Canal_in_Mekong_Delta_-_My_Tho_-_Vietnam_(15912635245).jpg",
