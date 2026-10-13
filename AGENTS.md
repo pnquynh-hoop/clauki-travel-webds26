@@ -178,7 +178,11 @@ export class WlHero extends HTMLElement {
 - **Phần do AI viết phải có `AI/` trong scope** của tiêu đề PR: `feat(AI/editor): …`.
 - **`docs/ai-log.md` chỉ ghi việc AI làm ra sản phẩm thi** (mã, nội dung, ảnh, cấu hình brand). Lập kế hoạch, bàn bạc, phân tích, viết tài liệu nội bộ thì không ghi.
 - **Dòng ai-log nằm trong chính PR đó**, cột "Commit" ghi `PR #số`. Không mở PR riêng chỉ để ghi log.
-- **Mỗi PR một việc**, để phần AI viết và phần tự viết không gộp chung một commit.
+- **Mỗi PR một tính năng, kích thước vừa phải**, để phần AI viết và phần tự viết không gộp chung một commit, và người xem PR đọc hết được:
+  - một PR ứng với một issue hoặc một issue con;
+  - nên dưới khoảng 300 dòng mã thay đổi (không tính ảnh và dữ liệu JSON của brand);
+  - lớn hơn thì tách theo lớp: lõi hoặc logic, giao diện, dữ liệu và nội dung brand; mỗi phần một PR, merge theo thứ tự;
+  - không gộp sửa lỗi lặt vặt hay dọn code không liên quan vào PR tính năng.
 - Commit trong nhánh viết thế nào cũng được vì sẽ được gộp, nhưng vẫn nên theo Conventional Commits.
 - `git pull --rebase` trước khi push. Không `push --force` lên `main`, không viết lại lịch sử của `main`.
 - Không commit khoá API hay bí mật (cấu hình Firebase demo, khoá máy demo, secret key của Supabase).
@@ -192,6 +196,7 @@ export class WlHero extends HTMLElement {
 ## 10. Cách trợ lý AI làm việc trong dự án này
 
 - **Làm từng bước nhỏ, đúng phần được nhờ.** Không viết cả tính năng lớn trong một lần, không sửa lan sang tệp khác.
+- **Tự đánh giá kích thước trước khi đề xuất PR:** xem `git diff --stat` so với `main`. Nếu PR chứa hơn một tính năng, vượt khoảng 300 dòng mã, hoặc trộn lõi, giao diện và dữ liệu, thì nói rõ với người đang nhờ và đề xuất cách tách thành các PR nhỏ trước khi mở PR.
 - **Viết xong thì giải thích ngắn gọn** đoạn mã làm gì và vì sao, đủ để người dùng tự trình bày lại khi vấn đáp.
 - **Ưu tiên cách đơn giản, dễ giải thích** hơn cách thông minh.
 - **Không dùng emoji hay ký hiệu trang trí** (dấu tích, tên lửa, lấp lánh, mũi tên…) trong mã, chú thích, commit message, tài liệu và câu trả lời. Viết bằng chữ.
