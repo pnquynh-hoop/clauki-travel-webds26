@@ -1,7 +1,8 @@
-/* room-detail.css - trang chi tiết một hạng, dàn như trang tạp chí du lịch: ảnh bìa tràn màn hình,
-   thẻ đặt phòng nổi đè lên mép ảnh, thư viện ảnh khảm, dải cảnh nhìn ra tràn màn hình, thẻ ảnh hạng khác.
+/* room-detail.css - trang chi tiết một hạng, dàn như trang tạp chí du lịch: ảnh bìa gần kín màn hình với dải
+   thông số ở đáy, câu dẫn chữ lớn cạnh thẻ đặt phòng dính, dải phim ảnh trôi ngang khi cuộn, dải cảnh nhìn ra
+   tràn màn hình, thẻ ảnh đứng của các hạng khác.
    Màu, font, bo góc lấy từ biến của thương hiệu. Thời gian chuyển động theo --duration: bật giảm chuyển động
-   thì về 0, ảnh đứng yên (parallax trong JS cũng tự tắt). */
+   thì về 0; parallax và dải phim trong JS cũng tự tắt. */
 
 /* Ảnh bìa sát header, nên bỏ khoảng đệm trên chung của section. */
 .room-detail {
@@ -14,8 +15,8 @@
 .room-detail__cover {
   position: relative;
   display: grid;
-  align-items: end;
-  min-height: min(82vh, 52rem);
+  align-content: end;
+  min-height: min(92svh, 60rem);
   overflow: hidden;
   isolation: isolate;
   color: var(--color-bg);
@@ -31,47 +32,89 @@
   animation: room-detail-settle calc(var(--duration) * 12) ease-out both;
 }
 
-/* Lớp tối dần về phía dưới để chữ trắng luôn đọc được trên mọi ảnh. */
+/* Tối dần về phía dưới để chữ sáng luôn đọc được trên mọi ảnh; phía trên hơi tối để không chói dưới header. */
 .room-detail__cover::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-ink) 78%, transparent) 0%,
-    color-mix(in srgb, var(--color-ink) 30%, transparent) 45%,
-    transparent 75%
-  );
+  background:
+    linear-gradient(to top, color-mix(in srgb, var(--color-ink) 82%, transparent) 0%, color-mix(in srgb, var(--color-ink) 35%, transparent) 40%, transparent 70%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 25%, transparent), transparent 25%);
 }
 
 .room-detail__cover-text {
-  padding-block: 6rem 3rem;
+  padding-top: 8rem;
+  animation: room-detail-rise calc(var(--duration) * 5) ease-out both;
 }
 
 .room-detail__eyebrow {
   margin: 0 0 1rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   opacity: 0.85;
 }
 
 .room-detail__title {
   margin: 0;
-  max-width: 14ch;
+  max-width: 12ch;
   font-family: var(--font-heading);
-  font-size: clamp(2.75rem, 8vw, 6rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
+  font-size: clamp(3.25rem, 11vw, 8.5rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
 }
 
-.room-detail__lead {
-  margin: 1.25rem 0 0;
-  max-width: 38rem;
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  line-height: 1.65;
-  opacity: 0.92;
+/* Dải thông số: nhãn nhỏ in hoa, giá trị chữ tiêu đề. Điện thoại mỗi thông số một hàng (nhãn trái, giá trị phải)
+   để chữ dài không bị bẻ vụn; từ 760px chia cột, ngăn nhau bằng vạch đứng. */
+.room-detail__facts {
+  display: grid;
+  margin-block: 2rem 0;
+  /* Chừa đáy cho nút tròn đổi brand của BTC ở góc dưới trái, để nút không đè lên hàng thông số cuối. */
+  padding-bottom: 4.5rem;
+  animation: room-detail-rise calc(var(--duration) * 5) calc(var(--duration) * 1.5) ease-out both;
+}
+
+.room-detail__fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.7rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-bg) 30%, transparent);
+}
+
+.room-detail__fact-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.room-detail__fact-icon {
+  display: grid;
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.room-detail__fact-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.room-detail__fact dd {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+  line-height: 1.15;
+  text-align: right;
 }
 
 /* Không có ảnh: chữ màu mực trên nền trang. */
@@ -84,12 +127,17 @@
   content: none;
 }
 
-/* ---------- Bố cục chính ---------- */
+.room-detail__cover--plain .room-detail__facts,
+.room-detail__cover--plain .room-detail__fact {
+  border-color: color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+/* ---------- Câu dẫn, tiện nghi, thẻ đặt phòng ---------- */
 
 .room-detail__layout {
   display: grid;
-  gap: 2.5rem;
-  margin-top: 2.5rem;
+  gap: 3rem;
+  margin-top: clamp(3rem, 7vw, 6rem);
 }
 
 .room-detail__layout > *,
@@ -99,151 +147,83 @@
 
 .room-detail__content {
   display: grid;
-  gap: 3.5rem;
+  align-content: start;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* Câu dẫn như lời mở đầu bài báo: chữ tiêu đề cỡ lớn, dòng ngắn. */
+.room-detail__lead {
+  margin: 0;
+  max-width: 26ch;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
 }
 
 .room-detail__subtitle {
   margin: 0 0 1.25rem;
-  font-family: var(--font-heading);
-  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
-  line-height: 1.2;
-  color: var(--color-ink);
-}
-
-/* Các con số: ô có icon tròn, chữ nhỏ in hoa ở trên, số lớn ở dưới. */
-.room-detail__facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 1rem;
-  margin: 0;
-}
-
-.room-detail__fact {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--color-surface) 50%, var(--color-bg));
-}
-
-.room-detail__fact-icon {
-  flex: 0 0 2.5rem;
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-bg));
-}
-
-.room-detail__fact-icon svg,
-.room-detail__icon svg {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-.room-detail__fact dt {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-muted);
-}
-
-.room-detail__fact dd {
-  margin: 0.2rem 0 0;
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--color-ink);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
-/* Tiện nghi: lưới thanh mảnh, mỗi dòng có đường kẻ dưới. */
+/* Tiện nghi: hai cột thanh mảnh, mỗi dòng có đường kẻ dưới. */
 .room-detail__amenities {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
 }
 
 .room-detail__amenity {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  padding-block: 0.85rem;
+  padding-block: 1rem;
   line-height: 1.4;
   color: var(--color-ink);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
 }
 
 /* Ô giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
 .room-detail__icon {
-  flex: 0 0 2.25rem;
+  flex: 0 0 1.5rem;
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--color-accent);
 }
 
-/* Thư viện ảnh khảm: điện thoại hai cột, ảnh đầu chiếm cả hàng; màn rộng bốn cột, ảnh đầu chiếm 2 x 2. */
-.room-detail__mosaic {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: 9rem;
-  gap: 0.6rem;
+.room-detail__icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
-.room-detail__tile {
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  border-radius: calc(var(--radius) * 0.8);
-  background: var(--color-surface);
-  cursor: zoom-in;
-}
-
-.room-detail__tile:first-child {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-.room-detail__tile img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform calc(var(--duration) * 4) ease;
-}
-
-.room-detail__tile:hover img,
-.room-detail__tile:focus-visible img {
-  transform: scale(1.06);
-}
-
-/* ---------- Thẻ đặt phòng ---------- */
-
-/* Nền mờ kính, đổ bóng mềm; từ 1024px đè lên mép dưới ảnh bìa và dính khi cuộn. */
+/* Thẻ đặt phòng: nền sáng, vạch màu nhấn trên đầu như nẹp gỗ, từ 1024px dính khi cuộn. */
 .room-detail__card {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
   align-self: start;
-  padding: 1.75rem;
-  border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
-  border-radius: calc(var(--radius) * 1.4);
-  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 24px 60px color-mix(in srgb, var(--color-ink) 16%, transparent);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 3px solid var(--color-accent);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--color-ink) 30%, transparent);
 }
 
 .room-detail__from {
   margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
@@ -252,13 +232,15 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem 0.6rem;
+  gap: 0.25rem 0.6rem;
+  margin-top: 0.4rem;
 }
 
 .room-detail__amount {
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.05;
   color: var(--color-ink);
 }
 
@@ -267,23 +249,21 @@
 }
 
 .room-detail__price-note {
-  margin: 0.6rem 0 0;
+  margin: 0.75rem 0 0;
   font-size: 0.9rem;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--color-muted);
 }
 
 .room-detail__book {
   width: 100%;
   min-height: 3.25rem;
-  border-radius: 999px;
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 35%, transparent);
   transition: transform var(--duration) ease, box-shadow var(--duration) ease, background-color var(--duration) ease;
 }
 
 .room-detail__book:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-primary) 45%, transparent);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-primary) 40%, transparent);
 }
 
 .room-detail__card-title {
@@ -302,7 +282,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding-block: 0.55rem;
+  padding-block: 0.6rem;
   font-size: 0.95rem;
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
 }
@@ -328,14 +308,164 @@
   color: var(--color-muted);
 }
 
+/* ---------- Dải phim ảnh ---------- */
+
+/* Điện thoại và khi giảm chuyển động: dải cuộn ngang bằng tay, mỗi khung bắt vào mép trái. */
+.room-detail__film {
+  margin-top: clamp(4rem, 9vw, 7rem);
+}
+
+.room-detail__film-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.room-detail__film-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.room-detail__film-count {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-style: italic;
+  color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.room-detail__film-window {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+/* Lề trái của dải thẳng hàng với khung nội dung, lề phải chừa một khoảng để khung cuối không dính mép. */
+.room-detail__film-track {
+  --film-inset: max(1rem, (100% - var(--container)) / 2);
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0 var(--film-inset);
+  list-style: none;
+}
+
+.room-detail__frame {
+  display: grid;
+  gap: 0.75rem;
+  scroll-snap-align: start;
+  scroll-margin-left: 1rem;
+}
+
+.room-detail__frame-btn {
+  display: block;
+  width: 80vw;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: zoom-in;
+}
+
+.room-detail__frame-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform calc(var(--duration) * 5) ease;
+}
+
+.room-detail__frame-btn:hover .room-detail__frame-img,
+.room-detail__frame-btn:focus-visible .room-detail__frame-img {
+  transform: scale(1.05);
+}
+
+.room-detail__frame-caption {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 80vw;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.room-detail__frame-no {
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+/* Từ 1024px, JS thêm is-pinned: khung sân khấu dính dưới header, dải trôi ngang theo độ cuộn,
+   vạch dưới đáy dài dần cho biết đã xem tới đâu. Chiều cao khối ngoài do JS đặt. */
+.room-detail__film.is-pinned {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.room-detail__film.is-pinned .room-detail__film-stage {
+  position: sticky;
+  top: var(--header-stuck, 4rem);
+  display: grid;
+  /* Cột lưới khoá theo bề ngang màn hình; không có minmax(0, 1fr) thì khung dải giãn theo dải ảnh và JS đo sai quãng trôi. */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  height: calc(100vh - var(--header-stuck, 4rem));
+  overflow: hidden;
+}
+
+.room-detail__film.is-pinned .room-detail__film-stage::after {
+  content: '';
+  position: absolute;
+  bottom: 2rem;
+  left: max(1rem, (100% - var(--container)) / 2);
+  width: min(100% - 2rem, var(--container));
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(var(--pin-progress, 0));
+  transform-origin: left;
+}
+
+.room-detail__film.is-pinned .room-detail__film-window {
+  overflow: visible;
+}
+
+.room-detail__film.is-pinned .room-detail__film-track {
+  will-change: transform;
+}
+
+/* Khung giữ tỉ lệ thật của ảnh: cao cố định, ngang theo ảnh, nên ảnh dọc và ảnh ngang xen nhau như một dãy tranh. */
+.room-detail__film.is-pinned .room-detail__frame-btn {
+  width: auto;
+  height: min(60vh, 38rem);
+  aspect-ratio: auto;
+}
+
+.room-detail__film.is-pinned .room-detail__frame-img {
+  width: auto;
+  max-width: none;
+}
+
+.room-detail__film.is-pinned .room-detail__frame-caption {
+  max-width: 28rem;
+}
+
 /* ---------- Dải cảnh nhìn ra ---------- */
 
 .room-detail__view {
   position: relative;
   display: grid;
   align-items: end;
-  min-height: min(70vh, 40rem);
-  margin: 5rem 0 0;
+  min-height: min(80vh, 46rem);
+  margin: clamp(4rem, 9vw, 7rem) 0 0;
   overflow: hidden;
   isolation: isolate;
   color: var(--color-bg);
@@ -355,108 +485,108 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 70%, transparent), transparent 60%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 75%, transparent), transparent 65%);
 }
 
 .room-detail__view-caption {
-  padding-block: 3rem;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
 }
 
 .room-detail__view-label {
   margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   opacity: 0.85;
 }
 
 .room-detail__view-text {
   margin: 0;
-  max-width: 22ch;
+  max-width: 20ch;
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
+  font-size: clamp(2rem, 5.5vw, 4.25rem);
   font-style: italic;
-  line-height: 1.15;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 .room-detail__view-best {
-  margin: 1rem 0 0;
+  margin: 1.25rem 0 0;
   opacity: 0.85;
 }
 
 /* ---------- Hạng khác ---------- */
 
 .room-detail__others {
-  margin-top: 5rem;
+  margin-top: clamp(4rem, 9vw, 7rem);
 }
 
 .room-detail__others-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
+  gap: 2rem 1.5rem;
 }
 
 .room-detail__other {
-  position: relative;
   display: grid;
-  align-items: end;
-  min-height: 15rem;
-  overflow: hidden;
-  isolation: isolate;
+  gap: 1rem;
   text-decoration: none;
-  color: var(--color-bg);
+  color: var(--color-ink);
+}
+
+.room-detail__other-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
   border-radius: var(--radius);
 }
 
 .room-detail__other-img {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform calc(var(--duration) * 4) ease;
-}
-
-.room-detail__other::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 72%, transparent), transparent 65%);
+  transition: transform calc(var(--duration) * 5) ease;
 }
 
 .room-detail__other:hover .room-detail__other-img,
 .room-detail__other:focus-visible .room-detail__other-img {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
 
 .room-detail__other-text {
   display: grid;
-  gap: 0.25rem;
-  padding: 1.25rem;
+  gap: 0.3rem;
 }
 
 .room-detail__other-name {
   font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.room-detail__other:hover .room-detail__other-name {
+  color: var(--color-accent);
 }
 
 .room-detail__other-note {
-  font-size: 0.9rem;
-  opacity: 0.9;
+  color: var(--color-muted);
 }
 
-/* Thẻ không có ảnh: viền mảnh, chữ màu mực. */
-.room-detail__other--plain {
-  min-height: 0;
+.room-detail__others-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+.room-detail__other-link {
+  font-weight: 700;
   color: var(--color-accent);
-  border: 1px solid currentColor;
-}
-
-.room-detail__other--plain::after {
-  content: none;
+  text-underline-offset: 0.3em;
 }
 
 @keyframes room-detail-settle {
@@ -465,42 +595,75 @@
   }
 }
 
-@media (min-width: 760px) {
-  .room-detail__amenities {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2rem;
-  }
-
-  .room-detail__mosaic {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: 10rem;
-  }
-
-  .room-detail__others-grid {
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+@keyframes room-detail-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
   }
 }
 
-/* Từ 1024px: nội dung 7 phần, thẻ đặt phòng 4 phần; thẻ kéo lên đè mép dưới ảnh bìa và dính khi cuộn. */
+@media (min-width: 760px) {
+  .room-detail__facts {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 16rem));
+    margin-top: 2.5rem;
+    padding-block: 1.25rem 1.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-bg) 35%, transparent);
+  }
+
+  .room-detail__fact {
+    display: grid;
+    align-content: start;
+    gap: 0.35rem;
+    padding: 0 1rem 0 0;
+    border-top: 0;
+  }
+
+  .room-detail__fact + .room-detail__fact {
+    padding-left: 1rem;
+    border-left: 1px solid color-mix(in srgb, var(--color-bg) 25%, transparent);
+  }
+
+  .room-detail__fact dd {
+    text-align: left;
+  }
+
+  .room-detail__cover--plain .room-detail__facts,
+  .room-detail__cover--plain .room-detail__fact + .room-detail__fact {
+    border-color: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  }
+
+  .room-detail__amenities {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+
+  .room-detail__frame-btn {
+    width: min(46vw, 26rem);
+  }
+
+  /* auto-fill giữ chỗ cho cột trống, nên chỉ có một thẻ thì thẻ vẫn hẹp, không giãn thành ảnh dọc to hết bề ngang. */
+  .room-detail__others-grid {
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+
+  .room-detail__other-media {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* Từ 1024px: câu dẫn và tiện nghi 7 phần, thẻ đặt phòng 4 phần, thẻ dính khi cuộn. */
 @media (min-width: 1024px) {
   .room-detail__cover-text {
-    padding-block: 8rem 5rem;
-    padding-right: 30rem;
+    padding-top: 10rem;
   }
 
   .room-detail__layout {
     grid-template-columns: 7fr 4fr;
-    gap: 4rem;
-    margin-top: 0;
-  }
-
-  .room-detail__content {
-    padding-top: 3.5rem;
+    gap: 5rem;
   }
 
   .room-detail__card {
     position: sticky;
     top: calc(var(--header-stuck, 4rem) + 1.5rem);
-    margin-top: -10rem;
   }
 }

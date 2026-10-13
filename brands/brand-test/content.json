@@ -311,6 +311,137 @@
           ]
         }
       ]
+    },
+    {
+      "path": "nha-be",
+      "title": "Một đêm nhà bè",
+      "description": "Thử khối room-detail: một đêm ở nhà bè giữa vịnh sau chuyến bay thuỷ phi cơ.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "chi-tiet",
+          "eyebrow": "Sau chuyến bay",
+          "title": "Một đêm nhà bè",
+          "lead": "Hạ cánh xuống mặt vịnh, chèo kayak vào làng bè, tối ngủ trên nhà bè nghe nước vỗ dưới sàn gỗ.",
+          "images": [
+            {
+              "src": "images/nha-be.webp",
+              "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
+              "caption": "Nhà bè giữa vịnh."
+            },
+            {
+              "src": "images/lang-be.webp",
+              "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
+              "caption": "Làng chài trên bè."
+            },
+            {
+              "src": "images/kayak-nui-da.webp",
+              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
+              "caption": "Len giữa các đảo bằng kayak."
+            },
+            {
+              "src": "images/buong-lai.webp",
+              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
+              "caption": "Ngồi sau buồng lái."
+            },
+            {
+              "src": "images/thuyen-hoang-hon.webp",
+              "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
+              "caption": "Chiều trên vịnh."
+            }
+          ],
+          "facts": [
+            {
+              "icon": "clock",
+              "label": "Thời lượng",
+              "value": "2 ngày 1 đêm"
+            },
+            {
+              "icon": "users",
+              "label": "Nhóm",
+              "value": "Tối đa 6 khách"
+            },
+            {
+              "icon": "plane",
+              "label": "Phương tiện",
+              "value": "Thuỷ phi cơ, kayak"
+            }
+          ],
+          "price": 6900000,
+          "currency": "đồng",
+          "priceNote": "Mỗi khách, gồm chuyến bay, một đêm nhà bè, bữa tối hải sản và kayak.",
+          "amenities": [
+            {
+              "icon": "plane",
+              "text": "Chuyến bay ngắm vịnh 25 phút"
+            },
+            {
+              "icon": "sailboat",
+              "text": "Kayak vào làng bè"
+            },
+            {
+              "icon": "utensils",
+              "text": "Bữa tối hải sản trên bè"
+            },
+            {
+              "icon": "bed-double",
+              "text": "Phòng ngủ riêng trên nhà bè"
+            }
+          ],
+          "view": {
+            "image": {
+              "src": "images/hoang-hon.webp",
+              "alt": "Hoàng hôn trên vịnh, núi đá in bóng"
+            },
+            "text": "Nắng tắt sau dãy núi đá ngay trước hiên bè.",
+            "best": "chiều muộn"
+          },
+          "availability": [
+            {
+              "label": "Tháng 11/2026",
+              "left": 4
+            },
+            {
+              "label": "Tháng 12/2026",
+              "left": 0
+            }
+          ],
+          "others": [
+            {
+              "label": "Chuyến bay ngắm vịnh",
+              "href": "page:/#chuyen-bay",
+              "image": {
+                "src": "images/nui-da-lan-ha.webp",
+                "alt": "Núi đá vôi giữa vịnh nhìn từ trên cao"
+              },
+              "note": "Xem ở trang chủ"
+            },
+            {
+              "label": "Hỏi đáp",
+              "href": "page:hoi-dap"
+            }
+          ],
+          "labels": {
+            "from": "Giá mỗi khách",
+            "perNight": "mỗi khách",
+            "book": "Giữ ghế",
+            "availability": "Còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "hết chỗ",
+            "amenities": "Có trong giá",
+            "gallery": "Một vòng quanh vịnh",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "view": "Nhìn ra từ bè",
+            "best": "Đẹp nhất lúc",
+            "others": "Xem thêm"
+          }
+        }
+      ]
     }
   ],
   "footer": {

@@ -1,16 +1,18 @@
 /* wl-room-detail.js - trang chi tiết một hạng phòng hoặc một tour, dàn như một trang tạp chí:
-   - ảnh bìa tràn màn hình, tên hạng chữ lớn đè lên; ảnh phóng chậm khi vào trang và trôi chậm khi cuộn;
-   - cột trái: các con số có icon, tiện nghi, thư viện ảnh dạng khảm (bấm ảnh thì xem lớn toàn màn hình);
-   - cột phải: thẻ đặt phòng nổi (giá, ghi chú giá, nút đặt, khoảng ngày còn trống), đè lên mép dưới ảnh bìa
-     và dính khi cuộn (từ 1024px);
+   - ảnh bìa gần kín màn hình, tên hạng chữ rất lớn; đáy ảnh là dải thông số mảnh (diện tích, số khách...);
+     ảnh phóng chậm khi vào trang và trôi chậm khi cuộn;
+   - câu dẫn chữ lớn, tiện nghi; bên cạnh là thẻ đặt phòng (giá, ghi chú giá, nút đặt, ngày còn trống) dính khi cuộn;
+   - dải phim ảnh: từ 1024px khối ghim lại, cuộn dọc thì dải trôi ngang như đi một vòng quanh phòng;
+     điện thoại thì vuốt ngang; bấm ảnh thì xem lớn toàn màn hình;
    - dải "nhìn ra từ hiên" tràn màn hình có câu chữ đè lên;
-   - thẻ ảnh dẫn sang các hạng khác.
+   - thẻ ảnh dẫn sang các hạng khác, liên kết không có ảnh thành một dòng chữ bên dưới.
    Nút đặt lấy từ site.cta và phát wl:choose-room (detail.id = room) để form đặt chỗ chọn sẵn hạng này,
    kể cả khi form nằm ở trang khác (core.js giữ lựa chọn rồi phát lại). */
 import { asset } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
 import { iconEl } from '../icon.js';
 import { parallax } from '../effects/parallax.js';
+import { pinHorizontal } from '../effects/pin-scroll.js';
 import { openLightbox } from '../effects/lightbox.js';
 
 function fill(template, values) {
@@ -26,6 +28,8 @@ function imgEl(image, className, lazy) {
   if (lazy) img.loading = 'lazy';
   return img;
 }
+
+const pad = (n) => String(n).padStart(2, '0');
 
 export class WlRoomDetail extends HTMLElement {
   set data(section) {
@@ -43,7 +47,7 @@ export class WlRoomDetail extends HTMLElement {
 
   /* ---------- Ảnh bìa ---------- */
 
-  // Chưa có ảnh thì vẫn có phần chữ (tên, mô tả), chỉ không có ảnh bìa.
+  // Chưa có ảnh thì vẫn có phần chữ và dải thông số, chỉ không có ảnh bìa.
   coverEl(section) {
     const image = section.images?.[0];
     const cover = document.createElement('header');
@@ -52,27 +56,28 @@ export class WlRoomDetail extends HTMLElement {
     const text = groupEl('room-detail__cover-text container', [
       textEl('p', 'room-detail__eyebrow', section.eyebrow),
       textEl('h2', 'room-detail__title', section.title),
-      textEl('p', 'room-detail__lead', section.lead),
     ]);
-    if (!img && !text) return null;
-    cover.append(...[img, text].filter(Boolean));
+    const facts = this.factsEl(section.facts ?? []);
+    if (!img && !text && !facts) return null;
+    cover.append(...[img, text, facts].filter(Boolean));
     parallax(img, 0.18, 1.18);
     return cover;
   }
 
-  /* ---------- Cột trái ---------- */
-
+  // Dải thông số ở đáy ảnh bìa: nhãn nhỏ in hoa, giá trị chữ lớn, ngăn nhau bằng vạch mảnh.
   factsEl(facts) {
     const items = facts.filter((f) => f.label && f.value);
     if (!items.length) return null;
     const dl = document.createElement('dl');
-    dl.className = 'room-detail__facts';
+    dl.className = 'room-detail__facts container';
     dl.append(...items.map((f) => groupEl('room-detail__fact', [
-      iconEl(f.icon, 'room-detail__fact-icon'),
-      groupEl('room-detail__fact-text', [textEl('dt', '', f.label), textEl('dd', '', f.value)]),
+      groupEl('room-detail__fact-label', [iconEl(f.icon, 'room-detail__fact-icon'), textEl('dt', '', f.label)]),
+      textEl('dd', '', f.value),
     ])));
     return dl;
   }
+
+  /* ---------- Câu dẫn, tiện nghi, thẻ đặt phòng ---------- */
 
   amenitiesEl(amenities) {
     const items = amenities.filter((a) => a.text);
@@ -87,25 +92,6 @@ export class WlRoomDetail extends HTMLElement {
     }));
     return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels.amenities), list]);
   }
-
-  // Thư viện ảnh dạng khảm: ảnh đầu to, các ảnh sau nhỏ; mỗi ô là một nút mở hộp xem ảnh lớn ở đúng ảnh đó.
-  galleryEl(images) {
-    if (images.length < 2) return null;
-    const grid = document.createElement('div');
-    grid.className = 'room-detail__mosaic';
-    grid.append(...images.map((image, i) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'room-detail__tile';
-      button.setAttribute('aria-label', fill(this.labels.open, { n: i + 1 }) || image.alt || '');
-      button.append(imgEl(image, '', true));
-      button.addEventListener('click', () => openLightbox(images, i, this.labels.lightbox ?? {}));
-      return button;
-    }));
-    return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels.gallery), grid]);
-  }
-
-  /* ---------- Thẻ đặt phòng ---------- */
 
   priceEl(section) {
     if (!section.price) return null;
@@ -162,6 +148,42 @@ export class WlRoomDetail extends HTMLElement {
     ]);
   }
 
+  /* ---------- Dải phim ảnh ---------- */
+
+  // Mỗi khung là một nút mở hộp xem ảnh lớn ở đúng ảnh đó; dưới ảnh là số thứ tự và chú thích (nếu có).
+  filmEl(images) {
+    if (images.length < 2) return null;
+    const track = document.createElement('ol');
+    track.className = 'room-detail__film-track';
+    track.append(...images.map((image, i) => {
+      const li = document.createElement('li');
+      li.className = 'room-detail__frame';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'room-detail__frame-btn';
+      button.setAttribute('aria-label', fill(this.labels.open, { n: i + 1 }) || image.alt || '');
+      // Không lazy: dải bị dịch ngang bằng transform nên trình duyệt có thể không nạp kịp ảnh ở cuối dải.
+      button.append(imgEl(image, 'room-detail__frame-img', false));
+      button.addEventListener('click', () => openLightbox(images, i, this.labels.lightbox ?? {}));
+      li.append(button, groupEl('room-detail__frame-caption', [
+        textEl('span', 'room-detail__frame-no', pad(i + 1)),
+        textEl('span', '', image.caption),
+      ]));
+      return li;
+    }));
+    const head = groupEl('room-detail__film-head container', [
+      textEl('h3', 'room-detail__film-title', this.labels.gallery),
+      textEl('p', 'room-detail__film-count', pad(images.length)),
+    ]);
+    const stage = groupEl('room-detail__film-stage', [head, groupEl('room-detail__film-window', [track])]);
+    const film = document.createElement('section');
+    film.className = 'room-detail__film';
+    if (this.labels.gallery) film.setAttribute('aria-label', this.labels.gallery);
+    film.append(stage);
+    pinHorizontal(film, track);
+    return film;
+  }
+
   /* ---------- Phần dưới ---------- */
 
   // Dải ảnh tràn màn hình, câu tả cảnh chữ lớn nghiêng đè lên góc dưới, ảnh trôi chậm khi cuộn.
@@ -187,23 +209,35 @@ export class WlRoomDetail extends HTMLElement {
     return figure;
   }
 
-  // Thẻ ảnh của các hạng khác: ảnh, tên, một dòng ghi chú (ví dụ giá); cả thẻ là một liên kết.
+  // Hạng khác có ảnh thành thẻ ảnh đứng (cả thẻ là liên kết); liên kết không có ảnh thành dòng chữ dưới các thẻ.
   othersEl(others) {
-    const cards = others.filter((o) => o.href && o.label).map((o) => {
+    const valid = others.filter((o) => o.href && o.label);
+    if (!valid.length) return null;
+    const cards = valid.filter((o) => o.image?.src).map((o) => {
       const a = document.createElement('a');
-      a.className = o.image ? 'room-detail__other' : 'room-detail__other room-detail__other--plain';
+      a.className = 'room-detail__other';
       a.href = o.href;
-      a.append(...[
-        imgEl(o.image, 'room-detail__other-img', true),
+      a.append(
+        groupEl('room-detail__other-media', [imgEl(o.image, 'room-detail__other-img', true)]),
         groupEl('room-detail__other-text', [textEl('span', 'room-detail__other-name', o.label), textEl('span', 'room-detail__other-note', o.note)]),
-      ].filter(Boolean));
+      );
       return a;
     });
-    if (!cards.length) return null;
+    const links = valid.filter((o) => !o.image?.src).map((o) => {
+      const a = document.createElement('a');
+      a.className = 'room-detail__other-link';
+      a.href = o.href;
+      a.textContent = o.label;
+      return a;
+    });
     const nav = document.createElement('nav');
     nav.className = 'room-detail__others container';
     if (this.labels.others) nav.setAttribute('aria-label', this.labels.others);
-    nav.append(...[textEl('h3', 'room-detail__subtitle', this.labels.others), groupEl('room-detail__others-grid', cards)].filter(Boolean));
+    nav.append(...[
+      textEl('h3', 'room-detail__subtitle', this.labels.others),
+      cards.length ? groupEl('room-detail__others-grid', cards) : null,
+      links.length ? groupEl('room-detail__others-links', links) : null,
+    ].filter(Boolean));
     return nav;
   }
 
@@ -212,15 +246,15 @@ export class WlRoomDetail extends HTMLElement {
     this.className = section.variant ? `room-detail room-detail--${section.variant}` : 'room-detail';
     const body = groupEl('room-detail__layout container', [
       groupEl('room-detail__content', [
-        this.factsEl(section.facts ?? []),
+        textEl('p', 'room-detail__lead', section.lead),
         this.amenitiesEl(section.amenities ?? []),
-        this.galleryEl(section.images ?? []),
       ]),
       this.cardEl(section),
     ]);
     this.replaceChildren(...[
       this.coverEl(section),
       body,
+      this.filmEl(section.images ?? []),
       this.viewEl(section.view),
       this.othersEl(section.others ?? []),
     ].filter(Boolean));
