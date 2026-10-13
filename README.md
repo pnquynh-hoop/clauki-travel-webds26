@@ -102,8 +102,8 @@ lại theo danh sách cuối file rồi ghi vào `docs/ai-log.md`.
 - Component không ghi cứng chữ, màu hay đường dẫn ảnh: mọi thứ lấy từ `content.json` và biến CSS.
 - Thứ tự section nằm trong mảng `sections` của `content.json`; `index.html` không liệt kê section.
 - Mỗi PR merge bằng squash, tiêu đề PR tiếng Anh theo Conventional Commits. Phần có dùng AI thì ghi rõ
-  trong scope, ví dụ `feat(AI/hero): add split layout`, và thêm một dòng `PR #số` vào `docs/ai-log.md`
-  ngay trong PR đó.
+  trong scope, ví dụ `feat(AI/hero): add split layout`, và nếu là việc làm ra sản phẩm thi thì thêm
+  một dòng `PR #số` vào `docs/ai-log.md` ngay trong PR đó.
 
 ## Nguồn ảnh và thư viện
 

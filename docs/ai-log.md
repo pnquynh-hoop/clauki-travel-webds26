@@ -3,7 +3,7 @@
 Quy định cuộc thi: mọi việc dùng AI phải được ghi lại trung thực và đối chiếu được với lịch sử GitHub.
 Khi trình bày hiệu ứng phức tạp, đội phải cung cấp prompt đã dùng.
 
-Mỗi lần dùng AI cho mã nguồn, thêm một dòng vào bảng của mình.
+Mỗi lần dùng AI **làm ra sản phẩm thi** (mã, nội dung, ảnh, cấu hình brand), thêm một dòng vào bảng của mình. Lập kế hoạch, bàn bạc, phân tích, viết tài liệu nội bộ thì không ghi.
 - **Từ 13/10:** mọi PR merge bằng squash, mỗi PR là một commit trên `main` có đuôi `(#số PR)`. Dòng log nằm trong chính PR đó, cột "Commit" ghi `PR #số`.
 - Các dòng trước 13/10 ghi mã commit chứa phần đó.
 Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md` rồi đặt link trong bảng, để bảng không bị vỡ.
@@ -41,7 +41,6 @@ Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md
 | 10/10 | Claude Code (Claude Opus 5.5) | README: mục giải thích một component nhiều cách hiển thị (variant, dữ liệu, biến CSS), bảng component dùng chung và đặc trưng riêng theo dữ liệu thật trên main; sửa vị trí nút đổi thương hiệu | (tóm tắt) README giải thích component dùng chung nhưng khác cách hiển thị; bảng component dùng chung, đặc trưng riêng | e1b1360 |
 | 11/10 | Claude Code (Claude Opus 5.5) | Prompt mẫu nhờ AI viết `content.json`, `theme.css` cho thương hiệu mới: bảng chọn khối (ý của từng khối, kiểu hợp loại hình nào, mạch trang), ràng buộc dữ liệu, danh sách người kiểm tra lại; mục "Thêm thương hiệu mới" trong README | [docs/prompts/tao-thuong-hieu-moi.md](prompts/tao-thuong-hieu-moi.md) | 4380d84 |
 | 11/10 | Claude Code (Claude Opus 5.5) | Chạy prompt tạo thương hiệu mới cho `brand-test`: "Lượn Vịnh" (bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè), AI viết `content.json`, `theme.css` và lý do chọn khối; người kiểm tra tra tên, tìm 9 ảnh có giấy phép, đổi màu nhấn trùng Gành Sớm, đổi hero sang `coverflow` chỉ bằng JSON; không sửa mã nguồn; đổi nhãn trong `brands.json` thành "Lượn Vịnh (AI tạo)" | [docs/prompts/11-10-brand-test-luon-vinh.md](prompts/11-10-brand-test-luon-vinh.md) | 1376555, 9c7e9a3 |
-| 13/10 | Claude Code (Claude Opus 5.5) | Quy ước Git mới: PR merge bằng squash, tiêu đề PR tiếng Anh theo Conventional Commits, nội dung PR tiếng Việt, dòng ai-log nằm trong cùng PR ghi `PR #số`; cập nhật mốc chung kết và danh sách tự kiểm ở AGENTS.md, mục Quy ước ở README, phần đầu ai-log | (tóm tắt) Từ giờ để tránh sinh rác commit thì dùng squash cho PR và các log AI cần neo vào commit PR; tiêu đề PR tiếng Anh theo chuẩn, nội dung tiếng Việt có dấu | PR #86 |
 
 ## Mị Nương
 

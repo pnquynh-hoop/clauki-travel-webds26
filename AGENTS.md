@@ -9,6 +9,8 @@ Mốc thời gian (đội đã vào top 5):
 - **Chung kết 18h00 Chủ nhật 18/10** (có mặt 17h30), phòng 602, 97 Võ Văn Tần: mỗi đội tối đa 15–20 phút gồm trình bày, demo, vấn đáp; BGK hỏi bất kỳ thành viên nào.
 - Sản phẩm: website doanh nghiệp nhiều trang có chứa landing page; đổi cấu hình thì **tất cả các trang** cùng đổi.
 
+**Kế hoạch chung kết** nằm ở `web-design-2026-docs/FINAL_PLAN.md`: repo riêng `pgiahuy/web-design-2026-docs` (riêng tư, xin Gia Huy quyền đọc), clone vào thư mục `web-design-2026-docs/` ở gốc repo này, đã có trong `.gitignore`. Trước khi làm việc liên quan chung kết, đọc file đó và `git pull` trong thư mục đó để lấy bản mới nhất. Quyết định nào trong kế hoạch khác với AGENTS.md thì hỏi lại trước khi làm.
+
 ## 1. Luật thi (vi phạm bị trừ điểm hoặc bị loại)
 
 | Không được | Hậu quả |
@@ -174,6 +176,7 @@ export class WlHero extends HTMLElement {
 - **Mọi PR merge bằng Squash and merge** (từ 13/10). Mỗi PR thành đúng một commit trên `main`, có đuôi `(#số PR)`.
 - **Tiêu đề PR là tiêu đề commit squash:** tiếng Anh, theo Conventional Commits: `feat(editor): switch section variant in place`. **Nội dung PR viết tiếng Việt có dấu.**
 - **Phần do AI viết phải có `AI/` trong scope** của tiêu đề PR: `feat(AI/editor): …`.
+- **`docs/ai-log.md` chỉ ghi việc AI làm ra sản phẩm thi** (mã, nội dung, ảnh, cấu hình brand). Lập kế hoạch, bàn bạc, phân tích, viết tài liệu nội bộ thì không ghi.
 - **Dòng ai-log nằm trong chính PR đó**, cột "Commit" ghi `PR #số`. Không mở PR riêng chỉ để ghi log.
 - **Mỗi PR một việc**, để phần AI viết và phần tự viết không gộp chung một commit.
 - Commit trong nhánh viết thế nào cũng được vì sẽ được gộp, nhưng vẫn nên theo Conventional Commits.
@@ -194,7 +197,7 @@ export class WlHero extends HTMLElement {
 - **Không dùng emoji hay ký hiệu trang trí** (dấu tích, tên lửa, lấp lánh, mũi tên…) trong mã, chú thích, commit message, tài liệu và câu trả lời. Viết bằng chữ.
 - **Không bịa luật thi.** Không chắc thì nói không chắc và đề nghị hỏi BTC.
 - **Không chép mã** từ repo mẫu của BTC hay của đội khác.
-- **Kết thúc mỗi phần việc:** đề xuất tiêu đề PR tiếng Anh có `AI/` và nội dung PR tiếng Việt, nhắc thêm dòng `docs/ai-log.md` ghi `PR #số` vào cùng PR.
+- **Kết thúc mỗi phần việc:** đề xuất tiêu đề PR tiếng Anh có `AI/` và nội dung PR tiếng Việt; nếu là việc làm ra sản phẩm thi thì nhắc thêm dòng `docs/ai-log.md` ghi `PR #số` vào cùng PR.
 
 ## 11. Trước khi push: tự kiểm
 
