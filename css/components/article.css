@@ -1,0 +1,231 @@
+/* article.css - bài viết dài: đầu bài hẹp ở giữa, các hàng chữ và ảnh, danh sách địa điểm, câu trích.
+   Màu, font, bo góc lấy từ biến của thương hiệu; chữ dễ đọc trên điện thoại (dòng không quá dài, giãn dòng rộng). */
+
+.article {
+  display: block;
+}
+
+.article__head {
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  text-align: center;
+}
+
+.article__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.article__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.article__lead {
+  margin: 1.25rem 0 0;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+
+.article__body {
+  display: grid;
+  gap: 3.5rem;
+  margin-top: 3.5rem;
+}
+
+/* Cột lưới co theo màn hình, không để ảnh hay danh sách kéo rộng tràn ngang. */
+.article__body > *,
+.article__row > * {
+  min-width: 0;
+}
+
+.article__text {
+  max-width: 40rem;
+}
+
+.article__heading {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+.article__p {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+}
+
+.article__p:last-child {
+  margin-bottom: 0;
+}
+
+.article__figure {
+  margin: 0;
+}
+
+.article__figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.article__caption {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.article__row {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* ---------- Địa điểm ---------- */
+
+.article__places {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article__place {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.25rem 1.25rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 60%, var(--color-bg));
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+}
+
+.article__place:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.article__place-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--color-ink);
+}
+
+.article__place-text {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--color-ink);
+}
+
+.article__place-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.article__map {
+  justify-self: start;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Câu trích ---------- */
+
+.article__quote {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.article__quote-text {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+
+.article__quote-by {
+  display: block;
+  margin-top: 0.75rem;
+  font-style: normal;
+  color: var(--color-muted);
+}
+
+/* ---------- Hiện dần khi cuộn ---------- */
+
+/* JS chỉ thêm lớp article__reveal khi có IntersectionObserver, nên trình duyệt cũ vẫn thấy đủ nội dung.
+   Thời gian theo --duration: giảm chuyển động thì hiện ngay. */
+.article__reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity calc(var(--duration) * 4) ease, transform calc(var(--duration) * 4) ease;
+}
+
+.article__reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article__reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 760px) {
+  .article__places {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Từ 1024px: hàng chữ và ảnh chia đôi, hàng sau đổi bên. */
+@media (min-width: 1024px) {
+  .article__body {
+    gap: 5rem;
+    margin-top: 5rem;
+  }
+
+  .article__row {
+    grid-template-columns: 5fr 6fr;
+    gap: 4rem;
+  }
+
+  .article__row--flip {
+    grid-template-columns: 6fr 5fr;
+  }
+
+  .article__row--flip > :first-child {
+    order: 2;
+  }
+
+  /* Ảnh đứng riêng một hàng rộng hết khung: khung 16:9 cho khỏi cao gần một màn hình. */
+  .article__body > .article__figure img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .article__places {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

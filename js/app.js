@@ -19,6 +19,7 @@ import { WlCloudBand } from './components/wl-cloud-band.js';
 import { WlProcess } from './components/wl-process.js';
 import { WlReviews } from './components/wl-reviews.js';
 import { WlRoomDetail } from './components/wl-room-detail.js';
+import { WlArticle } from './components/wl-article.js';
 
 // Phải đăng ký trước khi core.js tạo khối, nếu không core.js bỏ qua khối đó.
 // Đặt sau start() hiện vẫn chạy vì start() còn chờ tải brands.json; đặt trước thì không phụ thuộc vào việc đó.
@@ -39,5 +40,6 @@ customElements.define('wl-cloud-band', WlCloudBand);
 customElements.define('wl-process', WlProcess);
 customElements.define('wl-reviews', WlReviews);
 customElements.define('wl-room-detail', WlRoomDetail);
+customElements.define('wl-article', WlArticle);
 
 start();
