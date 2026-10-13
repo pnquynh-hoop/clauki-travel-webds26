@@ -3,7 +3,9 @@
 Quy định cuộc thi: mọi việc dùng AI phải được ghi lại trung thực và đối chiếu được với lịch sử GitHub.
 Khi trình bày hiệu ứng phức tạp, đội phải cung cấp prompt đã dùng.
 
-Mỗi lần dùng AI cho mã nguồn, thêm một dòng vào bảng của mình. Cột "Commit" ghi mã commit chứa phần đó.
+Mỗi lần dùng AI cho mã nguồn, thêm một dòng vào bảng của mình.
+- **Từ 13/10:** mọi PR merge bằng squash, mỗi PR là một commit trên `main` có đuôi `(#số PR)`. Dòng log nằm trong chính PR đó, cột "Commit" ghi `PR #số`.
+- Các dòng trước 13/10 ghi mã commit chứa phần đó.
 Prompt dài hoặc nhiều dòng thì lưu ở `docs/prompts/<ngày>-<việc>.md` rồi đặt link trong bảng, để bảng không bị vỡ.
 
 ## Gia Huy
