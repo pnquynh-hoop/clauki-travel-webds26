@@ -163,7 +163,7 @@ export class WlHero extends HTMLElement {
 - **Giấy phép:** chỉ CC0, phạm vi công cộng, CC BY, CC BY-SA, hoặc giấy phép Unsplash/Pexels. Không dùng ảnh NC hay ND. Mỗi ảnh phải có một dòng trong `credits`.
 - **Không có logo, biển hiệu thương hiệu thật** trong ảnh.
 - **Kích thước:** ảnh rộng tối đa 2000px, JPEG hoặc WebP, nên dưới 300KB.
-- **Không dùng dấu chấm giữa (`·`) hay ký hiệu làm dấu ngăn** trong chữ hiện ra trang (`content.json`, tiêu đề tab, chuỗi component tự ghép như `join(' · ')`). Dùng dấu phẩy hoặc " - ": `Tour Tây Bắc, 4 ngày 3 đêm`, `Ngày 1, 09:45`, `Bậc Trà - Tour Tây Bắc`.
+- **Không dùng dấu chấm giữa (`·`), gạch dài (`—`) hay ký hiệu làm dấu ngăn** trong chữ hiện ra trang (`content.json`, tiêu đề tab, chuỗi component tự ghép như `join(' · ')`). Dùng dấu phẩy hoặc gạch thường " - ": `Tour Tây Bắc, 4 ngày 3 đêm`, `Ngày 1, 09:45`, `Bậc Trà - Tour Tây Bắc`.
 - **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.clauki` (không phải tên miền thật, đã đối chiếu danh sách của IANA), ví dụ `dat-phong@ganhsom.clauki`.
 
 **Icon:** quy định của BTC coi "icon 3D bóng bẩy vô nghĩa" là AI slop.
@@ -200,7 +200,7 @@ export class WlHero extends HTMLElement {
 - **Tự đánh giá kích thước trước khi đề xuất PR:** xem `git diff --stat` so với `main`. Nếu PR chứa hơn một tính năng, vượt khoảng 300 dòng mã, hoặc trộn lõi, giao diện và dữ liệu, thì nói rõ với người đang nhờ và đề xuất cách tách thành các PR nhỏ trước khi mở PR.
 - **Viết xong thì giải thích ngắn gọn** đoạn mã làm gì và vì sao, đủ để người dùng tự trình bày lại khi vấn đáp.
 - **Ưu tiên cách đơn giản, dễ giải thích** hơn cách thông minh.
-- **Không dùng emoji hay ký hiệu trang trí** (dấu tích, tên lửa, lấp lánh, mũi tên, dấu chấm giữa làm dấu ngăn…) trong mã, chú thích, commit message, tiêu đề và nội dung PR, issue, tài liệu và câu trả lời. Viết bằng chữ; cần ngăn ý thì dùng dấu phẩy hoặc " - ".
+- **Không dùng emoji hay ký hiệu trang trí** (dấu tích, tên lửa, lấp lánh, mũi tên, dấu chấm giữa, gạch dài `—` làm dấu ngăn…) trong mã, chú thích, commit message, tiêu đề và nội dung PR, issue, tài liệu và câu trả lời. Viết bằng chữ; cần ngăn ý thì dùng dấu phẩy hoặc " - ".
 - **Không bịa luật thi.** Không chắc thì nói không chắc và đề nghị hỏi BTC.
 - **Không chép mã** từ repo mẫu của BTC hay của đội khác.
 - **Kết thúc mỗi phần việc:** đề xuất tiêu đề PR tiếng Anh có `AI/` và nội dung PR tiếng Việt; nếu là việc làm ra sản phẩm thi thì nhắc thêm dòng `docs/ai-log.md` ghi `PR #số` vào cùng PR.
