@@ -261,7 +261,8 @@
             "guestsValue": "{n} khách",
             "perNight": "một đêm",
             "book": "Đặt hạng này",
-            "best": "Đẹp nhất lúc"
+            "best": "Đẹp nhất lúc",
+            "detail": "Xem chi tiết"
           },
           "rooms": [
             {
@@ -286,7 +287,8 @@
                 },
                 "text": "Sóng vỗ ngay dưới chân hiên.",
                 "best": "bình minh"
-              }
+              },
+              "href": "page:villa"
             },
             {
               "id": "phong-vuon",
@@ -310,7 +312,8 @@
                 },
                 "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.",
                 "best": "buổi trưa"
-              }
+              },
+              "href": "page:phong-vuon"
             },
             {
               "id": "nha-doi",
@@ -334,9 +337,385 @@
                 },
                 "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.",
                 "best": "bình minh và chiều muộn"
-              }
+              },
+              "href": "page:nha-doi"
             }
           ]
+        }
+      ]
+    },
+    {
+      "path": "villa",
+      "title": "Villa sát biển",
+      "description": "Villa 70 m² sát mép nước có bể ngâm riêng, đón bình minh ngay hiên, tối đa 4 khách, 6.200.000 đồng một đêm.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "chi-tiet",
+          "room": "villa",
+          "eyebrow": "8 căn sát mép nước",
+          "title": "Villa sát biển",
+          "lead": "Hiên gỗ sát mép nước, bể ngâm riêng nhìn thẳng ra chỗ mặt trời lên. Mở cửa là chạm vào tiếng sóng.",
+          "images": [
+            {
+              "src": "images/hero-veranda.webp",
+              "alt": "Hiên gỗ có mái che nhìn ra biển, lan can ánh vàng khi mặt trời sát chân trời"
+            },
+            {
+              "src": "images/view-villa.webp",
+              "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời"
+            },
+            {
+              "src": "images/sup.webp",
+              "alt": "Một người đứng chèo ván trên mặt biển phẳng lúc mặt trời sát chân trời, phía sau là cụm đá tối màu"
+            },
+            {
+              "src": "images/footer.webp",
+              "alt": "Mặt trời vừa lên khỏi mặt biển, vài người tắm sớm in bóng trên bãi cát"
+            },
+            {
+              "src": "images/breakfast.webp",
+              "alt": "Đĩa bánh xèo vàng gấp đôi đặt trên lá chuối, bên cạnh rau sống, cà chua, dưa leo và đồ chua"
+            }
+          ],
+          "facts": [
+            {
+              "label": "Diện tích",
+              "value": "70 m²"
+            },
+            {
+              "label": "Tối đa",
+              "value": "4 khách"
+            },
+            {
+              "label": "Số căn",
+              "value": "8 căn"
+            }
+          ],
+          "price": 6200000,
+          "currency": "đồng",
+          "priceNote": "Giá cho 2 khách, gồm bữa sáng, xe đón sân bay Phù Cát, xe đạp và một buổi chèo ván lúc bình minh. Thêm khách 450.000 đồng một khách một đêm, gồm bữa sáng.",
+          "amenities": [
+            {
+              "icon": "bath",
+              "text": "Bể ngâm riêng nhìn ra biển"
+            },
+            {
+              "icon": "sunrise",
+              "text": "Hiên quay về hướng đông, đón bình minh"
+            },
+            {
+              "icon": "coffee",
+              "text": "Bữa sáng mỗi ngày"
+            },
+            {
+              "icon": "plane",
+              "text": "Xe đón sân bay Phù Cát"
+            },
+            {
+              "icon": "bike",
+              "text": "Xe đạp đi chợ cá, ra bãi"
+            },
+            {
+              "icon": "waves",
+              "text": "Một buổi chèo ván lúc bình minh"
+            }
+          ],
+          "view": {
+            "image": {
+              "src": "images/view-villa.webp",
+              "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời"
+            },
+            "text": "Sóng vỗ ngay dưới chân hiên.",
+            "best": "bình minh"
+          },
+          "availability": [
+            {
+              "label": "1 đến 15/5/2027",
+              "left": 3
+            },
+            {
+              "label": "16 đến 31/5/2027",
+              "left": 0
+            },
+            {
+              "label": "Tháng 6/2027",
+              "left": 5
+            }
+          ],
+          "others": [
+            {
+              "label": "Nhà đồi",
+              "href": "page:nha-doi"
+            },
+            {
+              "label": "Phòng vườn",
+              "href": "page:phong-vuon"
+            },
+            {
+              "label": "So sánh cả ba hạng",
+              "href": "page:nha"
+            }
+          ],
+          "labels": {
+            "gallery": "Ảnh villa sát biển",
+            "thumb": "Xem ảnh {n}",
+            "perNight": "một đêm",
+            "book": "Đặt villa sát biển",
+            "availability": "Còn trống hè 2027",
+            "left": "còn {n} căn",
+            "soldOut": "hết căn",
+            "amenities": "Có sẵn trong giá",
+            "view": "Nhìn ra từ hiên",
+            "best": "Đẹp nhất lúc",
+            "others": "Xem hạng khác"
+          }
+        }
+      ]
+    },
+    {
+      "path": "nha-doi",
+      "title": "Nhà đồi",
+      "description": "Nhà 45 m² trên dốc nhìn xuống cả vịnh Quy Nhơn, tối đa 3 khách, 3.900.000 đồng một đêm.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "chi-tiet",
+          "room": "nha-doi",
+          "eyebrow": "10 căn trên dốc",
+          "title": "Nhà đồi",
+          "lead": "Nhà trên dốc, nhìn xuống cả vịnh qua rặng dừa. Thấy cả vịnh đổi màu từ tím sang vàng.",
+          "images": [
+            {
+              "src": "images/view-hill.webp",
+              "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi"
+            },
+            {
+              "src": "images/hero-dawn.webp",
+              "alt": "Bầu trời xanh tím trước bình minh trên biển lặng, mũi đất tối có ngọn hải đăng nhỏ"
+            },
+            {
+              "src": "images/hero-sunrise.webp",
+              "alt": "Mặt trời lên sau dải mây trên biển, núi và con tàu in bóng tối nơi chân trời"
+            },
+            {
+              "src": "images/breakfast.webp",
+              "alt": "Đĩa bánh xèo vàng gấp đôi đặt trên lá chuối, bên cạnh rau sống, cà chua, dưa leo và đồ chua"
+            }
+          ],
+          "facts": [
+            {
+              "label": "Diện tích",
+              "value": "45 m²"
+            },
+            {
+              "label": "Tối đa",
+              "value": "3 khách"
+            },
+            {
+              "label": "Số căn",
+              "value": "10 căn"
+            }
+          ],
+          "price": 3900000,
+          "currency": "đồng",
+          "priceNote": "Giá cho 2 khách, gồm bữa sáng, xe đón sân bay Phù Cát, xe đạp và một buổi chèo ván lúc bình minh. Thêm khách 450.000 đồng một khách một đêm, gồm bữa sáng.",
+          "amenities": [
+            {
+              "icon": "mountain",
+              "text": "Nhìn toàn cảnh vịnh từ trên cao"
+            },
+            {
+              "icon": "sunrise",
+              "text": "Hiên quay về hướng đông, đón bình minh"
+            },
+            {
+              "icon": "coffee",
+              "text": "Bữa sáng mỗi ngày"
+            },
+            {
+              "icon": "plane",
+              "text": "Xe đón sân bay Phù Cát"
+            },
+            {
+              "icon": "bike",
+              "text": "Xe đạp đi chợ cá, ra bãi"
+            },
+            {
+              "icon": "waves",
+              "text": "Một buổi chèo ván lúc bình minh"
+            }
+          ],
+          "view": {
+            "image": {
+              "src": "images/view-hill.webp",
+              "alt": "Vịnh nhìn từ trên đồi: làng chài, bãi cát cong và đảo nhỏ ngoài khơi"
+            },
+            "text": "Thấy cả vịnh đổi màu từ sáng tới chiều.",
+            "best": "bình minh và chiều muộn"
+          },
+          "availability": [
+            {
+              "label": "1 đến 15/5/2027",
+              "left": 6
+            },
+            {
+              "label": "16 đến 31/5/2027",
+              "left": 2
+            },
+            {
+              "label": "Tháng 6/2027",
+              "left": 8
+            }
+          ],
+          "others": [
+            {
+              "label": "Villa sát biển",
+              "href": "page:villa"
+            },
+            {
+              "label": "Phòng vườn",
+              "href": "page:phong-vuon"
+            },
+            {
+              "label": "So sánh cả ba hạng",
+              "href": "page:nha"
+            }
+          ],
+          "labels": {
+            "gallery": "Ảnh nhà đồi",
+            "thumb": "Xem ảnh {n}",
+            "perNight": "một đêm",
+            "book": "Đặt nhà đồi",
+            "availability": "Còn trống hè 2027",
+            "left": "còn {n} căn",
+            "soldOut": "hết căn",
+            "amenities": "Có sẵn trong giá",
+            "view": "Nhìn ra từ hiên",
+            "best": "Đẹp nhất lúc",
+            "others": "Xem hạng khác"
+          }
+        }
+      ]
+    },
+    {
+      "path": "phong-vuon",
+      "title": "Phòng vườn",
+      "description": "Phòng 32 m² giữa vườn dừa, thấy biển qua kẽ lá, tối đa 2 khách, 2.800.000 đồng một đêm.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "chi-tiet",
+          "room": "phong-vuon",
+          "eyebrow": "6 căn giữa vườn dừa",
+          "title": "Phòng vườn",
+          "lead": "Giữa vườn dừa, thấy biển qua kẽ lá và nghe rõ tiếng sóng.",
+          "images": [
+            {
+              "src": "images/view-garden.webp",
+              "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau"
+            },
+            {
+              "src": "images/bai-bien-quy-nhon.webp",
+              "alt": "Bãi cát vàng vắng người, biển lặng và dãy núi xanh bên kia vịnh Quy Nhơn"
+            },
+            {
+              "src": "images/hero.webp",
+              "alt": "Nắng sớm lấp lánh trên mặt biển, sóng nhẹ tràn lên bờ sỏi tròn và một tảng đá nhô lên ngoài xa"
+            },
+            {
+              "src": "images/breakfast.webp",
+              "alt": "Đĩa bánh xèo vàng gấp đôi đặt trên lá chuối, bên cạnh rau sống, cà chua, dưa leo và đồ chua"
+            }
+          ],
+          "facts": [
+            {
+              "label": "Diện tích",
+              "value": "32 m²"
+            },
+            {
+              "label": "Tối đa",
+              "value": "2 khách"
+            },
+            {
+              "label": "Số căn",
+              "value": "6 căn"
+            }
+          ],
+          "price": 2800000,
+          "currency": "đồng",
+          "priceNote": "Giá cho 2 khách, gồm bữa sáng, xe đón sân bay Phù Cát, xe đạp và một buổi chèo ván lúc bình minh. Thêm khách 450.000 đồng một khách một đêm, gồm bữa sáng.",
+          "amenities": [
+            {
+              "icon": "trees",
+              "text": "Giữa vườn dừa, thấy biển qua kẽ lá"
+            },
+            {
+              "icon": "coffee",
+              "text": "Bữa sáng mỗi ngày"
+            },
+            {
+              "icon": "plane",
+              "text": "Xe đón sân bay Phù Cát"
+            },
+            {
+              "icon": "bike",
+              "text": "Xe đạp đi chợ cá, ra bãi"
+            },
+            {
+              "icon": "waves",
+              "text": "Một buổi chèo ván lúc bình minh"
+            }
+          ],
+          "view": {
+            "image": {
+              "src": "images/view-garden.webp",
+              "alt": "Hàng dừa nghiêng ra bãi cát trắng, biển xanh phía sau"
+            },
+            "text": "Bóng dừa che nắng trưa, biển vẫn ở ngay đó.",
+            "best": "buổi trưa"
+          },
+          "availability": [
+            {
+              "label": "1 đến 15/5/2027",
+              "left": 4
+            },
+            {
+              "label": "16 đến 31/5/2027",
+              "left": 1
+            },
+            {
+              "label": "Tháng 6/2027",
+              "left": 6
+            }
+          ],
+          "others": [
+            {
+              "label": "Villa sát biển",
+              "href": "page:villa"
+            },
+            {
+              "label": "Nhà đồi",
+              "href": "page:nha-doi"
+            },
+            {
+              "label": "So sánh cả ba hạng",
+              "href": "page:nha"
+            }
+          ],
+          "labels": {
+            "gallery": "Ảnh phòng vườn",
+            "thumb": "Xem ảnh {n}",
+            "perNight": "một đêm",
+            "book": "Đặt phòng vườn",
+            "availability": "Còn trống hè 2027",
+            "left": "còn {n} căn",
+            "soldOut": "hết căn",
+            "amenities": "Có sẵn trong giá",
+            "view": "Nhìn ra từ hiên",
+            "best": "Đẹp nhất lúc",
+            "others": "Xem hạng khác"
+          }
         }
       ]
     },

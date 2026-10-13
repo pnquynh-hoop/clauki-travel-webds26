@@ -103,6 +103,15 @@
   color: var(--color-muted);
 }
 
+.stays__more {
+  color: var(--color-muted);
+  text-underline-offset: 0.2em;
+}
+
+.stays__more:hover {
+  color: var(--color-accent);
+}
+
 .stays__book {
   position: relative;
   font-weight: 600;

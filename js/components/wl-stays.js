@@ -5,7 +5,7 @@
      thẻ bên cạnh hiện tên, mô tả, các con số và giá của hạng đó.
    Nút "đặt hạng này" phát sự kiện wl:choose-room (detail.id là id hạng) để khối đặt chỗ chọn sẵn hạng đó. */
 import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl, linkEl } from '../dom.js';
 
 function fill(template, values) {
   return (template ?? '').replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ''));
@@ -44,6 +44,11 @@ export class WlStays extends HTMLElement {
       document.dispatchEvent(new CustomEvent('wl:choose-room', { detail: { id: room.id } }));
     });
     return a;
+  }
+
+  // Hạng có trang chi tiết riêng (room.href) thì có thêm link "Xem chi tiết" cạnh nút đặt.
+  detailLink(room) {
+    return linkEl(room.href, this._data.labels?.detail, 'stays__more');
   }
 
   factsEl(room) {
@@ -86,7 +91,7 @@ export class WlStays extends HTMLElement {
       textEl('p', 'stays__text', room.text),
       groupEl('stays__view', [textEl('p', 'stays__view-text', view?.text), textEl('p', 'stays__best', this.bestText(view))]),
       this.factsEl(room),
-      groupEl('stays__foot', [this.priceEl(room), this.bookLink(room)]),
+      groupEl('stays__foot', [this.priceEl(room), this.detailLink(room), this.bookLink(room)]),
     ]);
     const image = brief ? null : imgEl(view?.image ?? room.image, '', lazy);
     card.append(...[image, body].filter(Boolean));
