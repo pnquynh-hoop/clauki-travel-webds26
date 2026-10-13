@@ -48,15 +48,16 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
 1. `index.html` là vỏ. Nó chỉ chứa `<wl-header>`, `<main id="main">` rỗng, `<wl-footer>`, `<wl-sticky-cta>`, `<wl-to-top>`, không có chữ của thương hiệu nào.
 2. `app.js` import mọi component, gọi `customElements.define('wl-<tên>', Lớp)`, rồi gọi `start()` của `core.js`.
 3. `core.js`:
-   - đọc `brands/brands.json`; nếu địa chỉ có `?brand=` thì chỉ nhận id có trong danh sách (không có thì dùng `default`);
+   - đọc `/brands/brands.json`; đọc thương hiệu và trang từ đường dẫn `/<id>/<trang>` (`/` là trang chủ của thương hiệu mặc định, `?brand=<id>` của địa chỉ cũ vẫn nhận); chỉ nhận id có trong danh sách;
    - gọi `WebDesign2026.init`: `wd2026.js` tải `brands/<id>/content.json`, nhớ lựa chọn sau F5 và hiện nút tròn để BGK đổi thương hiệu (BTC đặt ở góc dưới phải; `base.css` chuyển sang góc dưới trái và cho luôn hiện);
-   - mỗi lần có sự kiện `webdesign2026:datachange`: đổi `href` của `<link id="brand-theme">` thành `brands/<id>/theme.css`, điền `title`, `description`, `favicon`, cập nhật `?brand=` trên địa chỉ;
-   - sau đó dựng section: với mỗi phần tử trong `sections`, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng;
+   - mỗi lần có sự kiện `webdesign2026:datachange`: đổi mọi link `page:` trong dữ liệu thành đường dẫn thật; chọn trang đang mở trong `pages` (thương hiệu chưa có `pages` thì cả `sections` là trang chủ; đổi thương hiệu thì giữ trang, thương hiệu mới không có trang đó thì về trang chủ hoặc trang `404` nếu nó tự khai); đổi `href` của `<link id="brand-theme">` thành `/brands/<id>/theme.css`, điền `title` (trang con: `<tiêu đề trang> - <tên thương hiệu>`), `description`, `favicon`, cập nhật đường dẫn trên địa chỉ;
+   - sau đó dựng section của trang đang mở: với mỗi phần tử trong `sections` của trang, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng; mục menu trỏ đúng trang đang mở được gắn `aria-current="page"`;
    - `type` chưa có component đăng ký thì bỏ qua khối đó và cảnh báo trong console, không làm sập trang;
    - `id` của section được gán làm `id` của thẻ, để menu và nút CTA (`"href": "#dat-tour"`) nhảy tới được;
-   - `el.site` gồm `brand`, `cta`, `nav`, `place` (nơi chốn, toạ độ, múi giờ), `contact` (điện thoại, email, địa chỉ); thương hiệu nào thiếu khoá nào thì khoá đó là `undefined`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
+   - `el.site` gồm `brand`, `cta`, `nav`, `place` (nơi chốn, toạ độ, múi giờ), `contact` (điện thoại, email, địa chỉ), `home` (đường dẫn trang chủ của thương hiệu); thương hiệu nào thiếu khoá nào thì khoá đó là `undefined`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
 4. Các component cố định (header, footer, sticky-cta, to-top) cũng nhận `el.site` như vậy, nhưng `el.data` là toàn bộ `content.json`; thẻ nào chưa có component thì bỏ qua.
-5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật.
+5. `core.js` export hàm `asset(path)` để đổi đường dẫn ảnh trong JSON (tính từ thư mục thương hiệu) thành đường dẫn thật, tính từ gốc (`/brands/<id>/...`).
+6. **Mọi đường dẫn tính từ gốc** (`/css/...`, `/js/...`, `/brands/...`), vì trang có thể nằm ở `/ganh-som/phong`. Trên máy chạy bằng `python3 serve.py` (có file thì trả file, không có thì trả `index.html`, giống Cloudflare Pages); `python3 -m http.server` không mở được trang con.
 
 **`wd2026.js` do BTC cấp:** đặt nguyên ở thư mục gốc, **không sửa**.
 - Đổi thương hiệu bằng nút của BTC **không tải lại trang**: component có thể nhận `data` mới nhiều lần, mỗi lần phải dựng lại từ đầu (`replaceChildren`), không cộng dồn phần tử hay listener.
@@ -117,6 +118,16 @@ export class WlHero extends HTMLElement {
   "credits": [{ "file": "images/hero.jpg", "author": "", "license": "CC0", "source": "https://..." }]
 }
 ```
+**Nhiều trang:** thay `sections` cấp ngoài bằng `pages`, mỗi trang có `path` (`"/"` là trang chủ; trang con viết thường không dấu, nối gạch ngang), `title`, `description` (tuỳ chọn) và `sections`. Thương hiệu chưa có `pages` thì cả `sections` là trang chủ, nên chuyển dần được.
+```json
+"pages": [
+  { "path": "/", "sections": [ ... ] },
+  { "path": "hoi-dap", "title": "Hỏi đáp", "description": "...", "sections": [ ... ] }
+]
+```
+- **Link:** `#neo` nhảy tới khối trong trang đang mở; `page:hoi-dap` sang trang khác; `page:/#dat-cho` về trang chủ, tới khối `dat-cho`. Thương hiệu nhiều trang thì menu và `cta` nên dùng `page:`, để ở trang con vẫn bấm được.
+- Trang con khai `"path": "404"` thì hiện khi địa chỉ trỏ tới trang không có; không khai thì về trang chủ.
+
 - **Trường chung của mọi section:** `type` (bắt buộc, trùng tên component), `id` (neo cho menu), `variant`, `hidden`, `eyebrow`, `title`, `lead`. Các trường riêng do người viết component quy định, và phải ghi vào bảng ở cuối tệp này.
 - **Ảnh** luôn là object `{ "src", "alt" }`, đường dẫn tính từ thư mục thương hiệu.
 - **Chữ:** chữ thường, không chứa HTML. Ít chữ: tiêu đề ngắn, mỗi đoạn tối đa khoảng 2 câu.
@@ -126,7 +137,7 @@ export class WlHero extends HTMLElement {
   - thương hiệu nào dùng section nào ghi ở cột "Thương hiệu dùng" trong bảng mục 12.
 
 **`brands/brand-test/`: "Lượn Vịnh", bản cấu hình do AI viết theo [prompt mẫu](docs/prompts/tao-thuong-hieu-moi.md)** (bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè), chỉ dùng các khối chạy bằng dữ liệu thuần; minh chứng đổi file cấu hình là ra landing page mới. Bộ dữ liệu thử cũ "Lối Mây" (đủ mọi loại section) còn trong lịch sử Git.
-- Viết component mới thì thử trên `?brand=brand-test` trước. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
+- Viết component mới thì thử trên `/brand-test/` trước. brand-test có hai trang (`/` và `hoi-dap`) để thử chuyển trang. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
 - Có trong nút đổi thương hiệu với nhãn "Lượn Vịnh (AI tạo)" để BGK thấy thương hiệu sinh từ cấu hình; thông tin gửi BTC ghi rõ đây là bản AI tạo, ngoài ba thương hiệu chính.
 
 **`brands/<id>/theme.css`**
@@ -213,8 +224,8 @@ export class WlHero extends HTMLElement {
 
 ## 11. Trước khi push: tự kiểm
 
-- [ ] Chạy bằng Live Server hoặc `python3 -m http.server`, không có lỗi trong console.
-- [ ] `?brand=bac-tra`, `ganh-som`, `me-rach` đều ra trang đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, không cần F5.
+- [ ] Chạy bằng `python3 serve.py`, không có lỗi trong console.
+- [ ] `/bac-tra/`, `/ganh-som/`, `/me-rach/` và các trang con đều ra đúng; đổi qua lại bằng nút tròn của BTC cũng đúng, giữ trang đang mở, không cần F5.
 - [ ] Đổi màu chủ đạo ở `theme.css`: toàn trang đổi theo.
 - [ ] Đổi thứ tự hai section trong `content.json`: trang đổi theo.
 - [ ] Thêm một thương hiệu mới chỉ bằng dữ liệu, không sửa mã: vẫn ra trang.

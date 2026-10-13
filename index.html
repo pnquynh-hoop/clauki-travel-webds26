@@ -8,28 +8,29 @@
   <meta name="description" content="">
   <link rel="icon" href="data:,">
 
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <!-- core.js đổi href thành brands/<id>/theme.css -->
+  <!-- Đường dẫn tính từ gốc vì trang có thể nằm ở /ganh-som/phong. -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <!-- core.js đổi href thành /brands/<id>/theme.css -->
   <link rel="stylesheet" id="brand-theme" href="">
 
   <!-- wd2026.js của BTC (giữ nguyên, không sửa): nút đổi thương hiệu cho BGK.
        Phải đứng trước app.js để window.WebDesign2026 có sẵn khi core.js chạy. -->
-  <script src="wd2026.js" defer></script>
-  <script type="module" src="js/app.js"></script>
+  <script src="/wd2026.js" defer></script>
+  <script type="module" src="/js/app.js"></script>
   <script>
     // Mở bằng file:// thì trình duyệt chặn module app.js; script thường này vẫn chạy để báo cách mở đúng.
     if (location.protocol === 'file:') {
       addEventListener('DOMContentLoaded', () => {
         document.body.textContent = 'Trang cần chạy qua máy chủ: mở bằng Live Server của VS Code, '
-          + 'hoặc chạy "python3 -m http.server 5500" trong thư mục dự án rồi vào http://localhost:5500.';
+          + 'hoặc chạy "python3 serve.py" trong thư mục dự án rồi vào http://localhost:5500.';
       });
     }
   </script>
 </head>
 <body>
   <!-- Trang này không chứa chữ của thương hiệu nào. Các section trong <main> do core.js
-       dựng theo đúng thứ tự trong mảng "sections" của content.json. -->
+       dựng theo đúng thứ tự trong "sections" của trang đang mở (pages[] trong content.json). -->
   <wl-header></wl-header>
   <main id="main"></main>
   <wl-footer></wl-footer>

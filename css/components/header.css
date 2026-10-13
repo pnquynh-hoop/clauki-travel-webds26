@@ -94,6 +94,11 @@
   color: var(--color-accent);
 }
 
+/* Mục menu của trang đang mở (core.js gắn aria-current="page"). */
+.header__link[aria-current="page"] {
+  color: var(--color-accent);
+}
+
 /* Nút CTA trên thanh mặc định chỉ hiện ở màn rộng; kiểu nào cần hiện cả trên điện thoại thì tự bật (như solid). */
 .header__cta {
   display: none;

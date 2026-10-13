@@ -12,7 +12,7 @@
   },
   "cta": {
     "label": "Giữ ghế",
-    "href": "#giu-ghe",
+    "href": "page:/#giu-ghe",
     "note": "6.900.000 đồng mỗi khách, gồm chuyến bay và một đêm nhà bè"
   },
   "toTop": {
@@ -21,19 +21,19 @@
   "nav": [
     {
       "label": "Chuyến bay",
-      "href": "#chuyen-bay"
+      "href": "page:/#chuyen-bay"
     },
     {
       "label": "Ảnh",
-      "href": "#thu-vien"
+      "href": "page:/#thu-vien"
     },
     {
       "label": "Khách kể",
-      "href": "#khach-ke"
+      "href": "page:/#khach-ke"
     },
     {
       "label": "Hỏi đáp",
-      "href": "#hoi-dap"
+      "href": "page:hoi-dap"
     }
   ],
   "header": {
@@ -51,254 +51,266 @@
     "lon": 107.0,
     "timezone": "Asia/Ho_Chi_Minh"
   },
-  "sections": [
+  "pages": [
     {
-      "type": "hero",
-      "id": "gioi-thieu",
-      "variant": "coverflow",
-      "eyebrow": "Thuỷ phi cơ, vịnh Hạ Long và Lan Hạ",
-      "title": "Ngắm vịnh từ trên mây",
-      "lead": "Hai mươi lăm phút bay thấp qua hàng nghìn đảo đá, hạ cánh ngay trước nhà bè và ở lại một đêm giữa vịnh.",
-      "link": {
-        "label": "Xem chuyến bay",
-        "href": "#chuyen-bay"
-      },
-      "slidesLabel": "Ảnh chuyến bay Lượn Vịnh, dùng phím mũi tên trái phải để đổi ảnh",
-      "prevLabel": "Trước",
-      "nextLabel": "Sau",
-      "slides": [
+      "path": "/",
+      "sections": [
         {
+          "type": "hero",
+          "id": "gioi-thieu",
+          "variant": "coverflow",
+          "eyebrow": "Thuỷ phi cơ, vịnh Hạ Long và Lan Hạ",
+          "title": "Ngắm vịnh từ trên mây",
+          "lead": "Hai mươi lăm phút bay thấp qua hàng nghìn đảo đá, hạ cánh ngay trước nhà bè và ở lại một đêm giữa vịnh.",
+          "link": {
+            "label": "Xem chuyến bay",
+            "href": "#chuyen-bay"
+          },
+          "slidesLabel": "Ảnh chuyến bay Lượn Vịnh, dùng phím mũi tên trái phải để đổi ảnh",
+          "prevLabel": "Trước",
+          "nextLabel": "Sau",
+          "slides": [
+            {
+              "image": {
+                "src": "images/nui-da-lan-ha.webp",
+                "alt": "Những núi đá vôi phủ cây xanh mọc thẳng từ mặt vịnh lặng"
+              },
+              "caption": "Núi đá Lan Hạ"
+            },
+            {
+              "image": {
+                "src": "images/hero.webp",
+                "alt": "Thuỷ phi cơ cánh đỏ trắng bay thấp sát mặt nước xanh, phía sau là bờ rừng thông"
+              },
+              "caption": "Bay thấp sát mặt nước"
+            },
+            {
+              "image": {
+                "src": "images/cheo-kayak.webp",
+                "alt": "Khách chèo kayak vàng trên làn nước xanh ngọc giữa các đảo đá"
+              },
+              "caption": "Sáng chèo kayak"
+            }
+          ]
+        },
+        {
+          "type": "intro",
+          "id": "chuyen-bay",
+          "variant": "center",
+          "eyebrow": "Chuyến bay",
+          "title": "Cất cánh ở Tuần Châu, hạ cánh trước cửa nhà bè",
+          "lead": "Máy bay bay ở độ cao vài trăm mét, đủ thấp để thấy rõ làng chài. Tối ăn hải sản trên bè, sáng chèo kayak rồi theo tàu về."
+        },
+        {
+          "type": "gallery",
+          "id": "thu-vien",
+          "variant": "slices",
+          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+          "listLabel": "Năm ảnh của chuyến đi, mỗi lần mở một ảnh",
+          "eyebrow": "Từ buồng lái tới mặt nước",
+          "title": "Một ngày nhìn vịnh từ hai phía",
+          "images": [
+            {
+              "src": "images/buong-lai.webp",
+              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
+              "caption": "Ngồi sau buồng lái"
+            },
+            {
+              "src": "images/lang-be.webp",
+              "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
+              "caption": "Làng chài trên bè"
+            },
+            {
+              "src": "images/nha-be.webp",
+              "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
+              "caption": "Nhà bè giữa vịnh"
+            },
+            {
+              "src": "images/kayak-nui-da.webp",
+              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
+              "caption": "Len giữa các đảo"
+            },
+            {
+              "src": "images/thuyen-hoang-hon.webp",
+              "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
+              "caption": "Chiều trên vịnh"
+            }
+          ]
+        },
+        {
+          "type": "reviews",
+          "id": "khach-ke",
+          "variant": "postcard",
+          "eyebrow": "Khách đã bay",
+          "title": "Bưu thiếp gửi về từ trên mây",
+          "lead": "Mùa hè 2026: 96 chuyến bay, 1.104 khách, điểm trung bình 4,8 trên 5.",
+          "scoreLabel": "điểm",
+          "dateLabel": "Ngày bay",
+          "items": [
+            {
+              "rating": 5,
+              "text": "Lúc máy bay nghiêng cánh qua làng chài, cả khoang cùng nín thở. Tối nằm trên bè nghe sóng vỗ, không tin vừa bay qua chỗ đó.",
+              "name": "Thanh Tâm",
+              "from": "Hà Nội, đi cùng chồng",
+              "stamp": {
+                "value": 300,
+                "unit": "m",
+                "label": "Ba Trái Đào"
+              },
+              "date": "18.06.2026"
+            },
+            {
+              "rating": 5,
+              "text": "Con trai mười tuổi được ngồi ghế đầu, nhìn thẳng vào buồng lái suốt chuyến. Sáng hôm sau cả nhà chèo kayak qua hang tới trưa.",
+              "name": "Minh Đức",
+              "from": "TP.HCM, đi cùng vợ con",
+              "stamp": {
+                "value": 450,
+                "unit": "m",
+                "label": "Vịnh Lan Hạ"
+              },
+              "date": "02.07.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Hôm đó gió mạnh nên chuyến bay dời sang chiều, phải chờ hơn ba tiếng. Bù lại bay lúc hoàng hôn, nước vịnh đỏ rực dưới cánh.",
+              "name": "Phương Linh",
+              "from": "Đà Nẵng, đi cùng bạn thân",
+              "stamp": {
+                "value": 250,
+                "unit": "m",
+                "label": "Hang Sáng Tối"
+              },
+              "date": "27.07.2026"
+            },
+            {
+              "rating": 5,
+              "text": "Bữa tối hải sản dọn ngay trên bè, mực câu lúc chiều. Đêm vịnh tối hẳn, thấy cả sao, sáng ra sương phủ kín núi đá.",
+              "name": "Gia Bảo",
+              "from": "Cần Thơ, đi một mình",
+              "stamp": {
+                "value": 400,
+                "unit": "m",
+                "label": "Cái Bèo"
+              },
+              "date": "14.08.2026"
+            }
+          ]
+        },
+        {
+          "type": "booking",
+          "id": "giu-ghe",
+          "variant": "request",
+          "eyebrow": "Giữ ghế",
+          "title": "Giữ ghế cho chuyến bay của bạn",
+          "lead": "Mỗi chuyến chỉ 12 ghế. Trang soạn sẵn tin nhắn, Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
           "image": {
-            "src": "images/nui-da-lan-ha.webp",
-            "alt": "Những núi đá vôi phủ cây xanh mọc thẳng từ mặt vịnh lặng"
+            "src": "images/nha-be.webp",
+            "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
           },
-          "caption": "Núi đá Lan Hạ"
-        },
-        {
-          "image": {
-            "src": "images/hero.webp",
-            "alt": "Thuỷ phi cơ cánh đỏ trắng bay thấp sát mặt nước xanh, phía sau là bờ rừng thông"
+          "price": 6900000,
+          "currency": "đồng",
+          "childPrice": 4900000,
+          "maxGuests": 12,
+          "maxNights": 1,
+          "defaultAdults": 2,
+          "defaultDates": {
+            "checkIn": "2027-06-12",
+            "checkOut": "2027-06-13"
           },
-          "caption": "Bay thấp sát mặt nước"
-        },
-        {
-          "image": {
-            "src": "images/cheo-kayak.webp",
-            "alt": "Khách chèo kayak vàng trên làn nước xanh ngọc giữa các đảo đá"
-          },
-          "caption": "Sáng chèo kayak"
-        }
-      ]
-    },
-    {
-      "type": "intro",
-      "id": "chuyen-bay",
-      "variant": "center",
-      "eyebrow": "Chuyến bay",
-      "title": "Cất cánh ở Tuần Châu, hạ cánh trước cửa nhà bè",
-      "lead": "Máy bay bay ở độ cao vài trăm mét, đủ thấp để thấy rõ làng chài. Tối ăn hải sản trên bè, sáng chèo kayak rồi theo tàu về."
-    },
-    {
-      "type": "gallery",
-      "id": "thu-vien",
-      "variant": "slices",
-      "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
-      "touchHint": "Chạm vào một dải để mở ảnh lớn.",
-      "listLabel": "Năm ảnh của chuyến đi, mỗi lần mở một ảnh",
-      "eyebrow": "Từ buồng lái tới mặt nước",
-      "title": "Một ngày nhìn vịnh từ hai phía",
-      "images": [
-        {
-          "src": "images/buong-lai.webp",
-          "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
-          "caption": "Ngồi sau buồng lái"
-        },
-        {
-          "src": "images/lang-be.webp",
-          "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
-          "caption": "Làng chài trên bè"
-        },
-        {
-          "src": "images/nha-be.webp",
-          "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
-          "caption": "Nhà bè giữa vịnh"
-        },
-        {
-          "src": "images/kayak-nui-da.webp",
-          "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
-          "caption": "Len giữa các đảo"
-        },
-        {
-          "src": "images/thuyen-hoang-hon.webp",
-          "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
-          "caption": "Chiều trên vịnh"
-        }
-      ]
-    },
-    {
-      "type": "reviews",
-      "id": "khach-ke",
-      "variant": "postcard",
-      "eyebrow": "Khách đã bay",
-      "title": "Bưu thiếp gửi về từ trên mây",
-      "lead": "Mùa hè 2026: 96 chuyến bay, 1.104 khách, điểm trung bình 4,8 trên 5.",
-      "scoreLabel": "điểm",
-      "dateLabel": "Ngày bay",
-      "items": [
-        {
-          "rating": 5,
-          "text": "Lúc máy bay nghiêng cánh qua làng chài, cả khoang cùng nín thở. Tối nằm trên bè nghe sóng vỗ, không tin vừa bay qua chỗ đó.",
-          "name": "Thanh Tâm",
-          "from": "Hà Nội, đi cùng chồng",
-          "stamp": {
-            "value": 300,
-            "unit": "m",
-            "label": "Ba Trái Đào"
-          },
-          "date": "18.06.2026"
-        },
-        {
-          "rating": 5,
-          "text": "Con trai mười tuổi được ngồi ghế đầu, nhìn thẳng vào buồng lái suốt chuyến. Sáng hôm sau cả nhà chèo kayak qua hang tới trưa.",
-          "name": "Minh Đức",
-          "from": "TP.HCM, đi cùng vợ con",
-          "stamp": {
-            "value": 450,
-            "unit": "m",
-            "label": "Vịnh Lan Hạ"
-          },
-          "date": "02.07.2026"
-        },
-        {
-          "rating": 4,
-          "text": "Hôm đó gió mạnh nên chuyến bay dời sang chiều, phải chờ hơn ba tiếng. Bù lại bay lúc hoàng hôn, nước vịnh đỏ rực dưới cánh.",
-          "name": "Phương Linh",
-          "from": "Đà Nẵng, đi cùng bạn thân",
-          "stamp": {
-            "value": 250,
-            "unit": "m",
-            "label": "Hang Sáng Tối"
-          },
-          "date": "27.07.2026"
-        },
-        {
-          "rating": 5,
-          "text": "Bữa tối hải sản dọn ngay trên bè, mực câu lúc chiều. Đêm vịnh tối hẳn, thấy cả sao, sáng ra sương phủ kín núi đá.",
-          "name": "Gia Bảo",
-          "from": "Cần Thơ, đi một mình",
-          "stamp": {
-            "value": 400,
-            "unit": "m",
-            "label": "Cái Bèo"
-          },
-          "date": "14.08.2026"
-        }
-      ]
-    },
-    {
-      "type": "faq",
-      "id": "hoi-dap",
-      "eyebrow": "Hỏi đáp",
-      "title": "Trước khi lên máy bay",
-      "lead": "Những điều khách hay hỏi nhất về chuyến bay và đêm trên bè.",
-      "ask": {
-        "text": "Chưa thấy điều bạn cần?",
-        "action": "Gọi"
-      },
-      "items": [
-        {
-          "question": "Gió to hay trời mưa thì sao?",
-          "answer": "Phi công quyết định cất cánh theo thời tiết lúc bay. Chuyến bị huỷ thì bạn chọn bay ngày khác hoặc nhận lại toàn bộ tiền."
-        },
-        {
-          "question": "Có giới hạn hành lý không?",
-          "answer": "Mỗi khách mang tối đa 10 kg lên máy bay. Hành lý lớn hơn gửi theo tàu sang bè, tới nơi trước bữa tối."
-        },
-        {
-          "question": "Trẻ em đi được không?",
-          "answer": "Trẻ từ 2 tuổi trở lên được bay, ngồi ghế riêng và thắt dây an toàn. Trẻ dưới 12 tuổi tính giá trẻ em."
-        },
-        {
-          "question": "Nhà bè có điều hoà và phòng tắm riêng không?",
-          "answer": "Mỗi phòng trên bè có điều hoà và phòng tắm riêng, nước nóng chạy bằng điện mặt trời."
-        },
-        {
-          "question": "Về lại Tuần Châu bằng gì?",
-          "answer": "Trưa hôm sau tàu của bè đưa bạn về bến Tuần Châu, khoảng hai tiếng rưỡi đi giữa các đảo."
-        }
-      ]
-    },
-    {
-      "type": "booking",
-      "id": "giu-ghe",
-      "variant": "request",
-      "eyebrow": "Giữ ghế",
-      "title": "Giữ ghế cho chuyến bay của bạn",
-      "lead": "Mỗi chuyến chỉ 12 ghế. Trang soạn sẵn tin nhắn, Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
-      "image": {
-        "src": "images/nha-be.webp",
-        "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
-      },
-      "price": 6900000,
-      "currency": "đồng",
-      "childPrice": 4900000,
-      "maxGuests": 12,
-      "maxNights": 1,
-      "defaultAdults": 2,
-      "defaultDates": {
-        "checkIn": "2027-06-12",
-        "checkOut": "2027-06-13"
-      },
-      "perks": [
-        {
-          "minNights": 1,
-          "months": [
-            5,
-            6,
-            7,
-            8
+          "perks": [
+            {
+              "minNights": 1,
+              "months": [
+                5,
+                6,
+                7,
+                8
+              ],
+              "text": "Bay từ tháng 5 đến tháng 8: tặng một buổi câu mực đêm trên bè."
+            }
           ],
-          "text": "Bay từ tháng 5 đến tháng 8: tặng một buổi câu mực đêm trên bè."
+          "labels": {
+            "place": "Lượn Vịnh",
+            "placeFacts": "Bay Tuần Châu sang Lan Hạ, một đêm nhà bè",
+            "perGuest": "{price} mỗi khách, gồm bay và một đêm",
+            "checkIn": "Ngày bay",
+            "checkOut": "Ngày về",
+            "adults": "Người lớn",
+            "adultsLess": "Bớt một người lớn",
+            "adultsMore": "Thêm một người lớn",
+            "children": "Trẻ 2 đến 11 tuổi",
+            "childrenLess": "Bớt một trẻ",
+            "childrenMore": "Thêm một trẻ",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "summary": "Tạm tính",
+            "guestLine": "Người lớn",
+            "guestDetail": "{adults} khách × {nights} đêm × {price}",
+            "childLine": "Trẻ em",
+            "childDetail": "{children} trẻ",
+            "free": "Miễn phí",
+            "total": "Tổng cộng",
+            "includes": "Đã gồm chuyến bay 25 phút, một đêm nhà bè, bữa tối hải sản, bữa sáng, kayak và tàu về Tuần Châu."
+          },
+          "errors": {
+            "dates": "Ngày về phải là ngày ngay sau ngày bay; gói này ở một đêm.",
+            "name": "Bạn nhập họ tên để Lượn Vịnh giữ đúng ghế.",
+            "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
+          },
+          "message": {
+            "title": "Tin nhắn giữ ghế đã soạn sẵn",
+            "lead": "Gửi tin này bằng một trong các cách dưới đây. Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
+            "template": "Chào Lượn Vịnh, tôi là {name}, số {phone}. Tôi muốn giữ ghế bay ngày {checkIn}, về ngày {checkOut} ({nights} đêm nhà bè), {adults} người lớn và {children} trẻ em. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi {phone}",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép",
+            "edit": "Sửa lại thông tin"
+          }
         }
-      ],
-      "labels": {
-        "place": "Lượn Vịnh",
-        "placeFacts": "Bay Tuần Châu sang Lan Hạ, một đêm nhà bè",
-        "perGuest": "{price} mỗi khách, gồm bay và một đêm",
-        "checkIn": "Ngày bay",
-        "checkOut": "Ngày về",
-        "adults": "Người lớn",
-        "adultsLess": "Bớt một người lớn",
-        "adultsMore": "Thêm một người lớn",
-        "children": "Trẻ 2 đến 11 tuổi",
-        "childrenLess": "Bớt một trẻ",
-        "childrenMore": "Thêm một trẻ",
-        "name": "Họ tên",
-        "phone": "Số điện thoại",
-        "summary": "Tạm tính",
-        "guestLine": "Người lớn",
-        "guestDetail": "{adults} khách × {nights} đêm × {price}",
-        "childLine": "Trẻ em",
-        "childDetail": "{children} trẻ",
-        "free": "Miễn phí",
-        "total": "Tổng cộng",
-        "includes": "Đã gồm chuyến bay 25 phút, một đêm nhà bè, bữa tối hải sản, bữa sáng, kayak và tàu về Tuần Châu."
-      },
-      "errors": {
-        "dates": "Ngày về phải là ngày ngay sau ngày bay; gói này ở một đêm.",
-        "name": "Bạn nhập họ tên để Lượn Vịnh giữ đúng ghế.",
-        "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
-      },
-      "message": {
-        "title": "Tin nhắn giữ ghế đã soạn sẵn",
-        "lead": "Gửi tin này bằng một trong các cách dưới đây. Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
-        "template": "Chào Lượn Vịnh, tôi là {name}, số {phone}. Tôi muốn giữ ghế bay ngày {checkIn}, về ngày {checkOut} ({nights} đêm nhà bè), {adults} người lớn và {children} trẻ em. Tạm tính {total}.",
-        "sms": "Gửi tin nhắn",
-        "call": "Gọi {phone}",
-        "copy": "Chép nội dung",
-        "copied": "Đã chép",
-        "edit": "Sửa lại thông tin"
-      }
+      ]
+    },
+    {
+      "path": "hoi-dap",
+      "title": "Hỏi đáp",
+      "description": "Câu hỏi thường gặp trước khi bay ngắm vịnh và ngủ nhà bè.",
+      "sections": [
+        {
+          "type": "faq",
+          "id": "hoi-dap",
+          "eyebrow": "Hỏi đáp",
+          "title": "Trước khi lên máy bay",
+          "lead": "Những điều khách hay hỏi nhất về chuyến bay và đêm trên bè.",
+          "ask": {
+            "text": "Chưa thấy điều bạn cần?",
+            "action": "Gọi"
+          },
+          "items": [
+            {
+              "question": "Gió to hay trời mưa thì sao?",
+              "answer": "Phi công quyết định cất cánh theo thời tiết lúc bay. Chuyến bị huỷ thì bạn chọn bay ngày khác hoặc nhận lại toàn bộ tiền."
+            },
+            {
+              "question": "Có giới hạn hành lý không?",
+              "answer": "Mỗi khách mang tối đa 10 kg lên máy bay. Hành lý lớn hơn gửi theo tàu sang bè, tới nơi trước bữa tối."
+            },
+            {
+              "question": "Trẻ em đi được không?",
+              "answer": "Trẻ từ 2 tuổi trở lên được bay, ngồi ghế riêng và thắt dây an toàn. Trẻ dưới 12 tuổi tính giá trẻ em."
+            },
+            {
+              "question": "Nhà bè có điều hoà và phòng tắm riêng không?",
+              "answer": "Mỗi phòng trên bè có điều hoà và phòng tắm riêng, nước nóng chạy bằng điện mặt trời."
+            },
+            {
+              "question": "Về lại Tuần Châu bằng gì?",
+              "answer": "Trưa hôm sau tàu của bè đưa bạn về bến Tuần Châu, khoảng hai tiếng rưỡi đi giữa các đảo."
+            }
+          ]
+        }
+      ]
     }
   ],
   "footer": {

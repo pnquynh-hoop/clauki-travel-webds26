@@ -1,15 +1,22 @@
-/* core.js - lõi white label: đọc danh sách thương hiệu, chọn thương hiệu theo ?brand=,
+/* core.js - lõi white label: đọc thương hiệu và trang từ đường dẫn (/<thương hiệu>/<trang>),
    rồi để wd2026.js (của BTC) tải content.json và hiện nút đổi dữ liệu cho BGK;
-   mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối trong <main>. */
+   mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở. */
 
-const BRAND_LIST_URL = 'brands/brands.json';
+// Mọi đường dẫn tính từ gốc: trang có thể nằm ở /ganh-som/phong, đường dẫn tương đối sẽ trỏ sai thư mục.
+const DATA_ROOT = '/brands';
+const BRAND_LIST_URL = `${DATA_ROOT}/brands.json`;
 // Tên do wd2026.js đặt, phải khớp với mã của BTC.
 const STORAGE_KEY = 'wd2026_active_file';
 const CHANGE_EVENT = 'webdesign2026:datachange';
 // Ba khối luôn có sẵn trong index.html, không nằm trong danh sách sections.
 const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-sticky-cta', 'wl-to-top'];
+const HOME = '/';
+// Trang thương hiệu tự khai để hiện khi địa chỉ trỏ tới trang không có.
+const NOT_FOUND = '404';
 
 let currentId = null;
+let currentPage = HOME;
+let firstRender = true;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -32,39 +39,84 @@ function contentFile(id) {
   return `${id}/content.json`;
 }
 
-// wd2026.js không đọc địa chỉ và ưu tiên lựa chọn đã lưu, nên ghi ?brand= vào chỗ nó đọc trước khi init.
-// Chỉ nhận id có trong danh sách để ?brand=../../abc không trỏ ra ngoài thư mục brands.
-function saveBrandFromUrl(ids, defaultId) {
-  const wanted = new URLSearchParams(location.search).get('brand');
-  if (wanted === null) return;
-  const id = ids.includes(wanted) ? wanted : defaultId;
-  localStorage.setItem(STORAGE_KEY, contentFile(id));
+// "/phong/", "phong" và "" đều quy về một dạng để so sánh; trang chủ là "/".
+function normalizePage(path) {
+  const clean = String(path ?? '').replace(/^\/+|\/+$/g, '');
+  return clean || HOME;
+}
+
+// Đọc thương hiệu và trang từ đường dẫn. Chỉ nhận id có trong danh sách để địa chỉ lạ không trỏ ra ngoài thư mục brands.
+// ?brand= của địa chỉ cũ vẫn nhận, để link đã gửi trước đây không hỏng.
+function readLocation(ids) {
+  const parts = location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts.length && ids.includes(parts[0])) {
+    return { id: parts[0], page: normalizePage(parts.slice(1).join('/')) };
+  }
+  const legacy = new URLSearchParams(location.search).get('brand');
+  return { id: ids.includes(legacy) ? legacy : null, page: HOME };
+}
+
+// wd2026.js không đọc địa chỉ và ưu tiên lựa chọn đã lưu, nên ghi thương hiệu trên địa chỉ vào chỗ nó đọc trước khi init.
+function saveBrand(id) {
+  if (id) localStorage.setItem(STORAGE_KEY, contentFile(id));
+}
+
+function pageUrl(id, page) {
+  return page === HOME ? `/${id}/` : `/${id}/${page}`;
 }
 
 // Đường dẫn ảnh trong content.json tính từ thư mục thương hiệu; component gọi hàm này để ra đường dẫn thật.
 export function asset(path) {
-  return `brands/${currentId}/${path}`;
+  return `${DATA_ROOT}/${currentId}/${path}`;
 }
 
-function applyBrand(data) {
+// Thương hiệu chưa chuyển sang pages thì coi cả trang cũ là trang chủ, nên chuyển dần từng thương hiệu được.
+function pagesOf(data) {
+  return data.pages ?? [{ path: HOME, sections: data.sections ?? [] }];
+}
+
+function findPage(data, page) {
+  return pagesOf(data).find((p) => normalizePage(p.path) === page);
+}
+
+// Trong dữ liệu, link sang trang khác ghi "page:phong" hoặc "page:/#dat-cho" để không phụ thuộc thương hiệu nằm ở đâu;
+// đổi thành đường dẫn thật ở đây một lần, các component chỉ việc gán href như trước.
+function resolveHref(href, id) {
+  if (typeof href !== 'string' || !href.startsWith('page:')) return href;
+  const [page, hash] = href.slice('page:'.length).split('#');
+  return pageUrl(id, normalizePage(page)) + (hash ? `#${hash}` : '');
+}
+
+function resolveLinks(node, id) {
+  if (Array.isArray(node)) return node.map((item) => resolveLinks(item, id));
+  if (!node || typeof node !== 'object') return node;
+  return Object.fromEntries(Object.entries(node).map(([key, value]) => (
+    [key, key === 'href' ? resolveHref(value, id) : resolveLinks(value, id)]
+  )));
+}
+
+function applyBrand(data, page) {
   currentId = data.id;
-  document.getElementById('brand-theme').href = `brands/${data.id}/theme.css`;
-  document.title = data.meta.title;
-  document.querySelector('meta[name="description"]').content = data.meta.description;
+  document.getElementById('brand-theme').href = `${DATA_ROOT}/${data.id}/theme.css`;
+  // Trang con lấy tiêu đề riêng; trang chủ giữ tiêu đề chung của thương hiệu.
+  const isHome = normalizePage(page.path) === HOME;
+  document.title = isHome || !page.title ? data.meta.title : `${page.title} - ${data.brand?.name ?? data.meta.title}`;
+  document.querySelector('meta[name="description"]').content = page.description ?? data.meta.description;
   // 'data:,' là favicon rỗng, để trình duyệt khỏi tự đi tìm /favicon.ico khi thương hiệu chưa có.
   document.querySelector('link[rel="icon"]').href = data.meta.favicon ? asset(data.meta.favicon) : 'data:,';
 
-  // Giữ ?brand= khớp với thương hiệu đang dùng, nếu không thì BGK đổi trong hộp chọn rồi tải lại trang
-  // sẽ bị ?brand= cũ kéo về thương hiệu trước.
-  const url = new URL(location.href);
-  url.searchParams.set('brand', data.id);
-  history.replaceState(null, '', url);
+  // Giữ địa chỉ khớp với thương hiệu và trang đang mở: BGK đổi thương hiệu rồi tải lại trang thì vẫn đúng chỗ.
+  history.replaceState(null, '', pageUrl(data.id, currentPage) + location.hash);
 }
 
 // Thông tin chung của thương hiệu mà khối nào cũng có thể cần (tên, menu, CTA, nơi chốn, liên hệ),
 // gom lại một chỗ để đưa cho mọi khối, khỏi phải chép vào dữ liệu từng section.
+// home là đường dẫn trang chủ của thương hiệu, để logo ở trang con dẫn về trang chủ.
 function siteInfo(data) {
-  return { brand: data.brand, cta: data.cta, nav: data.nav, place: data.place, contact: data.contact };
+  return {
+    brand: data.brand, cta: data.cta, nav: data.nav, place: data.place, contact: data.contact,
+    home: pageUrl(data.id, HOME),
+  };
 }
 
 // Phải gán site trước: dòng el.data = section làm khối vẽ ngay lập tức,
@@ -86,11 +138,10 @@ function hasComponent(section) {
   return false;
 }
 
-// Xoá hết khối cũ rồi mới đặt khối mới, nên đổi thương hiệu không bị lặp hay sót khối.
-function renderSections(data) {
+// Xoá hết khối cũ rồi mới đặt khối mới, nên đổi thương hiệu hay trang không bị lặp hay sót khối.
+function renderSections(data, page) {
   const site = siteInfo(data);
-  // Thương hiệu chưa có sections thì coi như danh sách rỗng.
-  const blocks = (data.sections ?? [])
+  const blocks = (page.sections ?? [])
     .filter((section) => !section.hidden)
     .filter(hasComponent)
     .map((section) => createSection(section, site));
@@ -110,6 +161,24 @@ function renderFixed(data) {
   }
 }
 
+// Mục menu trỏ đúng trang đang mở (không phải neo tới một khối) được đánh dấu cho trình đọc màn hình và CSS.
+function markCurrentPage() {
+  for (const a of document.querySelectorAll('wl-header a[href], wl-footer a[href]')) {
+    // Link chỉ có "#" (ví dụ nút mở menu) trỏ về chính trang nhưng không phải mục menu của trang.
+    const here = a.getAttribute('href') !== '#'
+      && a.origin === location.origin && a.pathname === location.pathname && !a.hash;
+    if (here) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  }
+}
+
+// Khối được dựng sau khi trang tải xong nên trình duyệt không tự cuộn tới #neo trên địa chỉ
+// (ví dụ đi từ trang con về /ganh-som/#dat-cho); cuộn giúp một lần ở lần dựng đầu.
+function scrollToHash() {
+  if (!location.hash) return;
+  requestAnimationFrame(() => document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView());
+}
+
 // Trang đã dựng lại xong ngay khi đổi thương hiệu (không cần tải lại), nên bỏ qua câu hỏi "tải lại trang?" của wd2026.js:
 // chờ hộp thoại vẽ xong màn xác nhận rồi bấm giúp nút "Để sau" (chỉ đóng hộp, không sửa wd2026.js), đưa trang về đầu
 // để thấy thương hiệu mới từ hero. Lần nạp đầu không có hộp thoại nên không làm gì.
@@ -122,26 +191,46 @@ function skipReloadPrompt() {
   });
 }
 
+function render(raw) {
+  const data = resolveLinks(raw, raw.id);
+  // Đổi thương hiệu thì giữ trang đang mở; thương hiệu mới không có trang đó thì hiện trang 404 nó tự khai,
+  // không khai thì về trang chủ.
+  let page = findPage(data, currentPage);
+  if (!page) {
+    page = findPage(data, NOT_FOUND);
+    if (!page) {
+      currentPage = HOME;
+      page = findPage(data, HOME);
+    }
+  }
+  // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
+  applyBrand(data, page);
+  renderSections(data, page);
+  renderFixed(data);
+  markCurrentPage();
+  if (firstRender) scrollToHash();
+  firstRender = false;
+}
+
 export async function start() {
   try {
     const list = await loadBrandList();
     const ids = list.brands.map((b) => b.id);
-    saveBrandFromUrl(ids, list.default);
+    const here = readLocation(ids);
+    currentPage = here.page;
+    saveBrand(here.id);
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
     document.addEventListener(CHANGE_EVENT, (e) => {
       try {
-        // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
-        applyBrand(e.detail);
-        renderSections(e.detail);
-        renderFixed(e.detail);
+        render(e.detail);
         skipReloadPrompt();
       } catch (err) {
         showError(err);
       }
     });
     window.WebDesign2026.init({
-      folder: 'brands',
+      folder: DATA_ROOT,
       files: ids.map(contentFile),
       labels: list.brands.map((b) => b.label ?? b.id),
       defaultIndex: ids.indexOf(list.default),
