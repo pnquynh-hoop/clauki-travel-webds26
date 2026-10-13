@@ -60,6 +60,7 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
 6. **Mọi đường dẫn tính từ gốc** (`/css/...`, `/js/...`, `/brands/...`), vì trang có thể nằm ở `/ganh-som/phong`. Trên máy chạy bằng `python3 serve.py` (có file thì trả file, không có thì trả `index.html`, giống Cloudflare Pages); `python3 -m http.server` không mở được trang con.
 
 **`wd2026.js` do BTC cấp:** đặt nguyên ở thư mục gốc, **không sửa**.
+- **Chuyển trang trong cùng thương hiệu cũng không tải lại trang:** bấm link sang trang khác cùng brand thì `core.js` đổi địa chỉ (`history.pushState`) rồi dựng lại `<main>` và các khối cố định trong `document.startViewTransition` (chuyển mờ mượt; bật giảm chuyển động thì đổi ngay); nút Back, Forward vẫn đúng. Link ra ngoài, sang brand khác, mở tab mới, hay chỉ nhảy `#neo` trong trang thì để trình duyệt tự xử lý.
 - Đổi thương hiệu bằng nút của BTC **không tải lại trang**: component có thể nhận `data` mới nhiều lần, mỗi lần phải dựng lại từ đầu (`replaceChildren`), không cộng dồn phần tử hay listener.
 - `id` trong `content.json` phải trùng tên thư mục thương hiệu, vì `core.js` dùng nó để chọn `theme.css`.
 - Góc dưới trái là chỗ của nút tròn (đội đã chuyển từ góc dưới phải sang bằng CSS trong `base.css`): không đặt thành phần `position: fixed` đè lên góc đó.
