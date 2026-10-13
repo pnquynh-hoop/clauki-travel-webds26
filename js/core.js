@@ -17,6 +17,8 @@ const NOT_FOUND = '404';
 let currentId = null;
 let currentPage = HOME;
 let firstRender = true;
+// Dữ liệu thô của thương hiệu đang mở, để chuyển sang trang khác cùng thương hiệu mà không phải tải lại.
+let lastRaw = null;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -192,6 +194,7 @@ function skipReloadPrompt() {
 }
 
 function render(raw) {
+  lastRaw = raw;
   const data = resolveLinks(raw, raw.id);
   // Đổi thương hiệu thì giữ trang đang mở; thương hiệu mới không có trang đó thì hiện trang 404 nó tự khai,
   // không khai thì về trang chủ.
@@ -212,6 +215,62 @@ function render(raw) {
   firstRender = false;
 }
 
+// Link trỏ tới một trang khác của cùng thương hiệu thì trả về trang đó; link ra ngoài, sang thương hiệu khác,
+// mở tab mới hay chỉ nhảy #neo trong trang đang mở thì để trình duyệt tự xử lý.
+function samebrandPage(a) {
+  if (!a || !currentId || a.hasAttribute('download') || (a.target && a.target !== '_self')) return null;
+  const url = new URL(a.href, location.href);
+  const root = `/${currentId}`;
+  if (url.origin !== location.origin || !(url.pathname === root || url.pathname.startsWith(`${root}/`))) return null;
+  const page = normalizePage(decodeURIComponent(url.pathname.slice(root.length)));
+  // Cùng trang mà có #neo thì trình duyệt tự cuộn tới khối; để nguyên.
+  if (page === currentPage && url.hash) return null;
+  return { page, hash: url.hash };
+}
+
+// Đổi trang tại chỗ: không tải lại content.json hay wd2026.js, nên nhanh, và chuyển mượt bằng View Transitions
+// (trình duyệt không hỗ trợ hoặc bật giảm chuyển động thì đổi ngay). push = false khi đi bằng nút Back, Forward.
+function goToPage(page, hash, push) {
+  const update = () => {
+    currentPage = page;
+    if (push) history.pushState(null, '', pageUrl(currentId, page) + hash);
+    render(lastRaw);
+    if (hash) scrollToHash();
+    else scrollTo({ top: 0, behavior: 'instant' });
+  };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.startViewTransition && !reduce) document.startViewTransition(update);
+  else update();
+}
+
+function onLinkClick(e) {
+  // Bấm giữ Ctrl, Cmd, Shift hay chuột giữa là muốn mở tab mới: để trình duyệt làm.
+  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const target = samebrandPage(e.target.closest('a[href]'));
+  if (!target || !lastRaw) return;
+  e.preventDefault();
+  // Link về chính trang đang mở (ví dụ bấm logo khi đang ở /ganh-som/#dat-phong): bỏ #neo và cuộn lên đầu,
+  // không để trình duyệt tải lại cả trang chỉ vì địa chỉ mất phần #.
+  if (target.page === currentPage) {
+    history.pushState(null, '', pageUrl(currentId, currentPage));
+    scrollTo({ top: 0 });
+    return;
+  }
+  goToPage(target.page, target.hash, true);
+}
+
+// Nút Back, Forward: cùng thương hiệu thì đổi trang tại chỗ; khác thương hiệu thì tải lại cho chắc.
+// Chỉ đổi #neo trong cùng trang thì trình duyệt tự cuộn, không làm gì.
+function onPopState() {
+  const parts = location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts[0] !== currentId) {
+    location.reload();
+    return;
+  }
+  const page = normalizePage(parts.slice(1).join('/'));
+  if (page !== currentPage) goToPage(page, location.hash, false);
+}
+
 export async function start() {
   try {
     const list = await loadBrandList();
@@ -219,6 +278,8 @@ export async function start() {
     const here = readLocation(ids);
     currentPage = here.page;
     saveBrand(here.id);
+    document.addEventListener('click', onLinkClick);
+    addEventListener('popstate', onPopState);
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
     document.addEventListener(CHANGE_EVENT, (e) => {
