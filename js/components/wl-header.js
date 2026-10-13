@@ -6,10 +6,11 @@ import { textEl, linkEl, groupEl, telHref } from '../dom.js';
 // Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
 // Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);
 // kiểu header nào chỉ muốn thấy logo thì CSS ẩn chữ khỏi mắt nhưng vẫn giữ cho trình đọc màn hình.
-function brandEl(brand) {
+// Bấm logo thì về trang chủ của thương hiệu (core.js đưa vào site.home); chưa có thì về đầu trang.
+function brandEl(brand, home) {
   const a = document.createElement('a');
   a.className = 'header__brand';
-  a.href = '#';
+  a.href = home ?? '#';
   if (brand.logo) {
     const img = document.createElement('img');
     img.src = asset(brand.logo);
@@ -97,7 +98,7 @@ export class WlHeader extends HTMLElement {
     bar.className = 'header__bar container';
     const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn header__cta');
     // Nút Menu đứng ngay sau tên thương hiệu: điện thoại thì cùng hàng, phím Tab đi qua nút trước rồi mới tới menu.
-    bar.append(...[brandEl(content.brand ?? {}), toggle, nav, cta].filter(Boolean));
+    bar.append(...[brandEl(content.brand ?? {}, this.site?.home), toggle, nav, cta].filter(Boolean));
     // Đổi thương hiệu thì thanh cũ bị thay: theo dõi thanh mới (đổi bề ngang màn hình thì thanh cũng đổi cao).
     this._bar = bar;
     this._resize?.disconnect();

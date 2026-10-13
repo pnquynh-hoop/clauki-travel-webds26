@@ -7,16 +7,16 @@ HTML, CSS, JavaScript thuần: không framework, không bước build, không ba
 
 ## Chạy
 
-Mở bằng **Live Server** của VS Code, hoặc:
-
 ```bash
-python3 -m http.server 5500
+python3 serve.py
 ```
 
-Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
+rồi mở http://localhost:5500. `serve.py` có file thì trả file, không có thì trả `index.html` (giống Cloudflare Pages),
+để các trang con như `/ganh-som/phong` mở được; nó chỉ dùng trên máy, không deploy. `python3 -m http.server` và
+Live Server chỉ mở được trang chủ. Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
-Đổi thương hiệu bằng nút tròn ở góc dưới trái (của BTC, trong `wd2026.js`), hoặc bằng tham số trên
-địa chỉ: `index.html?brand=ganh-som`.
+Địa chỉ: `/<thương hiệu>/<trang>`, ví dụ `/ganh-som/`, `/brand-test/hoi-dap`; `/` là thương hiệu mặc định.
+Đổi thương hiệu bằng nút tròn ở góc dưới trái (của BTC, trong `wd2026.js`): trang đang mở được giữ nguyên.
 
 ## Một component, nhiều cách hiển thị
 
@@ -67,6 +67,7 @@ Trường dữ liệu và kiểu trình bày của từng component ghi ở mụ
 
 ```
 index.html              vỏ trang: không chứa chữ của thương hiệu nào
+serve.py                chạy thử trên máy: trả index.html cho đường dẫn trang con (không deploy)
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
@@ -90,7 +91,7 @@ docs/prompts/           prompt đầy đủ của các lần dùng AI, link từ
 
 1. Tạo thư mục `brands/<id>/` gồm `content.json`, `theme.css`, `images/`.
 2. Thêm một dòng `{ "id": "<id>", "label": "<tên>" }` vào `brands/brands.json`.
-3. Mở `index.html?brand=<id>`. Không cần sửa HTML, CSS quy tắc hay JavaScript.
+3. Mở `/<id>/`. Không cần sửa HTML, CSS quy tắc hay JavaScript.
 
 Có thể nhờ AI viết `content.json` và `theme.css` bằng prompt mẫu ở
 [docs/prompts/tao-thuong-hieu-moi.md](docs/prompts/tao-thuong-hieu-moi.md): prompt nói rõ khối nào dùng để nói ý
@@ -100,7 +101,8 @@ lại theo danh sách cuối file rồi ghi vào `docs/ai-log.md`.
 ## Quy ước
 
 - Component không ghi cứng chữ, màu hay đường dẫn ảnh: mọi thứ lấy từ `content.json` và biến CSS.
-- Thứ tự section nằm trong mảng `sections` của `content.json`; `index.html` không liệt kê section.
+- Trang và thứ tự section nằm trong `pages` (hoặc `sections` nếu chỉ có một trang) của `content.json`;
+  `index.html` không liệt kê trang hay section. Thêm trang là thêm một mục trong `pages`, không thêm file HTML.
 - Mỗi PR merge bằng squash, tiêu đề PR tiếng Anh theo Conventional Commits. Phần có dùng AI thì ghi rõ
   trong scope, ví dụ `feat(AI/hero): add split layout`, và nếu là việc làm ra sản phẩm thi thì thêm
   một dòng `PR #số` vào `docs/ai-log.md` ngay trong PR đó.
