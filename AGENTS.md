@@ -173,6 +173,13 @@ export class WlHero extends HTMLElement {
 
 ## 9. Git
 
+- **Không có trailer AI** trong commit message, tiêu đề và nội dung PR:
+  - không có `Co-Authored-By: Claude …`, `Co-authored-by: Copilot …` hay của công cụ AI nào khác;
+  - không có dòng "Generated with …";
+  - khi bấm **Squash and merge**, GitHub có thể tự chép các dòng `Co-authored-by:` từ commit trong nhánh vào commit cuối: người merge xoá dòng nào là của AI trước khi xác nhận (dòng của thành viên trong đội thì giữ).
+
+  Việc dùng AI đã được ghi bằng `AI/` trong scope và trong `docs/ai-log.md`.
+- **Trợ lý AI chỉ commit, push, mở PR khi người dùng yêu cầu rõ; không bao giờ tự merge.**
 - **Mọi PR merge bằng Squash and merge** (từ 13/10). Mỗi PR thành đúng một commit trên `main`, có đuôi `(#số PR)`.
 - **Tiêu đề PR là tiêu đề commit squash:** tiếng Anh, theo Conventional Commits: `feat(editor): switch section variant in place`. **Nội dung PR viết tiếng Việt có dấu.**
 - **Phần do AI viết phải có `AI/` trong scope** của tiêu đề PR: `feat(AI/editor): …`.
@@ -186,12 +193,6 @@ export class WlHero extends HTMLElement {
 - Commit trong nhánh viết thế nào cũng được vì sẽ được gộp, nhưng vẫn nên theo Conventional Commits.
 - `git pull --rebase` trước khi push. Không `push --force` lên `main`, không viết lại lịch sử của `main`.
 - Không commit khoá API hay bí mật (cấu hình Firebase demo, khoá máy demo, secret key của Supabase).
-- **Trợ lý AI không tự commit hay push.** Chỉ đề xuất nội dung commit để người dùng tự chạy.
-- **Commit message và mô tả PR không có trailer AI:**
-  - không có `Co-Authored-By: Claude …`, `Co-authored-by: Copilot …`;
-  - không có dòng "Generated with …".
-
-  Việc dùng AI đã được ghi bằng `AI/` trong scope và trong `docs/ai-log.md`.
 
 ## 10. Cách trợ lý AI làm việc trong dự án này
 
