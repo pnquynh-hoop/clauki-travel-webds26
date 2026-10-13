@@ -1,151 +1,264 @@
-/* room-detail.css - trang chi tiết một hạng: ảnh lớn bên trái, thông tin dính bên phải (từ 1024px),
-   tiện nghi có icon, cảnh nhìn ra, link sang hạng khác. Màu, font, bo góc lấy từ biến của thương hiệu.
-   Sắc thái: nhiều khoảng trắng, ảnh lớn, chữ thưa, chuyển ảnh chậm và êm. */
+/* room-detail.css - trang chi tiết một hạng, dàn như trang tạp chí du lịch: ảnh bìa tràn màn hình,
+   thẻ đặt phòng nổi đè lên mép ảnh, thư viện ảnh khảm, dải cảnh nhìn ra tràn màn hình, thẻ ảnh hạng khác.
+   Màu, font, bo góc lấy từ biến của thương hiệu. Thời gian chuyển động theo --duration: bật giảm chuyển động
+   thì về 0, ảnh đứng yên (parallax trong JS cũng tự tắt). */
 
+/* Ảnh bìa sát header, nên bỏ khoảng đệm trên chung của section. */
 .room-detail {
   display: block;
+  padding-top: 0;
 }
 
-.room-detail__top {
-  display: grid;
-  gap: 2rem;
-}
+/* ---------- Ảnh bìa ---------- */
 
-/* Cột lưới mặc định rộng ít nhất bằng nội dung; dải ảnh nhỏ cuộn ngang sẽ kéo cột rộng tràn màn hình điện thoại.
-   min-width: 0 cho cột co theo màn hình, dải ảnh tự cuộn bên trong. */
-.room-detail__top > *,
-.room-detail__more > * {
-  min-width: 0;
-}
-
-/* ---------- Ảnh ---------- */
-
-/* Các ảnh chồng lên nhau trong cùng khung; ảnh mới hiện dần đè lên ảnh cũ. */
-.room-detail__main {
+.room-detail__cover {
   position: relative;
-  margin: 0;
-  aspect-ratio: 4 / 3;
+  display: grid;
+  align-items: end;
+  min-height: min(82vh, 52rem);
   overflow: hidden;
-  border-radius: var(--radius);
-  background: var(--color-surface);
+  isolation: isolate;
+  color: var(--color-bg);
 }
 
-.room-detail__photo {
+.room-detail__cover-img {
   position: absolute;
   inset: 0;
+  z-index: -2;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  /* Gấp ba --duration cho chậm và êm; giảm chuyển động thì --duration là 0, ảnh đổi ngay. */
-  transition: opacity calc(var(--duration) * 3) ease;
+  animation: room-detail-settle calc(var(--duration) * 12) ease-out both;
 }
 
-.room-detail__photo.is-shown {
-  opacity: 1;
+/* Lớp tối dần về phía dưới để chữ trắng luôn đọc được trên mọi ảnh. */
+.room-detail__cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-ink) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-ink) 30%, transparent) 45%,
+    transparent 75%
+  );
 }
 
-/* Dải ảnh nhỏ: trên điện thoại vuốt ngang được, không xuống dòng. */
-.room-detail__thumbs {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  overflow-x: auto;
-  scrollbar-width: none;
+.room-detail__cover-text {
+  padding-block: 6rem 3rem;
 }
-
-.room-detail__thumb {
-  flex: 0 0 5.5rem;
-  aspect-ratio: 4 / 3;
-  padding: 0;
-  overflow: hidden;
-  border: 2px solid transparent;
-  border-radius: calc(var(--radius) * 0.6);
-  background: var(--color-surface);
-  cursor: pointer;
-  opacity: 0.65;
-  transition: opacity var(--duration) ease, border-color var(--duration) ease;
-}
-
-.room-detail__thumb img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.room-detail__thumb:hover,
-.room-detail__thumb[aria-pressed="true"] {
-  opacity: 1;
-}
-
-.room-detail__thumb[aria-pressed="true"] {
-  border-color: var(--color-accent);
-}
-
-/* ---------- Thông tin ---------- */
 
 .room-detail__eyebrow {
-  margin: 0 0 0.75rem;
+  margin: 0 0 1rem;
   font-size: 0.8rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  opacity: 0.85;
 }
 
 .room-detail__title {
   margin: 0;
+  max-width: 14ch;
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  line-height: 1.1;
-  color: var(--color-ink);
+  font-size: clamp(2.75rem, 8vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
 }
 
 .room-detail__lead {
-  margin: 1rem 0 0;
-  font-size: 1.1rem;
+  margin: 1.25rem 0 0;
+  max-width: 38rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
   line-height: 1.65;
-  color: var(--color-muted);
+  opacity: 0.92;
 }
 
-/* Các con số: hàng ngang ngăn bằng đường kẻ mảnh trên dưới. */
+/* Không có ảnh: chữ màu mực trên nền trang. */
+.room-detail__cover--plain {
+  min-height: 0;
+  color: var(--color-ink);
+}
+
+.room-detail__cover--plain::after {
+  content: none;
+}
+
+/* ---------- Bố cục chính ---------- */
+
+.room-detail__layout {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+.room-detail__layout > *,
+.room-detail__content > * {
+  min-width: 0;
+}
+
+.room-detail__content {
+  display: grid;
+  gap: 3.5rem;
+}
+
+.room-detail__subtitle {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+/* Các con số: ô có icon tròn, chữ nhỏ in hoa ở trên, số lớn ở dưới. */
 .room-detail__facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
   gap: 1rem;
-  margin: 2rem 0 0;
-  padding-block: 1.25rem;
-  border-block: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  margin: 0;
+}
+
+.room-detail__fact {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 50%, var(--color-bg));
+}
+
+.room-detail__fact-icon {
+  flex: 0 0 2.5rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-bg));
+}
+
+.room-detail__fact-icon svg,
+.room-detail__icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .room-detail__fact dt {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
 
 .room-detail__fact dd {
-  margin: 0.35rem 0 0;
+  margin: 0.2rem 0 0;
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--color-ink);
 }
 
-.room-detail__price {
-  margin-top: 1.5rem;
+/* Tiện nghi: lưới thanh mảnh, mỗi dòng có đường kẻ dưới. */
+.room-detail__amenities {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.room-detail__amenity {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 0.85rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+}
+
+/* Ô giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
+.room-detail__icon {
+  flex: 0 0 2.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--color-accent);
+}
+
+/* Thư viện ảnh khảm: điện thoại hai cột, ảnh đầu chiếm cả hàng; màn rộng bốn cột, ảnh đầu chiếm 2 x 2. */
+.room-detail__mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 9rem;
+  gap: 0.6rem;
+}
+
+.room-detail__tile {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: calc(var(--radius) * 0.8);
+  background: var(--color-surface);
+  cursor: zoom-in;
+}
+
+.room-detail__tile:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.room-detail__tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform calc(var(--duration) * 4) ease;
+}
+
+.room-detail__tile:hover img,
+.room-detail__tile:focus-visible img {
+  transform: scale(1.06);
+}
+
+/* ---------- Thẻ đặt phòng ---------- */
+
+/* Nền mờ kính, đổ bóng mềm; từ 1024px đè lên mép dưới ảnh bìa và dính khi cuộn. */
+.room-detail__card {
+  display: grid;
+  gap: 1.25rem;
+  align-self: start;
+  padding: 1.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border-radius: calc(var(--radius) * 1.4);
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+.room-detail__from {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
 }
 
 .room-detail__amount-row {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.4rem 0.6rem;
 }
 
 .room-detail__amount {
   font-family: var(--font-heading);
-  font-size: 1.75rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1.1;
   color: var(--color-ink);
 }
 
@@ -154,26 +267,29 @@
 }
 
 .room-detail__price-note {
-  margin: 0.4rem 0 0;
+  margin: 0.6rem 0 0;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--color-muted);
 }
 
 .room-detail__book {
   width: 100%;
-  margin-top: 1.25rem;
+  min-height: 3.25rem;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 35%, transparent);
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease, background-color var(--duration) ease;
 }
 
-.room-detail__subtitle {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
+.room-detail__book:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+
+.room-detail__card-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
   color: var(--color-ink);
-}
-
-.room-detail__availability {
-  margin-top: 2rem;
 }
 
 .room-detail__dates {
@@ -186,12 +302,17 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding-block: 0.6rem;
+  padding-block: 0.55rem;
+  font-size: 0.95rem;
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
 }
 
+.room-detail__date:last-child {
+  border-bottom: 0;
+}
+
 .room-detail__date-left {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-accent);
 }
 
@@ -207,135 +328,179 @@
   color: var(--color-muted);
 }
 
-/* ---------- Phần dưới ---------- */
-
-.room-detail__more {
-  display: grid;
-  gap: 3rem;
-  margin-top: 4rem;
-}
-
-.room-detail__amenities {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.room-detail__amenity {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  line-height: 1.4;
-  color: var(--color-ink);
-}
-
-/* Ô tròn giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
-.room-detail__icon {
-  flex: 0 0 2.5rem;
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg));
-}
-
-.room-detail__icon svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
+/* ---------- Dải cảnh nhìn ra ---------- */
 
 .room-detail__view {
-  margin: 0;
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: min(70vh, 40rem);
+  margin: 5rem 0 0;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--color-bg);
 }
 
 .room-detail__view-img {
-  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -2;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
-  border-radius: var(--radius);
+}
+
+.room-detail__view::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 70%, transparent), transparent 60%);
 }
 
 .room-detail__view-caption {
-  margin-top: 0.75rem;
+  padding-block: 3rem;
+}
+
+.room-detail__view-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.85;
 }
 
 .room-detail__view-text {
   margin: 0;
+  max-width: 22ch;
   font-family: var(--font-heading);
-  font-size: 1.2rem;
+  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
   font-style: italic;
-  color: var(--color-ink);
+  line-height: 1.15;
 }
 
 .room-detail__view-best {
-  margin: 0.25rem 0 0;
-  font-size: 0.9rem;
-  color: var(--color-muted);
+  margin: 1rem 0 0;
+  opacity: 0.85;
 }
 
-/* Link sang hạng khác: hàng nút viền bo tròn. */
+/* ---------- Hạng khác ---------- */
+
 .room-detail__others {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 3rem;
+  margin-top: 5rem;
 }
 
-.room-detail__others .room-detail__subtitle {
-  flex-basis: 100%;
-  margin-bottom: 0;
+.room-detail__others-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
 }
 
 .room-detail__other {
-  padding: 0.6rem 1.25rem;
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: 15rem;
+  overflow: hidden;
+  isolation: isolate;
   text-decoration: none;
-  color: var(--color-accent);
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  transition: background-color var(--duration) ease;
+  color: var(--color-bg);
+  border-radius: var(--radius);
 }
 
-.room-detail__other:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+.room-detail__other-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform calc(var(--duration) * 4) ease;
+}
+
+.room-detail__other::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 72%, transparent), transparent 65%);
+}
+
+.room-detail__other:hover .room-detail__other-img,
+.room-detail__other:focus-visible .room-detail__other-img {
+  transform: scale(1.06);
+}
+
+.room-detail__other-text {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1.25rem;
+}
+
+.room-detail__other-name {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.room-detail__other-note {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Thẻ không có ảnh: viền mảnh, chữ màu mực. */
+.room-detail__other--plain {
+  min-height: 0;
+  color: var(--color-accent);
+  border: 1px solid currentColor;
+}
+
+.room-detail__other--plain::after {
+  content: none;
+}
+
+@keyframes room-detail-settle {
+  from {
+    scale: 1.08;
+  }
 }
 
 @media (min-width: 760px) {
   .room-detail__amenities {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
   }
 
-  .room-detail__thumb {
-    flex-basis: 7rem;
+  .room-detail__mosaic {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 10rem;
+  }
+
+  .room-detail__others-grid {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   }
 }
 
-/* Từ 1024px: ảnh 7 phần, thông tin 5 phần; thông tin dính dưới thanh header khi cuộn qua phần ảnh. */
+/* Từ 1024px: nội dung 7 phần, thẻ đặt phòng 4 phần; thẻ kéo lên đè mép dưới ảnh bìa và dính khi cuộn. */
 @media (min-width: 1024px) {
-  .room-detail__top {
-    grid-template-columns: 7fr 5fr;
-    gap: 4rem;
-    align-items: start;
+  .room-detail__cover-text {
+    padding-block: 8rem 5rem;
+    padding-right: 30rem;
   }
 
-  .room-detail__info {
+  .room-detail__layout {
+    grid-template-columns: 7fr 4fr;
+    gap: 4rem;
+    margin-top: 0;
+  }
+
+  .room-detail__content {
+    padding-top: 3.5rem;
+  }
+
+  .room-detail__card {
     position: sticky;
     top: calc(var(--header-stuck, 4rem) + 1.5rem);
-  }
-
-  .room-detail__main {
-    aspect-ratio: 3 / 2;
-  }
-
-  .room-detail__more {
-    grid-template-columns: 5fr 7fr;
-    gap: 4rem;
-    margin-top: 6rem;
+    margin-top: -10rem;
   }
 }
