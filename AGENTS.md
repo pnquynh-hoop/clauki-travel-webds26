@@ -4,8 +4,12 @@ Dự án thi **Web Design 2026** (CLB MPC, ĐH Mở TP.HCM) của đội **ClauK
 chủ đề **Du lịch & Dịch vụ lưu trú**, ba thương hiệu giả tưởng dùng chung một mã nguồn.
 Trả lời người dùng bằng tiếng Việt.
 
-Mốc thời gian: **push mã vòng loại trước 13h ngày 11/10/2026**. Chấm trực tiếp lúc 14h cùng ngày,
-trên máy của đội. Chung kết ngày 18/10 cần website 3–5 trang có chứa landing page.
+Mốc thời gian (đội đã vào top 5):
+- **Nộp bài trước 20h00 thứ Bảy 17/10/2026** qua form của BTC: link GitHub, link website đã deploy, báo cáo đội thi có khai báo dùng AI. Sau hạn vẫn được sửa tới đêm chung kết.
+- **Chung kết 18h00 Chủ nhật 18/10** (có mặt 17h30), phòng 602, 97 Võ Văn Tần: mỗi đội tối đa 15–20 phút gồm trình bày, demo, vấn đáp; BGK hỏi bất kỳ thành viên nào.
+- Sản phẩm: website doanh nghiệp nhiều trang có chứa landing page; đổi cấu hình thì **tất cả các trang** cùng đổi.
+
+**Kế hoạch chung kết** nằm ở `web-design-2026-docs/FINAL_PLAN.md`: repo riêng `pgiahuy/web-design-2026-docs` (riêng tư, xin Gia Huy quyền đọc), clone vào thư mục `web-design-2026-docs/` ở gốc repo này, đã có trong `.gitignore`. Trước khi làm việc liên quan chung kết, đọc file đó và `git pull` trong thư mục đó để lấy bản mới nhất. Quyết định nào trong kế hoạch khác với AGENTS.md thì hỏi lại trước khi làm.
 
 ## 1. Luật thi (vi phạm bị trừ điểm hoặc bị loại)
 
@@ -169,10 +173,19 @@ export class WlHero extends HTMLElement {
 
 ## 9. Git
 
-- Commit theo Conventional Commits, viết tiếng Việt: `feat(hero): thêm kiểu trình bày split`.
-- **Phần do AI viết phải có `AI/` trong scope:** `feat(AI/hero): …`, đồng thời thêm một dòng vào bảng của mình trong `docs/ai-log.md`.
-- `git pull --rebase` trước khi push. Không `push --force` lên `main`.
-- Commit nhỏ, mỗi commit một việc. Không commit khoá API hay bí mật.
+- **Mọi PR merge bằng Squash and merge** (từ 13/10). Mỗi PR thành đúng một commit trên `main`, có đuôi `(#số PR)`.
+- **Tiêu đề PR là tiêu đề commit squash:** tiếng Anh, theo Conventional Commits: `feat(editor): switch section variant in place`. **Nội dung PR viết tiếng Việt có dấu.**
+- **Phần do AI viết phải có `AI/` trong scope** của tiêu đề PR: `feat(AI/editor): …`.
+- **`docs/ai-log.md` chỉ ghi việc AI làm ra sản phẩm thi** (mã, nội dung, ảnh, cấu hình brand). Lập kế hoạch, bàn bạc, phân tích, viết tài liệu nội bộ thì không ghi.
+- **Dòng ai-log nằm trong chính PR đó**, cột "Commit" ghi `PR #số`. Không mở PR riêng chỉ để ghi log.
+- **Mỗi PR một tính năng, kích thước vừa phải**, để phần AI viết và phần tự viết không gộp chung một commit, và người xem PR đọc hết được:
+  - một PR ứng với một issue hoặc một issue con;
+  - nên dưới khoảng 300 dòng mã thay đổi (không tính ảnh và dữ liệu JSON của brand);
+  - lớn hơn thì tách theo lớp: lõi hoặc logic, giao diện, dữ liệu và nội dung brand; mỗi phần một PR, merge theo thứ tự;
+  - không gộp sửa lỗi lặt vặt hay dọn code không liên quan vào PR tính năng.
+- Commit trong nhánh viết thế nào cũng được vì sẽ được gộp, nhưng vẫn nên theo Conventional Commits.
+- `git pull --rebase` trước khi push. Không `push --force` lên `main`, không viết lại lịch sử của `main`.
+- Không commit khoá API hay bí mật (cấu hình Firebase demo, khoá máy demo, secret key của Supabase).
 - **Trợ lý AI không tự commit hay push.** Chỉ đề xuất nội dung commit để người dùng tự chạy.
 - **Commit message và mô tả PR không có trailer AI:**
   - không có `Co-Authored-By: Claude …`, `Co-authored-by: Copilot …`;
@@ -183,12 +196,13 @@ export class WlHero extends HTMLElement {
 ## 10. Cách trợ lý AI làm việc trong dự án này
 
 - **Làm từng bước nhỏ, đúng phần được nhờ.** Không viết cả tính năng lớn trong một lần, không sửa lan sang tệp khác.
+- **Tự đánh giá kích thước trước khi đề xuất PR:** xem `git diff --stat` so với `main`. Nếu PR chứa hơn một tính năng, vượt khoảng 300 dòng mã, hoặc trộn lõi, giao diện và dữ liệu, thì nói rõ với người đang nhờ và đề xuất cách tách thành các PR nhỏ trước khi mở PR.
 - **Viết xong thì giải thích ngắn gọn** đoạn mã làm gì và vì sao, đủ để người dùng tự trình bày lại khi vấn đáp.
 - **Ưu tiên cách đơn giản, dễ giải thích** hơn cách thông minh.
 - **Không dùng emoji hay ký hiệu trang trí** (dấu tích, tên lửa, lấp lánh, mũi tên…) trong mã, chú thích, commit message, tài liệu và câu trả lời. Viết bằng chữ.
 - **Không bịa luật thi.** Không chắc thì nói không chắc và đề nghị hỏi BTC.
 - **Không chép mã** từ repo mẫu của BTC hay của đội khác.
-- **Kết thúc mỗi phần việc:** đề xuất commit message có `AI/` và nhắc ghi `docs/ai-log.md`.
+- **Kết thúc mỗi phần việc:** đề xuất tiêu đề PR tiếng Anh có `AI/` và nội dung PR tiếng Việt; nếu là việc làm ra sản phẩm thi thì nhắc thêm dòng `docs/ai-log.md` ghi `PR #số` vào cùng PR.
 
 ## 11. Trước khi push: tự kiểm
 
@@ -201,7 +215,8 @@ export class WlHero extends HTMLElement {
 - [ ] Hiển thị đúng ở bề ngang 390px và 1440px.
 - [ ] Ảnh mới có `alt` và có dòng trong `credits`.
 - [ ] Người viết giải thích được từng dòng mình vừa thêm.
-- [ ] Bản nộp vòng loại: nút đổi thương hiệu có 3 thương hiệu chính và "Lượn Vịnh (AI tạo)"; thông tin gửi BTC đã nhắc bản AI tạo.
+- [ ] Đổi thương hiệu thì mọi trang của website cùng đổi, không trang nào vỡ.
+- [ ] Tiêu đề PR tiếng Anh theo Conventional Commits, có `AI/` nếu AI viết; dòng ai-log ghi `PR #số` nằm trong cùng PR.
 
 ## 12. Trường riêng của từng section
 
