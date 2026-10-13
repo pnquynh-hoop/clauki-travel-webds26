@@ -19,6 +19,10 @@ let currentPage = HOME;
 let firstRender = true;
 // Dữ liệu thô của thương hiệu đang mở, để chuyển sang trang khác cùng thương hiệu mà không phải tải lại.
 let lastRaw = null;
+// Khối các hạng nhà, ưu đãi phát wl:choose-room để khối đặt chỗ chọn sẵn hạng. Khối đặt chỗ có thể nằm ở trang khác,
+// lúc bấm chưa được dựng nên không nghe thấy: giữ lại lựa chọn, dựng xong trang mới thì phát lại một lần.
+const CHOOSE_EVENT = 'wl:choose-room';
+let pendingChoice = null;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -193,6 +197,18 @@ function skipReloadPrompt() {
   });
 }
 
+function onChoose(e) {
+  if (e.detail?.replayed) return;
+  pendingChoice = document.querySelector('wl-booking') ? null : e.detail;
+}
+
+function replayChoice() {
+  if (!pendingChoice) return;
+  const detail = { ...pendingChoice, replayed: true };
+  pendingChoice = null;
+  document.dispatchEvent(new CustomEvent(CHOOSE_EVENT, { detail }));
+}
+
 function render(raw) {
   lastRaw = raw;
   const data = resolveLinks(raw, raw.id);
@@ -211,6 +227,7 @@ function render(raw) {
   renderSections(data, page);
   renderFixed(data);
   markCurrentPage();
+  replayChoice();
   if (firstRender) scrollToHash();
   firstRender = false;
 }
@@ -278,6 +295,7 @@ export async function start() {
     const here = readLocation(ids);
     currentPage = here.page;
     saveBrand(here.id);
+    document.addEventListener(CHOOSE_EVENT, onChoose);
     document.addEventListener('click', onLinkClick);
     addEventListener('popstate', onPopState);
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
