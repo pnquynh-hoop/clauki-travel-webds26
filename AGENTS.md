@@ -1,4 +1,4 @@
-# Quy tắc dự án — dành cho trợ lý AI và cả đội
+# Quy tắc dự án: dành cho trợ lý AI và cả đội
 
 Dự án thi **Web Design 2026** (CLB MPC, ĐH Mở TP.HCM) của đội **ClauKi**: landing page white label,
 chủ đề **Du lịch & Dịch vụ lưu trú**, ba thương hiệu giả tưởng dùng chung một mã nguồn.
