@@ -166,8 +166,13 @@ export class WlHero extends HTMLElement {
 - **Không dùng dấu chấm giữa (`·`), gạch dài (`—`) hay ký hiệu làm dấu ngăn** trong chữ hiện ra trang (`content.json`, tiêu đề tab, chuỗi component tự ghép như `join(' · ')`). Dùng dấu phẩy hoặc gạch thường " - ": `Tour Tây Bắc, 4 ngày 3 đêm`, `Ngày 1, 09:45`, `Bậc Trà - Tour Tây Bắc`.
 - **Thông tin liên hệ đều giả:** số điện thoại kiểu `0123 456 789`, email đuôi `.clauki` (không phải tên miền thật, đã đối chiếu danh sách của IANA), ví dụ `dat-phong@ganhsom.clauki`.
 
+**Hướng thiết kế cho chung kết (13/10):** bớt khắt khe với "AI slop", ưu tiên giao diện hiện đại và hiệu ứng nhiều hơn ở mức phù hợp, miễn **có chủ đích** (quy định BTC chỉ cấm bố cục sáo rỗng, icon 3D vô nghĩa, gradient mặc định không chủ đích).
+- Sắc thái đề xuất: Gành Sớm sang trọng hiện đại; Bậc Trà và Mé Rạch truyền thống pha hiện đại (chi tiết ở issue #88).
+- Được dùng khi có lý do: chuyển trang mượt (View Transitions), hiện dần khi cuộn, parallax nhẹ, thẻ nhô khi rê chuột, kính mờ (`backdrop-filter`), gradient theo màu brand, đếm số.
+- Mỗi hiệu ứng phải nói được nó để làm gì; tắt hoặc giảm khi `prefers-reduced-motion`; mượt trên điện thoại tầm trung.
+
 **Icon:** quy định của BTC coi "icon 3D bóng bẩy vô nghĩa" là AI slop.
-- Không dùng icon chỉ để trang trí; mỗi icon phải giúp hiểu nhanh hơn chữ.
+- Dùng icon ở chỗ giúp đọc nhanh hơn chữ (tiện nghi, liên hệ, chỉ đường, nút chức năng); không đặt icon chỉ để trang trí.
 - Không dùng emoji làm icon, không đặt icon trước mỗi tiêu đề hay mỗi thẻ.
 - Cần icon thì dùng một bộ duy nhất cho cả trang (ví dụ Lucide), nét đồng đều, màu lấy từ biến CSS.
 - Icon đứng một mình (không kèm chữ) phải có `aria-label`.
