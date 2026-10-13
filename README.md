@@ -112,3 +112,5 @@ lại theo danh sách cuối file rồi ghi vào `docs/ai-log.md`.
 Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi `content.json`, hiện ở chân trang.
 
 `wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.
+
+Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/icon.js`, không tải cả bộ.
