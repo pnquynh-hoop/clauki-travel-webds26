@@ -24,12 +24,12 @@
       "href": "page:nha"
     },
     {
-      "label": "Thư viện ảnh",
-      "href": "page:/#thu-vien"
-    },
-    {
       "label": "Ưu đãi hè 2027",
       "href": "page:uu-dai"
+    },
+    {
+      "label": "Quanh Quy Nhơn",
+      "href": "page:quanh-quy-nhon"
     },
     {
       "label": "Hỏi đáp",
@@ -848,6 +848,90 @@
             "full": "Giá 4 đêm",
             "pay": "Bạn trả (3 đêm)",
             "perNightTotal": "Tính ra mỗi đêm"
+          }
+        }
+      ]
+    },
+    {
+      "path": "quanh-quy-nhon",
+      "title": "Quanh Quy Nhơn",
+      "description": "Bến cá buổi sáng, thuyền thúng, Bãi Đá Trứng, Eo Gió, Kỳ Co, Nhơn Lý, Cù Lao Xanh: vài nơi đi nửa ngày khi ở Gành Sớm.",
+      "sections": [
+        {
+          "type": "article",
+          "id": "quanh-quy-nhon",
+          "eyebrow": "Quanh Quy Nhơn",
+          "title": "Sáng ở hiên, chiều đi một vòng",
+          "lead": "Gành Sớm để bạn ở yên một chỗ. Khi muốn ra ngoài, quanh Quy Nhơn có vài nơi đáng đi nửa ngày.",
+          "blocks": [
+            {
+              "type": "text",
+              "title": "Bến cá lúc trời vừa sáng",
+              "body": "Mỗi căn có sẵn xe đạp. Sáng sớm đạp ra bến cá, xem thuyền vào bờ, người đội nón lá gánh hàng giữa những rổ cá còn tươi.\n\nVề tới nhà là vừa bữa sáng."
+            },
+            {
+              "type": "image",
+              "src": "images/fish-market.webp",
+              "alt": "Bến cá trên bãi biển buổi sáng, người đội nón lá gánh hàng, rổ nhựa trên bạt và thuyền đánh cá neo ngoài khơi",
+              "caption": "Bến cá buổi sáng, người đội nón lá gánh hàng giữa những rổ nhựa."
+            },
+            {
+              "type": "text",
+              "title": "Thuyền thúng trên bãi",
+              "body": "Những chiếc thuyền thúng tròn nằm phơi trên bãi cát là hình ảnh quen của làng chài miền Trung. Ghé lúc chiều, khi thuyền đã về và bãi vắng người."
+            },
+            {
+              "type": "image",
+              "src": "images/basket-boat.webp",
+              "alt": "Những chiếc thuyền thúng tròn nằm trên bãi cát, xa xa là người dân và thuyền nhỏ trên mặt biển",
+              "caption": "Những chiếc thuyền thúng tròn nằm phơi trên bãi cát."
+            },
+            {
+              "type": "places",
+              "title": "Đi nửa ngày",
+              "items": [
+                {
+                  "name": "Bãi Đá Trứng",
+                  "text": "Những hòn đá tròn nhẵn xếp kín bờ, sóng nhẹ, gành đá phủ cây xanh.",
+                  "map": "https://www.google.com/maps/search/?api=1&query=B%C3%A3i%20%C4%90%C3%A1%20Tr%E1%BB%A9ng%2C%20Quy%20Nh%C6%A1n"
+                },
+                {
+                  "name": "Eo Gió",
+                  "text": "Đường mòn qua sườn đồi cỏ ra những mỏm đá nhìn xuống biển.",
+                  "map": "https://www.google.com/maps/search/?api=1&query=Eo%20Gi%C3%B3%2C%20Quy%20Nh%C6%A1n"
+                },
+                {
+                  "name": "Kỳ Co",
+                  "text": "Bãi cát trắng dưới chân vách đá, nước biển xanh ngọc.",
+                  "map": "https://www.google.com/maps/search/?api=1&query=K%E1%BB%B3%20Co%2C%20Quy%20Nh%C6%A1n"
+                },
+                {
+                  "name": "Nhơn Lý",
+                  "text": "Làng chài với những thuyền đánh cá sơn xanh đỏ neo kín mặt biển.",
+                  "map": "https://www.google.com/maps/search/?api=1&query=Nh%C6%A1n%20L%C3%BD%2C%20Quy%20Nh%C6%A1n"
+                },
+                {
+                  "name": "Cù Lao Xanh",
+                  "text": "Hòn đảo ngoài khơi Quy Nhơn.",
+                  "by": "Đi tàu ra đảo",
+                  "map": "https://www.google.com/maps/search/?api=1&query=C%C3%B9%20Lao%20Xanh%2C%20Quy%20Nh%C6%A1n"
+                }
+              ]
+            },
+            {
+              "type": "image",
+              "src": "images/ky-co.webp",
+              "alt": "Bãi cát trắng dưới chân vách đá, nước biển xanh ngọc và vài chiếc thuyền nhỏ ở Kỳ Co, nhìn từ trên đèo",
+              "caption": "Bãi cát trắng dưới chân vách đá ở Kỳ Co, nhìn từ trên đèo."
+            },
+            {
+              "type": "quote",
+              "text": "Chiều nào cả nhà cũng ra bãi Đá Trứng nhặt sỏi, tối ngủ nghe tiếng sóng qua vườn dừa.",
+              "by": "Đức Anh, TP.HCM, đi cùng vợ con"
+            }
+          ],
+          "labels": {
+            "map": "Mở bản đồ"
           }
         }
       ]
