@@ -1,0 +1,196 @@
+/* clock.css - giao diện của <wl-clock>: mặt đồng hồ 24 giờ bên trái, bảng "giờ này làm gì" bên phải (từ 1024px).
+   Màu múi giờ lấy từ dữ liệu; bảng pha màu của múi đang chọn (--clock-color, JS gán) với màu thẻ.
+   Viền và bóng của bảng đọc --card-border, --card-shadow nếu theme.css có khai báo. */
+
+.clock {
+  display: block;
+}
+
+.clock__head {
+  max-width: 40rem;
+  margin-bottom: 2.5rem;
+}
+
+.clock__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.clock__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 1.4rem + 4vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.clock__lead {
+  margin: 1rem 0 0;
+  font-size: 1.125rem;
+  color: var(--color-muted);
+}
+
+.clock__body {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.clock__dial {
+  width: 100%;
+  max-width: 32rem;
+  margin-inline: auto;
+}
+
+.clock__face {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* Vuốt dọc trên mặt đồng hồ vẫn cuộn trang (điện thoại); chạm, kéo ngang thì đổi giờ. */
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.clock__face:active {
+  cursor: grabbing;
+}
+
+.clock__sector {
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+  transform-origin: 0 0;
+  transition: transform 0.3s ease, filter 0.2s;
+}
+
+.clock__sector:hover {
+  filter: brightness(1.08);
+  transform: scale(1.03);
+}
+
+.clock__hours text {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 7px;
+  fill: var(--color-ink);
+}
+
+.clock__hand {
+  stroke: var(--color-ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transform-origin: 0 0;
+  transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.clock__hub {
+  fill: var(--color-accent);
+  stroke: var(--color-ink);
+  stroke-width: 2;
+}
+
+.clock__now {
+  margin: 0.8rem 0 0;
+  text-align: center;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.85rem;
+}
+
+.clock__panel {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: start;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  background: color-mix(in srgb, var(--clock-color, var(--color-primary)) 38%, var(--color-surface));
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow: var(--card-shadow, none);
+  transition: background-color 0.5s;
+}
+
+.clock__range-label {
+  display: grid;
+  gap: 0.3rem;
+  width: 100%;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.clock__range {
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 0;
+  accent-color: var(--color-ink);
+}
+
+.clock__time {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.clock__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 1.4rem + 2.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.clock__line {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.clock__meter {
+  display: inline-flex;
+  gap: 3px;
+  vertical-align: middle;
+}
+
+.clock__meter i {
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 3px;
+}
+
+.clock__meter i.is-on {
+  background: var(--color-ink);
+}
+
+.clock__tour {
+  margin-top: 0.4rem;
+}
+
+/* .btn đặt display: inline-flex, đè mất [hidden]: phải ẩn lại ở đây. */
+.clock__tour[hidden] {
+  display: none;
+}
+
+.clock__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .clock__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clock__hand,
+  .clock__sector { transition: none; }
+}

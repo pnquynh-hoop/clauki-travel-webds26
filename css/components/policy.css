@@ -1,0 +1,95 @@
+/* policy.css - giao diện của <wl-policy>: bảng điều khoản, mỗi dòng trường hợp bên trái, kết quả bên phải.
+   Kết quả tô theo mức: ok (pha màu nhấn), mid (màu chủ đạo), no (màu mực); chữ luôn ghi đủ ý. */
+
+.policy {
+  display: block;
+}
+
+.policy__head {
+  max-width: 40rem;
+  margin-bottom: 2rem;
+}
+
+.policy__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.policy__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.policy__lead {
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+}
+
+.policy__rows {
+  display: grid;
+  margin: 0;
+  background: var(--color-surface);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, none);
+  overflow: hidden;
+}
+
+.policy__row {
+  display: grid;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+
+.policy__row + .policy__row {
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.policy__when {
+  font-weight: 600;
+}
+
+.policy__what {
+  justify-self: start;
+  margin: 0;
+  padding: 0.35rem 0.8rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.policy__row--ok .policy__what {
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+}
+
+.policy__row--mid .policy__what {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.policy__row--no .policy__what {
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.policy__note {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+@media (min-width: 760px) {
+  .policy__row {
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+  }
+}

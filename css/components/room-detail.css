@@ -192,6 +192,37 @@
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
 }
 
+/* Gồm, chưa gồm, nên mang (tour trong catalog): ba nhóm cạnh nhau khi đủ chỗ, mỗi dòng có đường kẻ dưới như tiện nghi. */
+.room-detail__lists {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.room-detail__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.room-detail__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  line-height: 1.4;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.room-detail__list--excludes li {
+  color: var(--color-muted);
+}
+
+.room-detail__list--excludes .room-detail__icon {
+  color: var(--color-muted);
+}
+
 /* Ô giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
 .room-detail__icon {
   flex: 0 0 1.5rem;

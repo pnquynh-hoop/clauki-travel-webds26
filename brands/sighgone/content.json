@@ -1,0 +1,3182 @@
+{
+  "id": "sighgone",
+  "meta": {
+    "title": "SighGone - Tour trong ngày quanh Sài Gòn bằng bảy phương tiện",
+    "description": "Đi bộ, xích lô, xe đạp, xe máy, thuyền, phà, ca nô: bảy tour trong ngày quanh Sài Gòn, nhóm tối đa 8 khách, đón ở trung tâm.",
+    "favicon": "images/favicon.svg"
+  },
+  "brand": {
+    "name": "SighGone",
+    "logo": "images/logo.svg",
+    "slogan": "Every sigh, gone."
+  },
+  "cta": {
+    "label": "Đặt tour",
+    "href": "page:dat-tour#dat-tour",
+    "note": "Từ 390.000 đồng một khách"
+  },
+  "toTop": {
+    "label": "Lên đầu trang"
+  },
+  "nav": [
+    {
+      "label": "Cách đi",
+      "href": "page:/#cach-di"
+    },
+    {
+      "label": "Khách kể",
+      "href": "page:/#khach-ke"
+    },
+    {
+      "label": "Cẩm nang",
+      "href": "page:cam-nang"
+    },
+    {
+      "label": "Hỏi đáp",
+      "href": "page:hoi-dap"
+    }
+  ],
+  "header": {
+    "variant": "solid",
+    "menu": "Menu",
+    "note": "Mỗi ngày 5:30 đến 22:30, nhóm tối đa 8 khách"
+  },
+  "contact": {
+    "phone": "0123 456 789",
+    "email": "xin-chao@sighgone.clauki",
+    "address": "Số 8, hẻm 42, Quận 1, TP.HCM"
+  },
+  "place": {
+    "name": "Sài Gòn",
+    "lat": 10.776,
+    "lon": 106.703,
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "catalog": {
+    "currency": "đồng",
+    "vehicles": {
+      "di-bo": {
+        "label": "Đi bộ",
+        "color": "#1f4fbf"
+      },
+      "xich-lo": {
+        "label": "Xích lô",
+        "color": "#d6331f"
+      },
+      "xe-dap": {
+        "label": "Xe đạp",
+        "color": "#13a06e"
+      },
+      "xe-may": {
+        "label": "Xe máy",
+        "color": "#ffcc1d"
+      },
+      "thuyen": {
+        "label": "Thuyền",
+        "color": "#0f8fa3"
+      },
+      "ca-no": {
+        "label": "Ca nô",
+        "color": "#ff7a1a"
+      },
+      "pha": {
+        "label": "Phà",
+        "color": "#7a4dd8"
+      },
+      "xe": {
+        "label": "Xe đưa đón",
+        "color": "#5a5f6b"
+      }
+    },
+    "buoi": {
+      "sang": "Sáng",
+      "chieu": "Chiều",
+      "toi": "Tối",
+      "ca-ngay": "Cả ngày"
+    },
+    "topics": {
+      "an-uong": "Ăn uống",
+      "lich-su": "Lịch sử",
+      "song-nuoc": "Sông nước",
+      "sinh-thai": "Sinh thái",
+      "chup-anh": "Chụp ảnh"
+    },
+    "items": [
+      {
+        "id": "thuc-giac",
+        "name": "Sài Gòn thức giấc",
+        "tagline": "Đi bộ lúc thành phố vừa mở mắt",
+        "text": "Ba tiếng đi bộ trước khi Sài Gòn kẹt xe: ly cà phê vợt đầu hẻm, chợ sáng, nhà thờ, bưu điện và một chung cư cũ.",
+        "image": {
+          "src": "images/cafe-vot.webp",
+          "alt": "Người pha chế rót nước sôi qua vợt vải làm cà phê vợt ở một quán Quận 3"
+        },
+        "price": 390000,
+        "unit": "khách",
+        "start": "06:30",
+        "end": "09:30",
+        "tags": {
+          "buoi": "sang",
+          "topics": [
+            "an-uong",
+            "lich-su",
+            "chup-anh"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "3 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "06:30 đến 09:30"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "06:30",
+            "place": "Nhà hát Thành phố",
+            "vehicle": "di-bo",
+            "text": "Gặp hướng dẫn viên, chia nước, khởi động chân."
+          },
+          {
+            "time": "06:45",
+            "place": "Cà phê vợt đầu hẻm",
+            "vehicle": "di-bo",
+            "text": "Ly cà phê pha bằng vợt vải, ngồi ghế nhựa đầu hẻm.",
+            "image": {
+              "src": "images/cafe-vot.webp",
+              "alt": "Người pha chế rót nước sôi qua vợt vải làm cà phê vợt ở một quán Quận 3"
+            }
+          },
+          {
+            "time": "07:30",
+            "place": "Chợ sáng",
+            "vehicle": "di-bo",
+            "text": "Xôi, bánh cuốn, bánh mì nóng. Ăn đứng cũng được.",
+            "image": {
+              "src": "images/banh-mi.webp",
+              "alt": "Ổ bánh mì giòn kẹp thịt, đồ chua và ớt xanh cầm trên tay"
+            }
+          },
+          {
+            "time": "08:15",
+            "place": "Nhà thờ Đức Bà, Bưu điện",
+            "vehicle": "di-bo",
+            "text": "Hai công trình hơn trăm tuổi, chụp ảnh lúc nắng còn xiên.",
+            "image": {
+              "src": "images/buu-dien.webp",
+              "alt": "Mặt tiền vàng của Bưu điện Trung tâm Sài Gòn dưới trời xanh, du khách đi dạo trên sân"
+            }
+          },
+          {
+            "time": "09:00",
+            "place": "Hẻm Quận 3",
+            "vehicle": "di-bo",
+            "text": "Đi qua con hẻm có chợ rau, nhà phố treo đèn lồng.",
+            "image": {
+              "src": "images/di-bo.webp",
+              "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng"
+            }
+          },
+          {
+            "time": "09:30",
+            "place": "Phố đi bộ",
+            "vehicle": "di-bo",
+            "text": "Kết thúc. Muốn đi tiếp, hướng dẫn viên chỉ đường."
+          }
+        ],
+        "includes": [
+          "Hướng dẫn viên người Sài Gòn",
+          "Cà phê và 3 món ăn sáng",
+          "Nước suối",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Đồ uống thêm",
+          "Tiền tip (không bắt buộc)"
+        ],
+        "bring": [
+          "Giày đi bộ",
+          "Mũ",
+          "Áo kín vai nếu muốn vào nhà thờ"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 1
+          },
+          {
+            "date": "2026-10-21",
+            "left": 2
+          },
+          {
+            "date": "2026-10-22",
+            "left": 3
+          },
+          {
+            "date": "2026-10-23",
+            "left": 4
+          },
+          {
+            "date": "2026-10-24",
+            "left": 5
+          },
+          {
+            "date": "2026-10-25",
+            "left": 6
+          },
+          {
+            "date": "2026-10-26",
+            "left": 7
+          },
+          {
+            "date": "2026-10-27",
+            "left": 8
+          },
+          {
+            "date": "2026-10-28",
+            "left": 0
+          },
+          {
+            "date": "2026-10-29",
+            "left": 0
+          },
+          {
+            "date": "2026-10-30",
+            "left": 0
+          },
+          {
+            "date": "2026-10-31",
+            "left": 0
+          },
+          {
+            "date": "2026-11-01",
+            "left": 0
+          },
+          {
+            "date": "2026-11-02",
+            "left": 1
+          },
+          {
+            "date": "2026-11-03",
+            "left": 2
+          },
+          {
+            "date": "2026-11-04",
+            "left": 3
+          },
+          {
+            "date": "2026-11-05",
+            "left": 4
+          },
+          {
+            "date": "2026-11-06",
+            "left": 5
+          },
+          {
+            "date": "2026-11-07",
+            "left": 6
+          },
+          {
+            "date": "2026-11-08",
+            "left": 7
+          },
+          {
+            "date": "2026-11-09",
+            "left": 8
+          },
+          {
+            "date": "2026-11-10",
+            "left": 2
+          },
+          {
+            "date": "2026-11-11",
+            "left": 3
+          },
+          {
+            "date": "2026-11-12",
+            "left": 4
+          },
+          {
+            "date": "2026-11-13",
+            "left": 5
+          },
+          {
+            "date": "2026-11-14",
+            "left": 6
+          },
+          {
+            "date": "2026-11-15",
+            "left": 7
+          },
+          {
+            "date": "2026-11-16",
+            "left": 8
+          },
+          {
+            "date": "2026-11-17",
+            "left": 0
+          },
+          {
+            "date": "2026-11-18",
+            "left": 0
+          },
+          {
+            "date": "2026-11-19",
+            "left": 0
+          },
+          {
+            "date": "2026-11-20",
+            "left": 0
+          },
+          {
+            "date": "2026-11-21",
+            "left": 1
+          },
+          {
+            "date": "2026-11-22",
+            "left": 2
+          },
+          {
+            "date": "2026-11-23",
+            "left": 3
+          },
+          {
+            "date": "2026-11-24",
+            "left": 4
+          },
+          {
+            "date": "2026-11-25",
+            "left": 5
+          },
+          {
+            "date": "2026-11-26",
+            "left": 6
+          },
+          {
+            "date": "2026-11-27",
+            "left": 7
+          },
+          {
+            "date": "2026-11-28",
+            "left": 8
+          },
+          {
+            "date": "2026-11-29",
+            "left": 0
+          },
+          {
+            "date": "2026-11-30",
+            "left": 0
+          }
+        ]
+      },
+      {
+        "id": "cho-lon",
+        "name": "Hẻm Chợ Lớn",
+        "tagline": "Ngồi xích lô qua phố người Hoa",
+        "text": "Xe đưa sang Quận 5, rồi đổi sang xích lô len qua phố thuốc bắc, phố lồng đèn, dừng ở chợ Bình Tây và chùa Bà Thiên Hậu.",
+        "href": "page:tour/cho-lon",
+        "image": {
+          "src": "images/cho-binh-tay.webp",
+          "alt": "Tháp đồng hồ và mái ngói cong của chợ Bình Tây ở Chợ Lớn dưới bầu trời nhiều mây"
+        },
+        "price": 590000,
+        "unit": "khách",
+        "start": "07:00",
+        "end": "11:00",
+        "tags": {
+          "buoi": "sang",
+          "topics": [
+            "lich-su",
+            "an-uong",
+            "chup-anh"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "4 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "07:00 đến 11:00"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "07:00",
+            "place": "Đón ở Quận 1",
+            "vehicle": "xe",
+            "text": "Xe 16 chỗ đón ở điểm hẹn, 30 phút sang Chợ Lớn."
+          },
+          {
+            "time": "07:30",
+            "place": "Chợ Bình Tây",
+            "vehicle": "di-bo",
+            "text": "Chợ sỉ trăm tuổi, giờ này đông nhất, hàng chất cao tới trần.",
+            "image": {
+              "src": "images/cho-binh-tay.webp",
+              "alt": "Tháp đồng hồ và mái ngói cong của chợ Bình Tây ở Chợ Lớn dưới bầu trời nhiều mây"
+            }
+          },
+          {
+            "time": "08:30",
+            "place": "Phố thuốc bắc, phố lồng đèn",
+            "vehicle": "xich-lo",
+            "text": "Lên xích lô, mỗi người một xe, chạy chậm qua những con phố nghề.",
+            "image": {
+              "src": "images/xich-lo.webp",
+              "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn"
+            }
+          },
+          {
+            "time": "09:30",
+            "place": "Chùa Bà Thiên Hậu",
+            "vehicle": "di-bo",
+            "text": "Những vòng nhang lớn treo trên trần, khói bay trong nắng.",
+            "image": {
+              "src": "images/chua-thien-hau.webp",
+              "alt": "Hàng lư hương cắm nhang đỏ toả khói trong chùa Bà Thiên Hậu, Chợ Lớn"
+            }
+          },
+          {
+            "time": "10:15",
+            "place": "Điểm tâm người Hoa",
+            "vehicle": "di-bo",
+            "text": "Há cảo, xíu mại, trà nóng ở một tiệm ba đời."
+          },
+          {
+            "time": "11:00",
+            "place": "Về Quận 1",
+            "vehicle": "xe",
+            "text": "Xe đưa về điểm hẹn."
+          }
+        ],
+        "includes": [
+          "Xe đưa đón",
+          "Xích lô 60 phút",
+          "Điểm tâm",
+          "Vé vào chùa",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Mua sắm ở chợ"
+        ],
+        "bring": [
+          "Khẩu trang (khói nhang)",
+          "Tiền mặt lẻ nếu muốn mua đồ"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 1
+          },
+          {
+            "date": "2026-10-21",
+            "left": 2
+          },
+          {
+            "date": "2026-10-22",
+            "left": 3
+          },
+          {
+            "date": "2026-10-23",
+            "left": 4
+          },
+          {
+            "date": "2026-10-24",
+            "left": 5
+          },
+          {
+            "date": "2026-10-25",
+            "left": 6
+          },
+          {
+            "date": "2026-10-26",
+            "left": 7
+          },
+          {
+            "date": "2026-10-27",
+            "left": 8
+          },
+          {
+            "date": "2026-10-28",
+            "left": 0
+          },
+          {
+            "date": "2026-10-29",
+            "left": 0
+          },
+          {
+            "date": "2026-10-30",
+            "left": 0
+          },
+          {
+            "date": "2026-10-31",
+            "left": 0
+          },
+          {
+            "date": "2026-11-01",
+            "left": 0
+          },
+          {
+            "date": "2026-11-02",
+            "left": 1
+          },
+          {
+            "date": "2026-11-03",
+            "left": 2
+          },
+          {
+            "date": "2026-11-04",
+            "left": 3
+          },
+          {
+            "date": "2026-11-05",
+            "left": 4
+          },
+          {
+            "date": "2026-11-06",
+            "left": 5
+          },
+          {
+            "date": "2026-11-07",
+            "left": 6
+          },
+          {
+            "date": "2026-11-08",
+            "left": 7
+          },
+          {
+            "date": "2026-11-09",
+            "left": 8
+          },
+          {
+            "date": "2026-11-10",
+            "left": 0
+          },
+          {
+            "date": "2026-11-11",
+            "left": 0
+          },
+          {
+            "date": "2026-11-12",
+            "left": 1
+          },
+          {
+            "date": "2026-11-13",
+            "left": 2
+          },
+          {
+            "date": "2026-11-14",
+            "left": 3
+          },
+          {
+            "date": "2026-11-15",
+            "left": 4
+          },
+          {
+            "date": "2026-11-16",
+            "left": 5
+          },
+          {
+            "date": "2026-11-17",
+            "left": 6
+          },
+          {
+            "date": "2026-11-18",
+            "left": 7
+          },
+          {
+            "date": "2026-11-19",
+            "left": 8
+          },
+          {
+            "date": "2026-11-20",
+            "left": 8
+          },
+          {
+            "date": "2026-11-21",
+            "left": 0
+          },
+          {
+            "date": "2026-11-22",
+            "left": 0
+          },
+          {
+            "date": "2026-11-23",
+            "left": 0
+          },
+          {
+            "date": "2026-11-24",
+            "left": 1
+          },
+          {
+            "date": "2026-11-25",
+            "left": 2
+          },
+          {
+            "date": "2026-11-26",
+            "left": 3
+          },
+          {
+            "date": "2026-11-27",
+            "left": 4
+          },
+          {
+            "date": "2026-11-28",
+            "left": 5
+          },
+          {
+            "date": "2026-11-29",
+            "left": 6
+          },
+          {
+            "date": "2026-11-30",
+            "left": 6
+          }
+        ]
+      },
+      {
+        "id": "thanh-da",
+        "name": "Đạp xe Thanh Đa",
+        "tagline": "Đường làng giữa lòng thành phố",
+        "text": "Bán đảo bao quanh bởi sông Sài Gòn, cách trung tâm 6 km mà còn đường làng, vườn rau, đò ngang.",
+        "image": {
+          "src": "images/xe-dap.webp",
+          "alt": "Chiếc xe đạp của người bán hàng rong chở đầy bưởi và chuối trên vỉa hè Sài Gòn"
+        },
+        "price": 490000,
+        "unit": "khách",
+        "start": "15:00",
+        "end": "18:00",
+        "tags": {
+          "buoi": "chieu",
+          "topics": [
+            "song-nuoc",
+            "sinh-thai"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "3 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "15:00 đến 18:00"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "15:00",
+            "place": "Nhận xe ở Bình Thạnh",
+            "vehicle": "xe-dap",
+            "text": "Chỉnh yên, đội mũ, chạy thử một vòng."
+          },
+          {
+            "time": "15:30",
+            "place": "Đường làng ven sông",
+            "vehicle": "xe-dap",
+            "text": "Hàng dừa nước, nhà sàn cũ, gần như không có ô tô.",
+            "image": {
+              "src": "images/xe-dap.webp",
+              "alt": "Chiếc xe đạp của người bán hàng rong chở đầy bưởi và chuối trên vỉa hè Sài Gòn"
+            }
+          },
+          {
+            "time": "16:15",
+            "place": "Đò ngang",
+            "vehicle": "thuyen",
+            "text": "Dắt xe xuống đò, năm phút sang bờ bên kia.",
+            "image": {
+              "src": "images/thuyen.webp",
+              "alt": "Mũi chiếc thuyền gỗ xanh lướt trên sông Sài Gòn, phía xa là các toà cao ốc trung tâm"
+            }
+          },
+          {
+            "time": "16:45",
+            "place": "Vườn rau",
+            "vehicle": "xe-dap",
+            "text": "Uống nước dừa, nghe chủ vườn kể chuyện giữ đất."
+          },
+          {
+            "time": "17:30",
+            "place": "Hoàng hôn trên sông",
+            "vehicle": "xe-dap",
+            "text": "Dừng ở bờ đê, nhìn nắng tắt sau dãy nhà cao tầng.",
+            "image": {
+              "src": "images/song-hoang-hon.webp",
+              "alt": "Sông Sài Gòn uốn cong quanh bán đảo Bình Thạnh lúc hoàng hôn"
+            }
+          },
+          {
+            "time": "18:00",
+            "place": "Trả xe",
+            "vehicle": "xe-dap",
+            "text": "Kết thúc."
+          }
+        ],
+        "includes": [
+          "Xe đạp và mũ",
+          "Vé đò",
+          "Nước dừa",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Đưa đón tận khách sạn"
+        ],
+        "bring": [
+          "Kem chống nắng",
+          "Quần áo thoải mái"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 3
+          },
+          {
+            "date": "2026-10-21",
+            "left": 4
+          },
+          {
+            "date": "2026-10-22",
+            "left": 5
+          },
+          {
+            "date": "2026-10-23",
+            "left": 6
+          },
+          {
+            "date": "2026-10-24",
+            "left": 7
+          },
+          {
+            "date": "2026-10-25",
+            "left": 8
+          },
+          {
+            "date": "2026-10-26",
+            "left": 0
+          },
+          {
+            "date": "2026-10-27",
+            "left": 0
+          },
+          {
+            "date": "2026-10-28",
+            "left": 0
+          },
+          {
+            "date": "2026-10-29",
+            "left": 1
+          },
+          {
+            "date": "2026-10-30",
+            "left": 1
+          },
+          {
+            "date": "2026-10-31",
+            "left": 2
+          },
+          {
+            "date": "2026-11-01",
+            "left": 2
+          },
+          {
+            "date": "2026-11-02",
+            "left": 3
+          },
+          {
+            "date": "2026-11-03",
+            "left": 4
+          },
+          {
+            "date": "2026-11-04",
+            "left": 5
+          },
+          {
+            "date": "2026-11-05",
+            "left": 6
+          },
+          {
+            "date": "2026-11-06",
+            "left": 7
+          },
+          {
+            "date": "2026-11-07",
+            "left": 8
+          },
+          {
+            "date": "2026-11-08",
+            "left": 0
+          },
+          {
+            "date": "2026-11-09",
+            "left": 0
+          },
+          {
+            "date": "2026-11-10",
+            "left": 0
+          },
+          {
+            "date": "2026-11-11",
+            "left": 0
+          },
+          {
+            "date": "2026-11-12",
+            "left": 1
+          },
+          {
+            "date": "2026-11-13",
+            "left": 2
+          },
+          {
+            "date": "2026-11-14",
+            "left": 3
+          },
+          {
+            "date": "2026-11-15",
+            "left": 4
+          },
+          {
+            "date": "2026-11-16",
+            "left": 5
+          },
+          {
+            "date": "2026-11-17",
+            "left": 6
+          },
+          {
+            "date": "2026-11-18",
+            "left": 7
+          },
+          {
+            "date": "2026-11-19",
+            "left": 8
+          },
+          {
+            "date": "2026-11-20",
+            "left": 8
+          },
+          {
+            "date": "2026-11-21",
+            "left": 0
+          },
+          {
+            "date": "2026-11-22",
+            "left": 0
+          },
+          {
+            "date": "2026-11-23",
+            "left": 0
+          },
+          {
+            "date": "2026-11-24",
+            "left": 1
+          },
+          {
+            "date": "2026-11-25",
+            "left": 2
+          },
+          {
+            "date": "2026-11-26",
+            "left": 3
+          },
+          {
+            "date": "2026-11-27",
+            "left": 4
+          },
+          {
+            "date": "2026-11-28",
+            "left": 5
+          },
+          {
+            "date": "2026-11-29",
+            "left": 6
+          },
+          {
+            "date": "2026-11-30",
+            "left": 6
+          }
+        ]
+      },
+      {
+        "id": "song-chieu",
+        "name": "Sông Sài Gòn chiều",
+        "tagline": "Thuyền nhỏ, kênh nhỏ, nắng tắt",
+        "text": "Rời bến Bạch Đằng bằng thuyền gỗ tám chỗ, vào kênh nhỏ, ra sông lớn đúng lúc hoàng hôn, về bến khi thành phố lên đèn.",
+        "image": {
+          "src": "images/song-hoang-hon.webp",
+          "alt": "Sông Sài Gòn uốn cong quanh bán đảo Bình Thạnh lúc hoàng hôn"
+        },
+        "price": 690000,
+        "unit": "khách",
+        "start": "16:30",
+        "end": "19:30",
+        "tags": {
+          "buoi": "chieu",
+          "topics": [
+            "song-nuoc",
+            "chup-anh"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "3 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "16:30 đến 19:30"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "16:30",
+            "place": "Bến Bạch Đằng",
+            "vehicle": "di-bo",
+            "text": "Lên thuyền, áo phao, nước mát."
+          },
+          {
+            "time": "17:00",
+            "place": "Kênh Thị Nghè",
+            "vehicle": "thuyen",
+            "text": "Thuyền chạy chậm dưới những cây cầu thấp.",
+            "image": {
+              "src": "images/thuyen.webp",
+              "alt": "Mũi chiếc thuyền gỗ xanh lướt trên sông Sài Gòn, phía xa là các toà cao ốc trung tâm"
+            }
+          },
+          {
+            "time": "17:45",
+            "place": "Ngã ba sông",
+            "vehicle": "thuyen",
+            "text": "Hoàng hôn phía Thủ Thiêm, mặt sông đổi màu cam.",
+            "image": {
+              "src": "images/song-hoang-hon.webp",
+              "alt": "Sông Sài Gòn uốn cong quanh bán đảo Bình Thạnh lúc hoàng hôn"
+            }
+          },
+          {
+            "time": "18:30",
+            "place": "Ăn nhẹ trên thuyền",
+            "vehicle": "thuyen",
+            "text": "Gỏi cuốn, chè, nước mía."
+          },
+          {
+            "time": "19:30",
+            "place": "Về bến",
+            "vehicle": "thuyen",
+            "text": "Đèn các toà nhà bật lên lần lượt.",
+            "image": {
+              "src": "images/skyline-dem.webp",
+              "alt": "Đường chân trời trung tâm Sài Gòn lên đèn, soi bóng xuống mặt sông về đêm"
+            }
+          }
+        ],
+        "includes": [
+          "Thuyền gỗ riêng nhóm 8 khách",
+          "Ăn nhẹ",
+          "Áo phao",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Đồ uống có cồn"
+        ],
+        "bring": [
+          "Áo khoác mỏng",
+          "Máy ảnh"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 8
+          },
+          {
+            "date": "2026-10-21",
+            "left": 0
+          },
+          {
+            "date": "2026-10-22",
+            "left": 0
+          },
+          {
+            "date": "2026-10-23",
+            "left": 0
+          },
+          {
+            "date": "2026-10-24",
+            "left": 1
+          },
+          {
+            "date": "2026-10-25",
+            "left": 2
+          },
+          {
+            "date": "2026-10-26",
+            "left": 3
+          },
+          {
+            "date": "2026-10-27",
+            "left": 4
+          },
+          {
+            "date": "2026-10-28",
+            "left": 5
+          },
+          {
+            "date": "2026-10-29",
+            "left": 6
+          },
+          {
+            "date": "2026-10-30",
+            "left": 6
+          },
+          {
+            "date": "2026-10-31",
+            "left": 7
+          },
+          {
+            "date": "2026-11-01",
+            "left": 7
+          },
+          {
+            "date": "2026-11-02",
+            "left": 8
+          },
+          {
+            "date": "2026-11-03",
+            "left": 0
+          },
+          {
+            "date": "2026-11-04",
+            "left": 0
+          },
+          {
+            "date": "2026-11-05",
+            "left": 0
+          },
+          {
+            "date": "2026-11-06",
+            "left": 1
+          },
+          {
+            "date": "2026-11-07",
+            "left": 2
+          },
+          {
+            "date": "2026-11-08",
+            "left": 3
+          },
+          {
+            "date": "2026-11-09",
+            "left": 4
+          },
+          {
+            "date": "2026-11-10",
+            "left": 0
+          },
+          {
+            "date": "2026-11-11",
+            "left": 0
+          },
+          {
+            "date": "2026-11-12",
+            "left": 0
+          },
+          {
+            "date": "2026-11-13",
+            "left": 1
+          },
+          {
+            "date": "2026-11-14",
+            "left": 2
+          },
+          {
+            "date": "2026-11-15",
+            "left": 3
+          },
+          {
+            "date": "2026-11-16",
+            "left": 4
+          },
+          {
+            "date": "2026-11-17",
+            "left": 5
+          },
+          {
+            "date": "2026-11-18",
+            "left": 6
+          },
+          {
+            "date": "2026-11-19",
+            "left": 7
+          },
+          {
+            "date": "2026-11-20",
+            "left": 7
+          },
+          {
+            "date": "2026-11-21",
+            "left": 8
+          },
+          {
+            "date": "2026-11-22",
+            "left": 0
+          },
+          {
+            "date": "2026-11-23",
+            "left": 0
+          },
+          {
+            "date": "2026-11-24",
+            "left": 0
+          },
+          {
+            "date": "2026-11-25",
+            "left": 1
+          },
+          {
+            "date": "2026-11-26",
+            "left": 2
+          },
+          {
+            "date": "2026-11-27",
+            "left": 3
+          },
+          {
+            "date": "2026-11-28",
+            "left": 4
+          },
+          {
+            "date": "2026-11-29",
+            "left": 5
+          },
+          {
+            "date": "2026-11-30",
+            "left": 5
+          }
+        ]
+      },
+      {
+        "id": "len-den",
+        "name": "Sài Gòn lên đèn",
+        "tagline": "Ngồi sau xe máy, ăn bảy món",
+        "text": "Mỗi khách một tài xế, chạy qua bốn quận, ăn bảy món ở những chỗ người Sài Gòn ăn, rồi nhìn thành phố từ trên cao.",
+        "href": "page:tour/len-den",
+        "image": {
+          "src": "images/xe-may-dem.webp",
+          "alt": "Ngã tư Sài Gòn về đêm nhìn từ trên cao, xe máy và ô tô thành những vệt đèn rực rỡ"
+        },
+        "price": 890000,
+        "unit": "khách",
+        "start": "18:00",
+        "end": "22:00",
+        "tags": {
+          "buoi": "toi",
+          "topics": [
+            "an-uong",
+            "chup-anh"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "4 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "18:00 đến 22:00"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "18:00",
+            "place": "Đón tận khách sạn",
+            "vehicle": "xe-may",
+            "text": "Tài xế đưa mũ bảo hiểm, áo mưa để sẵn dưới yên."
+          },
+          {
+            "time": "18:30",
+            "place": "Hẻm ốc Quận 4",
+            "vehicle": "xe-may",
+            "text": "Nghêu xào ớt, sò điệp nướng mỡ hành.",
+            "image": {
+              "src": "images/oc.webp",
+              "alt": "Đĩa nghêu xào ớt và rau thơm trong một quán hải sản"
+            }
+          },
+          {
+            "time": "19:15",
+            "place": "Chè Quận 5",
+            "vehicle": "xe-may",
+            "text": "Chè trôi nước, sương sa hột lựu ở tiệm bốn mươi năm."
+          },
+          {
+            "time": "20:00",
+            "place": "Vỉa hè Quận 3",
+            "vehicle": "xe-may",
+            "text": "Bánh tráng nướng, ngồi ghế nhựa sát lề đường.",
+            "image": {
+              "src": "images/an-dem.webp",
+              "alt": "Người bán hàng đứng bên nồi nước dùng nghi ngút ở một quầy ăn đêm trong hẻm"
+            }
+          },
+          {
+            "time": "20:45",
+            "place": "Bánh mì khuya",
+            "vehicle": "xe-may",
+            "text": "Ổ bánh mì nóng giòn, pate nhà làm.",
+            "image": {
+              "src": "images/banh-mi.webp",
+              "alt": "Ổ bánh mì giòn kẹp thịt, đồ chua và ớt xanh cầm trên tay"
+            }
+          },
+          {
+            "time": "21:30",
+            "place": "Sân thượng",
+            "vehicle": "di-bo",
+            "text": "Nhìn dòng xe bên dưới thành những vệt sáng.",
+            "image": {
+              "src": "images/skyline-dem.webp",
+              "alt": "Đường chân trời trung tâm Sài Gòn lên đèn, soi bóng xuống mặt sông về đêm"
+            }
+          },
+          {
+            "time": "22:00",
+            "place": "Về khách sạn",
+            "vehicle": "xe-may",
+            "text": "Tài xế đưa về tận cửa."
+          }
+        ],
+        "includes": [
+          "Mỗi khách một tài xế",
+          "Mũ bảo hiểm, áo mưa",
+          "Bảy món ăn",
+          "Nước uống",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Đồ uống có cồn"
+        ],
+        "bring": [
+          "Bụng đói",
+          "Giày kín mũi"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 5
+          },
+          {
+            "date": "2026-10-21",
+            "left": 6
+          },
+          {
+            "date": "2026-10-22",
+            "left": 7
+          },
+          {
+            "date": "2026-10-23",
+            "left": 8
+          },
+          {
+            "date": "2026-10-24",
+            "left": 0
+          },
+          {
+            "date": "2026-10-25",
+            "left": 0
+          },
+          {
+            "date": "2026-10-26",
+            "left": 0
+          },
+          {
+            "date": "2026-10-27",
+            "left": 1
+          },
+          {
+            "date": "2026-10-28",
+            "left": 2
+          },
+          {
+            "date": "2026-10-29",
+            "left": 3
+          },
+          {
+            "date": "2026-10-30",
+            "left": 3
+          },
+          {
+            "date": "2026-10-31",
+            "left": 4
+          },
+          {
+            "date": "2026-11-01",
+            "left": 4
+          },
+          {
+            "date": "2026-11-02",
+            "left": 5
+          },
+          {
+            "date": "2026-11-03",
+            "left": 6
+          },
+          {
+            "date": "2026-11-04",
+            "left": 7
+          },
+          {
+            "date": "2026-11-05",
+            "left": 8
+          },
+          {
+            "date": "2026-11-06",
+            "left": 0
+          },
+          {
+            "date": "2026-11-07",
+            "left": 0
+          },
+          {
+            "date": "2026-11-08",
+            "left": 0
+          },
+          {
+            "date": "2026-11-09",
+            "left": 1
+          },
+          {
+            "date": "2026-11-10",
+            "left": 1
+          },
+          {
+            "date": "2026-11-11",
+            "left": 2
+          },
+          {
+            "date": "2026-11-12",
+            "left": 3
+          },
+          {
+            "date": "2026-11-13",
+            "left": 4
+          },
+          {
+            "date": "2026-11-14",
+            "left": 5
+          },
+          {
+            "date": "2026-11-15",
+            "left": 6
+          },
+          {
+            "date": "2026-11-16",
+            "left": 7
+          },
+          {
+            "date": "2026-11-17",
+            "left": 8
+          },
+          {
+            "date": "2026-11-18",
+            "left": 0
+          },
+          {
+            "date": "2026-11-19",
+            "left": 0
+          },
+          {
+            "date": "2026-11-20",
+            "left": 0
+          },
+          {
+            "date": "2026-11-21",
+            "left": 0
+          },
+          {
+            "date": "2026-11-22",
+            "left": 1
+          },
+          {
+            "date": "2026-11-23",
+            "left": 2
+          },
+          {
+            "date": "2026-11-24",
+            "left": 3
+          },
+          {
+            "date": "2026-11-25",
+            "left": 4
+          },
+          {
+            "date": "2026-11-26",
+            "left": 5
+          },
+          {
+            "date": "2026-11-27",
+            "left": 6
+          },
+          {
+            "date": "2026-11-28",
+            "left": 7
+          },
+          {
+            "date": "2026-11-29",
+            "left": 8
+          },
+          {
+            "date": "2026-11-30",
+            "left": 8
+          }
+        ]
+      },
+      {
+        "id": "cu-chi",
+        "name": "Củ Chi sớm",
+        "tagline": "Tới địa đạo trước đám đông",
+        "text": "Rời thành phố lúc 6 giờ để tới địa đạo khi rừng còn mát và chưa có xe du lịch lớn.",
+        "image": {
+          "src": "images/cu-chi-ham.webp",
+          "alt": "Miệng hầm bí mật nhỏ nằm giữa lớp lá khô dưới gốc cây ở địa đạo Củ Chi"
+        },
+        "price": 790000,
+        "unit": "khách",
+        "start": "06:00",
+        "end": "12:30",
+        "tags": {
+          "buoi": "sang",
+          "topics": [
+            "lich-su",
+            "sinh-thai"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "6 giờ 30 phút"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "06:00 đến 12:30"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "06:00",
+            "place": "Đón ở Quận 1",
+            "vehicle": "xe",
+            "text": "Xe 16 chỗ, ăn sáng nhẹ trên xe."
+          },
+          {
+            "time": "07:30",
+            "place": "Địa đạo Củ Chi",
+            "vehicle": "di-bo",
+            "text": "Vào cổng khi khu di tích vừa mở.",
+            "image": {
+              "src": "images/cu-chi-rung.webp",
+              "alt": "Lối mòn đất dẫn tới căn chòi mái lá giữa rừng tre ở khu di tích địa đạo Củ Chi"
+            }
+          },
+          {
+            "time": "08:00",
+            "place": "Rừng và hầm",
+            "vehicle": "di-bo",
+            "text": "Xem nắp hầm nguỵ trang, bếp Hoàng Cầm, hầm chỉ huy."
+          },
+          {
+            "time": "08:45",
+            "place": "Chui đường hầm",
+            "vehicle": "di-bo",
+            "text": "Đoạn hầm đã nới rộng, ai ngại thì đi đoạn ngắn.",
+            "image": {
+              "src": "images/cu-chi-ham.webp",
+              "alt": "Miệng hầm bí mật nhỏ nằm giữa lớp lá khô dưới gốc cây ở địa đạo Củ Chi"
+            }
+          },
+          {
+            "time": "09:45",
+            "place": "Khoai mì chấm muối mè",
+            "vehicle": "di-bo",
+            "text": "Món ăn của người ở hầm ngày trước."
+          },
+          {
+            "time": "10:30",
+            "place": "Về thành phố",
+            "vehicle": "xe",
+            "text": "Về tới Quận 1 khoảng 12:30."
+          }
+        ],
+        "includes": [
+          "Xe đưa đón",
+          "Vé vào khu di tích",
+          "Ăn sáng nhẹ",
+          "Khoai mì",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Bắn súng thể thao"
+        ],
+        "bring": [
+          "Quần dài",
+          "Thuốc chống muỗi"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 4
+          },
+          {
+            "date": "2026-10-21",
+            "left": 5
+          },
+          {
+            "date": "2026-10-22",
+            "left": 6
+          },
+          {
+            "date": "2026-10-23",
+            "left": 7
+          },
+          {
+            "date": "2026-10-24",
+            "left": 8
+          },
+          {
+            "date": "2026-10-25",
+            "left": 0
+          },
+          {
+            "date": "2026-10-26",
+            "left": 0
+          },
+          {
+            "date": "2026-10-27",
+            "left": 0
+          },
+          {
+            "date": "2026-10-28",
+            "left": 1
+          },
+          {
+            "date": "2026-10-29",
+            "left": 2
+          },
+          {
+            "date": "2026-10-30",
+            "left": 2
+          },
+          {
+            "date": "2026-10-31",
+            "left": 3
+          },
+          {
+            "date": "2026-11-01",
+            "left": 3
+          },
+          {
+            "date": "2026-11-02",
+            "left": 4
+          },
+          {
+            "date": "2026-11-03",
+            "left": 5
+          },
+          {
+            "date": "2026-11-04",
+            "left": 6
+          },
+          {
+            "date": "2026-11-05",
+            "left": 7
+          },
+          {
+            "date": "2026-11-06",
+            "left": 8
+          },
+          {
+            "date": "2026-11-07",
+            "left": 0
+          },
+          {
+            "date": "2026-11-08",
+            "left": 0
+          },
+          {
+            "date": "2026-11-09",
+            "left": 0
+          },
+          {
+            "date": "2026-11-10",
+            "left": 4
+          },
+          {
+            "date": "2026-11-11",
+            "left": 5
+          },
+          {
+            "date": "2026-11-12",
+            "left": 6
+          },
+          {
+            "date": "2026-11-13",
+            "left": 7
+          },
+          {
+            "date": "2026-11-14",
+            "left": 8
+          },
+          {
+            "date": "2026-11-15",
+            "left": 0
+          },
+          {
+            "date": "2026-11-16",
+            "left": 0
+          },
+          {
+            "date": "2026-11-17",
+            "left": 0
+          },
+          {
+            "date": "2026-11-18",
+            "left": 1
+          },
+          {
+            "date": "2026-11-19",
+            "left": 2
+          },
+          {
+            "date": "2026-11-20",
+            "left": 2
+          },
+          {
+            "date": "2026-11-21",
+            "left": 3
+          },
+          {
+            "date": "2026-11-22",
+            "left": 4
+          },
+          {
+            "date": "2026-11-23",
+            "left": 5
+          },
+          {
+            "date": "2026-11-24",
+            "left": 6
+          },
+          {
+            "date": "2026-11-25",
+            "left": 7
+          },
+          {
+            "date": "2026-11-26",
+            "left": 8
+          },
+          {
+            "date": "2026-11-27",
+            "left": 0
+          },
+          {
+            "date": "2026-11-28",
+            "left": 0
+          },
+          {
+            "date": "2026-11-29",
+            "left": 0
+          },
+          {
+            "date": "2026-11-30",
+            "left": 0
+          }
+        ]
+      },
+      {
+        "id": "can-gio",
+        "name": "Rừng Sác Cần Giờ",
+        "tagline": "Xe, phà, ca nô, rồi đi bộ trong rừng đước",
+        "text": "Một ngày đổi bốn cách đi: xe ra bến, phà qua sông, ca nô vào rừng đước, rồi đi bộ trên cầu gỗ giữa rừng ngập mặn.",
+        "href": "page:tour/can-gio",
+        "image": {
+          "src": "images/can-gio-rung.webp",
+          "alt": "Rừng ngập mặn Cần Giờ xanh thẫm trải dài bên bờ sông"
+        },
+        "price": 1290000,
+        "unit": "khách",
+        "start": "07:00",
+        "end": "17:00",
+        "tags": {
+          "buoi": "ca-ngay",
+          "topics": [
+            "sinh-thai",
+            "song-nuoc",
+            "an-uong"
+          ]
+        },
+        "maxGuests": 8,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "10 giờ"
+          },
+          {
+            "label": "Giờ chạy",
+            "value": "07:00 đến 17:00"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 8 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "07:00",
+            "place": "Đón ở Quận 1",
+            "vehicle": "xe",
+            "text": "Xe 16 chỗ ra bến phà."
+          },
+          {
+            "time": "07:45",
+            "place": "Phà Bình Khánh",
+            "vehicle": "pha",
+            "text": "Đứng giữa hàng trăm xe máy qua sông, gió thổi mặn.",
+            "image": {
+              "src": "images/pha.webp",
+              "alt": "Chiếc phà chở người và xe máy băng qua sông, bờ bên kia là rặng dừa"
+            }
+          },
+          {
+            "time": "08:45",
+            "place": "Rạch trong rừng đước",
+            "vehicle": "ca-no",
+            "text": "Ca nô luồn vào rạch nhỏ, rễ đước hai bên.",
+            "image": {
+              "src": "images/ca-no.webp",
+              "alt": "Tàu cao tốc rẽ sóng trên sông, bờ cây xanh thẫm phía sau"
+            }
+          },
+          {
+            "time": "10:00",
+            "place": "Khu Rừng Sác",
+            "vehicle": "di-bo",
+            "text": "Đi bộ trên cầu gỗ, gặp đàn khỉ, chim cò.",
+            "image": {
+              "src": "images/can-gio-rung.webp",
+              "alt": "Rừng ngập mặn Cần Giờ xanh thẫm trải dài bên bờ sông"
+            }
+          },
+          {
+            "time": "12:00",
+            "place": "Cơm trưa hải sản",
+            "vehicle": "di-bo",
+            "text": "Cá kho, tôm, rau đắng ở nhà hàng ven biển."
+          },
+          {
+            "time": "14:00",
+            "place": "Chợ hải sản",
+            "vehicle": "xe",
+            "text": "Ghé chợ, ai muốn mua khô mang về.",
+            "image": {
+              "src": "images/cho-hai-san.webp",
+              "alt": "Người bán cá ngồi giữa những thau cá tươi ở một chợ quê"
+            }
+          },
+          {
+            "time": "15:30",
+            "place": "Phà về",
+            "vehicle": "pha",
+            "text": "Về tới Quận 1 khoảng 17:00."
+          }
+        ],
+        "includes": [
+          "Xe đưa đón",
+          "Vé phà",
+          "Ca nô 60 phút",
+          "Vé khu Rừng Sác",
+          "Cơm trưa",
+          "Bảo hiểm du lịch"
+        ],
+        "excludes": [
+          "Hải sản mua mang về"
+        ],
+        "bring": [
+          "Mũ rộng vành",
+          "Thuốc chống muỗi",
+          "Không mang đồ ăn vặt (khỉ giật)"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-20",
+            "left": 0
+          },
+          {
+            "date": "2026-10-21",
+            "left": 0
+          },
+          {
+            "date": "2026-10-22",
+            "left": 1
+          },
+          {
+            "date": "2026-10-23",
+            "left": 2
+          },
+          {
+            "date": "2026-10-24",
+            "left": 3
+          },
+          {
+            "date": "2026-10-25",
+            "left": 4
+          },
+          {
+            "date": "2026-10-26",
+            "left": 5
+          },
+          {
+            "date": "2026-10-27",
+            "left": 6
+          },
+          {
+            "date": "2026-10-28",
+            "left": 7
+          },
+          {
+            "date": "2026-10-29",
+            "left": 8
+          },
+          {
+            "date": "2026-10-30",
+            "left": 8
+          },
+          {
+            "date": "2026-10-31",
+            "left": 0
+          },
+          {
+            "date": "2026-11-01",
+            "left": 0
+          },
+          {
+            "date": "2026-11-02",
+            "left": 0
+          },
+          {
+            "date": "2026-11-03",
+            "left": 0
+          },
+          {
+            "date": "2026-11-04",
+            "left": 1
+          },
+          {
+            "date": "2026-11-05",
+            "left": 2
+          },
+          {
+            "date": "2026-11-06",
+            "left": 3
+          },
+          {
+            "date": "2026-11-07",
+            "left": 4
+          },
+          {
+            "date": "2026-11-08",
+            "left": 5
+          },
+          {
+            "date": "2026-11-09",
+            "left": 6
+          },
+          {
+            "date": "2026-11-10",
+            "left": 8
+          },
+          {
+            "date": "2026-11-11",
+            "left": 0
+          },
+          {
+            "date": "2026-11-12",
+            "left": 0
+          },
+          {
+            "date": "2026-11-13",
+            "left": 0
+          },
+          {
+            "date": "2026-11-14",
+            "left": 1
+          },
+          {
+            "date": "2026-11-15",
+            "left": 2
+          },
+          {
+            "date": "2026-11-16",
+            "left": 3
+          },
+          {
+            "date": "2026-11-17",
+            "left": 4
+          },
+          {
+            "date": "2026-11-18",
+            "left": 5
+          },
+          {
+            "date": "2026-11-19",
+            "left": 6
+          },
+          {
+            "date": "2026-11-20",
+            "left": 6
+          },
+          {
+            "date": "2026-11-21",
+            "left": 7
+          },
+          {
+            "date": "2026-11-22",
+            "left": 8
+          },
+          {
+            "date": "2026-11-23",
+            "left": 0
+          },
+          {
+            "date": "2026-11-24",
+            "left": 0
+          },
+          {
+            "date": "2026-11-25",
+            "left": 0
+          },
+          {
+            "date": "2026-11-26",
+            "left": 1
+          },
+          {
+            "date": "2026-11-27",
+            "left": 2
+          },
+          {
+            "date": "2026-11-28",
+            "left": 3
+          },
+          {
+            "date": "2026-11-29",
+            "left": 4
+          },
+          {
+            "date": "2026-11-30",
+            "left": 4
+          }
+        ]
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "sections": [
+        {
+          "type": "hero",
+          "id": "gioi-thieu",
+          "variant": "haze",
+          "eyebrow": "Tour trong ngày, nhóm tối đa 8 khách",
+          "title": "Every sigh, gone.",
+          "lead": "Sài Gòn, đi kiểu nào cũng được: đi bộ, xích lô, xe đạp, xe máy, thuyền, phà hay ca nô. Hướng dẫn viên sinh ra ở đây.",
+          "link": {
+            "label": "Xem các cách đi",
+            "href": "#cach-di"
+          },
+          "image": {
+            "src": "images/xe-may-dem.webp",
+            "alt": "Ngã tư Sài Gòn về đêm nhìn từ trên cao, xe máy và ô tô thành những vệt đèn rực rỡ"
+          },
+          "haze": {
+            "word": "sigh",
+            "hint": "Rê chuột để thở ra",
+            "stamp": "Đã thở ra"
+          }
+        },
+        {
+          "type": "intro",
+          "id": "mot-ngay",
+          "eyebrow": "SighGone là gì",
+          "title": "Một ngày ở Sài Gòn, đổi nhiều cách đi",
+          "lead": "Người Sài Gòn dẫn bạn đi những đoạn đường họ đi mỗi ngày. Mỗi chuyến chỉ vài tiếng, nhóm nhỏ, đón ở trung tâm.",
+          "variant": "center"
+        },
+        {
+          "type": "gallery",
+          "id": "cach-di",
+          "variant": "slices",
+          "eyebrow": "Cách đi",
+          "title": "Bảy phương tiện, một thành phố",
+          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+          "listLabel": "Bảy cách đi Sài Gòn cùng SighGone, mỗi lần mở một ảnh",
+          "images": [
+            {
+              "src": "images/di-bo.webp",
+              "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng",
+              "caption": "Đi bộ qua hẻm và chợ sáng"
+            },
+            {
+              "src": "images/xich-lo.webp",
+              "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn",
+              "caption": "Xích lô qua phố người Hoa"
+            },
+            {
+              "src": "images/xe-dap.webp",
+              "alt": "Chiếc xe đạp của người bán hàng rong chở đầy bưởi và chuối trên vỉa hè Sài Gòn",
+              "caption": "Xe đạp trên đường làng Thanh Đa"
+            },
+            {
+              "src": "images/xe-may-dem.webp",
+              "alt": "Ngã tư Sài Gòn về đêm nhìn từ trên cao, xe máy và ô tô thành những vệt đèn rực rỡ",
+              "caption": "Xe máy có tài xế, ăn đêm bốn quận"
+            },
+            {
+              "src": "images/thuyen.webp",
+              "alt": "Mũi chiếc thuyền gỗ xanh lướt trên sông Sài Gòn, phía xa là các toà cao ốc trung tâm",
+              "caption": "Thuyền gỗ vào kênh nhỏ"
+            },
+            {
+              "src": "images/pha.webp",
+              "alt": "Chiếc phà chở người và xe máy băng qua sông, bờ bên kia là rặng dừa",
+              "caption": "Phà Bình Khánh sang Cần Giờ"
+            },
+            {
+              "src": "images/ca-no.webp",
+              "alt": "Tàu cao tốc rẽ sóng trên sông, bờ cây xanh thẫm phía sau",
+              "caption": "Ca nô vào rừng đước"
+            }
+          ]
+        },
+        {
+          "type": "reviews",
+          "id": "khach-ke",
+          "variant": "postcard",
+          "eyebrow": "Khách kể",
+          "title": "Thở phào rồi mới viết",
+          "lead": "Từ tháng 6 đến tháng 9/2026: 1.240 chuyến, 6.900 khách, điểm trung bình 4,7 trên 5.",
+          "scoreLabel": "điểm",
+          "dateLabel": "Ngày đi",
+          "items": [
+            {
+              "rating": 5,
+              "text": "Tài xế chạy chậm như đi dạo, dừng đúng chỗ cho mình chụp. Bảy món mà muốn ăn thêm món tám.",
+              "name": "Thu Hà",
+              "from": "Hà Nội",
+              "stamp": {
+                "value": "18:00",
+                "label": "Sài Gòn lên đèn"
+              },
+              "date": "12.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Lần đầu ngồi xích lô, chú đạp xe kể chuyện Chợ Lớn suốt đường. Con gái mình nhớ tên từng con phố.",
+              "name": "Minh Khoa",
+              "from": "Cần Thơ",
+              "stamp": {
+                "value": "07:00",
+                "label": "Hẻm Chợ Lớn"
+              },
+              "date": "27.08.2026"
+            },
+            {
+              "rating": 5,
+              "text": "Đi phà xong lên ca nô, rồi đi bộ trong rừng. Một ngày mà như ba chuyến đi khác nhau.",
+              "name": "Bảo Ngọc",
+              "from": "Đà Nẵng",
+              "stamp": {
+                "value": "07:00",
+                "label": "Rừng Sác Cần Giờ"
+              },
+              "date": "06.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Có nửa ngày trống giữa hai cuộc họp, đặt tour sáng sớm. Về khách sạn kịp tắm rồi đi làm.",
+              "name": "Đức Anh",
+              "from": "Hải Phòng",
+              "stamp": {
+                "value": "06:30",
+                "label": "Sài Gòn thức giấc"
+              },
+              "date": "18.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Thuyền vào kênh nhỏ tới mức phải cúi đầu qua cầu. Hoàng hôn ngoài sông lớn đẹp hơn mình tưởng.",
+              "name": "Lan Chi",
+              "from": "Huế",
+              "stamp": {
+                "value": "16:30",
+                "label": "Sông Sài Gòn chiều"
+              },
+              "date": "03.10.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Không nghĩ giữa thành phố còn đường làng để đạp xe. Nước dừa ở vườn ngọt lịm.",
+              "name": "Quốc Bảo",
+              "from": "Nha Trang",
+              "stamp": {
+                "value": "15:00",
+                "label": "Đạp xe Thanh Đa"
+              },
+              "date": "09.10.2026"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "dat-tour",
+      "title": "Đặt tour",
+      "description": "Chọn ngày, số khách, gửi tin giữ chỗ cho tour Sài Gòn lên đèn. SighGone gọi lại xác nhận, trả tiền khi gặp hướng dẫn viên.",
+      "sections": [
+        {
+          "type": "booking",
+          "id": "dat-tour",
+          "variant": "calendar",
+          "eyebrow": "Tour buổi tối",
+          "title": "Sài Gòn lên đèn, chọn tối nào?",
+          "lead": "Khởi hành 18:00 mỗi tối, đón tận khách sạn, về khoảng 22:00.",
+          "price": 890000,
+          "priceNote": "một khách",
+          "currency": "đồng",
+          "fewSeats": 3,
+          "defaultGuests": 2,
+          "includes": [
+            "Mỗi khách một tài xế",
+            "Mũ bảo hiểm, áo mưa",
+            "Bảy món ăn",
+            "Nước uống",
+            "Bảo hiểm du lịch"
+          ],
+          "excludes": [
+            "Đồ uống có cồn"
+          ],
+          "departures": [
+            {
+              "date": "2026-10-20",
+              "seats": 5
+            },
+            {
+              "date": "2026-10-21",
+              "seats": 6
+            },
+            {
+              "date": "2026-10-22",
+              "seats": 7
+            },
+            {
+              "date": "2026-10-23",
+              "seats": 8
+            },
+            {
+              "date": "2026-10-24",
+              "seats": 0
+            },
+            {
+              "date": "2026-10-25",
+              "seats": 0
+            },
+            {
+              "date": "2026-10-26",
+              "seats": 0
+            },
+            {
+              "date": "2026-10-27",
+              "seats": 1
+            },
+            {
+              "date": "2026-10-28",
+              "seats": 2
+            },
+            {
+              "date": "2026-10-29",
+              "seats": 3
+            },
+            {
+              "date": "2026-10-30",
+              "seats": 3
+            },
+            {
+              "date": "2026-10-31",
+              "seats": 4
+            },
+            {
+              "date": "2026-11-01",
+              "seats": 4
+            },
+            {
+              "date": "2026-11-02",
+              "seats": 5
+            },
+            {
+              "date": "2026-11-03",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-04",
+              "seats": 7
+            },
+            {
+              "date": "2026-11-05",
+              "seats": 8
+            },
+            {
+              "date": "2026-11-06",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-07",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-08",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-09",
+              "seats": 1
+            },
+            {
+              "date": "2026-11-10",
+              "seats": 1
+            },
+            {
+              "date": "2026-11-11",
+              "seats": 2
+            },
+            {
+              "date": "2026-11-12",
+              "seats": 3
+            },
+            {
+              "date": "2026-11-13",
+              "seats": 4
+            },
+            {
+              "date": "2026-11-14",
+              "seats": 5
+            },
+            {
+              "date": "2026-11-15",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-16",
+              "seats": 7
+            },
+            {
+              "date": "2026-11-17",
+              "seats": 8
+            },
+            {
+              "date": "2026-11-18",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-19",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-20",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-21",
+              "seats": 0
+            },
+            {
+              "date": "2026-11-22",
+              "seats": 1
+            },
+            {
+              "date": "2026-11-23",
+              "seats": 2
+            },
+            {
+              "date": "2026-11-24",
+              "seats": 3
+            },
+            {
+              "date": "2026-11-25",
+              "seats": 4
+            },
+            {
+              "date": "2026-11-26",
+              "seats": 5
+            },
+            {
+              "date": "2026-11-27",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-28",
+              "seats": 7
+            },
+            {
+              "date": "2026-11-29",
+              "seats": 8
+            },
+            {
+              "date": "2026-11-30",
+              "seats": 8
+            }
+          ],
+          "policies": [
+            {
+              "title": "Trả tiền và huỷ",
+              "items": [
+                {
+                  "label": "Trả tiền",
+                  "text": "không cần cọc; trả tiền mặt hoặc chuyển khoản khi gặp hướng dẫn viên."
+                },
+                {
+                  "label": "Huỷ",
+                  "text": "trước 24 giờ hoàn đủ, trong 24 giờ hoàn một nửa."
+                },
+                {
+                  "label": "Mưa to",
+                  "text": "SighGone gọi trước 3 tiếng để dời lịch, không mất phí."
+                }
+              ]
+            }
+          ],
+          "labels": {
+            "departures": "Tối khởi hành",
+            "month": "tháng {m}, {y}",
+            "seats": "Còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "includesTitle": "Đã gồm",
+            "excludesTitle": "Chưa gồm",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "guestsValue": "{guests} khách",
+            "baseLine": "{price} × {guests} khách",
+            "dealLine": "Ưu đãi",
+            "total": "Tạm tính",
+            "deposit": "Cọc"
+          },
+          "errors": {
+            "name": "Bạn nhập họ tên giúp SighGone nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "brand": "SighGone, phiếu giữ chỗ",
+            "from": "Khách sạn của bạn",
+            "to": "Bốn quận, bảy món",
+            "guest": "Khách",
+            "date": "Tối đi",
+            "seats": "Số chỗ",
+            "total": "Tạm tính",
+            "stamp": "Chờ xác nhận",
+            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour Sài Gòn lên đèn tối {date}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi SighGone",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép"
+          }
+        }
+      ]
+    },
+    {
+      "path": "hoi-dap",
+      "title": "Hỏi đáp",
+      "description": "Đặt trước bao lâu, trời mưa thì sao, đón ở đâu: hỏi SighGone như nhắn tin.",
+      "sections": [
+        {
+          "type": "faq",
+          "id": "hoi-dap",
+          "variant": "chat",
+          "eyebrow": "Hỏi đáp",
+          "title": "Hỏi trước, đi nhẹ người",
+          "lead": "Chọn một câu gợi ý, SighGone trả lời ngay như đang nhắn tin.",
+          "chat": {
+            "label": "Nhắn tin với SighGone",
+            "avatar": {
+              "src": "images/favicon.svg",
+              "alt": ""
+            },
+            "tagline": "Trả lời từ 5:30 đến 22:30",
+            "cover": {
+              "src": "images/di-bo.webp",
+              "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng"
+            },
+            "greeting": "Chào bạn, SighGone đây. Muốn biết gì trước khi đi, cứ chọn một câu bên dưới nhé.",
+            "pick": "Chọn câu bạn muốn hỏi",
+            "done": "Bạn đã hỏi hết các câu gợi ý",
+            "reset": "Bắt đầu lại",
+            "again": "Hỏi lại từ đầu",
+            "groupsLabel": "Nhóm câu hỏi",
+            "groupDone": "Hết câu trong nhóm này, chọn nhóm khác nhé",
+            "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho SighGone nhé:",
+            "you": "Bạn hỏi:"
+          },
+          "ask": {
+            "text": "Chưa thấy điều bạn cần?",
+            "action": "Gọi",
+            "image": {
+              "src": "images/xich-lo.webp",
+              "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn"
+            }
+          },
+          "items": [
+            {
+              "group": "Trước khi đặt",
+              "question": "Đặt trước bao lâu?",
+              "answer": "Tour ghép đặt trước 2 tiếng là được nếu còn chỗ. Tour riêng nên đặt trước 2 ngày để SighGone xếp xe, xếp người."
+            },
+            {
+              "group": "Trước khi đặt",
+              "question": "Có cần trả tiền trước không?",
+              "answer": "Không. Bạn gửi tin giữ chỗ, SighGone gọi xác nhận, rồi trả tiền mặt hoặc chuyển khoản khi gặp hướng dẫn viên."
+            },
+            {
+              "group": "Trước khi đặt",
+              "question": "Đi một mình được không?",
+              "answer": "Được, nhiều người đi một mình lắm. Bạn ghép chung nhóm tối đa 8 người, tour xe máy thì ai cũng có tài xế riêng."
+            },
+            {
+              "group": "Trong tour",
+              "question": "Ăn chay được không?",
+              "answer": "Được. Ghi chú lúc giữ chỗ, quán đổi món chay cho bạn, giá không đổi."
+            },
+            {
+              "group": "Trong tour",
+              "question": "Trẻ em đi được tour nào?",
+              "answer": "Tour ban ngày nhận trẻ mọi tuổi, dưới 6 tuổi miễn phí. Tour đêm bằng xe máy nhận trẻ từ 6 tuổi, ngồi cùng xe bố hoặc mẹ."
+            },
+            {
+              "group": "Thời tiết, huỷ",
+              "question": "Trời mưa thì sao?",
+              "answer": "Mưa nhỏ vẫn đi, có áo mưa. Mưa to hoặc triều cường, SighGone gọi trước 3 tiếng để dời lịch, không mất phí."
+            },
+            {
+              "group": "Thời tiết, huỷ",
+              "question": "Huỷ có mất tiền không?",
+              "answer": "Huỷ trước 24 giờ: hoàn đủ. Trong 24 giờ: hoàn một nửa. Không tới mà không báo thì không hoàn."
+            },
+            {
+              "group": "Đón, trả",
+              "question": "Đón ở đâu?",
+              "answer": "Điểm hẹn ở Nhà hát Thành phố, miễn phí. Đón tận khách sạn Quận 1, Quận 3 thêm 50.000 đồng mỗi nhóm."
+            },
+            {
+              "group": "Đón, trả",
+              "question": "Có trả về khách sạn không?",
+              "answer": "Tour xe máy và tour có xe 16 chỗ trả tận nơi. Tour đi bộ, xe đạp kết thúc ở trung tâm, hướng dẫn viên gọi xe giúp nếu cần."
+            }
+          ]
+        },
+        {
+          "type": "policy",
+          "id": "chinh-sach",
+          "eyebrow": "Chính sách huỷ",
+          "title": "Huỷ, hoàn, dời.",
+          "lead": "Không cần cọc, nên huỷ cũng nhẹ nhàng. Tính theo giờ khởi hành của tour.",
+          "rows": [
+            {
+              "when": "Báo huỷ trước giờ chạy 24 giờ",
+              "what": "Hoàn 100%",
+              "tone": "ok"
+            },
+            {
+              "when": "Báo huỷ trong vòng 24 giờ",
+              "what": "Hoàn 50%",
+              "tone": "mid"
+            },
+            {
+              "when": "Không tới, không báo",
+              "what": "Không hoàn",
+              "tone": "no"
+            },
+            {
+              "when": "Mưa to, triều cường, nắng nóng gắt",
+              "what": "SighGone gọi dời lịch, miễn phí",
+              "tone": "ok"
+            }
+          ],
+          "note": "Tour riêng huỷ trước 48 giờ thì hoàn đủ, vì phải giữ xe và người từ sớm."
+        }
+      ]
+    },
+    {
+      "path": "cam-nang",
+      "title": "Cẩm nang",
+      "description": "Sài Gòn theo giờ: giờ nào ăn gì, đi đâu, có kẹt xe không; mặc gì, tháng nào mưa.",
+      "sections": [
+        {
+          "type": "clock",
+          "id": "theo-gio",
+          "eyebrow": "Cẩm nang",
+          "title": "Sài Gòn theo giờ.",
+          "lead": "Thành phố này đổi mặt theo từng giờ. Xoay đồng hồ để xem giờ đó nên ăn gì, đi đâu, có kẹt xe không.",
+          "windows": [
+            {
+              "from": 5,
+              "to": 7,
+              "name": "Bình minh",
+              "color": "#ffd59e",
+              "eat": "cà phê vợt, bánh mì nóng",
+              "do": "đi bộ công viên, xem người ta tập dưỡng sinh",
+              "item": "thuc-giac"
+            },
+            {
+              "from": 7,
+              "to": 11,
+              "name": "Sáng",
+              "color": "#ffe066",
+              "eat": "phở, hủ tiếu, điểm tâm người Hoa",
+              "do": "đi chợ sáng, ngồi xích lô qua Chợ Lớn",
+              "item": "cho-lon"
+            },
+            {
+              "from": 11,
+              "to": 14,
+              "name": "Trưa nắng",
+              "color": "#ffb347",
+              "eat": "cơm tấm, bún thịt nướng",
+              "do": "trốn nắng trong bảo tàng, quán máy lạnh",
+              "item": "cu-chi"
+            },
+            {
+              "from": 14,
+              "to": 17,
+              "name": "Chiều",
+              "color": "#9be3c1",
+              "eat": "chè, nước mía, bánh tráng trộn",
+              "do": "đạp xe đường làng ven sông",
+              "item": "thanh-da"
+            },
+            {
+              "from": 17,
+              "to": 19,
+              "name": "Hoàng hôn",
+              "color": "#ff9a76",
+              "eat": "bánh tráng nướng, ốc",
+              "do": "ra sông, xem nắng tắt sau toà nhà",
+              "item": "song-chieu"
+            },
+            {
+              "from": 19,
+              "to": 23,
+              "name": "Tối",
+              "color": "#c3a6ff",
+              "eat": "ốc, lẩu, bánh mì khuya",
+              "do": "ngồi sau xe máy đi ăn khắp bốn quận",
+              "item": "len-den"
+            },
+            {
+              "from": 23,
+              "to": 29,
+              "name": "Khuya",
+              "color": "#8aa0d6",
+              "eat": "cháo khuya, hủ tiếu gõ",
+              "do": "ngủ đi, sáng mai còn đi tiếp",
+              "item": "thuc-giac"
+            }
+          ],
+          "traffic": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            5,
+            5,
+            3,
+            2,
+            2,
+            3,
+            2,
+            2,
+            3,
+            4,
+            5,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "labels": {
+            "range": "Kéo để đổi giờ",
+            "now": "Bây giờ ở Sài Gòn: {h}h",
+            "eat": "Ăn",
+            "do": "Làm",
+            "traffic": "Kẹt xe",
+            "trafficValue": "mức {n} trên 5",
+            "tour": "Hợp với tour {name}"
+          }
+        },
+        {
+          "type": "tips",
+          "id": "meo",
+          "eyebrow": "Mẹo nhỏ",
+          "title": "Trước khi ra đường",
+          "items": [
+            {
+              "title": "Mặc gì?",
+              "text": "Áo cotton sáng màu, giày kín mũi nếu đi xe máy. Mang áo khoác mỏng: trong quán máy lạnh khá rét. Vào chùa, nhà thờ thì áo kín vai.",
+              "link": {
+                "label": "Đi rừng cả ngày thì mang gì",
+                "href": "page:tour/can-gio"
+              }
+            },
+            {
+              "title": "Tháng nào mưa?",
+              "text": "Mùa mưa từ tháng 5 đến tháng 11, mưa chiều rồi tạnh. Cột càng cao càng mưa nhiều.",
+              "chart": {
+                "values": [
+                  1,
+                  0,
+                  1,
+                  2,
+                  6,
+                  9,
+                  9,
+                  8,
+                  10,
+                  10,
+                  6,
+                  3
+                ],
+                "labels": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+                ],
+                "label": "Lượng mưa theo tháng: ít nhất tháng 1 đến tháng 4, nhiều nhất tháng 9 và tháng 10"
+              },
+              "link": {
+                "label": "Tour buổi sáng, né mưa chiều",
+                "href": "page:tour/cho-lon"
+              }
+            },
+            {
+              "title": "Tránh giờ nào?",
+              "text": "Kẹt nhất 7:00 đến 8:30 và 16:30 đến 18:30. Tour của SighGone xếp giờ né hai khung này.",
+              "chart": {
+                "values": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  2,
+                  5,
+                  5,
+                  3,
+                  2,
+                  2,
+                  3,
+                  2,
+                  2,
+                  3,
+                  4,
+                  5,
+                  5,
+                  4,
+                  3,
+                  2,
+                  1,
+                  0
+                ],
+                "max": 5,
+                "labels": [
+                  "0",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "6",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "12",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "",
+                  "18",
+                  "",
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                "label": "Mức kẹt xe theo giờ: đỉnh lúc 7 đến 8 giờ sáng và 17 đến 18 giờ chiều"
+              },
+              "link": {
+                "label": "Đi tối, đường đã thưa",
+                "href": "page:tour/len-den"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tour/can-gio",
+      "title": "Rừng Sác Cần Giờ",
+      "description": "Một ngày đổi bốn cách đi: xe ra bến, phà qua sông, ca nô vào rừng đước, rồi đi bộ trên cầu gỗ giữa rừng ngập mặn.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "can-gio",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/ca-no.webp",
+              "alt": "Tàu cao tốc rẽ sóng trên sông, bờ cây xanh thẫm phía sau"
+            },
+            "text": "Ra tới sông lớn, ca nô tăng tốc, gió mặn tạt ngang mặt.",
+            "best": "9:00 đến 10:00, nước lên"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          },
+          "book": {
+            "label": "Gọi giữ chỗ",
+            "href": "tel:0123456789"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/len-den",
+      "title": "Sài Gòn lên đèn",
+      "description": "Mỗi khách một tài xế, chạy qua bốn quận, ăn bảy món ở những chỗ người Sài Gòn ăn, rồi nhìn thành phố từ trên cao.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "len-den",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/skyline-dem.webp",
+              "alt": "Đường chân trời trung tâm Sài Gòn lên đèn, soi bóng xuống mặt sông về đêm"
+            },
+            "text": "Từ sân thượng, dòng xe bên dưới thành những vệt sáng không dứt.",
+            "best": "21:30, đèn lên đủ"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/cho-lon",
+      "title": "Hẻm Chợ Lớn",
+      "description": "Xe đưa sang Quận 5, rồi đổi sang xích lô len qua phố thuốc bắc, phố lồng đèn, dừng ở chợ Bình Tây và chùa Bà Thiên Hậu.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "cho-lon",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/chua-thien-hau.webp",
+              "alt": "Hàng lư hương cắm nhang đỏ toả khói trong chùa Bà Thiên Hậu, Chợ Lớn"
+            },
+            "text": "Khói nhang từ những vòng nhang lớn bay chéo qua vệt nắng sớm.",
+            "best": "9:30, nắng xiên qua mái"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          },
+          "book": {
+            "label": "Gọi giữ chỗ",
+            "href": "tel:0123456789"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour",
+      "title": "Tất cả tour",
+      "description": "Bảy tour ghép theo lịch, sáng, chiều, tối và cả ngày.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Tour",
+          "title": "Bảy tour, chọn theo giờ rảnh",
+          "lead": "Sáng sớm đi bộ, chiều đạp xe, tối ngồi xe máy đi ăn: mỗi tour vài tiếng, nhóm tối đa 8 khách."
+        }
+      ]
+    },
+    {
+      "path": "tour-rieng",
+      "title": "Tour riêng",
+      "description": "Đi riêng cả nhóm, giờ giấc theo nhóm mình.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Tour riêng",
+          "title": "Cả nhóm đi riêng một chuyến",
+          "lead": "Gia đình, nhóm bạn hay công ty muốn đi riêng thì gọi SighGone để xếp xe, xếp người và giờ đi."
+        }
+      ]
+    },
+    {
+      "path": "dem-nay",
+      "title": "Sài Gòn lên đèn",
+      "description": "Bốn tiếng ngồi sau xe máy, bảy món ăn, bốn quận.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Tối nay",
+          "title": "Tối nay đi đâu?",
+          "lead": "Sáu giờ chiều có người đón ở khách sạn, mười giờ đêm đưa về, giữa hai mốc đó là bảy món ăn."
+        }
+      ]
+    },
+    {
+      "path": "gioi-thieu",
+      "title": "Về SighGone",
+      "description": "Ai dẫn bạn đi và vì sao nhóm chỉ 8 khách.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Về SighGone",
+          "title": "Đọc lên là Sài Gòn",
+          "lead": "SighGone dẫn khách đi Sài Gòn bằng đúng phương tiện người Sài Gòn dùng mỗi ngày."
+        }
+      ]
+    },
+    {
+      "path": "lien-he",
+      "title": "Liên hệ",
+      "description": "Điểm hẹn, giờ làm việc, số điện thoại của SighGone.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Liên hệ",
+          "title": "Gặp nhau ở Nhà hát Thành phố",
+          "lead": "Mỗi ngày từ 5:30 đến 22:30. Gọi, nhắn tin hoặc ghé điểm hẹn."
+        }
+      ]
+    },
+    {
+      "path": "404",
+      "title": "Lạc đường",
+      "description": "Trang này không có.",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "noi-dung",
+          "eyebrow": "Lạc đường",
+          "title": "Hẻm này cụt rồi",
+          "lead": "Trang bạn tìm không có. Quay về trang chủ để chọn một chuyến khác."
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "variant": "columns",
+    "wires": true,
+    "plate": {
+      "number": "8",
+      "lines": [
+        "Hẻm 42",
+        "Quận 1"
+      ],
+      "label": "Điểm hẹn: số 8, hẻm 42, Quận 1"
+    },
+    "image": {
+      "src": "images/skyline-dem.webp",
+      "alt": "Đường chân trời trung tâm Sài Gòn lên đèn, soi bóng xuống mặt sông về đêm"
+    },
+    "title": "Every sigh,",
+    "titleAccent": "gone.",
+    "marquee": [
+      "Chợ Lớn",
+      "Bến Bạch Đằng",
+      "Thanh Đa",
+      "Kênh Thị Nghè",
+      "Củ Chi",
+      "Phà Bình Khánh",
+      "Rừng Sác"
+    ],
+    "navTitle": "Xem thêm",
+    "contactTitle": "Liên hệ",
+    "addressTitle": "Điểm hẹn",
+    "note": "SighGone là thương hiệu giả tưởng làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
+    "creditsTitle": "Nguồn ảnh"
+  },
+  "credits": [
+    {
+      "file": "images/xe-may-dem.webp",
+      "author": "Huỳnh Thanh Huy",
+      "license": "CC BY 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:M%E1%BB%A9c_%C4%91%E1%BB%99_k%E1%BA%B9t_xe_kinh_ho%C3%A0ng_t%E1%BA%A1i_Th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/xich-lo.webp",
+      "author": "Nick",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City_(49057670312).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/xe-dap.webp",
+      "author": "McKay Savage from London, UK",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vietnam_08_-_69_-_Saigon_fruit_vendor_(3171353168).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/di-bo.webp",
+      "author": "Vinnie Cartabiano",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Alley_in_District_3,_HCMC_(38447694045).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/thuyen.webp",
+      "author": "RG72",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vido_de_sur_blua_boato_al_Ho-%C4%88i-Min-urbo.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ca-no.webp",
+      "author": "calflier001",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:HYDROFOIL_SAIGON_RIVER_VIETNAM_JAN_2012_(7009600799).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/pha.webp",
+      "author": "calflier001",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:SAIGON_RIVER_FERRY_VIETNAM_JAN_2012_(6820612474).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/skyline-dem.webp",
+      "author": "Gurval Le Bouter",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Saigon_skyline_night_view.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cafe-vot.webp",
+      "author": "Trương Minh Khải",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Making_net-filter_coffee_at_Cheo_Leo_Caf%C3%A9,_Ho_Chi_Minh_City.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/buu-dien.webp",
+      "author": "Anne and David from Kent, England UK",
+      "license": "Public domain",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C6%B0u_%C4%91i%E1%BB%87n_Trung_t%C3%A2m_S%C3%A0i_G%C3%B2n,_2018.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cho-binh-tay.webp",
+      "author": "Ondrej Pospisil",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Binh_Tay_Market_(31382551786).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/chua-thien-hau.webp",
+      "author": "Frank McKenna (frankiefoto)",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Incensories_at_Thien_Hau_Temple,_Ho_Chi_Minh_City,_2016.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/song-hoang-hon.webp",
+      "author": "Lê Minh Phát",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:PANO0001-Pano120920199tam.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/an-dem.webp",
+      "author": "Hiep Nguyen (hiepng)",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Street_Food_Life_(Unsplash).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/oc.webp",
+      "author": "Ji-Elle",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Coquillages_au_Vietnam.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/banh-mi.webp",
+      "author": "The Hippie Triathlete from Encinitas, United States",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Banh_mi_at_Eden_Center_(4381046538).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cu-chi-ham.webp",
+      "author": "Balon Greyjoy",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:20190925_Cu_Chi_tunnel_entrance.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cu-chi-rung.webp",
+      "author": "Ludovic Lubeigt",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:C%E1%BB%A7_Chi_Tunnels.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/can-gio-rung.webp",
+      "author": "Lưu Ly",
+      "license": "CC BY 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:R%E1%BB%ABng_S%C3%A1c_-_2.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cho-hai-san.webp",
+      "author": "Alpha",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Basa_fish_-_Vinh_Long_Market.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    }
+  ]
+}

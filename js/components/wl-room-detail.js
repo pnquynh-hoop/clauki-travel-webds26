@@ -7,8 +7,10 @@
    - dải "nhìn ra từ hiên" tràn màn hình có câu chữ đè lên;
    - thẻ ảnh dẫn sang các hạng khác, liên kết không có ảnh thành một dòng chữ bên dưới.
    Nút đặt lấy từ site.cta và phát wl:choose-room (detail.id = room) để form đặt chỗ chọn sẵn hạng này,
-   kể cả khi form nằm ở trang khác (core.js giữ lựa chọn rồi phát lại). */
-import { asset } from '../core.js';
+   kể cả khi form nằm ở trang khác (core.js giữ lựa chọn rồi phát lại).
+   Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog: tên, ảnh (ảnh bìa rồi ảnh các chặng), giá, thông số,
+   ngày còn chỗ, gồm, chưa gồm, nên mang, và các mục khác cùng buổi; trường nào section ghi riêng thì dùng của section. */
+import { asset, catalogItem } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
 import { iconEl } from '../icon.js';
 import { parallax } from '../effects/parallax.js';
@@ -30,6 +32,44 @@ function imgEl(image, className, lazy) {
 }
 
 const pad = (n) => String(n).padStart(2, '0');
+// Số ngày còn chỗ hiện trong thẻ đặt, và số mục khác cùng gu ở cuối trang.
+const DAYS_SHOWN = 6;
+const OTHERS_SHOWN = 3;
+
+function todayIso(timezone) {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date());
+  } catch {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
+
+// "2026-10-20" thành "Thứ Ba, 20/10"; tính theo giờ UTC để ngày không lệch theo múi giờ của máy.
+function dayLabel(iso) {
+  const date = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return iso;
+  const text = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(date);
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// Ảnh bìa rồi ảnh của từng chặng (chú thích là tên chặng), bỏ ảnh trùng.
+function itemImages(item) {
+  const seen = new Set();
+  const list = [item.image, ...(item.stages ?? []).map((st) => st.image && { ...st.image, caption: st.place })];
+  return list.filter((image) => image?.src && !seen.has(image.src) && seen.add(image.src));
+}
+
+// Mục khác cùng buổi trước, rồi tới mục chung chủ đề; chỉ lấy mục có trang (href).
+function itemOthers(catalog, item) {
+  const topics = item.tags?.topics ?? [];
+  const score = (other) => (other.tags?.buoi === item.tags?.buoi ? 2 : 0)
+    + (other.tags?.topics ?? []).filter((t) => topics.includes(t)).length;
+  return (catalog?.items ?? [])
+    .filter((other) => other.id !== item.id && other.href)
+    .sort((a, b) => score(b) - score(a))
+    .slice(0, OTHERS_SHOWN)
+    .map((other) => ({ label: other.name, href: other.href, image: other.image, note: other.tagline }));
+}
 
 export class WlRoomDetail extends HTMLElement {
   set data(section) {
@@ -42,7 +82,7 @@ export class WlRoomDetail extends HTMLElement {
   }
 
   money(amount) {
-    return `${amount.toLocaleString('vi-VN')} ${this._data.currency ?? ''}`.trim();
+    return `${amount.toLocaleString('vi-VN')} ${this._section.currency ?? ''}`.trim();
   }
 
   /* ---------- Ảnh bìa ---------- */
@@ -93,6 +133,23 @@ export class WlRoomDetail extends HTMLElement {
     return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels.amenities), list]);
   }
 
+  // Gồm, chưa gồm, nên mang (của tour trong catalog): mỗi nhóm một danh sách ngắn có tiêu đề.
+  listsEl(section) {
+    const groups = [['includes', 'check'], ['excludes', 'x'], ['bring', 'backpack']].map(([key, icon]) => {
+      const items = (section[key] ?? []).filter(Boolean);
+      if (!items.length) return null;
+      const list = document.createElement('ul');
+      list.className = `room-detail__list room-detail__list--${key}`;
+      list.append(...items.map((text) => {
+        const li = document.createElement('li');
+        li.append(...[iconEl(icon, 'room-detail__icon'), textEl('span', '', text)].filter(Boolean));
+        return li;
+      }));
+      return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels[key]), list]);
+    });
+    return groupEl('room-detail__lists', groups);
+  }
+
   priceEl(section) {
     if (!section.price) return null;
     return groupEl('room-detail__price', [
@@ -105,15 +162,18 @@ export class WlRoomDetail extends HTMLElement {
     ]);
   }
 
+  // Nút đặt mặc định theo site.cta; section ghi book (label, href) thì dùng nút riêng, ví dụ gọi điện khi
+  // trang đặt chỗ chưa nhận sản phẩm này.
   bookEl(section) {
     const cta = this.site?.cta;
-    const label = this.labels.book ?? cta?.label;
-    if (!cta?.href || !label) return null;
+    const href = section.book?.href ?? cta?.href;
+    const label = section.book?.label ?? this.labels.book ?? cta?.label;
+    if (!href || !label) return null;
     const a = document.createElement('a');
     a.className = 'btn room-detail__book';
-    a.href = cta.href;
+    a.href = href;
     a.textContent = label;
-    if (section.room) {
+    if (section.room && !section.book) {
       a.addEventListener('click', () => {
         document.dispatchEvent(new CustomEvent('wl:choose-room', { detail: { id: section.room } }));
       });
@@ -241,13 +301,42 @@ export class WlRoomDetail extends HTMLElement {
     return nav;
   }
 
+  // Ghép dữ liệu từ catalog (nếu section ghi item) với dữ liệu riêng của section; của section được ưu tiên.
+  withItem(section) {
+    const item = catalogItem(this.site, section.item);
+    if (!item) return section;
+    const today = todayIso(this.site?.place?.timezone);
+    const availability = (item.availability ?? [])
+      .filter((day) => day.date >= today)
+      .slice(0, DAYS_SHOWN)
+      .map((day) => ({ label: dayLabel(day.date), left: day.left }));
+    const merged = {
+      room: item.id,
+      eyebrow: item.tagline,
+      title: item.name,
+      lead: item.text,
+      images: itemImages(item),
+      facts: item.facts,
+      price: item.price,
+      currency: this.site?.catalog?.currency,
+      availability,
+      includes: item.includes,
+      excludes: item.excludes,
+      bring: item.bring,
+      others: itemOthers(this.site?.catalog, item),
+    };
+    return { ...merged, ...section };
+  }
+
   render() {
-    const section = this._data;
+    const section = this.withItem(this._data);
+    this._section = section;
     this.className = section.variant ? `room-detail room-detail--${section.variant}` : 'room-detail';
     const body = groupEl('room-detail__layout container', [
       groupEl('room-detail__content', [
         textEl('p', 'room-detail__lead', section.lead),
         this.amenitiesEl(section.amenities ?? []),
+        this.listsEl(section),
       ]),
       this.cardEl(section),
     ]);

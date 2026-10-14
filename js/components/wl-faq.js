@@ -108,11 +108,14 @@ export class WlFaq extends HTMLElement {
     this._scroll.scrollTo({ top: this._scroll.scrollHeight, behavior: instant || reduce ? 'auto' : 'smooth' });
   }
 
+  // Có nhóm thì chỉ hiện câu gợi ý của nhóm đang chọn. Hết câu trong nhóm mà nhóm khác còn thì nhắc chọn nhóm khác;
+  // hết cả thì hiện nút hỏi lại từ đầu.
   renderChips() {
     const chat = this._data.chat ?? {};
     const items = this._items;
     this._chips.replaceChildren(...items.map((item, i) => {
-      if (this._asked.has(i)) return null;
+      // Câu không ghi nhóm hiện ở mọi nhóm, để không câu nào bị kẹt không bấm được.
+      if (this._asked.has(i) || (this._group && item.group && item.group !== this._group)) return null;
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'faq__chip';
@@ -121,9 +124,40 @@ export class WlFaq extends HTMLElement {
       return chip;
     }).filter(Boolean));
     const left = this._chips.children.length;
+    const leftAll = items.length - this._asked.size;
     this._chips.hidden = left === 0;
-    this._again.hidden = left > 0;
-    this._pick.textContent = left ? chat.pick ?? '' : chat.done ?? '';
+    this._again.hidden = leftAll > 0;
+    this._pick.textContent = left ? chat.pick ?? '' : (leftAll ? chat.groupDone ?? chat.done ?? '' : chat.done ?? '');
+    this._topics?.querySelectorAll('.faq__topic').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.group === this._group));
+    });
+  }
+
+  // Hàng nút chọn nhóm câu hỏi (item.group); không câu nào có nhóm thì không có hàng này.
+  topicsEl() {
+    const groups = [...new Set(this._items.map((item) => item.group).filter(Boolean))];
+    this._group = groups[0] ?? null;
+    if (!groups.length) return null;
+    const row = document.createElement('div');
+    row.className = 'faq__topics';
+    row.setAttribute('role', 'group');
+    const label = this._data.chat?.groupsLabel;
+    if (label) row.setAttribute('aria-label', label);
+    row.append(...groups.map((group) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'faq__topic';
+      button.dataset.group = group;
+      button.textContent = group;
+      return button;
+    }));
+    row.addEventListener('click', (e) => {
+      const button = e.target.closest('.faq__topic');
+      if (!button) return;
+      this._group = button.dataset.group;
+      this.renderChips();
+    });
+    return row;
   }
 
   // Lần lượt trả lời các câu khách đã bấm: hiện câu hỏi, chờ một chút, ba chấm "đang nhập", rồi câu trả lời.
@@ -184,7 +218,12 @@ export class WlFaq extends HTMLElement {
       (rest[pos] ?? rest[pos - 1]).focus({ preventScroll: true });
     } else {
       this.renderChips();
-      this._again.focus({ preventScroll: true });
+      // Còn nhóm khác thì đưa con trỏ tới nhóm đầu tiên còn câu chưa hỏi; hết cả thì sang nút hỏi lại.
+      const left = (group) => this._items.some((item, i) => item.group === group && !this._asked.has(i));
+      const next = this._again.hidden
+        ? [...(this._topics?.querySelectorAll('.faq__topic') ?? [])].find((button) => left(button.dataset.group))
+        : this._again;
+      next?.focus({ preventScroll: true });
     }
     this.pump();
   }
@@ -224,6 +263,8 @@ export class WlFaq extends HTMLElement {
 
     this._pick = document.createElement('p');
     this._pick.className = 'faq__pick';
+    // Đổi chữ khi hết câu trong nhóm ("chọn nhóm khác"): đọc lên cho người dùng trình đọc màn hình.
+    this._pick.setAttribute('aria-live', 'polite');
     this._pick.id = `${this.id || 'faq'}-pick`;
     this._chips = document.createElement('div');
     this._chips.className = 'faq__chips';
@@ -239,11 +280,13 @@ export class WlFaq extends HTMLElement {
     this._again.textContent = chat.again ?? '';
     this._again.addEventListener('click', () => {
       this.restart(false);
+      this._group = this._topics?.querySelector('.faq__topic')?.dataset.group ?? null;
       this.renderChips();
       this._chips.firstElementChild?.focus({ preventScroll: true });
     });
 
-    const box = groupEl('faq__chat', [head, this._scroll, groupEl('faq__tray', [this._pick, this._chips, this._again])]);
+    this._topics = this.topicsEl();
+    const box = groupEl('faq__chat', [head, this._scroll, groupEl('faq__tray', [this._topics, this._pick, this._chips, this._again])]);
     box.setAttribute('role', 'region');
     if (chat.label) box.setAttribute('aria-label', chat.label);
     return groupEl('faq__chat-wrap', [box]);

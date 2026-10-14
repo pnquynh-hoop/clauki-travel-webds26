@@ -1,6 +1,6 @@
 # ClauKi - Web Design 2026
 
-Landing page white label cho chủ đề **Du lịch & Dịch vụ lưu trú**. Ba thương hiệu giả tưởng dùng chung
+Landing page white label cho chủ đề **Du lịch & Dịch vụ lưu trú**. Bốn thương hiệu giả tưởng dùng chung
 một mã nguồn; đổi thương hiệu chỉ là đổi dữ liệu, không sửa dòng mã nào.
 
 HTML, CSS, JavaScript thuần: không framework, không bước build, không backend.
@@ -20,11 +20,11 @@ Live Server chỉ mở được trang chủ. Nếu mở bằng cách nhấp đú
 
 ## Một component, nhiều cách hiển thị
 
-Ba thương hiệu dùng chung một bộ component `<wl-*>`. Cùng một component nhưng mỗi thương hiệu trông khác
+Các thương hiệu dùng chung một bộ component `<wl-*>`. Cùng một component nhưng mỗi thương hiệu trông khác
 nhau nhờ ba lớp, đều nằm ngoài mã nguồn:
 
 1. **Kiểu trình bày (`variant`)** trong `content.json`: component gắn class `<khối>--<variant>`, CSS và JS của
-   kiểu đó đổi bố cục, hiệu ứng. Ví dụ `hero` có `full`, `coverflow`, `stacked`.
+   kiểu đó đổi bố cục, hiệu ứng. Ví dụ `hero` có `full`, `coverflow`, `stacked`, `haze`.
 2. **Dữ liệu**: trường nào có thì hiện phần đó, thiếu thì bỏ. Ví dụ cả ba footer cùng kiểu `columns`, nhưng mỗi
    bên có ảnh nền, lời hẹn, dòng chữ chạy riêng; chỉ Bậc Trà bật `clouds` (mây trôi), chỉ Mé Rạch có
    `directions` (đường về vườn).
@@ -36,16 +36,16 @@ của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiể
 
 ### Component dùng chung
 
-| Component | Bậc Trà | Gành Sớm | Mé Rạch |
-| --------- | ------- | -------- | ------- |
-| `header` (cố định) | `overlay`: trong suốt đè lên hero | `solid`: nền màu trang hơi trong | `center`: tên thương hiệu đứng giữa |
-| `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` |
-| `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng |
-| `faq` | `chat` | `chat` | `chat` |
-| `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn |
-| `to-top` (cố định) | có | có | có |
-| `reviews` | `postcard` | `postcard` | `postcard` |
-| `gallery` | | `slices` | `slices` |
+| Component | Bậc Trà | Gành Sớm | Mé Rạch | SighGone |
+| --------- | ------- | -------- | ------- | -------- |
+| `header` (cố định) | `overlay`: trong suốt đè lên hero | `solid`: nền màu trang hơi trong | `center`: tên thương hiệu đứng giữa | `solid` |
+| `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` | `haze`: ảnh phủ sương, rê chuột thì tan |
+| `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng | `calendar` |
+| `faq` | `chat` | `chat` | `chat` | `chat` |
+| `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `columns`, dây điện, biển số nhà |
+| `to-top` (cố định) | có | có | có | có |
+| `reviews` | `postcard` | `postcard` | `postcard` | `postcard` |
+| `gallery` | | `slices` | `slices` | `slices` |
 
 Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau nằm ở dữ liệu và biến màu, font.
 
@@ -60,6 +60,8 @@ Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khá
 | | `offer` (`postcard`) | bưu thiếp ưu đãi hè 2027, dấu bưu điện đếm ngược |
 | Mé Rạch (homestay miệt vườn) | `host` (`tv`) | tivi đời cũ kể chuyện chủ nhà |
 | | `day-plan` | một ngày ở vườn, xuồng trôi theo cuộn |
+| SighGone (tour trong ngày ở Sài Gòn) | `clock` | đồng hồ 24 giờ: giờ nào ăn gì, đi đâu, tour hợp giờ đó (trang `cam-nang`) |
+| | `tips`, `policy` | thẻ mẹo có biểu đồ nhỏ; bảng chính sách huỷ (trang `cam-nang`, `hoi-dap`) |
 
 Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 
