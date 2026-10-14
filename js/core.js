@@ -44,6 +44,8 @@ let launcher = null;
 let lastRendered = null;
 // Nháp editor gửi thẳng qua DRAFT_EVENT: vẫn xem trước được khi trình duyệt chặn localStorage.
 let editorDraft = null;
+// Site khách (tạo bằng /tao): theme gồm base (thương hiệu làm khung) và vars; null là thương hiệu có sẵn.
+let guestTheme = null;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -74,11 +76,17 @@ function normalizePage(path) {
 
 // Đọc thương hiệu và trang từ đường dẫn. Chỉ nhận id có trong danh sách để địa chỉ lạ không trỏ ra ngoài thư mục brands.
 // ?brand= của địa chỉ cũ vẫn nhận, để link đã gửi trước đây không hỏng.
+// Đoạn đầu không phải thương hiệu có sẵn nhưng đúng dạng tên site thì là site khách (/tao xuất bản), hoặc trang công cụ.
+export const SITE_SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])$/;
+const TOOL_PAGES = ['tao'];
+
 function readLocation(ids) {
   const parts = location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
   if (parts.length && ids.includes(parts[0])) {
     return { id: parts[0], page: normalizePage(parts.slice(1).join('/')) };
   }
+  if (parts.length && TOOL_PAGES.includes(parts[0])) return { tool: parts[0], page: HOME };
+  if (parts.length && SITE_SLUG_RE.test(parts[0])) return { guest: parts[0], page: normalizePage(parts.slice(1).join('/')) };
   const legacy = new URLSearchParams(location.search).get('brand');
   return { id: ids.includes(legacy) ? legacy : null, page: HOME };
 }
@@ -93,7 +101,9 @@ function pageUrl(id, page) {
 }
 
 // Đường dẫn ảnh trong content.json tính từ thư mục thương hiệu; component gọi hàm này để ra đường dẫn thật.
+// Đường dẫn tuyệt đối (ảnh của site khách lấy từ thư mục thương hiệu làm khung, ví dụ /brands/me-rach/images/...) giữ nguyên.
 export function asset(path) {
+  if (typeof path === 'string' && path.startsWith('/')) return path;
   return `${DATA_ROOT}/${currentId}/${path}`;
 }
 
@@ -122,9 +132,10 @@ function resolveLinks(node, id) {
   )));
 }
 
-function applyBrand(data, page) {
+// themeBase: site khách và nháp dùng theme.css của thương hiệu làm khung.
+function applyBrand(data, page, themeBase) {
   currentId = data.id;
-  document.getElementById('brand-theme').href = `${DATA_ROOT}/${data.id}/theme.css`;
+  document.getElementById('brand-theme').href = `${DATA_ROOT}/${themeBase ?? data.id}/theme.css`;
   // Trang con lấy tiêu đề riêng; trang chủ giữ tiêu đề chung của thương hiệu.
   const isHome = normalizePage(page.path) === HOME;
   document.title = isHome || !page.title ? data.meta.title : `${page.title} - ${data.brand?.name ?? data.meta.title}`;
@@ -317,8 +328,9 @@ async function render(raw, useDraft = true) {
   await Promise.all(tagsOf(page).map(loadComponent));
   if (token !== renderToken) return;
   // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
-  applyBrand(data, page);
-  applyDraftTheme(draft?.theme);
+  const theme = draft?.theme ?? guestTheme;
+  applyBrand(data, page, theme?.base);
+  applyDraftTheme(theme);
   try {
     renderSections(data, page);
     renderFixed(data, page);
@@ -337,7 +349,7 @@ async function render(raw, useDraft = true) {
   document.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
   // Trong khung editor thì báo cả lên thẻ iframe: editor nghe một lần ở đó, không phụ thuộc lúc khung tải.
   if (IN_EDITOR) window.frameElement.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
-  if (!IN_EDITOR) mountLauncher();
+  if (!IN_EDITOR && !guestTheme) mountLauncher();
 }
 
 // Về bản gốc (nháp đã xoá): trang đang mở chỉ có trong nháp (trang thêm khi thử) thì về trang chủ.
@@ -412,7 +424,22 @@ function onPopState() {
   if (page !== currentPage) goToPage(page, location.hash, false);
 }
 
-// Chọn sẵn sản phẩm, đổi trang tại chỗ, nút Back, Forward.
+// Site khách: đọc từ nháp trên máy (/nhap/) hoặc Supabase, dựng thẳng, không qua nút đổi thương hiệu của BTC.
+// Trình tạo web mở /nhap/ trong khung (data-ed-frame) và gửi nháp mới bằng DRAFT_EVENT khi AI đang viết.
+async function startGuest(here, ids) {
+  const { loadSite, RESERVED, DRAFT_SLUG } = await import('./sites.js');
+  const isDraft = here.guest === DRAFT_SLUG;
+  if (RESERVED.includes(here.guest) && !isDraft) throw new Error('Địa chỉ này không có trang.');
+  const site = await loadSite(here.guest);
+  if (!site) throw new Error(isDraft ? 'Chưa có bản nháp: mở /tao để tạo website.' : `Không có trang /${here.guest}/.`);
+  guestTheme = site.theme?.base && ids.includes(site.theme.base) ? site.theme : { ...site.theme, base: ids[0] };
+  currentPage = here.page;
+  listenPage();
+  listenDraft();
+  await render({ ...site.content, id: here.guest });
+}
+
+// Chọn sẵn sản phẩm, đổi trang tại chỗ, nút Back, Forward: chung cho thương hiệu có sẵn và site khách.
 function listenPage() {
   document.addEventListener(CHOOSE_EVENT, onChoose);
   document.addEventListener(CHOOSE_EVENT, bridgeChoose);
@@ -421,7 +448,7 @@ function listenPage() {
   addEventListener('popstate', onPopState);
 }
 
-// Trong khung của editor: nhận nháp mới qua DRAFT_EVENT rồi dựng lại trang đang mở.
+// Trong khung của editor, trình tạo web: nhận nháp mới qua DRAFT_EVENT rồi dựng lại trang đang mở.
 function listenDraft() {
   if (!IN_EDITOR) return;
   document.addEventListener(DRAFT_EVENT, (e) => {
@@ -437,6 +464,15 @@ export async function start(components = {}) {
     const list = await loadBrandList();
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
+    if (here.tool === 'tao') {
+      const { openBuilder } = await import('./tao/tao.js');
+      openBuilder({ brands: list.brands });
+      return;
+    }
+    if (here.guest) {
+      await startGuest(here, ids);
+      return;
+    }
     // Địa chỉ có ?sua: mở editor; trang thật chạy trong khung của editor, nên trang ngoài không dựng gì.
     if (new URLSearchParams(location.search).has('sua') && !IN_EDITOR) {
       const { openEditor } = await import('./editor/editor.js');

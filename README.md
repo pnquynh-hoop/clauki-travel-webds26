@@ -74,20 +74,24 @@ wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
   components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
-  editor.css            editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua)
+  editor.css            editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua), dùng chung với /tao
+  tao.css               trình tạo web /tao
   editor-launch.css     nút "Thử chỉnh" và dải báo nháp trên trang khách
 js/
   core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
   app.js                bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
   dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
   components/           mỗi component một file: wl-<tên>.js
-  editor/               editor "Thử chỉnh": editor.js (giao diện), draft.js (nháp trên máy), launch.js (nút vào),
-                        manifest.js (khối, kiểu, trường), form.js, ops.js (thao tác sửa dữ liệu), contrast.js, preview.js
+  editor/               editor "Thử chỉnh": draft.js (nháp trên máy), launch.js (nút vào), editor.js, form.js, manifest.js, ai.js
+  tao/                  trình tạo web /tao: tao.js (giao diện), generate.js (AI viết website trên khung có sẵn)
+  ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
+  sites.js              site khách: nháp /nhap/, đọc và xuất bản trên Supabase
 brands/
   brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
   <id>/theme.css        màu, font, bo góc của thương hiệu (chỉ biến CSS)
   <id>/images/          ảnh của thương hiệu
+supabase/sites.sql      bảng sites cho site khách xuất bản từ /tao (chạy trong SQL Editor của Supabase)
 docs/ai-log.md          nhật ký dùng AI
 docs/prompts/           prompt đầy đủ của các lần dùng AI, link từ ai-log.md
 ```
@@ -119,3 +123,5 @@ Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi
 `wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.
 
 Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/icon.js`, không tải cả bộ.
+
+AI trong editor (tab AI, #81): [Firebase JS SDK](https://github.com/firebase/firebase-js-sdk) 13.0.0 (giấy phép Apache 2.0), nạp từ CDN `www.gstatic.com/firebasejs/13.0.0/` bằng `js/ai/gemini.js`, chỉ khi bấm Gửi; gọi Gemini qua Firebase AI Logic, gói Spark miễn phí. Cấu hình của máy demo chỉ dán vào trình duyệt, không nằm trong repo.
