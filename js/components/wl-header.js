@@ -74,7 +74,9 @@ export class WlHeader extends HTMLElement {
   render() {
     const content = this._data;
     const header = content.header ?? {};
-    this.className = `header header--${header.variant ?? 'solid'}`;
+    // minimal: header rút gọn cho landing page (chỉ logo và nút đặt), dựng trên kiểu solid rồi ẩn menu.
+    const variant = header.variant ?? 'solid';
+    this.className = variant === 'minimal' ? 'header header--solid header--minimal' : `header header--${variant}`;
 
     const nav = document.createElement('nav');
     nav.className = 'header__nav';

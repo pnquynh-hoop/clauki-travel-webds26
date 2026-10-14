@@ -1,6 +1,8 @@
 /* core.js - lõi white label: đọc thương hiệu và trang từ đường dẫn (/<thương hiệu>/<trang>),
    rồi để wd2026.js (của BTC) tải content.json và hiện nút đổi dữ liệu cho BGK;
-   mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở. */
+   mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở.
+   Component không tải sẵn: trước khi dựng, core.js tải JS và CSS của đúng các khối trang đó dùng (bảng tra ở app.js). */
+
 
 // Mọi đường dẫn tính từ gốc: trang có thể nằm ở /ganh-som/phong, đường dẫn tương đối sẽ trỏ sai thư mục.
 const DATA_ROOT = '/brands';
@@ -19,10 +21,19 @@ let currentPage = HOME;
 let firstRender = true;
 // Dữ liệu thô của thương hiệu đang mở, để chuyển sang trang khác cùng thương hiệu mà không phải tải lại.
 let lastRaw = null;
-// Khối các hạng nhà, ưu đãi phát wl:choose-room để khối đặt chỗ chọn sẵn hạng. Khối đặt chỗ có thể nằm ở trang khác,
-// lúc bấm chưa được dựng nên không nghe thấy: giữ lại lựa chọn, dựng xong trang mới thì phát lại một lần.
-const CHOOSE_EVENT = 'wl:choose-room';
+// Khối nào cũng có thể phát wl:choose (detail.id là id sản phẩm trong danh mục) để khối đặt chỗ chọn sẵn.
+// Khối đặt chỗ có thể nằm ở trang khác, lúc bấm chưa được dựng nên không nghe thấy: giữ lại lựa chọn,
+// dựng xong trang mới thì phát lại một lần.
+const CHOOSE_EVENT = 'wl:choose';
+// Tên cũ: khối stays, offer, booking hiện còn dùng. core.js nhận cả hai và chuyển wl:choose sang tên cũ,
+// để đổi tên dần từng khối mà không khối nào hỏng.
+const LEGACY_CHOOSE = 'wl:choose-room';
 let pendingChoice = null;
+// Bảng tra component (app.js truyền vào) và các component đang tải, để một component chỉ tải một lần.
+let registry = {};
+const loading = new Map();
+// Mỗi lần dựng mang một số; lần dựng cũ tải xong muộn hơn lần mới thì bỏ, không vẽ đè trang mới.
+let renderToken = 0;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -115,14 +126,63 @@ function applyBrand(data, page) {
   history.replaceState(null, '', pageUrl(data.id, currentPage) + location.hash);
 }
 
-// Thông tin chung của thương hiệu mà khối nào cũng có thể cần (tên, menu, CTA, nơi chốn, liên hệ),
-// gom lại một chỗ để đưa cho mọi khối, khỏi phải chép vào dữ liệu từng section.
+// Thông tin chung của thương hiệu mà khối nào cũng có thể cần (tên, menu, CTA, nơi chốn, liên hệ, danh mục
+// sản phẩm), gom lại một chỗ để đưa cho mọi khối, khỏi phải chép vào dữ liệu từng section.
 // home là đường dẫn trang chủ của thương hiệu, để logo ở trang con dẫn về trang chủ.
 function siteInfo(data) {
   return {
     brand: data.brand, cta: data.cta, nav: data.nav, place: data.place, contact: data.contact,
+    catalog: data.catalog,
     home: pageUrl(data.id, HOME),
   };
+}
+
+// Tra một sản phẩm (tour, hạng phòng) trong danh mục theo id: khối chỉ cần ghi "item": "<id>"
+// là lấy được tên, ảnh, giá, khỏi chép lại ở từng section.
+export function catalogItem(site, id) {
+  return site?.catalog?.items?.find((item) => item.id === id);
+}
+
+/* ---------- Tải component khi cần ---------- */
+
+// CSS của component chèn trước theme của brand, giữ đúng thứ tự cũ (style component trước, biến của brand sau).
+function loadCss(name) {
+  if (document.querySelector(`link[data-component-css="${name}"]`)) return Promise.resolve();
+  return new Promise((resolve) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `/css/components/${name}.css`;
+    link.dataset.componentCss = name;
+    // Lỗi tải CSS không chặn trang: khối vẫn hiện, chỉ thiếu style.
+    link.onload = () => resolve();
+    link.onerror = () => resolve();
+    document.getElementById('brand-theme').before(link);
+  });
+}
+
+// Tải JS và CSS của một thẻ rồi đăng ký; thẻ không có trong bảng tra thì bỏ qua (hasComponent sẽ báo).
+function loadComponent(tag) {
+  const entry = registry[tag];
+  if (customElements.get(tag) || !entry) return Promise.resolve();
+  if (!loading.has(tag)) {
+    const job = Promise.all([entry.load(), ...(entry.css ?? []).map(loadCss)])
+      .then(([Component]) => {
+        if (!customElements.get(tag)) customElements.define(tag, Component);
+      })
+      .catch((err) => {
+        // Tải hỏng thì cho lần sau thử lại.
+        loading.delete(tag);
+        console.error(`Không tải được <${tag}>:`, err);
+      });
+    loading.set(tag, job);
+  }
+  return loading.get(tag);
+}
+
+// Các thẻ một trang cần: khối cố định và các loại khối không ẩn của trang.
+function tagsOf(page) {
+  const types = (page.sections ?? []).filter((section) => !section.hidden).map((section) => `wl-${section.type}`);
+  return [...new Set([...FIXED_TAGS, ...types])];
 }
 
 // Phải gán site trước: dòng el.data = section làm khối vẽ ngay lập tức,
@@ -155,15 +215,17 @@ function renderSections(data, page) {
 }
 
 // Mỗi khối cố định cần một phần khác nhau (đầu trang cần menu, chân trang cần nguồn ảnh), nên đưa cả tệp.
-function renderFixed(data) {
+// Trang có thể khai header riêng (ví dụ landing page dùng header rút gọn): ghi đè lên header chung của brand.
+function renderFixed(data, page) {
   const site = siteInfo(data);
+  const withHeader = page.header ? { ...data, header: { ...data.header, ...page.header } } : data;
   for (const tag of FIXED_TAGS) {
     const el = document.querySelector(tag);
     // Trang khác có thể thiếu thẻ này, hoặc thẻ chưa có ai viết code: bỏ qua.
     // Không gán vào thẻ chưa có code: gán trước khi đăng ký thì khối sẽ không bao giờ tự vẽ.
     if (!el || !customElements.get(tag)) continue;
     el.site = site;
-    el.data = data;
+    el.data = tag === 'wl-header' ? withHeader : data;
   }
 }
 
@@ -198,8 +260,13 @@ function skipReloadPrompt() {
 }
 
 function onChoose(e) {
-  if (e.detail?.replayed) return;
+  if (e.detail?.replayed || e.detail?.bridged) return;
   pendingChoice = document.querySelector('wl-booking') ? null : e.detail;
+}
+
+// Khối đặt chỗ hiện nghe tên cũ: phát kèm tên cũ cho mỗi wl:choose.
+function bridgeChoose(e) {
+  document.dispatchEvent(new CustomEvent(LEGACY_CHOOSE, { detail: { ...e.detail, bridged: true } }));
 }
 
 function replayChoice() {
@@ -209,7 +276,8 @@ function replayChoice() {
   document.dispatchEvent(new CustomEvent(CHOOSE_EVENT, { detail }));
 }
 
-function render(raw) {
+async function render(raw) {
+  const token = ++renderToken;
   lastRaw = raw;
   const data = resolveLinks(raw, raw.id);
   // Đổi thương hiệu thì giữ trang đang mở; thương hiệu mới không có trang đó thì hiện trang 404 nó tự khai,
@@ -222,10 +290,13 @@ function render(raw) {
       page = findPage(data, HOME);
     }
   }
+  // Tải đủ component của trang rồi mới dựng, để khối nào cũng hiện ngay lần đầu, không bị bỏ qua vì chưa đăng ký.
+  await Promise.all(tagsOf(page).map(loadComponent));
+  if (token !== renderToken) return;
   // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
   applyBrand(data, page);
   renderSections(data, page);
-  renderFixed(data);
+  renderFixed(data, page);
   markCurrentPage();
   replayChoice();
   if (firstRender) scrollToHash();
@@ -248,10 +319,11 @@ function samebrandPage(a) {
 // Đổi trang tại chỗ: không tải lại content.json hay wd2026.js, nên nhanh, và chuyển mượt bằng View Transitions
 // (trình duyệt không hỗ trợ hoặc bật giảm chuyển động thì đổi ngay). push = false khi đi bằng nút Back, Forward.
 function goToPage(page, hash, push) {
-  const update = () => {
+  // update trả về promise: View Transitions đợi trang mới dựng xong (kể cả lúc tải component) rồi mới chuyển.
+  const update = async () => {
     currentPage = page;
     if (push) history.pushState(null, '', pageUrl(currentId, page) + hash);
-    render(lastRaw);
+    await render(lastRaw);
     if (hash) scrollToHash();
     else scrollTo({ top: 0, behavior: 'instant' });
   };
@@ -288,25 +360,29 @@ function onPopState() {
   if (page !== currentPage) goToPage(page, location.hash, false);
 }
 
-export async function start() {
+// Chọn sẵn sản phẩm, đổi trang tại chỗ, nút Back, Forward.
+function listenPage() {
+  document.addEventListener(CHOOSE_EVENT, onChoose);
+  document.addEventListener(CHOOSE_EVENT, bridgeChoose);
+  document.addEventListener(LEGACY_CHOOSE, onChoose);
+  document.addEventListener('click', onLinkClick);
+  addEventListener('popstate', onPopState);
+}
+
+// components: bảng tra thẻ, cách tải JS, các file CSS (khai ở app.js).
+export async function start(components = {}) {
+  registry = components;
   try {
     const list = await loadBrandList();
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
     currentPage = here.page;
     saveBrand(here.id);
-    document.addEventListener(CHOOSE_EVENT, onChoose);
-    document.addEventListener('click', onLinkClick);
-    addEventListener('popstate', onPopState);
+    listenPage();
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
     document.addEventListener(CHANGE_EVENT, (e) => {
-      try {
-        render(e.detail);
-        skipReloadPrompt();
-      } catch (err) {
-        showError(err);
-      }
+      render(e.detail).then(skipReloadPrompt).catch(showError);
     });
     window.WebDesign2026.init({
       folder: DATA_ROOT,

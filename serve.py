@@ -24,6 +24,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.path = '/index.html'
         return super().send_head()
 
+    # Không có header này thì trình duyệt tự giữ bản cũ của brands.json, content.json một lúc:
+    # thêm thương hiệu mới mà trình duyệt chưa thấy thì địa chỉ /<id-mới>/ bị đổi về thương hiệu đã lưu.
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-cache')
+        super().end_headers()
+
 
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 5500
