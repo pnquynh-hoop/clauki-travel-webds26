@@ -1,0 +1,94 @@
+/* editor-launch.css - nút "Thử chỉnh" và dải báo nháp trên trang khách. Thuộc công cụ ClauKi, không theo thương hiệu:
+   màu cố định (xám kẽm, xanh ngọc), font Be Vietnam Pro, không đọc biến màu của brand (#82).
+   Đặt bên phải, trên nút lên đầu trang; góc dưới trái là nút đổi thương hiệu của BTC nên để trống. */
+
+.ed-launch,
+.ed-draftbar {
+  --ed-ink: #18181b;
+  --ed-paper: #fafafa;
+  --ed-accent: #22d3ee;
+  --ed-line: #52525b;
+  position: fixed;
+  z-index: 60;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  color: var(--ed-paper);
+  background: var(--ed-ink);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+}
+
+.ed-launch {
+  right: 14px;
+  bottom: calc(14px + 2.75rem + 0.75rem);
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid var(--ed-accent);
+  border-radius: 999px;
+}
+
+.ed-launch:hover {
+  color: var(--ed-ink);
+  background: var(--ed-accent);
+}
+
+.ed-launch:focus-visible,
+.ed-draftbar__btn:focus-visible {
+  outline: 3px solid var(--ed-accent);
+  outline-offset: 3px;
+}
+
+/* Dải báo nằm giữa mép dưới, chừa hai góc cho nút của BTC và nút lên đầu trang. */
+.ed-draftbar {
+  left: 50%;
+  bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  width: max-content;
+  max-width: calc(100vw - 9rem);
+  padding: 0.5rem 0.6rem 0.5rem 1rem;
+  border-left: 4px solid var(--ed-accent);
+  border-radius: 0.75rem;
+  translate: -50% 0;
+}
+
+.ed-draftbar[hidden],
+.ed-launch[hidden] {
+  display: none;
+}
+
+.ed-draftbar__text {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.ed-draftbar__btn {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.8rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ed-paper);
+  background: transparent;
+  border: 1px solid var(--ed-line);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.ed-draftbar__btn--main {
+  color: var(--ed-ink);
+  background: var(--ed-accent);
+  border-color: var(--ed-accent);
+}
+
+@media print {
+  .ed-launch,
+  .ed-draftbar { display: none; }
+}

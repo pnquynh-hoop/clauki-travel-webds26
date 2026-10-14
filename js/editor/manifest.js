@@ -1,0 +1,163 @@
+/* manifest.js - danh sách khối, kiểu trình bày và lựa chọn giao diện mà editor (#82) cho đổi; AI (#81) dùng chung.
+   Chỉ khai những kiểu chạy được với dữ liệu sẵn có của khối: kiểu cần trường riêng thì ghi needs (hàm kiểm dữ liệu),
+   dữ liệu thiếu thì editor không cho chọn kiểu đó. Khối không có ở đây vẫn dời, ẩn, xoá được, chỉ không đổi kiểu. */
+
+// [giá trị variant, tên hiện trong editor]; giá trị rỗng là kiểu mặc định (không ghi variant).
+export const BLOCKS = {
+  hero: { label: 'Ảnh đầu trang', variants: [['coverflow', 'Chồng thẻ ảnh xoay'], ['full', 'Ảnh phủ kín, mây vén khi cuộn'], ['stacked', 'Chữ trên, ảnh tràn ngang'], ['haze', 'Ảnh phủ sương, rê chuột thì tan']] },
+  intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa']] },
+  gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong']] },
+  faq: { label: 'Hỏi đáp', variants: [['', 'Danh sách gập mở'], ['chat', 'Khung nhắn tin']] },
+  reviews: { label: 'Khách kể', variants: [['postcard', 'Bưu thiếp']] },
+  stays: {
+    label: 'Các hạng phòng',
+    variants: [['', 'Lưới thẻ'], ['headland', 'Mốc trên ảnh mỏm gành']],
+    needs: { headland: (s) => Boolean(s.scene?.image?.src) },
+  },
+  offer: { label: 'Ưu đãi', variants: [['', 'Hai mặt phẳng'], ['postcard', 'Bưu thiếp nghiêng']] },
+  host: {
+    label: 'Chủ nhà',
+    variants: [['', 'Ảnh và chữ'], ['tv', 'Tivi kể chuyện']],
+    needs: { tv: (s) => Array.isArray(s.stories) && s.stories.length > 0 },
+  },
+  booking: { label: 'Đặt chỗ', variants: [] },
+  journey: { label: 'Lịch trình con đường', variants: [] },
+  process: { label: 'Các bước', variants: [] },
+  'day-plan': { label: 'Một ngày theo giờ', variants: [] },
+  'cloud-band': { label: 'Dải mây nối khối', variants: [] },
+  clock: { label: 'Đồng hồ 24 giờ', variants: [] },
+  tips: { label: 'Thẻ mẹo', variants: [] },
+  policy: { label: 'Bảng chính sách', variants: [] },
+  'room-detail': { label: 'Chi tiết phòng, tour', variants: [] },
+};
+
+// Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.
+export const PAGE_RESERVED = ['404', 'css', 'js', 'brands', 'tao', 'sua', 'nhap', 'editor', 'supabase', 'docs'];
+
+export const HEADER_VARIANTS = [['solid', 'Nền trang'], ['center', 'Tên ở giữa'], ['overlay', 'Trong suốt đè lên ảnh'], ['minimal', 'Rút gọn (logo và nút đặt)']];
+
+// Kiểu nào chọn được với dữ liệu hiện có của khối.
+export function variantsFor(section) {
+  const block = BLOCKS[section.type];
+  if (!block) return [];
+  return block.variants.filter(([value]) => !block.needs?.[value] || block.needs[value](section));
+}
+
+// Biến màu cho chỉnh, theo đúng tên biến bắt buộc ở AGENTS.md mục 5.
+export const COLORS = [
+  ['--color-primary', 'Nền nút chính'],
+  ['--color-on-primary', 'Chữ trên nút chính'],
+  ['--color-bg', 'Nền trang'],
+  ['--color-surface', 'Nền thẻ'],
+  ['--color-ink', 'Chữ'],
+  ['--color-muted', 'Chữ phụ'],
+  ['--color-accent', 'Màu nhấn (chữ, liên kết)'],
+];
+
+// Cặp màu phải đạt tương phản AA (từ 4,5): [chữ, nền, mô tả].
+export const CONTRAST = [
+  ['--color-ink', '--color-bg', 'Chữ trên nền trang'],
+  ['--color-muted', '--color-bg', 'Chữ phụ trên nền trang'],
+  ['--color-accent', '--color-bg', 'Màu nhấn trên nền trang'],
+  ['--color-on-primary', '--color-primary', 'Chữ trên nút chính'],
+  ['--color-ink', '--color-surface', 'Chữ trên thẻ'],
+  ['--color-accent', '--color-surface', 'Màu nhấn trên thẻ'],
+];
+
+// Cặp font có sẵn (Google Fonts, có dấu tiếng Việt). Giá trị rỗng: giữ font trong theme.css.
+export const FONTS = [
+  { key: '', label: 'Giữ font gốc của thương hiệu' },
+  { key: 'montserrat', label: 'Montserrat (hiện đại, gọn)', heading: "'Montserrat', system-ui, sans-serif", body: "'Montserrat', system-ui, sans-serif", url: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap' },
+  { key: 'lora', label: 'Lora và Be Vietnam Pro (có chân, cổ điển)', heading: "'Lora', Georgia, serif", body: "'Be Vietnam Pro', system-ui, sans-serif", url: 'https://fonts.googleapis.com/css2?family=Lora:wght@500;700&family=Be+Vietnam+Pro:wght@400;600&display=swap' },
+  { key: 'unbounded', label: 'Unbounded và Nunito (tròn, vui)', heading: "'Unbounded', system-ui, sans-serif", body: "'Nunito', system-ui, sans-serif", url: 'https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Nunito:wght@400;700&display=swap' },
+  { key: 'playfair', label: 'Playfair Display và Inter (sang trọng)', heading: "'Playfair Display', Georgia, serif", body: "'Inter', system-ui, sans-serif", url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Inter:wght@400;600&display=swap' },
+];
+
+/* ---------- Trường sửa được của từng loại khối (form tự sinh) ----------
+   Mỗi trường: key (đường dẫn trong section, ví dụ "link.label"; rỗng là chính mục đó), label, type:
+   text (một dòng), long (đoạn), image ({ src, alt }, chọn trong kho ảnh của thương hiệu), select (options),
+   list (mảng; fields là trường của mỗi mục, item là mục mới khi bấm Thêm). optional: chỉ hiện khi dữ liệu đã có. */
+
+const HEAD = [
+  { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text' },
+  { key: 'title', label: 'Tiêu đề', type: 'text' },
+  { key: 'lead', label: 'Đoạn dẫn', type: 'long' },
+];
+
+const FIELDS = {
+  hero: [
+    ...HEAD,
+    { key: 'link.label', label: 'Chữ trên nút phụ', type: 'text', optional: true },
+    { key: 'image', label: 'Ảnh', type: 'image', optional: true },
+    {
+      key: 'slides', label: 'Các ảnh', type: 'list', optional: true,
+      fields: [{ key: 'image', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
+      item: { image: { src: '', alt: '' }, caption: '' },
+    },
+  ],
+  intro: HEAD,
+  gallery: [
+    ...HEAD,
+    {
+      key: 'images', label: 'Ảnh', type: 'list',
+      fields: [{ key: '', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
+      item: { src: '', alt: '', caption: '' },
+    },
+  ],
+  faq: [
+    ...HEAD,
+    {
+      key: 'items', label: 'Câu hỏi', type: 'list',
+      fields: [{ key: 'question', label: 'Câu hỏi', type: 'text' }, { key: 'answer', label: 'Trả lời', type: 'long' }],
+      item: { question: 'Câu hỏi mới?', answer: 'Câu trả lời.' },
+    },
+  ],
+  reviews: [
+    ...HEAD,
+    {
+      key: 'items', label: 'Lời kể', type: 'list',
+      fields: [{ key: 'text', label: 'Lời kể', type: 'long' }, { key: 'name', label: 'Tên', type: 'text' }, { key: 'from', label: 'Đến từ', type: 'text' }],
+      item: { text: 'Lời kể của khách.', name: 'Tên khách', from: 'Nơi ở' },
+    },
+  ],
+  tips: [
+    ...HEAD,
+    {
+      key: 'items', label: 'Thẻ mẹo', type: 'list',
+      fields: [{ key: 'title', label: 'Tiêu đề', type: 'text' }, { key: 'text', label: 'Nội dung', type: 'long' }],
+      item: { title: 'Mẹo mới', text: 'Một hai câu.' },
+    },
+  ],
+  policy: [
+    ...HEAD,
+    {
+      key: 'rows', label: 'Dòng', type: 'list',
+      fields: [
+        { key: 'when', label: 'Trường hợp', type: 'text' },
+        { key: 'what', label: 'Kết quả', type: 'text' },
+        { key: 'tone', label: 'Mức', type: 'select', options: [['ok', 'Tốt cho khách'], ['mid', 'Một phần'], ['no', 'Không']] },
+      ],
+      item: { when: 'Trường hợp', what: 'Kết quả', tone: 'ok' },
+    },
+    { key: 'note', label: 'Ghi chú', type: 'long', optional: true },
+  ],
+  'room-detail': [
+    { key: 'lead', label: 'Câu dẫn', type: 'long', optional: true },
+    { key: 'priceNote', label: 'Ghi chú giá', type: 'text', optional: true },
+  ],
+};
+
+export function fieldsFor(section) {
+  return FIELDS[section.type] ?? HEAD;
+}
+
+// Khối thêm mới: dữ liệu mẫu tối thiểu để khối hiện được ngay, người dùng sửa tiếp trong form.
+// gallery lấy ảnh từ kho ảnh của thương hiệu (images: [{ src, alt }]) lúc thêm.
+export const TEMPLATES = [
+  { type: 'intro', label: 'Đoạn giới thiệu', make: () => ({ type: 'intro', eyebrow: 'Nhãn nhỏ', title: 'Tiêu đề mới', lead: 'Một hai câu giới thiệu.' }) },
+  { type: 'gallery', label: 'Thư viện ảnh', make: (images) => ({ type: 'gallery', variant: 'slices', title: 'Thư viện ảnh', images: images.slice(0, 4).map((img) => ({ ...img, caption: '' })) }) },
+  { type: 'faq', label: 'Hỏi đáp', make: () => ({ type: 'faq', title: 'Hỏi đáp', items: [{ question: 'Câu hỏi?', answer: 'Câu trả lời.' }] }) },
+  { type: 'reviews', label: 'Khách kể', make: () => ({ type: 'reviews', variant: 'postcard', title: 'Khách kể', items: [{ text: 'Lời kể của khách.', name: 'Tên khách', from: 'Nơi ở' }] }) },
+  { type: 'tips', label: 'Thẻ mẹo', make: () => ({ type: 'tips', title: 'Mẹo nhỏ', items: [{ title: 'Mẹo đầu tiên', text: 'Một hai câu.' }] }) },
+  { type: 'policy', label: 'Bảng chính sách', make: () => ({ type: 'policy', title: 'Chính sách', rows: [{ when: 'Trường hợp', what: 'Kết quả', tone: 'ok' }] }) },
+];

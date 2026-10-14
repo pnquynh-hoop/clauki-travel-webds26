@@ -74,11 +74,15 @@ wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
   components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
+  editor.css            editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua)
+  editor-launch.css     nút "Thử chỉnh" và dải báo nháp trên trang khách
 js/
   core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
   app.js                bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
   dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
   components/           mỗi component một file: wl-<tên>.js
+  editor/               editor "Thử chỉnh": editor.js (giao diện), draft.js (nháp trên máy), launch.js (nút vào),
+                        manifest.js (khối, kiểu, trường), form.js, ops.js (thao tác sửa dữ liệu), contrast.js, preview.js
 brands/
   brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
