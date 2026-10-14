@@ -824,3 +824,123 @@
 .ed-add__row .ed-select {
   flex: 1;
 }
+
+/* ---------- Tab AI ---------- */
+
+.ed-ai__status {
+  margin: 0 0 0.6rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ed-green);
+  background: rgb(19 160 110 / 0.1);
+  border-radius: 8px;
+}
+
+/* Máy demo đang dùng project riêng: một chấm nhỏ trên tab AI, kín đáo. */
+.ed-tab.is-demo::after {
+  content: '';
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-left: 0.35rem;
+  vertical-align: middle;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.ed-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.ed-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.7rem;
+}
+
+.ed-chips button {
+  min-height: 2rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 999px;
+}
+
+.ed-ai__out {
+  margin-top: 1rem;
+}
+
+.ed-ai__say {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+
+.ed-diff {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0 0 0.7rem;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-diff li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  border-left: 4px solid var(--ed-accent);
+  border-radius: 8px;
+}
+
+.ed-diff li.is-skip {
+  border-left-color: var(--ed-red);
+  color: var(--ed-muted);
+}
+
+.ed-diff__from {
+  color: var(--ed-muted);
+  text-decoration: line-through;
+}
+
+.ed-diff__to {
+  font-weight: 800;
+  color: var(--ed-green);
+}
+
+.ed-swatch {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-right: 0.35rem;
+  vertical-align: -0.1rem;
+  border: 1px solid var(--ed-line);
+  border-radius: 50%;
+}
+
+.ed-ok {
+  font-weight: 700;
+  color: var(--ed-green);
+}
+
+.ed-ai__config {
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ed-line);
+}
+
+.ed-ai__config summary {
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ed-ai__config .ed-input {
+  margin-top: 0.4rem;
+}

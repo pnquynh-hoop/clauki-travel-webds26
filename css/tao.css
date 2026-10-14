@@ -1,0 +1,135 @@
+/* tao.css - trình tạo web /tao: bảng mô tả bên trái, trang xem trước bên phải (điện thoại: xếp dọc).
+   Dùng chung biến, nút, ô nhập của css/editor.css; màu cố định của ClauKi, không theo thương hiệu. */
+
+.tao-main {
+  grid-template-rows: auto minmax(70dvh, 1fr);
+  overflow-y: auto;
+}
+
+.tao-panel {
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  padding: 1.25rem;
+  background: var(--ed-paper);
+}
+
+.tao-title {
+  margin: 0 0 0.25rem;
+  font-family: inherit;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.tao-panel textarea.ed-input {
+  min-height: 7rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.tao-create {
+  min-height: 2.9rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.tao-bar {
+  width: 100%;
+  height: 0.4rem;
+  margin-top: 0.6rem;
+  accent-color: var(--ed-ink);
+}
+
+.tao-status:empty {
+  display: none;
+}
+
+.tao-status {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  background: #fff;
+  border-left: 4px solid var(--ed-line);
+  border-radius: 8px;
+}
+
+.tao-status p {
+  margin: 0;
+}
+
+.tao-status p:first-child {
+  font-weight: 800;
+}
+
+.tao-status.is-ok {
+  border-left-color: var(--ed-green);
+}
+
+.tao-status.is-error {
+  color: var(--ed-red);
+  border-left-color: var(--ed-red);
+}
+
+.tao-status.is-warn {
+  border-left-color: #b45309;
+}
+
+.tao-publish {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ed-line);
+}
+
+.tao-publish[hidden] {
+  display: none;
+}
+
+.tao-hint,
+.tao-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  color: var(--ed-muted);
+  overflow-wrap: anywhere;
+}
+
+.tao-note a {
+  font-weight: 800;
+  color: #0e7490;
+}
+
+.tao-url {
+  font-weight: 700;
+  color: var(--ed-ink);
+}
+
+.tao-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  font-weight: 700;
+  color: #a1a1aa;
+}
+
+.tao-empty[hidden] {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .tao-main {
+    grid-template-columns: 26rem minmax(0, 1fr);
+    grid-template-rows: none;
+    overflow: hidden;
+  }
+
+  .tao-panel {
+    min-height: 0;
+    overflow-y: auto;
+  }
+}

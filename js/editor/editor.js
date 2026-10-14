@@ -11,6 +11,7 @@ import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPag
 import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../dom.js';
+import { mountAi } from './ai.js';
 
 const HISTORY_MAX = 60;
 const TOAST_MS = 2600;
@@ -59,6 +60,7 @@ function toast(message) {
 
 const colorOf = (name) => state.theme.vars[name] ?? state.base[name] ?? '';
 
+// vars: bộ biến thử (AI kiểm bộ màu mới trước khi đề xuất); bỏ trống thì kiểm theme đang dùng.
 function contrastChecks(vars = state.theme.vars) {
   const pick = (name) => vars[name] ?? state.base[name] ?? '';
   return CONTRAST.map(([fg, bg, label]) => {
@@ -601,9 +603,18 @@ function renderPages() {
 
 /* ---------- Tab AI ---------- */
 
-// Sửa bằng lời làm ở #81 (ai.js); tạm hiện một dòng báo.
 function renderAi() {
-  ui.panes.ai.replaceChildren(h('p', { class: 'ed-hint', text: 'Sửa website bằng lời: đang làm ở issue #81.' }));
+  mountAi(ui.panes.ai, {
+    h,
+    state,
+    sections,
+    pageOf,
+    colorOf,
+    commit,
+    images: () => imageLibrary(state.content),
+    contrastOf: contrastChecks,
+    tab: ui.tabs.find((t) => t.dataset.tab === 'ai'),
+  });
 }
 
 /* ---------- Tải tệp ---------- */
