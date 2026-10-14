@@ -51,6 +51,102 @@
     "lon": 107.0,
     "timezone": "Asia/Ho_Chi_Minh"
   },
+  "catalog": {
+    "currency": "đồng",
+    "vehicles": {
+      "thuy-phi-co": {
+        "label": "Thuỷ phi cơ",
+        "color": "#2b6cb0"
+      },
+      "kayak": {
+        "label": "Kayak",
+        "color": "#e8743b"
+      },
+      "nha-be": {
+        "label": "Nhà bè",
+        "color": "#4a7c59"
+      }
+    },
+    "items": [
+      {
+        "id": "bay-va-be",
+        "name": "Bay ngắm vịnh, ngủ nhà bè",
+        "text": "Hai ngày một đêm: thuỷ phi cơ, kayak, một đêm trên nhà bè",
+        "href": "page:/#giu-ghe",
+        "image": {
+          "src": "images/nha-be.webp",
+          "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
+        },
+        "price": 6900000,
+        "unit": "khách",
+        "tags": {
+          "buoi": "ca-ngay",
+          "topics": [
+            "song-nuoc"
+          ]
+        },
+        "maxGuests": 12,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "2 ngày 1 đêm"
+          }
+        ],
+        "stages": [
+          {
+            "time": "08:00",
+            "place": "Bến bay",
+            "vehicle": "thuy-phi-co",
+            "text": "Bay 25 phút ngắm vịnh từ trên cao.",
+            "image": {
+              "src": "images/buong-lai.webp",
+              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ"
+            }
+          },
+          {
+            "time": "09:00",
+            "place": "Làng bè",
+            "vehicle": "kayak",
+            "text": "Chèo kayak vào làng chài nổi.",
+            "image": {
+              "src": "images/kayak-nui-da.webp",
+              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng"
+            }
+          },
+          {
+            "time": "18:00",
+            "place": "Nhà bè",
+            "vehicle": "nha-be",
+            "text": "Ăn tối hải sản, ngủ trên bè."
+          }
+        ],
+        "availability": [
+          {
+            "date": "2026-11-07",
+            "left": 6
+          },
+          {
+            "date": "2026-11-14",
+            "left": 0
+          }
+        ]
+      },
+      {
+        "id": "chi-bay",
+        "name": "Chỉ bay ngắm vịnh",
+        "text": "25 phút trên thuỷ phi cơ, về trong buổi sáng",
+        "image": {
+          "src": "images/nui-da-lan-ha.webp",
+          "alt": "Núi đá vôi giữa vịnh nhìn từ trên cao"
+        },
+        "price": 3200000,
+        "unit": "khách",
+        "start": "08:00",
+        "end": "09:30",
+        "maxGuests": 12
+      }
+    ]
+  },
   "pages": [
     {
       "path": "/",
@@ -310,7 +406,10 @@
             }
           ]
         }
-      ]
+      ],
+      "header": {
+        "variant": "minimal"
+      }
     },
     {
       "path": "nha-be",

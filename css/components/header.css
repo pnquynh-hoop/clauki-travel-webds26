@@ -537,3 +537,10 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
     padding-inline: 1.3rem;
   }
 }
+
+/* Kiểu minimal: header rút gọn cho landing page, khách chỉ cần logo để về trang chủ và nút đặt chỗ;
+   không có menu để khỏi dẫn khách đi chỗ khác. Dựng trên kiểu solid (JS gắn cả hai class). */
+.header--minimal .header__nav,
+.header--minimal .header__toggle {
+  display: none;
+}

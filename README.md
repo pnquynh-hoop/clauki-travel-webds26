@@ -71,11 +71,10 @@ serve.py                chạy thử trên máy: trả index.html cho đường 
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
-  components.css        @import style của từng component
-  components/           mỗi component một file
+  components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
 js/
   core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
-  app.js                đăng ký các component <wl-*>
+  app.js                bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
   dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
   components/           mỗi component một file: wl-<tên>.js
 brands/
