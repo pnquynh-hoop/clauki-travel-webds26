@@ -3,6 +3,7 @@
    mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở.
    Component không tải sẵn: trước khi dựng, core.js tải JS và CSS của đúng các khối trang đó dùng (bảng tra ở app.js). */
 
+import { readDraft, applyDraftTheme } from './editor/draft.js';
 
 // Mọi đường dẫn tính từ gốc: trang có thể nằm ở /ganh-som/phong, đường dẫn tương đối sẽ trỏ sai thư mục.
 const DATA_ROOT = '/brands';
@@ -34,6 +35,15 @@ let registry = {};
 const loading = new Map();
 // Mỗi lần dựng mang một số; lần dựng cũ tải xong muộn hơn lần mới thì bỏ, không vẽ đè trang mới.
 let renderToken = 0;
+// Editor (#82): trang chạy trong khung của editor thì không hiện nút "Thử chỉnh"; editor báo nháp đổi bằng DRAFT_EVENT.
+// Dựng xong mỗi lần thì phát RENDERED_EVENT (thương hiệu, trang, dữ liệu gốc) để editor và nút "Thử chỉnh" biết.
+const IN_EDITOR = Boolean(window.frameElement?.hasAttribute('data-ed-frame'));
+const DRAFT_EVENT = 'wl:draft';
+const RENDERED_EVENT = 'wl:rendered';
+let launcher = null;
+let lastRendered = null;
+// Nháp editor gửi thẳng qua DRAFT_EVENT: vẫn xem trước được khi trình duyệt chặn localStorage.
+let editorDraft = null;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -205,12 +215,17 @@ function hasComponent(section) {
 }
 
 // Xoá hết khối cũ rồi mới đặt khối mới, nên đổi thương hiệu hay trang không bị lặp hay sót khối.
+// Mỗi khối mang số thứ tự của nó trong sections (kể cả khối ẩn), để editor biết bấm vào khối nào là sửa mục nào.
 function renderSections(data, page) {
   const site = siteInfo(data);
   const blocks = (page.sections ?? [])
-    .filter((section) => !section.hidden)
-    .filter(hasComponent)
-    .map((section) => createSection(section, site));
+    .map((section, index) => ({ section, index }))
+    .filter(({ section }) => !section.hidden && hasComponent(section))
+    .map(({ section, index }) => {
+      const el = createSection(section, site);
+      el.dataset.section = String(index);
+      return el;
+    });
   document.getElementById('main').replaceChildren(...blocks);
 }
 
@@ -276,10 +291,18 @@ function replayChoice() {
   document.dispatchEvent(new CustomEvent(CHOOSE_EVENT, { detail }));
 }
 
-async function render(raw) {
+// Nháp "Thử chỉnh" của thương hiệu này: trong khung editor lấy bản editor vừa gửi, ngoài ra đọc trên máy.
+function draftFor(raw) {
+  if (IN_EDITOR && editorDraft?.content?.id === raw.id) return editorDraft;
+  return readDraft(raw.id, raw);
+}
+
+async function render(raw, useDraft = true) {
   const token = ++renderToken;
   lastRaw = raw;
-  const data = resolveLinks(raw, raw.id);
+  // Thương hiệu đang có nháp "Thử chỉnh" thì dựng theo nháp; lastRaw vẫn giữ bản gốc để về bản gốc được.
+  const draft = useDraft ? draftFor(raw) : null;
+  const data = resolveLinks(draft?.content ?? raw, raw.id);
   // Đổi thương hiệu thì giữ trang đang mở; thương hiệu mới không có trang đó thì hiện trang 404 nó tự khai,
   // không khai thì về trang chủ.
   let page = findPage(data, currentPage);
@@ -295,12 +318,39 @@ async function render(raw) {
   if (token !== renderToken) return;
   // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
   applyBrand(data, page);
-  renderSections(data, page);
-  renderFixed(data, page);
+  applyDraftTheme(draft?.theme);
+  try {
+    renderSections(data, page);
+    renderFixed(data, page);
+  } catch (err) {
+    // Nháp hỏng cấu trúc thì dựng lại theo bản gốc, để trang khách không trắng và vẫn có nút về bản gốc.
+    if (!draft) throw err;
+    console.warn('Nháp Thử chỉnh lỗi, dựng theo bản gốc:', err);
+    return render(raw, false);
+  }
   markCurrentPage();
   replayChoice();
   if (firstRender) scrollToHash();
   firstRender = false;
+  // page là trang thật sự đã dựng (ví dụ "404" khi địa chỉ trỏ tới trang không có), để editor sửa đúng trang đó.
+  lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft) };
+  document.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
+  // Trong khung editor thì báo cả lên thẻ iframe: editor nghe một lần ở đó, không phụ thuộc lúc khung tải.
+  if (IN_EDITOR) window.frameElement.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
+  if (!IN_EDITOR) mountLauncher();
+}
+
+// Về bản gốc (nháp đã xoá): trang đang mở chỉ có trong nháp (trang thêm khi thử) thì về trang chủ.
+function resetDraft() {
+  if (!findPage(lastRaw, currentPage)) currentPage = HOME;
+  return render(lastRaw).catch(showError);
+}
+
+// Nút "Thử chỉnh" và dải báo đang thử nháp: tải sau khi trang đã dựng, không làm chậm lần hiện đầu tiên.
+function mountLauncher() {
+  launcher ??= import('./editor/launch.js')
+    .then((m) => m.mountLauncher({ current: lastRendered, reset: resetDraft }))
+    .catch((err) => console.error('Không tải được nút Thử chỉnh:', err));
 }
 
 // Link trỏ tới một trang khác của cùng thương hiệu thì trả về trang đó; link ra ngoài, sang thương hiệu khác,
@@ -308,6 +358,8 @@ async function render(raw) {
 function samebrandPage(a) {
   if (!a || !currentId || a.hasAttribute('download') || (a.target && a.target !== '_self')) return null;
   const url = new URL(a.href, location.href);
+  // Link có phần ?... khác trang hiện tại (ví dụ nút "Thử chỉnh" trỏ tới ?sua để mở editor) thì để trình duyệt mở hẳn.
+  if (url.search !== location.search) return null;
   const root = `/${currentId}`;
   if (url.origin !== location.origin || !(url.pathname === root || url.pathname.startsWith(`${root}/`))) return null;
   const page = normalizePage(decodeURIComponent(url.pathname.slice(root.length)));
@@ -369,6 +421,15 @@ function listenPage() {
   addEventListener('popstate', onPopState);
 }
 
+// Trong khung của editor: nhận nháp mới qua DRAFT_EVENT rồi dựng lại trang đang mở.
+function listenDraft() {
+  if (!IN_EDITOR) return;
+  document.addEventListener(DRAFT_EVENT, (e) => {
+    editorDraft = e.detail ?? null;
+    if (lastRaw) render(lastRaw).catch(showError);
+  });
+}
+
 // components: bảng tra thẻ, cách tải JS, các file CSS (khai ở app.js).
 export async function start(components = {}) {
   registry = components;
@@ -376,6 +437,13 @@ export async function start(components = {}) {
     const list = await loadBrandList();
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
+    // Địa chỉ có ?sua: mở editor; trang thật chạy trong khung của editor, nên trang ngoài không dựng gì.
+    if (new URLSearchParams(location.search).has('sua') && !IN_EDITOR) {
+      const { openEditor } = await import('./editor/editor.js');
+      openEditor({ brands: list.brands, id: here.id ?? list.default, page: here.page });
+      return;
+    }
+    listenDraft();
     currentPage = here.page;
     saveBrand(here.id);
     listenPage();
