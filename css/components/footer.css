@@ -534,3 +534,74 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
     animation: none;
   }
 }
+
+/* ========= DÂY ĐIỆN, BIỂN SỐ NHÀ (footer.wires, footer.plate) =========
+   Dây điện vắt ngang chỗ nối trang và footer, nền là màu trang để như dây giăng qua khoảng trống.
+   Biển số nhà nằm ở cột địa chỉ: nền màu nhấn, chữ và viền lồng trong màu nền trang (màu nhấn luôn đạt tương phản
+   trên màu nền, xem AGENTS.md mục 5), số chữ bảng hiệu (--font-hand). */
+
+.footer__wires {
+  display: block;
+  width: 100%;
+  height: clamp(4.5rem, 9vw, 8.75rem);
+  margin-bottom: -1px;
+  overflow: visible;
+  background: var(--color-bg);
+}
+
+.footer__wires path {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.footer__wire {
+  transform-origin: 50% 0;
+  animation: footer-sway 6s ease-in-out infinite alternate;
+}
+
+.footer__wire:nth-child(2n) {
+  stroke-width: 1.6;
+  animation-duration: 7.5s;
+}
+
+.footer__wire:nth-child(4) {
+  stroke-width: 3;
+}
+
+@keyframes footer-sway {
+  to { transform: scaleY(1.06) translateY(2px); }
+}
+
+.footer__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 0 0.6rem;
+  padding: 0.7rem 1rem;
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-radius: 0.6rem;
+  box-shadow: inset 0 0 0 3px var(--color-accent), inset 0 0 0 5px var(--color-bg);
+  transform: rotate(-2deg);
+}
+
+.footer__plate-no {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.footer__plate-street {
+  padding-left: 0.8rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+  border-left: 2px solid var(--color-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__wire { animation: none; }
+}

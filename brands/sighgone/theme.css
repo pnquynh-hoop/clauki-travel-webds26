@@ -1,0 +1,30 @@
+/* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
+   Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Bungee&display=swap');
+
+/* SighGone: tour trong ngày quanh Sài Gòn. Màu lấy từ phố: giấy báo cũ làm nền, vàng taxi và mũ xe ôm cho nút,
+   xanh biển số nhà cho chữ nhấn. Bungee là chữ bảng hiệu (--font-hand): số trên biển số, đồng hồ, nhãn, dòng nhấn ở footer.
+   Tương phản (WCAG): chữ nút trên --color-primary 12.48; --color-ink trên nền 16.27; --color-muted trên nền 6.61;
+   --color-accent trên nền 6.19, trên thẻ trắng 7.17, trên --color-tint 5.4; --color-ink trên --color-tint 14.2. */
+:root {
+  --color-primary: #ffcc1d;
+  --color-on-primary: #111114;
+  --color-bg: #f2eee4;
+  --color-surface: #ffffff;
+  --color-ink: #111114;
+  --color-muted: #55525a;
+  --color-accent: #1f4fbf;
+  --color-tint: #e6dfcf;
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-hand: 'Bungee', system-ui, sans-serif;
+  --radius: 0.875rem;
+  /* Nút như bảng hiệu dán tường: viền mực, bóng in lệch không nhoè; rê chuột thì nút nhấc lên, bóng dài ra. */
+  --btn-border: #111114;
+  --btn-shadow: 4px 4px 0 #111114;
+  --btn-shadow-hover: 6px 6px 0 #111114;
+  --btn-lift: -2px -2px;
+  /* Thẻ thông tin (đồng hồ, mẹo, bảng chính sách) cùng kiểu với nút: viền mực, bóng in lệch. */
+  --card-border: 2px solid #111114;
+  --card-shadow: 8px 8px 0 #111114;
+}

@@ -310,6 +310,34 @@
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 11%, transparent);
 }
 
+/* Hàng nút chọn nhóm câu hỏi: nhóm đang chọn tô màu chủ đạo; hết chỗ thì xuống hàng, để không nhóm nào bị khuất. */
+.faq__topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.faq__topic {
+  flex: none;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.85rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1.5px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.faq__topic[aria-pressed='true'] {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--btn-border, var(--color-primary));
+}
+
 .faq__pick {
   margin: 0 0 0.6rem 0.25rem;
   font-size: 0.8125rem;

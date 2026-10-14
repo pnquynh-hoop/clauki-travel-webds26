@@ -22,8 +22,48 @@ function columnsEl(content, footer) {
       linkEl(telHref(contact.phone), contact.phone, 'footer__link'),
       linkEl(contact.email && `mailto:${contact.email}`, contact.email, 'footer__link'),
     ]),
-    columnEl(footer.addressTitle, [textEl('p', 'footer__address', contact.address)]),
+    columnEl(footer.addressTitle, [plateEl(footer.plate), textEl('p', 'footer__address', contact.address)]),
   ]);
+}
+
+// Biển số nhà (footer.plate): số lớn, bên cạnh là tên hẻm, quận; nhãn đầy đủ cho trình đọc màn hình nằm ở label.
+function plateEl(plate) {
+  if (!plate?.number) return null;
+  const box = document.createElement('p');
+  box.className = 'footer__plate';
+  if (plate.label) {
+    box.setAttribute('role', 'img');
+    box.setAttribute('aria-label', plate.label);
+  }
+  const lines = document.createElement('span');
+  lines.className = 'footer__plate-street';
+  (plate.lines ?? []).forEach((line, i) => lines.append(...(i ? [document.createElement('br')] : []), line));
+  box.append(textEl('span', 'footer__plate-no', plate.number), lines);
+  return box;
+}
+
+// Dây điện chằng chịt (footer.wires: true) vắt ngang chỗ nối trang và footer, khẽ đung đưa; chỉ để trang trí.
+const WIRES = ['M0 30 C 360 120, 720 120, 1440 40', 'M0 55 C 400 140, 900 90, 1440 70', 'M0 20 C 500 90, 1000 130, 1440 25',
+  'M0 75 C 300 110, 1100 140, 1440 95'];
+const TANGLE = 'M700 104 c 20 -30, 60 30, 30 10 s -40 -20, -10 -30 s 40 40, 10 30';
+const BIRDS = ['M380 92 q6 -6 12 0 q6 -6 12 0', 'M1010 99 q5 -5 10 0 q5 -5 10 0'];
+
+function wiresEl(on) {
+  if (on !== true) return null;
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('class', 'footer__wires');
+  svg.setAttribute('viewBox', '0 0 1440 140');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = (d, cls) => {
+    const el = document.createElementNS(ns, 'path');
+    el.setAttribute('d', d);
+    if (cls) el.setAttribute('class', cls);
+    return el;
+  };
+  svg.append(...WIRES.map((d) => path(d, 'footer__wire')), path(TANGLE, 'footer__wire-tangle'), ...BIRDS.map((d) => path(d, 'footer__bird')));
+  return svg;
 }
 
 // Ảnh CC BY và CC BY-SA bắt buộc ghi tên tác giả, giấy phép và nguồn trên trang, nên mỗi ảnh một dòng.
@@ -181,12 +221,12 @@ export class WlFooter extends HTMLElement {
     const photo = photoEl(footer.image);
     const heading = headingEl(footer.title, footer.titleAccent);
     if (!photo && !heading) {
-      this.replaceChildren(...[tickerEl(footer.marquee), groupEl('footer__main container', parts)].filter(Boolean));
+      this.replaceChildren(...[wiresEl(footer.wires), tickerEl(footer.marquee), groupEl('footer__main container', parts)].filter(Boolean));
     } else {
       const inner = groupEl('footer__inner container', [heading, tickerEl(footer.marquee), groupEl('footer__main footer__panel', parts)]);
       // Có lời hẹn mà không có ảnh thì thêm lớp --plain để CSS đổi sang nền trang, chữ màu mực.
       const sceneClass = photo ? 'footer__scene' : 'footer__scene footer__scene--plain';
-      this.replaceChildren(groupEl(sceneClass, [photo, cloudsEl(footer.clouds), inner]));
+      this.replaceChildren(...[wiresEl(footer.wires), groupEl(sceneClass, [photo, cloudsEl(footer.clouds), inner])].filter(Boolean));
     }
     this._ticker = this.querySelector('.footer__ticker-track');
     this._photo = this.querySelector('.footer__photo');

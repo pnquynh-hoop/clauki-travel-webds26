@@ -5,6 +5,7 @@
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, clamp, smooth } from '../dom.js';
 import { attachReveal } from '../effects/hero-reveal.js';
+import { buildHaze } from './hero-haze.js';
 
 function statsEl(stats) {
   if (!stats?.length) return null;
@@ -91,6 +92,8 @@ export class WlHero extends HTMLElement {
   disconnectedCallback() {
     this._detachEffect?.();
     this._detachEffect = null;
+    this._detachHaze?.();
+    this._detachHaze = null;
     this.stop();
   }
 
@@ -370,8 +373,19 @@ export class WlHero extends HTMLElement {
     inner.className = 'hero__inner container';
     inner.append(copy);
 
-    // Kiểu full: dựng sân khấu riêng thay cho khung ảnh; xem phần kiểu full ở trên.
+    // Dựng lại thì tắt chuyển động và sương của lần dựng trước.
     this.stop();
+    this._detachHaze?.();
+    this._detachHaze = null;
+    // Kiểu haze: ảnh phủ sương ở tệp hero-haze.js.
+    if (section.variant === 'haze') {
+      const { stage, detach } = buildHaze(this, section, inner);
+      this._detachHaze = detach;
+      this.replaceChildren(stage, inner);
+      this.attachEffect(section);
+      return;
+    }
+    // Kiểu full: dựng sân khấu riêng thay cho khung ảnh; xem phần kiểu full ở trên.
     this._stage = section.variant === 'full' ? this.stageEl(section, inner) : null;
     if (this._stage) {
       this.replaceChildren(this._stage);
@@ -381,9 +395,10 @@ export class WlHero extends HTMLElement {
     }
 
     // Từ hai ảnh trở lên mới cần chồng thẻ; một ảnh thì dùng khung ảnh thường.
+    // Kiểu stacked chỉ có một khung ảnh: dữ liệu có nhiều ảnh (đổi kiểu từ coverflow) thì lấy ảnh đầu.
     const slides = (section.slides ?? []).filter((slide) => slide.image?.src);
     this._cards = [];
-    if (slides.length > 1) {
+    if (slides.length > 1 && section.variant !== 'stacked') {
       const { backdrop, deck, controls } = this.deckEl(section, slides);
       inner.append(deck, controls);
       this.replaceChildren(backdrop, inner);

@@ -11,7 +11,7 @@ import { start } from './core.js';
 const COMPONENTS = {
   'wl-intro': { load: () => import('./components/wl-intro.js').then((m) => m.WlIntro), css: ['intro'] },
   'wl-journey': { load: () => import('./components/wl-journey.js').then((m) => m.WlJourney), css: ['journey'] },
-  'wl-hero': { load: () => import('./components/wl-hero.js').then((m) => m.WlHero), css: ['hero', 'hero-reveal'] },
+  'wl-hero': { load: () => import('./components/wl-hero.js').then((m) => m.WlHero), css: ['hero', 'hero-reveal', 'hero-haze'] },
   'wl-header': { load: () => import('./components/wl-header.js').then((m) => m.WlHeader), css: ['header'] },
   'wl-footer': { load: () => import('./components/wl-footer.js').then((m) => m.WlFooter), css: ['footer'] },
   'wl-host': { load: () => import('./components/wl-host.js').then((m) => m.WlHost), css: ['host', 'host-tv'] },
@@ -26,6 +26,9 @@ const COMPONENTS = {
   'wl-process': { load: () => import('./components/wl-process.js').then((m) => m.WlProcess), css: ['process'] },
   'wl-reviews': { load: () => import('./components/wl-reviews.js').then((m) => m.WlReviews), css: ['reviews'] },
   'wl-room-detail': { load: () => import('./components/wl-room-detail.js').then((m) => m.WlRoomDetail), css: ['room-detail', 'lightbox'] },
+  'wl-clock': { load: () => import('./components/wl-clock.js').then((m) => m.WlClock), css: ['clock'] },
+  'wl-tips': { load: () => import('./components/wl-tips.js').then((m) => m.WlTips), css: ['tips'] },
+  'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },
 };
 
 start(COMPONENTS);
