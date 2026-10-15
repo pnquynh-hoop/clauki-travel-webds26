@@ -4,7 +4,11 @@
 
 // [giá trị variant, tên hiện trong editor]; giá trị rỗng là kiểu mặc định (không ghi variant).
 export const BLOCKS = {
-  hero: { label: 'Ảnh đầu trang', variants: [['coverflow', 'Chồng thẻ ảnh xoay'], ['full', 'Ảnh phủ kín, mây vén khi cuộn'], ['stacked', 'Chữ trên, ảnh tràn ngang'], ['haze', 'Ảnh phủ sương, rê chuột thì tan']] },
+  hero: {
+    label: 'Ảnh đầu trang',
+    variants: [['coverflow', 'Chồng thẻ ảnh xoay'], ['full', 'Ảnh phủ kín, mây vén khi cuộn'], ['stacked', 'Chữ trên, ảnh tràn ngang'], ['haze', 'Ảnh phủ sương, rê chuột thì tan'], ['ride', 'Cuộn qua từng ga, thành phố trôi ngang']],
+    needs: { ride: (s) => Array.isArray(s.stops) && s.stops.length > 0 },
+  },
   intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa']] },
   gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong']] },
   faq: { label: 'Hỏi đáp', variants: [['', 'Danh sách gập mở'], ['chat', 'Khung nhắn tin']] },
@@ -92,6 +96,20 @@ const FIELDS = {
     ...HEAD,
     { key: 'link.label', label: 'Chữ trên nút phụ', type: 'text', optional: true },
     { key: 'image', label: 'Ảnh', type: 'image', optional: true },
+    { key: 'price.now', label: 'Giá hiện tại', type: 'text', optional: true },
+    { key: 'price.was', label: 'Giá thường', type: 'text', optional: true },
+    {
+      // Kiểu ride: mỗi ga một dòng. Cỡ và chỗ đặt công trình (scene) là số chỉnh tay theo từng ảnh nên không đưa vào form.
+      key: 'stops', label: 'Các ga', type: 'list', optional: true,
+      fields: [
+        { key: 'time', label: 'Giờ (HH:MM)', type: 'text' },
+        { key: 'place', label: 'Tên ga', type: 'text' },
+        { key: 'note', label: 'Ghi chú', type: 'text' },
+        { key: 'how', label: 'Phương tiện', type: 'text' },
+        { key: 'image', label: 'Ảnh công trình tách nền', type: 'image' },
+      ],
+      item: { time: '12:00', place: 'Ga mới', note: '', how: '', image: { src: '', alt: '' } },
+    },
     {
       key: 'slides', label: 'Các ảnh', type: 'list', optional: true,
       fields: [{ key: 'image', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
