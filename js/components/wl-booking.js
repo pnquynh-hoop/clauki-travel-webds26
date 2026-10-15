@@ -1355,8 +1355,9 @@ export class WlBooking extends HTMLElement {
       return dot;
     }).filter(Boolean));
     p.date.value.textContent = values.date;
-    p.time.value.textContent = this._tour?.start ?? '';
-    p.time.node.hidden = !this._tour?.start;
+    const start = this._tour?.start ?? this._data.start ?? '';
+    p.time.value.textContent = start;
+    p.time.node.hidden = !start;
     p.guests.value.textContent = fill(this._data.labels?.guestsValue ?? '{guests}', values);
     p.total.value.textContent = values.total;
     p.who.replaceChildren(`${values.name}, ${values.phone}`, document.createElement('br'), values.pickup);
@@ -1382,7 +1383,7 @@ export class WlBooking extends HTMLElement {
     }
     const q = this.quoteCalendar();
     const date = viDate(this._departure.date);
-    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), tour: this._tour?.name ?? '', pickup: this.pickup()?.label ?? '', seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
+    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), tour: this._tour?.name ?? section.tourName ?? '', pickup: this.pickup()?.label ?? '', seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
     if (this._pass) {
       this.fillPass(values);
     } else {

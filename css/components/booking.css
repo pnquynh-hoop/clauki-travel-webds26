@@ -1486,8 +1486,13 @@ button.booking__day:not(:disabled):hover {
   gap: 2.5rem;
 }
 
+.booking--ticket .booking__head {
+  max-width: none;
+}
+
 .booking--ticket .booking__title {
-  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  max-width: 18ch;
+  font-size: clamp(2.4rem, 7.5vw, 5.5rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
 }
@@ -1871,7 +1876,9 @@ button.booking__day:not(:disabled):hover {
   display: grid;
   gap: 0.3rem;
   padding: 1rem;
-  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  /* Font chữ thường có đủ dấu tiếng Việt (font đơn cách của hệ thống thiếu ơ, ỗ...), số vẫn thẳng hàng nhờ tabular-nums. */
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.4;
@@ -1944,6 +1951,11 @@ button.booking__day:not(:disabled):hover {
   box-shadow: 0 16px 30px -18px rgba(0, 0, 0, 0.5);
   rotate: 0deg;
   animation: booking-pass-print 1.6s steps(14) both, booking-pass-settle 0.5s 1.6s ease both;
+}
+
+/* display: grid của thẻ thắng thuộc tính hidden: chưa gửi form thì thẻ phải ẩn hẳn. */
+.booking--ticket .booking__pass[hidden] {
+  display: none;
 }
 
 @keyframes booking-pass-print {
