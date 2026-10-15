@@ -9,7 +9,7 @@
 .catalog-list__head {
   display: grid;
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .catalog-list__eyebrow {
@@ -52,6 +52,138 @@
   color: var(--color-surface);
   background: var(--color-accent);
   border-radius: calc(var(--radius) / 2);
+}
+
+/* Bộ lọc như bàn phím máy bán vé: mỗi nhóm một hàng phím nổi, bấm thì phím lún xuống và sáng đèn. */
+.catalog-list__filters {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  padding: clamp(0.85rem, 2vw, 1.2rem);
+  background: var(--color-tint, color-mix(in srgb, var(--color-ink) 8%, var(--color-bg)));
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow: var(--card-shadow, none);
+}
+
+.catalog-list__row {
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* Màn rộng: tên hàng đứng bên trái hàng phím, mỗi nhóm chỉ còn một dòng nên hộp lọc thấp hẳn. */
+@media (min-width: 760px) {
+  .catalog-list__row {
+    grid-template-columns: 5.5rem 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.catalog-list__row-label {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+}
+
+.catalog-list__keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.catalog-list__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: calc(var(--radius) * 0.7);
+  box-shadow: 0 4px 0 var(--color-ink);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, background-color 0.2s;
+}
+
+.catalog-list__key:hover {
+  background: var(--color-surface);
+}
+
+.catalog-list__key:focus-visible,
+.catalog-list__reset:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Phím đang chọn: lún xuống, nền pha màu của phương tiện (nhóm khác dùng màu nút), đèn nhỏ sáng bên phải. */
+.catalog-list__key[aria-pressed='true'] {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--color-ink);
+  background: color-mix(in srgb, var(--kc, var(--color-primary)) 35%, var(--color-surface));
+}
+
+.catalog-list__key[aria-pressed='true']::after {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--kc, var(--color-primary));
+  box-shadow: 0 0 8px var(--kc, var(--color-primary));
+}
+
+.catalog-list__reset {
+  justify-self: start;
+  padding: 0.2rem 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+/* Không còn tour hợp lựa chọn: một tấm bảng màu nút kèm lối sang tour riêng. */
+.catalog-list__empty {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  padding: clamp(2rem, 6vw, 4rem);
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: var(--card-border, 0);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, none);
+}
+
+/* Nút nằm trên nền màu nút nên đổi sang nền mực, nếu không nút lẫn vào tấm bảng. */
+.catalog-list__empty .btn {
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.catalog-list__empty-text {
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* Thẻ trượt về chỗ mới khi lọc: chỉ áp cho các thẻ, không đổi nhịp chuyển trang chung của cả site. */
+.catalog-list__card {
+  view-transition-class: catalog-card;
+}
+
+::view-transition-group(*.catalog-card) {
+  animation-duration: 0.45s;
 }
 
 .catalog-list__grid {
@@ -206,7 +338,8 @@ a.catalog-list__card:hover .catalog-list__media img {
 
 @media (prefers-reduced-motion: reduce) {
   .catalog-list__card,
-  .catalog-list__media img {
+  .catalog-list__media img,
+  .catalog-list__key {
     transition: none;
   }
 
