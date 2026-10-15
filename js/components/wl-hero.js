@@ -6,6 +6,7 @@ import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, clamp, smooth } from '../dom.js';
 import { attachReveal } from '../effects/hero-reveal.js';
 import { buildHaze } from './hero-haze.js';
+import { buildRide } from './hero-ride.js';
 
 function statsEl(stats) {
   if (!stats?.length) return null;
@@ -94,6 +95,8 @@ export class WlHero extends HTMLElement {
     this._detachEffect = null;
     this._detachHaze?.();
     this._detachHaze = null;
+    this._detachRide?.();
+    this._detachRide = null;
     this.stop();
   }
 
@@ -377,6 +380,15 @@ export class WlHero extends HTMLElement {
     this.stop();
     this._detachHaze?.();
     this._detachHaze = null;
+    this._detachRide?.();
+    this._detachRide = null;
+    // Kiểu ride: poster rồi cuộn qua từng ga, ở tệp hero-ride.js.
+    if (section.variant === 'ride') {
+      const { stage, detach } = buildRide(this, section, this.site);
+      this._detachRide = detach;
+      this.replaceChildren(stage);
+      return;
+    }
     // Kiểu haze: ảnh phủ sương ở tệp hero-haze.js.
     if (section.variant === 'haze') {
       const { stage, detach } = buildHaze(this, section, inner);

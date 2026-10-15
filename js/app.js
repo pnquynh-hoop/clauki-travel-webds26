@@ -11,7 +11,7 @@ import { start } from './core.js';
 const COMPONENTS = {
   'wl-intro': { load: () => import('./components/wl-intro.js').then((m) => m.WlIntro), css: ['intro'] },
   'wl-journey': { load: () => import('./components/wl-journey.js').then((m) => m.WlJourney), css: ['journey'] },
-  'wl-hero': { load: () => import('./components/wl-hero.js').then((m) => m.WlHero), css: ['hero', 'hero-reveal', 'hero-haze'] },
+  'wl-hero': { load: () => import('./components/wl-hero.js').then((m) => m.WlHero), css: ['hero', 'hero-reveal', 'hero-haze', 'hero-ride'] },
   'wl-header': { load: () => import('./components/wl-header.js').then((m) => m.WlHeader), css: ['header'] },
   'wl-footer': { load: () => import('./components/wl-footer.js').then((m) => m.WlFooter), css: ['footer'] },
   'wl-host': { load: () => import('./components/wl-host.js').then((m) => m.WlHost), css: ['host', 'host-tv'] },
