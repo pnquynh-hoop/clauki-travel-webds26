@@ -3,9 +3,12 @@
    - không có variant: lưới ảnh có chú thích, dạng cơ bản;
    - slices (Gành Sớm): các ảnh là dải hẹp đứng cạnh nhau như tấm bình phong; rê chuột, bấm, Tab hoặc phím mũi tên
      tới dải nào thì dải đó xoè rộng, hiện số thứ tự, chú thích và tên tác giả. Điện thoại thì các dải nằm ngang xếp dọc.
-     Ảnh có href (và section có linkLabel) thì dải mở ra kèm một liên kết, ví dụ sang danh sách tour đã lọc theo cách đi đó. */
+     Ảnh có href (và section có linkLabel) thì dải mở ra kèm một liên kết, ví dụ sang danh sách tour đã lọc theo cách đi đó;
+   - plates (SighGone): lưới ô như biển số nhà (nền màu nhấn, viền trắng bên trong), mỗi ô có số, tên (caption), icon và dòng phụ
+     (`note`, `icon` tuỳ chọn); rê chuột hoặc Tab tới ô thì ảnh loang ra từ chỗ con trỏ; ảnh có href thì cả ô là liên kết. */
 import { asset } from '../core.js';
 import { textEl, groupEl, linkEl } from '../dom.js';
+import { iconEl } from '../icon.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -114,6 +117,39 @@ export class WlGallery extends HTMLElement {
     return list;
   }
 
+  // Kiểu plates: ghi vị trí con trỏ vào ô để ảnh loang ra đúng từ chỗ chuột đi vào (CSS đọc --mx, --my).
+  plateEl(image, i) {
+    const plate = document.createElement(image.href ? 'a' : 'div');
+    plate.className = 'gallery__plate';
+    if (image.href) plate.href = image.href;
+    else plate.tabIndex = 0;
+    const photo = document.createElement('span');
+    photo.className = 'gallery__plate-photo';
+    photo.append(imgEl(image, true));
+    const number = textEl('span', 'gallery__plate-no', pad(i + 1));
+    number.setAttribute('aria-hidden', 'true');
+    const name = textEl('span', 'gallery__plate-name', image.caption);
+    if (name) name.prepend(...[iconEl(image.icon, 'gallery__plate-icon')].filter(Boolean));
+    plate.append(photo, number, groupEl('gallery__plate-text', [name, textEl('span', 'gallery__plate-note', image.note)]));
+    plate.addEventListener('pointermove', (e) => {
+      const box = plate.getBoundingClientRect();
+      plate.style.setProperty('--mx', `${e.clientX - box.left}px`);
+      plate.style.setProperty('--my', `${e.clientY - box.top}px`);
+    });
+    return plate;
+  }
+
+  platesEl(images) {
+    const list = document.createElement('div');
+    list.className = 'gallery__plates';
+    if (this._data.listLabel) {
+      list.setAttribute('role', 'group');
+      list.setAttribute('aria-label', this._data.listLabel);
+    }
+    list.append(...images.map((image, i) => this.plateEl(image, i)));
+    return list;
+  }
+
   render() {
     const section = this._data;
     const variant = section.variant;
@@ -130,7 +166,7 @@ export class WlGallery extends HTMLElement {
       groupEl('gallery__intro', [textEl('p', 'gallery__lead', section.lead), variant === 'slices' ? hint : null]),
     ]);
 
-    const body = variant === 'slices' && images.length ? this.slicesEl(images) : gridEl(images);
+    const body = images.length && variant === 'slices' ? this.slicesEl(images) : images.length && variant === 'plates' ? this.platesEl(images) : gridEl(images);
     this.replaceChildren(...[groupEl('gallery__inner container', [head, body])].filter(Boolean));
     if (variant === 'slices' && images.length) this.open(0);
   }
