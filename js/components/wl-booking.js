@@ -96,6 +96,12 @@ export class WlBooking extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('wl:choose-room', this._onChoose);
+    this.stopCountdown();
+  }
+
+  stopCountdown() {
+    clearInterval(this._countTimer);
+    this._countTimer = null;
   }
 
   chooseRoom(id) {
@@ -742,6 +748,84 @@ export class WlBooking extends HTMLElement {
     return { row, term, value };
   }
 
+  // Đếm ngược tới hết ngày ưu đãi (deal.until, 23:59:59 giờ máy khách, cùng cách tính với dealActive).
+  // Mẫu chữ labels.dealCountdown có {d} {h} {m} {s}; thiếu mẫu hoặc ưu đãi đã hết hạn thì không có dòng này.
+  countdownEl() {
+    const deal = this._data.deal;
+    const template = this._data.labels?.dealCountdown;
+    if (!template || !this.dealActive() || !deal.until) return null;
+    const [y, m, d] = deal.until.split('-').map(Number);
+    const end = new Date(y, m - 1, d, 23, 59, 59);
+    const line = textEl('p', 'booking__hold-count', ' ');
+    const tick = () => {
+      const left = Math.max(0, end - Date.now());
+      const two = (n) => String(n).padStart(2, '0');
+      line.textContent = fill(template, { d: Math.floor(left / DAY), h: two(Math.floor(left / 36e5) % 24), m: two(Math.floor(left / 6e4) % 60), s: two(Math.floor(left / 1e3) % 60) });
+      if (!left) this.stopCountdown();
+    };
+    this.stopCountdown();
+    tick();
+    this._countTimer = setInterval(tick, 1000);
+    return line;
+  }
+
+  // Sơ đồ ghế (tuỳ chọn, khai seatMap.total): các ghế đầu là chỗ đã có người, số ghế trống là số chỗ còn của chuyến đang chọn.
+  // Số khách và ghế chọn luôn khớp nhau: bấm ghế thì số khách đổi, đổi số khách hoặc đổi chuyến thì ghế đổi theo.
+  seatPickEl(prefix) {
+    const total = this._data.seatMap?.total;
+    if (!total) return null;
+    const labels = this._data.labels ?? {};
+    this._picked = new Set();
+    this._seatDep = null;
+    const map = document.createElement('div');
+    map.className = 'booking__seatmap';
+    map.setAttribute('role', 'group');
+    if (labels.seatMap) map.setAttribute('aria-label', labels.seatMap);
+    this._seatButtons = Array.from({ length: total }, (_, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'booking__seat';
+      button.textContent = String(i + 1);
+      button.addEventListener('click', () => this.toggleSeat(i + 1));
+      map.append(button);
+      return button;
+    });
+    return groupEl('booking__seatpick', [textEl('span', 'booking__seatpick-label', labels.seatPick), map]);
+  }
+
+  syncSeats(guests) {
+    const total = this._data.seatMap.total;
+    const dep = this._departure;
+    const taken = total - (dep?.seats ?? 0);
+    if (this._seatDep !== dep) {
+      this._picked = new Set();
+      this._seatDep = dep;
+    }
+    const picks = [...this._picked].filter((n) => n > taken).sort((a, b) => a - b).slice(0, guests);
+    for (let n = taken + 1; n <= total && picks.length < guests; n += 1) {
+      if (!picks.includes(n)) picks.push(n);
+    }
+    this._picked = new Set(picks);
+    const labels = this._data.labels ?? {};
+    this._seatButtons.forEach((button, i) => {
+      const n = i + 1;
+      button.disabled = n <= taken;
+      button.setAttribute('aria-pressed', String(this._picked.has(n)));
+      if (n <= taken && labels.seatTaken) button.setAttribute('aria-label', fill(labels.seatTaken, { n }));
+      else button.removeAttribute('aria-label');
+    });
+  }
+
+  toggleSeat(n) {
+    const next = new Set(this._picked);
+    if (next.has(n)) next.delete(n);
+    else next.add(n);
+    if (!next.size) return;
+    this._picked = next;
+    this._fields.guests.control.value = String(next.size);
+    this.updateCalendar();
+  }
+
   calendarEl() {
     const section = this._data;
     const labels = section.labels ?? {};
@@ -761,6 +845,7 @@ export class WlBooking extends HTMLElement {
       groupEl('booking__terms', [
         this.listEl(labels.includesTitle, section.includes, 'booking__included'),
         this.listEl(labels.excludesTitle, section.excludes, 'booking__included booking__included--no'),
+        this.listEl(labels.bringTitle, section.bring, 'booking__included booking__included--bring'),
       ]),
       ...(section.policies ?? []).map((policy) => this.policyEl(policy)),
     ]);
@@ -788,7 +873,9 @@ export class WlBooking extends HTMLElement {
     this._form.append(...[
       price,
       this.dealActive() ? textEl('p', 'booking__hold-deal', section.deal.label) : null,
+      this.countdownEl(),
       ...Object.values(this._fields).map((ref) => ref.field),
+      this.seatPickEl(prefix),
       sum,
       this._submit,
     ].filter(Boolean));
@@ -821,6 +908,7 @@ export class WlBooking extends HTMLElement {
     g.less.disabled = value <= g.min;
     g.more.disabled = value >= max;
     this._submit.disabled = !dep;
+    if (this._seatButtons) this.syncSeats(value);
     if (this._fields.name.control.value.trim()) showError(this._fields.name, '');
     if (validPhone(this._fields.phone.control.value.trim())) showError(this._fields.phone, '');
 
@@ -900,7 +988,7 @@ export class WlBooking extends HTMLElement {
     }
     const q = this.quoteCalendar();
     const date = viDate(this._departure.date);
-    const values = { name, phone, date, guests: q.guests, total: this.money(q.total) };
+    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
     const t = this._ticketInfo;
     t.guest.textContent = name;
     t.date.textContent = date;
@@ -923,6 +1011,9 @@ export class WlBooking extends HTMLElement {
     const section = this._data;
     const variant = section.variant ?? 'calendar';
     this.className = `booking booking--${variant}`;
+    // Dựng lại từ đầu (đổi thương hiệu): bỏ đồng hồ và sơ đồ ghế của lần trước.
+    this.stopCountdown();
+    this._seatButtons = null;
 
     const head = groupEl('booking__head', [
       textEl('p', 'booking__eyebrow', section.eyebrow),

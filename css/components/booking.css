@@ -826,6 +826,59 @@ form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
   color: var(--color-ink);
 }
 
+.booking__hold-count {
+  margin: -0.5rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Sơ đồ ghế: bốn ghế một hàng; ghế đã có người gạch chéo, không dựa vào màu. */
+.booking__seatpick {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.booking__seatpick-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.booking__seatmap {
+  display: grid;
+  grid-template-columns: repeat(4, 3rem);
+  gap: 0.5rem 0.75rem;
+}
+
+.booking__seat {
+  height: 3rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius) var(--radius) 0.3rem 0.3rem;
+  cursor: pointer;
+  transition: translate var(--duration) ease, background-color var(--duration) ease;
+}
+
+.booking__seat:not(:disabled):hover {
+  translate: 0 -3px;
+}
+
+.booking__seat[aria-pressed='true'] {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  box-shadow: 0 3px 0 var(--color-ink);
+}
+
+.booking__seat:disabled {
+  color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--color-ink) 25%, transparent) 0 6px, transparent 6px 12px), var(--color-bg);
+  border-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+  cursor: not-allowed;
+}
+
 .booking__hold-deal {
   margin: 0;
   padding: 0.5rem 0.75rem;
