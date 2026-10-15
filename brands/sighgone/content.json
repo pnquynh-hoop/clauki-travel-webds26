@@ -2017,6 +2017,20 @@
           }
         ]
       }
+    ],
+    "legs": [
+      { "id": "cafe-vot", "name": "Cà phê vợt đầu hẻm", "vehicle": "di-bo", "minutes": 45, "price": 90000, "area": "Quận 1" },
+      { "id": "cho-sang", "name": "Chợ sáng, ăn sáng", "vehicle": "di-bo", "minutes": 60, "price": 120000, "area": "Quận 1" },
+      { "id": "nha-tho", "name": "Nhà thờ, Bưu điện", "vehicle": "di-bo", "minutes": 45, "price": 60000, "area": "Quận 1" },
+      { "id": "xich-lo-cho-lon", "name": "Xích lô qua Chợ Lớn", "vehicle": "xich-lo", "minutes": 60, "price": 250000, "area": "Quận 5" },
+      { "id": "binh-tay", "name": "Chợ Bình Tây", "vehicle": "di-bo", "minutes": 60, "price": 60000, "area": "Quận 6" },
+      { "id": "thien-hau", "name": "Chùa Bà Thiên Hậu", "vehicle": "di-bo", "minutes": 40, "price": 50000, "area": "Quận 5" },
+      { "id": "dap-xe", "name": "Đạp xe đường làng Thanh Đa", "vehicle": "xe-dap", "minutes": 90, "price": 220000, "area": "Bình Thạnh" },
+      { "id": "thuyen-kenh", "name": "Thuyền vào kênh", "vehicle": "thuyen", "minutes": 90, "price": 380000, "area": "Quận 1" },
+      { "id": "an-dem", "name": "Ăn đêm bằng xe máy", "vehicle": "xe-may", "minutes": 150, "price": 560000, "area": "4 quận" },
+      { "id": "cu-chi", "name": "Địa đạo Củ Chi", "vehicle": "xe", "minutes": 300, "price": 650000, "area": "Củ Chi" },
+      { "id": "pha-can-gio", "name": "Phà Bình Khánh", "vehicle": "pha", "minutes": 60, "price": 80000, "area": "Cần Giờ" },
+      { "id": "ca-no-duoc", "name": "Ca nô rừng đước", "vehicle": "ca-no", "minutes": 75, "price": 420000, "area": "Cần Giờ" }
     ]
   },
   "pages": [
@@ -2961,11 +2975,45 @@
       "description": "Đi riêng cả nhóm, giờ giấc theo nhóm mình.",
       "sections": [
         {
-          "type": "intro",
-          "id": "noi-dung",
+          "type": "custom-trip",
+          "id": "tu-ghep",
           "eyebrow": "Tour riêng",
-          "title": "Cả nhóm đi riêng một chuyến",
-          "lead": "Gia đình, nhóm bạn hay công ty muốn đi riêng thì gọi SighGone để xếp xe, xếp người và giờ đi."
+          "title": "Tự xếp chuyến đi.",
+          "lead": "Bấm các chặng để xếp vào ngày của nhóm bạn. Trang tự cộng giờ và giá; gửi đi là SighGone gọi lại báo giá chính xác.",
+          "surcharge": 0.3,
+          "start": "07:00",
+          "endBy": "23:00",
+          "maxHours": 10,
+          "guests": { "min": 2, "max": 20, "default": 4 },
+          "presets": [
+            { "name": "Gia đình có trẻ nhỏ", "note": "Ít đi bộ, nhiều thứ để xem", "legs": ["cho-sang", "xich-lo-cho-lon", "thien-hau", "thuyen-kenh"] },
+            { "name": "Nhóm công ty", "note": "Một ngày đủ mọi phương tiện", "legs": ["pha-can-gio", "ca-no-duoc", "thuyen-kenh", "an-dem"] },
+            { "name": "Cặp đôi", "note": "Chậm, nhiều chỗ chụp ảnh", "legs": ["cafe-vot", "nha-tho", "dap-xe", "an-dem"], "default": true }
+          ],
+          "labels": {
+            "presets": "Lộ trình gợi ý",
+            "library": "Kho chặng",
+            "plan": "Chuyến của bạn",
+            "add": "Thêm {name} vào chuyến",
+            "up": "Lên",
+            "down": "Xuống",
+            "remove": "Bỏ",
+            "upLabel": "Đưa {name} lên trước",
+            "downLabel": "Đưa {name} xuống sau",
+            "removeLabel": "Bỏ {name}",
+            "empty": "Chưa có chặng nào. Bấm một chặng trong kho, hoặc chọn một lộ trình gợi ý ở trên.",
+            "hours": "{n} giờ",
+            "minutes": "{n} phút",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "summary": "{n} chặng, {duration}",
+            "span": "{from} đến {to}",
+            "perGuest": "Một khách (đã gồm phí đi riêng 30%)",
+            "total": "{n} khách, tạm tính",
+            "tooLong": "Chuyến dài {duration}, quá {max} tiếng. Bớt một chặng cho đỡ mệt nhé.",
+            "tooLate": "Kết thúc lúc {end}, sau {endBy}. Bắt đầu sớm hơn hoặc bớt chặng."
+          }
         }
       ]
     },
