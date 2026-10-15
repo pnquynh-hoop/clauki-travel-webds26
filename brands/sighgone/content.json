@@ -2059,6 +2059,30 @@
           }
         },
         {
+          "type": "tour-pick",
+          "id": "quay",
+          "variant": "reel",
+          "eyebrow": "Chưa biết chọn gì?",
+          "title": "Hôm nay mình đi bằng",
+          "options": [
+            { "label": "đi bộ", "items": ["thuc-giac", "song-chieu"] },
+            { "label": "xích lô", "items": ["cho-lon"] },
+            { "label": "xe đạp", "items": ["thanh-da"] },
+            { "label": "xe máy", "items": ["len-den"] },
+            { "label": "thuyền", "items": ["song-chieu", "thanh-da"] },
+            { "label": "ca nô", "items": ["can-gio"] }
+          ],
+          "labels": {
+            "spin": "Quay một vòng",
+            "again": "Quay lại",
+            "empty": "Bấm quay, SighGone chọn giúp.",
+            "note": "Đi bằng {option}: gợi ý {tour}, {start} đến {end}.",
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
+          }
+        },
+        {
           "type": "intro",
           "id": "mot-ngay",
           "eyebrow": "SighGone là gì",
