@@ -1,0 +1,97 @@
+/* backdrop.css - giao diện của <wl-backdrop>: ảnh nền đứng yên, trang cuộn qua phía trước.
+   Khung có clip-path: inset(0) nên ảnh fixed bên trong chỉ hiện trong phạm vi khối; không dùng transform hay filter ở khung
+   vì chúng làm phần tử fixed đổi sang bám theo khung và mất hiệu ứng. */
+
+.backdrop {
+  display: block;
+  /* Ghi đè khoảng đệm dọc của `main > *`: ảnh phải chạm sát khối trên và khối dưới. */
+  padding-block: 0;
+}
+
+.backdrop__frame {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  clip-path: inset(0);
+  display: grid;
+  align-items: end;
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.backdrop--half .backdrop__frame {
+  min-height: 60svh;
+}
+
+.backdrop--tall .backdrop__frame {
+  min-height: 150svh;
+}
+
+.backdrop__image {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lớp tối ở đáy để chữ trắng đọc được trên mọi ảnh; chỉ có khi khối có chữ. */
+.backdrop__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-ink) 78%, transparent), transparent 62%);
+}
+
+.backdrop__text {
+  position: relative;
+  max-width: 44rem;
+  padding: 3rem 1.25rem;
+  margin-inline: max(0px, calc((100% - 72rem) / 2));
+}
+
+.backdrop__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.backdrop__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 1.08;
+}
+
+.backdrop__lead {
+  margin: 1rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  max-width: 36rem;
+}
+
+.backdrop__credit {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.75rem;
+  margin: 0;
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+@media (min-width: 1024px) {
+  .backdrop__text {
+    padding: 4rem 2rem;
+  }
+}
+
+/* Giảm chuyển động: ảnh nằm yên trong khung và cuộn cùng trang. */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop__frame {
+    min-height: 70svh;
+  }
+
+  .backdrop__image {
+    position: absolute;
+  }
+}

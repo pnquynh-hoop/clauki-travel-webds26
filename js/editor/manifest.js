@@ -41,6 +41,7 @@ export const BLOCKS = {
   'catalog-list': { label: 'Danh sách tour, phòng', variants: [] },
   'custom-trip': { label: 'Tự ghép tour riêng', variants: [] },
   breadcrumb: { label: 'Đường dẫn trang', variants: [] },
+  backdrop: { label: 'Ảnh nền cố định', variants: [['screen', 'Cao một màn hình'], ['half', 'Dải thấp'], ['tall', 'Cao hơn màn hình']] },
   'tour-pick': { label: 'Gợi ý tour', variants: [['reel', 'Vòng quay chọn cách đi'], ['claw', 'Máy gắp thú']] },
 };
 
@@ -130,6 +131,12 @@ const FIELDS = {
       fields: [{ key: 'label', label: 'Chữ', type: 'text' }, { key: 'href', label: 'Liên kết (ví dụ page:tour), bỏ trống ở bước cuối', type: 'text' }],
       item: { label: 'Bước mới', href: '' },
     },
+  ],
+  backdrop: [
+    ...HEAD,
+    { key: 'image', label: 'Ảnh nền', type: 'image' },
+    { key: 'focus', label: 'Vùng giữ lại khi cắt ảnh (ví dụ 50% 30%)', type: 'text', optional: true },
+    { key: 'credit', label: 'Ghi nguồn nhỏ ở góc', type: 'text', optional: true },
   ],
   gallery: [
     ...HEAD,
