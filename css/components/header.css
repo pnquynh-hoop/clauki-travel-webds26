@@ -544,3 +544,36 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
 .header--minimal .header__toggle {
   display: none;
 }
+
+/* Trang đang mở trên menu: chữ đậm màu mực và vạch màu nhấn dưới chữ luôn hiện (aria-current="page", core.js gắn);
+   trang cha của trang đang mở (data-parent, ví dụ "Tour" khi đang xem một tour) cũng có vạch nhưng chữ không đậm hơn.
+   Viết với .header phía trước để mạnh hơn màu chữ của từng kiểu header (solid, center ghi chữ xám cho mục thường). */
+.header .header__link[aria-current='page'],
+.header .header__link[data-parent] {
+  color: var(--color-ink);
+  box-shadow: inset 4px 0 0 var(--color-accent);
+  padding-left: 0.9rem;
+}
+
+.header .header__link[aria-current='page'] {
+  font-weight: 800;
+}
+
+@media (min-width: 1024px) {
+  .header .header__link[aria-current='page'],
+  .header .header__link[data-parent] {
+    padding-left: 0;
+    box-shadow: none;
+  }
+
+  .header .header__link[aria-current='page']::after,
+  .header .header__link[data-parent]::after {
+    background: var(--color-accent);
+    transform: scaleX(1);
+  }
+
+  .header .header__link[data-parent]:not(:hover)::after {
+    opacity: 0.55;
+  }
+}
+

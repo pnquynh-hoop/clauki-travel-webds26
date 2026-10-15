@@ -257,12 +257,20 @@ function renderFixed(data, page) {
 
 // Mục menu trỏ đúng trang đang mở (không phải neo tới một khối) được đánh dấu cho trình đọc màn hình và CSS.
 function markCurrentPage() {
+  const root = `/${currentId}`;
+  const path = location.pathname.replace(/\/$/, '');
   for (const a of document.querySelectorAll('wl-header a[href], wl-footer a[href]')) {
+    const same = a.origin === location.origin && a.getAttribute('href') !== '#';
     // Link chỉ có "#" (ví dụ nút mở menu) trỏ về chính trang nhưng không phải mục menu của trang.
-    const here = a.getAttribute('href') !== '#'
-      && a.origin === location.origin && a.pathname === location.pathname && !a.hash;
+    const here = same && a.pathname === location.pathname && !a.hash;
     if (here) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
+    // Trang con không có trong menu (ví dụ tour/can-gio) thì mục menu của trang cha (tour) được đánh dấu nhẹ hơn (data-parent):
+    // mục trỏ về trang chủ không tính, vì trang nào cũng nằm dưới trang chủ.
+    const base = a.pathname.replace(/\/$/, '');
+    const parent = same && !here && !a.hash && a.closest('wl-header') && base !== root && path.startsWith(`${base}/`);
+    if (parent) a.setAttribute('data-parent', '');
+    else a.removeAttribute('data-parent');
   }
 }
 
