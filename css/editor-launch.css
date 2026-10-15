@@ -55,6 +55,12 @@
   outline-offset: 3px;
 }
 
+/* Đã gom nút: nút tròn của BTC là nút duy nhất, nên ẩn nút "Đổi dữ liệu demo" hiện khi rê chuột (có trong menu rồi).
+   Có html phía trước để mạnh hơn style wd2026.js chèn vào sau. */
+html.ed-merged .wd2026-fab-wrap .wd2026-trigger {
+  display: none;
+}
+
 /* Menu mở phía trên nút: mỗi mục một dòng, đủ cao để bấm bằng ngón tay. */
 .ed-menu {
   order: -1;
@@ -108,6 +114,7 @@
 
 .ed-draftbar[hidden],
 .ed-fab[hidden],
+.ed-launch[hidden],
 .ed-menu[hidden] {
   display: none;
 }
