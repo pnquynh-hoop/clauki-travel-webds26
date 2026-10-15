@@ -278,12 +278,218 @@
   display: none;
 }
 
-/* Số khách: hai nút tròn kẹp con số chữ bảng hiệu. */
+/* Đầu tấm thẻ: tiêu đề và huy hiệu số cách đi dán nghiêng. */
+.custom-trip__plan-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.custom-trip__badge {
+  margin: 0;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  transform: rotate(-2deg);
+}
+
+.custom-trip__badge:empty {
+  display: none;
+}
+
+/* Thước giờ: một đường mảnh có vạch mỗi giờ; mỗi chặng là một đoạn màu phương tiện nằm trên đường,
+   đầu chặng là chấm đánh số thứ tự dừng, cuối chuyến là chấm đặc màu mực. */
+.custom-trip__ruler {
+  position: relative;
+  padding-top: 1.4rem;
+}
+
+.custom-trip__ticks span {
+  position: absolute;
+  top: 0;
+  left: var(--at);
+  translate: -50% 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+
+.custom-trip__track {
+  position: relative;
+  height: 1.8rem;
+  background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 25%, transparent) 0 1px, transparent 1px calc(100% / var(--hours, 18)));
+  background-size: 100% 0.5rem;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+/* Đường trục chạy ngang giữa thước. */
+.custom-trip__track::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  translate: 0 -50%;
+  background: color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+.custom-trip__block {
+  position: absolute;
+  top: 50%;
+  height: 0.4rem;
+  translate: 0 -50%;
+  background: var(--vc, var(--color-accent));
+  border-radius: 999px;
+  transform-origin: left;
+  animation: custom-trip-grow 0.4s ease both;
+}
+
+.custom-trip__block.is-over {
+  background: repeating-linear-gradient(45deg, var(--vc, var(--color-accent)) 0 4px, var(--color-surface) 4px 8px);
+}
+
+/* Điện thoại: chặng ngắn chỉ rộng vài pixel nên chấm nhỏ, không số, để các chấm không chồng lên nhau;
+   thứ tự vẫn đọc được qua màu và danh sách chặng ngay bên dưới. Từ 760px mới hiện chấm có số. */
+.custom-trip__stop {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 0.75rem;
+  height: 0.75rem;
+  translate: -50% -50%;
+  font-size: 0;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--vc, var(--color-ink));
+  border-radius: 50%;
+}
+
+.custom-trip__stop--end {
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+@media (min-width: 760px) {
+  .custom-trip__stop:not(.custom-trip__stop--end) {
+    width: 1.3rem;
+    height: 1.3rem;
+    font-size: 0.65rem;
+  }
+}
+
+@keyframes custom-trip-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Form: ngăn với danh sách chặng bằng vạch đứt. */
+.custom-trip__form {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.4rem;
+  border-top: 3px dashed color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.custom-trip__form .btn {
+  justify-self: start;
+}
+
+.custom-trip__row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+}
+
+.custom-trip__field {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  font-weight: 700;
+}
+
+.custom-trip__input {
+  min-height: 3rem;
+  padding: 0.6rem 0.9rem;
+  font: 500 1rem var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: calc(var(--radius) * 0.7);
+}
+
+.custom-trip__input:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.custom-trip__input[aria-invalid='true'] {
+  border-color: var(--color-accent);
+}
+
+.custom-trip__error {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.custom-trip__error:empty {
+  display: none;
+}
+
+/* Tin nhắn soạn sẵn: khung viền đứt như tờ giấy nháp, bên dưới là các nút gửi. */
+.custom-trip__done {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding: 1.1rem;
+  background: var(--color-bg);
+  border: 2px dashed var(--color-ink);
+  border-radius: var(--radius);
+}
+
+.custom-trip__done[hidden] {
+  display: none;
+}
+
+.custom-trip__done-title {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.custom-trip__done-title:focus {
+  outline: none;
+}
+
+.custom-trip__draft {
+  margin: 0;
+}
+
+.custom-trip__done-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Số khách: hai nút tròn kẹp con số chữ bảng hiệu, nằm cùng hàng với ngày và giờ. */
 .custom-trip__guests {
   display: grid;
-  gap: 0.4rem;
-  padding-top: 1.2rem;
-  border-top: 3px dashed color-mix(in srgb, var(--color-ink) 15%, transparent);
+  gap: 0.35rem;
+  align-content: start;
+  font-weight: 700;
 }
 
 .custom-trip__stepper {
@@ -388,7 +594,8 @@
     transform: none;
   }
 
-  .custom-trip__chunk.is-added .custom-trip__plus {
+  .custom-trip__chunk.is-added .custom-trip__plus,
+  .custom-trip__block {
     animation: none;
   }
 }
