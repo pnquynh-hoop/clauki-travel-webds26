@@ -3273,6 +3273,76 @@
           }
         },
         {
+          "type": "deal",
+          "id": "gia-mo-ban",
+          "eyebrow": "Giá mở bán",
+          "title": "Giữ chỗ trước 31/10, đi chuyến đầu",
+          "lead": "Giá mở bán dành cho mọi chỗ giữ trước 23:59 ngày 31/10/2026. Sau đó giá là 890.000 đồng mỗi khách.",
+          "now": 690000,
+          "was": 890000,
+          "currency": "đ",
+          "badge": "Giảm 200.000 đ",
+          "deadline": "2026-10-31T23:59:59+07:00",
+          "seats": {
+            "total": 8,
+            "taken": 5
+          },
+          "labels": {
+            "d": "ngày",
+            "h": "giờ",
+            "m": "phút",
+            "s": "giây",
+            "timer": "Thời gian còn lại của giá mở bán",
+            "seats": "Chuyến đầu 01/11 còn {left} trên {total} ghế",
+            "ended": "Giá mở bán đã kết thúc, giá thường là 890.000 đồng mỗi khách."
+          },
+          "image": {
+            "src": "images/cut-caphe.webp",
+            "alt": ""
+          }
+        },
+        {
+          "type": "checklist",
+          "id": "gom-gi",
+          "eyebrow": "Trong giá",
+          "title": "Gồm gì, mang gì",
+          "groups": [
+            {
+              "title": "Đã gồm",
+              "items": [
+                "Vé metro, xích lô 45 phút",
+                "Vé lên tầng cao Bitexco",
+                "Ba món ăn vặt, nước suối",
+                "Hướng dẫn viên người Sài Gòn"
+              ]
+            },
+            {
+              "title": "Chưa gồm",
+              "items": [
+                "Đồ uống thêm",
+                "Đưa đón khách sạn"
+              ]
+            },
+            {
+              "title": "Nên mang",
+              "items": [
+                "Giày đi bộ",
+                "Áo mưa mỏng (mùa mưa)",
+                "Máy ảnh"
+              ]
+            }
+          ],
+          "pictures": [
+            {
+              "image": {
+                "src": "images/cut-banhmi.webp",
+                "alt": ""
+              },
+              "place": "right"
+            }
+          ]
+        },
+        {
           "type": "reviews",
           "id": "khach-ke",
           "variant": "postcard",
@@ -3349,6 +3419,57 @@
               "date": "09.10.2026"
             }
           ]
+        },
+        {
+          "type": "seat-booking",
+          "id": "giu-cho",
+          "eyebrow": "Giữ chỗ",
+          "title": "Chuyến đầu chỉ 8 ghế",
+          "lead": "Không cần cọc. Gửi tin giữ chỗ, SighGone gọi xác nhận, trả tiền khi gặp hướng dẫn viên.",
+          "price": 690000,
+          "currency": "đ",
+          "dates": [
+            "01/11/2026",
+            "02/11/2026",
+            "08/11/2026",
+            "09/11/2026"
+          ],
+          "seats": {
+            "total": 8,
+            "taken": 5
+          },
+          "defaultGuests": 2,
+          "labels": {
+            "date": "Ngày đi",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "seats": "Chọn ghế, còn {left} trên {total}",
+            "seatMap": "Sơ đồ ghế chuyến đầu",
+            "seatTaken": "Ghế {n} đã có người",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "total": "Tạm tính, giá mở bán",
+            "submit": "Giữ chỗ chuyến đầu"
+          },
+          "errors": {
+            "name": "Nhập họ tên giúp SighGone nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "title": "Soạn sẵn tin nhắn giữ chỗ",
+            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour Tuyến số 1 ngày {date}, ghế {seats}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi {phone}",
+            "copy": "Chép tin nhắn",
+            "copied": "Đã chép",
+            "edit": "Đổi thông tin"
+          },
+          "image": {
+            "src": "images/cut-xichlo.webp",
+            "alt": ""
+          }
         },
         {
           "type": "faq",
@@ -3658,6 +3779,34 @@
       "license": "CC BY 3.0",
       "source": "https://commons.wikimedia.org/wiki/File:Becamex_tower,_Hamnghi_tphcmvn_-_panoramio.jpg",
       "note": "Ảnh chụp tháp Bitexco (tên tệp gốc trên Commons ghi nhầm). Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cut-caphe.webp",
+      "author": "Clarin",
+      "license": "CC BY 2.5",
+      "source": "https://commons.wikimedia.org/wiki/File:Ca_Phe_Sua_Da.jpg",
+      "note": "Đã tách nền, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cut-banhmi.webp",
+      "author": "Baoothersks",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:B%C3%A1nh_m%C3%AC_by_Baoothersks.jpg",
+      "note": "Đã tách nền, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cut-nonla.webp",
+      "author": "Anass Sedrati",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:N%C3%B3n_t%C6%A1i_in_Tam_Coc_-_August_2023.jpg",
+      "note": "Đã tách nền, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/cut-xichlo.webp",
+      "author": "Jorge Cortell",
+      "license": "CC BY 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Dsc_(221219619).jpeg",
+      "note": "Đã tách nền, thu nhỏ, chuyển sang WebP"
     }
   ]
 }
