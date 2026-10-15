@@ -1,0 +1,394 @@
+/* custom-trip.css - giao diện của <wl-custom-trip>: lộ trình gợi ý, kho chặng, chuyến của khách, số khách, tạm tính.
+   Thẻ, nút đọc --card-border, --card-shadow như các khối khác (SighGone: viền mực, bóng in lệch); mỗi chặng mang
+   màu phương tiện của nó qua --vc (lấy từ catalog.vehicles). Màn rộng: kho chặng bên trái dính khi cuộn, chuyến bên phải. */
+
+.custom-trip {
+  display: block;
+}
+
+.custom-trip__head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.custom-trip__eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.custom-trip__title {
+  margin: 0;
+  max-width: 12ch;
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 12vw, 9rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.custom-trip__lead {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--color-muted);
+}
+
+.custom-trip__label {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+}
+
+.custom-trip__presets {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.custom-trip__preset-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* Lộ trình gợi ý: thẻ nhỏ nổi, rê chuột thì nhấc lên. */
+.custom-trip__preset {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: calc(var(--radius) * 0.85);
+  box-shadow: 3px 3px 0 var(--color-ink);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.custom-trip__preset:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--color-ink);
+}
+
+.custom-trip__preset small {
+  color: var(--color-muted);
+}
+
+.custom-trip__layout {
+  display: grid;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.custom-trip__heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+/* Kho chặng */
+.custom-trip__library {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.custom-trip__chunks {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.custom-trip__chunk {
+  display: grid;
+  grid-template-columns: 1fr 1.8rem;
+  grid-template-areas: 'name plus' 'meta plus';
+  align-items: center;
+  gap: 0.1rem 0.8rem;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-left: 8px solid var(--vc, var(--color-accent));
+  border-radius: calc(var(--radius) * 0.7);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.custom-trip__chunk:hover {
+  transform: translateX(4px);
+}
+
+.custom-trip__chunk-name {
+  grid-area: name;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.custom-trip__chunk-meta {
+  grid-area: meta;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.custom-trip__plus {
+  grid-area: plus;
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-bg);
+  background: var(--color-ink);
+  border-radius: 50%;
+}
+
+/* Bấm thêm: dấu cộng nảy lên như vừa thả vào giỏ. */
+.custom-trip__chunk.is-added .custom-trip__plus {
+  animation: custom-trip-bump 0.45s cubic-bezier(0.3, 1.8, 0.5, 1);
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+@keyframes custom-trip-bump {
+  40% {
+    transform: scale(1.5) rotate(90deg);
+  }
+}
+
+/* Chuyến của khách: một tấm thẻ trắng lớn. */
+.custom-trip__plan {
+  display: grid;
+  gap: 1.4rem;
+  min-width: 0;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  background: var(--color-surface);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+  border-radius: calc(var(--radius) * 1.3);
+  box-shadow: var(--card-shadow, none);
+}
+
+.custom-trip__heading:focus {
+  outline: none;
+}
+
+.custom-trip__list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.custom-trip__leg {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-template-areas: 'time name' 'tools tools';
+  align-items: center;
+  gap: 0.4rem 0.8rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--color-bg);
+  border-left: 6px solid var(--vc, var(--color-accent));
+  border-radius: calc(var(--radius) * 0.7);
+}
+
+.custom-trip__leg--empty {
+  display: block;
+  color: var(--color-muted);
+  border-left-color: color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.custom-trip__leg-time {
+  grid-area: time;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.custom-trip__leg-time small,
+.custom-trip__leg-name small {
+  display: block;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.custom-trip__leg-name {
+  grid-area: name;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.custom-trip__tools {
+  grid-area: tools;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.custom-trip__tool {
+  padding: 0.3rem 0.7rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.custom-trip__tool:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.custom-trip__tool--remove {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.custom-trip__chunk:focus-visible,
+.custom-trip__preset:focus-visible,
+.custom-trip__tool:focus-visible,
+.custom-trip__step:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.custom-trip__warn {
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.custom-trip__warn:empty {
+  display: none;
+}
+
+/* Số khách: hai nút tròn kẹp con số chữ bảng hiệu. */
+.custom-trip__guests {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 1.2rem;
+  border-top: 3px dashed color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.custom-trip__stepper {
+  display: grid;
+  grid-template-columns: 2.6rem 3rem 2.6rem;
+  align-items: center;
+}
+
+.custom-trip__step {
+  height: 2.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+  box-shadow: 0 3px 0 var(--color-ink);
+  cursor: pointer;
+}
+
+.custom-trip__step:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.custom-trip__guests-n {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.custom-trip__sum {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem;
+  font-weight: 600;
+  background: var(--color-bg);
+  border-radius: calc(var(--radius) * 0.7);
+}
+
+.custom-trip__sum:empty {
+  display: none;
+}
+
+/* Màn hẹp: chữ bên trái được xuống dòng, con số bên phải giữ nguyên một dòng và luôn căn phải. */
+.custom-trip__sum-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2rem 1rem;
+}
+
+.custom-trip__sum-row > :last-child {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.custom-trip__sum-row--total {
+  margin-top: 0.3rem;
+  padding-top: 0.4rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-top: 2px solid var(--color-ink);
+}
+
+@media (min-width: 760px) {
+  .custom-trip__leg {
+    grid-template-columns: 4rem 1fr auto;
+    grid-template-areas: 'time name tools';
+  }
+}
+
+/* Màn rộng: kho chặng bên trái dính lại khi cuộn, danh sách dài thì cuộn riêng trong cột. */
+@media (min-width: 1024px) {
+  .custom-trip__layout {
+    grid-template-columns: 24rem minmax(0, 1fr);
+    gap: 3rem;
+  }
+
+  .custom-trip__library {
+    position: sticky;
+    top: 5.5rem;
+  }
+
+  .custom-trip__chunks {
+    max-height: calc(100vh - 11rem);
+    overflow-y: auto;
+    padding: 0.3rem 0.6rem 0.6rem 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-trip__preset,
+  .custom-trip__chunk {
+    transition: none;
+  }
+
+  .custom-trip__preset:hover,
+  .custom-trip__chunk:hover {
+    transform: none;
+  }
+
+  .custom-trip__chunk.is-added .custom-trip__plus {
+    animation: none;
+  }
+}
