@@ -3,6 +3,8 @@
    (dựng cả trang bằng cách ghép các khối đó). Không phải component: chỉ là hàm, mỗi khối import phần mình cần.
    Tách từ wl-room-detail.js, giữ nguyên cách xử lý. */
 import { asset, catalogItem } from '../core.js';
+// Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
+import { pageLocale } from '../i18n.js';
 
 export function fill(template, values) {
   return (template ?? '').replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ''));
@@ -35,7 +37,7 @@ function todayIso(timezone) {
 function dayLabel(iso) {
   const date = new Date(`${iso}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return iso;
-  const text = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(date);
+  const text = new Intl.DateTimeFormat(pageLocale(), { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(date);
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
@@ -43,7 +45,7 @@ function dayLabel(iso) {
 export function dayChip(iso) {
   const date = new Date(`${iso}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return { dow: '', day: iso };
-  const dow = new Intl.DateTimeFormat('vi-VN', { weekday: 'short', timeZone: 'UTC' }).format(date);
+  const dow = new Intl.DateTimeFormat(pageLocale(), { weekday: 'short', timeZone: 'UTC' }).format(date);
   return { dow, day: `${date.getUTCDate()}/${date.getUTCMonth() + 1}` };
 }
 
@@ -82,7 +84,7 @@ export function itemSection(site, section) {
 }
 
 export function money(amount, currency) {
-  return `${amount.toLocaleString('vi-VN')} ${currency ?? ''}`.trim();
+  return `${amount.toLocaleString(pageLocale())} ${currency ?? ''}`.trim();
 }
 
 // Tạo một khối khác ngay bên trong khối đang dựng (room-detail ghép các khối, item-booking lồng lộ trình).

@@ -6,6 +6,8 @@
 import { catalogItem } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
 import { iconEl } from '../icon.js';
+// Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
+import { pageLocale } from '../i18n.js';
 
 // Ba nhóm theo thứ tự hiện, kèm icon của kiểu mặc định (tên icon Lucide).
 const GROUPS = [['includes', 'check'], ['excludes', 'x'], ['bring', 'backpack']];
@@ -36,7 +38,7 @@ export class WlIncluded extends HTMLElement {
   }
 
   money(amount) {
-    return `${amount.toLocaleString('vi-VN')} ${this.site?.catalog?.currency ?? ''}`.trim();
+    return `${amount.toLocaleString(pageLocale())} ${this.site?.catalog?.currency ?? ''}`.trim();
   }
 
   // Kiểu receipt dùng dấu in (+, -, *) do CSS vẽ nên không cần icon.

@@ -3,6 +3,8 @@
    (thẻ kết quả gợi ý), nên thẻ ở hai nơi luôn giống nhau. Giao diện nằm trong css/components/catalog-list.css. */
 import { asset } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
+// Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
+import { pageLocale } from '../i18n.js';
 
 // Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
 export function fill(template, values) {
@@ -50,7 +52,7 @@ function hours(start, end) {
   const [h1, m1] = start.split(':').map(Number);
   const [h2, m2] = end.split(':').map(Number);
   const n = (h2 * 60 + m2 - h1 * 60 - m1) / 60;
-  return n > 0 ? n.toLocaleString('vi-VN') : null;
+  return n > 0 ? n.toLocaleString(pageLocale()) : null;
 }
 
 function chipEl(catalog, id) {
@@ -71,7 +73,7 @@ function mediaEl(item) {
 }
 
 function priceEl(item, catalog, labels) {
-  const price = `${item.price.toLocaleString('vi-VN')} ${catalog.currency ?? ''}`.trim();
+  const price = `${item.price.toLocaleString(pageLocale())} ${catalog.currency ?? ''}`.trim();
   const note = fill(labels.priceNote, {
     unit: item.unit,
     buoi: catalog.buoi?.[item.tags?.buoi]?.toLowerCase(),

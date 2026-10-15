@@ -3,6 +3,8 @@
    Section ghi lộ trình gợi ý (presets), phí đi riêng (surcharge), giờ bắt đầu, ngưỡng cảnh báo và mẫu chữ (labels). */
 import { textEl, groupEl } from '../dom.js';
 import { requestEl } from './custom-trip-request.js';
+// Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
+import { pageLocale } from '../i18n.js';
 
 // Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
 function fill(template, values) {
@@ -76,7 +78,7 @@ export class WlCustomTrip extends HTMLElement {
   }
 
   money(amount) {
-    return `${amount.toLocaleString('vi-VN')} ${this.site.catalog.currency ?? ''}`.trim();
+    return `${amount.toLocaleString(pageLocale())} ${this.site.catalog.currency ?? ''}`.trim();
   }
 
   vehicle(id) {

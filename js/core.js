@@ -4,6 +4,8 @@
    Component không tải sẵn: trước khi dựng, core.js tải JS và CSS của đúng các khối trang đó dùng (bảng tra ở app.js). */
 
 import { readDraft, applyDraftTheme } from './editor/draft.js';
+// Song ngữ: chọn ngôn ngữ, ghép bản dịch content.<lang>.json vào nội dung (xem chú thích đầu i18n.js).
+import { localize, langFor, BASE_LANG } from './i18n.js';
 
 // Mọi đường dẫn tính từ gốc: trang có thể nằm ở /ganh-som/phong, đường dẫn tương đối sẽ trỏ sai thư mục.
 const DATA_ROOT = '/brands';
@@ -156,6 +158,9 @@ function siteInfo(data) {
     brand: data.brand, cta: data.cta, nav: data.nav, place: data.place, contact: data.contact,
     catalog: data.catalog,
     home: pageUrl(data.id, HOME),
+    // Ngôn ngữ đang hiện và các ngôn ngữ thương hiệu có: header dùng để vẽ nút đổi ngôn ngữ.
+    lang: document.documentElement.lang || BASE_LANG,
+    languages: data.languages,
   };
 }
 
@@ -322,7 +327,12 @@ async function render(raw, useDraft = true) {
   lastRaw = raw;
   // Thương hiệu đang có nháp "Thử chỉnh" thì dựng theo nháp; lastRaw vẫn giữ bản gốc để về bản gốc được.
   const draft = useDraft ? draftFor(raw) : null;
-  const data = resolveLinks(draft?.content ?? raw, raw.id);
+  // Nháp Thử chỉnh luôn là tiếng Việt (editor sửa bản gốc); không có nháp thì ghép bản dịch theo ngôn ngữ đang chọn.
+  const lang = draft ? BASE_LANG : langFor(raw);
+  const source = draft?.content ?? await localize(raw, DATA_ROOT);
+  if (token !== renderToken) return;
+  document.documentElement.lang = lang;
+  const data = resolveLinks(source, raw.id);
   // Đổi thương hiệu thì giữ trang đang mở; thương hiệu mới không có trang đó thì hiện trang 404 nó tự khai,
   // không khai thì về trang chủ.
   let page = findPage(data, currentPage);
@@ -496,6 +506,10 @@ export async function start(components = {}) {
     listenPage();
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
+    // Khách đổi ngôn ngữ (nút ở header): dựng lại trang đang mở bằng bản dịch, không tải lại trang.
+    document.addEventListener('wl:lang', () => {
+      if (lastRaw) render(lastRaw).catch(showError);
+    });
     document.addEventListener(CHANGE_EVENT, (e) => {
       render(e.detail).then(skipReloadPrompt).catch(showError);
     });

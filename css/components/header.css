@@ -600,3 +600,32 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
   rotate: -4deg;
   transform-origin: left center;
 }
+
+/* Nút đổi ngôn ngữ ở dải thông tin trên cùng: hai chữ viết tắt, nút đang dùng có nền tối hơn; chữ cùng màu dải. */
+.header__lang {
+  display: flex;
+  gap: 0.15rem;
+  flex: none;
+}
+
+.header__lang-btn {
+  padding: 0.15rem 0.45rem;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.header__lang-btn[aria-pressed='true'] {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  cursor: default;
+}
+
+.header__lang-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
