@@ -129,7 +129,7 @@ export class WlHero extends HTMLElement {
   { "path": "hoi-dap", "title": "Hỏi đáp", "description": "...", "sections": [ ... ] }
 ]
 ```
-- **Link:** `#neo` nhảy tới khối trong trang đang mở; `page:hoi-dap` sang trang khác; `page:/#dat-cho` về trang chủ, tới khối `dat-cho`. Thương hiệu nhiều trang thì menu và `cta` nên dùng `page:`, để ở trang con vẫn bấm được.
+- **Link:** `#neo` nhảy tới khối trong trang đang mở; `page:hoi-dap` sang trang khác; `page:/#dat-cho` về trang chủ, tới khối `dat-cho`. Thương hiệu nhiều trang thì menu và `cta` nên dùng `page:`, để ở trang con vẫn bấm được. Menu của thương hiệu nhiều trang chỉ gồm liên kết sang trang, không trộn với liên kết nhảy tới một khối trong trang (`#neo`, `page:/#neo`): khách bấm vào phải biết là sẽ sang trang khác. Thương hiệu một trang (Mé Rạch) thì toàn bộ menu là liên kết `#neo`.
 - Trang con khai `"path": "404"` thì hiện khi địa chỉ trỏ tới trang không có; không khai thì về trang chủ.
 - Trang khai `"header": { "variant": "minimal" }` thì dùng header rút gọn (chỉ logo và nút đặt), hợp với landing page một mục tiêu.
 

@@ -24,16 +24,16 @@
       "href": "page:tour"
     },
     {
+      "label": "Tour riêng",
+      "href": "page:tour-rieng"
+    },
+    {
       "label": "Tuyến số 1",
       "href": "page:tuyen-so-1"
     },
     {
-      "label": "Cách đi",
-      "href": "page:/#cach-di"
-    },
-    {
-      "label": "Khách kể",
-      "href": "page:/#khach-ke"
+      "label": "Về SighGone",
+      "href": "page:gioi-thieu"
     },
     {
       "label": "Cẩm nang",
@@ -42,6 +42,10 @@
     {
       "label": "Hỏi đáp",
       "href": "page:hoi-dap"
+    },
+    {
+      "label": "Liên hệ",
+      "href": "page:lien-he"
     }
   ],
   "header": {
