@@ -47,6 +47,7 @@
 
 .ed {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   height: 100%;
 }
@@ -303,6 +304,7 @@
 
 .ed-blocks {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.45rem;
   margin: 0;
   padding: 0;
@@ -311,6 +313,7 @@
 
 .ed-block {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.4rem;
   padding: 0.6rem;
   background: #fff;
@@ -325,6 +328,39 @@
 
 .ed-block.is-hidden {
   opacity: 0.6;
+}
+
+/* Dòng gọn của khối chưa chọn: một dòng, tên cắt bằng dấu ba chấm, đủ cao để bấm bằng ngón tay. */
+.ed-block--compact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.15rem 0.6rem;
+}
+
+.ed-block--compact .ed-block__name {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ed-block__show {
+  min-height: 2rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--ed-paper);
+  border: 1px solid var(--ed-line);
+  border-radius: 999px;
+}
+
+.ed-block.is-sel > .ed-content {
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--ed-line);
 }
 
 .ed-block__name {
@@ -613,9 +649,37 @@
     grid-template-rows: auto 1fr auto;
   }
 
+  /* Một hàng duy nhất (tên trang, hoàn tác, làm lại, thoát) để khung xem trước còn nhiều chỗ; tên thương hiệu và trạng thái
+     chỉ hiện khi đang có bản nháp, vì khi đó mới cần nhắc. */
   .ed-top {
-    gap: 0.5rem;
-    padding: 0.5rem 0.7rem;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: 0.4rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .ed-top__who {
+    display: none;
+  }
+
+  .ed-top__who:has(.is-draft) {
+    display: block;
+    flex: none;
+  }
+
+  .ed-top__brand {
+    display: none;
+  }
+
+  .ed-top__group {
+    flex: 1;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .ed-top__end {
+    flex: none;
+    margin-left: 0;
   }
 
   .ed-top__wide {
@@ -623,7 +687,14 @@
   }
 
   .ed-top .ed-select {
-    max-width: 9rem;
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .ed-top .ed-btn {
+    padding-inline: 0.6rem;
+    white-space: nowrap;
   }
 
   .ed-frame-wrap {
@@ -638,7 +709,7 @@
     left: 0;
     z-index: 20;
     grid-template-rows: 1fr;
-    max-height: 62dvh;
+    max-height: 58dvh;
     border-radius: 20px 20px 0 0;
     box-shadow: 0 -20px 50px -10px rgb(0 0 0 / 0.65);
     transform: translateY(110%);
@@ -678,6 +749,11 @@
 
   .ed-tool {
     right: 8px;
+  }
+
+  /* Tấm trượt đang mở đã có đủ nút cho khối đang chọn, nên bỏ thanh công cụ nổi để khỏi che trang. */
+  .ed-main:has(.ed-panel.is-open) .ed-tool {
+    display: none;
   }
 }
 
