@@ -40,13 +40,10 @@ const state = {
   loadToken: 0,
   // Điều khiển cần nhận lại con trỏ bàn phím sau lần vẽ lại kế tiếp (ví dụ nút Xuống của khối vừa dời).
   focusKey: null,
-<<<<<<< HEAD
   // Thương hiệu làm khung (theme.css, ảnh): bằng id với thương hiệu có sẵn, khác id với site khách.
   baseId: null,
-=======
   // Lúc ghi nháp gần nhất (Date) để hiện "Đã lưu lúc ..." ở thanh trên.
   savedAt: null,
->>>>>>> origin/main
 };
 const ui = {};
 
