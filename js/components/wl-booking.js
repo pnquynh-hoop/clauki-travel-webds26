@@ -7,6 +7,7 @@
    số người lớn và số trẻ em, họ tên, số điện thoại, tạm tính theo đầu người. Hai kiểu dùng chung ô nhập, khung tin nhắn. */
 import { asset } from '../core.js';
 import { textEl, groupEl, telHref } from '../dom.js';
+import { iconEl } from '../icon.js';
 
 const DAY = 86400000;
 
@@ -944,6 +945,7 @@ export class WlBooking extends HTMLElement {
       label.append(...[radio, thumb].filter(Boolean), groupEl('booking__room-text', [
         textEl('span', 'booking__room-name', tour.name),
         textEl('span', 'booking__room-price', [tour.start, this.money(tour.price)].filter(Boolean).join(', ')),
+        this._data.variant === 'ticket' ? this.vehiclesEl(tour) : null,
       ]));
       list.append(label);
       return radio;
@@ -967,6 +969,21 @@ export class WlBooking extends HTMLElement {
       return label;
     }), control);
     return { field: list, control };
+  }
+
+  // Các phương tiện của tour (từ `stages`, mỗi loại một lần) dưới dạng hàng icon nhỏ; tên phương tiện nằm ở `title` để rê chuột thấy.
+  vehicleList(tour) {
+    const vehicles = this.site?.catalog?.vehicles ?? {};
+    return [...new Set((tour.stages ?? []).map((stage) => stage.vehicle))].map((id) => vehicles[id] && { id, ...vehicles[id] }).filter(Boolean);
+  }
+
+  vehiclesEl(tour) {
+    const icons = this.vehicleList(tour).map((v) => {
+      const icon = iconEl(v.icon, 'booking__vehicle');
+      if (icon) icon.title = v.label;
+      return icon;
+    }).filter(Boolean);
+    return groupEl('booking__vehicles', icons);
   }
 
   // Ô chọn điểm đón: mỗi lựa chọn ghi phí nếu có (phí cả đơn).
@@ -1164,7 +1181,7 @@ export class WlBooking extends HTMLElement {
     const slot = document.createElement('div');
     slot.className = 'booking__slot';
     slot.setAttribute('aria-hidden', 'true');
-    this._ticket = this.ticketEl();
+    this._ticket = this.passEl();
     const printer = groupEl('booking__printer', [
       groupEl('booking__printer-body', [textEl('p', 'booking__printer-brand', labels.printer), screen, this._submit, slot]),
       this._ticket,
@@ -1266,6 +1283,88 @@ export class WlBooking extends HTMLElement {
     return ticket;
   }
 
+  // Mã vạch trên thẻ lên xe: độ dày từng vạch suy từ mã vé, nên cùng vé thì cùng vạch. Chỉ để trang trí.
+  barcodeEl(code) {
+    let x = 0;
+    const bars = [...code.repeat(3)].map((c) => {
+      const w = 1 + (c.charCodeAt(0) % 4);
+      const bar = `<rect x="${x}" width="${w}" height="40"/>`;
+      x += w + 1 + (c.charCodeAt(0) % 2);
+      return bar;
+    }).join('');
+    const svg = new DOMParser().parseFromString(`<svg xmlns="http://www.w3.org/2000/svg" class="booking__pass-bar" viewBox="0 0 ${x} 40" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>`, 'image/svg+xml').documentElement;
+    return document.importNode(svg, true);
+  }
+
+  // Kiểu ticket: thẻ lên xe thay cho phiếu của kiểu thường. Khung rỗng dựng một lần, submitCalendar điền chữ và mã vạch mỗi lần gửi.
+  passEl() {
+    const m = this._data.message ?? {};
+    const hotline = this.site?.contact?.phone;
+    const cell = (label) => {
+      const value = document.createElement('dd');
+      return { value, node: groupEl('booking__pass-cell', [textEl('dt', '', label), value]) };
+    };
+    this._pass = { code: textEl('span', 'booking__pass-code', ' '), tour: textEl('h3', 'booking__pass-tour', ' '), route: document.createElement('div'), who: document.createElement('p'), bar: document.createElement('div'), date: cell(m.date), time: cell(m.time), guests: cell(m.seats), total: cell(m.total) };
+    this._pass.route.className = 'booking__pass-route';
+    this._pass.who.className = 'booking__pass-who';
+    const grid = document.createElement('dl');
+    grid.className = 'booking__pass-grid';
+    grid.append(...['date', 'time', 'guests', 'total'].map((key) => this._pass[key].node));
+    this._messageTitle = textEl('p', 'booking__pass-brand', m.brand) ?? document.createElement('p');
+    this._messageTitle.tabIndex = -1;
+    this._draft = document.createElement('p');
+    this._draft.className = 'booking__pass-msg-text';
+    this._sms = hotline && m.sms ? Object.assign(document.createElement('a'), { className: 'btn booking__sms', href: '#', textContent: m.sms }) : null;
+    const call = hotline && m.call ? Object.assign(document.createElement('a'), { className: 'btn btn--ghost booking__call', href: telHref(hotline), textContent: fill(m.call, { phone: hotline }) }) : null;
+    let copy = null;
+    if (m.copy) {
+      copy = Object.assign(document.createElement('button'), { type: 'button', className: 'btn btn--ghost booking__copy', textContent: m.copy });
+      copy.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(this._draft.textContent);
+          copy.textContent = m.copied ?? m.copy;
+          setTimeout(() => { copy.textContent = m.copy; }, 2000);
+        } catch {
+          getSelection().selectAllChildren(this._draft);
+        }
+      });
+    }
+    const pass = groupEl('booking__ticket booking__pass', [
+      groupEl('booking__pass-top', [this._messageTitle, this._pass.code]),
+      this._pass.tour,
+      this._pass.route,
+      grid,
+      this._pass.who,
+      this._pass.bar,
+      textEl('span', 'booking__pass-stamp', m.stamp),
+      groupEl('booking__pass-msg', [textEl('p', 'booking__pass-msg-title', m.msgTitle), this._draft, groupEl('booking__pass-actions', [this._sms, call, copy])]),
+    ]);
+    pass.hidden = true;
+    return pass;
+  }
+
+  // Điền thẻ lên xe: mã vé, tên tour, các phương tiện, ngày, giờ đón, khách, tạm tính, người đặt, mã vạch.
+  fillPass(values) {
+    const p = this._pass;
+    const code = `SG${this._departure.date.replaceAll('-', '').slice(2)}${(this._tour?.id ?? 'tour').slice(0, 2).toUpperCase()}${Math.floor(Math.random() * 900) + 100}`;
+    p.code.textContent = code;
+    p.tour.textContent = values.tour;
+    p.route.replaceChildren(...(this._tour ? this.vehicleList(this._tour) : []).map((v) => {
+      const dot = groupEl('booking__pass-vehicle', [iconEl(v.icon, 'booking__vehicle')]);
+      if (dot) dot.title = v.label;
+      return dot;
+    }).filter(Boolean));
+    p.date.value.textContent = values.date;
+    p.time.value.textContent = this._tour?.start ?? '';
+    p.time.node.hidden = !this._tour?.start;
+    p.guests.value.textContent = fill(this._data.labels?.guestsValue ?? '{guests}', values);
+    p.total.value.textContent = values.total;
+    p.who.replaceChildren(`${values.name}, ${values.phone}`, document.createElement('br'), values.pickup);
+    p.bar.className = 'booking__pass-barwrap';
+    p.bar.replaceChildren(this.barcodeEl(code));
+    values.code = code;
+  }
+
   // Bấm giữ chỗ: kiểm tra họ tên, số điện thoại; hợp lệ thì điền phiếu, soạn tin nhắn và hiện phiếu ngay dưới form.
   submitCalendar(e) {
     e.preventDefault();
@@ -1284,11 +1383,15 @@ export class WlBooking extends HTMLElement {
     const q = this.quoteCalendar();
     const date = viDate(this._departure.date);
     const values = { name, phone, date, guests: q.guests, total: this.money(q.total), tour: this._tour?.name ?? '', pickup: this.pickup()?.label ?? '', seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
-    const t = this._ticketInfo;
-    t.guest.textContent = name;
-    t.date.textContent = date;
-    t.seats.textContent = fill(section.labels?.guestsValue ?? '{guests}', values);
-    t.total.textContent = values.total;
+    if (this._pass) {
+      this.fillPass(values);
+    } else {
+      const t = this._ticketInfo;
+      t.guest.textContent = name;
+      t.date.textContent = date;
+      t.seats.textContent = fill(section.labels?.guestsValue ?? '{guests}', values);
+      t.total.textContent = values.total;
+    }
     const text = fill(section.message?.template, values);
     this._draft.textContent = text;
     const digits = this.site?.contact?.phone?.replace(/\s/g, '');
@@ -1315,6 +1418,7 @@ export class WlBooking extends HTMLElement {
     this._tours = null;
     this._tour = null;
     this._tourRadios = null;
+    this._pass = null;
 
     const head = groupEl('booking__head', [
       textEl('p', 'booking__eyebrow', section.eyebrow),

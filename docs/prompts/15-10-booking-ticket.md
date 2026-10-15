@@ -14,5 +14,6 @@ Ràng buộc: không viết component trùng với `booking`; chạy được v�
 ## Phần tự quyết định
 
 - Làm thành `variant: ticket` của `booking` (dùng lại tour, ngày, điểm đón, tạm tính, phiếu của kiểu `calendar`), không tạo component mới.
-- Chưa làm: số khách tách người lớn, trẻ em, em bé (cần quy tắc giá), thẻ lên xe có mã vạch; để PR sau.
+- Lượt chỉnh thứ hai ("cần style giống bản mẫu"): thẻ tour ảnh lớn, dải ngày một hàng, số bước và nút theo kiểu bảng hiệu, máy in vé, thẻ lên xe có mã vạch, đổi `currency` thành "đ" ở trang đặt tour.
+- Chưa làm: số khách tách người lớn, trẻ em, em bé (cần quy tắc giá); để PR sau.
 - Sửa kèm: `datesShown` không có tác dụng vì `display: grid` của ô ngày thắng thuộc tính `hidden`.
