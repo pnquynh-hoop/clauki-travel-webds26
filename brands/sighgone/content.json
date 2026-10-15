@@ -2276,9 +2276,27 @@
           "type": "booking",
           "id": "dat-tour",
           "variant": "calendar",
+          "tours": true,
+          "pickups": [
+            {
+              "id": "q1",
+              "label": "Khách sạn quận 1",
+              "fee": 0
+            },
+            {
+              "id": "q-gan",
+              "label": "Khách sạn quận 3, 4, 5, 10",
+              "fee": 50000
+            },
+            {
+              "id": "q-xa",
+              "label": "Khách sạn quận khác hoặc Thủ Đức",
+              "fee": 100000
+            }
+          ],
           "eyebrow": "Tour buổi tối",
-          "title": "Sài Gòn lên đèn, chọn tối nào?",
-          "lead": "Khởi hành 18:00 mỗi tối, đón tận khách sạn, về khoảng 22:00.",
+          "title": "Chọn tour, chọn ngày, chọn nơi đón",
+          "lead": "Đón tận khách sạn: quận 1 miễn phí, quận khác cộng một khoản phí cho cả đoàn.",
           "price": 890000,
           "priceNote": "một khách",
           "currency": "đồng",
@@ -2484,7 +2502,10 @@
             }
           ],
           "labels": {
-            "departures": "Tối khởi hành",
+            "departures": "Ngày khởi hành",
+            "tour": "Chọn tour",
+            "pickup": "Điểm đón",
+            "pickupLine": "Phí đón, {label}",
             "month": "tháng {m}, {y}",
             "seats": "Còn {n} chỗ",
             "soldOut": "Hết chỗ",
@@ -2515,7 +2536,7 @@
             "seats": "Số chỗ",
             "total": "Tạm tính",
             "stamp": "Chờ xác nhận",
-            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour Sài Gòn lên đèn tối {date}. Tạm tính {total}.",
+            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour {tour} ngày {date}, đón ở {pickup}. Tạm tính {total}.",
             "sms": "Gửi tin nhắn",
             "call": "Gọi SighGone",
             "copy": "Chép nội dung",
@@ -3570,6 +3591,89 @@
               "prev": "Ảnh trước",
               "next": "Ảnh sau"
             }
+          }
+        },
+        {
+          "type": "booking",
+          "id": "dat-cho",
+          "variant": "calendar",
+          "eyebrow": "Giữ chỗ",
+          "title": "Chọn tối đi, chọn nơi đón",
+          "lead": "Tour Sài Gòn lên đèn khởi hành 18:00 mỗi tối. Đón tận khách sạn: quận 1 miễn phí, quận khác cộng phí.",
+          "tours": [
+            "len-den"
+          ],
+          "pickups": [
+            {
+              "id": "q1",
+              "label": "Khách sạn quận 1",
+              "fee": 0
+            },
+            {
+              "id": "q-gan",
+              "label": "Khách sạn quận 3, 4, 5, 10",
+              "fee": 50000
+            },
+            {
+              "id": "q-xa",
+              "label": "Khách sạn quận khác hoặc Thủ Đức",
+              "fee": 100000
+            }
+          ],
+          "priceNote": "một khách",
+          "currency": "đồng",
+          "fewSeats": 3,
+          "defaultGuests": 2,
+          "includes": [
+            "Mỗi khách một tài xế",
+            "Mũ bảo hiểm, áo mưa",
+            "Bảy món ăn",
+            "Nước uống",
+            "Bảo hiểm du lịch"
+          ],
+          "excludes": [
+            "Đồ uống có cồn"
+          ],
+          "labels": {
+            "departures": "Ngày khởi hành",
+            "tour": "Chọn tour",
+            "pickup": "Điểm đón",
+            "pickupLine": "Phí đón, {label}",
+            "month": "tháng {m}, {y}",
+            "seats": "Còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "includesTitle": "Đã gồm",
+            "excludesTitle": "Chưa gồm",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "guestsValue": "{guests} khách",
+            "baseLine": "{price} × {guests} khách",
+            "dealLine": "Ưu đãi",
+            "total": "Tạm tính",
+            "deposit": "Cọc"
+          },
+          "errors": {
+            "name": "Bạn nhập họ tên giúp SighGone nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "brand": "SighGone, phiếu giữ chỗ",
+            "from": "Khách sạn của bạn",
+            "to": "Bốn quận, bảy món",
+            "guest": "Khách",
+            "date": "Tối đi",
+            "seats": "Số chỗ",
+            "total": "Tạm tính",
+            "stamp": "Chờ xác nhận",
+            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour {tour} ngày {date}, đón ở {pickup}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi SighGone",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép"
           }
         }
       ]

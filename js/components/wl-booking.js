@@ -105,6 +105,11 @@ export class WlBooking extends HTMLElement {
   }
 
   chooseRoom(id) {
+    // Chế độ chọn tour (calendar có `tours`): id là id tour trong danh mục.
+    if (this._tours?.length) {
+      this.pickTour(id);
+      return;
+    }
     const input = this._roomInputs?.find((radio) => radio.value === id);
     if (!input) return;
     input.checked = true;
@@ -748,6 +753,89 @@ export class WlBooking extends HTMLElement {
     return { row, term, value };
   }
 
+  /* Chế độ chọn tour của kiểu calendar (khai `tours` trong section): khách chọn tour trong danh mục (site.catalog.items), ngày
+     còn chỗ lấy từ `availability` của tour đó, giá lấy từ `price` của tour. `tours` là true (mọi tour có lịch) hoặc mảng id
+     (chỉ các tour này, giữ thứ tự). Không khai `tours` thì kiểu calendar chạy như cũ với `price` và `departures` của section. */
+  toursList() {
+    const want = this._data.tours;
+    if (!want) return [];
+    const items = this.site?.catalog?.items ?? [];
+    const pool = Array.isArray(want) ? want.map((id) => items.find((item) => item.id === id)) : items;
+    return pool.filter((item) => item?.price && (item.availability ?? []).length);
+  }
+
+  tourPrice() {
+    return this._tour?.price ?? this._data.price;
+  }
+
+  calDepartures() {
+    if (!this._tour) return (this._data.departures ?? []).filter((dep) => dep.date);
+    return this._tour.availability.filter((a) => a.date).map((a) => ({ date: a.date, seats: a.left }));
+  }
+
+  // Điểm đón đang chọn: { label, fee } với fee là phí cả đơn (không nhân số khách); không khai pickups thì không có phí.
+  pickup() {
+    const list = this._data.pickups ?? [];
+    return list.find((p) => p.id === this._fields?.pickup?.control.value) ?? list[0] ?? null;
+  }
+
+  // Đổi tour: dựng lại các thẻ ngày theo lịch của tour mới, chọn ngày đầu còn chỗ, tính lại tạm tính; phiếu cũ ẩn đi.
+  pickTour(id) {
+    const tour = this._tours.find((t) => t.id === id);
+    if (!tour) return;
+    this._tour = tour;
+    const departures = this.calDepartures();
+    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
+    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
+    this._datesBox.replaceChildren(...this._dateButtons.map(({ button }) => button));
+    this._tourRadios?.forEach((radio) => { radio.checked = radio.value === id; });
+    if (this._ticket) this._ticket.hidden = true;
+    this.updateCalendar();
+  }
+
+  // Các thẻ chọn tour: nút radio thật nằm trong thẻ (cùng kiểu thẻ hạng của kiểu stay). Chỉ một tour thì không cần chọn.
+  tourPickEl(prefix) {
+    if (this._tours.length < 2) return null;
+    const labels = this._data.labels ?? {};
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'booking__rooms booking__tours';
+    fieldset.append(textEl('legend', 'booking__legend', labels.tour) ?? '');
+    const list = document.createElement('div');
+    list.className = 'booking__room-list booking__tour-list';
+    this._tourRadios = this._tours.map((tour) => {
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `${prefix}-tour`;
+      radio.value = tour.id;
+      radio.checked = tour === this._tour;
+      radio.className = 'booking__room-input';
+      radio.addEventListener('change', () => this.pickTour(tour.id));
+      const label = document.createElement('label');
+      label.className = 'booking__room booking__tour';
+      label.append(radio, groupEl('booking__room-text', [
+        textEl('span', 'booking__room-name', tour.name),
+        textEl('span', 'booking__room-price', [tour.start, this.money(tour.price)].filter(Boolean).join(', ')),
+      ]));
+      list.append(label);
+      return radio;
+    });
+    fieldset.append(list);
+    return fieldset;
+  }
+
+  // Ô chọn điểm đón: mỗi lựa chọn ghi phí nếu có (phí cả đơn).
+  pickupField(prefix) {
+    const pickups = this._data.pickups ?? [];
+    if (!pickups.length) return null;
+    const select = document.createElement('select');
+    select.className = 'booking__input';
+    pickups.forEach((p) => {
+      const fee = p.fee ? ` (+ ${this.money(p.fee)})` : '';
+      select.append(new Option(`${p.label}${fee}`, p.id));
+    });
+    return fieldEl(`${prefix}-pickup`, this._data.labels?.pickup, select);
+  }
+
   // Đếm ngược tới hết ngày ưu đãi (deal.until, 23:59:59 giờ máy khách, cùng cách tính với dealActive).
   // Mẫu chữ labels.dealCountdown có {d} {h} {m} {s}; thiếu mẫu hoặc ưu đãi đã hết hạn thì không có dòng này.
   countdownEl() {
@@ -830,8 +918,10 @@ export class WlBooking extends HTMLElement {
     const section = this._data;
     const labels = section.labels ?? {};
     const prefix = this.id || 'booking';
-    const departures = (section.departures ?? []).filter((dep) => dep.date);
-    if (!section.price || !departures.length) return null;
+    this._tours = this.toursList();
+    this._tour = this._tours[0] ?? null;
+    const departures = this.calDepartures();
+    if (!this.tourPrice() || !departures.length) return null;
 
     // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn để vừa mở đã thấy tạm tính.
     this._departure = departures.find((dep) => dep.seats > 0) ?? null;
@@ -839,8 +929,10 @@ export class WlBooking extends HTMLElement {
     const dates = groupEl('booking__dates', this._dateButtons.map(({ button }) => button));
     dates.setAttribute('role', 'group');
     if (labels.departures) dates.setAttribute('aria-label', labels.departures);
+    this._datesBox = dates;
 
     const info = groupEl('booking__info', [
+      this.tourPickEl(prefix),
       dates,
       groupEl('booking__terms', [
         this.listEl(labels.includesTitle, section.includes, 'booking__included'),
@@ -850,15 +942,18 @@ export class WlBooking extends HTMLElement {
       ...(section.policies ?? []).map((policy) => this.policyEl(policy)),
     ]);
 
+    const pickup = this.pickupField(prefix);
     this._fields = {
       name: fieldEl(`${prefix}-name`, labels.name, inputEl('text', { autocomplete: 'name' })),
       phone: fieldEl(`${prefix}-phone`, labels.phone, inputEl('tel', { autocomplete: 'tel', inputmode: 'tel', ...(labels.phoneExample ? { placeholder: labels.phoneExample } : {}) })),
       guests: this.counterEl(`${prefix}-guests`, labels.guests, labels.guestsLess, labels.guestsMore, 1, section.defaultGuests ?? 2),
+      ...(pickup ? { pickup } : {}),
     };
     const price = document.createElement('p');
     price.className = 'booking__hold-price';
-    price.append(textEl('strong', '', this.money(section.price)), ` ${section.priceNote ?? ''}`);
-    this._sum = { base: this.sumRow('booking__sum-row--base'), deal: this.sumRow('booking__sum-row--deal'), total: this.sumRow('booking__sum-row--total'), deposit: this.sumRow('booking__sum-row--deposit') };
+    this._priceNow = textEl('strong', '', this.money(this.tourPrice()));
+    price.append(this._priceNow, ` ${section.priceNote ?? ''}`);
+    this._sum = { base: this.sumRow('booking__sum-row--base'), deal: this.sumRow('booking__sum-row--deal'), pickup: this.sumRow('booking__sum-row--pickup'), total: this.sumRow('booking__sum-row--total'), deposit: this.sumRow('booking__sum-row--deposit') };
     const sum = document.createElement('dl');
     sum.className = 'booking__sum';
     sum.append(...Object.values(this._sum).map((line) => line.row));
@@ -890,9 +985,10 @@ export class WlBooking extends HTMLElement {
   quoteCalendar() {
     const section = this._data;
     const guests = Number(this._fields.guests.control.value) || 0;
-    const base = section.price * guests;
+    const base = this.tourPrice() * guests;
     const discount = this.dealActive() ? section.deal.amount * guests : 0;
-    return { guests, base, discount, total: base - discount, deposit: (section.deposit ?? 0) * guests };
+    const fee = this.pickup()?.fee ?? 0;
+    return { guests, base, discount, fee, total: base - discount + fee, deposit: (section.deposit ?? 0) * guests };
   }
 
   // Số khách không vượt số chỗ còn của chuyến đang chọn; đổi chuyến thì số khách tự thu lại cho vừa.
@@ -914,11 +1010,15 @@ export class WlBooking extends HTMLElement {
 
     const q = this.quoteCalendar();
     const s = this._sum;
-    s.base.term.textContent = fill(labels.baseLine, { price: this.money(section.price), guests: q.guests });
+    if (this._priceNow) this._priceNow.textContent = this.money(this.tourPrice());
+    s.base.term.textContent = fill(labels.baseLine, { price: this.money(this.tourPrice()), guests: q.guests });
     s.base.value.textContent = this.money(q.base);
     s.deal.row.hidden = !q.discount;
     s.deal.term.textContent = labels.dealLine ?? '';
     s.deal.value.textContent = `− ${this.money(q.discount)}`;
+    s.pickup.row.hidden = !q.fee;
+    s.pickup.term.textContent = fill(labels.pickupLine, { label: this.pickup()?.label ?? '' });
+    s.pickup.value.textContent = `+ ${this.money(q.fee)}`;
     s.total.term.textContent = labels.total ?? '';
     s.total.value.textContent = this.money(q.total);
     s.deposit.row.hidden = !q.deposit;
@@ -988,7 +1088,7 @@ export class WlBooking extends HTMLElement {
     }
     const q = this.quoteCalendar();
     const date = viDate(this._departure.date);
-    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
+    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), tour: this._tour?.name ?? '', pickup: this.pickup()?.label ?? '', seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
     const t = this._ticketInfo;
     t.guest.textContent = name;
     t.date.textContent = date;
@@ -1014,6 +1114,9 @@ export class WlBooking extends HTMLElement {
     // Dựng lại từ đầu (đổi thương hiệu): bỏ đồng hồ và sơ đồ ghế của lần trước.
     this.stopCountdown();
     this._seatButtons = null;
+    this._tours = null;
+    this._tour = null;
+    this._tourRadios = null;
 
     const head = groupEl('booking__head', [
       textEl('p', 'booking__eyebrow', section.eyebrow),

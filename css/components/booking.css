@@ -1148,3 +1148,28 @@ form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
     transform: none;
   }
 }
+
+/* Chọn tour và điểm đón (kiểu calendar có `tours`, `pickups`): thẻ tour dùng lại kiểu thẻ hạng; hai cột từ 760px. */
+.booking__tours {
+  margin-bottom: 1.5rem;
+}
+
+.booking__tour-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.booking__tour {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0.6rem 0.8rem;
+}
+
+@media (min-width: 760px) {
+  .booking__tour-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.booking__tour .booking__room-text {
+  display: grid;
+  gap: 0.15rem;
+}
