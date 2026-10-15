@@ -1,0 +1,127 @@
+/* tour-pick.css - giao diện của <wl-tour-pick>. Kiểu reel: cả khối nền màu nhấn, câu hỏi chữ rất lớn có ô chữ quay
+   như máy quay số (nền màu nút, viền mực, nghiêng nhẹ); bên cạnh là thẻ tour kết quả (giao diện thẻ ở catalog-list.css),
+   trước khi quay là một khung viền đứt mời bấm. Từ 1024px chia hai cột. */
+
+.tour-pick {
+  display: block;
+}
+
+.tour-pick--reel {
+  color: var(--color-surface);
+  background: var(--color-accent);
+}
+
+.tour-pick__inner {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+.tour-pick__ask {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+}
+
+.tour-pick__eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tour-pick__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 6.4vw, 5.4rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.tour-pick__lead {
+  margin: 0;
+  max-width: 34rem;
+}
+
+/* Ô chữ quay: cao đúng một dòng (1.12em), phần dải chữ ngoài ô bị che. */
+.tour-pick__window {
+  display: inline-block;
+  height: 1.12em;
+  padding: 0 0.3em;
+  overflow: hidden;
+  vertical-align: bottom;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 3px solid var(--color-ink);
+  border-radius: 0.2em;
+  box-shadow: 6px 6px 0 var(--color-ink);
+  transform: rotate(-2deg);
+}
+
+.tour-pick__strip {
+  display: block;
+  font-family: var(--font-hand, var(--font-heading));
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.tour-pick__strip span {
+  display: block;
+  height: 1.12em;
+  line-height: 1.12em;
+  white-space: nowrap;
+}
+
+.tour-pick__spin {
+  font-size: 1.15rem;
+}
+
+.tour-pick__note {
+  margin: 0;
+  min-height: 1.6em;
+  font-weight: 600;
+}
+
+.tour-pick__result {
+  min-height: 10rem;
+}
+
+.tour-pick__empty {
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+  margin: 0;
+  padding: 2rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: center;
+  border: 3px dashed color-mix(in srgb, currentColor 50%, transparent);
+  border-radius: var(--radius);
+}
+
+/* Thẻ kết quả bật ra như vừa rơi từ máy quay số. */
+.tour-pick__card {
+  animation: tour-pick-pop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+
+@keyframes tour-pick-pop {
+  from {
+    opacity: 0;
+    transform: translateY(2rem) rotate(4deg) scale(0.9);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tour-pick__inner {
+    grid-template-columns: 1.3fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-pick__card {
+    animation: none;
+  }
+}

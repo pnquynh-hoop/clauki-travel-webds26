@@ -2,42 +2,10 @@
    Tour khai một lần ở catalog (AGENTS.md mục 5), khối này chỉ đọc lại qua this.site.catalog, nên giá hay ảnh
    sửa một chỗ là mọi trang cùng đổi. Section chỉ ghi tiêu đề, mẫu chữ trên thẻ (labels) và tuỳ chọn pick
    (danh sách id) khi chỉ muốn hiện vài mục, ví dụ ba tour gợi ý ở trang 404. */
-import { asset, catalogItem } from '../core.js';
+import { catalogItem } from '../core.js';
 import { textEl, linkEl, groupEl } from '../dom.js';
-
-// Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
-function fill(template, values) {
-  if (!template) return null;
-  return template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
-}
-
-// Ngày hôm nay theo múi giờ của nơi chốn (dạng 2026-10-20, giống availability), không theo giờ máy của khách.
-function today(timezone) {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date());
-}
-
-// Chuyến gần nhất từ hôm nay còn chỗ. Ngày đã qua hay đã hết chỗ thì bỏ qua.
-function nextDeparture(item, from) {
-  return (item.availability ?? []).find((day) => day.date >= from && day.left > 0);
-}
-
-// Một tour đi qua nhiều chặng, nhiều chặng cùng một phương tiện: chỉ lấy mỗi phương tiện một lần, giữ thứ tự đi.
-function vehiclesOf(item) {
-  return [...new Set((item.stages ?? []).map((stage) => stage.vehicle).filter(Boolean))];
-}
-
-// Mục thiếu id, tên hoặc giá thì bỏ, vì thẻ không có gì để khách so sánh.
-function isComplete(item) {
-  return Boolean(item?.id && item.name && Number.isFinite(item.price));
-}
-
-// Số giờ từ giờ đi tới giờ về, ví dụ 06:00 tới 12:30 là "6,5". Tính từ start, end để khỏi khai thêm trường.
-function hours(start, end) {
-  const [h1, m1] = start.split(':').map(Number);
-  const [h2, m2] = end.split(':').map(Number);
-  const n = (h2 * 60 + m2 - h1 * 60 - m1) / 60;
-  return n > 0 ? n.toLocaleString('vi-VN') : null;
-}
+// Thẻ tour và vài hàm nhỏ dùng chung với khối gợi ý tour (tour-pick).
+import { cardEl, vehiclesOf, isComplete } from './catalog-card.js';
 
 // Ba nhóm lọc. key là tên trên địa chỉ (#di=thuyen&buoi=toi), label là khoá chữ trong section.filters,
 // names lấy tên hiện ra từ danh mục, match cho biết một tour có hợp lựa chọn không.
@@ -80,66 +48,8 @@ export class WlCatalogList extends HTMLElement {
     return p;
   }
 
-  chipEl(id) {
-    const vehicle = this.site.catalog.vehicles?.[id];
-    const chip = textEl('span', 'catalog-list__chip', vehicle?.label);
-    if (chip && vehicle.color) chip.style.setProperty('--vc', vehicle.color);
-    return chip;
-  }
-
-  mediaEl(item) {
-    if (!item.image?.src) return null;
-    const img = document.createElement('img');
-    img.src = asset(item.image.src);
-    img.alt = item.image.alt ?? '';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    return groupEl('catalog-list__media', [img]);
-  }
-
-  priceEl(item) {
-    const catalog = this.site.catalog;
-    const price = `${item.price.toLocaleString('vi-VN')} ${catalog.currency ?? ''}`.trim();
-    const note = fill(this._data.labels?.priceNote, {
-      unit: item.unit,
-      buoi: catalog.buoi?.[item.tags?.buoi]?.toLowerCase(),
-    });
-    const el = textEl('p', 'catalog-list__price', price);
-    if (note) el.append(' ', textEl('small', '', note));
-    return el;
-  }
-
-  // Chỉ báo khi chuyến gần nhất còn ít chỗ (mặc định từ 3 chỗ trở xuống), để nhãn này có ý nghĩa thúc khách đặt sớm.
-  seatsEl(item) {
-    const trip = nextDeparture(item, today(this.site.place?.timezone));
-    if (!trip || trip.left > (this._data.fewSeats ?? 3)) return null;
-    const [, month, day] = trip.date.split('-');
-    return textEl('p', 'catalog-list__few', fill(this._data.labels?.seatsLeft, { date: `${day}/${month}`, n: trip.left }));
-  }
-
-  // Mục có trang chi tiết thì cả thẻ là liên kết; mục chưa có trang thì là thẻ thường, không dẫn vào trang trống.
   cardEl(item) {
-    const card = document.createElement(item.href ? 'a' : 'article');
-    card.className = 'catalog-list__card';
-    if (item.href) card.href = item.href;
-    // Tên riêng cho từng thẻ để khi lọc, trình duyệt cho thẻ còn lại trượt từ chỗ cũ sang chỗ mới (View Transitions).
-    // Chỉ đặt khi khối có bộ lọc: hai thẻ cùng tên trên một trang thì trình duyệt bỏ cả hiệu ứng chuyển trang.
-    if (this._data.filters) card.style.viewTransitionName = `catalog-${item.id.replace(/[^a-z0-9-]/gi, '')}`;
-    const span = item.start && item.end ? hours(item.start, item.end) : null;
-    const duration = span ? fill(this._data.labels?.duration, { n: span }) : null;
-    const time = item.start && item.end ? [`${item.start} - ${item.end}`, duration].filter(Boolean).join(', ') : null;
-    const chips = vehiclesOf(item).map((id) => this.chipEl(id));
-    card.append(...[
-      this.mediaEl(item),
-      textEl('span', 'catalog-list__time', time),
-      groupEl('catalog-list__body', [
-        textEl('h3', 'catalog-list__name', item.name),
-        textEl('p', 'catalog-list__tagline', item.tagline),
-        groupEl('catalog-list__chips', chips),
-        groupEl('catalog-list__foot', [this.priceEl(item), this.seatsEl(item)]),
-      ]),
-    ].filter(Boolean));
-    return card;
+    return cardEl(item, { site: this.site, labels: this._data.labels, fewSeats: this._data.fewSeats, transition: Boolean(this._data.filters) });
   }
 
   // Chỉ hiện lựa chọn có ít nhất một tour, để không có phím bấm vào là trống ngay.
