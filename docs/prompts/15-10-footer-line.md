@@ -13,4 +13,4 @@ Tạo issue cho một variant mới của footer, rồi làm luôn một kiểu 
 - Ý tưởng: footer là ga cuối của một tuyến, hợp với hero `ride`, hành trình kiểu metro và biển ga của thương hiệu. Menu thành các ga trên một đường kẻ, nút CTA là ga cuối.
 - Là variant của `wl-footer` (HTML khác hẳn nên rẽ nhánh JS), không tạo component mới; dùng lại cột liên hệ, biển số nhà, ghi chú, nguồn ảnh và dây điện của kiểu `columns`.
 - Màu và font lấy từ biến CSS (`--color-ink`, `--color-bg`, `--color-primary`, `--font-hand`), nên thương hiệu khác dùng kiểu này vẫn đúng màu.
-- Chỉ SighGone dùng kiểu mới; ba thương hiệu kia giữ `columns` để không ảnh hưởng.
+- Trong lúc làm, PR #161 (Như Quỳnh) đã đưa kiểu `headline` cho footer SighGone vào `main`. Để không ghi đè dữ liệu của bạn đó, kiểu `line` được giữ lại trong mã nhưng chưa gắn cho thương hiệu nào; bật bằng `footer.variant: line` khi đội chọn.

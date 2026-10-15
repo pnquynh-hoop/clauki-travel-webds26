@@ -9,7 +9,7 @@ export const BLOCKS = {
     variants: [['coverflow', 'Chồng thẻ ảnh xoay'], ['full', 'Ảnh phủ kín, mây vén khi cuộn'], ['stacked', 'Chữ trên, ảnh tràn ngang'], ['haze', 'Ảnh phủ sương, rê chuột thì tan'], ['ride', 'Cuộn qua từng ga, thành phố trôi ngang']],
     needs: { ride: (s) => Array.isArray(s.stops) && s.stops.length > 0 },
   },
-  intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa']] },
+  intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa'], ['headline', 'Tiêu đề rất lớn']] },
   gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong'], ['plates', 'Ô biển số nhà, ảnh loang theo con trỏ']] },
   faq: { label: 'Hỏi đáp', variants: [['', 'Danh sách gập mở'], ['chat', 'Khung nhắn tin']] },
   reviews: { label: 'Khách kể', variants: [['postcard', 'Bưu thiếp'], ['notes', 'Tường giấy note']] },
@@ -43,6 +43,11 @@ export const BLOCKS = {
   breadcrumb: { label: 'Đường dẫn trang', variants: [] },
   backdrop: { label: 'Ảnh nền cố định', variants: [['screen', 'Cao một màn hình'], ['half', 'Dải thấp'], ['tall', 'Cao hơn màn hình']] },
   'tour-pick': { label: 'Gợi ý tour', variants: [['reel', 'Vòng quay chọn cách đi'], ['claw', 'Máy gắp thú']] },
+  contact: { label: 'Liên hệ', variants: [['notes', 'Giấy note dán tường'], ['plate', 'Thẻ màu, biển số nhà'], ['bell', 'Bảng chuông cửa']] },
+  cards: { label: 'Thẻ trình bày', variants: [['', 'Lưới thẻ'], ['badge', 'Thẻ đeo treo lệch']] },
+  pictogram: { label: 'Con số bằng hình', variants: [] },
+  medals: { label: 'Bảng thành tựu', variants: [] },
+  coins: { label: 'Tiền đi đâu', variants: [] },
 };
 
 // Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.

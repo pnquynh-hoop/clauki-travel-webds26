@@ -42,12 +42,12 @@ của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiể
 | `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` | `haze`: ảnh phủ sương, rê chuột thì tan (trang `tuyen-so-1`: `ride`, cuộn qua từng ga) |
 | `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng | `calendar` (trang `dat-tour` và `tuyen-so-1`: `ticket`, quầy vé có máy in vé) |
 | `faq` | `chat` | `chat` | `chat` | `chat` |
-| `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `line`: ga cuối của tuyến, dây điện, biển số nhà |
+| `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `headline`: lời hẹn chữ bảng hiệu, cột tour, dây điện, biển số nhà (kiểu `line`, ga cuối của tuyến, dùng được bằng `footer.variant`, chưa thương hiệu nào bật) |
 | `to-top` (cố định) | có | có | có | có |
 | `reviews` | `postcard` | `postcard` | `postcard` | `notes` (tường giấy note, thước thở dài trước và sau chuyến) |
 | `gallery` | | `slices` | `slices` | `slices` (trang chủ và `tuyen-so-1`: `plates`, ô biển số nhà, ảnh loang theo con trỏ) |
 
-Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau nằm ở dữ liệu và biến màu, font.
+Khối `faq`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau nằm ở dữ liệu và biến màu, font.
 
 ### Component đặc trưng riêng
 

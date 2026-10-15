@@ -4,6 +4,7 @@
    - line: cả footer là ga cuối của một tuyến: menu thành các ga nối nhau bằng một đường kẻ, nút CTA là ga cuối. HTML khác hẳn nên rẽ nhánh JS. */
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
+import { iconEl } from '../icon.js';
 
 // Bật giảm chuyển động thì CSS tắt dòng chữ chạy, JS cũng thôi chỉnh tốc độ.
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -43,6 +44,35 @@ function plateEl(plate) {
   (plate.lines ?? []).forEach((line, i) => lines.append(...(i ? [document.createElement('br')] : []), line));
   box.append(textEl('span', 'footer__plate-no', plate.number), lines);
   return box;
+}
+
+/* ========= KIỂU HEADLINE =========
+   Footer trên nền trang, không ảnh, không tấm thông tin, không nút CTA (nút đã dính ở header): lời hẹn chữ bảng hiệu
+   rất lớn, dưới là các cột chữ thường. Cột tour (footer.toursTitle) liệt kê các sản phẩm có trang riêng trong danh mục,
+   nên thêm tour vào catalog là footer tự có link; cột liên hệ có icon và giờ mở cửa (footer.hours);
+   biển số nhà đứng riêng một cột, không tiêu đề. */
+
+// Icon đứng trước một dòng liên hệ, để đọc nhanh đâu là số, đâu là email, đâu là giờ; chữ đã nói đủ nên icon ẩn với trình đọc.
+function withIcon(el, icon) {
+  el?.prepend(iconEl(icon, 'footer__icon'));
+  return el;
+}
+
+function headlineColsEl(content, footer, catalog) {
+  const contact = content.contact ?? {};
+  const tours = footer.toursTitle ? (catalog?.items ?? []).map((item) => linkEl(item.href, item.name, 'footer__link')) : [];
+  const nav = (content.nav ?? []).map((item) => linkEl(item.href, item.label, 'footer__link'));
+  const plate = plateEl(footer.plate);
+  return groupEl('footer__cols', [
+    columnEl(footer.toursTitle, tours),
+    columnEl(footer.navTitle, nav),
+    columnEl(footer.contactTitle, [
+      withIcon(linkEl(telHref(contact.phone), contact.phone, 'footer__link'), 'phone'),
+      withIcon(linkEl(contact.email && `mailto:${contact.email}`, contact.email, 'footer__link'), 'mail'),
+      withIcon(textEl('p', 'footer__hours', footer.hours), 'clock'),
+    ]),
+    plate ? groupEl('footer__col footer__col--plate', [plate]) : null,
+  ]);
 }
 
 // Dây điện chằng chịt (footer.wires: true) vắt ngang chỗ nối trang và footer, khẽ đung đưa; chỉ để trang trí.
@@ -257,6 +287,24 @@ export class WlFooter extends HTMLElement {
       return;
     }
 
+    const fine = groupEl('footer__fine', [
+      textEl('p', 'footer__note', footer.note),
+      creditsEl(footer.creditsTitle, content.credits),
+    ]);
+
+    // Kiểu headline khác hẳn cấu trúc (không ảnh, không tấm thông tin, không nút CTA) nên dựng riêng.
+    if (footer.variant === 'headline') {
+      const main = groupEl('footer__main container', [
+        headingEl(footer.title, footer.titleAccent),
+        headlineColsEl(content, footer, this.site?.catalog),
+        fine,
+      ]);
+      this.replaceChildren(...[wiresEl(footer.wires), tickerEl(footer.marquee), main].filter(Boolean));
+      this._ticker = this.querySelector('.footer__ticker-track');
+      this._photo = null;
+      return;
+    }
+
     const brand = groupEl('footer__brand', [
       textEl('p', 'footer__name', content.brand?.name),
       textEl('p', 'footer__slogan', content.brand?.slogan),
@@ -265,10 +313,6 @@ export class WlFooter extends HTMLElement {
     const action = groupEl('footer__action', [
       linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn footer__cta'),
       textEl('p', 'footer__cta-note', this.site?.cta?.note),
-    ]);
-    const fine = groupEl('footer__fine', [
-      textEl('p', 'footer__note', footer.note),
-      creditsEl(footer.creditsTitle, content.credits),
     ]);
     const parts = [
       groupEl('footer__top', [brand, action]),

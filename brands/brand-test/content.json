@@ -2231,6 +2231,19 @@
           ]
         },
         {
+          "type": "intro",
+          "id": "ten-goi",
+          "variant": "headline",
+          "eyebrow": "Về Lửa Băng",
+          "title": "Ísland, đọc thành Iceland",
+          "morph": {
+            "from": "Ísland",
+            "to": "Iceland",
+            "replay": "Đọc lại"
+          },
+          "lead": "Người Iceland gọi nước mình là Ísland, đất của băng. Dấu sắc bay đi, thêm hai chữ là ra cái tên cả thế giới quen gọi."
+        },
+        {
           "type": "host",
           "id": "ve-chung-toi",
           "variant": "tv",
@@ -2305,11 +2318,187 @@
           }
         },
         {
-          "type": "intro",
+          "type": "pictogram",
+          "id": "con-so",
+          "eyebrow": "Mùa đêm dài",
+          "title": "Một ngày tháng 12 ở Iceland",
+          "lead": "Trời sáng chừng năm tiếng, còn lại là đêm để săn cực quang.",
+          "items": [
+            {
+              "value": 19,
+              "label": "giờ tối",
+              "icon": "moon",
+              "faded": 5,
+              "fadedLabel": "5 giờ có nắng"
+            },
+            {
+              "value": 10,
+              "label": "khách mỗi đoàn",
+              "text": "Một xe địa hình, một trưởng đoàn nói tiếng Việt.",
+              "icon": "user",
+              "mark": 1,
+              "markLabel": "Trưởng đoàn"
+            },
+            {
+              "label": "cách đi",
+              "icons": [
+                {
+                  "icon": "car",
+                  "label": "Xe địa hình"
+                },
+                {
+                  "icon": "footprints",
+                  "label": "Đi bộ trên băng",
+                  "color": "#7fd6ff"
+                },
+                {
+                  "icon": "ship",
+                  "label": "Thuyền",
+                  "color": "#5fd0b5"
+                }
+              ]
+            },
+            {
+              "value": 0,
+              "label": "mục bị bỏ vì không có số",
+              "icon": "user"
+            }
+          ]
+        },
+        {
+          "type": "cards",
           "id": "cam-ket",
           "eyebrow": "Cam kết",
           "title": "Đi chậm, ở xa đèn, trả tiền thẳng cho người địa phương",
-          "lead": "Nhà nghỉ, trang trại, người dẫn đường đều là gia đình địa phương. Lửa Băng chỉ giữ phần công tổ chức."
+          "lead": "Nhà nghỉ, trang trại, người dẫn đường đều là gia đình địa phương. Lửa Băng chỉ giữ phần công tổ chức.",
+          "items": [
+            {
+              "icon": "moon-star",
+              "title": "Ngủ xa đèn",
+              "text": "Mọi chỗ ngủ cách thị trấn gần nhất ít nhất 20 phút lái xe, trời đủ tối để thấy cực quang."
+            },
+            {
+              "icon": "house",
+              "title": "Nhà của người địa phương",
+              "text": "Nhà nghỉ, trang trại do gia đình tự đón khách, không qua chuỗi khách sạn."
+            },
+            {
+              "icon": "hand-coins",
+              "title": "Trả tiền thẳng",
+              "text": "Tiền phòng, tiền ăn trả thẳng cho chủ nhà; Lửa Băng chỉ thu phần công tổ chức."
+            }
+          ]
+        },
+        {
+          "type": "medals",
+          "id": "loi-hua",
+          "eyebrow": "Lời hứa mùa đông",
+          "title": "Ba điều Lửa Băng giữ",
+          "unlocked": "Đã giữ",
+          "items": [
+            {
+              "icon": "snowflake",
+              "title": "Không thấy cực quang, đi lại miễn phí",
+              "text": "Năm đêm không lần nào thấy cực quang thì mùa sau đi lại, chỉ trả vé máy bay.",
+              "value": "1 lần",
+              "valueLabel": "đi lại"
+            },
+            {
+              "icon": "shirt",
+              "title": "Đồ ấm có sẵn",
+              "text": "Áo phao, găng tay, đinh giày cho mượn ở Reykjavík, không phải mua trước."
+            },
+            {
+              "title": "Tài xế có chứng chỉ lái trên băng",
+              "text": "Đường đóng thì đổi lịch, không bao giờ cố chạy.",
+              "value": "0",
+              "valueLabel": "chuyến chạy khi đường đóng"
+            }
+          ]
+        },
+        {
+          "type": "coins",
+          "id": "tien-di-dau",
+          "eyebrow": "Minh bạch",
+          "title": "Bốn mươi tám triệu đi đâu",
+          "amount": 48000000,
+          "currency": "đồng",
+          "unit": 10,
+          "labels": {
+            "unit": "Mỗi đồng xu là {n}%"
+          },
+          "parts": [
+            {
+              "label": "Vé máy bay",
+              "value": 40,
+              "icon": "plane"
+            },
+            {
+              "label": "Nhà nghỉ mái kính",
+              "value": 25,
+              "text": "Năm đêm, có bữa sáng."
+            },
+            {
+              "label": "Xe và tài xế",
+              "value": 15,
+              "icon": "car-front"
+            },
+            {
+              "label": "Người dẫn đường",
+              "value": 10
+            },
+            {
+              "label": "Lửa Băng",
+              "value": 10,
+              "icon": "flame"
+            },
+            {
+              "label": "Phí ẩn",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "id": "nguoi-dan-duong",
+          "variant": "badge",
+          "eyebrow": "Người dẫn đường",
+          "title": "Ba người cầm lái",
+          "tag": "Lửa Băng, người dẫn đường",
+          "items": [
+            {
+              "title": "Chị Thu Hà",
+              "meta": "Trưởng đoàn, 8 mùa đông ở Iceland",
+              "quote": "Đêm nào trời trong, chị gõ cửa từng phòng.",
+              "facts": [
+                {
+                  "label": "Nói",
+                  "value": "tiếng Việt, tiếng Anh"
+                }
+              ]
+            },
+            {
+              "title": "Gunnar Ólafsson",
+              "meta": "Lái xe địa hình, sinh ra ở Vík",
+              "quote": "Nhìn mây là biết tối nay có nên đi không.",
+              "facts": [
+                {
+                  "label": "Nói",
+                  "value": "tiếng Iceland, tiếng Anh"
+                }
+              ],
+              "color": "#5fd0b5"
+            },
+            {
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Anh Minh Quân đứng trên sông băng, đeo dây an toàn"
+              },
+              "title": "Anh Minh Quân",
+              "meta": "Hướng dẫn leo sông băng, 5 mùa",
+              "quote": "Đinh giày, rìu băng, dây an toàn: kiểm hai lần."
+            }
+          ]
         }
       ]
     },
@@ -2423,6 +2612,58 @@
             "trafficValue": "cấp {n} trên 5",
             "tour": "Hợp với tour {name}"
           }
+        },
+        {
+          "type": "cards",
+          "id": "cho-toi",
+          "eyebrow": "Tự đi ngắm",
+          "title": "Ba chỗ tối quanh Reykjavík",
+          "lead": "Không đi tour vẫn ngắm được: thuê xe, lái ra một trong ba chỗ này, tắt đèn pha và chờ.",
+          "items": [
+            {
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Ngọn hải đăng trắng ở mũi đất Grótta dưới dải cực quang"
+              },
+              "title": "Mũi Grótta",
+              "meta": "15 phút từ trung tâm",
+              "text": "Hải đăng trắng ở mũi đất, phía biển không có đèn nhà.",
+              "facts": [
+                {
+                  "label": "Đẹp nhất",
+                  "value": "22:00 đến 01:00"
+                }
+              ]
+            },
+            {
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Hồ Kleifarvatn lặng gió giữa đồi dung nham, mặt nước soi trời đêm"
+              },
+              "title": "Hồ Kleifarvatn",
+              "meta": "40 phút lái xe",
+              "text": "Hồ giữa đồi dung nham, mặt nước soi bóng trời khi lặng gió.",
+              "facts": [
+                {
+                  "label": "Đẹp nhất",
+                  "value": "đêm không trăng"
+                }
+              ]
+            },
+            {
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Khe nứt đá ở Þingvellir phủ tuyết dưới trời sao"
+              },
+              "title": "Þingvellir",
+              "meta": "50 phút lái xe",
+              "text": "Khe nứt giữa hai mảng lục địa, xa mọi thị trấn.",
+              "link": {
+                "label": "Đi cùng tour Vòng Tròn Vàng",
+                "href": "page:tour/vong-tron-vang"
+              }
+            }
+          ]
         },
         {
           "type": "tips",
@@ -2575,9 +2816,9 @@
         {
           "type": "contact",
           "id": "lien-he",
-          "variant": "notes",
+          "variant": "bell",
           "eyebrow": "Liên hệ",
-          "title": "Văn phòng ở Reykjavík, nói tiếng Việt",
+          "title": "Bấm chuông văn phòng Laugavegur.",
           "lead": "Iceland chậm hơn Việt Nam 7 tiếng. Gọi trong giờ làm việc ở Reykjavík, hoặc để lại lời nhắn để được gọi lại.",
           "image": {
             "src": "images/khung.svg",
@@ -2589,37 +2830,35 @@
             "to": "17:00"
           },
           "labels": {
-            "open": "Văn phòng đang mở, tới {to} giờ Reykjavík",
-            "closed": "Văn phòng đã nghỉ, từ {from} giờ Reykjavík sẽ gọi lại"
+            "open": "Đang có người nghe tới {to}",
+            "closed": "Mở lại lúc {from} giờ Reykjavík"
           },
           "ways": [
             {
               "kind": "phone",
-              "label": "Tổng đài",
-              "text": "Gọi từ Việt Nam: chiều và tối giờ Việt Nam là giờ làm việc ở đây."
+              "label": "Gọi",
+              "hint": "Nhanh nhất",
+              "action": "Gọi ngay",
+              "text": "Chiều và tối giờ Việt Nam là giờ làm việc ở đây."
+            },
+            {
+              "kind": "message",
+              "label": "Nhắn",
+              "hint": "Ngoài giờ cũng được",
+              "text": "Văn phòng đọc tin nhắn mỗi sáng giờ Reykjavík."
             },
             {
               "kind": "email",
-              "label": "Email đặt tour",
+              "label": "Email",
+              "hint": "Visa, hoá đơn",
+              "action": "Viết email",
               "text": "Hồ sơ visa, thư mời, hoá đơn công ty."
             },
             {
               "kind": "address",
-              "label": "Văn phòng",
+              "label": "Ghé",
+              "hint": "Cửa gỗ đỏ",
               "text": "Ghé uống cà phê trước ngày khởi hành."
-            },
-            {
-              "icon": "map-pin",
-              "label": "Điểm hẹn ngày đầu",
-              "value": "Cửa ra số 2, sân bay Keflavík",
-              "text": "Trưởng đoàn cầm bảng tên tiếng Việt."
-            },
-            {
-              "icon": "siren",
-              "label": "Khẩn cấp ngoài giờ",
-              "value": "112",
-              "href": "tel:112",
-              "text": "Số khẩn cấp của Iceland, có người nghe tiếng Anh."
             }
           ],
           "message": {
@@ -2643,6 +2882,29 @@
           "errors": {
             "name": "Bạn cho Lửa Băng biết tên để tiện gọi lại nhé.",
             "text": "Bạn viết vài chữ điều cần hỏi nhé."
+          },
+          "plate": {
+            "number": "12",
+            "lines": [
+              "Laugavegur",
+              "Reykjavík"
+            ],
+            "label": "Số 12, phố Laugavegur, Reykjavík"
+          },
+          "bell": {
+            "open": "MỞ CỬA",
+            "closed": "ĐÓNG CỬA",
+            "keys": "Chọn cách liên hệ",
+            "ringing": "Đang đổ chuông",
+            "missed": "Giờ này văn phòng đã nghỉ, mở lại lúc {from}. Để lại lời nhắn, sáng mai gọi lại.",
+            "draft": "Chưa gửi, chỉ là bản nháp",
+            "empty": "Tin nhắn sẽ hiện ở đây"
+          },
+          "directions": {
+            "link": {
+              "label": "Mở bản đồ",
+              "href": "https://www.google.com/maps/search/?api=1&query=Laugavegur%20Reykjavik"
+            }
           }
         }
       ]
@@ -2925,14 +3187,25 @@
         {
           "type": "intro",
           "id": "lac-duong",
-          "variant": "center",
+          "variant": "headline",
           "eyebrow": "Không tìm thấy trang",
           "title": "Tuyết phủ mất lối này rồi",
-          "lead": "Trang bạn tìm không có. Thử một trong các tour dưới đây, hoặc quay về trang chủ."
+          "lead": "Trang bạn tìm không có. Thử một trong các tour dưới đây, hoặc quay về trang chủ.",
+          "plate": {
+            "number": "404",
+            "lines": [
+              "Đường",
+              "bị tuyết",
+              "phủ"
+            ],
+            "label": "Biển 404, đường bị tuyết phủ"
+          },
+          "road": {
+            "icon": "car"
+          }
         },
         {
           "type": "catalog-list",
-          "title": "Đường còn mở",
           "labels": {
             "duration": "{n} giờ",
             "priceNote": "một {unit}, {buoi}",

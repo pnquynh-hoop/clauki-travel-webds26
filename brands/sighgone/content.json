@@ -33,8 +33,8 @@
       "badge": "Mới"
     },
     {
-      "label": "Về SighGone",
-      "href": "page:gioi-thieu"
+      "label": "Về chúng tôi",
+      "href": "page:ve-chung-toi"
     },
     {
       "label": "Cẩm nang",
@@ -57,7 +57,7 @@
   "contact": {
     "phone": "0123 456 789",
     "email": "xin-chao@sighgone.clauki",
-    "address": "Số 8, hẻm 42, Quận 1, TP.HCM"
+    "address": "Số 8, hẻm 42, Quận 1, TP.HCM"
   },
   "place": {
     "name": "Sài Gòn",
@@ -3758,9 +3758,9 @@
       ]
     },
     {
-      "path": "gioi-thieu",
+      "path": "ve-chung-toi",
       "title": "Về SighGone",
-      "description": "Ai dẫn bạn đi và vì sao nhóm chỉ 8 khách.",
+      "description": "Chuyện cái tên, đội hướng dẫn viên và vì sao nhóm chỉ 8 khách.",
       "sections": [
         {
           "type": "breadcrumb",
@@ -3768,16 +3768,343 @@
           "home": "Trang chủ",
           "items": [
             {
-              "label": "Về SighGone"
+              "label": "Về chúng tôi"
             }
           ]
         },
         {
           "type": "intro",
-          "id": "noi-dung",
+          "id": "ten-goi",
+          "variant": "headline",
           "eyebrow": "Về SighGone",
-          "title": "Đọc lên là Sài Gòn",
-          "lead": "SighGone dẫn khách đi Sài Gòn bằng đúng phương tiện người Sài Gòn dùng mỗi ngày."
+          "title": "Sài Gòn, đọc nhanh thành Sigh Gone",
+          "morph": {
+            "from": "Sài Gòn",
+            "to": "Sigh Gone",
+            "replay": "Đọc nhanh lại"
+          },
+          "lead": "Hai dấu huyền là hai tiếng thở dài, đi một chuyến là bay hết."
+        },
+        {
+          "type": "host",
+          "id": "cau-chuyen",
+          "eyebrow": "Từ năm 2019",
+          "title": "Đọc nhanh là ra Sài Gòn",
+          "story": [
+            "Người Sài Gòn thở dài nhiều: kẹt xe, nắng, mưa chiều, việc gấp. Đội SighGone lớn lên ở đây, biết những góc làm người ta quên thở dài.",
+            "Năm 2019 SighGone bắt đầu bằng một chiếc xe máy và một tour ăn đêm. Giờ có 27 hướng dẫn viên, sáu cách đi, và một luật duy nhất: nhóm không quá 8 người."
+          ],
+          "quote": {
+            "text": "Đọc nhanh \"Sài Gòn\" là ra \"Sigh Gone\": tiếng thở dài bay mất.",
+            "by": "Chuyện cái tên"
+          },
+          "image": {
+            "src": "images/di-bo.webp",
+            "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng"
+          },
+          "imageSecond": {
+            "src": "images/xich-lo.webp",
+            "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn"
+          }
+        },
+        {
+          "type": "pictogram",
+          "id": "con-so",
+          "eyebrow": "Bảy năm kể bằng hình",
+          "title": "Từ một chiếc xe máy",
+          "items": [
+            {
+              "value": 27,
+              "label": "hướng dẫn viên",
+              "text": "Ai cũng lớn lên ở Sài Gòn, dẫn đúng khu mình rành.",
+              "icon": "user",
+              "mark": 1,
+              "markLabel": "Năm 2019: một người, một chiếc xe máy"
+            },
+            {
+              "label": "cách đi",
+              "text": "Đi chậm hay đi nhanh, trên bờ hay dưới nước.",
+              "icons": [
+                {
+                  "icon": "footprints",
+                  "color": "#1f4fbf",
+                  "label": "Đi bộ"
+                },
+                {
+                  "icon": "bike",
+                  "color": "#13a06e",
+                  "label": "Xe đạp"
+                },
+                {
+                  "icon": "bike",
+                  "color": "#d6331f",
+                  "label": "Xích lô"
+                },
+                {
+                  "icon": "bike",
+                  "color": "#ffcc1d",
+                  "label": "Xe máy"
+                },
+                {
+                  "icon": "sailboat",
+                  "color": "#0f8fa3",
+                  "label": "Thuyền"
+                },
+                {
+                  "icon": "ship",
+                  "color": "#ff7a1a",
+                  "label": "Ca nô"
+                }
+              ]
+            },
+            {
+              "value": 8,
+              "label": "khách mỗi nhóm",
+              "text": "Một hướng dẫn viên trông được hết, ai cũng hỏi được.",
+              "icon": "user",
+              "faded": 1,
+              "fadedLabel": "Người thứ 9 đi chuyến sau"
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "id": "huong-dan-vien",
+          "variant": "badge",
+          "eyebrow": "Ai dẫn bạn đi",
+          "title": "Thẻ của hướng dẫn viên.",
+          "tag": "SighGone, hướng dẫn viên",
+          "items": [
+            {
+              "title": "Mai Trâm",
+              "image": {
+                "src": "images/hdv-mai-tram.webp",
+                "alt": "Tranh vẽ Mai Trâm đeo kính, tóc tết, đưa tay che nắng giữa hàng cây"
+              },
+              "meta": "Bình Thạnh, 4 năm dẫn tour",
+              "quote": "Đạp xe Thanh Đa mỗi sáng, biết vườn nào có dừa ngọt.",
+              "color": "#0d8058",
+              "chips": [
+                {
+                  "icon": "bike",
+                  "text": "Đạp xe đường làng"
+                },
+                {
+                  "icon": "sprout",
+                  "text": "Vườn ven sông"
+                }
+              ]
+            },
+            {
+              "title": "Út Lộc",
+              "image": {
+                "src": "images/hdv-ut-loc.webp",
+                "alt": "Tranh vẽ Út Lộc cười tươi dưới tán cây"
+              },
+              "meta": "Cần Giờ, 7 năm dẫn tour",
+              "quote": "Lớn lên trong rừng đước, gọi được tên từng loại cây.",
+              "color": "#c2410c",
+              "chips": [
+                {
+                  "icon": "trees",
+                  "text": "Rừng ngập mặn"
+                },
+                {
+                  "icon": "ship",
+                  "text": "Ca nô"
+                }
+              ]
+            },
+            {
+              "title": "Bảo Vy",
+              "image": {
+                "src": "images/hdv-bao-vy.webp",
+                "alt": "Tranh vẽ Bảo Vy đeo kính, tóc tết, mỉm cười dưới gốc cây"
+              },
+              "meta": "Quận 1, 3 năm dẫn tour",
+              "quote": "Kể chuyện từng toà nhà cũ như kể chuyện nhà mình.",
+              "color": "#7a4dd8",
+              "chips": [
+                {
+                  "icon": "building-2",
+                  "text": "Kiến trúc phố cũ"
+                },
+                {
+                  "icon": "footprints",
+                  "text": "Đi bộ"
+                }
+              ]
+            },
+            {
+              "title": "Chị Tư Hạnh",
+              "meta": "Quận 4, 9 năm dẫn tour",
+              "quote": "Hẻm nào có ốc ngon, chị nhớ hết số nhà.",
+              "color": "#d6331f",
+              "chips": [
+                {
+                  "icon": "utensils",
+                  "text": "Ẩm thực đường phố"
+                },
+                {
+                  "icon": "moon",
+                  "text": "Sài Gòn về đêm"
+                }
+              ]
+            },
+            {
+              "title": "Anh Khôi",
+              "meta": "Quận 5, 6 năm dẫn tour",
+              "quote": "Ông nội anh đạp xích lô ở Chợ Lớn từ năm 1970.",
+              "color": "#1f4fbf",
+              "chips": [
+                {
+                  "icon": "landmark",
+                  "text": "Văn hoá người Hoa"
+                },
+                {
+                  "icon": "bike",
+                  "text": "Xích lô"
+                }
+              ]
+            },
+            {
+              "title": "Chú Năm",
+              "meta": "Quận 7, 12 năm dẫn tour",
+              "quote": "Ba mươi năm lái thuyền trên sông Sài Gòn.",
+              "color": "#0b6f80",
+              "chips": [
+                {
+                  "icon": "anchor",
+                  "text": "Đường sông"
+                },
+                {
+                  "icon": "sailboat",
+                  "text": "Thuyền"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "medals",
+          "id": "cam-ket",
+          "eyebrow": "Luật chơi",
+          "title": "Bốn điều SighGone giữ.",
+          "lead": "Nhiệm vụ chính: cho khách thấy một Sài Gòn thở chậm, và để tiền khách trả nuôi được người dẫn, quán nhà, bác tài trong hẻm.",
+          "progress": "Đã mở {n}/{total} cam kết",
+          "unlocked": "Đã mở khoá",
+          "items": [
+            {
+              "icon": "receipt",
+              "title": "Giá nào trả nấy",
+              "color": "#d6331f",
+              "text": "Giá trên web đã gồm xe, món ăn, nước và bảo hiểm. Tới nơi không ai thu thêm.",
+              "value": "0 đồng",
+              "valueLabel": "phí ẩn"
+            },
+            {
+              "icon": "undo-2",
+              "title": "Không cọc, huỷ nhẹ",
+              "color": "#1f4fbf",
+              "text": "Giữ chỗ không cần cọc. Báo huỷ trước giờ chạy 24 giờ thì hoàn đủ, mưa to thì dời lịch miễn phí.",
+              "value": "100%",
+              "valueLabel": "hoàn khi huỷ sớm"
+            },
+            {
+              "icon": "hand-coins",
+              "title": "Trả công trước chuyến",
+              "color": "#0d8058",
+              "text": "Hướng dẫn viên nhận tiền công trước khi xuất phát, không sống nhờ hoa hồng mua sắm.",
+              "value": "0",
+              "valueLabel": "điểm dừng mua sắm"
+            },
+            {
+              "icon": "store",
+              "title": "Tiền ở lại trong hẻm",
+              "color": "#7a4dd8",
+              "text": "Ăn ở quán nhà, đi xe của bác tài trong khu, không dẫn khách vào cửa hàng ăn chia.",
+              "value": "30%",
+              "valueLabel": "giá vé về quán nhà"
+            }
+          ]
+        },
+        {
+          "type": "coins",
+          "id": "tien-di-dau",
+          "eyebrow": "Minh bạch",
+          "title": "Một vé đi đâu?",
+          "lead": "Mỗi đồng xu là một phần giá vé. Hai chồng cao nhất về tay người dẫn và quán nhà; phần của SighGone chỉ một chồng thấp.",
+          "item": "len-den",
+          "unit": 5,
+          "labels": {
+            "total": "Một vé {name}",
+            "unit": "Mỗi đồng xu là {n}% giá vé"
+          },
+          "parts": [
+            {
+              "label": "Hướng dẫn viên",
+              "value": 40,
+              "icon": "user-round",
+              "color": "#d6331f",
+              "text": "Tiền công trả trước chuyến, không ăn hoa hồng."
+            },
+            {
+              "label": "Quán nhà",
+              "value": 30,
+              "icon": "utensils-crossed",
+              "color": "#c2410c",
+              "text": "Bảy món ăn và nước uống dọc đường."
+            },
+            {
+              "label": "Xe và xăng",
+              "value": 10,
+              "icon": "bike",
+              "color": "#1f4fbf",
+              "text": "Mỗi khách một tài xế, xăng, vé gửi xe."
+            },
+            {
+              "label": "Bảo hiểm, văn phòng",
+              "value": 10,
+              "icon": "shield-check",
+              "color": "#0d8058",
+              "text": "Bảo hiểm du lịch, áo mưa, tổng đài hẻm 42."
+            },
+            {
+              "label": "Phần của SighGone",
+              "value": 10,
+              "icon": "piggy-bank",
+              "color": "#7a4dd8",
+              "text": "Để dành mở tuyến mới."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "id": "an-toan",
+          "eyebrow": "An toàn",
+          "title": "Thở ra được là vì yên tâm.",
+          "items": [
+            {
+              "icon": "users",
+              "title": "Tối đa 8 khách",
+              "text": "Một hướng dẫn viên trông được hết, không ai bị bỏ lại phía sau."
+            },
+            {
+              "icon": "hard-hat",
+              "title": "Mũ bảo hiểm đạt chuẩn",
+              "text": "Xe máy, xe đạp đều có mũ; trẻ em có mũ cỡ nhỏ."
+            },
+            {
+              "icon": "life-buoy",
+              "title": "Áo phao trên mọi chuyến nước",
+              "text": "Thuyền, đò, ca nô, phà: mặc áo phao trước khi xuống."
+            },
+            {
+              "icon": "shield-check",
+              "title": "Bảo hiểm du lịch",
+              "text": "Đã gồm trong giá tour, cho mọi khách."
+            }
+          ]
         }
       ]
     },
@@ -3797,11 +4124,123 @@
           ]
         },
         {
-          "type": "intro",
-          "id": "noi-dung",
+          "type": "contact",
+          "id": "lien-he",
+          "variant": "bell",
           "eyebrow": "Liên hệ",
-          "title": "Gặp nhau ở Nhà hát Thành phố",
-          "lead": "Mỗi ngày từ 5:30 đến 22:30. Gọi, nhắn tin hoặc ghé điểm hẹn."
+          "title": "Ghé hẻm 42.",
+          "plate": {
+            "number": "8",
+            "lines": [
+              "Hẻm 42",
+              "Quận 1",
+              "TP.HCM"
+            ],
+            "label": "Số 8, hẻm 42, Quận 1, TP.HCM"
+          },
+          "hours": {
+            "from": "05:30",
+            "to": "22:30"
+          },
+          "labels": {
+            "open": "Đang mở cửa, tới {to}",
+            "closed": "Đã đóng cửa, mở lại lúc {from}"
+          },
+          "ways": [
+            {
+              "kind": "phone",
+              "label": "Gọi",
+              "text": "Nhanh nhất, 5:30 đến 22:30",
+              "hint": "Nhanh nhất",
+              "action": "Gọi ngay"
+            },
+            {
+              "kind": "message",
+              "label": "Nhắn",
+              "hint": "Ngoài giờ cũng được",
+              "text": "Ngoài giờ vẫn nhắn được, sáng hôm sau SighGone gọi lại."
+            },
+            {
+              "kind": "email",
+              "label": "Email",
+              "text": "Tour riêng, công ty, báo giá",
+              "hint": "Tour riêng, báo giá",
+              "action": "Viết email"
+            },
+            {
+              "kind": "address",
+              "icon": "map-pin",
+              "label": "Ghé",
+              "href": "https://www.google.com/maps/search/?api=1&query=Nh%C3%A0%20h%C3%A1t%20Th%C3%A0nh%20ph%E1%BB%91%20H%E1%BB%93%20Ch%C3%AD%20Minh",
+              "text": "Điểm hẹn các tour: Nhà hát Thành phố",
+              "hint": "Số 8, cửa vàng"
+            }
+          ],
+          "directions": {
+            "title": "Đường vào hẻm",
+            "steps": [
+              "Đứng trước Nhà hát Thành phố, đi bộ về phía chợ Bến Thành khoảng 5 phút.",
+              "Thấy tiệm cà phê có dãy ghế nhựa đỏ thì rẽ trái vào hẻm 42.",
+              "Nhà số 8, cửa sơn vàng, có treo biển số nhà xanh."
+            ],
+            "link": {
+              "label": "Mở bản đồ",
+              "href": "https://www.google.com/maps/search/?api=1&query=Nh%C3%A0%20h%C3%A1t%20Th%C3%A0nh%20ph%E1%BB%91%20H%E1%BB%93%20Ch%C3%AD%20Minh"
+            }
+          },
+          "message": {
+            "title": "Nhắn nhanh",
+            "name": "Bạn tên gì?",
+            "text": "Bạn muốn hỏi gì?",
+            "placeholder": "Ví dụ: nhóm mình 4 người, muốn đi ăn đêm tối thứ Bảy, đón ở Quận 1.",
+            "sms": "Soạn tin nhắn",
+            "email": "Gửi email",
+            "template": "Chào SighGone, mình là {name}. {text}",
+            "subject": "Liên hệ từ {name}"
+          },
+          "errors": {
+            "name": "Cho SighGone biết tên để tiện gọi lại nhé.",
+            "text": "Viết vài chữ điều cần hỏi nhé."
+          },
+          "bell": {
+            "open": "MỞ CỬA",
+            "closed": "ĐÓNG CỬA",
+            "keys": "Chọn cách liên hệ",
+            "ringing": "Đang đổ chuông",
+            "missed": "Giờ này đội SighGone đã về nhà, mở lại lúc {from}. Để lại lời nhắn, sáng mai gọi lại.",
+            "draft": "Chưa gửi, chỉ là bản nháp",
+            "empty": "Tin nhắn sẽ hiện ở đây"
+          }
+        },
+        {
+          "type": "policy",
+          "id": "chinh-sach",
+          "eyebrow": "Chính sách huỷ",
+          "title": "Huỷ, hoàn, dời.",
+          "lead": "Không cần cọc, nên huỷ cũng nhẹ nhàng. Tính theo giờ khởi hành của tour.",
+          "rows": [
+            {
+              "when": "Báo huỷ trước giờ chạy 24 giờ",
+              "what": "Hoàn 100%",
+              "tone": "ok"
+            },
+            {
+              "when": "Báo huỷ trong vòng 24 giờ",
+              "what": "Hoàn 50%",
+              "tone": "mid"
+            },
+            {
+              "when": "Không tới, không báo",
+              "what": "Không hoàn",
+              "tone": "no"
+            },
+            {
+              "when": "Mưa to, triều cường, nắng nóng gắt",
+              "what": "SighGone gọi dời lịch, miễn phí",
+              "tone": "ok"
+            }
+          ],
+          "note": "Tour riêng huỷ trước 48 giờ thì hoàn đủ, vì phải giữ xe và người từ sớm."
         }
       ]
     },
@@ -4195,23 +4634,54 @@
     },
     {
       "path": "404",
-      "title": "Lạc đường",
-      "description": "Trang này không có.",
+      "title": "Lạc hẻm",
+      "description": "Trang này không có, thử một chuyến khác của SighGone.",
       "sections": [
         {
           "type": "intro",
           "id": "noi-dung",
-          "eyebrow": "Lạc đường",
-          "title": "Hẻm này cụt rồi",
-          "lead": "Trang bạn tìm không có. Quay về trang chủ để chọn một chuyến khác."
+          "variant": "headline",
+          "plate": {
+            "number": "404",
+            "lines": [
+              "Hẻm",
+              "không",
+              "có thật"
+            ]
+          },
+          "title": "Lạc hẻm rồi!",
+          "lead": "Ở Sài Gòn lạc hẻm là chuyện thường. Trang bạn tìm không có, nhưng mấy chuyến này thì có thật:",
+          "road": {
+            "icon": "bike"
+          }
+        },
+        {
+          "type": "catalog-list",
+          "id": "goi-y",
+          "pick": [
+            "len-den",
+            "cho-lon",
+            "can-gio"
+          ],
+          "labels": {
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}, {buoi}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
+          }
         }
       ]
     }
   ],
   "footer": {
-    "variant": "line",
-    "lineTitle": "Ga cuối",
+    "variant": "headline",
     "wires": true,
+    "title": "Every sigh,",
+    "titleAccent": "gone.",
+    "toursTitle": "Tour",
+    "navTitle": "SighGone",
+    "contactTitle": "Liên hệ",
+    "hours": "Mỗi ngày, 5:30 đến 22:30",
+    "addressTitle": "Điểm hẹn",
     "plate": {
       "number": "8",
       "lines": [
@@ -4220,24 +4690,6 @@
       ],
       "label": "Điểm hẹn: số 8, hẻm 42, Quận 1"
     },
-    "image": {
-      "src": "images/skyline-dem.webp",
-      "alt": "Đường chân trời trung tâm Sài Gòn lên đèn, soi bóng xuống mặt sông về đêm"
-    },
-    "title": "Every sigh,",
-    "titleAccent": "gone.",
-    "marquee": [
-      "Chợ Lớn",
-      "Bến Bạch Đằng",
-      "Thanh Đa",
-      "Kênh Thị Nghè",
-      "Củ Chi",
-      "Phà Bình Khánh",
-      "Rừng Sác"
-    ],
-    "navTitle": "Xem thêm",
-    "contactTitle": "Liên hệ",
-    "addressTitle": "Điểm hẹn",
     "note": "SighGone là thương hiệu giả tưởng làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
     "creditsTitle": "Nguồn ảnh"
   },
@@ -4458,6 +4910,27 @@
       "license": "CC BY 2.0",
       "source": "https://commons.wikimedia.org/wiki/File:Saigon_skyline_night_view.jpg",
       "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/hdv-mai-tram.webp",
+      "author": "Đội ClauKi, tạo bằng Gemini",
+      "license": "Tự thiết kế",
+      "source": "",
+      "note": "Cắt lấy chân dung, chuyển sang WebP"
+    },
+    {
+      "file": "images/hdv-ut-loc.webp",
+      "author": "Đội ClauKi, tạo bằng Gemini",
+      "license": "Tự thiết kế",
+      "source": "",
+      "note": "Cắt lấy chân dung, chuyển sang WebP"
+    },
+    {
+      "file": "images/hdv-bao-vy.webp",
+      "author": "Đội ClauKi, tạo bằng Gemini",
+      "license": "Tự thiết kế",
+      "source": "",
+      "note": "Cắt lấy chân dung, chuyển sang WebP"
     }
   ]
 }
