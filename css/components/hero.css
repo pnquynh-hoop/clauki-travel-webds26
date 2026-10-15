@@ -811,3 +811,19 @@ theo mức độ cuộn trang.
     max-width: 54rem;
   }
 }
+
+/* Dưới header kiểu overlay
+
+   Header overlay ghim ở mép trên và không chiếm chỗ. Kiểu coverflow và stacked vốn tính header chiếm một hàng
+   riêng, nên khi đứng đầu trang dưới header overlay thì chữ bị header che: đẩy phần chữ xuống thêm đúng chiều
+   cao header (--header-stuck do wl-header đo), nền và ảnh vẫn tràn lên sau header. */
+body:has(.header--overlay) main > .hero--coverflow:first-child {
+  min-height: min(100svh, 64rem);
+  padding-top: calc(1.5rem + var(--header-stuck, 4.5rem));
+}
+
+/* Stacked có hiệu ứng reveal thì đệm trên nằm ở .hero__inner (xem hero-reveal.css), không nằm ở khối. */
+body:has(.header--overlay) main > .hero--stacked:first-child:not(.hero--reveal),
+body:has(.header--overlay) main > .hero--stacked.hero--reveal:first-child .hero__inner {
+  padding-top: calc(var(--space-section) + var(--header-stuck, 4rem));
+}
