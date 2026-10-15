@@ -123,9 +123,12 @@ export function composeHome(content, picks, frames, base, keepKeys = []) {
   const valid = [];
   const seen = new Set();
   for (const raw of picks) {
-    const key = typeof raw === 'string' ? raw.trim() : '';
+    // AI hay viết "intro::" hay "intro" cho kiểu mặc định: chuẩn hoá về "loại:kiểu".
+    const [head, ...rest] = (typeof raw === 'string' ? raw : '').split(':');
+    const type = head.trim();
+    const variant = rest.map((v) => v.trim()).find(Boolean) ?? '';
+    const key = `${type}:${variant}`;
     if (!MENU_KEYS.has(key)) continue;
-    const [type, variant] = key.split(':');
     if (seen.has(type)) continue;
     if (isBanned({ type, variant: variant || undefined }, keep)) continue;
     const found = findSection(key, frames, base);
@@ -169,4 +172,44 @@ export function composeHome(content, picks, frames, base, keepKeys = []) {
   content.credits = [...(content.credits ?? []), ...credits.filter((c) => !(content.credits ?? []).some((x) => x.file === c.file))];
   fixLinks(content, home);
   return { picked: valid.map((v) => v.key), hero: valid[0].key.startsWith('hero:') ? valid[0].key.split(':')[1] : '' };
+}
+
+// Chân trang cũng trộn được: kiểu columns (ảnh nền lớn, lời hẹn, dòng chữ chạy địa danh) hay headline (lời hẹn chữ bảng hiệu, không ảnh nền).
+// Dữ liệu lấy từ khung có kiểu đó (ưu tiên khung đang dùng); mây (clouds) chỉ giữ khi đã duyệt cloud-band, ô số nhà và dây điện chỉ giữ khi
+// đã duyệt contact:plate, cột tour của headline chỉ có khi khung có catalog.
+export const FOOTERS = [
+  ['columns', 'ảnh nền lớn, lời hẹn chữ lớn, dòng chữ chạy các địa danh, cột liên kết; hợp nơi có ảnh phong cảnh đẹp'],
+  ['headline', 'lời hẹn chữ rất lớn kiểu bảng hiệu, không ảnh nền, gọn; hợp thành phố, tour ngắn, giọng vui'],
+];
+
+export function composeFooter(content, kind, frames, base, keepKeys = []) {
+  if (!FOOTERS.some(([key]) => key === kind)) return null;
+  const keep = new Set(keepKeys);
+  let footer = null;
+  let credits = [];
+  if ((content.footer?.variant ?? 'columns') === kind) footer = content.footer;
+  else {
+    const donor = [base, ...Object.keys(frames).filter((f) => f !== base)].find((id) => id !== base && (frames[id]?.footer?.variant ?? 'columns') === kind);
+    if (!donor) return null;
+    footer = structuredClone(frames[donor].footer);
+    absolute(footer, donor);
+    delete footer.hours;
+    const files = new Set();
+    const collect = (n) => {
+      if (Array.isArray(n)) n.forEach(collect);
+      else if (n && typeof n === 'object') Object.values(n).forEach(collect);
+      else if (typeof n === 'string' && n.startsWith(`/brands/${donor}/`)) files.add(n);
+    };
+    collect(footer);
+    credits = (frames[donor].credits ?? []).filter((c) => files.has(`/brands/${donor}/${c.file}`)).map((c) => ({ ...c, file: `/brands/${donor}/${c.file}` }));
+  }
+  if (!keep.has('cloud-band')) delete footer.clouds;
+  if (!keep.has('contact:plate')) {
+    delete footer.plate;
+    delete footer.wires;
+  }
+  if (!(content.catalog?.items ?? []).length) delete footer.toursTitle;
+  content.footer = footer;
+  content.credits = [...(content.credits ?? []), ...credits.filter((c) => !(content.credits ?? []).some((x) => x.file === c.file))];
+  return kind;
 }

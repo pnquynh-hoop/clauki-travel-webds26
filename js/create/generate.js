@@ -12,7 +12,7 @@ import { setIn } from '../editor/form.js';
 import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
-import { MENU, composeHome, loadFrames } from './mix.js';
+import { MENU, FOOTERS, composeFooter, composeHome, loadFrames } from './mix.js';
 import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
@@ -88,8 +88,9 @@ dacTrung: các component đặc trưng chỉ được dùng khi thật sự phù
 ${SIGNATURE.filter((s) => !s.hard).map((s) => `- ${s.key}: ${s.fit}`).join('\n')}
 trangChu: thứ tự các khối chung của trang chủ, từ 5 tới 8 khoá lấy từ danh sách sau (khoá: mô tả). Khung đã có sẵn các khối riêng của nó (đặt chỗ, danh sách tour...) nên code tự giữ; bạn chỉ chọn khối chung, mỗi loại (phần trước dấu hai chấm) tối đa một lần.
 ${MENU.map(([key, hint]) => `- ${key}: ${hint}`).join('\n')}
-Luật: khoá đầu là một hero; chọn kiểu hợp giọng nơi chốn và trộn các kiểu khác nhau, ít nhất hai khoá có kiểu riêng (không phải kiểu mặc định có phần sau dấu hai chấm để trống), không chọn kiểu đầu tiên cho mọi loại; nên có reviews và faq; tips và policy chỉ chọn khi khoá đó cũng có trong dacTrung.
+Luật: khoá đầu là một hero; chọn kiểu hợp giọng nơi chốn và trộn các kiểu khác nhau, tối đa MỘT khoá mặc định (phần sau dấu hai chấm để trống, như "faq:"), các khoá còn lại phải chọn kiểu riêng (như "faq:chat", "gallery:slices"); không chọn kiểu đầu tiên cho mọi loại; nên có reviews và faq; tips và policy chỉ chọn khi khoá đó cũng có trong dacTrung.
 dauTrang: kiểu đầu trang, một trong "solid" (nền trang), "center" (tên ở giữa), "overlay" (trong suốt đè lên ảnh, chỉ khi hero là "hero:full").
+chanTrang: kiểu chân trang, một trong ${FOOTERS.map(([key, hint]) => `"${key}" (${hint})`).join(', ')}. Chọn theo giọng nơi chốn, không mặc định "columns".
 phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá sau: "montserrat" (hiện đại, gọn, hợp thành phố, resort hiện đại), "lora" (có chân, cổ điển, hợp núi, làng quê, truyền thống), "unbounded" (tròn, vui, trẻ trung, hợp tour ăn uống, bạn bè), "playfair" (sang trọng, hợp nghỉ dưỡng cao cấp), hoặc "" để giữ kiểu chữ của khung.
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
@@ -103,12 +104,13 @@ Trả về JSON đúng dạng:
  "dacTrung": [],
  "trangChu": ["", "", "", "", ""],
  "dauTrang": "",
+ "chanTrang": "",
  "anhTimKiem": ["", "", "", "", ""],
  "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
 }
 
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
-const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, ...rest }) => rest;
+const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
 
 function groupPrompt(profile, fields, idx) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
@@ -450,7 +452,10 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   // Luật component: bỏ khối đặc trưng của thương hiệu khung, đổi kiểu bị cấm (rules.js) trước khi tách chữ cho AI viết.
   const rules = sanitizeFrame(template, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
   // Ghép khối chung từ nhiều khung theo trangChu của AI; không dùng được thì giữ trang chủ của khung và để layoutTask chọn kiểu.
-  const mixed = composeHome(template, profile.trangChu, { ...(await framesRun), [frame]: template }, frame, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
+  const pool = { ...(await framesRun), [frame]: template };
+  const approved = Array.isArray(profile.dacTrung) ? profile.dacTrung : [];
+  const mixed = composeHome(template, profile.trangChu, pool, frame, approved);
+  composeFooter(template, profile.chanTrang, pool, frame, approved);
   const content = structuredClone(template);
   const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);
