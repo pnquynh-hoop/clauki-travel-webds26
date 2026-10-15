@@ -29,6 +29,7 @@ const COMPONENTS = {
   'wl-clock': { load: () => import('./components/wl-clock.js').then((m) => m.WlClock), css: ['clock'] },
   'wl-tips': { load: () => import('./components/wl-tips.js').then((m) => m.WlTips), css: ['tips'] },
   'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },
+  'wl-contact': { load: () => import('./components/wl-contact.js').then((m) => m.WlContact), css: ['contact'] },
 };
 
 start(COMPONENTS);

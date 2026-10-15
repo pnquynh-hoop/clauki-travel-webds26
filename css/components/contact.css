@@ -1,0 +1,373 @@
+/* contact.css - giao diện của <wl-contact>. Kiểu notes: mỗi cách liên hệ là một tờ giấy note dán băng keo,
+   nghiêng nhẹ và mang một màu giấy pha từ màu thương hiệu; tờ soạn tin nhắn là giấy trắng có ô viết kẻ dòng.
+   Điện thoại: một cột. Từ 760px: chữ và ảnh chia hai bên, giấy note hai cột, tờ tin nhắn chia hai nửa.
+   Từ 1024px: các tờ note nằm chung một hàng. */
+
+.contact {
+  display: block;
+}
+
+/* Khối liên hệ thường đứng đầu trang, header kiểu overlay nằm đè lên: chừa thêm chỗ cho header. */
+.contact:first-child {
+  padding-top: max(var(--space-section), calc(var(--header-stuck, 0px) + 2.5rem));
+}
+
+.contact__inner {
+  display: grid;
+  grid-template-areas: 'head' 'photo' 'ways' 'message';
+  gap: 2.5rem;
+}
+
+.contact__head {
+  grid-area: head;
+}
+
+.contact__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.contact__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.contact__lead {
+  max-width: 36rem;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  color: var(--color-muted);
+}
+
+/* Băng keo: dải trong mờ dán chéo trên mép giấy, nghiêng ngược chiều tờ giấy. */
+.contact__photo::before,
+.contact__note::before,
+.contact__message::before {
+  content: '';
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  width: 5.5rem;
+  height: 1.4rem;
+  translate: -50% 0;
+  rotate: calc(var(--rot, 1deg) * -2);
+  background: color-mix(in srgb, color-mix(in srgb, var(--color-muted) 20%, var(--color-surface)) 70%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+/* Bóng đổ chung của các tờ giấy: mép dưới hơi nhấc khỏi mặt bàn. */
+.contact__photo,
+.contact__note,
+.contact__message {
+  position: relative;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent),
+    0 18px 30px -18px color-mix(in srgb, var(--color-ink) 45%, transparent);
+  rotate: var(--rot);
+}
+
+/* Ảnh chụp lấy liền: viền giấy trắng, chú thích viết ở mép dưới. */
+.contact__photo {
+  --rot: 2deg;
+  grid-area: photo;
+  justify-self: center;
+  width: min(100%, 26rem);
+  padding: 0.6rem 0.6rem 0;
+  background: var(--color-surface);
+}
+
+.contact__photo img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.contact__caption {
+  padding: 0.75rem 0.25rem 0.9rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+/* Giấy note */
+
+.contact__ways {
+  grid-area: ways;
+  display: grid;
+  gap: 2.25rem 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Bốn màu giấy, bốn độ nghiêng xoay vòng, đều pha từ màu của thương hiệu nên đổi brand là đổi theo. */
+.contact__way:nth-child(4n + 1) {
+  --rot: -1.6deg;
+  --paper: color-mix(in srgb, var(--color-tint) 70%, var(--color-surface));
+}
+
+.contact__way:nth-child(4n + 2) {
+  --rot: 1.2deg;
+  --paper: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+}
+
+.contact__way:nth-child(4n + 3) {
+  --rot: -0.8deg;
+  --paper: var(--color-surface);
+}
+
+.contact__way:nth-child(4n + 4) {
+  --rot: 1.8deg;
+  --paper: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+}
+
+/* Dán lần lượt: tờ trước dán xong tờ sau mới tới. Thời gian và độ trễ theo --duration,
+   nên bật giảm chuyển động thì các tờ hiện ngay. */
+.contact__way {
+  transition:
+    opacity calc(var(--duration) * 2) ease,
+    translate calc(var(--duration) * 3) cubic-bezier(0.2, 0.8, 0.3, 1),
+    scale calc(var(--duration) * 3) cubic-bezier(0.2, 0.8, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * var(--duration) * 0.6);
+}
+
+.contact__ways:not(.is-in) .contact__way {
+  opacity: 0;
+  translate: 0 -1rem;
+  scale: 1.04;
+}
+
+.contact__note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 1.6rem 1.3rem 1.3rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  background: var(--paper);
+  transition:
+    rotate calc(var(--duration) * 1.5) ease,
+    translate calc(var(--duration) * 1.5) ease,
+    box-shadow calc(var(--duration) * 1.5) ease;
+}
+
+/* Rê chuột hay Tab tới tờ nào thì tờ đó thẳng lại và nhấc lên, báo là bấm được. */
+a.contact__note:hover,
+a.contact__note:focus-visible {
+  rotate: 0deg;
+  translate: 0 -0.4rem;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent),
+    0 26px 36px -20px color-mix(in srgb, var(--color-ink) 50%, transparent);
+}
+
+.contact__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-accent);
+}
+
+.contact__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.contact__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.contact__value {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* Email dài: chữ tiêu đề cỡ lớn làm email vỡ thành nhiều dòng, dùng chữ thường cỡ nhỏ hơn. */
+.contact__note--email .contact__value {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.contact__text {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+/* Đèn báo nghe máy: sáng màu chủ đạo và nhịp nhẹ khi đang nghe, xám khi ngoài giờ. */
+.contact__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.contact__lamp {
+  flex: none;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--color-muted);
+}
+
+.contact__status.is-open .contact__lamp {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+  animation: contact-lamp calc(var(--duration) * 10) ease-in-out infinite;
+}
+
+@keyframes contact-lamp {
+  50% {
+    box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--color-primary) 0%, transparent);
+  }
+}
+
+/* Tờ soạn tin nhắn */
+
+.contact__message {
+  --rot: -0.5deg;
+  grid-area: message;
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 1rem;
+  padding: 2rem 1.3rem 1.6rem;
+  background: var(--color-surface);
+}
+
+.contact__message-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.contact__message-lead {
+  margin-top: 0.6rem;
+  color: var(--color-muted);
+}
+
+.contact__tips-title {
+  margin-top: 1.4rem;
+  font-weight: 600;
+}
+
+.contact__tips {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Gạch đầu dòng viết tay. Không dùng ô vuông vì trông như ô bấm chọn được. */
+.contact__tip {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.contact__tip::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 0.8rem;
+  height: 2px;
+  background: var(--color-accent);
+  rotate: -8deg;
+}
+
+.contact__form {
+  display: grid;
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.contact__field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.contact__field-label {
+  font-weight: 600;
+}
+
+.contact__input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: var(--color-bg);
+  border: 1.5px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  border-radius: calc(var(--radius) / 2);
+}
+
+/* Ô viết là giấy kẻ dòng: chữ nằm trên vạch, vạch trôi theo chữ khi viết dài. */
+textarea.contact__input {
+  --line: 1.75rem;
+  min-height: calc(var(--line) * 4 + 1.4rem);
+  line-height: var(--line);
+  resize: vertical;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 calc(var(--line) - 1px),
+      color-mix(in srgb, var(--color-ink) 14%, transparent) calc(var(--line) - 1px) var(--line)
+    ) 0 0.7rem / 100% calc(100% - 0.7rem) no-repeat local,
+    var(--color-bg);
+}
+
+.contact__input[aria-invalid='true'] {
+  border-color: var(--color-accent);
+}
+
+.contact__error {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (min-width: 760px) {
+  .contact__inner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      'head photo'
+      'ways ways'
+      'message message';
+    column-gap: 3rem;
+    align-items: center;
+  }
+
+  .contact__ways {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact__message {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: 3rem;
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact__ways {
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+}
