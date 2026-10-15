@@ -1,5 +1,6 @@
-/* tao.css - trình tạo web /tao: bảng mô tả bên trái, trang xem trước bên phải (điện thoại: xếp dọc).
-   Dùng chung biến, nút, ô nhập của css/editor.css; màu cố định của ClauKi, không theo thương hiệu. */
+/* tao.css - trình tạo web /tao: bảng nhập bên trái, trang xem trước bên phải (điện thoại: xếp dọc).
+   Dùng chung biến, nút, ô nhập của css/editor.css; màu cố định của ClauKi, không theo thương hiệu.
+   Bảng gồm hai bước đánh số (1 kể về nơi của bạn, 2 tuỳ chọn) cuộn được, và chân bảng dính ở đáy chứa nút Tạo website. */
 
 .tao-main {
   grid-template-rows: auto minmax(70dvh, 1fr);
@@ -7,38 +8,322 @@
 }
 
 .tao-panel {
-  display: grid;
-  align-content: start;
-  gap: 0.3rem;
-  padding: 1.25rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--ed-paper);
 }
 
-.tao-title {
-  margin: 0 0 0.25rem;
-  font-family: inherit;
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.2;
+.tao-panel__body {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 1.75rem;
+  padding: 1.5rem 1.25rem 1.25rem;
 }
 
-.tao-panel textarea.ed-input {
-  min-height: 7rem;
-  resize: vertical;
+.tao-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.tao-lead {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
   line-height: 1.5;
+  color: var(--ed-muted);
+}
+
+.tao-step {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* Tiêu đề bước cùng kiểu tiêu đề nhóm của editor (.ed-h): chữ hoa nhỏ, xám, kèm số thứ tự. */
+.tao-step__title {
+  display: flex;
+  align-items: baseline;
+  font-family: inherit;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+}
+
+.tao-step__title label {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.tao-step__no {
+  color: var(--ed-ink);
+}
+
+/* Ô mô tả và thanh công cụ dính liền bên dưới như một khối: ô tự cao theo chữ, số ký tự ở góc phải thanh. */
+.tao-brief textarea.ed-input {
+  display: block;
+  width: 100%;
+  min-height: 9rem;
+  max-height: 22.5rem;
+  resize: none;
+  line-height: 1.55;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tao-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+}
+
+.tao-tools .ed-btn {
+  min-height: 2.2rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.tao-count {
+  margin-left: auto;
+  padding-right: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+.tao-count.is-long {
+  font-weight: 800;
+  color: var(--ed-red);
+}
+
+/* Nút Tinh chỉnh: nút nhấn mạnh nhất trên thanh, icon cây đũa phép cạnh chữ. */
+.tao-refine {
+  gap: 0.4rem;
+}
+
+.tao-refine__icon svg {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Kết quả tinh chỉnh: thẻ riêng dưới ô, viền trái màu nhấn; chi tiết AI thêm là nhãn xám, ý còn thiếu là nhãn nét đứt bấm được. */
+.tao-refine-box {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.8rem 0.9rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-left: 4px solid var(--ed-accent);
+  border-radius: 10px;
+}
+
+.tao-refine-box[hidden] {
+  display: none;
+}
+
+.tao-refine-box__lead {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.tao-refine-box__group {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.tao-refine-box__label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ed-muted);
+}
+
+.tao-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tao-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0.2rem 0.65rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  background: var(--ed-paper);
+  border: 1px solid var(--ed-line);
+  border-radius: 999px;
+}
+
+.tao-chip--missing {
+  cursor: pointer;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px dashed #d97706;
+}
+
+.tao-chip--missing:hover {
+  background: #fef3c7;
+}
+
+/* Ví dụ: một hàng nhãn ngắn cuộn ngang, bấm thì điền mô tả mẫu; không chiếm nhiều chỗ như câu đầy đủ. */
+.tao-examples {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: none;
+}
+
+.tao-examples__label {
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ed-muted);
+}
+
+.tao-chip--example {
+  flex: none;
+  cursor: pointer;
+  background: #fff;
+}
+
+.tao-chip--example:hover {
+  border-color: var(--ed-ink);
+}
+
+/* Bước 2: khung trang và công tắc ảnh là các hàng trắng bo góc, nhãn bên trái. */
+.tao-option,
+.tao-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.7rem 0.85rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 12px;
+}
+
+.tao-option__label {
+  flex: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tao-option .ed-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.tao-toggle {
+  cursor: pointer;
+}
+
+.tao-toggle__text {
+  display: grid;
+  gap: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.tao-toggle__text small {
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+/* Hộp kiểm vẽ lại thành công tắc: đường trượt và núm tròn, bật thì sáng màu nhấn. */
+.tao-toggle input {
+  position: relative;
+  flex: none;
+  width: 2.7rem;
+  height: 1.5rem;
+  margin: 0;
+  appearance: none;
+  background: #d4d4d8;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tao-toggle input::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.15rem;
+  height: 1.15rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  transition: translate 0.2s;
+}
+
+.tao-toggle input:checked {
+  background: var(--ed-accent);
+}
+
+.tao-toggle input:checked::after {
+  translate: 1.2rem 0;
+}
+
+.tao-toggle input:focus-visible {
+  outline: 3px solid var(--ed-ink);
+  outline-offset: 2px;
+}
+
+.tao-photo-key summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ed-muted);
+}
+
+/* Chân bảng dính ở đáy: nút Tạo website luôn thấy dù đang cuộn, thanh tiến độ mỏng nằm ngay trên nút. */
+.tao-panel__foot {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.8rem 1.25rem 1rem;
+  background: var(--ed-paper);
+  border-top: 1px solid var(--ed-line);
+  box-shadow: 0 -10px 20px -12px rgb(0 0 0 / 0.25);
 }
 
 .tao-create {
-  min-height: 2.9rem;
-  margin-top: 1rem;
-  font-size: 1rem;
+  min-height: 2.6rem;
+  font-size: 0.95rem;
 }
 
 .tao-bar {
   width: 100%;
-  height: 0.4rem;
-  margin-top: 0.6rem;
+  height: 0.3rem;
   accent-color: var(--ed-ink);
+}
+
+/* Chưa chạy thì ẩn thanh tiến độ (không để một vạch xám trống nằm trên nút). */
+.tao-bar[value='0'] {
+  opacity: 0;
 }
 
 .tao-status:empty {
@@ -123,25 +408,72 @@
 
 @media (min-width: 1024px) {
   .tao-main {
-    grid-template-columns: 26rem minmax(0, 1fr);
+    grid-template-columns: var(--tao-panel-w, 26rem) minmax(0, 1fr);
     grid-template-rows: none;
     overflow: hidden;
   }
 
+  /* Bảng không tự cuộn (để thanh kéo ở mép phải đứng yên); phần nội dung bên trong cuộn, chân bảng nằm cố định ở đáy. */
   .tao-panel {
     min-height: 0;
+  }
+
+  .tao-panel__body {
+    min-height: 0;
+    padding-inline: 1.5rem;
     overflow-y: auto;
+  }
+
+  .tao-panel__foot {
+    position: static;
+    padding-inline: 1.5rem;
   }
 }
 
-/* Nút Tinh chỉnh: icon cây đũa phép cạnh chữ, nằm cùng hàng với nút Nói. */
-.tao-refine {
-  gap: 0.4rem;
+@media (prefers-reduced-motion: reduce) {
+  .tao-toggle input,
+  .tao-toggle input::after {
+    transition: none;
+  }
 }
 
-.tao-refine__icon svg {
-  display: block;
-  width: 1.1rem;
-  height: 1.1rem;
+/* Thanh kéo đổi độ rộng bảng: sọc mảnh ở mép phải bảng, hiện màu nhấn khi rê chuột, focus hay đang kéo; ẩn trên điện thoại (bảng xếp dọc). */
+.tao-resizer {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .tao-resizer {
+    position: absolute;
+    top: 0;
+    right: -6px;
+    bottom: 0;
+    z-index: 6;
+    display: block;
+    width: 12px;
+    cursor: col-resize;
+    touch-action: none;
+  }
+
+  .tao-resizer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5px;
+    width: 2px;
+    background: transparent;
+    transition: background-color 0.15s;
+  }
+
+  .tao-resizer:hover::after,
+  .tao-resizer:focus-visible::after,
+  .tao-resizer.is-dragging::after {
+    background: var(--ed-accent);
+  }
+
+  .tao-resizer:focus-visible {
+    outline: none;
+  }
 }
 

@@ -6,7 +6,8 @@
 .ed-draftbar {
   --ed-ink: #18181b;
   --ed-paper: #fafafa;
-  --ed-accent: #22d3ee;
+  --ed-accent: #0e7490;
+  --ed-accent-text: #7dd3e0;
   --ed-line: #52525b;
   position: fixed;
   z-index: 60;
@@ -44,7 +45,7 @@
 
 .ed-launch:hover,
 .ed-launch[aria-expanded='true'] {
-  color: var(--ed-ink);
+  color: #fff;
   background: var(--ed-accent);
 }
 
@@ -92,7 +93,7 @@ html.ed-merged .wd2026-fab-wrap .wd2026-trigger {
 }
 
 .ed-menu__item:hover {
-  color: var(--ed-ink);
+  color: #fff;
   background: var(--ed-accent);
 }
 
@@ -140,7 +141,7 @@ html.ed-merged .wd2026-fab-wrap .wd2026-trigger {
 }
 
 .ed-draftbar__btn--main {
-  color: var(--ed-ink);
+  color: #fff;
   background: var(--ed-accent);
   border-color: var(--ed-accent);
 }

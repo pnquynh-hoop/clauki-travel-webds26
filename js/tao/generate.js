@@ -114,37 +114,39 @@ ${lines}`;
 
 /* ---------- Tinh chỉnh mô tả ---------- */
 
-// Viết lại mô tả của người dùng thành một prompt rõ ràng hơn trước khi tạo website: đủ loại hình, nơi chốn, đối tượng, giá, điểm riêng,
-// giọng điệu, theo đúng những gì hồ sơ thương hiệu ở bước sau cần. Giữ nguyên mọi sự thật và con số của người dùng; thiếu gì thì
-// không bịa mà ghi vào `thieu` để người dùng bổ sung. Mô tả không phải du lịch hoặc lưu trú thì từ chối, như bước lập hồ sơ.
+// Viết lại và bổ sung mô tả của người dùng thành một prompt đầy đủ trước khi tạo website: giữ nguyên mọi sự thật và con số người dùng đã
+// nói, thêm chi tiết hợp lý về nơi chốn (cảnh quan, mùa đẹp, món, hoạt động, không khí, đối tượng, giọng điệu) để AI ở bước sau có nhiều chất liệu.
+// Không bịa con số mới (giá, số phòng, sức chứa, giờ): thiếu thì ghi vào `thieu`; chi tiết đã thêm ghi vào `themVao` để người dùng biết mà sửa.
+// Mô tả không phải du lịch hoặc lưu trú thì từ chối, như bước lập hồ sơ.
 export async function refineBrief(brief) {
-  const out = await generateJson(`Bạn giúp người dùng chuẩn hoá mô tả để một AI khác đọc rồi dựng website cho một nơi lưu trú hoặc một tour du lịch.
+  const out = await generateJson(`Bạn giúp người dùng viết lại và bổ sung mô tả để một AI khác dựng website cho một nơi lưu trú hoặc một tour du lịch (thương hiệu giả tưởng).
 Đây là bản mô tả cho AI đọc, không phải lời quảng cáo cho khách.
 
 Mô tả gốc của người dùng: ${brief}
 
-Viết lại thành một đoạn tiếng Việt rõ ràng, trung tính, khẳng định, 1 tới 4 câu, tối đa 400 ký tự. Sắp theo thứ tự: loại hình (ở hay đi tour) và nơi chốn,
-dành cho ai, số lượng (phòng, chỗ, số người), điểm riêng, giá và đơn vị tính. Chỉ đưa vào ý có trong mô tả gốc.
+Viết thành một đoạn tiếng Việt đầy đủ, 5 tới 8 câu, khoảng 500 tới 900 ký tự, theo thứ tự: loại hình (ở hay đi tour) và nơi chốn cụ thể, dành cho ai,
+điều khiến nơi này riêng biệt, cảnh quan và mùa đẹp, món ăn hoặc hoạt động quanh đó, không khí và giọng điệu của thương hiệu, giá và đơn vị tính (nếu có).
 Luật:
-- Mỗi câu chỉ nói điều người dùng đã nói. Không thêm tiện nghi, địa danh, con số, phong cách, ưu đãi hay tính từ khen ("ấm cúng", "độc đáo", "tuyệt vời"); không dùng lời mời gọi ("hãy", "tham gia ngay", "chào đón"), tiếng lóng.
-- Không bỏ chi tiết nào người dùng đã nói (buổi trong ngày, thời lượng, số người, món, phương tiện). Giữ nguyên tên riêng và con số; sửa chính tả, viết hoa tên địa danh.
-- Các ý cốt lõi mà mô tả gốc chưa có thì không bịa; liệt kê vào "thieu" bằng cụm ngắn. Ý cốt lõi gồm: loại hình (ở hay đi tour), nơi chốn cụ thể, đối tượng khách, số lượng, điểm riêng, giá cụ thể. "giá rẻ" chưa phải giá cụ thể.
-- Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML.
+- Giữ nguyên mọi sự thật, tên riêng, con số và chi tiết người dùng đã nói (buổi trong ngày, thời lượng, số người, giá, phương tiện). Không đổi, không mâu thuẫn với chúng; sửa chính tả, viết hoa tên địa danh.
+- Được bổ sung chi tiết hợp lý, cụ thể cho đúng nơi chốn đó dựa vào hiểu biết thật về địa phương: cảnh quan, khí hậu, mùa đẹp, đặc sản, hoạt động quanh đó, không khí của chỗ ở hay của tour, kiểu khách hợp. Không bịa địa danh không có thật.
+- Không thêm con số mới mà người dùng chưa nói: giá, số phòng, sức chứa, số người, khoảng cách, giờ giấc. Thiếu thì ghi vào "thieu" bằng cụm ngắn. Ý cốt lõi gồm: loại hình, nơi chốn cụ thể, đối tượng khách, số lượng, điểm riêng, giá cụ thể ("giá rẻ" chưa phải giá cụ thể).
+- Câu khẳng định, cụ thể. Không lời mời gọi ("hãy", "tham gia ngay", "chào đón"), không tiếng lóng, không sáo rỗng ("tuyệt vời", "đẳng cấp"). Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML.
+- "themVao": các chi tiết bạn đã bổ sung, mỗi chi tiết một cụm ngắn, tối đa 5.
 - Mô tả không liên quan tới du lịch hoặc lưu trú, hoặc có nội dung không phù hợp thì chỉ trả {"tuChoi": "lý do ngắn, lịch sự, kèm gợi ý cách viết lại"}.
 
 Ví dụ. Gốc: "homestay đà lạt giá rẻ cho nhóm bạn". Trả về:
-{"moTa": "Homestay ở Đà Lạt dành cho nhóm bạn, giá rẻ.", "thieu": ["giá cụ thể mỗi đêm", "số phòng và sức chứa", "điểm riêng của chỗ ở"]}
+{"moTa": "Homestay ở Đà Lạt dành cho nhóm bạn đi chung, giá rẻ. Chỗ ở nằm gần những đồi thông, buổi sáng sương mỏng và trời se lạnh, tối thường nhóm lửa hoặc nướng đồ ngoài sân. Khách có thể đi chợ đêm Đà Lạt, uống cà phê trên đồi và ăn món nóng như bánh tráng nướng, lẩu gà lá é. Không khí thân mật, thoải mái, hợp những chuyến đi tụ tập vài ngày.", "themVao": ["đồi thông và sương sớm", "nhóm lửa, nướng đồ ngoài sân", "chợ đêm, cà phê, món nóng"], "thieu": ["giá cụ thể mỗi đêm", "số phòng và sức chứa", "điểm riêng của chỗ ở"]}
 
-Trả về JSON một dòng: {"moTa": "", "thieu": [""]}`);
+Trả về JSON một dòng: {"moTa": "", "themVao": [""], "thieu": [""]}`);
   if (out.tuChoi) {
     const err = new Error(cleanText(out.tuChoi, 300));
     err.kind = 'refused';
     throw err;
   }
-  const text = cleanText(out.moTa, 600);
+  const text = cleanText(out.moTa, 1200);
   if (!text) throw new Error('AI chưa viết lại được, hãy thử lại.');
-  const missing = (Array.isArray(out.thieu) ? out.thieu : []).map((s) => cleanText(s, 60)).filter(Boolean).slice(0, 4);
-  return { text, missing };
+  const list = (v) => (Array.isArray(v) ? v : []).map((s) => cleanText(s, 60)).filter(Boolean).slice(0, 5);
+  return { text, added: list(out.themVao), missing: list(out.thieu) };
 }
 
 /* ---------- Màu ---------- */
