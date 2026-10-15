@@ -1,10 +1,11 @@
-/* wl-gallery.js - thư viện ảnh. Dữ liệu ảnh: images (mảng src, alt, caption, credit tuỳ chọn).
+/* wl-gallery.js - thư viện ảnh. Dữ liệu ảnh: images (mảng src, alt, caption, credit tuỳ chọn, href tuỳ chọn).
    Hai cấu trúc HTML khác nhau nên rẽ nhánh JS theo variant:
    - không có variant: lưới ảnh có chú thích, dạng cơ bản;
    - slices (Gành Sớm): các ảnh là dải hẹp đứng cạnh nhau như tấm bình phong; rê chuột, bấm, Tab hoặc phím mũi tên
-     tới dải nào thì dải đó xoè rộng, hiện số thứ tự, chú thích và tên tác giả. Điện thoại thì các dải nằm ngang xếp dọc. */
+     tới dải nào thì dải đó xoè rộng, hiện số thứ tự, chú thích và tên tác giả. Điện thoại thì các dải nằm ngang xếp dọc.
+     Ảnh có href (và section có linkLabel) thì dải mở ra kèm một liên kết, ví dụ sang danh sách tour đã lọc theo cách đi đó. */
 import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl, linkEl } from '../dom.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -74,6 +75,7 @@ export class WlGallery extends HTMLElement {
       number,
       textEl('p', 'gallery__cap-text', image.caption),
       textEl('p', 'gallery__credit', image.credit),
+      linkEl(image.href, this._data.linkLabel, 'gallery__link'),
     ]);
     caption.id = `${prefix}-cap-${i}`;
 
