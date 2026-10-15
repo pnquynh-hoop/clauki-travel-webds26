@@ -47,16 +47,35 @@
   border-radius: var(--radius);
 }
 
+/* Nhãn nhỏ và tiêu đề đọc các biến tuỳ chọn của thương hiệu (--eyebrow-*, --heading-* trong theme.css), giống khối
+   intro; giá trị dự phòng là kiểu cũ của khối, nên thương hiệu không khai biến thì nhìn y như trước. */
 .host__eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--eyebrow-dot, 0rem) * 0.7);
+  font-family: var(--eyebrow-font, inherit);
+  font-size: var(--eyebrow-size, 0.8rem);
+  font-weight: var(--eyebrow-weight, 700);
+  letter-spacing: var(--eyebrow-tracking, 0.16em);
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--eyebrow-color, var(--color-accent));
+}
+
+.host__eyebrow::before {
+  content: '';
+  flex: none;
+  width: var(--eyebrow-dot, 0rem);
+  height: var(--eyebrow-dot, 0rem);
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
 }
 
 .host__title {
   margin-top: 0.75rem;
+  font-size: var(--heading-size, clamp(1.75rem, 1.25rem + 2vw, 2.75rem));
+  font-weight: var(--heading-weight, 700);
+  line-height: var(--heading-leading, 1.15);
+  letter-spacing: var(--heading-tracking, normal);
   color: var(--color-ink);
 }
 

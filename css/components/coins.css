@@ -1,0 +1,244 @@
+/* coins.css - giao diện của <wl-coins>: tiền đi đâu, kể bằng đồng xu.
+   Đồng xu nhìn nghiêng (hình bầu dục có độ dày) màu chủ đạo, viền màu mực, xếp chồng lên nhau; mọi chồng cao bằng chồng
+   cao nhất (--max xu) để đáy thẳng hàng. Điện thoại: mỗi phần một hàng, chồng xu bên trái, chữ bên phải.
+   Từ 1024px: các phần thành cột như biểu đồ cột, chồng xu đứng trên một vạch kẻ chung.
+   Icon và chấm của mỗi phần tô --part-color (dữ liệu ghi color), thiếu thì màu nhấn. */
+
+.coins {
+  display: block;
+}
+
+.coins__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.coins__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.coins__heading {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.coins__lead {
+  max-width: 40rem;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  color: var(--color-muted);
+}
+
+/* Dòng tổng như tờ hoá đơn viền đứt: tên khoản tiền, số tiền lớn, chú thích một đồng xu. */
+.coins__total {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.2rem;
+  margin-top: 2rem;
+  padding: 0.9rem 1.2rem;
+  background: var(--color-surface);
+  border: 2px dashed var(--color-ink);
+  border-radius: var(--radius);
+}
+
+.coins__name {
+  font-weight: 700;
+}
+
+.coins__price {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.coins__unit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.coins__parts {
+  --coin-w: 2.8rem;
+  --coin-h: 0.95rem;
+  --coin-step: 0.55rem;
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 2.5rem;
+  padding: 0;
+  list-style: none;
+  transition: opacity calc(var(--duration) * 1.5) ease;
+}
+
+.coins__part {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  grid-template-areas: 'stack percent' 'stack label' 'stack amount' 'stack text';
+  column-gap: 1rem;
+  align-content: start;
+  transition: opacity calc(var(--duration) * 1.5) ease;
+}
+
+/* Rê chuột vào một phần thì các phần khác mờ đi, để nhìn riêng phần đó. */
+.coins__parts:has(.coins__part:hover) .coins__part:not(:hover) {
+  opacity: 0.4;
+}
+
+/* Chồng xu: xu đầu tiên nằm dưới cùng, xu sau chồng lên; cao cố định theo chồng cao nhất. */
+.coins__stack {
+  grid-area: stack;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  height: calc(var(--max, 1) * var(--coin-step) + var(--coin-h) + 0.6rem);
+  margin: 0;
+  padding: 0 0 0.3rem;
+  list-style: none;
+  border-bottom: 3px solid var(--color-ink);
+}
+
+.coins__coin {
+  flex: none;
+  width: var(--coin-w);
+  height: var(--coin-h);
+  margin-bottom: calc(var(--coin-step) - var(--coin-h));
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-primary) 70%, var(--color-surface)), var(--color-primary) 60%);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+  box-shadow: 0 0.25rem 0 color-mix(in srgb, var(--color-primary) 55%, var(--color-ink));
+  transition:
+    opacity 0.2s ease,
+    translate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(var(--k, 0) * 70ms);
+}
+
+/* Chồng xếp từ dưới lên (column-reverse): mỗi xu đè lên xu trước một khoảng --coin-step; xu đầu nằm sát đáy. */
+.coins__coin:first-child {
+  margin-bottom: 0;
+}
+
+/* Trước khi cuộn tới, xu treo phía trên và ẩn; vào màn hình thì rơi xuống từng đồng theo --k. */
+.coins__parts:not(.is-shown) .coins__stack .coins__coin {
+  opacity: 0;
+  translate: 0 -3rem;
+}
+
+/* Đồng xu trong dòng chú thích: nhỏ hơn, không rơi. */
+.coins__coin--key {
+  display: inline-block;
+  width: 1.8rem;
+  height: 0.65rem;
+  margin: 0;
+  box-shadow: 0 0.18rem 0 color-mix(in srgb, var(--color-primary) 55%, var(--color-ink));
+}
+
+.coins__percent {
+  grid-area: percent;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chữ chỉ dành cho trình đọc màn hình: phần trăm cuối cùng, vì số đang đếm đã ẩn với trình đọc. */
+.coins__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.coins__label {
+  grid-area: label;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.coins__icon {
+  flex: none;
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--part-color, var(--color-accent));
+}
+
+.coins__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.coins__amount {
+  grid-area: amount;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.coins__text {
+  grid-area: text;
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Màn rộng: các phần thành cột, chồng xu đứng trên cùng một vạch kẻ ngang, chữ xếp dưới. */
+@media (min-width: 1024px) {
+  .coins__parts {
+    --coin-w: 4.2rem;
+    --coin-h: 1.3rem;
+    --coin-step: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0;
+  }
+
+  .coins__part {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'stack' 'percent' 'label' 'amount' 'text';
+    padding: 0 0.8rem;
+  }
+
+  /* Vạch kẻ chạy liền qua các cột; xu căn trái theo chữ bên dưới. */
+  .coins__stack {
+    align-items: flex-start;
+    margin: 0 -0.8rem 0.9rem;
+    padding-inline: 0.8rem;
+  }
+
+  .coins__label {
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coins__coin,
+  .coins__part {
+    transition: none;
+  }
+}

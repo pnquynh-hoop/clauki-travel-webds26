@@ -1,0 +1,120 @@
+/* intro-morph.css - tiêu đề "đọc nhanh" của khối intro (trường morph).
+   Tấm lật nền màu mực, chữ màu nền trang, nên đọc được ở cả theme sáng lẫn tối;
+   tấm mọc thêm khi lật (chữ dài hơn) tô màu nhấn để thấy chữ nào là mới. */
+
+.intro__title.morph {
+  position: relative;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: clamp(2.6rem, 12vw, 8.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.morph__words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.14em 0.3em;
+}
+
+.morph__word {
+  display: inline-flex;
+  gap: 0.06em;
+}
+
+.morph__cell {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 0.82em;
+  height: 1.22em;
+  padding-top: 0.16em;
+  color: var(--color-bg);
+  background: var(--color-ink);
+  border-radius: 0.1em;
+  box-shadow: 0.05em 0.05em 0 var(--color-accent);
+  perspective: 4em;
+  transition: width 0.35s ease, margin 0.35s ease, opacity 0.3s ease;
+}
+
+/* Vạch giữa tấm như bảng ga chữ lật. */
+.morph__cell::after {
+  content: '';
+  position: absolute;
+  inset: 55% 0 auto;
+  height: 0.02em;
+  background: var(--color-bg);
+  opacity: 0.45;
+}
+
+.morph__cell.is-new {
+  background: var(--color-accent);
+  box-shadow: 0.05em 0.05em 0 var(--color-ink);
+}
+
+.morph__cell.is-hidden {
+  width: 0;
+  margin-right: -0.06em;
+  opacity: 0;
+}
+
+.morph__ch {
+  display: block;
+}
+
+.morph__cell.is-flip .morph__ch {
+  animation: morph-flap 0.09s linear;
+}
+
+@keyframes morph-flap {
+  from { transform: rotateX(-80deg); }
+  to { transform: rotateX(0); }
+}
+
+/* Dấu thanh vẽ rời khỏi chữ để bay được. */
+.morph__mark {
+  position: absolute;
+  top: 0.04em;
+  left: 46%;
+  width: 0.09em;
+  height: 0.24em;
+  background: var(--color-bg);
+  border-radius: 0.05em;
+  transform-origin: bottom center;
+  animation: morph-mark 0.7s cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+
+.morph__mark--acute { --tilt: 45deg; }
+.morph__mark--grave { --tilt: -45deg; }
+.morph__mark--bar { --tilt: 90deg; }
+
+@keyframes morph-mark {
+  from { transform: rotate(var(--tilt)); }
+  to { transform: translateY(-1.1em) rotate(calc(var(--tilt) * 3)) scale(0.4); opacity: 0; }
+}
+
+/* Vòng hơi thở: nở ra, bay lên, tan đi. */
+.morph__ring {
+  position: absolute;
+  width: 0.5em;
+  height: 0.5em;
+  margin: -0.25em 0 0 -0.25em;
+  border: 0.06em solid var(--color-accent);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: morph-ring 1.4s ease-out forwards;
+}
+
+@keyframes morph-ring {
+  from { opacity: 1; transform: translateY(0) scale(0.3); }
+  to { opacity: 0; transform: translateY(-1.6em) scale(1.8); }
+}
+
+.intro__replay {
+  margin-top: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph__cell { transition: none; }
+}

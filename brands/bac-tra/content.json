@@ -2619,7 +2619,6 @@
         },
         {
           "type": "catalog-list",
-          "title": "Bốn mùa vẫn mở",
           "labels": {
             "priceNote": "một {unit}"
           }
