@@ -65,6 +65,7 @@ Khối `faq`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau n�
 | | `hero` kiểu `ride` | trang `tuyen-so-1`: poster rồi cuộn qua từng ga, thành phố trôi ngang, trời đổi từ chiều sang đêm |
 | | `route` (`metro`) | hành trình chia chặng như sơ đồ tuyến metro, cuộn tới chặng nào thì phương tiện đổi theo chặng đó (trang chi tiết tour, `dem-nay`) |
 | | `backdrop` | dải ảnh nền cố định giữa các khối, trang cuộn qua mà ảnh đứng yên (trang chủ) |
+| | `timetable` (`board`) | bảng giờ chạy hôm nay kiểu nhà ga: chữ lật, trạng thái theo giờ thật, bấm là sang đặt tour đã chọn sẵn (trang chủ) |
 
 Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 

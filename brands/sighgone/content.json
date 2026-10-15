@@ -231,6 +231,26 @@
         ],
         "availability": [
           {
+            "date": "2026-10-15",
+            "left": 2
+          },
+          {
+            "date": "2026-10-16",
+            "left": 0
+          },
+          {
+            "date": "2026-10-17",
+            "left": 3
+          },
+          {
+            "date": "2026-10-18",
+            "left": 1
+          },
+          {
+            "date": "2026-10-19",
+            "left": 4
+          },
+          {
             "date": "2026-10-20",
             "left": 1
           },
@@ -503,6 +523,26 @@
         ],
         "availability": [
           {
+            "date": "2026-10-15",
+            "left": 3
+          },
+          {
+            "date": "2026-10-16",
+            "left": 2
+          },
+          {
+            "date": "2026-10-17",
+            "left": 0
+          },
+          {
+            "date": "2026-10-18",
+            "left": 4
+          },
+          {
+            "date": "2026-10-19",
+            "left": 2
+          },
+          {
             "date": "2026-10-20",
             "left": 1
           },
@@ -773,6 +813,26 @@
         ],
         "availability": [
           {
+            "date": "2026-10-15",
+            "left": 5
+          },
+          {
+            "date": "2026-10-16",
+            "left": 3
+          },
+          {
+            "date": "2026-10-17",
+            "left": 2
+          },
+          {
+            "date": "2026-10-18",
+            "left": 6
+          },
+          {
+            "date": "2026-10-19",
+            "left": 1
+          },
+          {
             "date": "2026-10-20",
             "left": 3
           },
@@ -1036,6 +1096,26 @@
           "Máy ảnh"
         ],
         "availability": [
+          {
+            "date": "2026-10-15",
+            "left": 1
+          },
+          {
+            "date": "2026-10-16",
+            "left": 4
+          },
+          {
+            "date": "2026-10-17",
+            "left": 5
+          },
+          {
+            "date": "2026-10-18",
+            "left": 0
+          },
+          {
+            "date": "2026-10-19",
+            "left": 3
+          },
           {
             "date": "2026-10-20",
             "left": 8
@@ -1318,6 +1398,26 @@
         ],
         "availability": [
           {
+            "date": "2026-10-15",
+            "left": 2
+          },
+          {
+            "date": "2026-10-16",
+            "left": 5
+          },
+          {
+            "date": "2026-10-17",
+            "left": 1
+          },
+          {
+            "date": "2026-10-18",
+            "left": 3
+          },
+          {
+            "date": "2026-10-19",
+            "left": 6
+          },
+          {
             "date": "2026-10-20",
             "left": 5
           },
@@ -1584,6 +1684,26 @@
           "Thuốc chống muỗi"
         ],
         "availability": [
+          {
+            "date": "2026-10-15",
+            "left": 0
+          },
+          {
+            "date": "2026-10-16",
+            "left": 2
+          },
+          {
+            "date": "2026-10-17",
+            "left": 4
+          },
+          {
+            "date": "2026-10-18",
+            "left": 2
+          },
+          {
+            "date": "2026-10-19",
+            "left": 5
+          },
           {
             "date": "2026-10-20",
             "left": 4
@@ -1868,6 +1988,26 @@
           "Không mang đồ ăn vặt (khỉ giật)"
         ],
         "availability": [
+          {
+            "date": "2026-10-15",
+            "left": 4
+          },
+          {
+            "date": "2026-10-16",
+            "left": 1
+          },
+          {
+            "date": "2026-10-17",
+            "left": 0
+          },
+          {
+            "date": "2026-10-18",
+            "left": 2
+          },
+          {
+            "date": "2026-10-19",
+            "left": 3
+          },
           {
             "date": "2026-10-20",
             "left": 0
@@ -2168,6 +2308,23 @@
               "href": "page:tour#di=ca-no"
             }
           ]
+        },
+        {
+          "type": "timetable",
+          "id": "gio-chay",
+          "variant": "board",
+          "title": "Giờ chạy hôm nay",
+          "note": "Giờ Sài Gòn. Bấm một chuyến để giữ chỗ.",
+          "soon": 90,
+          "labels": {
+            "clock": "Giờ Sài Gòn:",
+            "left": "Còn {n} chỗ",
+            "open": "Còn chỗ",
+            "soon": "Sắp chạy",
+            "full": "Hết chỗ",
+            "gone": "Đã chạy",
+            "tomorrow": "Giờ chạy ngày mai"
+          }
         },
           {
             "type": "backdrop",

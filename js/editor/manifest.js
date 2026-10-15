@@ -57,6 +57,7 @@ export const BLOCKS = {
   pictogram: { label: 'Con số bằng hình', variants: [] },
   medals: { label: 'Bảng thành tựu', variants: [] },
   coins: { label: 'Tiền đi đâu', variants: [] },
+  timetable: { label: 'Giờ chạy hôm nay', variants: [['', 'Danh sách trên thẻ'], ['board', 'Bảng giờ nhà ga']] },
 };
 
 // Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.

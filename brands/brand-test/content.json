@@ -569,6 +569,19 @@
           "type": "cloud-band"
         },
         {
+          "type": "timetable",
+          "id": "chuyen-hom-nay",
+          "title": "Chuyến hôm nay",
+          "lead": "Giờ Reykjavík. Chuyến nào chạy rồi thì mờ đi.",
+          "soon": 120,
+          "labels": {
+            "open": "Còn chỗ",
+            "soon": "Sắp chạy",
+            "full": "Hết chỗ",
+            "gone": "Đã chạy"
+          }
+        },
+        {
           "type": "intro",
           "id": "vi-sao",
           "variant": "center",

@@ -48,6 +48,7 @@ const COMPONENTS = {
   'wl-pictogram': { load: () => import('./components/wl-pictogram.js').then((m) => m.WlPictogram), css: ['pictogram'] },
   'wl-medals': { load: () => import('./components/wl-medals.js').then((m) => m.WlMedals), css: ['medals'] },
   'wl-coins': { load: () => import('./components/wl-coins.js').then((m) => m.WlCoins), css: ['coins'] },
+  'wl-timetable': { load: () => import('./components/wl-timetable.js').then((m) => m.WlTimetable), css: ['timetable'] },
 };
 
 start(COMPONENTS);
