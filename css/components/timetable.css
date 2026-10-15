@@ -1,0 +1,307 @@
+/* timetable.css - giao diện của <wl-timetable>: bảng giờ chạy hôm nay.
+   Mặc định: một tấm thẻ (viền, bóng theo --card-border, --card-shadow), mỗi chuyến một dòng ngăn bằng vạch đứt,
+   trạng thái là nhãn tô theo loại. Kiểu board: bảng giờ nhà ga là vật tối như ngoài đời, nên nền và màu đèn của bảng
+   cố định (khai ở --tt-*) để đọc được ở cả theme sáng lẫn tối; giờ và trạng thái nằm trên các ô chữ lật.
+   Điện thoại: giờ bên trái, tên, phương tiện, trạng thái xếp ba hàng bên phải; từ 760px một hàng. */
+
+.timetable {
+  display: block;
+}
+
+.timetable__frame {
+  padding: clamp(1.2rem, 3vw, 2rem);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: var(--card-border, 2px solid var(--color-ink));
+  border-radius: calc(var(--radius) + 0.4rem);
+  box-shadow: var(--card-shadow, 4px 4px 0 var(--color-ink));
+}
+
+.timetable__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.timetable__eyebrow {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.timetable__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3.4vw, 2.2rem);
+  line-height: 1.1;
+}
+
+.timetable__clock {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.timetable__lead {
+  max-width: 40rem;
+  margin-top: 1rem;
+  color: var(--color-muted);
+}
+
+.timetable__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Cả dòng là liên kết sang trang đặt chỗ. */
+.timetable__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: 'time name' 'time vehicles' 'time status';
+  gap: 0.2rem 1rem;
+  align-items: center;
+  padding: 0.9rem 0.4rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+  transition: background calc(var(--duration) * 1.5) ease;
+}
+
+a.timetable__row[href]:hover {
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.timetable__time {
+  grid-area: time;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.timetable__name {
+  grid-area: name;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.timetable__vehicles {
+  grid-area: vehicles;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.timetable__icon {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--vehicle-color, var(--color-muted));
+}
+
+.timetable__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.timetable__status {
+  grid-area: status;
+  justify-self: start;
+  margin-top: 0.2rem;
+}
+
+/* Nhãn trạng thái của kiểu mặc định: chữ ghi đủ ý nên không dựa vào màu. Kiểu board không có nhãn, chỉ có ô chữ lật. */
+.timetable:not(.timetable--board) .timetable__status-text {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+}
+
+.timetable:not(.timetable--board) .timetable__row[data-status='soon'] .timetable__status-text {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.timetable:not(.timetable--board) .timetable__row[data-status='full'] .timetable__status-text {
+  color: var(--color-muted);
+  background: color-mix(in srgb, var(--color-ink) 8%, var(--color-surface));
+}
+
+.timetable__row[data-status='gone'] {
+  opacity: 0.5;
+}
+
+.timetable__foot {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* Chữ chỉ dành cho trình đọc màn hình: giờ, trạng thái, tên phương tiện, vì ô chữ lật và icon đã ẩn với trình đọc. */
+.timetable__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ========= KIỂU BOARD: bảng giờ nhà ga ========= */
+
+.timetable--board {
+  --tt-screen: color-mix(in srgb, var(--color-ink) 12%, #0d0f18);
+  --tt-cell: color-mix(in srgb, var(--tt-screen) 82%, #ffffff);
+  --tt-line: color-mix(in srgb, var(--tt-screen) 78%, #ffffff);
+  --tt-glow: #ffd25e;
+  --tt-text: #f6f2e8;
+  --tt-dim: #8f97b5;
+  --tt-ok: #3ee08f;
+  --tt-soon: #ffb020;
+  --tt-full: #ff5a4e;
+}
+
+.timetable--board .timetable__frame {
+  color: var(--tt-glow);
+  background: var(--tt-screen);
+  border: 0;
+  box-shadow: inset 0 0 0 2px var(--tt-line), 0 30px 60px -30px color-mix(in srgb, var(--tt-screen) 80%, transparent);
+}
+
+.timetable--board .timetable__head {
+  border-bottom-color: var(--tt-line);
+}
+
+.timetable--board .timetable__eyebrow {
+  color: var(--tt-dim);
+}
+
+.timetable--board .timetable__title {
+  font-family: var(--font-hand, var(--font-heading));
+  font-weight: 400;
+  color: var(--tt-text);
+}
+
+.timetable--board .timetable__colon {
+  animation: timetable-blink 1s steps(1) infinite;
+}
+
+.timetable--board .timetable__lead,
+.timetable--board .timetable__foot {
+  color: var(--tt-dim);
+}
+
+.timetable--board .timetable__row {
+  border-bottom-color: var(--tt-line);
+}
+
+.timetable--board a.timetable__row[href]:hover {
+  background: color-mix(in srgb, var(--tt-text) 6%, transparent);
+}
+
+.timetable--board .timetable__name {
+  color: var(--tt-text);
+}
+
+.timetable--board .timetable__icon {
+  color: var(--tt-dim);
+}
+
+.timetable--board .timetable__row[data-status='open'] .timetable__status {
+  color: var(--tt-ok);
+}
+
+.timetable--board .timetable__row[data-status='soon'] .timetable__status {
+  color: var(--tt-soon);
+  animation: timetable-blink 1.2s steps(1) infinite;
+}
+
+.timetable--board .timetable__row[data-status='full'] .timetable__status {
+  color: var(--tt-full);
+}
+
+.timetable--board .timetable__row[data-status='gone'] {
+  opacity: 0.45;
+}
+
+/* Ô chữ lật: nền ô, vạch ngang giữa ô như tấm lật thật. */
+.timetable__flaps {
+  display: inline-flex;
+  gap: 2px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.timetable__flap {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.05em;
+  padding: 0.32em 0.12em;
+  background: var(--tt-cell);
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 var(--tt-screen);
+}
+
+.timetable__flap::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--tt-screen);
+}
+
+.timetable__flap--space {
+  background: transparent;
+  box-shadow: none;
+}
+
+.timetable__flap--space::after {
+  content: none;
+}
+
+@keyframes timetable-blink {
+  50% { opacity: 0; }
+}
+
+@media (min-width: 760px) {
+  .timetable__row {
+    grid-template-columns: 5.5rem 1.4fr 1fr auto;
+    grid-template-areas: 'time name vehicles status';
+  }
+
+  .timetable__status {
+    justify-self: end;
+    margin-top: 0;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timetable__row {
+    transition: none;
+  }
+
+  .timetable--board .timetable__colon,
+  .timetable--board .timetable__row[data-status='soon'] .timetable__status {
+    animation: none;
+  }
+}

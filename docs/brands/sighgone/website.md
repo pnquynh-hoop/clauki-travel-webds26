@@ -27,14 +27,14 @@ Mỗi tour có `stages` (giờ, nơi, phương tiện, ảnh), `includes`, `excl
 ## Sơ đồ trang
 | Đường dẫn | Nội dung hiện tại | Issue |
 |---|---|---|
-| `/` | hero, giới thiệu, bảy cách đi, khách kể | #108 |
+| `/` | hero, giới thiệu, bảy cách đi, giờ chạy hôm nay (`timetable board`, #117), khách kể | #108 |
 | `dat-tour` | đặt tour Sài Gòn lên đèn (`booking calendar`) | #107 |
 | `hoi-dap` | hỏi đáp kiểu nhắn tin chia bốn nhóm, bảng chính sách huỷ (`policy`) | #114 |
 | `cam-nang` | đồng hồ 24 giờ (`clock`), mẹo mặc gì, tháng nào mưa, tránh giờ nào (`tips`) | #114 |
 | `tour/can-gio`, `tour/len-den`, `tour/cho-lon` | chi tiết tour (`room-detail` đọc `catalog` qua `item`) | #112 |
 | `ve-chung-toi` | tên gọi lật chữ Sài Gòn thành Sigh Gone (`intro` có `morph`), chuyện cái tên (`host`), con số kể bằng hình (`pictogram`), thẻ hướng dẫn viên (`cards badge`), luật chơi: cam kết và sứ mệnh (`medals`), một vé đi đâu (`coins`), cam kết an toàn (`cards`) | #111 |
 | `lien-he` | bảng chuông cửa hẻm 42: đèn giờ mở cửa, nút gọi, nhắn, email, ghé, đường vào hẻm, soạn tin nhắn (`contact bell`) | #111 |
-| `404` | "Lạc hẻm rồi!", nút về trang chủ, ba tour gợi ý (`catalog-list` với `pick`) | #111 |
+| `404` | "Lạc hẻm rồi!", biển số nhà, con đường có xe đạp, ba tour gợi ý (`catalog-list` với `pick`) | #111 |
 | `tour`, `tour-rieng`, `dem-nay` | mới có một đoạn giới thiệu, chưa lên menu | #109, #110, #113, #114 |
 
 Trang nào có khối thật thì thêm vào `nav` trong `content.json`.
