@@ -89,7 +89,7 @@ phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá s
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
-anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) và một cảnh
+anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) đứng ĐẦU truy vấn rồi tới một cảnh
 cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
 Trả về JSON đúng dạng:
@@ -303,6 +303,8 @@ function imageSlots(content) {
     }
   };
   for (const page of content.pages ?? [{ sections: content.sections ?? [] }]) for (const section of page.sections ?? []) walk(section, [], section);
+  // Trang chi tiết (catalog) cũng có ảnh của khung; để nguyên thì tour mới hiện ảnh món ăn, phố của khung.
+  walk(content.catalog, [], { type: 'catalog' });
   return slots;
 }
 
@@ -312,7 +314,7 @@ async function vetPhotos(profile, photos) {
   const list = photos.map((p, i) => `${i}\t${p.alt.replace(/\s+/g, ' ')}`).join('\n');
   try {
     const out = await generateJson(`Nơi chốn của website: ${profile.noiChon}. Dưới đây là danh sách ảnh (số, mô tả gốc thường bằng tiếng Anh).
-Giữ lại ảnh có vẻ chụp đúng nơi chốn hoặc một cảnh hợp với nơi đó; bỏ ảnh chụp ở nơi khác, chân dung cận mặt, ảnh không rõ nội dung.
+Giữ lại ảnh có vẻ chụp đúng nơi chốn hoặc một cảnh hợp với nơi đó; bỏ ảnh chụp ở nơi khác (kể cả cảnh giống nhưng tỉnh khác, ví dụ ruộng bậc thang Hà Giang cho site An Giang), chân dung cận mặt, ảnh không rõ nội dung.
 Với mỗi ảnh giữ lại, viết mô tả tiếng Việt ngắn (tối đa 110 ký tự) cho người không nhìn thấy ảnh, chỉ nói điều có trong mô tả gốc, không bịa.
 Trả JSON một dòng: {"giu": [{"i": 0, "alt": ""}]}
 
