@@ -1,6 +1,7 @@
 -- sites.sql - kho site khách của trình tạo web /tao (#81, js/sites.js): bảng sites trên Supabase.
 -- Xuất bản xong là cố định: ai cũng thêm và đọc được, không ai sửa hay xoá, trừ máy demo (khoá riêng, không nằm trong repo).
--- Rào nội dung ở database: tên đúng dạng và không trùng tên dành riêng, mọi địa chỉ phải thuộc danh sách cho phép, JSON dưới 200 KB.
+-- Rào nội dung ở database: tên đúng dạng và không trùng tên dành riêng, mọi địa chỉ phải thuộc danh sách cho phép, JSON dưới 400 KB
+-- (site dựng trên khung SighGone có danh mục tour và ảnh Wikimedia đã gần 200 KB).
 -- Dán toàn bộ vào SQL Editor của Supabase rồi bấm Run. Chạy lại được nhiều lần (xoá bảng cũ, kể cả dữ liệu).
 -- Khoá demo KHÔNG nằm trong file này: chạy riêng câu insert ở cuối file, thay <KHOÁ DEMO> bằng khoá thật.
 
@@ -42,10 +43,10 @@ language sql stable security definer set search_path = public, extensions as $$
   );
 $$;
 
--- Mọi chuỗi trông giống địa chỉ phải thuộc danh sách cho phép; JSON dưới 200 KB.
+-- Mọi chuỗi trông giống địa chỉ phải thuộc danh sách cho phép; JSON dưới 400 KB.
 create or replace function site_ok(c jsonb) returns boolean
 language sql immutable as $$
-  select pg_column_size(c) < 200000
+  select pg_column_size(c) < 400000
      and not exists (
        select 1
        from jsonb_path_query(c, 'strict $.** ? (@.type() == "string")') s(v)
