@@ -209,7 +209,9 @@ export class WlRoute extends HTMLElement {
   }
 
   // Viên đi theo tâm màn hình; ga nào nằm trên vị trí của viên thì coi là đã qua.
+  // Lời gọi đến muộn (font tải xong) sau khi khối đã dựng lại thành rỗng thì bỏ qua.
   update() {
+    if (!this._ui) return;
     const { line, token, stops } = this._ui;
     const box = line.getBoundingClientRect();
     const y = clamp(window.innerHeight * 0.5 - box.top, 0, Math.max(0, box.height - token.offsetHeight));
