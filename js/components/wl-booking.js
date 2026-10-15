@@ -914,7 +914,7 @@ export class WlBooking extends HTMLElement {
     const labels = this._data.labels ?? {};
     const fieldset = document.createElement('fieldset');
     fieldset.className = 'booking__rooms booking__tours';
-    fieldset.append(textEl('legend', 'booking__legend', labels.tour) ?? '');
+    fieldset.append(textEl('legend', 'booking__legend booking__step-title', labels.tour) ?? '');
     const list = document.createElement('div');
     list.className = 'booking__room-list booking__tour-list';
     this._tourRadios = this._tours.map((tour) => {
@@ -927,7 +927,9 @@ export class WlBooking extends HTMLElement {
       radio.addEventListener('change', () => this.pickTour(tour.id));
       const label = document.createElement('label');
       label.className = 'booking__room booking__tour';
-      label.append(radio, groupEl('booking__room-text', [
+      const thumb = tour.image?.src ? imageEl(tour.image, 'booking__room-thumb', true) : null;
+      if (thumb) thumb.alt = '';
+      label.append(...[radio, thumb].filter(Boolean), groupEl('booking__room-text', [
         textEl('span', 'booking__room-name', tour.name),
         textEl('span', 'booking__room-price', [tour.start, this.money(tour.price)].filter(Boolean).join(', ')),
       ]));
@@ -1046,9 +1048,13 @@ export class WlBooking extends HTMLElement {
     this._datesBox = dates;
     this.fillDates();
 
+    // Bước 1 và 2 (chọn tour, chọn ngày) ở khối chính; "đã gồm", điều khoản đi sau form để trên điện thoại form không bị đẩy xuống cuối.
     const info = groupEl('booking__info', [
       this.tourPickEl(prefix),
+      textEl('h3', 'booking__step-title', labels.departures),
       dates,
+    ]);
+    const extra = groupEl('booking__extra', [
       groupEl('booking__terms', [
         this.listEl(labels.includesTitle, section.includes, 'booking__included'),
         this.listEl(labels.excludesTitle, section.excludes, 'booking__included booking__included--no'),
@@ -1081,6 +1087,7 @@ export class WlBooking extends HTMLElement {
     this._form.className = 'booking__hold';
     this._form.noValidate = true;
     this._form.append(...[
+      textEl('h3', 'booking__step-title', labels.holdTitle),
       price,
       this.dealActive() ? textEl('p', 'booking__hold-deal', section.deal.label) : null,
       this.countdownEl(),
@@ -1093,7 +1100,10 @@ export class WlBooking extends HTMLElement {
     this._form.addEventListener('submit', (e) => this.submitCalendar(e));
 
     this._ticket = this.ticketEl();
-    return groupEl('booking__body', [groupEl('booking__layout', [info, this._form]), this._ticket]);
+    const layout = groupEl('booking__layout', [info, this._form, extra]);
+    // Có tiêu đề cho form thì ba khối thành ba bước đánh số 1, 2, 3; không có thì chỉ là các tiêu đề thường.
+    if (labels.holdTitle) layout.classList.add('booking__layout--steps');
+    return groupEl('booking__body', [layout, this._ticket]);
   }
 
   // Tạm tính theo số khách: giá một khách nhân số khách, trừ ưu đãi mỗi khách nếu còn hạn; tiền cọc tính riêng.
