@@ -1,8 +1,8 @@
 /* editor-launch.css - nút "Thử chỉnh" và dải báo nháp trên trang khách. Thuộc công cụ ClauKi, không theo thương hiệu:
    màu cố định (xám kẽm, xanh ngọc), font Be Vietnam Pro, không đọc biến màu của brand (#82).
-   Đặt bên phải, trên nút lên đầu trang; góc dưới trái là nút đổi thương hiệu của BTC nên để trống. */
+   Đặt bên trái, ngay trên nút tròn đổi thương hiệu của BTC (góc dưới trái nên để trống); bấm vào thì mở menu phía trên nút. */
 
-.ed-launch,
+.ed-fab,
 .ed-draftbar {
   --ed-ink: #18181b;
   --ed-paper: #fafafa;
@@ -16,9 +16,17 @@
   box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
 }
 
-.ed-launch {
-  right: 14px;
+.ed-fab {
+  left: 14px;
   bottom: calc(14px + 2.75rem + 0.75rem);
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+  background: none;
+  box-shadow: none;
+}
+
+.ed-launch {
   display: inline-flex;
   align-items: center;
   min-height: 2.5rem;
@@ -28,17 +36,58 @@
   text-decoration: none;
   border: 2px solid var(--ed-accent);
   border-radius: 999px;
+  color: var(--ed-paper);
+  background: var(--ed-ink);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+  cursor: pointer;
 }
 
-.ed-launch:hover {
+.ed-launch:hover,
+.ed-launch[aria-expanded='true'] {
   color: var(--ed-ink);
   background: var(--ed-accent);
 }
 
 .ed-launch:focus-visible,
+.ed-menu__item:focus-visible,
 .ed-draftbar__btn:focus-visible {
   outline: 3px solid var(--ed-accent);
   outline-offset: 3px;
+}
+
+/* Menu mở phía trên nút: mỗi mục một dòng, đủ cao để bấm bằng ngón tay. */
+.ed-menu {
+  order: -1;
+  display: grid;
+  min-width: 12.5rem;
+  padding: 0.35rem;
+  color: var(--ed-paper);
+  background: var(--ed-ink);
+  border: 1px solid var(--ed-line);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+}
+
+.ed-menu__item {
+  display: block;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: left;
+  text-decoration: none;
+  color: var(--ed-paper);
+  background: none;
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.ed-menu__item:hover {
+  color: var(--ed-ink);
+  background: var(--ed-accent);
 }
 
 /* Dải báo nằm giữa mép dưới, chừa hai góc cho nút của BTC và nút lên đầu trang. */
@@ -58,7 +107,8 @@
 }
 
 .ed-draftbar[hidden],
-.ed-launch[hidden] {
+.ed-fab[hidden],
+.ed-menu[hidden] {
   display: none;
 }
 
@@ -89,6 +139,6 @@
 }
 
 @media print {
-  .ed-launch,
+  .ed-fab,
   .ed-draftbar { display: none; }
 }
