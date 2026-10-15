@@ -3804,9 +3804,6 @@
       "path": "tuyen-so-1",
       "title": "Tuyến số 1",
       "description": "Tour mới của SighGone: metro trên cao, ăn vặt chợ Bến Thành, xích lô quanh Dinh Độc Lập, Nhà thờ Đức Bà, hoàng hôn trên Bitexco. Chuyến đầu 01/11/2026, giá mở bán 690.000 đồng.",
-      "header": {
-        "variant": "minimal"
-      },
       "sections": [
         {
           "type": "hero",
