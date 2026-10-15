@@ -3,10 +3,15 @@
    2. Chép khung (content.json của một thương hiệu có sẵn), tách các trường chữ riêng của brand (bỏ nhãn giao diện,
       thông báo lỗi, mẫu tin nhắn dùng chung), chia vài nhóm chạy song song; mỗi dòng trả về dạng "số|vị trí|chữ",
       code kiểm vị trí khớp số rồi áp ngay; dòng thiếu hoặc lệch thì gửi lại một lần.
-   3. Số liệu do code điền từ hồ sơ (giá), ảnh và theme lấy từ khung; AI không tự viết con số ở nhiều chỗ. */
+   3. Số liệu do code điền từ hồ sơ (giá), theme lấy từ khung; AI không tự viết con số ở nhiều chỗ.
+   4. Ảnh: tìm ảnh thật theo nơi chốn (photos.js), AI loại ảnh lạc đề và viết mô tả tiếng Việt, rồi thay vào các chỗ ảnh của khung
+      (trừ ảnh tách nền và ảnh đại diện); không tìm được thì giữ ảnh của khung. */
 import { streamLines, generateJson, cleanText } from '../ai/gemini.js';
 import { contrastRatio, AA } from '../editor/contrast.js';
 import { setIn } from '../editor/form.js';
+import { findPhotos } from './photos.js';
+import { FONTS } from '../editor/manifest.js';
+import { applyFont } from '../editor/ops.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
@@ -72,22 +77,30 @@ Mô tả không liên quan tới du lịch, lưu trú, hoặc có nội dung kh�
 Mô tả: ${brief}
 
 Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất.'}
-Màu: chọn bộ màu hợp nơi chốn, mã hex 6 số; chữ (ink), chữ phụ (muted), màu nhấn (accent) trên nền trang (bg) và trên nền thẻ (surface) phải tương phản từ 4.5; chữ trên nút (onPrimary) trên màu nút (primary) từ 4.5.
+Màu: chọn bộ màu hợp nơi chốn và khí hậu, mã hex 6 số; nền trang (bg) và nền thẻ (surface) phải là màu sáng (gần trắng, có thể ngả ấm hay mát); chữ (ink), chữ phụ (muted), màu nhấn (accent) trên nền trang và trên nền thẻ phải tương phản từ 4.5; chữ trên nút (onPrimary) trên màu nút (primary) từ 4.5.
+phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá sau: "montserrat" (hiện đại, gọn, hợp thành phố, resort hiện đại), "lora" (có chân, cổ điển, hợp núi, làng quê, truyền thống), "unbounded" (tròn, vui, trẻ trung, hợp tour ăn uống, bạn bè), "playfair" (sang trọng, hợp nghỉ dưỡng cao cấp), hoặc "" để giữ kiểu chữ của khung.
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
+anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) và một cảnh
+cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
 Trả về JSON đúng dạng:
 {"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
+ "phongChu": "",
+ "anhTimKiem": ["", "", "", "", ""],
  "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
 }
+
+// Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
+const brandProfile = ({ anhTimKiem, ...rest }) => rest;
 
 function groupPrompt(profile, fields, idx) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
   return `Bạn viết lại chữ của một phần website du lịch cho thương hiệu mới. Khung trang giữ nguyên.
 
 Hồ sơ thương hiệu (bắt buộc theo đúng):
-${JSON.stringify(profile)}
+${JSON.stringify(brandProfile(profile))}
 
 Mỗi dòng dưới đây gồm: số, vị trí, chữ của trang mẫu. Viết lại từng dòng cho thương hiệu mới, cùng vai trò, độ dài gần bằng chữ cũ.
 
@@ -101,15 +114,49 @@ ${lines}`;
 
 /* ---------- Màu ---------- */
 
-// Bộ màu AI chọn: chỉ dùng khi đủ mã hex và đạt AA ở đúng các cặp editor kiểm (manifest.js CONTRAST), kể cả chữ
-// trên thẻ (surface); không thì giữ màu của khung.
+// Bộ màu AI chọn hay lệch một cặp (nhất là màu nhấn trên nền sáng, chữ trắng trên nút vàng cam); bỏ cả bộ vì một cặp thì phí, nên sửa:
+// chữ, chữ phụ, màu nhấn được tối dần cho tới khi đạt AA (4,5) trên cả nền trang và nền thẻ; chữ trên nút chọn trắng hay mực theo
+// bên nào tương phản hơn, nếu vẫn chưa đạt thì tối màu nút. Nền tối thì bỏ (các khung thiết kế cho nền sáng), giữ màu của khung.
 const PALETTE = { primary: '--color-primary', onPrimary: '--color-on-primary', bg: '--color-bg', surface: '--color-surface',
   ink: '--color-ink', muted: '--color-muted', accent: '--color-accent' };
-const PAIRS = [['ink', 'bg'], ['muted', 'bg'], ['accent', 'bg'], ['onPrimary', 'primary'], ['ink', 'surface'], ['accent', 'surface']];
+const WHITE = '#ffffff';
+const INK = '#111111';
+const HEX = /^#[0-9a-f]{6}$/i;
+
+function mixToward(hex, target, t) {
+  const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const a = rgb(hex);
+  const b = rgb(target);
+  return `#${a.map((v, i) => Math.round(v + (b[i] - v) * t).toString(16).padStart(2, '0')).join('')}`;
+}
+
+// Tối màu fg dần (mỗi bước 8%) cho tới khi tương phản với mọi nền trong bgs từ AA; tối đa 20 bước.
+function darkenToPass(fg, bgs) {
+  let color = fg;
+  for (let step = 0; step < 20; step += 1) {
+    if (bgs.every((bg) => (contrastRatio(color, bg) ?? 0) >= AA + 0.05)) return color;
+    color = mixToward(color, '#000000', 0.08);
+  }
+  return color;
+}
 
 function paletteVars(mau) {
-  if (!mau || !PAIRS.every(([a, b]) => (contrastRatio(mau[a], mau[b]) ?? 0) >= AA)) return null;
-  return Object.fromEntries(Object.entries(PALETTE).map(([key, name]) => [name, String(mau[key]).toLowerCase()]));
+  if (!mau) return null;
+  const m = Object.fromEntries(Object.keys(PALETTE).map((k) => [k, String(mau[k] ?? '').trim().toLowerCase()]));
+  if (!Object.values(m).every((v) => HEX.test(v))) return null;
+  if ((contrastRatio(m.bg, WHITE) ?? 9) > 1.6 || (contrastRatio(m.surface, WHITE) ?? 9) > 1.6) return null;
+  const bgs = [m.bg, m.surface];
+  m.ink = darkenToPass(m.ink, bgs);
+  m.muted = darkenToPass(m.muted, bgs);
+  m.accent = darkenToPass(m.accent, bgs);
+  const onWhite = contrastRatio(WHITE, m.primary) ?? 0;
+  const onInk = contrastRatio(INK, m.primary) ?? 0;
+  if (Math.max(onWhite, onInk) >= AA + 0.05) m.onPrimary = onWhite >= onInk ? WHITE : INK;
+  else {
+    m.onPrimary = WHITE;
+    m.primary = darkenToPass(m.primary, [WHITE]);
+  }
+  return Object.fromEntries(Object.entries(PALETTE).map(([key, name]) => [name, m[key]]));
 }
 
 /* ---------- Khung, ảnh, số liệu ---------- */
@@ -164,11 +211,88 @@ function applyProfile(content, profile, slug) {
   scalePrices(content, Number(profile.gia));
 }
 
+/* ---------- Ảnh theo nơi chốn ---------- */
+
+// Chỗ nào không thay ảnh: ảnh tách nền (scene, poster, các ga của hero ride, thẻ hướng dẫn viên) và ảnh đại diện nhỏ.
+const KEEP_KEYS = new Set(['avatar', 'scene', 'poster']);
+const KEEP_SECTIONS = new Set(['cards']);
+const IMAGE_FILE = /\.(jpe?g|png|webp)(\?|$)/i;
+
+function imageSlots(content) {
+  const slots = [];
+  const walk = (node, keys, section) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...keys, String(i)], section));
+    else if (node && typeof node === 'object') {
+      const blocked = keys.some((k) => KEEP_KEYS.has(k)) || (section.type === 'hero' && keys.includes('stops')) || KEEP_SECTIONS.has(section.type);
+      if (!blocked && typeof node.src === 'string' && IMAGE_FILE.test(node.src) && !/favicon|logo/i.test(node.src)) slots.push(node);
+      for (const [k, v] of Object.entries(node)) walk(v, [...keys, k], section);
+    }
+  };
+  for (const page of content.pages ?? [{ sections: content.sections ?? [] }]) for (const section of page.sections ?? []) walk(section, [], section);
+  return slots;
+}
+
+// Gửi danh sách ảnh tìm được cho AI: giữ ảnh đúng nơi chốn, bỏ ảnh lạc đề (nước khác, cảnh không liên quan), viết mô tả ngắn tiếng Việt
+// chỉ dựa vào mô tả có sẵn của ảnh. AI lỗi thì dùng tạm mô tả gốc, vẫn có ảnh.
+async function vetPhotos(profile, photos) {
+  const list = photos.map((p, i) => `${i}\t${p.alt.replace(/\s+/g, ' ')}`).join('\n');
+  try {
+    const out = await generateJson(`Nơi chốn của website: ${profile.noiChon}. Dưới đây là danh sách ảnh (số, mô tả gốc thường bằng tiếng Anh).
+Giữ lại ảnh có vẻ chụp đúng nơi chốn hoặc một cảnh hợp với nơi đó; bỏ ảnh chụp ở nơi khác, chân dung cận mặt, ảnh không rõ nội dung.
+Với mỗi ảnh giữ lại, viết mô tả tiếng Việt ngắn (tối đa 110 ký tự) cho người không nhìn thấy ảnh, chỉ nói điều có trong mô tả gốc, không bịa.
+Trả JSON một dòng: {"giu": [{"i": 0, "alt": ""}]}
+
+${list}`);
+    const kept = (out.giu ?? []).filter((g) => photos[g.i] && typeof g.alt === 'string' && g.alt.trim())
+      .map((g) => ({ ...photos[g.i], alt: cleanText(g.alt, 140) }));
+    if (kept.length) return kept;
+  } catch {
+    // Không vet được: dùng nguyên danh sách.
+  }
+  return photos.map((p) => ({ ...p, alt: `${profile.noiChon}: ${p.alt}`.slice(0, 140) }));
+}
+
+// Thay ảnh vào các chỗ ảnh của khung theo thứ tự (ảnh đầu vào ảnh bìa), lặp vòng nếu chỗ nhiều hơn ảnh; credits chỉ giữ ảnh còn dùng
+// của khung và thêm ảnh mới.
+function applyPhotos(content, photos) {
+  const slots = imageSlots(content);
+  slots.forEach((slot, i) => {
+    const photo = photos[i % photos.length];
+    slot.src = photo.src;
+    slot.alt = photo.alt;
+  });
+  const used = new Set();
+  const collect = (node) => {
+    if (Array.isArray(node)) node.forEach(collect);
+    else if (node && typeof node === 'object') {
+      if (typeof node.src === 'string') used.add(node.src);
+      Object.entries(node).forEach(([k, v]) => { if (k !== 'credits') collect(v); });
+    }
+  };
+  collect(content);
+  const fresh = photos.filter((p) => used.has(p.src)).map((p) => p.credit);
+  content.credits = [...(content.credits ?? []).filter((c) => used.has(c.file)), ...fresh];
+  return slots.length;
+}
+
+async function photoTask({ profile, content, theme, photos, on }) {
+  const queries = (Array.isArray(profile.anhTimKiem) ? profile.anhTimKiem : []).filter((q) => typeof q === 'string' && q.trim()).slice(0, 6);
+  if (!photos?.on || !queries.length) return 0;
+  const found = await findPhotos(queries, { pexelsKey: photos.pexelsKey });
+  if (found.length < 3) return 0;
+  const kept = await vetPhotos(profile, found);
+  if (kept.length < 3) return 0;
+  const count = applyPhotos(content, kept);
+  on.update?.(content, theme);
+  on.photos?.({ photos: kept.length, slots: count, source: photos.pexelsKey ? 'Pexels' : 'Wikimedia Commons' });
+  return kept.length;
+}
+
 /* ---------- Chạy ---------- */
 
 // on.profile(profile, info) khi có hồ sơ, on.field(done, total) mỗi dòng chữ nhận được, on.update(content, theme)
 // mỗi lần dữ liệu đổi (trang xem trước dựng lại). Trả về { content, theme, profile, stats }.
-export async function generateSite({ brief, frameId, slug, frames, on }) {
+export async function generateSite({ brief, frameId, slug, frames, photos, on }) {
   const t0 = performance.now();
   const sec = () => Number(((performance.now() - t0) / 1000).toFixed(1));
   const profile = await generateJson(profilePrompt(brief, frameId));
@@ -188,10 +312,15 @@ export async function generateSite({ brief, frameId, slug, frames, on }) {
   applyProfile(content, profile, slug);
   const vars = paletteVars(profile.mau);
   const theme = { base: frame, vars: vars ?? {} };
+  // Kiểu chữ AI chọn (khoá có trong danh sách của editor); khoá lạ hay rỗng thì giữ kiểu chữ của khung.
+  const font = FONTS.find((f) => f.key && f.key === profile.phongChu);
+  if (font) applyFont(theme, font.key);
   const profileSec = sec();
-  on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars) });
+  on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars), font: font?.label ?? null });
   on.update?.(content, theme);
 
+  // Tìm ảnh chạy song song với việc viết chữ; lỗi mạng hay không tìm được thì giữ ảnh của khung.
+  const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0);
   const got = new Set();
   let first = 0;
   let mismatched = 0;
@@ -216,7 +345,8 @@ export async function generateSite({ brief, frameId, slug, frames, on }) {
   const missing = fields.map((_, i) => i).filter((i) => !got.has(i));
   // Lượt gửi lại hỏng thì thôi: các chỗ thiếu giữ chữ của khung, người dùng sửa sau bằng editor.
   if (missing.length) await streamLines('', groupPrompt(profile, fields, missing), handle).catch(() => {});
+  const photoCount = await photoRun;
   on.update?.(content, theme);
-  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched };
+  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount };
   return { content, theme, profile, stats };
 }

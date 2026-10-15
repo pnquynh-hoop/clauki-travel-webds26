@@ -4,6 +4,7 @@
    Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite } from './generate.js';
 import { micButton } from '../ai/speech.js';
+import { readPexelsKey, savePexelsKey } from './photos.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
@@ -72,6 +73,7 @@ async function create() {
   const sec = () => ((performance.now() - t0) / 1000).toFixed(1);
   let head = [];
   let progress = '';
+  let photoNote = '';
   const tick = setInterval(() => setStatus([...head, progress || `Đang lập hồ sơ thương hiệu... ${sec()} giây`]), 200);
   try {
     const frameId = ui.framePick.value;
@@ -80,9 +82,11 @@ async function create() {
       frameId,
       slug: DRAFT_SLUG,
       frames: FRAMES.map((f) => f.id).filter((id) => builtIn().includes(id)),
+      photos: { on: ui.photoOn.checked, pexelsKey: ui.pexelsKey.value.trim() },
       on: {
+        photos: (info) => { photoNote = `Ảnh: ${info.photos} ảnh thật theo nơi chốn từ ${info.source}, thay vào ${info.slots} chỗ; nguồn ảnh ghi ở cuối trang.`; },
         profile: (p, info) => {
-          head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'}`];
+          head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'} ${info.font ? `Kiểu chữ: ${info.font}.` : 'Giữ kiểu chữ của khung.'}`];
           state.draft = { brief, profile: p };
         },
         field: (done, total) => {
@@ -94,7 +98,7 @@ async function create() {
     });
     preview(result.content, result.theme, true);
     const s = result.stats;
-    setStatus([...head, `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
+    setStatus([...head, photoNote || (ui.photoOn.checked ? 'Không tìm được ảnh hợp nơi chốn nên giữ ảnh của khung.' : ''), `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung, sửa sau bằng editor.` : ''], 'ok');
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
@@ -160,6 +164,10 @@ function build() {
   ui.framePick = h('select', { class: 'ed-select', id: 'tao-frame' },
     h('option', { value: '', text: 'Để AI chọn theo mô tả' }),
     FRAMES.map((f) => h('option', { value: f.id, text: f.label })));
+  ui.photoOn = h('input', { type: 'checkbox', checked: true });
+  ui.pexelsKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán khoá Pexels', 'aria-label': 'Khoá Pexels' });
+  ui.pexelsKey.value = readPexelsKey();
+  ui.pexelsKey.addEventListener('change', () => savePexelsKey(ui.pexelsKey.value.trim()));
   ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: create, text: 'Tạo website' });
   ui.bar = h('progress', { class: 'tao-bar', max: '1', value: '0', 'aria-label': 'Tiến độ viết chữ' });
   ui.status = h('div', { class: 'tao-status', role: 'status', 'aria-live': 'polite' });
@@ -191,6 +199,10 @@ function build() {
     h('div', { class: 'ed-chips' }, EXAMPLES.map((text) => h('button', { type: 'button', onclick: () => { ui.brief.value = text; }, text }))),
     h('label', { class: 'ed-field', for: 'tao-frame' }, h('span', { text: 'Khung trang' })),
     ui.framePick,
+    h('label', { class: 'ed-check' }, ui.photoOn, ' Tìm ảnh thật theo nơi chốn (Wikimedia Commons, có ghi nguồn)'),
+    h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Pexels (tuỳ chọn)' }),
+      h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Pexels thay vì Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
+      ui.pexelsKey),
     ui.create,
     ui.bar,
     ui.status,

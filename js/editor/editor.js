@@ -399,7 +399,7 @@ function contentEl() {
     key: `f:${key}`,
     images: imageLibrary(state.content),
     // Ảnh của site khách ghi đường dẫn tuyệt đối (/brands/<khung>/images/...): giữ nguyên.
-    assetUrl: (src) => (String(src).startsWith('/') ? src : `/brands/${state.baseId}/${src}`),
+    assetUrl: (src) => (/^(\/|https:\/\/)/.test(String(src)) ? src : `/brands/${state.baseId}/${src}`),
     set: (path, value, label) => setField(key, path, value, label),
     list: (path, action, i, item) => listOp(key, path, action, i, item),
   });

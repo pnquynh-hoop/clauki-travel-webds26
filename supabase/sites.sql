@@ -50,7 +50,7 @@ language sql immutable as $$
        select 1
        from jsonb_path_query(c, 'strict $.** ? (@.type() == "string")') s(v)
        where (v #>> '{}') ~* '^\s*(https?:|//|data:|javascript:|vbscript:)'
-         and (v #>> '{}') !~ '^https://(images\.unsplash\.com|images\.pexels\.com|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/'
+         and (v #>> '{}') !~ '^https://(images\.unsplash\.com|images\.pexels\.com|upload\.wikimedia\.org|thumb\.wikimedia\.org|commons\.wikimedia\.org|www\.pexels\.com|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/'
      );
 $$;
 
