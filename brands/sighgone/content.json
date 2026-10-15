@@ -2967,6 +2967,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "can-gio",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -2981,6 +2995,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3000,21 +3018,6 @@
           "book": {
             "label": "Gọi giữ chỗ",
             "href": "tel:0123456789"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "can-gio",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3042,6 +3045,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "len-den",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3056,6 +3073,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3071,21 +3092,6 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "len-den",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3113,6 +3119,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "cho-lon",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3127,6 +3147,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3146,21 +3170,6 @@
           "book": {
             "label": "Gọi giữ chỗ",
             "href": "tel:0123456789"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "cho-lon",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3188,6 +3197,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "thuc-giac",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3202,6 +3225,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3217,21 +3244,6 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "thuc-giac",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3259,6 +3271,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "thanh-da",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3273,6 +3299,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3288,21 +3318,6 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "thanh-da",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3330,6 +3345,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "song-chieu",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3344,6 +3373,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3359,21 +3392,6 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "song-chieu",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
@@ -3401,6 +3419,20 @@
           "type": "room-detail",
           "id": "tour",
           "item": "cu-chi",
+          "variant": "ticket",
+          "ticketNote": "Huỷ miễn phí trước 24 giờ, mưa to thì dời lịch.",
+          "route": {
+            "eyebrow": "Hành trình",
+            "title": "{stages} ga, {vehicles} cách đi.",
+            "labels": {
+              "open": "Xem ảnh {place} cỡ lớn",
+              "lightbox": {
+                "close": "Đóng",
+                "prev": "Ảnh trước",
+                "next": "Ảnh sau"
+              }
+            }
+          },
           "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
           "view": {
             "image": {
@@ -3415,6 +3447,10 @@
             "perNight": "một khách",
             "book": "Giữ chỗ",
             "availability": "Ngày còn chỗ",
+            "chooseDay": "Chọn ngày",
+            "receipt": "Hoá đơn chuyến đi",
+            "total": "Tổng một khách",
+            "thanks": "Cảm ơn, hẹn gặp ở ga đầu.",
             "left": "còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "gallery": "Dọc đường",
@@ -3430,21 +3466,6 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
-          }
-        },
-        {
-          "type": "route",
-          "id": "hanh-trinh",
-          "item": "cu-chi",
-          "eyebrow": "Hành trình",
-          "title": "{stages} ga, {vehicles} cách đi.",
-          "labels": {
-            "open": "Xem ảnh {place} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            }
           }
         }
       ]
