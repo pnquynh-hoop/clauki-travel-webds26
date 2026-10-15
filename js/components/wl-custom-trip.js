@@ -2,6 +2,7 @@
    Kho chặng (catalog.legs: tên, phương tiện, số phút, giá) khai một lần trong danh mục (AGENTS.md mục 5), khối chỉ đọc lại.
    Section ghi lộ trình gợi ý (presets), phí đi riêng (surcharge), giờ bắt đầu, ngưỡng cảnh báo và mẫu chữ (labels). */
 import { textEl, groupEl } from '../dom.js';
+import { requestEl } from './custom-trip-request.js';
 
 // Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
 function fill(template, values) {
@@ -44,6 +45,23 @@ export class WlCustomTrip extends HTMLElement {
 
   get labels() {
     return this._data.labels ?? {};
+  }
+
+  // Mấy hàm nhỏ để custom-trip-request.js (form) dùng chung cách ghép chữ, đọc giờ với file này.
+  fill(template, values) {
+    return fill(template, values);
+  }
+
+  text(key, values = {}) {
+    return fill(this.labels[key], values);
+  }
+
+  minutes(time) {
+    return toMinutes(time);
+  }
+
+  clock(minutes) {
+    return clock(minutes);
   }
 
   leg(id) {
@@ -174,7 +192,7 @@ export class WlCustomTrip extends HTMLElement {
     this._guestsOut = document.createElement('output');
     this._guestsOut.className = 'custom-trip__guests-n';
     const box = groupEl('custom-trip__guests', [
-      textEl('span', 'custom-trip__label', this.labels.guests),
+      textEl('span', '', this.labels.guests),
       groupEl('custom-trip__stepper', [this._less, this._guestsOut, this._more]),
     ]);
     box.setAttribute('role', 'group');
@@ -204,9 +222,79 @@ export class WlCustomTrip extends HTMLElement {
     ].filter(Boolean).join(' ');
   }
 
+  // Trục giờ của thước: từ dayStart tới endBy (ví dụ 05:00 tới 23:00), mỗi hai tiếng một vạch.
+  rulerEl() {
+    this._track = null;
+    this._dayFrom = toMinutes(this._data.dayStart) ?? 5 * 60;
+    this._dayTo = toMinutes(this._data.endBy) ?? 23 * 60;
+    if (this._dayTo <= this._dayFrom) return null;
+    const ticks = document.createElement('div');
+    ticks.className = 'custom-trip__ticks';
+    for (let m = this._dayFrom; m <= this._dayTo; m += 120) {
+      const tick = textEl('span', '', this.text('tick', { n: Math.floor(m / 60) }));
+      if (!tick) continue;
+      tick.style.setProperty('--at', `${((m - this._dayFrom) / (this._dayTo - this._dayFrom)) * 100}%`);
+      ticks.append(tick);
+    }
+    this._track = document.createElement('div');
+    this._track.className = 'custom-trip__track';
+    // Số giờ trên trục, để CSS kẻ đúng một ô mỗi giờ dù thương hiệu chọn khung giờ khác.
+    this._track.style.setProperty('--hours', String((this._dayTo - this._dayFrom) / 60));
+    // Thước chỉ để nhìn nhanh; giờ từng chặng đã ghi bằng chữ trong danh sách nên trình đọc màn hình bỏ qua.
+    const ruler = groupEl('custom-trip__ruler', [ticks, this._track]);
+    ruler.setAttribute('aria-hidden', 'true');
+    return ruler;
+  }
+
+  // Trên đường giờ mảnh: mỗi chặng là một đoạn màu phương tiện dài theo số phút, đầu mỗi chặng là một chấm
+  // đánh số thứ tự dừng, cuối chuyến một chấm đặc là giờ về. Đoạn tràn qua endBy thì kẻ sọc.
+  drawRuler(legs) {
+    if (!this._track) return;
+    const span = this._dayTo - this._dayFrom;
+    // Giữ mọi vị trí trong khoảng của thước: giờ bắt đầu sớm hơn đầu thước hay chuyến kéo quá cuối thước
+    // thì đoạn màu dừng ở mép, không tràn ra ngoài thẻ.
+    const inside = (minutes) => Math.min(this._dayTo, Math.max(this._dayFrom, minutes));
+    const pos = (minutes) => `${((inside(minutes) - this._dayFrom) / span) * 100}%`;
+    let at = this._start;
+    const parts = legs.flatMap((leg, index) => {
+      const color = this.vehicle(leg.vehicle)?.color;
+      const block = document.createElement('span');
+      block.className = at + leg.minutes > this._dayTo ? 'custom-trip__block is-over' : 'custom-trip__block';
+      block.style.left = pos(at);
+      block.style.width = `${((inside(at + leg.minutes) - inside(at)) / span) * 100}%`;
+      const stop = textEl('span', 'custom-trip__stop', String(index + 1));
+      stop.style.left = pos(at);
+      if (color) {
+        block.style.setProperty('--vc', color);
+        stop.style.setProperty('--vc', color);
+      }
+      at += leg.minutes;
+      return [block, stop];
+    });
+    if (legs.length) {
+      const end = document.createElement('span');
+      end.className = 'custom-trip__stop custom-trip__stop--end';
+      end.style.left = pos(at);
+      parts.push(end);
+    }
+    this._track.replaceChildren(...parts);
+  }
+
+  // Huy hiệu theo số phương tiện khác nhau trong chuyến: chọn mức cao nhất mà chuyến đạt.
+  drawBadge(legs) {
+    if (!this._badge) return;
+    const count = new Set(legs.map((leg) => leg.vehicle)).size;
+    const badge = [...(this._data.badges ?? [])].sort((a, b) => b.min - a.min).find((b) => count >= b.min);
+    this._badge.replaceChildren(...(badge && count ? [this.text('badge', { n: count }) ?? '', ' ', textEl('strong', '', badge.label) ?? ''] : []));
+  }
+
   refresh(focus) {
     const { legs, minutes, perGuest, total } = this.totals();
     const start = this._start;
+    this.drawRuler(legs);
+    this.drawBadge(legs);
+    // Chuyến vừa đổi thì tin nhắn đã soạn không còn khớp: ẩn đi, khách bấm gửi lại để soạn bản mới.
+    if (this._done) this._done.hidden = true;
     let at = start;
     const rows = legs.map((leg, index) => {
       const li = this.legEl(leg, index, at);
@@ -261,7 +349,11 @@ export class WlCustomTrip extends HTMLElement {
     this._sum = document.createElement('div');
     this._sum.className = 'custom-trip__sum';
     this._sum.setAttribute('aria-live', 'polite');
-    const plan = groupEl('custom-trip__plan', [this._planTitle, this._list, this._warn, this.guestsEl(), this._sum]);
+    this._badge = document.createElement('p');
+    this._badge.className = 'custom-trip__badge';
+    const top = groupEl('custom-trip__plan-top', [this._planTitle, this._badge]);
+    // Form tách file riêng; nó đặt số khách và phần tạm tính (this._sum) vào trong form, cạnh ngày giờ.
+    const plan = groupEl('custom-trip__plan', [top, this.rulerEl(), this._list, this._warn, requestEl(this)]);
 
     this.replaceChildren(groupEl('custom-trip__inner container', [head, groupEl('custom-trip__layout', [this.libraryEl(), plan])]));
     this.refresh();

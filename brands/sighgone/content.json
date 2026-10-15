@@ -2982,7 +2982,15 @@
           "lead": "Bấm các chặng để xếp vào ngày của nhóm bạn. Trang tự cộng giờ và giá; gửi đi là SighGone gọi lại báo giá chính xác.",
           "surcharge": 0.3,
           "start": "07:00",
+          "startTimes": { "from": "05:00", "to": "11:00", "step": 30 },
+          "dayStart": "05:00",
           "endBy": "23:00",
+          "badges": [
+            { "min": 1, "label": "Mới khởi hành" },
+            { "min": 2, "label": "Biết đổi xe" },
+            { "min": 3, "label": "Đủ đường" },
+            { "min": 5, "label": "Thổ địa Sài Gòn" }
+          ],
           "maxHours": 10,
           "guests": { "min": 2, "max": 20, "default": 4 },
           "presets": [
@@ -3012,7 +3020,28 @@
             "perGuest": "Một khách (đã gồm phí đi riêng 30%)",
             "total": "{n} khách, tạm tính",
             "tooLong": "Chuyến dài {duration}, quá {max} tiếng. Bớt một chặng cho đỡ mệt nhé.",
-            "tooLate": "Kết thúc lúc {end}, sau {endBy}. Bắt đầu sớm hơn hoặc bớt chặng."
+            "tooLate": "Kết thúc lúc {end}, sau {endBy}. Bắt đầu sớm hơn hoặc bớt chặng.",
+            "tick": "{n}h",
+            "badge": "{n} cách đi:",
+            "date": "Ngày đi",
+            "start": "Giờ bắt đầu",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0912 345 678"
+          },
+          "errors": {
+            "legs": "Chuyến chưa có chặng nào. Thêm ít nhất một chặng nhé.",
+            "date": "Chọn ngày đi từ hôm nay trở đi.",
+            "name": "Bạn nhập họ tên giúp SighGone.",
+            "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
+          },
+          "message": {
+            "title": "Đã soạn sẵn yêu cầu",
+            "template": "SighGone ơi, mình là {name} ({phone}). Nhóm {guests} người muốn đi tour riêng ngày {date}, bắt đầu {start}, khoảng {duration}: {legs}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi {phone}",
+            "copy": "Chép tin nhắn",
+            "copied": "Đã chép"
           }
         }
       ]
