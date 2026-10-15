@@ -101,9 +101,10 @@ function pageUrl(id, page) {
 }
 
 // Đường dẫn ảnh trong content.json tính từ thư mục thương hiệu; component gọi hàm này để ra đường dẫn thật.
-// Đường dẫn tuyệt đối (ảnh của site khách lấy từ thư mục thương hiệu làm khung, ví dụ /brands/me-rach/images/...) giữ nguyên.
+// Đường dẫn tuyệt đối (ảnh của site khách lấy từ thư mục thương hiệu làm khung, ví dụ /brands/me-rach/images/...) và địa chỉ https (ảnh của
+// site khách tìm theo nơi chốn) giữ nguyên.
 export function asset(path) {
-  if (typeof path === 'string' && path.startsWith('/')) return path;
+  if (typeof path === 'string' && (path.startsWith('/') || /^https:\/\//.test(path))) return path;
   return `${DATA_ROOT}/${currentId}/${path}`;
 }
 

@@ -26,7 +26,7 @@ export function imageLibrary(content) {
   const walk = (node) => {
     if (Array.isArray(node)) node.forEach(walk);
     else if (node && typeof node === 'object') {
-      if (typeof node.src === 'string' && node.src.startsWith('images/') && !node.src.endsWith('.svg')) {
+      if (typeof node.src === 'string' && /^(images\/|\/brands\/|https:\/\/)/.test(node.src) && !node.src.endsWith('.svg')) {
         const old = found.get(node.src);
         if (!old || (!old.alt && node.alt)) found.set(node.src, { src: node.src, alt: node.alt ?? '' });
       }

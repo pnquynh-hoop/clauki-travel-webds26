@@ -3,10 +3,13 @@
    2. Chép khung (content.json của một thương hiệu có sẵn), tách các trường chữ riêng của brand (bỏ nhãn giao diện,
       thông báo lỗi, mẫu tin nhắn dùng chung), chia vài nhóm chạy song song; mỗi dòng trả về dạng "số|vị trí|chữ",
       code kiểm vị trí khớp số rồi áp ngay; dòng thiếu hoặc lệch thì gửi lại một lần.
-   3. Số liệu do code điền từ hồ sơ (giá), ảnh và theme lấy từ khung; AI không tự viết con số ở nhiều chỗ. */
+   3. Số liệu do code điền từ hồ sơ (giá), theme lấy từ khung; AI không tự viết con số ở nhiều chỗ.
+   4. Ảnh: tìm ảnh thật theo nơi chốn (photos.js), AI loại ảnh lạc đề và viết mô tả tiếng Việt, rồi thay vào các chỗ ảnh của khung
+      (trừ ảnh tách nền và ảnh đại diện); không tìm được thì giữ ảnh của khung. */
 import { streamLines, generateJson, cleanText } from '../ai/gemini.js';
 import { contrastRatio, AA } from '../editor/contrast.js';
 import { setIn } from '../editor/form.js';
+import { findPhotos } from './photos.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
@@ -76,18 +79,24 @@ Màu: chọn bộ màu hợp nơi chốn, mã hex 6 số; chữ (ink), chữ ph�
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
+anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) và một cảnh
+cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
 Trả về JSON đúng dạng:
 {"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
+ "anhTimKiem": ["", "", "", "", ""],
  "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
 }
+
+// Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
+const brandProfile = ({ anhTimKiem, ...rest }) => rest;
 
 function groupPrompt(profile, fields, idx) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
   return `Bạn viết lại chữ của một phần website du lịch cho thương hiệu mới. Khung trang giữ nguyên.
 
 Hồ sơ thương hiệu (bắt buộc theo đúng):
-${JSON.stringify(profile)}
+${JSON.stringify(brandProfile(profile))}
 
 Mỗi dòng dưới đây gồm: số, vị trí, chữ của trang mẫu. Viết lại từng dòng cho thương hiệu mới, cùng vai trò, độ dài gần bằng chữ cũ.
 
@@ -164,11 +173,88 @@ function applyProfile(content, profile, slug) {
   scalePrices(content, Number(profile.gia));
 }
 
+/* ---------- Ảnh theo nơi chốn ---------- */
+
+// Chỗ nào không thay ảnh: ảnh tách nền (scene, poster, các ga của hero ride, thẻ hướng dẫn viên) và ảnh đại diện nhỏ.
+const KEEP_KEYS = new Set(['avatar', 'scene', 'poster']);
+const KEEP_SECTIONS = new Set(['cards']);
+const IMAGE_FILE = /\.(jpe?g|png|webp)(\?|$)/i;
+
+function imageSlots(content) {
+  const slots = [];
+  const walk = (node, keys, section) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...keys, String(i)], section));
+    else if (node && typeof node === 'object') {
+      const blocked = keys.some((k) => KEEP_KEYS.has(k)) || (section.type === 'hero' && keys.includes('stops')) || KEEP_SECTIONS.has(section.type);
+      if (!blocked && typeof node.src === 'string' && IMAGE_FILE.test(node.src) && !/favicon|logo/i.test(node.src)) slots.push(node);
+      for (const [k, v] of Object.entries(node)) walk(v, [...keys, k], section);
+    }
+  };
+  for (const page of content.pages ?? [{ sections: content.sections ?? [] }]) for (const section of page.sections ?? []) walk(section, [], section);
+  return slots;
+}
+
+// Gửi danh sách ảnh tìm được cho AI: giữ ảnh đúng nơi chốn, bỏ ảnh lạc đề (nước khác, cảnh không liên quan), viết mô tả ngắn tiếng Việt
+// chỉ dựa vào mô tả có sẵn của ảnh. AI lỗi thì dùng tạm mô tả gốc, vẫn có ảnh.
+async function vetPhotos(profile, photos) {
+  const list = photos.map((p, i) => `${i}\t${p.alt.replace(/\s+/g, ' ')}`).join('\n');
+  try {
+    const out = await generateJson(`Nơi chốn của website: ${profile.noiChon}. Dưới đây là danh sách ảnh (số, mô tả gốc thường bằng tiếng Anh).
+Giữ lại ảnh có vẻ chụp đúng nơi chốn hoặc một cảnh hợp với nơi đó; bỏ ảnh chụp ở nơi khác, chân dung cận mặt, ảnh không rõ nội dung.
+Với mỗi ảnh giữ lại, viết mô tả tiếng Việt ngắn (tối đa 110 ký tự) cho người không nhìn thấy ảnh, chỉ nói điều có trong mô tả gốc, không bịa.
+Trả JSON một dòng: {"giu": [{"i": 0, "alt": ""}]}
+
+${list}`);
+    const kept = (out.giu ?? []).filter((g) => photos[g.i] && typeof g.alt === 'string' && g.alt.trim())
+      .map((g) => ({ ...photos[g.i], alt: cleanText(g.alt, 140) }));
+    if (kept.length) return kept;
+  } catch {
+    // Không vet được: dùng nguyên danh sách.
+  }
+  return photos.map((p) => ({ ...p, alt: `${profile.noiChon}: ${p.alt}`.slice(0, 140) }));
+}
+
+// Thay ảnh vào các chỗ ảnh của khung theo thứ tự (ảnh đầu vào ảnh bìa), lặp vòng nếu chỗ nhiều hơn ảnh; credits chỉ giữ ảnh còn dùng
+// của khung và thêm ảnh mới.
+function applyPhotos(content, photos) {
+  const slots = imageSlots(content);
+  slots.forEach((slot, i) => {
+    const photo = photos[i % photos.length];
+    slot.src = photo.src;
+    slot.alt = photo.alt;
+  });
+  const used = new Set();
+  const collect = (node) => {
+    if (Array.isArray(node)) node.forEach(collect);
+    else if (node && typeof node === 'object') {
+      if (typeof node.src === 'string') used.add(node.src);
+      Object.entries(node).forEach(([k, v]) => { if (k !== 'credits') collect(v); });
+    }
+  };
+  collect(content);
+  const fresh = photos.filter((p) => used.has(p.src)).map((p) => p.credit);
+  content.credits = [...(content.credits ?? []).filter((c) => used.has(c.file)), ...fresh];
+  return slots.length;
+}
+
+async function photoTask({ profile, content, theme, photos, on }) {
+  const queries = (Array.isArray(profile.anhTimKiem) ? profile.anhTimKiem : []).filter((q) => typeof q === 'string' && q.trim()).slice(0, 6);
+  if (!photos?.on || !queries.length) return 0;
+  const found = await findPhotos(queries, { pexelsKey: photos.pexelsKey });
+  if (found.length < 3) return 0;
+  const kept = await vetPhotos(profile, found);
+  if (kept.length < 3) return 0;
+  const count = applyPhotos(content, kept);
+  on.update?.(content, theme);
+  on.photos?.({ photos: kept.length, slots: count, source: photos.pexelsKey ? 'Pexels' : 'Wikimedia Commons' });
+  return kept.length;
+}
+
 /* ---------- Chạy ---------- */
 
 // on.profile(profile, info) khi có hồ sơ, on.field(done, total) mỗi dòng chữ nhận được, on.update(content, theme)
 // mỗi lần dữ liệu đổi (trang xem trước dựng lại). Trả về { content, theme, profile, stats }.
-export async function generateSite({ brief, frameId, slug, frames, on }) {
+export async function generateSite({ brief, frameId, slug, frames, photos, on }) {
   const t0 = performance.now();
   const sec = () => Number(((performance.now() - t0) / 1000).toFixed(1));
   const profile = await generateJson(profilePrompt(brief, frameId));
@@ -192,6 +278,8 @@ export async function generateSite({ brief, frameId, slug, frames, on }) {
   on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars) });
   on.update?.(content, theme);
 
+  // Tìm ảnh chạy song song với việc viết chữ; lỗi mạng hay không tìm được thì giữ ảnh của khung.
+  const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0);
   const got = new Set();
   let first = 0;
   let mismatched = 0;
@@ -216,7 +304,8 @@ export async function generateSite({ brief, frameId, slug, frames, on }) {
   const missing = fields.map((_, i) => i).filter((i) => !got.has(i));
   // Lượt gửi lại hỏng thì thôi: các chỗ thiếu giữ chữ của khung, người dùng sửa sau bằng editor.
   if (missing.length) await streamLines('', groupPrompt(profile, fields, missing), handle).catch(() => {});
+  const photoCount = await photoRun;
   on.update?.(content, theme);
-  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched };
+  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount };
   return { content, theme, profile, stats };
 }
