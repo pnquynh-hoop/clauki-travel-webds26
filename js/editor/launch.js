@@ -1,4 +1,7 @@
-/* launch.js - lối vào editor và trình tạo web trên trang khách: nút "Thử chỉnh" ở bên trái, bấm vào thì mở một menu nhỏ.
+/* launch.js - lối vào editor và trình tạo web trên trang khách: một nút duy nhất ở góc dưới trái, bấm vào thì mở một menu nhỏ.
+   Trang thương hiệu có sẵn đã có nút tròn của BTC ở đó (wd2026.js), nên nút tròn đó chính là nút này: bấm nó mở menu của mình,
+   không mở thêm khung riêng của BTC; mục Đổi thương hiệu bấm giúp hộp chọn của BTC. Site khách không có nút của BTC nên có nút
+   chữ "Thử chỉnh".
    Thương hiệu có sẵn: Đổi thương hiệu (mở hộp chọn của BTC), Tạo mới (trình tạo web /tao), Chỉnh sửa (editor).
    Site khách đã xuất bản: chỉ Chỉnh sửa (nháp trên máy này, không đụng bản đã xuất bản) và Tạo bản sao (chép sang trình tạo web
    để đặt tên mới rồi xuất bản). Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
@@ -69,16 +72,22 @@ export function mountLauncher({ current: first, reset }) {
   loadCss();
   const wrap = document.createElement('div');
   wrap.className = 'ed-fab';
-  const open = button('Thử chỉnh', 'ed-launch');
-  open.setAttribute('aria-haspopup', 'menu');
-  open.setAttribute('aria-expanded', 'false');
-  open.title = 'Đổi thương hiệu, tạo mới, chỉnh sửa; bản sửa chỉ lưu trên máy này';
+  const pill = button('Thử chỉnh', 'ed-launch');
+  // Nút mở menu: nút tròn của BTC nếu có (gắn sau, xem bindFab), không thì nút chữ.
+  let open = pill;
+  const label = 'Đổi thương hiệu, tạo mới, chỉnh sửa; bản sửa chỉ lưu trên máy này';
+  const describe = (el) => {
+    el.setAttribute('aria-haspopup', 'menu');
+    el.setAttribute('aria-expanded', 'false');
+    el.title = label;
+  };
+  describe(pill);
   const menu = document.createElement('div');
   menu.className = 'ed-menu';
   menu.setAttribute('role', 'menu');
   menu.setAttribute('aria-label', 'Thử chỉnh');
   menu.hidden = true;
-  wrap.append(menu, open);
+  wrap.append(menu, pill);
 
   const bar = document.createElement('div');
   bar.className = 'ed-draftbar';
@@ -98,10 +107,39 @@ export function mountLauncher({ current: first, reset }) {
     open.setAttribute('aria-expanded', String(on));
     if (on) menu.querySelector('.ed-menu__item')?.focus();
   };
-  open.addEventListener('click', () => setOpen(menu.hidden));
+  pill.addEventListener('click', () => setOpen(menu.hidden));
+
+  // Nút tròn của BTC: nghe ở pha bắt (capture) rồi chặn, để thao tác của BTC (hiện nút "Đổi dữ liệu demo") không chạy thêm.
+  // Nút chữ ẩn đi, nút "Đổi dữ liệu demo" cũng ẩn (html.ed-merged), vì menu đã có mục Đổi thương hiệu.
+  let merged = false;
+  const bindFab = () => {
+    const fab = document.querySelector('.wd2026-fab');
+    if (!fab || fab.dataset.edBound) return Boolean(fab);
+    fab.dataset.edBound = '1';
+    open = fab;
+    describe(fab);
+    fab.setAttribute('aria-label', 'Đổi thương hiệu, tạo mới, chỉnh sửa');
+    fab.addEventListener('click', (e) => {
+      e.stopImmediatePropagation();
+      setOpen(menu.hidden);
+    }, true);
+    merged = true;
+    document.documentElement.classList.add('ed-merged');
+    pill.hidden = true;
+    return true;
+  };
+  // wd2026.js chèn nút tròn sau khi trang dựng xong; chờ nó xuất hiện (site khách không có, nên chỉ chờ ở trang thương hiệu có sẵn).
+  const waitFab = (guest) => {
+    if (guest || bindFab()) return;
+    const watch = new MutationObserver(() => {
+      if (bindFab()) watch.disconnect();
+    });
+    watch.observe(document.body, { childList: true });
+    setTimeout(() => watch.disconnect(), 8000);
+  };
   // Bấm ra ngoài hoặc Esc thì đóng; Esc trả con trỏ về nút.
   document.addEventListener('click', (e) => {
-    if (!menu.hidden && !wrap.contains(e.target)) setOpen(false);
+    if (!menu.hidden && !wrap.contains(e.target) && !open.contains(e.target)) setOpen(false);
   });
   wrap.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !menu.hidden) {
@@ -137,8 +175,9 @@ export function mountLauncher({ current: first, reset }) {
     // core.js báo trang vừa dựng có theo nháp hay không (nháp cũ của content.json trước đó thì không tính).
     const has = Boolean(detail.draft);
     bar.hidden = !has;
-    // Có nháp thì dải báo đã có nút Mở editor, nên ẩn nút Thử chỉnh cho gọn.
-    wrap.hidden = has;
+    // Có nháp thì dải báo đã có nút Mở editor, nên ẩn nút chữ cho gọn (nút tròn của BTC thì luôn còn).
+    pill.hidden = merged || has;
+    waitFab(detail.guest);
   };
   back.addEventListener('click', () => {
     if (!current) return;
