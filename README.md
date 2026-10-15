@@ -64,6 +64,7 @@ Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khá
 | | `tips`, `policy` | thẻ mẹo có biểu đồ nhỏ; bảng chính sách huỷ (trang `cam-nang`, `hoi-dap`) |
 | | `hero` kiểu `ride` | trang `tuyen-so-1`: poster rồi cuộn qua từng ga, thành phố trôi ngang, trời đổi từ chiều sang đêm |
 | | `route` (`metro`) | hành trình chia chặng như sơ đồ tuyến metro, cuộn tới chặng nào thì phương tiện đổi theo chặng đó (trang chi tiết tour, `dem-nay`) |
+| | `backdrop` | dải ảnh nền cố định giữa các khối, trang cuộn qua mà ảnh đứng yên (trang chủ) |
 
 Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 

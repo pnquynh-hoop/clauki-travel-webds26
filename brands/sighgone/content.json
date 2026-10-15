@@ -2155,6 +2155,18 @@
             }
           ]
         },
+          {
+            "type": "backdrop",
+            "id": "phong-nen",
+            "variant": "screen",
+            "eyebrow": "Sài Gòn không ngủ",
+            "title": "Đi tới đâu, thành phố cũng đang chờ",
+            "image": {
+              "src": "images/skyline-dem.webp",
+              "alt": "Đường chân trời Sài Gòn về đêm, các toà nhà cao tầng lên đèn"
+            },
+            "focus": "50% 60%"
+          },
         {
           "type": "tour-pick",
           "id": "gap-thu",
