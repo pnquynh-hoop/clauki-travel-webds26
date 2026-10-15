@@ -40,8 +40,13 @@ const state = {
   loadToken: 0,
   // Điều khiển cần nhận lại con trỏ bàn phím sau lần vẽ lại kế tiếp (ví dụ nút Xuống của khối vừa dời).
   focusKey: null,
+<<<<<<< HEAD
   // Thương hiệu làm khung (theme.css, ảnh): bằng id với thương hiệu có sẵn, khác id với site khách.
   baseId: null,
+=======
+  // Lúc ghi nháp gần nhất (Date) để hiện "Đã lưu lúc ..." ở thanh trên.
+  savedAt: null,
+>>>>>>> origin/main
 };
 const ui = {};
 
@@ -105,6 +110,22 @@ function commit(label, mutate) {
   persist();
 }
 
+// Mỗi thay đổi đã tự ghi nháp ngay (persist), nút Lưu để người dùng thấy rõ điều đó: ghi lại một lần nữa, báo giờ lưu và nơi lưu.
+// Nháp chỉ nằm trên trình duyệt này; muốn đưa vào repo thì tải content.json.
+function save() {
+  if (isOriginal()) {
+    toast('Chưa có thay đổi nào để lưu.');
+    return;
+  }
+  persist();
+  const at = timeLabel(state.savedAt);
+  ui.save.textContent = 'Đã lưu';
+  setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
+  toast(`Đã lưu lúc ${at}. Bản nháp nằm trên trình duyệt này, mở lại ?sua là còn. Muốn đưa vào repo thì bấm Tải content.json.`);
+}
+
+const timeLabel = (date) => (date ?? new Date()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
 function undo() {
   const op = state.past.pop();
   if (!op) return;
@@ -137,6 +158,8 @@ function persist() {
   if (original) clearDraft(state.id);
   else if (!writeDraft(state.id, draft)) {
     toast('Trình duyệt chặn bộ nhớ: xem thử được trong editor, nhưng thoát ra là mất.');
+  } else {
+    state.savedAt = new Date();
   }
   // Hoàn tác hay về bản gốc làm mất trang đang mở (trang vừa thêm): về trang chủ.
   if (!pageOf(state.content)) {
@@ -576,6 +599,17 @@ function renderTheme() {
 
 /* ---------- Tab Trang ---------- */
 
+const NEW_PAGE = '__new__';
+
+// Mở tab Trang (điện thoại: mở tấm trượt) và đặt con trỏ vào ô tên trang mới.
+function openNewPage() {
+  openTab('pages');
+  if (isNarrow() && !ui.panel.classList.contains('is-open')) dock('pages');
+  const input = ui.panes.pages.querySelector('.ed-newpage input[name="name"]');
+  input?.scrollIntoView({ block: 'center' });
+  input?.focus();
+}
+
 function addPage(form) {
   const name = form.elements.name.value.trim();
   const { slug, error } = checkNewPage(state.content, name);
@@ -584,7 +618,8 @@ function addPage(form) {
     return;
   }
   const onMenu = form.elements.menu.checked;
-  commit(`Thêm trang ${name}`, () => addPageTo(state.content, slug, name, onMenu));
+  const from = form.elements.from.value;
+  commit(`Thêm trang ${name}`, () => addPageTo(state.content, slug, name, onMenu, from || null));
   toast(`Đã thêm trang /${slug}${onMenu ? ', có trên menu' : ''}.`);
   openPage(slug);
 }
@@ -603,6 +638,10 @@ function renderPages() {
   const form = h('form', { class: 'ed-newpage' },
     h('label', { class: 'ed-field' }, h('span', { text: 'Tên trang' }), h('input', { class: 'ed-input', name: 'name', required: true, placeholder: 'Ví dụ: Ăn chay ở Sài Gòn' })),
     h('p', { class: 'ed-slug', text: 'Đường dẫn: /...' }),
+    h('label', { class: 'ed-field' }, h('span', { text: 'Bắt đầu từ' }),
+      h('select', { class: 'ed-select', name: 'from' },
+        h('option', { value: '', text: 'Trang trống (chỉ có tiêu đề)', selected: true }),
+        h('option', { value: state.page, text: 'Bản sao của trang đang mở' }))),
     h('label', { class: 'ed-check' }, h('input', { type: 'checkbox', name: 'menu', checked: true }), ' Hiện trên menu'),
     h('p', { class: 'ed-err', 'aria-live': 'polite' }),
     h('button', { class: 'ed-btn', type: 'submit', text: 'Thêm trang' }));
@@ -705,13 +744,16 @@ function refresh() {
   ui.redo.disabled = !state.future.length;
   ui.undo.title = state.past.length ? `Hoàn tác: ${state.past.at(-1).label}` : '';
   ui.brand.textContent = state.brands.find((b) => b.id === state.id)?.label ?? state.id;
-  ui.status.textContent = isOriginal() ? 'Bản gốc' : (isNarrow() ? 'Bản thử' : 'Đang thử, chưa lưu vào repo');
+  ui.status.textContent = isOriginal() ? 'Bản gốc' : `Đã lưu ${timeLabel(state.savedAt)}`;
+  ui.status.title = isOriginal() ? '' : 'Bản nháp nằm trên trình duyệt này, chưa vào repo. Tải content.json để đưa vào repo.';
+  ui.save.disabled = isOriginal();
+  ui.save.title = isOriginal() ? 'Chưa có thay đổi' : 'Lưu bản nháp trên trình duyệt này';
   ui.status.classList.toggle('is-draft', !isOriginal());
   const pages = state.content.pages ?? [{ path: '/', title: 'Trang chủ' }];
   ui.pageSelect.replaceChildren(...pages.map((p) => {
     const path = norm(p.path);
     return h('option', { value: path, text: p.title ?? (path === '/' ? 'Trang chủ' : path), selected: path === state.page });
-  }));
+  }), h('option', { value: NEW_PAGE, text: '+ Thêm trang mới' }));
   ui.exit.href = pageUrl(state.id, state.page);
   const bad = !contrastChecks().every((c) => c.ok);
   ui.themeBtn.disabled = bad;
@@ -858,7 +900,15 @@ function build() {
   ui.brand = h('strong', { class: 'ed-top__brand' });
   ui.status = h('span', { class: 'ed-top__status' });
   ui.pageSelect = h('select', { class: 'ed-select', 'aria-label': 'Trang đang chỉnh' });
-  ui.pageSelect.addEventListener('change', () => openPage(ui.pageSelect.value));
+  ui.pageSelect.addEventListener('change', () => {
+    if (ui.pageSelect.value !== NEW_PAGE) {
+      openPage(ui.pageSelect.value);
+      return;
+    }
+    // Chọn "Thêm trang mới": trả ô chọn về trang đang mở rồi đưa người dùng tới form thêm trang.
+    ui.pageSelect.value = state.page;
+    openNewPage();
+  });
   ui.undo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: undo, text: 'Hoàn tác' });
   ui.redo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: redo, text: 'Làm lại' });
   ui.modes = [['edit', 'Chỉnh'], ['view', 'Xem thử']].map(([mode, label]) =>
@@ -868,7 +918,8 @@ function build() {
     fit();
   });
   ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, text: 'Tải theme.css' });
-  ui.exit = h('a', { class: 'ed-btn', text: 'Thoát' });
+  ui.save = h('button', { type: 'button', class: 'ed-btn ed-btn--save', onclick: save, text: 'Lưu' });
+  ui.exit = h('a', { class: 'ed-btn ed-btn--ghost', text: 'Thoát' });
 
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, ui.brand, ui.status),
@@ -879,6 +930,7 @@ function build() {
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: resetAll, text: 'Về bản gốc' }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: downloadContent, text: 'Tải content.json' }),
       h('span', { class: 'ed-top__wide' }, ui.themeBtn),
+      ui.save,
       ui.exit));
 
   ui.frame = h('iframe', { class: 'ed-frame', title: 'Trang đang chỉnh', 'data-ed-frame': true });
