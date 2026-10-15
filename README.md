@@ -87,7 +87,7 @@ js/
   dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
   components/           mỗi component một file: wl-<tên>.js
   editor/               editor "Thử chỉnh": draft.js (nháp trên máy), launch.js (nút vào), editor.js, form.js, manifest.js, ai.js
-  tao/                  trình tạo web /tao: tao.js (giao diện), generate.js (AI viết website trên khung có sẵn)
+  create/               trình tạo web /tao: tao.js (giao diện), generate.js (AI viết website trên khung có sẵn)
   ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
   sites.js              site khách: nháp /nhap/, đọc và xuất bản trên Supabase
 brands/

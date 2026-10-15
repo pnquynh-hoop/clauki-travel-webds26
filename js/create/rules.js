@@ -43,7 +43,7 @@ const keyOf = (section) => (section.variant && SIGNATURE_BY_KEY.has(`${section.t
 const signatureOf = (section) => SIGNATURE_BY_KEY.get(keyOf(section)) ?? null;
 
 // Khối đặc trưng bị cấm trừ khi nằm trong tập keep (khoá AI đã duyệt là thật sự hợp); hard thì luôn bị cấm.
-const isBanned = (section, keep) => {
+export const isBanned = (section, keep) => {
   const sig = signatureOf(section);
   return Boolean(sig) && (sig.hard || !keep.has(sig.key));
 };
