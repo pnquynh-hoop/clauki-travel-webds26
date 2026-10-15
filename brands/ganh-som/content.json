@@ -24,16 +24,12 @@
       "href": "page:nha"
     },
     {
-      "label": "Thư viện ảnh",
-      "href": "page:/#thu-vien"
-    },
-    {
       "label": "Ưu đãi hè 2027",
       "href": "page:uu-dai"
     },
     {
       "label": "Hỏi đáp",
-      "href": "page:dat-phong#hoi-dap"
+      "href": "page:dat-phong"
     }
   ],
   "header": {
@@ -238,6 +234,16 @@
       "description": "Villa sát biển, nhà đồi, phòng vườn trên mỏm gành phía nam Quy Nhơn: chọn hạng bằng cảnh nhìn ra từ ban công.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Ba hạng nhà"
+            }
+          ]
+        },
+        {
           "type": "stays",
           "id": "hang-nha",
           "variant": "headland",
@@ -345,6 +351,16 @@
       "title": "Ưu đãi hè 2027",
       "description": "Đặt trước 31/12/2026 cho kỳ nghỉ từ tháng 4 đến tháng 8/2027: ở 4 đêm, chỉ trả 3.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Ưu đãi hè 2027"
+            }
+          ]
+        },
         {
           "type": "offer",
           "id": "uu-dai",
@@ -478,6 +494,16 @@
       "title": "Đặt phòng",
       "description": "Hỏi chủ nhà trước khi đặt, chọn ngày và hạng nhà, gửi yêu cầu giữ phòng Gành Sớm.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Đặt phòng"
+            }
+          ]
+        },
         {
           "type": "faq",
           "id": "hoi-dap",
