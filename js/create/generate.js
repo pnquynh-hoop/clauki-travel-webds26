@@ -12,14 +12,15 @@ import { setIn } from '../editor/form.js';
 import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
+import { MENU, composeHome, loadFrames } from './mix.js';
 import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
   { id: 'me-rach', label: 'Homestay, tính tiền theo khách', hint: 'nhà dân, homestay, một chỗ ở, giá theo đầu người' },
   { id: 'ganh-som', label: 'Nghỉ dưỡng nhiều hạng phòng', hint: 'resort, khách sạn, nhà nghỉ có vài hạng phòng giá khác nhau' },
-  { id: 'bac-tra', label: 'Tour nhiều ngày theo lịch', hint: 'tour vài ngày, ngày khởi hành cố định, giá theo khách' },
-  { id: 'sighgone', label: 'Tour trong ngày', hint: 'tour vài giờ trong thành phố, nhiều chuyến, nhiều phương tiện' },
+  { id: 'bac-tra', label: 'Tour nhiều ngày theo lịch', hint: 'tour từ 2 ngày trở lên, có đêm nghỉ, ngày khởi hành cố định, giá theo khách; chỉ chọn khi mô tả nói rõ nhiều ngày' },
+  { id: 'sighgone', label: 'Tour trong ngày', hint: 'tour trong một ngày ở bất kỳ nơi nào (thành phố, núi, sông, đảo), chia chặng theo giờ, nhiều chuyến mỗi ngày; chọn khi mô tả không nói nhiều ngày' },
 ];
 
 // Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
@@ -77,7 +78,7 @@ Mô tả không liên quan tới du lịch, lưu trú, hoặc có nội dung kh�
 
 Mô tả: ${brief}
 
-Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất.'}
+Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất theo loại hình và số ngày; mô tả là tour mà không nói rõ nhiều ngày thì chọn "sighgone", không mặc định "bac-tra".'}
 Luật màu (bắt buộc):
 - Nền trang (bg) và nền thẻ (surface) sáng, gần trắng, ngả ấm hay mát nhẹ; chữ (ink) gần đen cùng tông nền, không dùng đen thuần #000000; chữ phụ (muted) là xám cùng tông.
 - Màu nút (primary) là màu thương hiệu rõ ràng nhưng không chói: độ bão hoà vừa phải, không dùng màu neon, cyan sáng, hồng sáng, vàng chói. Chọn theo nơi chốn và khí hậu (biển: xanh lam hoặc xanh ngọc đậm; núi, rừng: xanh rêu, nâu đất; nắng gió: cam đất, vàng đất; phố cổ: đỏ gạch, vàng đất; đồng quê: xanh lá trầm).
@@ -85,6 +86,10 @@ Luật màu (bắt buộc):
 - Tương phản từ 4.5: chữ, chữ phụ, màu nhấn trên nền trang và trên nền thẻ; chữ trên nút (onPrimary) trên màu nút (primary).
 dacTrung: các component đặc trưng chỉ được dùng khi thật sự phù hợp với nơi này. Dưới đây là danh sách (khoá: điều kiện phù hợp). Chỉ chọn khoá nào mà mô tả của người dùng thật sự thoả điều kiện; nghi ngờ thì không chọn; mảng rỗng là bình thường và là lựa chọn mặc định.
 ${SIGNATURE.filter((s) => !s.hard).map((s) => `- ${s.key}: ${s.fit}`).join('\n')}
+trangChu: thứ tự các khối chung của trang chủ, từ 5 tới 8 khoá lấy từ danh sách sau (khoá: mô tả). Khung đã có sẵn các khối riêng của nó (đặt chỗ, danh sách tour...) nên code tự giữ; bạn chỉ chọn khối chung, mỗi loại (phần trước dấu hai chấm) tối đa một lần.
+${MENU.map(([key, hint]) => `- ${key}: ${hint}`).join('\n')}
+Luật: khoá đầu là một hero; chọn kiểu hợp giọng nơi chốn và trộn các kiểu khác nhau, ít nhất hai khoá có kiểu riêng (không phải kiểu mặc định có phần sau dấu hai chấm để trống), không chọn kiểu đầu tiên cho mọi loại; nên có reviews và faq; tips và policy chỉ chọn khi khoá đó cũng có trong dacTrung.
+dauTrang: kiểu đầu trang, một trong "solid" (nền trang), "center" (tên ở giữa), "overlay" (trong suốt đè lên ảnh, chỉ khi hero là "hero:full").
 phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá sau: "montserrat" (hiện đại, gọn, hợp thành phố, resort hiện đại), "lora" (có chân, cổ điển, hợp núi, làng quê, truyền thống), "unbounded" (tròn, vui, trẻ trung, hợp tour ăn uống, bạn bè), "playfair" (sang trọng, hợp nghỉ dưỡng cao cấp), hoặc "" để giữ kiểu chữ của khung.
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
@@ -96,12 +101,14 @@ Trả về JSON đúng dạng:
 {"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
  "phongChu": "",
  "dacTrung": [],
+ "trangChu": ["", "", "", "", ""],
+ "dauTrang": "",
  "anhTimKiem": ["", "", "", "", ""],
  "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
 }
 
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
-const brandProfile = ({ anhTimKiem, dacTrung, ...rest }) => rest;
+const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, ...rest }) => rest;
 
 function groupPrompt(profile, fields, idx) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
@@ -303,8 +310,9 @@ function imageSlots(content) {
     }
   };
   for (const page of content.pages ?? [{ sections: content.sections ?? [] }]) for (const section of page.sections ?? []) walk(section, [], section);
-  // Trang chi tiết (catalog) cũng có ảnh của khung; để nguyên thì tour mới hiện ảnh món ăn, phố của khung.
+  // Trang chi tiết (catalog) và chân trang cũng có ảnh của khung; để nguyên thì tour mới hiện ảnh món ăn, phố của khung.
   walk(content.catalog, [], { type: 'catalog' });
+  walk(content.footer, [], { type: 'footer' });
   return slots;
 }
 
@@ -410,6 +418,16 @@ Trả JSON một dòng: {"kieu": {"số khối": "kiểu"}, "header": ""}`);
   return picked;
 }
 
+// Trang chủ đã ghép từ nhiều khung: kiểu của từng khối đã nằm trong khoá AI chọn, chỉ còn kiểu đầu trang (overlay chỉ hợp hero full).
+function applyMixed({ mixed, profile, content, theme, on }) {
+  let header = HEADER_CHOICES.includes(profile.dauTrang) ? profile.dauTrang : (mixed.hero === 'full' ? 'overlay' : 'solid');
+  if (header === 'overlay' && mixed.hero !== 'full') header = 'solid';
+  (content.header ??= {}).variant = header;
+  on.update?.(content, theme);
+  on.layout?.({ picked: Object.fromEntries(mixed.picked.map((key) => key.split(':')).map(([type, variant]) => [type, variant || 'mặc định'])), header });
+  return Promise.resolve(mixed);
+}
+
 /* ---------- Chạy ---------- */
 
 // on.profile(profile, info) khi có hồ sơ, on.field(done, total) mỗi dòng chữ nhận được, on.update(content, theme)
@@ -417,6 +435,7 @@ Trả JSON một dòng: {"kieu": {"số khối": "kiểu"}, "header": ""}`);
 export async function generateSite({ brief, frameId, slug, frames, photos, on }) {
   const t0 = performance.now();
   const sec = () => Number(((performance.now() - t0) / 1000).toFixed(1));
+  const framesRun = loadFrames(frames).catch(() => ({}));
   const profile = await generateJson(profilePrompt(brief, frameId));
   if (profile.tuChoi) {
     const err = new Error(profile.tuChoi);
@@ -430,6 +449,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const template = await res.json();
   // Luật component: bỏ khối đặc trưng của thương hiệu khung, đổi kiểu bị cấm (rules.js) trước khi tách chữ cho AI viết.
   const rules = sanitizeFrame(template, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
+  // Ghép khối chung từ nhiều khung theo trangChu của AI; không dùng được thì giữ trang chủ của khung và để layoutTask chọn kiểu.
+  const mixed = composeHome(template, profile.trangChu, { ...(await framesRun), [frame]: template }, frame, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
   const content = structuredClone(template);
   const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);
@@ -447,7 +468,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   // Tìm ảnh chạy song song với việc viết chữ; lỗi mạng hay không tìm được thì giữ ảnh của khung.
   const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0);
   // Chọn kiểu trình bày của các khối ở trang chủ (trộn bộ), song song với việc viết chữ.
-  const layoutRun = layoutTask({ profile, content, theme, on }).catch(() => null);
+  const layoutRun = mixed ? applyMixed({ mixed, profile, content, theme, on }) : layoutTask({ profile, content, theme, on }).catch(() => null);
   const got = new Set();
   let first = 0;
   let mismatched = 0;

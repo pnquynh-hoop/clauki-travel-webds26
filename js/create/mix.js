@@ -1,0 +1,172 @@
+/* mix.js - ghép section từ nhiều khung cho website AI tạo ở /tao.
+   Khung (một thương hiệu có sẵn) giữ các khối gắn với dữ liệu và trang của nó (đặt chỗ, danh sách tour, lịch trình...). Các khối chung
+   (MIX_TYPES: hero, intro, gallery, reviews, faq, host, tips, policy) AI chọn tự do, kể cả khối và kiểu vốn của khung khác: AI trả
+   danh sách "loại:kiểu" ở hồ sơ (trangChu), code lấy dữ liệu của khối đó từ khung nào có nó, đổi đường dẫn ảnh, rồi xếp vào chỗ của các
+   khối chung trong trang chủ của khung. Khối đặc trưng vẫn theo luật ở rules.js. Mỗi lần thêm khối chung mới: thêm một dòng vào MENU. */
+import { variantsFor } from '../editor/manifest.js';
+import { isBanned } from './rules.js';
+
+// Khối chung được ghép: [loại:kiểu, mô tả cho AI]. Kiểu rỗng là kiểu mặc định.
+export const MENU = [
+  ['hero:coverflow', 'chồng thẻ ảnh xoay, nhiều ảnh, hợp nghỉ dưỡng và điểm đến nhiều cảnh'],
+  ['hero:full', 'một ảnh phủ kín, mây vén khi cuộn, hợp thiên nhiên và núi'],
+  ['hero:stacked', 'chữ trên, ảnh tràn ngang, gọn, hiện đại'],
+  ['hero:haze', 'ảnh phủ sương, rê chuột thì tan, huyền ảo, hợp đêm và thành phố'],
+  ['intro:', 'đoạn giới thiệu căn trái'],
+  ['intro:center', 'đoạn giới thiệu căn giữa'],
+  ['intro:headline', 'tiêu đề rất lớn, mạnh'],
+  ['gallery:', 'lưới ảnh'],
+  ['gallery:slices', 'dải ảnh xoè như bình phong'],
+  ['gallery:plates', 'ô biển số, ảnh loang theo con trỏ, hợp nhiều lựa chọn ngắn'],
+  ['reviews:postcard', 'đánh giá bưu thiếp nghiêng, ấm'],
+  ['reviews:notes', 'đánh giá giấy note dán, trẻ trung, vui'],
+  ['faq:', 'hỏi đáp danh sách gập mở, gọn'],
+  ['faq:chat', 'hỏi đáp như nhắn tin với chủ nhà, thân mật'],
+  ['host:', 'giới thiệu chủ nhà hay đội ngũ, có ảnh và lời kể'],
+  ['tips:', 'mẹo thực tế cho khách (cần duyệt đặc trưng "tips")'],
+  ['policy:', 'chính sách huỷ, hoàn tiền (cần duyệt đặc trưng "policy")'],
+];
+const MENU_KEYS = new Set(MENU.map(([key]) => key));
+export const MIX_TYPES = new Set(MENU.map(([key]) => key.split(':')[0]));
+const keyOf = (section) => `${section.type}:${section.variant ?? ''}`;
+const homeOf = (content) => (content.pages ? content.pages.find((p) => !p.path || p.path === '/') ?? content.pages[0] : content);
+
+// Tải content.json của mọi khung (một lần, song song với việc lập hồ sơ); khung lỗi thì bỏ qua.
+export async function loadFrames(ids) {
+  const entries = await Promise.all(ids.map(async (id) => {
+    try {
+      const res = await fetch(`/brands/${id}/content.json`);
+      return res.ok ? [id, await res.json()] : null;
+    } catch {
+      return null;
+    }
+  }));
+  return Object.fromEntries(entries.filter(Boolean));
+}
+
+const absolute = (node, origin) => {
+  const walk = (n) => {
+    if (Array.isArray(n)) n.forEach(walk);
+    else if (n && typeof n === 'object') {
+      for (const [k, v] of Object.entries(n)) {
+        if ((k === 'src' || k === 'file') && typeof v === 'string' && v.startsWith('images/')) n[k] = `/brands/${origin}/${v}`;
+        else walk(v);
+      }
+    }
+  };
+  walk(node);
+};
+
+// Lấy bản của khối "loại:kiểu": của chính khung đang dùng nếu có, không thì của khung đầu tiên có nó. Trả về { section, credits } hoặc null.
+function findSection(key, frames, base) {
+  for (const id of [base, ...Object.keys(frames).filter((f) => f !== base)]) {
+    const data = frames[id];
+    if (!data) continue;
+    const pages = data.pages ?? [{ sections: data.sections ?? [] }];
+    for (const page of pages) {
+      const hit = (page.sections ?? []).find((s) => keyOf(s) === key && !s.hidden);
+      if (!hit) continue;
+      const section = structuredClone(hit);
+      const own = id === base;
+      if (!own) absolute(section, id);
+      const files = new Set();
+      const collect = (n) => {
+        if (Array.isArray(n)) n.forEach(collect);
+        else if (n && typeof n === 'object') Object.values(n).forEach(collect);
+        else if (typeof n === 'string' && /^(\/brands\/|images\/)/.test(n)) files.add(n);
+      };
+      collect(section);
+      const credits = own ? [] : (data.credits ?? []).filter((c) => files.has(`/brands/${id}/${c.file}`)).map((c) => ({ ...c, file: `/brands/${id}/${c.file}` }));
+      return { section, credits };
+    }
+  }
+  return null;
+}
+
+// Liên kết lỡ trỏ tới trang hay mốc không còn trong website mới: mục menu thì bỏ, liên kết thường đổi về nút hành động chính của khung.
+function fixLinks(content, home) {
+  const paths = new Set((content.pages ?? [{ path: '/' }]).map((p) => (p.path || '/').replace(/^\/+|\/+$/g, '') || '/'));
+  const ids = new Set(home.sections.map((s) => s.id).filter(Boolean));
+  const dead = (href) => {
+    if (typeof href !== 'string') return false;
+    const page = href.match(/^page:([^#]*)(?:#(.*))?$/);
+    if (page) {
+      const path = page[1].replace(/^\/+|\/+$/g, '') || '/';
+      if (!paths.has(path)) return true;
+      return path === '/' && Boolean(page[2]) && !page[2].includes('=') && !ids.has(page[2]);
+    }
+    const local = href.match(/^#(.+)$/);
+    return Boolean(local) && !ids.has(local[1]);
+  };
+  content.nav = (content.nav ?? []).filter((item) => !dead(item.href));
+  const fallback = content.cta?.href && !dead(content.cta.href) ? content.cta.href : 'page:/';
+  const walk = (node) => {
+    if (Array.isArray(node)) node.forEach(walk);
+    else if (node && typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) {
+        if (k === 'href' && dead(v)) node[k] = fallback;
+        else walk(v);
+      }
+    }
+  };
+  walk(home.sections);
+}
+
+// Xếp lại trang chủ của khung (đã qua sanitizeFrame): khối chung lấy theo picks (thứ tự do AI chọn), khối khác của khung ở yên chỗ.
+// Chỗ của khối chung trong khung được lấp lần lượt; còn thừa thì nối tiếp sau chỗ cuối. Trả về { sections, kept } hoặc null khi picks
+// không dùng được (quá ít khối hợp lệ), khi đó trang chủ giữ nguyên.
+export function composeHome(content, picks, frames, base, keepKeys = []) {
+  if (!Array.isArray(picks)) return null;
+  const keep = new Set(keepKeys);
+  const home = homeOf(content);
+  const original = home.sections ?? [];
+  const valid = [];
+  const seen = new Set();
+  for (const raw of picks) {
+    const key = typeof raw === 'string' ? raw.trim() : '';
+    if (!MENU_KEYS.has(key)) continue;
+    const [type, variant] = key.split(':');
+    if (seen.has(type)) continue;
+    if (isBanned({ type, variant: variant || undefined }, keep)) continue;
+    const found = findSection(key, frames, base);
+    if (!found) continue;
+    const options = variantsFor(found.section);
+    if (options.length && !options.some(([value]) => value === (found.section.variant ?? ''))) continue;
+    seen.add(type);
+    valid.push({ key, ...found });
+  }
+  if (valid.length < 3) return null;
+  const heroAt = valid.findIndex((v) => v.key.startsWith('hero:'));
+  if (heroAt > 0) valid.unshift(...valid.splice(heroAt, 1));
+  const slots = original.filter((s) => MIX_TYPES.has(s.type)).length;
+  const used = new Set(original.filter((s) => !MIX_TYPES.has(s.type)).map((s) => s.id).filter(Boolean));
+  const credits = [];
+  const make = ({ section, credits: more }) => {
+    delete section.hidden;
+    let id = section.id;
+    for (let n = 2; id && used.has(id); n += 1) id = `${section.id}-${n}`;
+    if (id) {
+      section.id = id;
+      used.add(id);
+    }
+    credits.push(...more);
+    return section;
+  };
+  const sections = [];
+  let slot = 0;
+  let tail = -1;
+  for (const section of original) {
+    if (!MIX_TYPES.has(section.type)) {
+      sections.push(section);
+      continue;
+    }
+    if (slot < valid.length) sections.push(make(valid[slot]));
+    slot += 1;
+    tail = sections.length;
+  }
+  if (valid.length > slots) sections.splice(tail < 0 ? sections.length : tail, 0, ...valid.slice(slots).map(make));
+  home.sections = sections;
+  content.credits = [...(content.credits ?? []), ...credits.filter((c) => !(content.credits ?? []).some((x) => x.file === c.file))];
+  fixLinks(content, home);
+  return { picked: valid.map((v) => v.key), hero: valid[0].key.startsWith('hero:') ? valid[0].key.split(':')[1] : '' };
+}

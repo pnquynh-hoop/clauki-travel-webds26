@@ -50,10 +50,12 @@ async function searchCommons(query, limit = 20) {
 // có tên hoặc mô tả chứa hai từ đầu (địa danh), để ruộng bậc thang Hà Giang không lọt vào site của An Giang.
 async function searchCommonsLoose(query) {
   const words = query.trim().split(/\s+/);
-  const anchor = fold(words.slice(0, 2).join(' '));
+  const head = words.slice(0, 2).map(fold);
+  // Cụm hai từ đầu có mặt liền nhau; hai từ dài (từ 4 chữ) thì chỉ cần cùng có mặt, vì thứ tự trong mô tả ảnh có thể khác ("Japan Mount Fuji").
+  const near = (text) => text.includes(head.join(' ')) || (head.length === 2 && head.every((w) => w.length >= 4 && new RegExp(`\\b${w}\\b`).test(text)));
   let best = [];
   for (let n = words.length; n >= Math.min(2, words.length); n -= 1) {
-    const found = (await searchCommons(words.slice(0, n).join(' '))).filter((p) => p.text.includes(anchor));
+    const found = (await searchCommons(words.slice(0, n).join(' '))).filter((p) => near(p.text));
     if (found.length >= 3) return found;
     if (found.length > best.length) best = found;
   }
