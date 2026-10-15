@@ -81,7 +81,12 @@ export class WlHeader extends HTMLElement {
     const nav = document.createElement('nav');
     nav.className = 'header__nav';
     nav.id = 'menu-chinh';
-    const links = (content.nav ?? []).map((item) => linkEl(item.href, item.label, 'header__link')).filter(Boolean);
+    // item.badge (tuỳ chọn): nhãn nhỏ cạnh chữ của mục, ví dụ "Mới" cho trang chiến dịch vừa ra.
+    const links = (content.nav ?? []).map((item) => {
+      const link = linkEl(item.href, item.label, 'header__link');
+      if (link && item.badge) link.append(' ', textEl('span', 'header__badge', item.badge));
+      return link;
+    }).filter(Boolean);
     nav.append(...links);
     // Bấm một mục trong menu điện thoại thì đóng menu lại để thấy section vừa nhảy tới.
     nav.addEventListener('click', (e) => {

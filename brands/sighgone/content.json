@@ -29,7 +29,8 @@
     },
     {
       "label": "Tuyến số 1",
-      "href": "page:tuyen-so-1"
+      "href": "page:tuyen-so-1",
+      "badge": "Mới"
     },
     {
       "label": "Về SighGone",
