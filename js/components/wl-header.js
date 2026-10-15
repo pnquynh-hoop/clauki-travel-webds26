@@ -2,6 +2,7 @@
    Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ header.variant. */
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
+import { setLang } from '../i18n.js';
 
 // Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
 // Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);
@@ -22,12 +23,33 @@ function brandEl(brand, home) {
   return a;
 }
 
-// Dòng thông tin nhỏ phía trên: chỉ có khi dữ liệu ghi header.note (ví dụ giờ nhận phòng), kèm số điện thoại bấm gọi được.
-function topbarEl(note, phone) {
-  if (!note) return null;
+// Nút đổi ngôn ngữ: chỉ có khi thương hiệu khai từ hai ngôn ngữ (languages) và header.lang ghi chữ cho từng mã
+// (ví dụ { "vi": "VI", "en": "EN", "label": "Ngôn ngữ" }). Mỗi ngôn ngữ một nút, nút đang dùng có aria-pressed.
+function langEl(names, languages, current) {
+  const codes = (languages ?? []).filter((code) => names?.[code]);
+  if (codes.length < 2) return null;
+  const buttons = codes.map((code) => {
+    const button = textEl('button', 'header__lang-btn', names[code]);
+    button.type = 'button';
+    button.lang = code;
+    button.setAttribute('aria-pressed', String(code === current));
+    if (code !== current) button.addEventListener('click', () => setLang(code));
+    return button;
+  });
+  const group = groupEl('header__lang', buttons);
+  group.setAttribute('role', 'group');
+  if (names.label) group.setAttribute('aria-label', names.label);
+  return group;
+}
+
+// Dòng thông tin nhỏ phía trên: có khi dữ liệu ghi header.note (ví dụ giờ nhận phòng) hoặc có nút đổi ngôn ngữ,
+// kèm số điện thoại bấm gọi được.
+function topbarEl(note, phone, lang) {
+  if (!note && !lang) return null;
   const inner = groupEl('header__topbar-inner container', [
     textEl('p', 'header__note', note),
     linkEl(telHref(phone), phone, 'header__phone'),
+    lang,
   ]);
   return inner && groupEl('header__topbar', [inner]);
 }
@@ -111,7 +133,8 @@ export class WlHeader extends HTMLElement {
     this._resize?.disconnect();
     this._resize?.observe(bar);
 
-    this.replaceChildren(...[topbarEl(header.note, content.contact?.phone), bar].filter(Boolean));
+    const lang = langEl(header.lang, this.site?.languages, this.site?.lang);
+    this.replaceChildren(...[topbarEl(header.note, content.contact?.phone, lang), bar].filter(Boolean));
     // Gán className ở trên đã xoá is-open, is-scrolled; đặt lại cho khớp trạng thái hiện tại.
     this.setOpen(false);
     this._onScroll?.();

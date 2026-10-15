@@ -1,5 +1,6 @@
 {
   "id": "sighgone",
+  "languages": ["vi", "en"],
   "meta": {
     "title": "SighGone - Tour trong ngày quanh Sài Gòn bằng bảy phương tiện",
     "description": "Đi bộ, xích lô, xe đạp, xe máy, thuyền, phà, ca nô: bảy tour trong ngày quanh Sài Gòn, nhóm tối đa 8 khách, đón ở trung tâm.",
@@ -50,6 +51,7 @@
     }
   ],
   "header": {
+    "lang": { "vi": "VI", "en": "EN", "label": "Ngôn ngữ" },
     "variant": "solid",
     "menu": "Menu",
     "note": "Mỗi ngày 5:30 đến 22:30, nhóm tối đa 8 khách"

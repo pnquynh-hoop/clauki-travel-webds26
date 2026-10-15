@@ -1,0 +1,2933 @@
+{
+  "meta": {
+    "title": "SighGone - Saigon day tours by seven ways of getting around",
+    "description": "Walk, cyclo, bicycle, motorbike, boat, ferry, speedboat: seven day tours around Saigon, groups of up to 8, pickup in the centre."
+  },
+  "brand": {
+    "slogan": "Every sigh, gone."
+  },
+  "cta": {
+    "label": "Book a tour",
+    "note": "From 390,000 VND per guest"
+  },
+  "toTop": {
+    "label": "Back to top"
+  },
+  "nav": [
+    {
+      "label": "Tours"
+    },
+    {
+      "label": "Private tour"
+    },
+    {
+      "label": "Route No. 1",
+      "badge": "New"
+    },
+    {
+      "label": "About us"
+    },
+    {
+      "label": "Guide"
+    },
+    {
+      "label": "FAQ"
+    },
+    {
+      "label": "Contact"
+    }
+  ],
+  "header": {
+    "lang": {
+      "label": "Language"
+    },
+    "menu": "Menu",
+    "note": "Daily 5:30 to 22:30, groups of up to 8"
+  },
+  "contact": {
+    "address": "No. 8, Alley 42, District 1, Ho Chi Minh City"
+  },
+  "place": {
+    "name": "Saigon"
+  },
+  "footer": {
+    "title": "Every sigh,",
+    "titleAccent": "gone.",
+    "toursTitle": "Tours",
+    "navTitle": "SighGone",
+    "contactTitle": "Contact",
+    "hours": "Daily, 5:30 to 22:30",
+    "addressTitle": "Meeting point",
+    "plate": {
+      "lines": [
+        "Alley 42",
+        "District 1"
+      ],
+      "label": "Meeting point: no. 8, Alley 42, District 1"
+    },
+    "note": "SighGone is a fictional brand made for the Web Design 2026 contest. Contact details are placeholder data.",
+    "creditsTitle": "Photo credits"
+  },
+  "catalog": {
+    "currency": "VND",
+    "vehicles": {
+      "di-bo": {
+        "label": "Walking"
+      },
+      "xich-lo": {
+        "label": "Cyclo"
+      },
+      "xe-dap": {
+        "label": "Bicycle"
+      },
+      "xe-may": {
+        "label": "Motorbike"
+      },
+      "thuyen": {
+        "label": "Boat"
+      },
+      "ca-no": {
+        "label": "Speedboat"
+      },
+      "pha": {
+        "label": "Ferry"
+      },
+      "xe": {
+        "label": "Shuttle"
+      }
+    },
+    "buoi": {
+      "sang": "Morning",
+      "chieu": "Afternoon",
+      "toi": "Evening",
+      "ca-ngay": "Full day"
+    },
+    "topics": {
+      "an-uong": "Food",
+      "lich-su": "History",
+      "song-nuoc": "On the water",
+      "sinh-thai": "Nature",
+      "chup-anh": "Photography"
+    },
+    "legs": [
+      {
+        "id": "cafe-vot",
+        "name": "Sock-filter coffee in an alley",
+        "area": "District 1"
+      },
+      {
+        "id": "cho-sang",
+        "name": "Morning market, breakfast",
+        "area": "District 1"
+      },
+      {
+        "id": "nha-tho",
+        "name": "Cathedral and Post Office",
+        "area": "District 1"
+      },
+      {
+        "id": "xich-lo-cho-lon",
+        "name": "Cyclo through Cho Lon",
+        "area": "District 5"
+      },
+      {
+        "id": "binh-tay",
+        "name": "Binh Tay Market",
+        "area": "District 6"
+      },
+      {
+        "id": "thien-hau",
+        "name": "Thien Hau Temple",
+        "area": "District 5"
+      },
+      {
+        "id": "dap-xe",
+        "name": "Village lanes of Thanh Da by bike",
+        "area": "Binh Thanh"
+      },
+      {
+        "id": "thuyen-kenh",
+        "name": "Boat into the canals",
+        "area": "District 1"
+      },
+      {
+        "id": "an-dem",
+        "name": "Late-night food by motorbike",
+        "area": "4 districts"
+      },
+      {
+        "id": "cu-chi",
+        "name": "Cu Chi Tunnels",
+        "area": "Cu Chi"
+      },
+      {
+        "id": "pha-can-gio",
+        "name": "Binh Khanh ferry",
+        "area": "Can Gio"
+      },
+      {
+        "id": "ca-no-duoc",
+        "name": "Speedboat into the mangroves",
+        "area": "Can Gio"
+      }
+    ],
+    "items": [
+      {
+        "id": "thuc-giac",
+        "name": "Saigon wakes up",
+        "tagline": "A walk as the city opens its eyes",
+        "text": "Three hours on foot before the traffic starts: sock-filter coffee at the mouth of an alley, the morning market, the cathedral, the post office and an old apartment block.",
+        "image": {
+          "alt": "A barista pours hot water through a cloth filter to make coffee at a District 3 café"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "3 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "06:30 to 09:30"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Saigon Opera House",
+            "text": "Meet your guide, grab some water, stretch your legs."
+          },
+          {
+            "place": "Alley coffee",
+            "text": "Coffee brewed through a cloth sock, on plastic stools at the alley mouth.",
+            "image": {
+              "alt": "A barista pours hot water through a cloth filter to make coffee at a District 3 café"
+            }
+          },
+          {
+            "place": "Morning market",
+            "text": "Sticky rice, steamed rice rolls, hot banh mi. Eating standing up is fine.",
+            "image": {
+              "alt": "A crusty banh mi filled with meat, pickles and green chilli, held in one hand"
+            }
+          },
+          {
+            "place": "Notre-Dame Cathedral, Post Office",
+            "text": "Two buildings over a hundred years old, photographed while the sun is still low.",
+            "image": {
+              "alt": "The yellow facade of Saigon Central Post Office under a blue sky, visitors strolling outside"
+            }
+          },
+          {
+            "place": "District 3 alley",
+            "text": "Through an alley with a vegetable market and lantern-hung townhouses.",
+            "image": {
+              "alt": "A narrow District 3 alley, vegetable sellers on the kerb, townhouses hung with lanterns"
+            }
+          },
+          {
+            "place": "Walking street",
+            "text": "The end. Want to keep going? Your guide will point the way."
+          }
+        ],
+        "includes": [
+          "A Saigon-born guide",
+          "Coffee and 3 breakfast dishes",
+          "Bottled water",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Extra drinks",
+          "Tips (optional)"
+        ],
+        "bring": [
+          "Walking shoes",
+          "A hat",
+          "Covered shoulders if you want to go inside the cathedral"
+        ]
+      },
+      {
+        "id": "cho-lon",
+        "name": "Cho Lon alleys",
+        "tagline": "By cyclo through the Chinese quarter",
+        "text": "A van to District 5, then cyclos through the herbal medicine street and lantern street, stopping at Binh Tay Market and Thien Hau Temple.",
+        "image": {
+          "alt": "The clock tower and curved tiled roofs of Binh Tay Market in Cho Lon under a cloudy sky"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "4 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "07:00 to 11:00"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Pickup in District 1",
+            "text": "A 16-seat van picks you up at the meeting point, 30 minutes to Cho Lon."
+          },
+          {
+            "place": "Binh Tay Market",
+            "text": "A century-old wholesale market, busiest at this hour, goods stacked to the ceiling.",
+            "image": {
+              "alt": "The clock tower and curved tiled roofs of Binh Tay Market in Cho Lon under a cloudy sky"
+            }
+          },
+          {
+            "place": "Herbal medicine and lantern streets",
+            "text": "Onto the cyclos, one per person, rolling slowly through the trade streets.",
+            "image": {
+              "alt": "A cyclo driver pedalling down a Saigon street"
+            }
+          },
+          {
+            "place": "Thien Hau Temple",
+            "text": "Giant incense coils hanging from the ceiling, smoke drifting in the sunlight.",
+            "image": {
+              "alt": "Rows of incense burners with red sticks smoking inside Thien Hau Temple, Cho Lon"
+            }
+          },
+          {
+            "place": "Chinese breakfast",
+            "text": "Dumplings, siu mai and hot tea at a third-generation shop."
+          },
+          {
+            "place": "Back to District 1",
+            "text": "The van drops you at the meeting point."
+          }
+        ],
+        "includes": [
+          "Transfers",
+          "60 minutes by cyclo",
+          "Breakfast",
+          "Temple entry",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Shopping at the market"
+        ],
+        "bring": [
+          "A face mask (incense smoke)",
+          "Small cash if you want to buy things"
+        ]
+      },
+      {
+        "id": "thanh-da",
+        "name": "Thanh Da by bike",
+        "tagline": "Village lanes in the middle of the city",
+        "text": "A peninsula wrapped by the Saigon River, 6 km from the centre yet still full of village lanes, vegetable gardens and a river ferry.",
+        "image": {
+          "alt": "A street vendor's bicycle loaded with pomelos and bananas on a Saigon pavement"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "3 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "15:00 to 18:00"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Bikes in Binh Thanh",
+            "text": "Adjust the saddle, put on a helmet, a test lap."
+          },
+          {
+            "place": "Riverside village lane",
+            "text": "Water palms, old stilt houses, almost no cars.",
+            "image": {
+              "alt": "A street vendor's bicycle loaded with pomelos and bananas on a Saigon pavement"
+            }
+          },
+          {
+            "place": "River ferry",
+            "text": "Wheel your bike onto the boat, five minutes to the other bank.",
+            "image": {
+              "alt": "The bow of a green wooden boat gliding on the Saigon River, downtown towers in the distance"
+            }
+          },
+          {
+            "place": "Vegetable garden",
+            "text": "Coconut water while the gardener tells how the family kept its land."
+          },
+          {
+            "place": "Sunset on the river",
+            "text": "Stop on the dyke and watch the sun go down behind the towers.",
+            "image": {
+              "alt": "The Saigon River curving around the Binh Thanh peninsula at sunset"
+            }
+          },
+          {
+            "place": "Return the bikes",
+            "text": "The end."
+          }
+        ],
+        "includes": [
+          "Bicycle and helmet",
+          "Ferry ticket",
+          "Coconut water",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Hotel pickup"
+        ],
+        "bring": [
+          "Sunscreen",
+          "Comfortable clothes"
+        ]
+      },
+      {
+        "id": "song-chieu",
+        "name": "Saigon River at dusk",
+        "tagline": "Small boat, small canals, the sun going down",
+        "text": "Leave Bach Dang pier in an eight-seat wooden boat, slip into a small canal, reach the main river right at sunset and come back as the city lights up.",
+        "image": {
+          "alt": "The Saigon River curving around the Binh Thanh peninsula at sunset"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "3 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "16:30 to 19:30"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Bach Dang pier",
+            "text": "Board the boat, life jackets, cold water."
+          },
+          {
+            "place": "Thi Nghe canal",
+            "text": "The boat glides slowly under low bridges.",
+            "image": {
+              "alt": "The bow of a green wooden boat gliding on the Saigon River, downtown towers in the distance"
+            }
+          },
+          {
+            "place": "River junction",
+            "text": "Sunset over Thu Thiem, the water turns orange.",
+            "image": {
+              "alt": "The Saigon River curving around the Binh Thanh peninsula at sunset"
+            }
+          },
+          {
+            "place": "Snacks on board",
+            "text": "Fresh spring rolls, sweet soup, sugarcane juice."
+          },
+          {
+            "place": "Back to the pier",
+            "text": "The towers switch on their lights one by one.",
+            "image": {
+              "alt": "The downtown Saigon skyline lit up at night, reflected in the river"
+            }
+          }
+        ],
+        "includes": [
+          "Private wooden boat for 8",
+          "Snacks",
+          "Life jackets",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Alcoholic drinks"
+        ],
+        "bring": [
+          "A light jacket",
+          "A camera"
+        ]
+      },
+      {
+        "id": "len-den",
+        "name": "Saigon after dark",
+        "tagline": "On the back of a motorbike, seven dishes",
+        "text": "One driver per guest, four districts, seven dishes at the places Saigon locals eat, then the city seen from above.",
+        "image": {
+          "alt": "A Saigon intersection at night seen from above, motorbikes and cars turned into bright light trails"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "4 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "18:00 to 22:00"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Hotel pickup",
+            "text": "Your driver hands you a helmet, a raincoat waits under the seat."
+          },
+          {
+            "place": "Snail alley, District 4",
+            "text": "Chilli clams, scallops grilled with scallion oil.",
+            "image": {
+              "alt": "A plate of chilli-fried clams with fresh herbs at a seafood stall"
+            }
+          },
+          {
+            "place": "Sweet soup, District 5",
+            "text": "Glutinous rice balls and jelly drinks at a forty-year-old shop."
+          },
+          {
+            "place": "District 3 pavement",
+            "text": "Grilled rice paper, on plastic stools right by the kerb.",
+            "image": {
+              "alt": "A vendor standing by a steaming pot of broth at a late-night alley stall"
+            }
+          },
+          {
+            "place": "Late banh mi",
+            "text": "A hot crusty loaf with homemade pâté.",
+            "image": {
+              "alt": "A crusty banh mi filled with meat, pickles and green chilli, held in one hand"
+            }
+          },
+          {
+            "place": "Rooftop",
+            "text": "Watch the traffic below turn into trails of light.",
+            "image": {
+              "alt": "The downtown Saigon skyline lit up at night, reflected in the river"
+            }
+          },
+          {
+            "place": "Back to the hotel",
+            "text": "Your driver takes you to the door."
+          }
+        ],
+        "includes": [
+          "One driver per guest",
+          "Helmet, raincoat",
+          "Seven dishes",
+          "Drinks",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Alcoholic drinks"
+        ],
+        "bring": [
+          "An empty stomach",
+          "Closed-toe shoes"
+        ]
+      },
+      {
+        "id": "cu-chi",
+        "name": "Early Cu Chi",
+        "tagline": "At the tunnels before the crowds",
+        "text": "Leave the city at 6 to reach the tunnels while the forest is still cool and before the big tour buses arrive.",
+        "image": {
+          "alt": "A small hidden tunnel entrance among dry leaves at the foot of a tree, Cu Chi Tunnels"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "6 hours 30 minutes"
+          },
+          {
+            "label": "Runs",
+            "value": "06:00 to 12:30"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Pickup in District 1",
+            "text": "A 16-seat van, a light breakfast on board."
+          },
+          {
+            "place": "Cu Chi Tunnels",
+            "text": "Through the gate just as the site opens.",
+            "image": {
+              "alt": "A dirt path leading to a thatched hut in the bamboo forest at the Cu Chi Tunnels site"
+            }
+          },
+          {
+            "place": "Forest and bunkers",
+            "text": "Camouflaged hatches, the smokeless Hoang Cam kitchen, the command bunker."
+          },
+          {
+            "place": "Into the tunnel",
+            "text": "A widened section of tunnel; if you are not keen, take the short stretch.",
+            "image": {
+              "alt": "A small hidden tunnel entrance among dry leaves at the foot of a tree, Cu Chi Tunnels"
+            }
+          },
+          {
+            "place": "Cassava with sesame salt",
+            "text": "What people living in the tunnels used to eat."
+          },
+          {
+            "place": "Back to the city",
+            "text": "Back in District 1 around 12:30."
+          }
+        ],
+        "includes": [
+          "Transfers",
+          "Site entry",
+          "Light breakfast",
+          "Cassava",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Shooting range"
+        ],
+        "bring": [
+          "Long trousers",
+          "Insect repellent"
+        ]
+      },
+      {
+        "id": "can-gio",
+        "name": "Can Gio mangroves",
+        "tagline": "Van, ferry, speedboat, then a walk in the mangroves",
+        "text": "One day, four ways to travel: a van to the pier, a ferry across the river, a speedboat into the mangroves, then a walk on wooden boardwalks through the wetland forest.",
+        "image": {
+          "alt": "Dark green Can Gio mangrove forest stretching along the riverbank"
+        },
+        "unit": "guest",
+        "facts": [
+          {
+            "label": "Duration",
+            "value": "10 hours"
+          },
+          {
+            "label": "Runs",
+            "value": "07:00 to 17:00"
+          },
+          {
+            "label": "Group",
+            "value": "Up to 8 guests"
+          }
+        ],
+        "stages": [
+          {
+            "place": "Pickup in District 1",
+            "text": "A 16-seat van to the ferry pier."
+          },
+          {
+            "place": "Binh Khanh ferry",
+            "text": "Stand among hundreds of motorbikes crossing the river, a salty breeze.",
+            "image": {
+              "alt": "A ferry carrying people and motorbikes across the river, a line of palms on the far bank"
+            }
+          },
+          {
+            "place": "Creeks in the mangroves",
+            "text": "The speedboat slips into narrow creeks, mangrove roots on both sides.",
+            "image": {
+              "alt": "A speedboat cutting through the river, dark green trees on the bank behind"
+            }
+          },
+          {
+            "place": "Rung Sac reserve",
+            "text": "Walk the wooden boardwalks, meet the monkeys, storks and herons.",
+            "image": {
+              "alt": "Dark green Can Gio mangrove forest stretching along the riverbank"
+            }
+          },
+          {
+            "place": "Seafood lunch",
+            "text": "Braised fish, prawns and bitter greens at a seaside restaurant."
+          },
+          {
+            "place": "Seafood market",
+            "text": "A stop at the market for anyone who wants dried seafood to take home.",
+            "image": {
+              "alt": "A fish seller among basins of fresh fish at a country market"
+            }
+          },
+          {
+            "place": "Ferry back",
+            "text": "Back in District 1 around 17:00."
+          }
+        ],
+        "includes": [
+          "Transfers",
+          "Ferry ticket",
+          "60 minutes by speedboat",
+          "Rung Sac entry",
+          "Lunch",
+          "Travel insurance"
+        ],
+        "excludes": [
+          "Seafood bought to take home"
+        ],
+        "bring": [
+          "A wide-brimmed hat",
+          "Insect repellent",
+          "No snacks in hand (the monkeys grab them)"
+        ]
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "/",
+      "sections": [
+        {
+          "id": "gioi-thieu",
+          "eyebrow": "Day tours, groups of up to 8",
+          "title": "Every sigh, gone.",
+          "lead": "Saigon, any way you like: on foot, by cyclo, bicycle, motorbike, boat, ferry or speedboat. Guides born and raised here.",
+          "link": {
+            "label": "See the ways to go"
+          },
+          "image": {
+            "alt": "A Saigon intersection at night seen from above, motorbikes and cars turned into bright light trails"
+          },
+          "haze": {
+            "hint": "Move your mouse to breathe out",
+            "stamp": "Breathed out"
+          }
+        },
+        {
+          "id": "quay",
+          "eyebrow": "Can't decide?",
+          "title": "Today I'm going by",
+          "options": [
+            {
+              "label": "foot"
+            },
+            {
+              "label": "cyclo"
+            },
+            {
+              "label": "bicycle"
+            },
+            {
+              "label": "motorbike"
+            },
+            {
+              "label": "boat"
+            },
+            {
+              "label": "speedboat"
+            }
+          ],
+          "labels": {
+            "spin": "Give it a spin",
+            "again": "Spin again",
+            "empty": "Hit spin, SighGone picks for you.",
+            "note": "Going by {option}: try {tour}, {start} to {end}.",
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        },
+        {
+          "id": "mot-ngay",
+          "eyebrow": "What is SighGone",
+          "title": "One day in Saigon, many ways to get around",
+          "lead": "Saigon locals take you along the routes they travel every day. Each trip is just a few hours, small groups, pickup in the centre."
+        },
+        {
+          "id": "cach-di",
+          "eyebrow": "Six ways to go",
+          "title": "One city, six speeds",
+          "listLabel": "Six ways to see Saigon with SighGone, one photo opens at a time",
+          "images": [
+            {
+              "alt": "A narrow District 3 alley, vegetable sellers on the kerb, townhouses hung with lanterns",
+              "caption": "Walking",
+              "note": "6 tours"
+            },
+            {
+              "alt": "A cyclo driver pedalling down a Saigon street",
+              "caption": "Cyclo",
+              "note": "1 tour"
+            },
+            {
+              "alt": "A street vendor's bicycle loaded with pomelos and bananas on a Saigon pavement",
+              "caption": "Bicycle",
+              "note": "1 tour"
+            },
+            {
+              "alt": "A Saigon intersection at night seen from above, motorbikes and cars turned into bright light trails",
+              "caption": "Motorbike",
+              "note": "1 tour"
+            },
+            {
+              "alt": "The bow of a green wooden boat gliding on the Saigon River, downtown towers in the distance",
+              "caption": "Boat",
+              "note": "2 tours"
+            },
+            {
+              "alt": "A speedboat cutting through the river, dark green trees on the bank behind",
+              "caption": "Speedboat",
+              "note": "1 tour"
+            }
+          ]
+        },
+        {
+          "id": "phong-nen",
+          "eyebrow": "Saigon never sleeps",
+          "title": "Wherever you go, the city is waiting",
+          "image": {
+            "alt": "The Saigon skyline at night, high-rise towers lit up"
+          }
+        },
+        {
+          "id": "gap-thu",
+          "eyebrow": "When are you free?",
+          "title": "Grab a trip.",
+          "lead": "Every capsule is a trip. Hit grab, and whichever one drops out is where you go: morning, afternoon or evening.",
+          "options": [
+            {
+              "label": "early morning"
+            },
+            {
+              "label": "afternoon"
+            },
+            {
+              "label": "evening"
+            },
+            {
+              "label": "full day"
+            }
+          ],
+          "labels": {
+            "sign": "Grab a trip",
+            "spin": "Try a grab",
+            "again": "Grab again",
+            "empty": "Hit grab, the machine picks a trip for you.",
+            "note": "You grabbed {tour}, a {option} trip, {start} to {end}.",
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        },
+        {
+          "id": "khach-ke",
+          "eyebrow": "Guests say",
+          "title": "Before the trip: sigh. After the trip: gone.",
+          "lead": "June to September 2026: 1,240 trips, 6,900 guests, an average score of 4.7 out of 5.",
+          "meter": {
+            "before": "Before:",
+            "after": "After: 0",
+            "label": "{n} sighs"
+          },
+          "items": [
+            {
+              "text": "The driver rode as slowly as a stroll and stopped right where I wanted photos. Seven dishes and I still wanted an eighth.",
+              "note": "took Saigon after dark",
+              "stamp": {
+                "label": "Saigon after dark"
+              }
+            },
+            {
+              "text": "My first cyclo ride, and the driver told stories about Cho Lon the whole way. My daughter remembers every street name.",
+              "note": "took Cho Lon alleys",
+              "stamp": {
+                "label": "Cho Lon alleys"
+              }
+            },
+            {
+              "text": "A ferry, then a speedboat, then a walk in the forest. One day that felt like three different trips.",
+              "note": "took Can Gio mangroves",
+              "stamp": {
+                "label": "Can Gio mangroves"
+              }
+            },
+            {
+              "text": "I had half a day free between two meetings and booked the early tour. Back at the hotel in time to shower and go to work.",
+              "note": "took Saigon wakes up",
+              "stamp": {
+                "label": "Saigon wakes up"
+              }
+            },
+            {
+              "text": "The canal got so narrow we had to duck under the bridges. Sunset on the big river was better than I imagined.",
+              "note": "took Saigon River at dusk",
+              "stamp": {
+                "label": "Saigon River at dusk"
+              }
+            },
+            {
+              "text": "I never thought there were village lanes to cycle right in the city. The coconut water in the garden was so sweet.",
+              "note": "took Thanh Da by bike",
+              "stamp": {
+                "label": "Thanh Da by bike"
+              }
+            }
+          ]
+        },
+        {
+          "id": "gio-chay",
+          "title": "Today's departures",
+          "note": "Saigon time. Tap a trip to hold a seat.",
+          "labels": {
+            "clock": "Saigon time:",
+            "left": "Seats left: {n}",
+            "open": "Seats open",
+            "soon": "Leaving soon",
+            "full": "Full",
+            "gone": "Departed",
+            "tomorrow": "Tomorrow's departures"
+          }
+        }
+      ]
+    },
+    {
+      "path": "dat-tour",
+      "title": "Book a tour",
+      "description": "Pick a date and number of guests, send a hold message for Saigon after dark. SighGone calls back to confirm; pay when you meet your guide.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Book a tour"
+            }
+          ]
+        },
+        {
+          "id": "dat-tour",
+          "pickups": [
+            {
+              "id": "q1",
+              "label": "Hotel in District 1"
+            },
+            {
+              "id": "q-gan",
+              "label": "Hotel in District 3, 4, 5 or 10"
+            },
+            {
+              "id": "q-xa",
+              "label": "Hotel in another district or Thu Duc"
+            }
+          ],
+          "eyebrow": "Ticket counter",
+          "title": "Hold a seat, print a ticket.",
+          "lead": "Once you choose, the machine prints a boarding pass with a ready-to-send message. Hotel pickup: free in District 1, other districts add one fee for the whole group.",
+          "priceNote": "per guest",
+          "currency": "VND",
+          "includes": [
+            "One driver per guest",
+            "Helmet, raincoat",
+            "Seven dishes",
+            "Drinks",
+            "Travel insurance"
+          ],
+          "excludes": [
+            "Alcoholic drinks"
+          ],
+          "policies": [
+            {
+              "title": "Payment and cancellation",
+              "items": [
+                {
+                  "label": "Payment",
+                  "text": "no deposit; pay in cash or by bank transfer when you meet your guide."
+                },
+                {
+                  "label": "Cancellation",
+                  "text": "full refund up to 24 hours before, half refund within 24 hours."
+                },
+                {
+                  "label": "Heavy rain",
+                  "text": "SighGone calls 3 hours ahead to reschedule, free of charge."
+                }
+              ]
+            }
+          ],
+          "labels": {
+            "departures": "Departure date",
+            "tour": "Choose a tour",
+            "pickup": "Where should we pick you up?",
+            "pickupFree": "Free",
+            "guestsTitle": "How many people?",
+            "contactTitle": "Who are you?",
+            "printer": "SighGone, ticket printer no. 08",
+            "pickupLine": "Pickup fee, {label}",
+            "moreDates": "Show {n} more dates",
+            "holdTitle": "Your details",
+            "prevMonth": "Previous month",
+            "nextMonth": "Next month",
+            "month": "M{m}",
+            "seats": "Seats left: {n}",
+            "soldOut": "Sold out",
+            "includesTitle": "Included",
+            "excludesTitle": "Not included",
+            "name": "Full name",
+            "guests": "Guests",
+            "guestsLess": "One guest fewer",
+            "guestsMore": "One more guest",
+            "guestsValue": "{guests} guests",
+            "baseLine": "{price} × {guests} guests",
+            "dealLine": "Deal",
+            "total": "Estimate",
+            "deposit": "Deposit",
+            "phone": "Phone number"
+          },
+          "errors": {
+            "name": "Please enter your name for SighGone.",
+            "phone": "A phone number has 10 digits and starts with 0."
+          },
+          "message": {
+            "guest": "Guest",
+            "msgTitle": "Ready-to-send message",
+            "seats": "Guests",
+            "total": "Estimate",
+            "stamp": "Awaiting confirmation",
+            "template": "Hi SighGone, I'm {name}, phone {phone}. I'd like to hold {guests} seats on {tour} on {date}, pickup at {pickup}. Estimate {total}.",
+            "sms": "Send as text",
+            "call": "Call SighGone",
+            "copy": "Copy message",
+            "copied": "Copied",
+            "from": "Your hotel",
+            "to": "Four districts, seven dishes",
+            "date": "Date",
+            "time": "Pick-up"
+          }
+        }
+      ]
+    },
+    {
+      "path": "hoi-dap",
+      "title": "FAQ",
+      "description": "How far ahead to book, what if it rains, where we pick you up: ask SighGone like you're texting.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "FAQ"
+            }
+          ]
+        },
+        {
+          "id": "hoi-dap",
+          "eyebrow": "FAQ",
+          "title": "Ask first, travel light",
+          "lead": "Pick a suggested question and SighGone answers right away, like a text chat.",
+          "chat": {
+            "label": "Chat with SighGone",
+            "tagline": "Replies from 5:30 to 22:30",
+            "cover": {
+              "alt": "A narrow District 3 alley, vegetable sellers on the kerb, townhouses hung with lanterns"
+            },
+            "greeting": "Hi, SighGone here. Anything you'd like to know before you go, just pick a question below.",
+            "done": "You've asked all the suggested questions",
+            "reset": "Start over",
+            "again": "Ask again from the top",
+            "groupsLabel": "Question groups",
+            "groupDone": "That's every question in this group, try another one",
+            "closing": "Anything still unclear? Just call SighGone:",
+            "you": "You asked:",
+            "pick": "Pick a question to ask"
+          },
+          "ask": {
+            "text": "Didn't find what you need?",
+            "action": "Call",
+            "image": {
+              "alt": "A cyclo driver pedalling down a Saigon street"
+            }
+          },
+          "items": [
+            {
+              "group": "Before booking",
+              "question": "How far ahead should I book?",
+              "answer": "For group tours, 2 hours ahead is fine if seats are left. For private tours, book 2 days ahead so SighGone can arrange vehicles and people."
+            },
+            {
+              "group": "Before booking",
+              "question": "Do I need to pay in advance?",
+              "answer": "No. Send a hold message, SighGone calls to confirm, then pay in cash or by bank transfer when you meet your guide."
+            },
+            {
+              "group": "Before booking",
+              "question": "Can I come on my own?",
+              "answer": "Yes, plenty of people travel solo. You join a group of up to 8; on the motorbike tour everyone has their own driver."
+            },
+            {
+              "group": "On the tour",
+              "question": "Can I eat vegetarian?",
+              "answer": "Yes. Add a note when you book and the places switch to vegetarian dishes for you, same price."
+            },
+            {
+              "group": "On the tour",
+              "question": "Which tours are good for kids?",
+              "answer": "Daytime tours take kids of any age, under 6 free. The evening motorbike tour takes kids from 6, riding with a parent."
+            },
+            {
+              "group": "Weather, cancelling",
+              "question": "What if it rains?",
+              "answer": "Light rain, we still go, raincoats provided. Heavy rain or high tide, SighGone calls 3 hours ahead to reschedule, free of charge."
+            },
+            {
+              "group": "Weather, cancelling",
+              "question": "Do I lose money if I cancel?",
+              "answer": "Cancel more than 24 hours ahead: full refund. Within 24 hours: half refund. No-show without notice: no refund."
+            },
+            {
+              "group": "Pickup, drop-off",
+              "question": "Where do you pick me up?",
+              "answer": "The meeting point at the Opera House is free. Hotel pickup in District 1 or 3 adds 50,000 VND per group."
+            },
+            {
+              "group": "Pickup, drop-off",
+              "question": "Do you drop me back at my hotel?",
+              "answer": "Motorbike tours and tours with the 16-seat van drop you at the door. Walking and cycling tours end in the centre; your guide can call you a ride."
+            }
+          ]
+        },
+        {
+          "id": "chinh-sach",
+          "eyebrow": "Cancellation policy",
+          "title": "Cancel, refund, reschedule.",
+          "lead": "No deposit, so cancelling is easy too. Counted from the tour's departure time.",
+          "rows": [
+            {
+              "when": "Cancel more than 24 hours before departure",
+              "what": "100% refund"
+            },
+            {
+              "when": "Cancel within 24 hours",
+              "what": "50% refund"
+            },
+            {
+              "when": "No-show, no notice",
+              "what": "No refund"
+            },
+            {
+              "when": "Heavy rain, high tide, extreme heat",
+              "what": "SighGone reschedules, free"
+            }
+          ],
+          "note": "Private tours cancelled more than 48 hours ahead get a full refund, since vehicles and people are booked early."
+        }
+      ]
+    },
+    {
+      "path": "cam-nang",
+      "title": "Guide",
+      "description": "Saigon by the hour: what to eat, where to go and how bad the traffic is at each hour; what to wear, which months it rains.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Guide"
+            }
+          ]
+        },
+        {
+          "id": "theo-gio",
+          "eyebrow": "Guide",
+          "title": "Saigon by the hour.",
+          "lead": "This city changes its face every hour. Turn the clock to see what to eat, where to go and whether the roads are jammed.",
+          "windows": [
+            {
+              "name": "Dawn",
+              "eat": "sock-filter coffee, hot banh mi",
+              "do": "walk in the park, watch people doing their morning exercises"
+            },
+            {
+              "name": "Morning",
+              "eat": "pho, hu tieu, Chinese breakfast",
+              "do": "visit a morning market, ride a cyclo through Cho Lon"
+            },
+            {
+              "name": "Midday sun",
+              "eat": "broken rice, grilled pork with noodles",
+              "do": "hide from the sun in a museum or an air-conditioned café"
+            },
+            {
+              "name": "Afternoon",
+              "eat": "sweet soup, sugarcane juice, rice paper salad",
+              "do": "cycle the village lanes by the river"
+            },
+            {
+              "name": "Sunset",
+              "eat": "grilled rice paper, snails",
+              "do": "head to the river, watch the sun set behind the towers"
+            },
+            {
+              "name": "Evening",
+              "eat": "snails, hotpot, late banh mi",
+              "do": "ride pillion and eat your way across four districts"
+            },
+            {
+              "name": "Late night",
+              "eat": "late rice porridge, knock-knock noodles",
+              "do": "go to sleep, there's more to see tomorrow"
+            }
+          ],
+          "labels": {
+            "range": "Drag to change the hour",
+            "now": "Right now in Saigon: {h}h",
+            "eat": "Eat",
+            "do": "Do",
+            "traffic": "Traffic",
+            "trafficValue": "level {n} of 5",
+            "tour": "Good for the {name} tour"
+          }
+        },
+        {
+          "id": "meo",
+          "eyebrow": "Tips",
+          "title": "Before you head out",
+          "items": [
+            {
+              "title": "What to wear?",
+              "text": "Light-coloured cotton, closed-toe shoes if you ride a motorbike. Bring a light jacket: air-conditioned places get chilly. Cover your shoulders for temples and churches.",
+              "link": {
+                "label": "What to bring for a day in the forest"
+              }
+            },
+            {
+              "title": "Which months does it rain?",
+              "text": "The rainy season runs from May to November: an afternoon shower, then it clears. The taller the bar, the more rain.",
+              "chart": {
+                "label": "Rainfall by month: least from January to April, most in September and October"
+              },
+              "link": {
+                "label": "Morning tours dodge the afternoon rain"
+              }
+            },
+            {
+              "title": "Which hours to avoid?",
+              "text": "Traffic is worst from 7:00 to 8:30 and 16:30 to 18:30. SighGone times its tours around both.",
+              "chart": {
+                "label": "Traffic by hour: peaks from 7 to 8 am and 5 to 6 pm"
+              },
+              "link": {
+                "label": "Go in the evening, when the roads clear"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tour/can-gio",
+      "title": "Can Gio mangroves",
+      "description": "One day, four ways to travel: a van to the pier, a ferry across the river, a speedboat into the mangroves, then a walk on wooden boardwalks through the wetland forest.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Can Gio mangroves"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "book": {
+            "label": "Call to hold a seat"
+          },
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "A speedboat cutting through the river, dark green trees on the bank behind"
+            },
+            "text": "Out on the big river the speedboat opens up, salty wind across your face.",
+            "best": "9:00 to 10:00, rising tide"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/len-den",
+      "title": "Saigon after dark",
+      "description": "One driver per guest, four districts, seven dishes at the places Saigon locals eat, then the city seen from above.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Saigon after dark"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "The downtown Saigon skyline lit up at night, reflected in the river"
+            },
+            "text": "From the rooftop, the traffic below becomes endless trails of light.",
+            "best": "21:30, every light is on"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/cho-lon",
+      "title": "Cho Lon alleys",
+      "description": "A van to District 5, then cyclos through the herbal medicine street and lantern street, stopping at Binh Tay Market and Thien Hau Temple.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Cho Lon alleys"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "book": {
+            "label": "Call to hold a seat"
+          },
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "Rows of incense burners with red sticks smoking inside Thien Hau Temple, Cho Lon"
+            },
+            "text": "Smoke from the giant incense coils drifts across a shaft of morning sun.",
+            "best": "9:30, sunlight slanting through the roof"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/thuc-giac",
+      "title": "Saigon wakes up",
+      "description": "Three hours on foot before the rush hour: alley coffee, the morning market, the cathedral, the post office, then a lantern-hung alley.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Saigon wakes up"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "The yellow facade of Saigon Central Post Office under a blue sky, visitors strolling outside"
+            },
+            "text": "The sun is still low and the post office square still empty, no waiting for your photo.",
+            "best": "08:15 to 08:45"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/thanh-da",
+      "title": "Thanh Da by bike",
+      "description": "Cycle a peninsula 6 km from the centre that still has village lanes, a river ferry and vegetable gardens, then sit on the dyke for the sunset.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Thanh Da by bike"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "A street vendor's bicycle loaded with pomelos and bananas on a Saigon pavement"
+            },
+            "text": "Water palms line the village lane; you hear more bicycle bells than horns.",
+            "best": "15:30 to 16:00"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/song-chieu",
+      "title": "Saigon River at dusk",
+      "description": "An eight-seat wooden boat leaves Bach Dang pier, slips through a small canal, reaches the main river right at sunset and returns as the city lights up.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Saigon River at dusk"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "The Saigon River curving around the Binh Thanh peninsula at sunset"
+            },
+            "text": "At the river junction the water turns orange towards Thu Thiem.",
+            "best": "17:45, the sun just above the horizon"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/cu-chi",
+      "title": "Early Cu Chi",
+      "description": "Leave the city at 6 to reach the tunnels while the forest is cool, go underground, eat cassava with sesame salt and be back for lunch.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Early Cu Chi"
+            }
+          ]
+        },
+        {
+          "id": "dat-cho",
+          "priceNote": "No deposit, pay when you meet your guide",
+          "ticketNote": "Free cancellation up to 24 hours before; heavy rain, we reschedule.",
+          "route": {
+            "eyebrow": "Route",
+            "title": "{stages} stops, {vehicles} ways to go.",
+            "labels": {
+              "open": "View the photo of {place} large",
+              "lightbox": {
+                "close": "Close",
+                "prev": "Previous photo",
+                "next": "Next photo"
+              }
+            }
+          },
+          "labels": {
+            "from": "Price",
+            "perNight": "per guest",
+            "book": "Hold a seat",
+            "availability": "Dates with seats",
+            "chooseDay": "Pick a date",
+            "left": "{n} left",
+            "soldOut": "Sold out"
+          }
+        },
+        {
+          "id": "anh",
+          "labels": {
+            "gallery": "Along the way",
+            "open": "View photo {n} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "bao-gom",
+          "title": "Trip receipt",
+          "labels": {
+            "includes": "Included",
+            "excludes": "Not included",
+            "bring": "Bring",
+            "total": "Total per guest",
+            "thanks": "Thank you, see you at the first stop."
+          }
+        },
+        {
+          "id": "canh",
+          "view": {
+            "image": {
+              "alt": "A dirt path leading to a thatched hut in the bamboo forest at the Cu Chi Tunnels site"
+            },
+            "text": "The bamboo forest is still misty, the path untouched by any tour group.",
+            "best": "07:30, as the gates open"
+          },
+          "labels": {
+            "view": "Worth the wait",
+            "best": "Best time"
+          }
+        },
+        {
+          "id": "tour-khac",
+          "eyebrow": "Same vibe",
+          "title": "Other tours you might like",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour",
+      "title": "All tours",
+      "description": "Seven scheduled group tours: morning, afternoon, evening and full day.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "All tours"
+            }
+          ]
+        },
+        {
+          "id": "tat-ca-tour",
+          "eyebrow": "All tours",
+          "title": "Pick your way to breathe out.",
+          "lead": "Walk at dawn, cycle in the afternoon, eat your way through the night on a motorbike: each tour lasts a few hours, groups of up to 8.",
+          "labels": {
+            "count": "{n} tours showing",
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          },
+          "filters": {
+            "label": "Tour filters",
+            "vehicle": "Going by",
+            "buoi": "Time",
+            "topic": "Into",
+            "reset": "Clear filters"
+          },
+          "empty": {
+            "text": "No tour matches this yet. Build a private tour your way?",
+            "link": {
+              "label": "Build a private tour"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour-rieng",
+      "title": "Private tour",
+      "description": "Your whole group on its own, on your own schedule.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Tours"
+            },
+            {
+              "label": "Private tour"
+            }
+          ]
+        },
+        {
+          "id": "tu-ghep",
+          "eyebrow": "Private tour",
+          "title": "Plan your own day.",
+          "lead": "Tap the legs to build your group's day. The page adds up the time and price; send it and SighGone calls back with an exact quote.",
+          "badges": [
+            {
+              "label": "Just setting off"
+            },
+            {
+              "label": "Knows how to switch rides"
+            },
+            {
+              "label": "Every way there is"
+            },
+            {
+              "label": "Saigon local"
+            }
+          ],
+          "presets": [
+            {
+              "name": "Family with young kids",
+              "note": "Less walking, lots to see"
+            },
+            {
+              "name": "Company group",
+              "note": "Every kind of ride in one day"
+            },
+            {
+              "name": "Couple",
+              "note": "Slow, plenty of photo spots"
+            }
+          ],
+          "labels": {
+            "presets": "Suggested routes",
+            "library": "Legs to choose from",
+            "plan": "Your trip",
+            "add": "Add {name} to your trip",
+            "up": "Up",
+            "down": "Down",
+            "remove": "Remove",
+            "upLabel": "Move {name} earlier",
+            "downLabel": "Move {name} later",
+            "removeLabel": "Remove {name}",
+            "empty": "No legs yet. Tap a leg in the list, or pick a suggested route above.",
+            "hours": "{n} hr",
+            "minutes": "{n} min",
+            "guests": "Guests",
+            "guestsLess": "One guest fewer",
+            "guestsMore": "One more guest",
+            "summary": "{n} legs, {duration}",
+            "span": "{from} to {to}",
+            "perGuest": "Per guest (includes 30% private fee)",
+            "total": "{n} guests, estimate",
+            "tooLong": "That's {duration}, more than {max} hours. Drop a leg to take it easy.",
+            "tooLate": "Ends at {end}, after {endBy}. Start earlier or drop a leg.",
+            "tick": "{n}h",
+            "badge": "{n} ways to go:",
+            "date": "Date",
+            "start": "Start time",
+            "name": "Full name",
+            "phone": "Phone number",
+            "phoneExample": "0912 345 678"
+          },
+          "errors": {
+            "legs": "Your trip has no legs yet. Add at least one.",
+            "date": "Pick a date from today onwards.",
+            "name": "Please enter your name for SighGone.",
+            "phone": "That phone number doesn't look right, e.g. 0912 345 678."
+          },
+          "message": {
+            "title": "Your request is ready",
+            "template": "Hi SighGone, I'm {name} ({phone}). A group of {guests} would like a private tour on {date}, starting {start}, about {duration}: {legs}. Estimate {total}.",
+            "sms": "Send as text",
+            "call": "Call {phone}",
+            "copy": "Copy message",
+            "copied": "Copied"
+          }
+        }
+      ]
+    },
+    {
+      "path": "dem-nay",
+      "title": "Saigon after dark",
+      "description": "Four hours on the back of a motorbike, seven dishes, four districts.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Saigon after dark"
+            }
+          ]
+        },
+        {
+          "id": "noi-dung",
+          "eyebrow": "Tonight",
+          "title": "Where to tonight?",
+          "lead": "Someone picks you up at your hotel at six in the evening and drops you back at ten; in between, seven dishes."
+        },
+        {
+          "id": "hanh-trinh",
+          "eyebrow": "Where we go tonight",
+          "title": "{stages} stops in one evening",
+          "labels": {
+            "open": "View the photo of {place} large",
+            "lightbox": {
+              "close": "Close",
+              "prev": "Previous photo",
+              "next": "Next photo"
+            }
+          }
+        },
+        {
+          "id": "dat-cho",
+          "eyebrow": "Hold a seat",
+          "title": "Pick your night, pick your pickup",
+          "lead": "Saigon after dark leaves at 18:00 every evening. Hotel pickup: free in District 1, a fee for other districts.",
+          "pickups": [
+            {
+              "id": "q1",
+              "label": "Hotel in District 1"
+            },
+            {
+              "id": "q-gan",
+              "label": "Hotel in District 3, 4, 5 or 10"
+            },
+            {
+              "id": "q-xa",
+              "label": "Hotel in another district or Thu Duc"
+            }
+          ],
+          "priceNote": "per guest",
+          "currency": "VND",
+          "includes": [
+            "One driver per guest",
+            "Helmet, raincoat",
+            "Seven dishes",
+            "Drinks",
+            "Travel insurance"
+          ],
+          "excludes": [
+            "Alcoholic drinks"
+          ],
+          "labels": {
+            "departures": "Departure date",
+            "tour": "Choose a tour",
+            "pickup": "Pickup point",
+            "pickupLine": "Pickup fee, {label}",
+            "moreDates": "Show {n} more dates",
+            "holdTitle": "Your details",
+            "prevMonth": "Previous month",
+            "nextMonth": "Next month",
+            "month": "{m}/{y}",
+            "seats": "Seats left: {n}",
+            "soldOut": "Sold out",
+            "includesTitle": "Included",
+            "excludesTitle": "Not included",
+            "name": "Full name",
+            "guests": "Guests",
+            "guestsLess": "One guest fewer",
+            "guestsMore": "One more guest",
+            "guestsValue": "{guests} guests",
+            "baseLine": "{price} × {guests} guests",
+            "dealLine": "Deal",
+            "total": "Estimate",
+            "deposit": "Deposit",
+            "phone": "Phone number"
+          },
+          "errors": {
+            "name": "Please enter your name for SighGone.",
+            "phone": "A phone number has 10 digits and starts with 0."
+          },
+          "message": {
+            "brand": "SighGone, seat hold slip",
+            "guest": "Guest",
+            "seats": "Seats",
+            "total": "Estimate",
+            "stamp": "Awaiting confirmation",
+            "template": "Hi SighGone, I'm {name}, phone {phone}. I'd like to hold {guests} seats on {tour} on {date}, pickup at {pickup}. Estimate {total}.",
+            "sms": "Send as text",
+            "call": "Call SighGone",
+            "copy": "Copy message",
+            "copied": "Copied",
+            "from": "Your hotel",
+            "to": "Four districts, seven dishes",
+            "date": "Night of"
+          }
+        }
+      ]
+    },
+    {
+      "path": "ve-chung-toi",
+      "title": "About SighGone",
+      "description": "The story behind the name, our guides, and why groups stop at 8.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "About us"
+            }
+          ]
+        },
+        {
+          "id": "ten-goi",
+          "eyebrow": "About SighGone",
+          "title": "Say Sài Gòn fast and it sounds like Sigh Gone",
+          "morph": {
+            "replay": "Say it fast again"
+          },
+          "lead": "The two falling tone marks are two sighs; one trip and they're gone."
+        },
+        {
+          "id": "cau-chuyen",
+          "eyebrow": "Since 2019",
+          "title": "Say it fast: Saigon",
+          "story": [
+            "Saigon people sigh a lot: traffic, sun, afternoon rain, deadlines. The SighGone team grew up here and knows the corners where people forget to sigh.",
+            "SighGone started in 2019 with one motorbike and one late-night food tour. Now there are 27 guides, six ways to get around, and one rule: no group bigger than 8."
+          ],
+          "quote": {
+            "text": "Say \"Sài Gòn\" fast and it comes out as \"Sigh Gone\": the sigh flies away.",
+            "by": "The story of the name"
+          },
+          "image": {
+            "alt": "A narrow District 3 alley, vegetable sellers on the kerb, townhouses hung with lanterns"
+          },
+          "imageSecond": {
+            "alt": "A cyclo driver pedalling down a Saigon street"
+          }
+        },
+        {
+          "id": "con-so",
+          "eyebrow": "Seven years in pictures",
+          "title": "From one motorbike",
+          "items": [
+            {
+              "label": "guides",
+              "text": "Every one grew up in Saigon and leads the area they know best.",
+              "markLabel": "2019: one person, one motorbike"
+            },
+            {
+              "label": "ways to go",
+              "text": "Slow or fast, on land or on the water.",
+              "icons": [
+                {
+                  "label": "Walking"
+                },
+                {
+                  "label": "Bicycle"
+                },
+                {
+                  "label": "Cyclo"
+                },
+                {
+                  "label": "Motorbike"
+                },
+                {
+                  "label": "Boat"
+                },
+                {
+                  "label": "Speedboat"
+                }
+              ]
+            },
+            {
+              "label": "guests per group",
+              "text": "One guide can look after everyone, and everyone gets to ask questions.",
+              "fadedLabel": "Guest number 9 takes the next trip"
+            }
+          ]
+        },
+        {
+          "id": "huong-dan-vien",
+          "eyebrow": "Who takes you",
+          "title": "Our guides' ID cards.",
+          "tag": "SighGone, guide",
+          "items": [
+            {
+              "image": {
+                "alt": "Illustration of Mai Tram with glasses and braids, shading her eyes among the trees"
+              },
+              "meta": "Binh Thanh, guiding for 4 years",
+              "quote": "Cycles Thanh Da every morning and knows which garden has the sweetest coconuts.",
+              "chips": [
+                {
+                  "text": "Village lanes by bike"
+                },
+                {
+                  "text": "Riverside gardens"
+                }
+              ],
+              "title": "Mai Trâm"
+            },
+            {
+              "image": {
+                "alt": "Illustration of Ut Loc smiling under the trees"
+              },
+              "meta": "Can Gio, guiding for 7 years",
+              "quote": "Grew up in the mangroves and can name every kind of tree.",
+              "chips": [
+                {
+                  "text": "Mangrove forest"
+                },
+                {
+                  "text": "Speedboat"
+                }
+              ],
+              "title": "Út Lộc"
+            },
+            {
+              "image": {
+                "alt": "Illustration of Bao Vy with glasses and braids, smiling under a tree"
+              },
+              "meta": "District 1, guiding for 3 years",
+              "quote": "Tells the story of every old building like it's her own family's.",
+              "chips": [
+                {
+                  "text": "Old-town architecture"
+                },
+                {
+                  "text": "Walking"
+                }
+              ],
+              "title": "Bảo Vy"
+            },
+            {
+              "meta": "District 4, guiding for 9 years",
+              "quote": "Knows the house number of every alley with good snails.",
+              "chips": [
+                {
+                  "text": "Street food"
+                },
+                {
+                  "text": "Saigon at night"
+                }
+              ],
+              "title": "Tư Hạnh"
+            },
+            {
+              "meta": "District 5, guiding for 6 years",
+              "quote": "His grandfather pedalled a cyclo in Cho Lon from 1970.",
+              "chips": [
+                {
+                  "text": "Chinese-Vietnamese culture"
+                },
+                {
+                  "text": "Cyclo"
+                }
+              ],
+              "title": "Khôi"
+            },
+            {
+              "meta": "District 7, guiding for 12 years",
+              "quote": "Thirty years steering boats on the Saigon River.",
+              "chips": [
+                {
+                  "text": "River routes"
+                },
+                {
+                  "text": "Boat"
+                }
+              ],
+              "title": "Uncle Năm"
+            }
+          ]
+        },
+        {
+          "id": "cam-ket",
+          "eyebrow": "House rules",
+          "title": "Four things SighGone stands by.",
+          "lead": "Our main job: show guests a Saigon that breathes slower, and make sure the money guests pay supports the guides, the family eateries and the drivers in the alleys.",
+          "progress": "{n}/{total} promises unlocked",
+          "unlocked": "Unlocked",
+          "items": [
+            {
+              "title": "The price is the price",
+              "text": "The price online already covers transport, food, drinks and insurance. Nobody asks for more on the day.",
+              "value": "0 VND",
+              "valueLabel": "hidden fees"
+            },
+            {
+              "title": "No deposit, easy cancelling",
+              "text": "No deposit to hold a seat. Cancel more than 24 hours before departure for a full refund; heavy rain, we reschedule for free.",
+              "value": "100%",
+              "valueLabel": "refund if you cancel early"
+            },
+            {
+              "title": "Paid before the trip",
+              "text": "Guides are paid before setting off, so they never live on shopping commissions.",
+              "valueLabel": "shopping stops"
+            },
+            {
+              "title": "The money stays in the alley",
+              "text": "We eat at family places, ride with drivers from the neighbourhood, and never take guests to commission shops.",
+              "value": "30%",
+              "valueLabel": "of the ticket goes to family eateries"
+            }
+          ]
+        },
+        {
+          "id": "tien-di-dau",
+          "eyebrow": "Transparency",
+          "title": "Where does a ticket go?",
+          "lead": "Each coin is a share of the ticket price. The two tallest stacks go to the guides and the family eateries; SighGone's share is one short stack.",
+          "labels": {
+            "total": "One {name} ticket",
+            "unit": "Each coin is {n}% of the ticket"
+          },
+          "parts": [
+            {
+              "label": "Guides",
+              "text": "Paid before the trip, no commissions."
+            },
+            {
+              "label": "Family eateries",
+              "text": "Seven dishes and drinks along the way."
+            },
+            {
+              "label": "Vehicles and fuel",
+              "text": "One driver per guest, fuel, parking."
+            },
+            {
+              "label": "Insurance, office",
+              "text": "Travel insurance, raincoats, the Alley 42 phone line."
+            },
+            {
+              "label": "SighGone's share",
+              "text": "Saved for opening new routes."
+            }
+          ]
+        },
+        {
+          "id": "an-toan",
+          "eyebrow": "Safety",
+          "title": "You can only breathe out when you feel safe.",
+          "items": [
+            {
+              "title": "Up to 8 guests",
+              "text": "One guide can keep an eye on everyone; nobody gets left behind."
+            },
+            {
+              "title": "Certified helmets",
+              "text": "Every motorbike and bicycle comes with a helmet; small sizes for kids."
+            },
+            {
+              "title": "Life jackets on every water trip",
+              "text": "Boat, river ferry, speedboat, car ferry: life jacket on before you board."
+            },
+            {
+              "title": "Travel insurance",
+              "text": "Included in the tour price, for every guest."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "lien-he",
+      "title": "Contact",
+      "description": "SighGone's meeting point, opening hours and phone number.",
+      "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Breadcrumb",
+          "home": "Home",
+          "items": [
+            {
+              "label": "Contact"
+            }
+          ]
+        },
+        {
+          "id": "lien-he",
+          "eyebrow": "Contact",
+          "title": "Drop by Alley 42.",
+          "plate": {
+            "lines": [
+              "Alley 42",
+              "District 1",
+              "HCMC"
+            ],
+            "label": "No. 8, Alley 42, District 1, Ho Chi Minh City"
+          },
+          "labels": {
+            "open": "Open now, until {to}",
+            "closed": "Closed, opens again at {from}"
+          },
+          "ways": [
+            {
+              "label": "Call",
+              "text": "Fastest, 5:30 to 22:30",
+              "hint": "Fastest",
+              "action": "Call now"
+            },
+            {
+              "label": "Text",
+              "hint": "After hours is fine too",
+              "text": "Text us even after hours; SighGone calls back the next morning."
+            },
+            {
+              "label": "Email",
+              "text": "Private tours, companies, quotes",
+              "hint": "Private tours, quotes",
+              "action": "Write an email"
+            },
+            {
+              "label": "Visit",
+              "text": "Meeting point for all tours: the Opera House",
+              "hint": "No. 8, yellow door"
+            }
+          ],
+          "directions": {
+            "title": "Finding the alley",
+            "steps": [
+              "Stand in front of the Opera House and walk towards Ben Thanh Market for about 5 minutes.",
+              "When you see a café with a row of red plastic stools, turn left into Alley 42.",
+              "House no. 8, painted yellow door, with a blue house-number plate."
+            ],
+            "link": {
+              "label": "Open the map"
+            }
+          },
+          "message": {
+            "title": "Quick message",
+            "name": "What's your name?",
+            "text": "What would you like to ask?",
+            "placeholder": "For example: 4 of us want the late-night food tour on Saturday, pickup in District 1.",
+            "sms": "Write a text",
+            "template": "Hi SighGone, I'm {name}. {text}",
+            "subject": "Message from {name}",
+            "email": "Send an email"
+          },
+          "errors": {
+            "name": "Tell SighGone your name so we can call you back.",
+            "text": "Write a few words about what you need."
+          },
+          "bell": {
+            "open": "OPEN",
+            "closed": "CLOSED",
+            "keys": "Choose how to reach us",
+            "ringing": "Ringing",
+            "missed": "The SighGone team has gone home for now, back at {from}. Leave a message and we'll call tomorrow morning.",
+            "draft": "Not sent, just a draft",
+            "empty": "Your message will appear here"
+          }
+        },
+        {
+          "id": "chinh-sach",
+          "eyebrow": "Cancellation policy",
+          "title": "Cancel, refund, reschedule.",
+          "lead": "No deposit, so cancelling is easy too. Counted from the tour's departure time.",
+          "rows": [
+            {
+              "when": "Cancel more than 24 hours before departure",
+              "what": "100% refund"
+            },
+            {
+              "when": "Cancel within 24 hours",
+              "what": "50% refund"
+            },
+            {
+              "when": "No-show, no notice",
+              "what": "No refund"
+            },
+            {
+              "when": "Heavy rain, high tide, extreme heat",
+              "what": "SighGone reschedules, free"
+            }
+          ],
+          "note": "Private tours cancelled more than 48 hours ahead get a full refund, since vehicles and people are booked early."
+        }
+      ]
+    },
+    {
+      "path": "tuyen-so-1",
+      "title": "Route No. 1",
+      "description": "SighGone's new tour: the elevated metro, street snacks at Ben Thanh Market, a cyclo ride round Independence Palace, Notre-Dame Cathedral, sunset from Bitexco. First run 1 November 2026, launch price 690,000 VND.",
+      "sections": [
+        {
+          "id": "tuyen-so-1",
+          "eyebrow": "First run 01.11.2026",
+          "title": "Route No.",
+          "lead": "6 stations. 4 hours. One Saigon.",
+          "price": {
+            "now": "690,000 VND",
+            "was": "890,000 VND"
+          },
+          "poster": {
+            "image": {
+              "alt": "Landmark 81 tower against a golden sun"
+            }
+          },
+          "stopsLabel": "Stations on Route No. 1",
+          "stops": [
+            {
+              "place": "Landmark 81",
+              "short": "Metro",
+              "note": "See the tower through the train window",
+              "how": "Elevated metro",
+              "image": {
+                "alt": "Landmark 81 tower"
+              }
+            },
+            {
+              "place": "Ben Thanh Market",
+              "short": "Ben Thanh",
+              "note": "Three street snacks around the market",
+              "how": "On foot",
+              "image": {
+                "alt": "The clock tower of Ben Thanh Market"
+              }
+            },
+            {
+              "place": "Independence Palace",
+              "short": "Palace",
+              "note": "Round the palace under the tamarind trees",
+              "how": "Cyclo",
+              "image": {
+                "alt": "The front of Independence Palace"
+              }
+            },
+            {
+              "place": "Notre-Dame Cathedral",
+              "short": "Cathedral",
+              "note": "Two buildings over a hundred years old",
+              "how": "On foot",
+              "image": {
+                "alt": "Notre-Dame Cathedral with its two bell towers"
+              }
+            },
+            {
+              "place": "Bitexco",
+              "short": "Bitexco",
+              "note": "Watch the sunset, then the city lights up",
+              "how": "Lift",
+              "image": {
+                "alt": "Bitexco tower with its jutting helipad"
+              }
+            }
+          ],
+          "start": {
+            "short": "Opera House"
+          },
+          "end": {
+            "kicker": "Last station, 17:30",
+            "title": "The city lights up and you're on the top floor"
+          }
+        },
+        {
+          "id": "nhin-truoc",
+          "eyebrow": "A look ahead",
+          "title": "Six stations, six frames",
+          "listLabel": "Photos of the six stations on Route No. 1",
+          "images": [
+            {
+              "alt": "Nguyen Hue walking street, the lotus fountain and City Hall in the distance",
+              "caption": "Saigon Opera House"
+            },
+            {
+              "alt": "Saigon at sunset from above, the Nhieu Loc canal and streams of headlights",
+              "caption": "Saigon from above"
+            },
+            {
+              "alt": "Ben Thanh Market from the crossroads, motorbikes and taxis passing in the sun",
+              "caption": "Ben Thanh Market"
+            },
+            {
+              "alt": "Independence Palace and its lawn under a cloudy sky",
+              "caption": "Independence Palace"
+            },
+            {
+              "alt": "Notre-Dame Cathedral in the afternoon, motorbikes streaming past the square",
+              "caption": "Notre-Dame Cathedral"
+            },
+            {
+              "alt": "Bitexco and the riverside towers lighting up",
+              "caption": "Bitexco at sunset"
+            }
+          ]
+        },
+        {
+          "id": "giu-cho",
+          "eyebrow": "Hold a seat",
+          "title": "Only 8 seats on the first run",
+          "lead": "No deposit. Send a hold message, SighGone calls to confirm, you pay when you meet your guide.",
+          "priceNote": "per guest",
+          "currency": "VND",
+          "tourName": "Route No. 1",
+          "deal": {
+            "label": "Hold before 31/10 and save 200,000 VND per guest"
+          },
+          "includes": [
+            "Metro ticket, 45-minute cyclo ride",
+            "Bitexco observation deck ticket",
+            "Three street snacks, bottled water",
+            "A Saigon-born guide"
+          ],
+          "excludes": [
+            "Extra drinks",
+            "Hotel pick-up"
+          ],
+          "bring": [
+            "Walking shoes",
+            "A light raincoat (rainy season)",
+            "A camera"
+          ],
+          "labels": {
+            "departures": "Departure dates",
+            "guestsTitle": "How many of you?",
+            "contactTitle": "Who are you?",
+            "printer": "SighGone, ticket printer No. 08",
+            "month": "Month {m}",
+            "seats": "Seats left: {n}",
+            "soldOut": "Sold out",
+            "includesTitle": "Included",
+            "excludesTitle": "Not included",
+            "bringTitle": "Bring along",
+            "name": "Full name",
+            "guests": "Guests",
+            "guestsLess": "One guest fewer",
+            "guestsMore": "One more guest",
+            "guestsValue": "{guests} guests",
+            "baseLine": "{price} × {guests} guests",
+            "dealLine": "Launch price",
+            "total": "Estimated total",
+            "dealCountdown": "Launch price ends in {d} days {h}:{m}:{s}",
+            "seatPick": "Pick seats",
+            "seatMap": "Seat map for the selected departure",
+            "seatTaken": "Seat {n} is taken",
+            "phone": "Phone number"
+          },
+          "errors": {
+            "name": "Please enter your name.",
+            "phone": "A phone number has 10 digits and starts with 0."
+          },
+          "message": {
+            "brand": "SighGone",
+            "guest": "Guest",
+            "msgTitle": "Ready-made message",
+            "seats": "Guests",
+            "total": "Estimated total",
+            "stamp": "Awaiting confirmation",
+            "template": "Hi SighGone, I'm {name}, phone {phone}. I'd like to hold {guests} seats on Route No. 1 on {date}, seats {seats}. Estimated total {total}.",
+            "sms": "Send message",
+            "call": "Call SighGone",
+            "copy": "Copy text",
+            "copied": "Copied",
+            "from": "Opera House station",
+            "to": "Bitexco at sunset",
+            "date": "Date",
+            "time": "Pick-up"
+          }
+        },
+        {
+          "id": "hoi-dap",
+          "eyebrow": "Questions",
+          "title": "Ask first, travel light",
+          "lead": "Pick a suggested question and SighGone answers straight away, like a chat.",
+          "chat": {
+            "label": "Chat with SighGone",
+            "tagline": "Replies from 5:30 to 22:30",
+            "cover": {
+              "alt": "A narrow District 3 alley, vegetable sellers on the kerb, townhouses hung with lanterns"
+            },
+            "greeting": "Hi, SighGone here. Anything you want to know before you go, just pick a question below.",
+            "done": "You've asked all the suggested questions",
+            "reset": "Start over",
+            "again": "Ask from the start",
+            "groupsLabel": "Question groups",
+            "groupDone": "No more questions in this group, pick another one",
+            "closing": "Anything still unclear? Call SighGone directly:",
+            "you": "You asked:",
+            "pick": "Pick a question to ask"
+          },
+          "ask": {
+            "text": "Can't find what you need?",
+            "action": "Call",
+            "image": {
+              "alt": "A cyclo driver pedalling down a Saigon street"
+            }
+          },
+          "items": [
+            {
+              "group": "Before booking",
+              "question": "How far ahead should I book?",
+              "answer": "For shared tours, 2 hours ahead is fine if there are seats. For private tours, book 2 days ahead so SighGone can arrange vehicles and people."
+            },
+            {
+              "group": "Before booking",
+              "question": "Do I pay in advance?",
+              "answer": "No. Send a hold message, SighGone calls to confirm, then pay cash or by transfer when you meet your guide."
+            },
+            {
+              "group": "Before booking",
+              "question": "Can I go alone?",
+              "answer": "Yes, plenty of people do. You join a group of up to 8, and on motorbike tours everyone has their own driver."
+            },
+            {
+              "group": "On the tour",
+              "question": "Can I eat vegetarian?",
+              "answer": "Yes. Add a note when you hold your seat and the eateries switch to vegetarian dishes, same price."
+            },
+            {
+              "group": "On the tour",
+              "question": "Which tours suit children?",
+              "answer": "Daytime tours take children of any age, free under 6. Night motorbike tours take children from 6, riding with a parent."
+            },
+            {
+              "group": "Weather, cancelling",
+              "question": "What if it rains?",
+              "answer": "Light rain, we still go, with raincoats. Heavy rain or high tide, SighGone calls 3 hours ahead to reschedule at no cost."
+            },
+            {
+              "group": "Weather, cancelling",
+              "question": "Do I lose money if I cancel?",
+              "answer": "Cancel more than 24 hours ahead: full refund. Within 24 hours: half refund. No-show without notice: no refund."
+            },
+            {
+              "group": "Pick-up, drop-off",
+              "question": "Where do you pick me up?",
+              "answer": "The meeting point at the Saigon Opera House is free. Hotel pick-up in District 1 or 3 is 50,000 VND extra per group."
+            },
+            {
+              "group": "Pick-up, drop-off",
+              "question": "Do you drop me back at my hotel?",
+              "answer": "Motorbike tours and tours with a 16-seat van drop you at your door. Walking and cycling tours end in the centre, and your guide can call a ride if needed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "404",
+      "title": "Lost in an alley",
+      "description": "This page doesn't exist; try another SighGone trip.",
+      "sections": [
+        {
+          "id": "noi-dung",
+          "plate": {
+            "lines": [
+              "An alley",
+              "that isn't",
+              "real"
+            ]
+          },
+          "title": "Lost in an alley!",
+          "lead": "Getting lost in an alley is normal in Saigon. The page you wanted isn't here, but these trips are real:"
+        },
+        {
+          "id": "goi-y",
+          "labels": {
+            "duration": "{n} hrs",
+            "priceNote": "per {unit}, {buoi}",
+            "seatsLeft": "{date} trip, seats left: {n}"
+          }
+        }
+      ]
+    }
+  ],
+  "credits": [
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Background removed, cropped, resized, converted to WebP"
+    },
+    {
+      "note": "Background removed, cropped, resized, converted to WebP"
+    },
+    {
+      "note": "Background removed, cropped, resized, converted to WebP"
+    },
+    {
+      "note": "Background removed, cropped, resized, converted to WebP"
+    },
+    {
+      "note": "A photo of Bitexco tower (the original file name on Commons is wrong). Background removed, cropped, resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Resized, converted to WebP"
+    },
+    {
+      "note": "Cropped to a portrait, converted to WebP",
+      "author": "ClauKi team, made with Gemini"
+    },
+    {
+      "note": "Cropped to a portrait, converted to WebP",
+      "author": "ClauKi team, made with Gemini"
+    },
+    {
+      "note": "Cropped to a portrait, converted to WebP",
+      "author": "ClauKi team, made with Gemini"
+    }
+  ]
+}
