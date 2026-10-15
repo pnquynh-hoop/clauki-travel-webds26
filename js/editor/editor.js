@@ -789,10 +789,10 @@ function fit() {
 
 function setMode(mode) {
   state.mode = mode;
-  ui.modes.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+  ui.viewToggle.setAttribute('aria-checked', String(mode === 'view'));
   frameDoc()?.querySelectorAll('[data-ed-hover]').forEach((el) => el.removeAttribute('data-ed-hover'));
   markSelection();
-  toast(mode === 'view' ? 'Xem thử: bấm, cuộn như khách. Bấm "Chỉnh" để quay lại.' : 'Chỉnh: bấm một khối để chọn.');
+  toast(mode === 'view' ? 'Đang xem thử: bấm, cuộn như khách. Tắt "Xem thử" để chỉnh tiếp.' : 'Đang chỉnh: bấm một khối để chọn.');
 }
 
 function onKey(e) {
@@ -908,8 +908,10 @@ function build() {
   });
   ui.undo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: undo, text: 'Hoàn tác' });
   ui.redo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: redo, text: 'Làm lại' });
-  ui.modes = [['edit', 'Chỉnh'], ['view', 'Xem thử']].map(([mode, label]) =>
-    h('button', { type: 'button', class: 'ed-seg', 'data-mode': mode, 'aria-pressed': String(mode === 'edit'), onclick: () => setMode(mode), text: label }));
+  // Công tắc Xem thử: tắt là đang chỉnh (bấm khối để chọn), bật là xem như khách (bấm, cuộn như trang thật).
+  ui.viewToggle = h('button', { type: 'button', class: 'ed-switch', role: 'switch', 'aria-checked': 'false', onclick: () => setMode(state.mode === 'view' ? 'edit' : 'view') },
+    h('span', { class: 'ed-switch__track', 'aria-hidden': 'true' }, h('span', { class: 'ed-switch__thumb' })),
+    h('span', { text: 'Xem thử' }));
   ui.devices = deviceButtons(h, DESKTOP, (width) => {
     state.device = width;
     fit();
@@ -921,7 +923,7 @@ function build() {
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, ui.brand, ui.status),
     h('div', { class: 'ed-top__group' }, ui.pageSelect, ui.undo, ui.redo),
-    h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Chế độ' }, ui.modes),
+    h('div', { class: 'ed-top__group ed-top__wide' }, ui.viewToggle),
     h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
     h('div', { class: 'ed-top__group ed-top__end' },
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: resetAll, text: 'Về bản gốc' }),
