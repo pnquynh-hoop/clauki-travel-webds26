@@ -229,6 +229,10 @@ export function openBuilder({ brands }) {
     if (draft.profile) {
       setStatus([`${draft.profile.ten}: ${draft.profile.slogan}`, 'Nháp lần trước, còn trên máy này.'], 'ok');
       ui.slug.value = slugify(draft.profile.ten);
+    } else if (draft.copyOf) {
+      // Bản sao của một site đã xuất bản (nút Tạo bản sao): gợi ý tên mới để khỏi trùng với bản gốc.
+      setStatus([`Bản sao của /${draft.copyOf}/, còn trên máy này.`, 'Đặt tên mới rồi xuất bản, hoặc mở nháp để xem.'], 'ok');
+      ui.slug.value = `${draft.copyOf.slice(0, 24)}-copy`;
     }
     showPublish();
   }

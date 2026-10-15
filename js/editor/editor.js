@@ -40,6 +40,8 @@ const state = {
   loadToken: 0,
   // Điều khiển cần nhận lại con trỏ bàn phím sau lần vẽ lại kế tiếp (ví dụ nút Xuống của khối vừa dời).
   focusKey: null,
+  // Thương hiệu làm khung (theme.css, ảnh): bằng id với thương hiệu có sẵn, khác id với site khách.
+  baseId: null,
   // Lúc ghi nháp gần nhất (Date) để hiện "Đã lưu lúc ..." ở thanh trên.
   savedAt: null,
 };
@@ -147,7 +149,9 @@ function isOriginal() {
 // Nháp gửi thẳng cho trang trong khung (xem trước được cả khi bộ nhớ bị chặn), đồng thời ghi trên máy.
 function persist() {
   const original = isOriginal();
-  const draft = original ? null : { base: fingerprint(state.raw), content: state.content, theme: state.theme };
+  // Site khách: ghi kèm base trong theme để core.js dựng nháp trên đúng thương hiệu khung.
+  const theme = state.baseId && state.baseId !== state.id ? { ...state.theme, base: state.baseId } : state.theme;
+  const draft = original ? null : { base: fingerprint(state.raw), content: state.content, theme };
   if (original) clearDraft(state.id);
   else if (!writeDraft(state.id, draft)) {
     toast('Trình duyệt chặn bộ nhớ: xem thử được trong editor, nhưng thoát ra là mất.');
@@ -190,7 +194,7 @@ function onFrameLoad() {
 
 // Trang trong khung vừa dựng xong: đổi thương hiệu (nút của BTC trong khung) hoặc đổi trang thì editor theo.
 async function onRendered(detail) {
-  if (detail.id !== state.id || !state.raw) await loadBrand(detail.id, detail.raw);
+  if (detail.id !== state.id || !state.raw) await loadBrand(detail.id, detail.raw, detail.base);
   if (detail.id !== state.id) return;
   if (norm(detail.page) !== state.page) state.sel = null;
   state.page = norm(detail.page);
@@ -203,9 +207,11 @@ async function onRendered(detail) {
   refresh();
 }
 
-async function loadBrand(id, raw) {
+// base: thương hiệu làm khung của site khách (lấy theme.css, ảnh từ thư mục đó); thương hiệu có sẵn thì chính nó.
+async function loadBrand(id, raw, base = null) {
   const token = ++state.loadToken;
   state.id = id;
+  state.baseId = base ?? id;
   state.raw = clone(raw);
   const draft = readDraft(id, raw);
   state.content = clone(draft?.content ?? raw);
@@ -216,17 +222,17 @@ async function loadBrand(id, raw) {
   state.sel = null;
   state.base = {};
   let css = '';
-  const base = {};
+  const vars = {};
   try {
-    css = await (await fetch(`/brands/${id}/theme.css`)).text();
+    css = await (await fetch(`/brands/${state.baseId}/theme.css`)).text();
     const root = /:root\s*\{([\s\S]*?)\}/.exec(css)?.[1] ?? '';
-    for (const m of root.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) base[m[1]] = m[2].trim();
+    for (const m of root.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) vars[m[1]] = m[2].trim();
   } catch {
     css = '';
   }
   if (token !== state.loadToken) return;
   state.baseCss = css;
-  state.base = base;
+  state.base = vars;
   const brand = state.brands.find((b) => b.id === id);
   document.title = `Thử chỉnh - ${brand?.label ?? id}`;
 }
@@ -392,7 +398,8 @@ function contentEl() {
     h,
     key: `f:${key}`,
     images: imageLibrary(state.content),
-    assetUrl: (src) => `/brands/${state.id}/${src}`,
+    // Ảnh của site khách ghi đường dẫn tuyệt đối (/brands/<khung>/images/...): giữ nguyên.
+    assetUrl: (src) => (String(src).startsWith('/') ? src : `/brands/${state.baseId}/${src}`),
     set: (path, value, label) => setField(key, path, value, label),
     list: (path, action, i, item) => listOp(key, path, action, i, item),
   });

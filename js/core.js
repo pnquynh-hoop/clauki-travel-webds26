@@ -345,11 +345,12 @@ async function render(raw, useDraft = true) {
   if (firstRender) scrollToHash();
   firstRender = false;
   // page là trang thật sự đã dựng (ví dụ "404" khi địa chỉ trỏ tới trang không có), để editor sửa đúng trang đó.
-  lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft) };
+  // guest và base: site khách (không phải thương hiệu có sẵn) và thương hiệu làm khung của nó, để nút Thử chỉnh và editor biết.
+  lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft), guest: Boolean(guestTheme), base: guestTheme?.base ?? null };
   document.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
   // Trong khung editor thì báo cả lên thẻ iframe: editor nghe một lần ở đó, không phụ thuộc lúc khung tải.
   if (IN_EDITOR) window.frameElement.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
-  if (!IN_EDITOR && !guestTheme) mountLauncher();
+  if (!IN_EDITOR) mountLauncher();
 }
 
 // Về bản gốc (nháp đã xoá): trang đang mở chỉ có trong nháp (trang thêm khi thử) thì về trang chủ.
@@ -469,14 +470,15 @@ export async function start(components = {}) {
       openBuilder({ brands: list.brands });
       return;
     }
-    if (here.guest) {
-      await startGuest(here, ids);
-      return;
-    }
     // Địa chỉ có ?sua: mở editor; trang thật chạy trong khung của editor, nên trang ngoài không dựng gì.
+    // Site khách cũng sửa được: bản sửa là nháp trên máy này (như thương hiệu có sẵn), không đụng bản đã xuất bản.
     if (new URLSearchParams(location.search).has('sua') && !IN_EDITOR) {
       const { openEditor } = await import('./editor/editor.js');
-      openEditor({ brands: list.brands, id: here.id ?? list.default, page: here.page });
+      openEditor({ brands: list.brands, id: here.guest ?? here.id ?? list.default, page: here.page });
+      return;
+    }
+    if (here.guest) {
+      await startGuest(here, ids);
       return;
     }
     listenDraft();
