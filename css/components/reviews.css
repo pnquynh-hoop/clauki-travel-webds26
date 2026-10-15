@@ -305,3 +305,121 @@
     opacity: 1;
   }
 }
+
+/* Kiểu notes: tường giấy note. Mỗi tờ một màu giấy pha từ màu thương hiệu, nghiêng theo thứ tự, dán băng keo trên đầu; rê chuột
+   thì tờ thẳng lại và nhấc lên. Cuộn tới thì các tờ dán lên lần lượt (một lần). */
+.reviews--notes {
+  background: var(--color-bg);
+}
+
+.reviews__wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: 2rem 1.5rem;
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reviews__sticky:nth-child(6n + 1) { --paper: color-mix(in srgb, var(--color-primary) 38%, #fff); --rot: -1.5deg; }
+.reviews__sticky:nth-child(6n + 2) { --paper: color-mix(in srgb, var(--color-mark, var(--color-accent)) 16%, #fff); --rot: 1.2deg; }
+.reviews__sticky:nth-child(6n + 3) { --paper: color-mix(in srgb, var(--color-accent) 14%, #fff); --rot: -0.8deg; }
+.reviews__sticky:nth-child(6n + 4) { --paper: var(--color-surface); --rot: 1.6deg; }
+.reviews__sticky:nth-child(6n + 5) { --paper: color-mix(in srgb, var(--color-primary) 18%, #fff); --rot: -1.2deg; }
+.reviews__sticky:nth-child(6n) { --paper: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface)); --rot: 0.9deg; }
+
+.reviews__note {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  height: 100%;
+  margin: 0;
+  padding: 1.6rem 1.3rem 1.2rem;
+  color: var(--color-ink);
+  background: var(--paper, var(--color-surface));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 8%, transparent), 0 18px 30px -18px color-mix(in srgb, var(--color-ink) 45%, transparent);
+  transform: rotate(var(--rot, -1.5deg));
+  transition: transform calc(var(--duration, 0.2s) * 1.5) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reviews__note:hover {
+  transform: rotate(0) translateY(-6px);
+}
+
+/* Băng keo dán trên đầu tờ giấy, nghiêng ngược chiều với tờ. */
+.reviews__note::before {
+  content: '';
+  position: absolute;
+  top: -0.7rem;
+  left: 50%;
+  width: 5.5rem;
+  height: 1.4rem;
+  translate: -50% 0;
+  rotate: calc(var(--rot, -1.5deg) * -2);
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13);
+}
+
+.reviews__note .reviews__text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.reviews__who {
+  font-weight: 700;
+}
+
+.reviews__who small {
+  display: block;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.reviews__meter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.reviews__puffs {
+  display: inline-flex;
+  gap: 3px;
+  vertical-align: middle;
+}
+
+.reviews__puffs i {
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.reviews__after {
+  color: #0d7a52;
+}
+
+.reviews__wall:not(.is-in) .reviews__note {
+  opacity: 0;
+  translate: 0 1.5rem;
+}
+
+.reviews__wall.is-in .reviews__note {
+  transition: opacity 0.5s ease calc(var(--i, 0) * 90ms), translate 0.5s ease calc(var(--i, 0) * 90ms), transform calc(var(--duration, 0.2s) * 1.5) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviews__wall:not(.is-in) .reviews__note {
+    opacity: 1;
+    translate: none;
+  }
+
+  .reviews__note {
+    transition: none;
+  }
+}
+

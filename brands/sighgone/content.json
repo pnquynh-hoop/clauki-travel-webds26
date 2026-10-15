@@ -2203,18 +2203,23 @@
         {
           "type": "reviews",
           "id": "khach-ke",
-          "variant": "postcard",
-          "eyebrow": "Khách kể",
-          "title": "Thở phào rồi mới viết",
+          "variant": "notes",
+          "eyebrow": "Khách nói",
+          "title": "Trước chuyến: haizz. Sau chuyến: hết.",
           "lead": "Từ tháng 6 đến tháng 9/2026: 1.240 chuyến, 6.900 khách, điểm trung bình 4,7 trên 5.",
-          "scoreLabel": "điểm",
-          "dateLabel": "Ngày đi",
+          "meter": {
+            "before": "Trước chuyến:",
+            "after": "Sau chuyến: 0",
+            "label": "{n} lần thở dài"
+          },
           "items": [
             {
               "rating": 5,
               "text": "Tài xế chạy chậm như đi dạo, dừng đúng chỗ cho mình chụp. Bảy món mà muốn ăn thêm món tám.",
               "name": "Thu Hà",
               "from": "Hà Nội",
+              "note": "đi Sài Gòn lên đèn",
+              "meter": 5,
               "stamp": {
                 "value": "18:00",
                 "label": "Sài Gòn lên đèn"
@@ -2226,6 +2231,8 @@
               "text": "Lần đầu ngồi xích lô, chú đạp xe kể chuyện Chợ Lớn suốt đường. Con gái mình nhớ tên từng con phố.",
               "name": "Minh Khoa",
               "from": "Cần Thơ",
+              "note": "đi Hẻm Chợ Lớn",
+              "meter": 4,
               "stamp": {
                 "value": "07:00",
                 "label": "Hẻm Chợ Lớn"
@@ -2237,6 +2244,8 @@
               "text": "Đi phà xong lên ca nô, rồi đi bộ trong rừng. Một ngày mà như ba chuyến đi khác nhau.",
               "name": "Bảo Ngọc",
               "from": "Đà Nẵng",
+              "note": "đi Rừng Sác Cần Giờ",
+              "meter": 5,
               "stamp": {
                 "value": "07:00",
                 "label": "Rừng Sác Cần Giờ"
@@ -2248,6 +2257,8 @@
               "text": "Có nửa ngày trống giữa hai cuộc họp, đặt tour sáng sớm. Về khách sạn kịp tắm rồi đi làm.",
               "name": "Đức Anh",
               "from": "Hải Phòng",
+              "note": "đi Sài Gòn thức giấc",
+              "meter": 4,
               "stamp": {
                 "value": "06:30",
                 "label": "Sài Gòn thức giấc"
@@ -2259,6 +2270,8 @@
               "text": "Thuyền vào kênh nhỏ tới mức phải cúi đầu qua cầu. Hoàng hôn ngoài sông lớn đẹp hơn mình tưởng.",
               "name": "Lan Chi",
               "from": "Huế",
+              "note": "đi Sông Sài Gòn chiều",
+              "meter": 4,
               "stamp": {
                 "value": "16:30",
                 "label": "Sông Sài Gòn chiều"
@@ -2270,6 +2283,8 @@
               "text": "Không nghĩ giữa thành phố còn đường làng để đạp xe. Nước dừa ở vườn ngọt lịm.",
               "name": "Quốc Bảo",
               "from": "Nha Trang",
+              "note": "đi Đạp xe Thanh Đa",
+              "meter": 4,
               "stamp": {
                 "value": "15:00",
                 "label": "Đạp xe Thanh Đa"

@@ -12,7 +12,7 @@ export const BLOCKS = {
   intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa']] },
   gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong'], ['plates', 'Ô biển số nhà, ảnh loang theo con trỏ']] },
   faq: { label: 'Hỏi đáp', variants: [['', 'Danh sách gập mở'], ['chat', 'Khung nhắn tin']] },
-  reviews: { label: 'Khách kể', variants: [['postcard', 'Bưu thiếp']] },
+  reviews: { label: 'Khách kể', variants: [['postcard', 'Bưu thiếp'], ['notes', 'Tường giấy note']] },
   stays: {
     label: 'Các hạng phòng',
     variants: [['', 'Lưới thẻ'], ['headland', 'Mốc trên ảnh mỏm gành']],
