@@ -1,21 +1,25 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
-@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,600;0,700;1,500&family=Nunito+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Nunito:wght@400;600;700&family=Patrick+Hand&display=swap');
 
-/* brand-test "Lượn Vịnh": bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè. Dữ liệu do AI viết theo
-   docs/prompts/tao-thuong-hieu-moi.md. Màu trời buổi sáng trên vịnh, xanh ngọc của nước, giấy trắng của cánh máy bay.
-   Tương phản (WCAG): chữ nút trên --color-primary 7.09; --color-ink trên nền 14.83; --color-muted trên nền 6.39;
-   --color-accent trên nền 5.72, trên thẻ trắng 6.4; --color-ink trên --color-tint 13.12. */
+/* brand-test "Lửa Băng": Iceland mùa đông, bộ dữ liệu để thử độ linh hoạt của component.
+   Cố ý trái ngược các brand chính: nền tối xanh đêm, chữ sáng, góc gần như vuông.
+   Xanh lục cực quang cho nút, xanh băng cho chữ nhấn, cam lửa cho chấm nhấn trước nhãn nhỏ.
+   Tương phản (WCAG): chữ nút trên --color-primary 10.83; --color-ink trên nền 15.47; --color-muted trên nền 8.55;
+   --color-accent trên nền 11.03, trên --color-surface 9.83, trên --color-tint 8.6; --color-ink trên --color-tint 12.07. */
 :root {
-  --color-primary: #1d5d86;
-  --color-on-primary: #ffffff;
-  --color-bg: #eef3f5;
-  --color-surface: #ffffff;
-  --color-ink: #132029;
-  --color-muted: #4a5a64;
-  --color-accent: #0d6b5e;
-  --color-tint: #d9e7ee;
-  --font-heading: 'Archivo', system-ui, sans-serif;
-  --font-body: 'Nunito Sans', system-ui, sans-serif;
-  --radius: 0.875rem;
+  --color-primary: #7ee0c3;
+  --color-on-primary: #08201a;
+  --color-bg: #0e1822;
+  --color-surface: #16232f;
+  --color-ink: #e6f0f4;
+  --color-muted: #a3b6c2;
+  --color-accent: #8fd3ff;
+  --color-tint: #1b2e3c;
+  --color-mark: #ff9f6e;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
+  --font-hand: 'Patrick Hand', cursive;
+  --radius: 0.25rem;
+  --container: 70rem;
 }

@@ -34,6 +34,7 @@ const COMPONENTS = {
   'wl-custom-trip': { load: () => import('./components/wl-custom-trip.js').then((m) => m.WlCustomTrip), css: ['custom-trip'] },
   // Thẻ kết quả dùng chung giao diện thẻ của catalog-list, nên tải kèm catalog-list.css.
   'wl-tour-pick': { load: () => import('./components/wl-tour-pick.js').then((m) => m.WlTourPick), css: ['tour-pick', 'catalog-list'] },
+  'wl-route': { load: () => import('./components/wl-route.js').then((m) => m.WlRoute), css: ['route', 'lightbox'] },
 };
 
 start(COMPONENTS);

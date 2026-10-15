@@ -1,0 +1,293 @@
+/* route.css - giao diện của <wl-route>. Kiểu metro: tuyến dọc bên trái, mỗi chặng là một ga.
+   --vc là màu phương tiện của chặng (JS gán từ dữ liệu), thiếu thì dùng màu nhấn của thương hiệu.
+   Màu phương tiện chỉ tô chấm, viền, bóng; chữ luôn dùng màu mực vì có màu phương tiện không đủ tương phản làm chữ.
+   Điện thoại: ảnh nằm dưới chữ. Từ 760px: chữ một cột, ảnh một cột. */
+
+.route {
+  display: block;
+}
+
+/* display: block ở trên đè mất [hidden]: khối không có chặng nào thì ẩn lại ở đây. */
+.route[hidden] {
+  display: none;
+}
+
+/* Nhãn nhỏ như chữ bảng hiệu: font --font-hand, chấm tròn phía trước tô --color-mark (thiếu thì màu nhấn). */
+.route__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.route__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.route__title {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  color: var(--color-ink);
+}
+
+.route__lead {
+  max-width: 38rem;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  color: var(--color-muted);
+}
+
+/* Tuyến. --rail-x là tâm đường ray tính từ mép trái khung nội dung. */
+
+.route__line {
+  --rail-x: 1.35rem;
+  position: relative;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+/* Đường ray: nền nhạt, phần đã đi qua tô màu mực tới đúng vị trí của viên phương tiện (--fill). */
+.route__rail {
+  position: absolute;
+  top: 0.6rem;
+  bottom: 2rem;
+  left: calc(var(--rail-x) - 4px);
+  width: 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.route__rail::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--fill, 0);
+  border-radius: inherit;
+  background: var(--color-ink);
+}
+
+.route__stops {
+  position: relative;
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  padding: 0;
+  list-style: none;
+}
+
+/* isolation giữ số thứ tự lớn (z-index âm) nằm sau chữ của chính ga đó, không lọt ra sau nền trang. */
+.route__stop {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 1.2rem;
+  padding-left: calc(var(--rail-x) * 2 + 1rem);
+}
+
+.route__dot {
+  position: absolute;
+  top: 0.2rem;
+  left: calc(var(--rail-x) - 0.85rem);
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 4px solid var(--color-ink);
+  border-radius: 50%;
+  background: var(--color-surface);
+  transition:
+    background-color calc(var(--duration) * 1.5) ease,
+    scale calc(var(--duration) * 1.5) ease;
+}
+
+.route__stop.is-passed .route__dot {
+  background: var(--vc, var(--color-accent));
+  scale: 1.15;
+}
+
+.route__time {
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.route__place {
+  margin: 0.2rem 0 0.6rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.route__text {
+  max-width: 34rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.05rem;
+  color: var(--color-ink);
+}
+
+/* Nhãn phương tiện: nền pha nhạt màu phương tiện, viền đậm màu phương tiện, chữ màu mực. */
+.route__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem 0.3rem 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--vc, var(--color-accent)) 20%, var(--color-surface));
+  border: 1.5px solid var(--vc, var(--color-accent));
+  border-radius: 999px;
+}
+
+.route__chip-icon {
+  display: grid;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.route__chip-icon svg,
+.route__token-svg svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Ảnh chặng: nghiêng xen kẽ, bóng in lệch màu phương tiện; rê chuột hay Tab tới thì thẳng lại. */
+.route__photo {
+  display: block;
+  width: min(100%, 26rem);
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: var(--card-border, 0);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 var(--vc, var(--color-accent));
+  cursor: zoom-in;
+  rotate: -1.5deg;
+  transition:
+    rotate calc(var(--duration) * 1.5) ease,
+    scale calc(var(--duration) * 1.5) ease;
+}
+
+.route__stop:nth-child(even) .route__photo {
+  rotate: 1.5deg;
+}
+
+.route__photo:hover,
+.route__photo:focus-visible {
+  rotate: 0deg;
+  scale: 1.02;
+}
+
+.route__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Chặng không có ảnh: số thứ tự rất lớn, mờ, nằm sau chữ ở góc phải. */
+.route__no {
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  z-index: -1;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: clamp(4rem, 12vw, 9rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--vc, var(--color-accent)) 22%, transparent);
+}
+
+/* Viên phương tiện: tâm vòng tròn nằm trên đường ray, chạy dọc tuyến theo độ cuộn (JS gán transform).
+   Neo mép phải của viên rồi lùi lại bằng translate (không đụng transform của JS), để nhãn tên mọc sang trái. */
+.route__token {
+  position: absolute;
+  top: 0;
+  left: calc(var(--rail-x) + 1.6rem);
+  translate: -100% 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.route__token-icon {
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--vc, var(--color-accent)) 32%, var(--color-surface));
+  border: 3px solid var(--color-ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 var(--color-ink);
+}
+
+.route__token-svg {
+  display: grid;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* Tên phương tiện mọc sang trái viên, nằm ở lề trống ngoài khung nội dung nên không đẩy chữ của ga.
+   JS đo lề: đủ chỗ mới hiện (lớp has-room), màn hẹp thì ẩn vì tên đã có trong nhãn của từng ga.
+   visibility (không phải display) để lúc ẩn nhãn vẫn có bề ngang cho JS đo. */
+.route__token-name {
+  visibility: hidden;
+  white-space: nowrap;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 6px;
+}
+
+.route__line.has-room .route__token-name {
+  visibility: visible;
+}
+
+/* Đổi phương tiện thì viên lật một vòng nhỏ; thời gian theo --duration nên giảm chuyển động thì không lật. */
+.route__token.is-swap .route__token-icon {
+  animation: route-swap calc(var(--duration) * 2.5) cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes route-swap {
+  from {
+    transform: scale(0.4) rotate(-40deg);
+  }
+}
+
+/* Giảm chuyển động: ray tô kín, mọi ga đã sáng, không có viên chạy. */
+.route.is-static .route__rail::after {
+  height: 100%;
+}
+
+.route.is-static .route__dot {
+  background: var(--vc, var(--color-accent));
+}
+
+.route.is-static .route__token {
+  display: none;
+}
+
+@media (min-width: 760px) {
+  .route__stop {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}

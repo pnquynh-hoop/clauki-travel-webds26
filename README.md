@@ -15,7 +15,7 @@ rồi mở http://localhost:5500. `serve.py` có file thì trả file, không c�
 để các trang con như `/ganh-som/phong` mở được; nó chỉ dùng trên máy, không deploy. `python3 -m http.server` và
 Live Server chỉ mở được trang chủ. Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
-Địa chỉ: `/<thương hiệu>/<trang>`, ví dụ `/ganh-som/`, `/brand-test/hoi-dap`; `/` là thương hiệu mặc định.
+Địa chỉ: `/<thương hiệu>/<trang>`, ví dụ `/ganh-som/`, `/sighgone/tour/can-gio`; `/` là thương hiệu mặc định.
 Đổi thương hiệu bằng nút tròn ở góc dưới trái (của BTC, trong `wd2026.js`): trang đang mở được giữ nguyên.
 
 ## Một component, nhiều cách hiển thị
@@ -62,6 +62,7 @@ Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khá
 | | `day-plan` | một ngày ở vườn, xuồng trôi theo cuộn |
 | SighGone (tour trong ngày ở Sài Gòn) | `clock` | đồng hồ 24 giờ: giờ nào ăn gì, đi đâu, tour hợp giờ đó (trang `cam-nang`) |
 | | `tips`, `policy` | thẻ mẹo có biểu đồ nhỏ; bảng chính sách huỷ (trang `cam-nang`, `hoi-dap`) |
+| | `route` (`metro`) | hành trình chia chặng như sơ đồ tuyến metro, cuộn tới chặng nào thì phương tiện đổi theo chặng đó (trang chi tiết tour, `dem-nay`) |
 
 Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 
