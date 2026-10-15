@@ -29,6 +29,7 @@ export const BLOCKS = {
   tips: { label: 'Thẻ mẹo', variants: [] },
   policy: { label: 'Bảng chính sách', variants: [] },
   'room-detail': { label: 'Chi tiết phòng, tour', variants: [] },
+  'catalog-list': { label: 'Danh sách tour, phòng', variants: [] },
 };
 
 // Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.
@@ -160,4 +161,5 @@ export const TEMPLATES = [
   { type: 'reviews', label: 'Khách kể', make: () => ({ type: 'reviews', variant: 'postcard', title: 'Khách kể', items: [{ text: 'Lời kể của khách.', name: 'Tên khách', from: 'Nơi ở' }] }) },
   { type: 'tips', label: 'Thẻ mẹo', make: () => ({ type: 'tips', title: 'Mẹo nhỏ', items: [{ title: 'Mẹo đầu tiên', text: 'Một hai câu.' }] }) },
   { type: 'policy', label: 'Bảng chính sách', make: () => ({ type: 'policy', title: 'Chính sách', rows: [{ when: 'Trường hợp', what: 'Kết quả', tone: 'ok' }] }) },
+  { type: 'catalog-list', label: 'Danh sách tour, phòng', make: () => ({ type: 'catalog-list', title: 'Tất cả tour', labels: { count: '{n} mục đang hiện' } }) },
 ];

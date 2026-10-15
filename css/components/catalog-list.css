@@ -1,0 +1,217 @@
+/* catalog-list.css - giao diện của <wl-catalog-list>: tiêu đề lớn kèm số mục đang hiện, lưới thẻ tour.
+   Thẻ như tấm vé dán tường: viền và bóng đọc --card-border, --card-shadow (SighGone: viền mực, bóng in lệch);
+   brand không khai báo thì viền mảnh, không bóng. Giờ chạy là nhãn dán nghiêng màu nút, chữ bảng hiệu (--font-hand). */
+
+.catalog-list {
+  display: block;
+}
+
+.catalog-list__head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.catalog-list__eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.catalog-list__title {
+  margin: 0;
+  max-width: 12ch;
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 12vw, 9rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.catalog-list__lead {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--color-muted);
+}
+
+.catalog-list__count {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.1rem;
+}
+
+.catalog-list__count-n {
+  display: inline-block;
+  min-width: 1.6ch;
+  padding: 0.1em 0.35em;
+  text-align: center;
+  color: var(--color-surface);
+  background: var(--color-accent);
+  border-radius: calc(var(--radius) / 2);
+}
+
+.catalog-list__grid {
+  display: grid;
+  gap: 2rem 1.6rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+}
+
+/* Thẻ: cả thẻ là liên kết khi tour có trang chi tiết. */
+.catalog-list__card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  color: var(--color-ink);
+  text-decoration: none;
+  background: var(--color-surface);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, none);
+  transition: transform var(--duration, 0.25s) ease, box-shadow var(--duration, 0.25s) ease;
+}
+
+/* Rê chuột thì thẻ nhấc lên và hơi nghiêng như tấm vé bị gỡ khỏi tường; chỉ thẻ có liên kết mới phản hồi. */
+a.catalog-list__card:hover {
+  transform: translate(-3px, -3px) rotate(-0.5deg);
+}
+
+a.catalog-list__card:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.catalog-list__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-tint, color-mix(in srgb, var(--color-ink) 8%, var(--color-bg)));
+  border-bottom: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent));
+}
+
+.catalog-list__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+a.catalog-list__card:hover .catalog-list__media img {
+  transform: scale(1.06);
+}
+
+/* Giờ chạy: nhãn dán nghiêng ở góc ảnh. */
+.catalog-list__time {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+  line-height: 1.1;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-ink);
+  border-radius: calc(var(--radius) / 2);
+  box-shadow: 3px 3px 0 var(--color-ink);
+  transform: rotate(-3deg);
+}
+
+/* Cột dọc để dòng giá luôn nằm sát đáy thẻ, các thẻ cùng hàng thẳng đáy dù tên tour dài ngắn khác nhau. */
+.catalog-list__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.catalog-list__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.catalog-list__tagline {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+}
+
+.catalog-list__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* Chip phương tiện: màu riêng của từng phương tiện lấy từ catalog.vehicles, chấm màu đứng thay icon. */
+.catalog-list__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--vc, var(--color-accent)) 22%, var(--color-surface));
+  border: 1.5px solid var(--vc, var(--color-accent));
+  border-radius: 999px;
+}
+
+.catalog-list__chip::before {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--vc, var(--color-accent));
+}
+
+.catalog-list__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 15%, transparent);
+}
+
+.catalog-list__price {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.catalog-list__price small {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.catalog-list__few {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-list__card,
+  .catalog-list__media img {
+    transition: none;
+  }
+
+  a.catalog-list__card:hover,
+  a.catalog-list__card:hover .catalog-list__media img {
+    transform: none;
+  }
+}
