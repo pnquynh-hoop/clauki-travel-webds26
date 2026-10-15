@@ -577,3 +577,26 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
   }
 }
 
+/* Nhãn nhỏ cạnh chữ của mục menu (nav[].badge, ví dụ "Mới"), vẽ như thẻ treo: đầu trái nhọn, có một lỗ khoen tròn (khoét lộ nền
+   header phía sau), hơi nghiêng như đang đung đưa. Cỡ chữ tính theo em để theo mục menu ở mọi kiểu header; màu `--color-mark`
+   của thương hiệu nếu có, không thì màu nhấn. Lỗ khoen vẽ bằng mặt nạ nên thấy xuyên qua cả khi header trong suốt. */
+.header__badge {
+  --tag-notch: 0.7em;
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.2em 0.55em 0.2em calc(var(--tag-notch) + 0.55em);
+  font-size: 0.65em;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 0.15em;
+  color: var(--color-bg);
+  background: var(--color-mark, var(--color-accent));
+  border-radius: 0 0.3em 0.3em 0;
+  clip-path: polygon(var(--tag-notch) 0, 100% 0, 100% 100%, var(--tag-notch) 100%, 0 50%);
+  -webkit-mask: radial-gradient(circle at calc(var(--tag-notch) + 0.05em) 50%, transparent 0.17em, #000 0.19em);
+  mask: radial-gradient(circle at calc(var(--tag-notch) + 0.05em) 50%, transparent 0.17em, #000 0.19em);
+  rotate: -4deg;
+  transform-origin: left center;
+}
