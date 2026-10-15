@@ -9,6 +9,7 @@
 import { variantsFor } from '../editor/manifest.js';
 
 // Component đặc trưng. key là loại khối ("journey") hoặc loại và kiểu ("hero:ride"); fit là điều kiện phù hợp, đưa nguyên văn cho AI;
+// drop: true là khối không có bản thường dùng được (ảnh vẽ nhân vật của khung), bị cấm thì bỏ khối chứ không đổi kiểu;
 // hard: true là gắn chặt với ảnh tách nền hay dữ liệu riêng của thương hiệu khác, không bao giờ dùng được cho nơi khác.
 export const SIGNATURE = [
   { key: 'journey', fit: 'tour nhiều ngày, lịch trình theo từng trạm hay từng ngày trên một tuyến đường dài (đi núi, phượt, hành trình)' },
@@ -32,7 +33,7 @@ export const SIGNATURE = [
   { key: 'included:receipt', fit: 'tour có danh sách gồm gì, không gồm gì cần trình bày như hoá đơn' },
   { key: 'contact:bell', fit: 'chỗ ở trong hẻm, nhà phố, khách phải gọi hay bấm chuông' },
   { key: 'contact:plate', fit: 'chỗ ở trong hẻm, nhà phố có số nhà làm điểm hẹn' },
-  { key: 'cards:badge', fit: 'có đội hướng dẫn viên hay nhân sự cần giới thiệu bằng thẻ đeo' },
+  { key: 'cards:badge', drop: true, fit: 'có đội hướng dẫn viên hay nhân sự cần giới thiệu bằng thẻ đeo' },
   { key: 'hero:ride', hard: true, fit: 'chỉ dùng cho Sài Gòn, cần ảnh các toà nhà tách nền của thành phố' },
   { key: 'stays:headland', hard: true, fit: 'cần ảnh mỏm đá tách nền của đúng chỗ ở đó' },
 ];
@@ -83,6 +84,12 @@ export function sanitizeFrame(content, keepKeys = []) {
   const report = { removed: new Set(), kept: new Set(), removedPages: [] };
   const pages = content.pages ?? [{ path: '/', sections: content.sections ?? [] }];
   for (const page of pages) {
+    // Trang dựng quanh một khối gắn chặt với thương hiệu khác (như tuyen-so-1 quanh hero ride) thì bỏ cả trang, kẻo còn lại chữ của nơi khác.
+    const hard = (page.sections ?? []).map(signatureOf).find((sig) => sig?.hard);
+    if (hard && page.path && page.path !== '/') {
+      page.sections = page.sections.filter((section) => section.type === 'breadcrumb');
+      report.removed.add(hard.key);
+    }
     page.sections = (page.sections ?? []).filter((section) => {
       const sig = signatureOf(section);
       if (!sig) return true;
@@ -91,7 +98,7 @@ export function sanitizeFrame(content, keepKeys = []) {
         return true;
       }
       // Kiểu đặc trưng của một khối thường (như booking:ticket): đổi kiểu thay vì bỏ khối.
-      if (section.variant && sig.key.includes(':')) {
+      if (section.variant && sig.key.includes(':') && !sig.drop) {
         const next = fallbackVariant(section, keep);
         if (next !== undefined) {
           if (next) section.variant = next;
