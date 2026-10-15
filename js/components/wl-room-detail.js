@@ -177,6 +177,11 @@ export class WlRoomDetail extends HTMLElement {
       a.addEventListener('click', () => {
         document.dispatchEvent(new CustomEvent('wl:choose-room', { detail: { id: section.room } }));
       });
+    } else if (section.item && !section.book) {
+      // Trang chi tiết lấy từ danh mục: phát wl:choose (core.js giữ lại nếu khối đặt chỗ ở trang khác) để chọn sẵn tour này.
+      a.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('wl:choose', { detail: { id: section.item } }));
+      });
     }
     return a;
   }

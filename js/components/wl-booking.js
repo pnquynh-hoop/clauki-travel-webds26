@@ -105,6 +105,11 @@ export class WlBooking extends HTMLElement {
   }
 
   chooseRoom(id) {
+    // Chế độ chọn tour (calendar có `tours`): id là id tour trong danh mục.
+    if (this._tours?.length) {
+      this.pickTour(id);
+      return;
+    }
     const input = this._roomInputs?.find((radio) => radio.value === id);
     if (!input) return;
     input.checked = true;
@@ -748,6 +753,206 @@ export class WlBooking extends HTMLElement {
     return { row, term, value };
   }
 
+  /* Chế độ chọn tour của kiểu calendar (khai `tours` trong section): khách chọn tour trong danh mục (site.catalog.items), ngày
+     còn chỗ lấy từ `availability` của tour đó, giá lấy từ `price` của tour. `tours` là true (mọi tour có lịch) hoặc mảng id
+     (chỉ các tour này, giữ thứ tự). Không khai `tours` thì kiểu calendar chạy như cũ với `price` và `departures` của section. */
+  toursList() {
+    const want = this._data.tours;
+    if (!want) return [];
+    const items = this.site?.catalog?.items ?? [];
+    const pool = Array.isArray(want) ? want.map((id) => items.find((item) => item.id === id)) : items;
+    return pool.filter((item) => item?.price && (item.availability ?? []).length);
+  }
+
+  tourPrice() {
+    return this._tour?.price ?? this._data.price;
+  }
+
+  calDepartures() {
+    if (!this._tour) return (this._data.departures ?? []).filter((dep) => dep.date);
+    return this._tour.availability.filter((a) => a.date).map((a) => ({ date: a.date, seats: a.left }));
+  }
+
+  // Điểm đón đang chọn: { label, fee } với fee là phí cả đơn (không nhân số khách); không khai pickups thì không có phí.
+  pickup() {
+    const list = this._data.pickups ?? [];
+    return list.find((p) => p.id === this._fields?.pickup?.control.value) ?? list[0] ?? null;
+  }
+
+  // Dựng các thẻ ngày vào hộp ngày. Lịch dài (nhiều tour có cả quý) thì chỉ hiện `datesShown` ngày đầu (mặc định 8), phần còn lại
+  // mở bằng nút "Xem thêm"; ngày được chọn sẵn luôn nằm trong phần hiện. Lịch ngắn (Bậc Trà) thì không có nút.
+  fillDates() {
+    const departures = this.calDepartures();
+    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
+    if (this._data.variant === 'wall') {
+      this._month = (this._departure ?? departures[0])?.date.slice(0, 7);
+      this._wall = null;
+      this._datesBox.className = 'booking__dates booking__dates--wall';
+      this._datesBox.replaceChildren();
+      this.paintWall(0);
+      return;
+    }
+    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
+    const picked = this._dateButtons.findIndex(({ dep }) => dep === this._departure);
+    const shown = Math.max(this._data.datesShown ?? 8, picked + 1);
+    this._dateButtons.forEach(({ button }, i) => { button.hidden = i >= shown; });
+    const hidden = this._dateButtons.length - shown;
+    const more = hidden > 0 && this._data.labels?.moreDates ? textEl('button', 'booking__dates-more', fill(this._data.labels.moreDates, { n: hidden })) : null;
+    if (more) {
+      more.type = 'button';
+      more.addEventListener('click', () => {
+        this._dateButtons.forEach(({ button }) => { button.hidden = false; });
+        more.remove();
+      });
+    }
+    this._datesBox.replaceChildren(...this._dateButtons.map(({ button }) => button), ...[more].filter(Boolean));
+  }
+
+  /* Kiểu wall: mỗi tháng một tờ lịch lưới 7 cột (thứ hai đứng đầu), ngày có chuyến là nút bấm kèm số chỗ còn, ngày hết chỗ gạch,
+     ngày ít chỗ đổi màu. Đổi tháng thì tờ cũ rơi xuống như bị xé (bật giảm chuyển động thì đổi ngay). */
+  dayEl(dep, day) {
+    const labels = this._data.labels ?? {};
+    const weekday = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', timeZone: 'UTC' }).format(new Date(dayNumber(dep.date) * DAY));
+    const seats = dep.seats > 0 ? fill(labels.seats, { n: dep.seats }) : labels.soldOut;
+    const few = dep.seats > 0 && dep.seats <= (this._data.fewSeats ?? 4);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = few ? 'booking__day booking__day--few' : 'booking__day';
+    button.disabled = !(dep.seats > 0);
+    button.setAttribute('aria-pressed', String(dep === this._departure));
+    button.setAttribute('aria-label', `${weekday} ${viDate(dep.date)}, ${String(seats ?? '').toLowerCase()}`);
+    button.append(...[textEl('span', 'booking__day-num', String(day)), textEl('span', 'booking__day-seats', dep.seats > 0 ? String(dep.seats) : '')].filter(Boolean));
+    button.addEventListener('click', () => {
+      this._departure = dep;
+      this.updateCalendar();
+    });
+    return button;
+  }
+
+  paintWall(flip) {
+    const labels = this._data.labels ?? {};
+    const deps = this.calDepartures();
+    const byDate = new Map(deps.map((d) => [d.date, d]));
+    const months = [...new Set(deps.map((d) => d.date.slice(0, 7)))].sort();
+    const at = months.indexOf(this._month);
+    const [y, m] = this._month.split('-').map(Number);
+    const pad = (n) => String(n).padStart(2, '0');
+
+    const go = (delta, text, aria) => {
+      const button = textEl('button', 'booking__wall-nav', text) ?? document.createElement('button');
+      button.type = 'button';
+      button.disabled = !months[at + delta];
+      if (aria) button.setAttribute('aria-label', aria);
+      button.addEventListener('click', () => {
+        this._month = months[at + delta];
+        this.paintWall(delta);
+      });
+      return button;
+    };
+    const head = groupEl('booking__wall-head', [
+      go(-1, labels.prevMonth, labels.prevMonth),
+      textEl('p', 'booking__wall-title', fill(labels.month, { m, y })),
+      go(1, labels.nextMonth, labels.nextMonth),
+    ]);
+
+    const grid = document.createElement('div');
+    grid.className = 'booking__wall-grid';
+    for (let i = 0; i < 7; i += 1) {
+      const dow = new Intl.DateTimeFormat('vi-VN', { weekday: 'short', timeZone: 'UTC' }).format(new Date(Date.UTC(2024, 0, 1 + i)));
+      grid.append(textEl('span', 'booking__wall-dow', dow));
+    }
+    const lead = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7;
+    for (let i = 0; i < lead; i += 1) grid.append(document.createElement('span'));
+    this._dateButtons = [];
+    const count = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    for (let day = 1; day <= count; day += 1) {
+      const dep = byDate.get(`${y}-${pad(m)}-${pad(day)}`);
+      if (!dep) {
+        grid.append(textEl('span', 'booking__day booking__day--off', String(day)));
+        continue;
+      }
+      const button = this.dayEl(dep, day);
+      this._dateButtons.push({ dep, button });
+      grid.append(button);
+    }
+
+    const page = groupEl('booking__wall-page', [head, grid]);
+    if (!this._wall || !this._datesBox.contains(this._wall)) {
+      this._wall = document.createElement('div');
+      this._wall.className = 'booking__wall';
+      this._datesBox.append(this._wall);
+    }
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const old = this._wall.querySelector('.booking__wall-page');
+    if (old && flip && !calm) {
+      // Tờ cũ rời ra rơi xuống (bản sao không bấm được), tờ mới lật lên từ trên.
+      old.classList.add('is-torn');
+      old.setAttribute('aria-hidden', 'true');
+      old.inert = true;
+      old.addEventListener('animationend', () => old.remove(), { once: true });
+      page.classList.add('is-turning');
+      this._wall.prepend(page);
+    } else {
+      this._wall.replaceChildren(page);
+    }
+  }
+
+  // Đổi tour: dựng lại các thẻ ngày theo lịch của tour mới, chọn ngày đầu còn chỗ, tính lại tạm tính; phiếu cũ ẩn đi.
+  pickTour(id) {
+    const tour = this._tours.find((t) => t.id === id);
+    if (!tour) return;
+    this._tour = tour;
+    this.fillDates();
+    this._tourRadios?.forEach((radio) => { radio.checked = radio.value === id; });
+    if (this._ticket) this._ticket.hidden = true;
+    this.updateCalendar();
+  }
+
+  // Các thẻ chọn tour: nút radio thật nằm trong thẻ (cùng kiểu thẻ hạng của kiểu stay). Chỉ một tour thì không cần chọn.
+  tourPickEl(prefix) {
+    if (this._tours.length < 2) return null;
+    const labels = this._data.labels ?? {};
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'booking__rooms booking__tours';
+    fieldset.append(textEl('legend', 'booking__legend booking__step-title', labels.tour) ?? '');
+    const list = document.createElement('div');
+    list.className = 'booking__room-list booking__tour-list';
+    this._tourRadios = this._tours.map((tour) => {
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `${prefix}-tour`;
+      radio.value = tour.id;
+      radio.checked = tour === this._tour;
+      radio.className = 'booking__room-input';
+      radio.addEventListener('change', () => this.pickTour(tour.id));
+      const label = document.createElement('label');
+      label.className = 'booking__room booking__tour';
+      const thumb = tour.image?.src ? imageEl(tour.image, 'booking__room-thumb', true) : null;
+      if (thumb) thumb.alt = '';
+      label.append(...[radio, thumb].filter(Boolean), groupEl('booking__room-text', [
+        textEl('span', 'booking__room-name', tour.name),
+        textEl('span', 'booking__room-price', [tour.start, this.money(tour.price)].filter(Boolean).join(', ')),
+      ]));
+      list.append(label);
+      return radio;
+    });
+    fieldset.append(list);
+    return fieldset;
+  }
+
+  // Ô chọn điểm đón: mỗi lựa chọn ghi phí nếu có (phí cả đơn).
+  pickupField(prefix) {
+    const pickups = this._data.pickups ?? [];
+    if (!pickups.length) return null;
+    const select = document.createElement('select');
+    select.className = 'booking__input';
+    pickups.forEach((p) => {
+      const fee = p.fee ? ` (+ ${this.money(p.fee)})` : '';
+      select.append(new Option(`${p.label}${fee}`, p.id));
+    });
+    return fieldEl(`${prefix}-pickup`, this._data.labels?.pickup, select);
+  }
+
   // Đếm ngược tới hết ngày ưu đãi (deal.until, 23:59:59 giờ máy khách, cùng cách tính với dealActive).
   // Mẫu chữ labels.dealCountdown có {d} {h} {m} {s}; thiếu mẫu hoặc ưu đãi đã hết hạn thì không có dòng này.
   countdownEl() {
@@ -830,18 +1035,26 @@ export class WlBooking extends HTMLElement {
     const section = this._data;
     const labels = section.labels ?? {};
     const prefix = this.id || 'booking';
-    const departures = (section.departures ?? []).filter((dep) => dep.date);
-    if (!section.price || !departures.length) return null;
+    this._tours = this.toursList();
+    this._tour = this._tours[0] ?? null;
+    const departures = this.calDepartures();
+    if (!this.tourPrice() || !departures.length) return null;
 
-    // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn để vừa mở đã thấy tạm tính.
-    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
-    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
-    const dates = groupEl('booking__dates', this._dateButtons.map(({ button }) => button));
+    // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn (trong fillDates) để vừa mở đã thấy tạm tính.
+    const dates = document.createElement('div');
+    dates.className = 'booking__dates';
     dates.setAttribute('role', 'group');
     if (labels.departures) dates.setAttribute('aria-label', labels.departures);
+    this._datesBox = dates;
+    this.fillDates();
 
+    // Bước 1 và 2 (chọn tour, chọn ngày) ở khối chính; "đã gồm", điều khoản đi sau form để trên điện thoại form không bị đẩy xuống cuối.
     const info = groupEl('booking__info', [
+      this.tourPickEl(prefix),
+      textEl('h3', 'booking__step-title', labels.departures),
       dates,
+    ]);
+    const extra = groupEl('booking__extra', [
       groupEl('booking__terms', [
         this.listEl(labels.includesTitle, section.includes, 'booking__included'),
         this.listEl(labels.excludesTitle, section.excludes, 'booking__included booking__included--no'),
@@ -850,15 +1063,18 @@ export class WlBooking extends HTMLElement {
       ...(section.policies ?? []).map((policy) => this.policyEl(policy)),
     ]);
 
+    const pickup = this.pickupField(prefix);
     this._fields = {
       name: fieldEl(`${prefix}-name`, labels.name, inputEl('text', { autocomplete: 'name' })),
       phone: fieldEl(`${prefix}-phone`, labels.phone, inputEl('tel', { autocomplete: 'tel', inputmode: 'tel', ...(labels.phoneExample ? { placeholder: labels.phoneExample } : {}) })),
       guests: this.counterEl(`${prefix}-guests`, labels.guests, labels.guestsLess, labels.guestsMore, 1, section.defaultGuests ?? 2),
+      ...(pickup ? { pickup } : {}),
     };
     const price = document.createElement('p');
     price.className = 'booking__hold-price';
-    price.append(textEl('strong', '', this.money(section.price)), ` ${section.priceNote ?? ''}`);
-    this._sum = { base: this.sumRow('booking__sum-row--base'), deal: this.sumRow('booking__sum-row--deal'), total: this.sumRow('booking__sum-row--total'), deposit: this.sumRow('booking__sum-row--deposit') };
+    this._priceNow = textEl('strong', '', this.money(this.tourPrice()));
+    price.append(this._priceNow, ` ${section.priceNote ?? ''}`);
+    this._sum = { base: this.sumRow('booking__sum-row--base'), deal: this.sumRow('booking__sum-row--deal'), pickup: this.sumRow('booking__sum-row--pickup'), total: this.sumRow('booking__sum-row--total'), deposit: this.sumRow('booking__sum-row--deposit') };
     const sum = document.createElement('dl');
     sum.className = 'booking__sum';
     sum.append(...Object.values(this._sum).map((line) => line.row));
@@ -871,6 +1087,7 @@ export class WlBooking extends HTMLElement {
     this._form.className = 'booking__hold';
     this._form.noValidate = true;
     this._form.append(...[
+      textEl('h3', 'booking__step-title', labels.holdTitle),
       price,
       this.dealActive() ? textEl('p', 'booking__hold-deal', section.deal.label) : null,
       this.countdownEl(),
@@ -883,16 +1100,20 @@ export class WlBooking extends HTMLElement {
     this._form.addEventListener('submit', (e) => this.submitCalendar(e));
 
     this._ticket = this.ticketEl();
-    return groupEl('booking__body', [groupEl('booking__layout', [info, this._form]), this._ticket]);
+    const layout = groupEl('booking__layout', [info, this._form, extra]);
+    // Có tiêu đề cho form thì ba khối thành ba bước đánh số 1, 2, 3; không có thì chỉ là các tiêu đề thường.
+    if (labels.holdTitle) layout.classList.add('booking__layout--steps');
+    return groupEl('booking__body', [layout, this._ticket]);
   }
 
   // Tạm tính theo số khách: giá một khách nhân số khách, trừ ưu đãi mỗi khách nếu còn hạn; tiền cọc tính riêng.
   quoteCalendar() {
     const section = this._data;
     const guests = Number(this._fields.guests.control.value) || 0;
-    const base = section.price * guests;
+    const base = this.tourPrice() * guests;
     const discount = this.dealActive() ? section.deal.amount * guests : 0;
-    return { guests, base, discount, total: base - discount, deposit: (section.deposit ?? 0) * guests };
+    const fee = this.pickup()?.fee ?? 0;
+    return { guests, base, discount, fee, total: base - discount + fee, deposit: (section.deposit ?? 0) * guests };
   }
 
   // Số khách không vượt số chỗ còn của chuyến đang chọn; đổi chuyến thì số khách tự thu lại cho vừa.
@@ -914,11 +1135,15 @@ export class WlBooking extends HTMLElement {
 
     const q = this.quoteCalendar();
     const s = this._sum;
-    s.base.term.textContent = fill(labels.baseLine, { price: this.money(section.price), guests: q.guests });
+    if (this._priceNow) this._priceNow.textContent = this.money(this.tourPrice());
+    s.base.term.textContent = fill(labels.baseLine, { price: this.money(this.tourPrice()), guests: q.guests });
     s.base.value.textContent = this.money(q.base);
     s.deal.row.hidden = !q.discount;
     s.deal.term.textContent = labels.dealLine ?? '';
     s.deal.value.textContent = `− ${this.money(q.discount)}`;
+    s.pickup.row.hidden = !q.fee;
+    s.pickup.term.textContent = fill(labels.pickupLine, { label: this.pickup()?.label ?? '' });
+    s.pickup.value.textContent = `+ ${this.money(q.fee)}`;
     s.total.term.textContent = labels.total ?? '';
     s.total.value.textContent = this.money(q.total);
     s.deposit.row.hidden = !q.deposit;
@@ -988,7 +1213,7 @@ export class WlBooking extends HTMLElement {
     }
     const q = this.quoteCalendar();
     const date = viDate(this._departure.date);
-    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
+    const values = { name, phone, date, guests: q.guests, total: this.money(q.total), tour: this._tour?.name ?? '', pickup: this.pickup()?.label ?? '', seats: this._seatButtons ? [...this._picked].sort((a, b) => a - b).join(', ') : '' };
     const t = this._ticketInfo;
     t.guest.textContent = name;
     t.date.textContent = date;
@@ -1009,11 +1234,15 @@ export class WlBooking extends HTMLElement {
 
   render() {
     const section = this._data;
-    const variant = section.variant ?? 'calendar';
-    this.className = `booking booking--${variant}`;
+    // Kiểu wall (tờ lịch treo tường) chỉ đổi cách chọn ngày, còn lại là calendar: dùng chung mã và kiểu của calendar.
+    const variant = section.variant === 'wall' ? 'calendar' : (section.variant ?? 'calendar');
+    this.className = `booking booking--${variant}${section.variant === 'wall' ? ' booking--wall' : ''}`;
     // Dựng lại từ đầu (đổi thương hiệu): bỏ đồng hồ và sơ đồ ghế của lần trước.
     this.stopCountdown();
     this._seatButtons = null;
+    this._tours = null;
+    this._tour = null;
+    this._tourRadios = null;
 
     const head = groupEl('booking__head', [
       textEl('p', 'booking__eyebrow', section.eyebrow),

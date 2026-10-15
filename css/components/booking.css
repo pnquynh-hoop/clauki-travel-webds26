@@ -1148,3 +1148,326 @@ form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
     transform: none;
   }
 }
+
+/* Nút mở thêm ngày: nằm hết hàng dưới các thẻ ngày. */
+.booking__dates-more {
+  grid-column: 1 / -1;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--color-ink) 35%, transparent);
+  border-radius: calc(var(--radius) * 0.8);
+  cursor: pointer;
+}
+
+.booking__dates-more:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* Kiểu wall: tờ lịch treo tường. Dải đầu tờ có hai lỗ treo; ngày là ô vuông, số chỗ còn ghi nhỏ ở góc. */
+.booking__dates--wall {
+  display: block;
+  padding-top: 0;
+}
+
+.booking__wall {
+  position: relative;
+  perspective: 1200px;
+}
+
+.booking__wall-page {
+  position: relative;
+  padding: 3.4rem 1rem 1rem;
+  background: var(--color-surface);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, 0 0.5rem 1.5rem color-mix(in srgb, var(--color-ink) 12%, transparent));
+  transform-origin: 50% 0;
+}
+
+.booking__wall-page::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2.4rem;
+  background: var(--color-primary);
+  border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
+}
+
+.booking__wall-page::after {
+  content: '';
+  position: absolute;
+  top: 0.7rem;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+  translate: -50% 0;
+}
+
+.booking__wall-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.booking__wall-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.booking__wall-nav {
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.booking__wall-nav:disabled {
+  color: var(--color-muted);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.booking__wall-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.booking__wall-dow {
+  padding-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.booking__day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: calc(var(--radius) * 0.6);
+  cursor: pointer;
+  transition: translate var(--duration) ease, background-color var(--duration) ease;
+}
+
+button.booking__day:not(:disabled):hover {
+  translate: 0 -2px;
+}
+
+.booking__day-seats {
+  position: absolute;
+  right: 0.3rem;
+  bottom: 0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.booking__day--few .booking__day-seats {
+  color: var(--color-accent);
+}
+
+.booking__day[aria-pressed='true'] {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-ink);
+  box-shadow: 0 2px 0 var(--color-ink);
+}
+
+.booking__day[aria-pressed='true'] .booking__day-seats {
+  color: var(--color-on-primary);
+}
+
+/* Ngày hết chỗ: gạch ngang số ngày; ngày không có chuyến: nhạt, không bấm được. */
+.booking__day:disabled {
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.booking__day--off {
+  color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+}
+
+/* Xé tờ lịch: tờ mới lật lên từ trên, tờ cũ rời ra rơi xuống. */
+.booking__wall-page.is-turning {
+  animation: booking-wall-turn 0.55s ease-out both;
+}
+
+.booking__wall-page.is-torn {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: booking-wall-tear 0.5s ease-in both;
+}
+
+@keyframes booking-wall-turn {
+  from { transform: rotateX(-70deg); opacity: 0.2; }
+}
+
+@keyframes booking-wall-tear {
+  to { transform: translateY(2.5rem) rotate(6deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking__wall-page.is-turning,
+  .booking__wall-page.is-torn {
+    animation: none;
+  }
+}
+
+/* Bố cục ba bước của kiểu calendar: 1 chọn tour, 2 chọn ngày (cột trái), 3 thông tin (thẻ bên phải, dính khi cuộn);
+   "đã gồm" và điều khoản xuống dưới cột trái. Điện thoại xếp 1, 2, 3 rồi mới tới phần phụ. */
+.booking--calendar .booking__layout {
+  gap: 2rem;
+}
+
+.booking__layout--steps {
+  counter-reset: step;
+}
+
+.booking--calendar .booking__info,
+.booking--calendar .booking__extra {
+  display: grid;
+  gap: 1.75rem;
+  min-width: 0;
+}
+
+.booking--calendar .booking__extra .booking__terms,
+.booking--calendar .booking__extra .booking__policy {
+  margin-top: 0;
+}
+
+.booking__step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.booking__layout--steps .booking__step-title {
+  counter-increment: step;
+}
+
+.booking__layout--steps .booking__step-title::before {
+  content: counter(step);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+}
+
+/* Thẻ tour: ảnh vuông nhỏ, tên, giờ và giá; hai cột từ 760px. */
+.booking__tours {
+  margin: 0;
+}
+
+.booking__tour-list {
+  display: flex;
+  gap: 0.6rem;
+  margin-inline: calc(-1 * var(--page-gutter, 1rem));
+  padding: 0.15rem var(--page-gutter, 1rem) 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.booking__tour-list > .booking__tour {
+  flex: 0 0 min(15rem, 78%);
+  scroll-snap-align: start;
+}
+
+.booking__tour {
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.2rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+}
+
+.booking__tour .booking__room-thumb {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.booking__tour .booking__room-text {
+  display: grid;
+  gap: 0.15rem;
+}
+
+/* Ngày trong tờ lịch dẹt hơn một chút để tờ không quá cao. */
+.booking--wall .booking__day {
+  aspect-ratio: 1.15;
+}
+
+@media (min-width: 760px) {
+  .booking__tour-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .booking__tour-list > .booking__tour {
+    flex: initial;
+  }
+}
+
+@media (min-width: 1024px) {
+  .booking--calendar .booking__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(21rem, 27rem);
+    grid-template-areas: 'main form' 'extra form';
+    gap: 2.5rem 3.5rem;
+  }
+
+  .booking--calendar .booking__info {
+    grid-area: main;
+  }
+
+  .booking--calendar .booking__hold {
+    grid-area: form;
+    position: sticky;
+    top: calc(var(--header-stuck, 4rem) + 1.25rem);
+  }
+
+  .booking--calendar .booking__extra {
+    grid-area: extra;
+  }
+}
