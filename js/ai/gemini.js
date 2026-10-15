@@ -8,6 +8,11 @@
 const SDK = 'https://www.gstatic.com/firebasejs/13.0.0';
 const DEMO_KEY = 'clauki-ai-demo';
 export const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
+// Model chính hết lượt (lỗi 429): chuyển sang model dự phòng, có hạn mức riêng, trong FALLBACK_MS rồi quay lại model chính.
+export const FALLBACK_MODEL = 'gemini-3.1-flash-lite';
+const FALLBACK_MS = 60000;
+let fallbackUntil = 0;
+export const usingFallback = () => Date.now() < fallbackUntil;
 
 // Cấu hình web của project công khai (clauki-public). Cấu hình web của Firebase không phải bí mật: quyền gọi AI
 // giới hạn bởi gói Spark (hết lượt thì dừng, không tốn tiền) và giới hạn tên miền của key trên Google Cloud.
@@ -53,7 +58,7 @@ export function cleanText(value, max = 400) {
   return String(value ?? '').replace(/<[^>]*>/g, '').replace(/\s*[·—]\s*/g, ', ').replace(/\s+/g, ' ').trim().slice(0, max);
 }
 
-async function modelFor(systemInstruction, json = false) {
+async function modelFor(systemInstruction, json = false, modelName = '') {
   const demo = readDemo();
   sdk ??= Promise.all([import(`${SDK}/firebase-app.js`), import(`${SDK}/firebase-ai.js`)]);
   const [{ initializeApp }, { getAI, getGenerativeModel, GoogleAIBackend }] = await sdk;
@@ -61,7 +66,7 @@ async function modelFor(systemInstruction, json = false) {
   if (!apps.has(name)) apps.set(name, initializeApp(demo ? demo.config : PUBLIC_CONFIG, name));
   const ai = getAI(apps.get(name), { backend: new GoogleAIBackend() });
   return getGenerativeModel(ai, {
-    model: demo?.model || DEFAULT_MODEL,
+    model: modelName || demo?.model || DEFAULT_MODEL,
     ...(systemInstruction && { systemInstruction }),
     // Mức chặn để mặc định của Gemini: mức chặt nhất từng chặn nhầm chữ mẫu như tour địa đạo Củ Chi của khung SighGone.
     generationConfig: { temperature: 0.4, ...(json && { responseMimeType: 'application/json' }) },
@@ -90,18 +95,24 @@ function explain(err, aborted) {
   return new AiError('other', `AI gặp lỗi: ${text.slice(0, 160)}`);
 }
 
-// Chạy once(signal) với giới hạn thời gian; quá tải mà canRetry() còn đúng (chưa nhận được gì) thì thử lại một lần.
+// Chạy once(signal, model) với giới hạn thời gian; quá tải mà canRetry() còn đúng (chưa nhận được gì) thì thử lại một lần; hết lượt
+// thì chuyển sang model dự phòng (rỗng là model chính).
 async function withRetry(once, canRetry = () => true) {
   const abort = new AbortController();
   const timer = setTimeout(() => abort.abort(), TIMEOUT_MS);
   try {
+    const name = usingFallback() ? FALLBACK_MODEL : '';
     try {
-      return await once(abort.signal);
+      return await once(abort.signal, name);
     } catch (err) {
       const why = explain(err, abort.signal.aborted);
+      if (why.kind === 'quota' && !name) {
+        fallbackUntil = Date.now() + FALLBACK_MS;
+        if (canRetry()) return await once(abort.signal, FALLBACK_MODEL);
+      }
       if (why.kind !== 'busy' || !canRetry()) throw why;
       await new Promise((resolve) => setTimeout(resolve, RETRY_MS));
-      return await once(abort.signal);
+      return await once(abort.signal, name);
     }
   } catch (err) {
     throw explain(err, abort.signal.aborted);
@@ -113,8 +124,8 @@ async function withRetry(once, canRetry = () => true) {
 // Gửi prompt, nhận từng dòng (JSON Lines) ngay khi về; onLine được gọi với mỗi dòng không rỗng.
 export function streamLines(systemInstruction, prompt, onLine) {
   let got = 0;
-  return withRetry(async (signal) => {
-    const model = await modelFor(systemInstruction);
+  return withRetry(async (signal, name) => {
+    const model = await modelFor(systemInstruction, false, name);
     const result = await model.generateContentStream(prompt, { signal });
     let buffer = '';
     const emit = (line) => {
@@ -136,8 +147,8 @@ export function streamLines(systemInstruction, prompt, onLine) {
 
 // Một request trả về một object JSON (ví dụ hồ sơ brand).
 export function generateJson(prompt) {
-  return withRetry(async (signal) => {
-    const model = await modelFor('', true);
+  return withRetry(async (signal, name) => {
+    const model = await modelFor('', true, name);
     const result = await model.generateContent(prompt, { signal });
     return JSON.parse(result.response.text());
   });
