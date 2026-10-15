@@ -779,15 +779,33 @@ export class WlBooking extends HTMLElement {
     return list.find((p) => p.id === this._fields?.pickup?.control.value) ?? list[0] ?? null;
   }
 
+  // Dựng các thẻ ngày vào hộp ngày. Lịch dài (nhiều tour có cả quý) thì chỉ hiện `datesShown` ngày đầu (mặc định 8), phần còn lại
+  // mở bằng nút "Xem thêm"; ngày được chọn sẵn luôn nằm trong phần hiện. Lịch ngắn (Bậc Trà) thì không có nút.
+  fillDates() {
+    const departures = this.calDepartures();
+    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
+    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
+    const picked = this._dateButtons.findIndex(({ dep }) => dep === this._departure);
+    const shown = Math.max(this._data.datesShown ?? 8, picked + 1);
+    this._dateButtons.forEach(({ button }, i) => { button.hidden = i >= shown; });
+    const hidden = this._dateButtons.length - shown;
+    const more = hidden > 0 && this._data.labels?.moreDates ? textEl('button', 'booking__dates-more', fill(this._data.labels.moreDates, { n: hidden })) : null;
+    if (more) {
+      more.type = 'button';
+      more.addEventListener('click', () => {
+        this._dateButtons.forEach(({ button }) => { button.hidden = false; });
+        more.remove();
+      });
+    }
+    this._datesBox.replaceChildren(...this._dateButtons.map(({ button }) => button), ...[more].filter(Boolean));
+  }
+
   // Đổi tour: dựng lại các thẻ ngày theo lịch của tour mới, chọn ngày đầu còn chỗ, tính lại tạm tính; phiếu cũ ẩn đi.
   pickTour(id) {
     const tour = this._tours.find((t) => t.id === id);
     if (!tour) return;
     this._tour = tour;
-    const departures = this.calDepartures();
-    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
-    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
-    this._datesBox.replaceChildren(...this._dateButtons.map(({ button }) => button));
+    this.fillDates();
     this._tourRadios?.forEach((radio) => { radio.checked = radio.value === id; });
     if (this._ticket) this._ticket.hidden = true;
     this.updateCalendar();
@@ -923,13 +941,13 @@ export class WlBooking extends HTMLElement {
     const departures = this.calDepartures();
     if (!this.tourPrice() || !departures.length) return null;
 
-    // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn để vừa mở đã thấy tạm tính.
-    this._departure = departures.find((dep) => dep.seats > 0) ?? null;
-    this._dateButtons = departures.map((dep) => ({ dep, button: this.departureEl(dep) }));
-    const dates = groupEl('booking__dates', this._dateButtons.map(({ button }) => button));
+    // Ngày khởi hành đầu tiên còn chỗ được chọn sẵn (trong fillDates) để vừa mở đã thấy tạm tính.
+    const dates = document.createElement('div');
+    dates.className = 'booking__dates';
     dates.setAttribute('role', 'group');
     if (labels.departures) dates.setAttribute('aria-label', labels.departures);
     this._datesBox = dates;
+    this.fillDates();
 
     const info = groupEl('booking__info', [
       this.tourPickEl(prefix),

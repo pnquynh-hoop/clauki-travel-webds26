@@ -1173,3 +1173,19 @@ form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
   display: grid;
   gap: 0.15rem;
 }
+
+/* Nút mở thêm ngày: nằm hết hàng dưới các thẻ ngày. */
+.booking__dates-more {
+  grid-column: 1 / -1;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--color-ink) 35%, transparent);
+  border-radius: calc(var(--radius) * 0.8);
+  cursor: pointer;
+}
+
+.booking__dates-more:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
