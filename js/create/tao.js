@@ -262,7 +262,7 @@ async function create() {
     preview(result.content, result.theme, true);
     const s = result.stats;
     setStatus([...head, ruleNote, layoutNote, photoNote || (ui.photoOn.checked ? 'Không tìm được ảnh hợp nơi chốn nên giữ ảnh của khung.' : ''), `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
-      s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung, sửa sau bằng editor.` : ''], 'ok');
+      s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn của AI chặn)` : ''}, sửa sau bằng editor.` : ''], 'ok');
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
   } catch (err) {

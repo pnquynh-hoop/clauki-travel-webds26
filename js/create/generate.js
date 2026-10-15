@@ -494,13 +494,32 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
     on.update?.(content, theme);
   };
   const groups = splitGroups(fields);
-  await Promise.all(groups.map((idx) => streamLines('', groupPrompt(profile, fields, idx), handle)));
-  const missing = fields.map((_, i) => i).filter((i) => !got.has(i));
+  // Bộ lọc an toàn của AI đôi khi chặn cả nhóm vì một dòng chữ mẫu vô hại: chia đôi nhóm rồi thử lại cho tới từng dòng, dòng nào vẫn bị chặn
+  // thì giữ chữ của khung (không bỏ cả website vì một dòng).
+  const blocked = [];
+  const runGroup = async (idx) => {
+    const todo = idx.filter((i) => !got.has(i));
+    if (!todo.length) return;
+    try {
+      await streamLines('', groupPrompt(profile, fields, todo), handle);
+    } catch (err) {
+      if (err.kind !== 'blocked') throw err;
+      if (todo.length === 1) {
+        blocked.push(fields[todo[0]].key);
+        return;
+      }
+      const mid = Math.ceil(todo.length / 2);
+      await Promise.all([runGroup(todo.slice(0, mid)), runGroup(todo.slice(mid))]);
+    }
+  };
+  await Promise.all(groups.map(runGroup));
+  const missing = fields.map((_, i) => i).filter((i) => !got.has(i) && !blocked.includes(fields[i].key));
   // Lượt gửi lại hỏng thì thôi: các chỗ thiếu giữ chữ của khung, người dùng sửa sau bằng editor.
-  if (missing.length) await streamLines('', groupPrompt(profile, fields, missing), handle).catch(() => {});
+  if (missing.length) await runGroup(missing).catch(() => {});
+  if (blocked.length) console.warn('Dòng bị bộ lọc an toàn chặn, giữ chữ của khung:', blocked);
   const photoCount = await photoRun;
   await layoutRun;
   on.update?.(content, theme);
-  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount };
+  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount, blocked: blocked.length };
   return { content, theme, profile, stats };
 }
