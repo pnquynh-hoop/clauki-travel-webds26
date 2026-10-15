@@ -163,8 +163,13 @@ export class WlRoomDetail extends HTMLElement {
   }
 
   // Nút đặt mặc định theo site.cta; section ghi book (label, href) thì dùng nút riêng, ví dụ gọi điện khi
-  // trang đặt chỗ chưa nhận sản phẩm này.
+  // trang đặt chỗ chưa nhận sản phẩm này. Nút chỉ đi kèm thứ đặt được: giá, ngày còn trống, hạng phòng
+  // (tra được trong catalog thì room là id sản phẩm) hoặc nút khai riêng; khối chỉ có tiện nghi, cảnh nhìn ra
+  // hay thẻ các hạng khác thì không có nút. Không xét section.item: id ghi sai hay brand không có catalog thì
+  // không tra được gì, khối không được hiện nút trơ.
   bookEl(section) {
+    const bookable = section.book || section.price || section.room || section.availability?.length;
+    if (!bookable) return null;
     const cta = this.site?.cta;
     const href = section.book?.href ?? cta?.href;
     const label = section.book?.label ?? this.labels.book ?? cta?.label;
@@ -340,12 +345,15 @@ export class WlRoomDetail extends HTMLElement {
       ]),
       this.cardEl(section),
     ]);
-    this.replaceChildren(...[
+    const parts = [
       this.coverEl(section),
       body,
       this.filmEl(section.images ?? []),
       this.viewEl(section.view),
       this.othersEl(section.others ?? []),
-    ].filter(Boolean));
+    ].filter(Boolean);
+    // Không còn phần nào để hiện (id sản phẩm ghi sai, dữ liệu trống) thì ẩn cả khối, không để lại khoảng trống.
+    this.hidden = !parts.length;
+    this.replaceChildren(...parts);
   }
 }

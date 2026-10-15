@@ -127,9 +127,6 @@
         },
         {
           "type": "room-detail",
-          "labels": {
-            "book": ""
-          },
           "others": [
             {
               "label": "Mùa mây",
@@ -1236,7 +1233,6 @@
         {
           "type": "room-detail",
           "labels": {
-            "book": "",
             "others": "Các mùa khác"
           },
           "others": [
@@ -1732,7 +1728,6 @@
         {
           "type": "room-detail",
           "labels": {
-            "book": "",
             "others": "Các mùa khác"
           },
           "others": [
@@ -2149,7 +2144,6 @@
         {
           "type": "room-detail",
           "labels": {
-            "book": "",
             "others": "Các mùa khác"
           },
           "others": [
@@ -2267,7 +2261,6 @@
             "best": "5:00 đến 8:00"
           },
           "labels": {
-            "book": "",
             "amenities": "Nên mang theo",
             "view": "Sáng sớm trên đồi chè",
             "best": "Mặc áo ấm từ"
@@ -2378,7 +2371,6 @@
         {
           "type": "room-detail",
           "labels": {
-            "book": "",
             "others": "Soạn đồ xong thì chọn mùa"
           },
           "others": [
@@ -2652,9 +2644,6 @@
         },
         {
           "type": "room-detail",
-          "labels": {
-            "book": ""
-          },
           "others": [
             {
               "label": "Mùa mây",
