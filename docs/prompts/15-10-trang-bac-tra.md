@@ -2,7 +2,7 @@
 
 - Người dùng AI: Như Quỳnh
 - Công cụ: Claude Code (Claude Opus 5.5)
-- Kết quả: PR #122 trên nhánh `feat/bac-tra-pages`
+- Kết quả: PR #122
 
 ## Prompt (tóm tắt)
 
@@ -16,7 +16,7 @@ từ một landing page thành website nhiều trang theo sơ đồ ở issue #8
    (thẻ liên hệ nghiêng, biển đang mở theo giờ thật, ô nhắn nhanh); chưa có component thì tạo mới, có rồi thì thêm variant;
    trang liên hệ chỉ dùng để liên hệ với doanh nghiệp;
 4. trang chủ đổi sang hero kiểu `coverflow`, trang chuẩn bị đổi sang hero kiểu `stacked` có hiệu ứng `reveal`;
-5. sửa nút giữ chỗ thừa ở trang chuẩn bị; rebase lên `main` mới nhất rồi mở PR.
+5. sửa nút giữ chỗ thừa ở trang chuẩn bị.
 
 Yêu cầu:
 
@@ -31,4 +31,3 @@ Yêu cầu:
 - Chọn kiểu giấy note của bản mẫu thiết kế ban đầu cho trang liên hệ.
 - Chọn hero `coverflow` cho trang chủ, hero `stacked` có `reveal` cho trang chuẩn bị.
 - Sửa nội dung trang liên hệ thành liên hệ với doanh nghiệp, không phải với trưởng đoàn.
-- Gộp component, CSS và dữ liệu trong một PR.
