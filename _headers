@@ -1,0 +1,5 @@
+# Cloudflare Pages đọc file này khi deploy (không phải mã chạy trên trang).
+# Tắt cache dài: mọi tệp phải được kiểm tra lại với máy chủ trước khi dùng. Chưa đổi thì máy chủ trả 304 rất nhẹ,
+# đổi rồi thì lấy bản mới ngay, nên sau mỗi lần deploy không ai còn thấy bản cũ.
+/*
+  Cache-Control: no-cache
