@@ -43,4 +43,21 @@
   /* Thẻ thông tin (đồng hồ, mẹo, bảng chính sách) cùng kiểu với nút: viền mực, bóng in lệch. */
   --card-border: 2px solid #111114;
   --card-shadow: 8px 8px 0 #111114;
+  /* Bảng màu tối (theme-mode.js): Sài Gòn về đêm. Nền đêm, chữ màu giấy báo, màu nhấn xanh biển số sáng hơn để đủ
+     tương phản; nút vẫn vàng taxi. Viền thẻ, bóng nút đổi sang màu chữ sáng để còn thấy trên nền tối.
+     Tương phản: chữ trên nền 16; chữ phụ 8.5; màu nhấn trên nền 8.7, trên thẻ 7.6; chữ nút trên vàng 12.48. */
+  --dark-color-bg: #121318;
+  --dark-color-surface: #1c1d24;
+  --dark-color-ink: #f2eee4;
+  --dark-color-muted: #b4afa6;
+  --dark-color-accent: #8fb0ff;
+  --dark-color-primary: #ffcc1d;
+  --dark-color-on-primary: #111114;
+  --dark-color-tint: #24252d;
+  --dark-color-mark: #ff6b57;
+  --dark-eyebrow-color: #f2eee4;
+  --dark-card-border: 2px solid #f2eee4;
+  --dark-card-shadow: 8px 8px 0 #000000;
+  --dark-btn-shadow: 4px 4px 0 #f2eee4;
+  --dark-btn-shadow-hover: 6px 6px 0 #f2eee4;
 }

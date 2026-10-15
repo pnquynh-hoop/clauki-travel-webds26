@@ -29,7 +29,8 @@ nhau nhờ ba lớp, đều nằm ngoài mã nguồn:
    bên có ảnh nền, lời hẹn, dòng chữ chạy riêng; chỉ Bậc Trà bật `clouds` (mây trôi), chỉ Mé Rạch có
    `directions` (đường về vườn).
 3. **Biến CSS** trong `theme.css`: màu, font, bo góc, và vài biến tuỳ chọn như `--color-tint` (màu tấm thông
-   tin ở footer), `--font-hand` (chữ viết tay).
+   tin ở footer), `--font-hand` (chữ viết tay). Khai thêm bảng màu tối (`--dark-*`) thì trang có nút sáng, tối
+   (ví dụ SighGone); editor "Thử chỉnh" có khung chat nhờ AI gợi ý màu sáng, tối và bảng màu hai cột để tự chỉnh.
 
 Muốn đổi cách một thương hiệu hiển thị thì sửa một trong ba chỗ trên, không sửa component. Ngược lại, sửa CSS
 của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiểu đó cùng đổi.
@@ -77,16 +78,20 @@ serve.py                chạy thử trên máy: trả index.html cho đường 
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
   base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
+  theme-mode.css        chế độ tối: khối vốn sáng ngoài đời (giấy note, biển số, chữ trên ảnh) giữ bảng màu sáng
   components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
   editor.css            editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua), dùng chung với /tao
   tao.css               trình tạo web /tao
   editor-launch.css     nút "Thử chỉnh" và dải báo nháp trên trang khách
 js/
   core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
+  theme-mode.js         chế độ sáng, tối: áp bảng màu --dark-* của thương hiệu, nhớ lựa chọn
   app.js                bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
   dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
   components/           mỗi component một file: wl-<tên>.js
-  editor/               editor "Thử chỉnh": draft.js (nháp trên máy), launch.js (nút vào), editor.js, form.js, manifest.js, ai.js
+  editor/               editor "Thử chỉnh": draft.js (nháp trên máy), launch.js (nút vào), editor.js, form.js, manifest.js, ai.js,
+                        palette.js (màu sáng, tối: AI gợi ý và bảng màu hai cột),
+                        menu-order.js (kéo thả thứ tự menu)
   create/               trình tạo web /tao: tao.js (giao diện), generate.js (AI viết website trên khung có sẵn)
   ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
   sites.js              site khách: nháp /nhap/, đọc và xuất bản trên Supabase
