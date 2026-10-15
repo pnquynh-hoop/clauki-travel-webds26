@@ -1,0 +1,809 @@
+/* hero-ride.css - kiểu "ride" của <wl-hero>: poster mở đầu, rồi cuộn dọc thì thành phố trôi qua từng ga. Mã ở js/components/hero-ride.js.
+   Mặc định (chưa chạy JS, hoặc bật giảm chuyển động): poster tĩnh và các ga xếp thành dãy thẻ.
+   Khi JS chạy, khối có thêm lớp ride--live: một khung ghim (sticky) cao nhiều màn hình, mọi thứ trong khung theo tiến độ cuộn.
+   Màu thương hiệu lấy từ biến theme; riêng màu của cảnh vẽ (trời, nhà phố) khai ở đầu tệp, đổi được từ theme.css. */
+
+.hero--ride {
+  /* Màu thương hiệu dùng lại tên ngắn trong khối này. */
+  --ride-ink: var(--color-ink);
+  --ride-paper: var(--color-bg);
+  --ride-yellow: var(--color-primary);
+  --ride-plate: var(--color-accent);
+  /* Màu cảnh vẽ: mặc định pha từ màu thương hiệu, theme muốn đổi thì khai lại các biến này. */
+  --ride-alert: #d6331f;
+  --ride-dark: #0c1024;
+  --ride-sky-day: linear-gradient(180deg, #7fb0e8 0%, #b6d0ee 42%, var(--ride-paper) 80%);
+  --ride-sky-dusk: linear-gradient(180deg, #1b2a78 0%, #6b2f78 26%, var(--ride-alert) 54%, #ff8a2a 70%, var(--ride-yellow) 84%);
+  --ride-sky-night: linear-gradient(180deg, #06070c 0%, #111114 34%, #182052 68%, #3b2d5e 86%);
+  --ride-facade-1: var(--ride-yellow);
+  --ride-facade-2: var(--ride-paper);
+  --ride-facade-3: var(--color-tint, #e6dfcf);
+  --ride-facade-4: color-mix(in srgb, var(--ride-plate) 40%, #fff);
+  --ride-facade-5: #f3a68e;
+  --ride-facade-6: #9fd4bd;
+  --ride-facade-7: #f6d88a;
+  --ride-facade-8: #e9b8c9;
+  --ride-board-1: var(--ride-alert);
+  --ride-board-2: var(--ride-plate);
+  --ride-board-3: var(--ride-yellow);
+  --ride-board-4: #13a06e;
+  --ride-radius: 0.9rem;
+
+  position: relative;
+  display: block;
+  padding: 0;
+  color: var(--ride-ink);
+  background: var(--ride-sky-day);
+}
+
+/* ---------- Chữ màn mở đầu ---------- */
+
+.ride__intro {
+  position: relative;
+  order: -1;
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+  padding: 6.5rem 0 3rem;
+}
+
+.ride__eyebrow {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 1.2rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ride-paper);
+  background: var(--ride-ink);
+  border-radius: 999px;
+}
+
+.ride__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.18em;
+  margin: 0;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: clamp(4rem, 17vw, 6.5rem);
+  font-weight: 900;
+  line-height: 1.04;
+  text-transform: uppercase;
+}
+
+/* Chữ đầu một dòng riêng: poster xếp hai dòng, chữ sau cùng có ô tròn như biển số tuyến. */
+.ride__word {
+  display: inline-block;
+}
+
+.ride__word:first-child {
+  flex-basis: 100%;
+}
+
+.ride__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 0.92em;
+  height: 0.92em;
+  font-size: 0.6em;
+  line-height: 1;
+  color: var(--ride-ink);
+  background: var(--ride-yellow);
+  border: 0.09em solid var(--ride-ink);
+  border-radius: 50%;
+  box-shadow: 0.1em 0.1em 0 var(--ride-ink);
+}
+
+.ride__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.1rem;
+  margin-top: 1rem;
+}
+
+.ride__lead {
+  max-width: 30rem;
+  margin: 0;
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.ride__offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.6rem;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.9rem 1.2rem;
+  background: var(--color-surface);
+  border: 3px solid var(--ride-ink);
+  border-radius: calc(var(--ride-radius) + 0.2rem);
+  box-shadow: 7px 7px 0 var(--ride-ink);
+}
+
+.ride__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.ride__price-now {
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: clamp(1.6rem, 4.6vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ride__price-was {
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+/* Poster: mặt trời phẳng và một công trình đứng trước, chân công trình tan dần vào nền. */
+.ride__poster {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ride__poster-group {
+  position: absolute;
+  right: 3vw;
+  bottom: 0;
+  width: min(36svh, 64vw);
+  height: min(47svh, 24rem);
+}
+
+.ride__poster-sun {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--ride-yellow);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.ride__poster-img {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  transform: translateX(-50%);
+  -webkit-mask: linear-gradient(180deg, #000 72%, transparent 98%);
+  mask: linear-gradient(180deg, #000 72%, transparent 98%);
+}
+
+/* ---------- Biển ga kiểu metro ---------- */
+
+.ride__sign {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  max-width: min(25rem, calc(100vw - 2rem));
+  color: #fff;
+  background: var(--ride-plate);
+  border: 3px solid var(--ride-ink);
+  border-radius: var(--ride-radius);
+  box-shadow: 8px 8px 0 var(--ride-ink);
+}
+
+/* Hai thanh treo biển. */
+.ride__sign::before {
+  content: '';
+  position: absolute;
+  right: 22%;
+  bottom: 100%;
+  left: 22%;
+  height: 2rem;
+  border-inline: 3px solid var(--ride-ink);
+}
+
+.ride__sign-no {
+  display: grid;
+  place-items: center;
+  min-width: 3.4rem;
+  padding: 0.6rem;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--ride-ink);
+  background: var(--ride-yellow);
+  border-right: 3px solid var(--ride-ink);
+  border-radius: calc(var(--ride-radius) - 0.2rem) 0 0 calc(var(--ride-radius) - 0.2rem);
+}
+
+.ride__sign-body {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.3rem 1.1rem;
+  border-top: 6px solid var(--ride-alert);
+  border-radius: 0 calc(var(--ride-radius) - 0.2rem) 0 0;
+}
+
+.ride__sign-time {
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--ride-yellow);
+}
+
+.ride__sign-name {
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1.04;
+}
+
+.ride__sign-note {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, #fff 82%, var(--ride-plate));
+}
+
+.ride__sign-how {
+  justify-self: start;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ride-alert);
+  border: 2px solid var(--ride-ink);
+  border-radius: 999px;
+}
+
+/* ---------- Chế độ tĩnh: các ga xếp thành dãy thẻ ---------- */
+
+.ride__stage {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+}
+
+.ride__sky,
+.ride__names,
+.ride__strip,
+.ride__hud,
+.ride__end,
+.ride__tint,
+.ride__lit,
+.ride__rise,
+.ride__beacon,
+.ride__halo,
+.ride__beam {
+  display: none;
+}
+
+.ride__world {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 2.5rem 1.25rem;
+  width: min(100% - 2rem, var(--container));
+  margin: 2.5rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ride__stn {
+  display: grid;
+  gap: 2.2rem;
+  justify-items: center;
+  align-content: start;
+}
+
+.ride__art {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 15rem;
+}
+
+.ride__art-img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.ride__stn .ride__sign {
+  width: 100%;
+  box-shadow: 4px 4px 0 var(--ride-ink);
+}
+
+@media (min-width: 760px) {
+  .ride__intro { padding-top: 7.5rem; }
+  .ride__title { font-size: clamp(5rem, 11vw, 9rem); }
+  .ride__poster-group { right: 9vw; width: min(50svh, 40vw); height: min(94svh, 34rem); }
+}
+
+/* ---------- Chế độ chạy (JS bật lớp ride--live) ---------- */
+
+.ride--live .ride__track {
+  position: relative;
+  /* Mỗi ga 128 màn hình theo chiều cao, cộng nhịp mở đầu: số ga do dữ liệu quyết định (--n). */
+  height: calc(var(--n, 5) * 128svh);
+  background: var(--ride-dark);
+}
+
+.ride--live .ride__stage {
+  position: sticky;
+  top: var(--header-stuck, 0px);
+  display: block;
+  height: calc(100svh - var(--header-stuck, 0px));
+  padding: 0;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--ride-paper);
+}
+
+.ride--live .ride__sky,
+.ride--live .ride__names,
+.ride--live .ride__tint,
+.ride--live .ride__lit,
+.ride--live .ride__rise,
+.ride--live .ride__beacon,
+.ride--live .ride__halo,
+.ride--live .ride__beam,
+.ride--live .ride__end {
+  display: block;
+}
+
+.ride--live .ride__strip,
+.ride--live .ride__hud {
+  display: flex;
+}
+
+/* Bầu trời: ba lớp (ngày, hoàng hôn, đêm) và sao; JS chỉnh độ mờ từng lớp. */
+.ride__sky {
+  position: absolute;
+  inset: 0;
+}
+
+.ride__sky-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.ride__sky-day { background: var(--ride-sky-day); }
+.ride__sky-dusk { background: var(--ride-sky-dusk); opacity: 0; }
+.ride__sky-night { background: var(--ride-sky-night); opacity: 0; }
+
+.ride__stars {
+  opacity: 0;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 27% 9%, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 41% 24%, #fff6c9 50%, transparent 51%), radial-gradient(1px 1px at 55% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 68% 30%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 79% 7%, #fff 50%, transparent 51%),
+    radial-gradient(2px 2px at 90% 21%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 6% 36%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 33% 40%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 61% 44%, #fff 50%, transparent 51%);
+}
+
+/* Mặt trời có hai lớp bọc: lớp ngoài do CSS làm hiện dần khi cảnh bắt đầu chạy, lớp trong do JS cho lặn. */
+.ride__sun-wrap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.ride--live .ride__stage.is-calm .ride__sun-wrap { opacity: calc((1 - var(--calm, 1)) * 0.95); }
+.ride--live .ride__sun-wrap { opacity: 0.95; }
+
+.ride__sun {
+  position: absolute;
+  right: 6vw;
+  bottom: 38svh;
+  width: 11svh;
+  height: 11svh;
+  background: radial-gradient(circle, #fff8d6 0 30%, var(--ride-yellow) 52%, color-mix(in srgb, var(--ride-yellow) 35%, transparent) 62%, transparent 71%);
+  border-radius: 50%;
+}
+
+.ride__sun-red {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, #ffd27a 0 26%, #ff6a2a 50%, color-mix(in srgb, var(--ride-alert) 40%, transparent) 61%, transparent 71%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* Tên ga khổng lồ trong nền trời: chữ rỗng viền sáng. */
+.ride__names {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ride__names span {
+  position: absolute;
+  top: 37svh;
+  left: 0;
+  translate: -50% 0;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: 12svh;
+  font-weight: 900;
+  line-height: 0.85;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.12);
+  -webkit-text-stroke: 2.5px rgba(255, 255, 255, 0.55);
+  opacity: 0;
+}
+
+/* Dải nhà vẽ bằng SVG (JS sinh): lớp xa là đường chân trời, lớp gần là nhà ống, cây, dây điện.
+   Hiện dần khi cảnh bắt đầu chạy, nên màn mở đầu chỉ có trời, chữ và poster. */
+.ride__strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.ride__strip--far { z-index: 2; bottom: 17svh; height: 25svh; }
+.ride__strip--near { z-index: 8; height: 31svh; }
+.ride--live .ride__stage.is-calm .ride__strip { opacity: calc(1 - var(--calm, 1)); }
+
+.ride__strip-set {
+  position: relative;
+  flex: none;
+  height: 100%;
+}
+
+.ride__strip-set svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ride__strip-set svg + svg { opacity: 0; }
+
+/* Công trình tách nền: mỗi ga một khung, JS dời ngang theo độ sâu. */
+.ride--live .ride__world {
+  display: block;
+  width: auto;
+  margin: 0;
+}
+
+.ride--live .ride__stn { display: block; }
+
+.ride--live .ride__art {
+  position: absolute;
+  bottom: var(--bm);
+  left: 0;
+  z-index: var(--z);
+  display: block;
+  width: auto;
+  height: var(--hm);
+  aspect-ratio: var(--ar, 1);
+  translate: calc(-50% + var(--dx, 0px)) 0;
+}
+
+.ride--live .ride__art-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: fill;
+  -webkit-mask-image: linear-gradient(#000 var(--fa), transparent 97%);
+  mask-image: linear-gradient(#000 var(--fa), transparent 97%);
+}
+
+.ride__tint,
+.ride__lit {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+}
+
+.ride__tint--dusk { background: linear-gradient(105deg, rgba(122, 47, 110, 0.35), rgba(255, 106, 42, 0.62)); }
+.ride__tint--night { background: linear-gradient(180deg, #0a0e26, #0d1230); }
+.ride__lit--grid { background: radial-gradient(circle, #ffe08a 0 0.9px, transparent 1.4px) 0 0 / 5px 6px, linear-gradient(rgba(255, 210, 120, 0.12), rgba(255, 210, 120, 0.05)); }
+
+.ride__rise {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: translateY(100%);
+}
+
+.ride__rise > .ride__lit {
+  opacity: 1;
+  transform: translateY(-100%);
+}
+
+.ride__lit--floors {
+  background:
+    repeating-linear-gradient(90deg, rgba(10, 14, 40, 0) 0 37px, rgba(10, 14, 40, 0.75) 37px 52px, rgba(10, 14, 40, 0) 52px 81px, rgba(10, 14, 40, 0.6) 81px 90px),
+    repeating-linear-gradient(0deg, rgba(10, 14, 40, 0) 0 61px, rgba(10, 14, 40, 0.55) 61px 79px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 13px),
+    repeating-linear-gradient(180deg, rgba(255, 196, 92, 0.15) 0 4px, #ffd77a 4px 7px, rgba(255, 196, 92, 0.15) 7px 9px);
+}
+
+.ride__beacon {
+  position: absolute;
+  top: 0.3%;
+  left: 51%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4px;
+  opacity: 0;
+}
+
+.ride__beacon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ff3b24;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 4px rgba(255, 59, 36, 0.8);
+  animation: ride-blink 1.4s steps(1) infinite;
+}
+
+@keyframes ride-blink {
+  50% { opacity: 0.15; }
+}
+
+.ride__halo {
+  position: absolute;
+  inset: -10% -40% 10%;
+  background: radial-gradient(closest-side, rgba(255, 190, 90, 0.42), rgba(255, 140, 60, 0.12) 60%, transparent);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.ride__beam {
+  position: absolute;
+  bottom: 92%;
+  left: 50%;
+  width: 1.6svh;
+  height: 120svh;
+  margin-left: -0.8svh;
+  background: linear-gradient(0deg, rgba(255, 244, 210, 0.7), rgba(255, 244, 210, 0));
+  filter: blur(2px);
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: ride-sweep 7s ease-in-out infinite alternate;
+}
+
+.ride__beam--b {
+  animation-duration: 9s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes ride-sweep {
+  from { transform: rotate(-28deg); }
+  to { transform: rotate(24deg); }
+}
+
+/* Biển ga trong cảnh: treo phía trên công trình, JS lật xuống khi tới ga. */
+.ride--live .ride__stn .ride__sign {
+  position: absolute;
+  top: 21svh;
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  translate: -50% 0;
+  transform-origin: 50% -2rem;
+  opacity: 0;
+}
+
+/* Màn mở đầu đè lên cảnh. */
+.ride--live .ride__intro {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  width: auto;
+  margin: 0;
+  padding: 5.5rem max(5vw, 1rem) 0;
+}
+
+.ride--live .ride__intro.is-gone { visibility: hidden; }
+
+.ride--live .ride__title { font-size: min(18vw, 17svh); line-height: 1.02; }
+
+.ride--live .ride__poster {
+  z-index: -1;
+}
+
+/* Bảng giờ và tuyến thu nhỏ ở trên cùng. */
+.ride__hud {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  left: 1rem;
+  z-index: 12;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.55rem 1rem 0.55rem 0.55rem;
+  color: var(--ride-paper);
+  background: color-mix(in srgb, var(--ride-ink) 88%, transparent);
+  border: 2px solid var(--ride-ink);
+  border-radius: 999px;
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--ride-ink) 50%, transparent);
+  opacity: 0;
+}
+
+.ride__clock {
+  flex: none;
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ride-ink);
+  background: var(--ride-yellow);
+  border-radius: 999px;
+}
+
+.ride__map {
+  position: relative;
+  flex: 1;
+  height: 2.5rem;
+}
+
+.ride__map-line,
+.ride__map-fill {
+  position: absolute;
+  top: 0.55rem;
+  right: 0;
+  left: 0;
+  height: 6px;
+  background: color-mix(in srgb, var(--ride-ink) 65%, #fff);
+  border-radius: 6px;
+}
+
+.ride__map-fill {
+  background: linear-gradient(90deg, var(--ride-plate), var(--ride-alert) 60%, var(--ride-yellow));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.ride__map-stops {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ride__map-stops li {
+  position: relative;
+  width: 0;
+}
+
+.ride__map-stops b {
+  position: absolute;
+  top: 0.3rem;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--ride-paper);
+  border: 3px solid color-mix(in srgb, var(--ride-ink) 65%, #fff);
+  border-radius: 50%;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.ride__map-stops span {
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+  translate: -50% 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--ride-paper) 70%, var(--ride-ink));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.ride__map-stops li:first-child span { translate: -20% 0; }
+.ride__map-stops li:last-child span { translate: -80% 0; }
+.ride__map-stops .is-past b { background: var(--ride-yellow); border-color: var(--ride-yellow); }
+.ride__map-stops .is-on b { background: var(--ride-alert); border-color: var(--ride-paper); transform: scale(1.35); }
+.ride__map-stops .is-on span { opacity: 1; color: var(--ride-paper); }
+
+.ride__map-mark {
+  position: absolute;
+  top: 0.33rem;
+  left: -11px;
+  width: 22px;
+  height: 11px;
+  background: var(--ride-yellow);
+  border: 2px solid var(--ride-paper);
+  border-radius: 4px 7px 7px 4px;
+}
+
+/* Thẻ ga cuối. */
+.ride__end {
+  position: absolute;
+  top: auto;
+  right: 1rem;
+  bottom: 3svh;
+  left: 1rem;
+  z-index: 13;
+  padding: 1.5rem 1.6rem 1.7rem;
+  color: var(--ride-ink);
+  background: var(--color-surface);
+  border: 3px solid var(--ride-ink);
+  border-radius: calc(var(--ride-radius) + 0.3rem);
+  box-shadow: 10px 10px 0 var(--ride-yellow);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ride__end.is-in { visibility: visible; }
+
+.ride__end-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ride-alert);
+}
+
+.ride__end-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.ride__end-price {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-ride, var(--font-heading));
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+@media (min-width: 760px) {
+  .ride--live .ride__intro { padding-top: 6.5rem; }
+  .ride--live .ride__title { font-size: min(14vw, 24svh); }
+  .ride--live .ride__row { gap: 1.1rem; }
+  .ride--live .ride__offer { margin-top: 1.2rem; }
+  .ride--live .ride__art { bottom: var(--b); height: var(--h); }
+  .ride--live .ride__stn .ride__sign { top: var(--sy, 37svh); translate: calc(-100% - var(--gap, 11vw)) 0; }
+  .ride__names span { top: 18svh; font-size: clamp(4rem, 19svh, 13rem); color: rgba(255, 255, 255, 0.28); -webkit-text-stroke-color: rgba(255, 255, 255, 0.85); }
+  .ride__sun { top: 12svh; right: 9vw; bottom: auto; width: 24svh; height: 24svh; }
+  .ride__hud { left: 50%; right: auto; width: min(52rem, 100vw - 2rem); translate: -50% 0; padding-bottom: 0.9rem; }
+  .ride__end { top: 26svh; right: auto; bottom: auto; left: 5vw; width: min(30rem, 40vw); }
+}
+
+@media (min-width: 1024px) {
+  .ride--live .ride__intro { padding-inline: 5vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ride__beacon::before,
+  .ride__beam { animation: none; }
+}
