@@ -1,11 +1,12 @@
 /* wl-catalog-list.js - lưới thẻ các mục trong danh mục sản phẩm (tour, hạng phòng) của thương hiệu.
    Tour khai một lần ở catalog (AGENTS.md mục 5), khối này chỉ đọc lại qua this.site.catalog, nên giá hay ảnh
    sửa một chỗ là mọi trang cùng đổi. Section chỉ ghi tiêu đề, mẫu chữ trên thẻ (labels) và tuỳ chọn pick
-   (danh sách id) khi chỉ muốn hiện vài mục, ví dụ ba tour gợi ý ở trang 404. */
+   (danh sách id) khi chỉ muốn hiện vài mục, ví dụ ba tour gợi ý ở trang 404, hoặc related (id một mục) để tự chọn
+   các mục cùng gu với mục đó, ví dụ cuối trang chi tiết tour. */
 import { catalogItem } from '../core.js';
 import { textEl, linkEl, groupEl } from '../dom.js';
 // Thẻ tour và vài hàm nhỏ dùng chung với khối gợi ý tour (tour-pick).
-import { cardEl, vehiclesOf, isComplete } from './catalog-card.js';
+import { cardEl, vehiclesOf, isComplete, relatedItems } from './catalog-card.js';
 
 // Ba nhóm lọc. key là tên trên địa chỉ (#di=thuyen&buoi=toi), label là khoá chữ trong section.filters,
 // names lấy tên hiện ra từ danh mục, match cho biết một tour có hợp lựa chọn không.
@@ -27,10 +28,14 @@ export class WlCatalogList extends HTMLElement {
     this.render();
   }
 
-  // pick giữ đúng thứ tự người viết dữ liệu chọn; không có pick thì hiện cả danh mục.
+  // related: tự chọn các mục cùng gu (số lượng theo relatedCount, mặc định 3); pick giữ đúng thứ tự người viết
+  // dữ liệu chọn; không có cả hai thì hiện cả danh mục.
   items() {
+    const section = this._data;
     const all = this.site?.catalog?.items ?? [];
-    const picked = this._data.pick ? this._data.pick.map((id) => catalogItem(this.site, id)) : all;
+    let picked = all;
+    if (section.related) picked = relatedItems(this.site?.catalog, section.related, section.relatedCount ?? 3);
+    else if (section.pick) picked = section.pick.map((id) => catalogItem(this.site, id));
     return picked.filter(isComplete);
   }
 
