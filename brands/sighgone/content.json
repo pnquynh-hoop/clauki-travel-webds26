@@ -3923,42 +3923,46 @@
         {
           "type": "gallery",
           "id": "nhin-truoc",
-          "variant": "slices",
+          "variant": "plates",
           "eyebrow": "Nhìn trước tuyến",
           "title": "Sáu ga, sáu khung hình",
-          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
-          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
           "listLabel": "Ảnh sáu ga của tuyến số 1",
           "images": [
             {
               "src": "images/tuyen-nguyen-hue.webp",
               "alt": "Phố đi bộ Nguyễn Huệ, đài phun nước hoa sen và trụ sở Ủy ban Nhân dân Thành phố phía xa",
-              "caption": "14:30, Nhà hát Thành phố và phố đi bộ Nguyễn Huệ"
+              "caption": "Nhà hát Thành phố",
+              "note": "14:30"
             },
             {
               "src": "images/tuyen-tren-cao.webp",
               "alt": "Sài Gòn lúc hoàng hôn nhìn từ trên cao, kênh Nhiêu Lộc và những dòng đèn xe",
-              "caption": "14:45, Sài Gòn nhìn từ trên cao"
+              "caption": "Sài Gòn từ trên cao",
+              "note": "14:45"
             },
             {
               "src": "images/tuyen-ben-thanh.webp",
               "alt": "Chợ Bến Thành nhìn từ ngã tư, xe máy và taxi qua lại dưới trời nắng",
-              "caption": "15:40, Chợ Bến Thành"
+              "caption": "Chợ Bến Thành",
+              "note": "15:40"
             },
             {
               "src": "images/tuyen-dinh.webp",
               "alt": "Dinh Độc Lập và bãi cỏ dưới trời nhiều mây",
-              "caption": "16:20, Dinh Độc Lập"
+              "caption": "Dinh Độc Lập",
+              "note": "16:20"
             },
             {
               "src": "images/tuyen-nha-tho.webp",
               "alt": "Nhà thờ Đức Bà lúc chiều, dòng xe máy chạy ngang quảng trường",
-              "caption": "17:00, Nhà thờ Đức Bà"
+              "caption": "Nhà thờ Đức Bà",
+              "note": "17:00"
             },
             {
               "src": "images/tuyen-bitexco.webp",
               "alt": "Bitexco và các toà nhà ven sông lên đèn",
-              "caption": "17:30, Bitexco lúc hoàng hôn"
+              "caption": "Bitexco lúc hoàng hôn",
+              "note": "17:30"
             }
           ]
         },
