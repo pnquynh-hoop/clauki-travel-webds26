@@ -112,6 +112,41 @@ ${RULES}
 ${lines}`;
 }
 
+/* ---------- Tinh chỉnh mô tả ---------- */
+
+// Viết lại mô tả của người dùng thành một prompt rõ ràng hơn trước khi tạo website: đủ loại hình, nơi chốn, đối tượng, giá, điểm riêng,
+// giọng điệu, theo đúng những gì hồ sơ thương hiệu ở bước sau cần. Giữ nguyên mọi sự thật và con số của người dùng; thiếu gì thì
+// không bịa mà ghi vào `thieu` để người dùng bổ sung. Mô tả không phải du lịch hoặc lưu trú thì từ chối, như bước lập hồ sơ.
+export async function refineBrief(brief) {
+  const out = await generateJson(`Bạn giúp người dùng chuẩn hoá mô tả để một AI khác đọc rồi dựng website cho một nơi lưu trú hoặc một tour du lịch.
+Đây là bản mô tả cho AI đọc, không phải lời quảng cáo cho khách.
+
+Mô tả gốc của người dùng: ${brief}
+
+Viết lại thành một đoạn tiếng Việt rõ ràng, trung tính, khẳng định, 1 tới 4 câu, tối đa 400 ký tự. Sắp theo thứ tự: loại hình (ở hay đi tour) và nơi chốn,
+dành cho ai, số lượng (phòng, chỗ, số người), điểm riêng, giá và đơn vị tính. Chỉ đưa vào ý có trong mô tả gốc.
+Luật:
+- Mỗi câu chỉ nói điều người dùng đã nói. Không thêm tiện nghi, địa danh, con số, phong cách, ưu đãi hay tính từ khen ("ấm cúng", "độc đáo", "tuyệt vời"); không dùng lời mời gọi ("hãy", "tham gia ngay", "chào đón"), tiếng lóng.
+- Không bỏ chi tiết nào người dùng đã nói (buổi trong ngày, thời lượng, số người, món, phương tiện). Giữ nguyên tên riêng và con số; sửa chính tả, viết hoa tên địa danh.
+- Các ý cốt lõi mà mô tả gốc chưa có thì không bịa; liệt kê vào "thieu" bằng cụm ngắn. Ý cốt lõi gồm: loại hình (ở hay đi tour), nơi chốn cụ thể, đối tượng khách, số lượng, điểm riêng, giá cụ thể. "giá rẻ" chưa phải giá cụ thể.
+- Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML.
+- Mô tả không liên quan tới du lịch hoặc lưu trú, hoặc có nội dung không phù hợp thì chỉ trả {"tuChoi": "lý do ngắn, lịch sự, kèm gợi ý cách viết lại"}.
+
+Ví dụ. Gốc: "homestay đà lạt giá rẻ cho nhóm bạn". Trả về:
+{"moTa": "Homestay ở Đà Lạt dành cho nhóm bạn, giá rẻ.", "thieu": ["giá cụ thể mỗi đêm", "số phòng và sức chứa", "điểm riêng của chỗ ở"]}
+
+Trả về JSON một dòng: {"moTa": "", "thieu": [""]}`);
+  if (out.tuChoi) {
+    const err = new Error(cleanText(out.tuChoi, 300));
+    err.kind = 'refused';
+    throw err;
+  }
+  const text = cleanText(out.moTa, 600);
+  if (!text) throw new Error('AI chưa viết lại được, hãy thử lại.');
+  const missing = (Array.isArray(out.thieu) ? out.thieu : []).map((s) => cleanText(s, 60)).filter(Boolean).slice(0, 4);
+  return { text, missing };
+}
+
 /* ---------- Màu ---------- */
 
 // Bộ màu AI chọn hay lệch một cặp (nhất là màu nhấn trên nền sáng, chữ trắng trên nút vàng cam); bỏ cả bộ vì một cặp thì phí, nên sửa:
