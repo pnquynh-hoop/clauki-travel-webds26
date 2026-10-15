@@ -86,7 +86,7 @@ async function create() {
       on: {
         photos: (info) => { photoNote = `Ảnh: ${info.photos} ảnh thật theo nơi chốn từ ${info.source}, thay vào ${info.slots} chỗ; nguồn ảnh ghi ở cuối trang.`; },
         profile: (p, info) => {
-          head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'}`];
+          head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'} ${info.font ? `Kiểu chữ: ${info.font}.` : 'Giữ kiểu chữ của khung.'}`];
           state.draft = { brief, profile: p };
         },
         field: (done, total) => {
