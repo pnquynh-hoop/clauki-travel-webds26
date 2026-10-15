@@ -31,13 +31,17 @@ export function checkNewPage(content, title) {
 }
 
 // Thương hiệu một trang (chỉ có sections) chuyển sang dạng pages trước: sections cũ thành trang chủ.
-export function addPage(content, slug, title, onMenu) {
+// cloneFrom (tuỳ chọn): đường dẫn một trang có sẵn; có thì trang mới bắt đầu bằng bản sao các khối của trang đó, không thì chỉ có một khối tiêu đề.
+export function addPage(content, slug, title, onMenu, cloneFrom) {
   if (!content.pages) {
     content.pages = [{ path: '/', sections: content.sections ?? [] }];
     delete content.sections;
   }
-  content.pages.push({ path: slug, title, added: true,
-    sections: [{ type: 'intro', id: 'gioi-thieu', eyebrow: content.brand?.name ?? '', title }] });
+  const source = cloneFrom ? pageAt(content, cloneFrom) : null;
+  const sections = source?.sections?.length
+    ? JSON.parse(JSON.stringify(source.sections))
+    : [{ type: 'intro', id: 'gioi-thieu', eyebrow: content.brand?.name ?? '', title }];
+  content.pages.push({ path: slug, title, added: true, sections });
   if (onMenu) (content.nav ??= []).push({ label: title, href: `page:${slug}` });
 }
 

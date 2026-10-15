@@ -708,8 +708,8 @@
     grid-template-rows: auto 1fr auto;
   }
 
-  /* Một hàng duy nhất (tên trang, hoàn tác, làm lại, thoát) để khung xem trước còn nhiều chỗ; tên thương hiệu và trạng thái
-     chỉ hiện khi đang có bản nháp, vì khi đó mới cần nhắc. */
+  /* Một hàng duy nhất (tên trang, hoàn tác, làm lại, lưu, thoát) để khung xem trước còn nhiều chỗ; tên thương hiệu và trạng thái
+     ẩn đi, nút Lưu sáng lên khi có thay đổi. */
   .ed-top {
     flex-wrap: nowrap;
     min-width: 0;
@@ -719,11 +719,6 @@
 
   .ed-top__who {
     display: none;
-  }
-
-  .ed-top__who:has(.is-draft) {
-    display: block;
-    flex: none;
   }
 
   .ed-top__brand {
@@ -752,7 +747,9 @@
   }
 
   .ed-top .ed-btn {
-    padding-inline: 0.6rem;
+    min-height: 2.2rem;
+    padding-inline: 0.5rem;
+    font-size: 0.82rem;
     white-space: nowrap;
   }
 
