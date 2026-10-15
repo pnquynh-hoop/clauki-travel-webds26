@@ -120,6 +120,7 @@
     "items": [
       {
         "id": "thuc-giac",
+        "href": "page:tour/thuc-giac",
         "name": "Sài Gòn thức giấc",
         "tagline": "Đi bộ lúc thành phố vừa mở mắt",
         "text": "Ba tiếng đi bộ trước khi Sài Gòn kẹt xe: ly cà phê vợt đầu hẻm, chợ sáng, nhà thờ, bưu điện và một chung cư cũ.",
@@ -668,6 +669,7 @@
       },
       {
         "id": "thanh-da",
+        "href": "page:tour/thanh-da",
         "name": "Đạp xe Thanh Đa",
         "tagline": "Đường làng giữa lòng thành phố",
         "text": "Bán đảo bao quanh bởi sông Sài Gòn, cách trung tâm 6 km mà còn đường làng, vườn rau, đò ngang.",
@@ -937,6 +939,7 @@
       },
       {
         "id": "song-chieu",
+        "href": "page:tour/song-chieu",
         "name": "Sông Sài Gòn chiều",
         "tagline": "Thuyền nhỏ, kênh nhỏ, nắng tắt",
         "text": "Rời bến Bạch Đằng bằng thuyền gỗ tám chỗ, vào kênh nhỏ, ra sông lớn đúng lúc hoàng hôn, về bến khi thành phố lên đèn.",
@@ -1481,6 +1484,7 @@
       },
       {
         "id": "cu-chi",
+        "href": "page:tour/cu-chi",
         "name": "Củ Chi sớm",
         "tagline": "Tới địa đạo trước đám đông",
         "text": "Rời thành phố lúc 6 giờ để tới địa đạo khi rừng còn mát và chưa có xe du lịch lớn.",
@@ -3030,6 +3034,234 @@
           "type": "route",
           "id": "hanh-trinh",
           "item": "cho-lon",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/thuc-giac",
+      "title": "Sài Gòn thức giấc",
+      "description": "Ba tiếng đi bộ trước giờ kẹt xe: cà phê vợt đầu hẻm, chợ sáng, nhà thờ, bưu điện, rồi một con hẻm treo đèn lồng.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "thuc-giac",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/buu-dien.webp",
+              "alt": "Mặt tiền vàng của Bưu điện Trung tâm Sài Gòn dưới trời xanh, du khách đi dạo trên sân"
+            },
+            "text": "Nắng còn xiên, sân bưu điện chưa đông người, chụp ảnh không phải chờ ai.",
+            "best": "08:15 đến 08:45"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "thuc-giac",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/thanh-da",
+      "title": "Đạp xe Thanh Đa",
+      "description": "Đạp xe trên bán đảo cách trung tâm 6 km mà còn đường làng, đò ngang, vườn rau, rồi ngồi bờ đê xem nắng tắt.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "thanh-da",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/xe-dap.webp",
+              "alt": "Chiếc xe đạp của người bán hàng rong chở đầy bưởi và chuối trên vỉa hè Sài Gòn"
+            },
+            "text": "Hàng dừa nước hai bên đường làng, nghe tiếng xe đạp nhiều hơn tiếng còi.",
+            "best": "15:30 đến 16:00"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "thanh-da",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/song-chieu",
+      "title": "Sông Sài Gòn chiều",
+      "description": "Thuyền gỗ tám chỗ rời bến Bạch Đằng, luồn qua kênh nhỏ, ra sông lớn đúng lúc hoàng hôn rồi về khi thành phố lên đèn.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "song-chieu",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/song-hoang-hon.webp",
+              "alt": "Sông Sài Gòn uốn cong quanh bán đảo Bình Thạnh lúc hoàng hôn"
+            },
+            "text": "Ra tới ngã ba sông, mặt nước đổi sang màu cam phía Thủ Thiêm.",
+            "best": "17:45, mặt trời sát đường chân trời"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "song-chieu",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "tour/cu-chi",
+      "title": "Củ Chi sớm",
+      "description": "Rời thành phố lúc 6 giờ để tới địa đạo khi rừng còn mát, đi hầm, ăn khoai mì chấm muối mè, về kịp bữa trưa.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "cu-chi",
+          "priceNote": "Không cọc, trả khi gặp hướng dẫn viên",
+          "view": {
+            "image": {
+              "src": "images/cu-chi-rung.webp",
+              "alt": "Lối mòn đất dẫn tới căn chòi mái lá giữa rừng tre ở khu di tích địa đạo Củ Chi"
+            },
+            "text": "Rừng tre còn hơi sương, lối mòn chưa có đoàn khách nào đi qua.",
+            "best": "07:30, vừa mở cổng"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Cảnh đáng chờ",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác cùng gu"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "cu-chi",
           "eyebrow": "Hành trình",
           "title": "{stages} ga, {vehicles} cách đi.",
           "labels": {
