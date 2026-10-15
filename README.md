@@ -40,7 +40,7 @@ của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiể
 | --------- | ------- | -------- | ------- | -------- |
 | `header` (cố định) | `overlay`: trong suốt đè lên hero | `solid`: nền màu trang hơi trong | `center`: tên thương hiệu đứng giữa | `solid` |
 | `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` | `haze`: ảnh phủ sương, rê chuột thì tan (trang `tuyen-so-1`: `ride`, cuộn qua từng ga) |
-| `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng | `calendar` |
+| `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng | `calendar` (trang `dat-tour`: `ticket`, quầy vé có máy in vé) |
 | `faq` | `chat` | `chat` | `chat` | `chat` |
 | `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `columns`, dây điện, biển số nhà |
 | `to-top` (cố định) | có | có | có | có |

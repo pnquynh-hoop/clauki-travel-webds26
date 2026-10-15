@@ -1471,3 +1471,649 @@ button.booking__day:not(:disabled):hover {
     grid-area: extra;
   }
 }
+
+/* Kiểu ticket (quầy vé), theo bản mẫu: form là cả khối. Cột trái là các bước đánh số trong khung viền mực (tiêu đề đè lên viền),
+   cột phải là máy in vé có màn hình tạm tính; thẻ lên xe trượt ra khỏi khe của máy. Màn hình máy in dùng `--booking-screen`
+   (nền) và `--booking-screen-ink` (chữ), thiếu thì xanh lá trên nền tối; chữ bảng hiệu (số bước, thứ trong tuần, số khách)
+   dùng `--font-hand`, thiếu thì `--font-heading`. */
+.booking--ticket {
+  background: var(--color-bg);
+}
+
+.booking--ticket .booking__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+}
+
+.booking--ticket .booking__title {
+  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.booking--ticket .booking__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.5rem;
+  background: var(--color-mark, var(--color-accent));
+  border-radius: 50%;
+}
+
+/* Hai khối này đã có vùng lưới `form` và `extra` của bố cục calendar; ở đây cùng nằm trong một cột nên đưa về vị trí thường. */
+.booking--ticket .booking__hold,
+.booking--ticket .booking__extra {
+  grid-area: auto;
+  position: static;
+}
+
+.booking__hold--ticket {
+  display: grid;
+  gap: 2.5rem;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.booking__steps {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+  counter-reset: step;
+}
+
+.booking__box {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1.4rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+}
+
+.booking__box > .booking__step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: auto;
+  margin: 0;
+  padding: 0 0.4rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  counter-increment: step;
+}
+
+/* Số bước như biển số nhà: nền màu nhấn, viền trắng mảnh bên trong, chữ bảng hiệu. */
+.booking__box > .booking__step-title::before {
+  content: counter(step);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--color-surface);
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px var(--color-accent), inset 0 0 0 3.5px var(--color-surface);
+}
+
+.booking__box .booking__field + .booking__field {
+  margin-top: 0;
+}
+
+.booking__box .booking__tour-list {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+/* Thẻ tour: ảnh 16:10 ở trên, tên, giờ và giá, hàng icon phương tiện; tour đang chọn nền vàng nhạt và nhấc lên. */
+.booking--ticket .booking__tour-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.2rem), 1fr));
+  gap: 0.6rem;
+  overflow: visible;
+}
+
+.booking--ticket .booking__tour-list > .booking__tour {
+  flex: initial;
+}
+
+.booking--ticket .booking__tour {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 0.3rem;
+  padding: 0.5rem 0.5rem 0.7rem;
+  background: var(--color-surface);
+  border: 2px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-radius: 12px;
+  transition: transform var(--duration, 0.2s), box-shadow var(--duration, 0.2s), border-color var(--duration, 0.2s);
+}
+
+.booking--ticket .booking__tour .booking__room-thumb {
+  order: -1;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.booking--ticket .booking__tour .booking__room-name {
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.booking--ticket .booking__tour:has(:checked) {
+  background: color-mix(in srgb, var(--color-primary) 40%, var(--color-surface));
+  border-color: var(--color-ink);
+  box-shadow: 0 4px 0 var(--color-ink);
+  transform: translateY(-3px);
+}
+
+.booking__vehicles {
+  display: flex;
+  gap: 0.3rem;
+  color: var(--color-muted);
+}
+
+.booking__vehicle {
+  display: inline-grid;
+  place-items: center;
+}
+
+.booking__vehicle svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Dải ngày: một hàng cuộn ngang, mỗi ô một ngày kèm hàng vạch chỗ còn (mỗi vạch một chỗ); hết chỗ thì mờ và gạch, ít chỗ thì vạch đỏ. */
+.booking--ticket .booking__dates {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 4.6rem;
+  grid-template-columns: none;
+  gap: 0.5rem;
+  padding: 0.4rem 0.2rem 0.6rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.booking--ticket .booking__date {
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.6rem 0.3rem;
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.booking--ticket .booking__date::before {
+  content: none;
+}
+
+.booking--ticket .booking__date-dow {
+  padding: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: inherit;
+  background: none;
+  border-radius: 0;
+}
+
+.booking--ticket .booking__date-day {
+  padding: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.booking--ticket .booking__date-month {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+.booking--ticket .booking__date-seats {
+  display: none;
+}
+
+.booking--ticket .booking__date:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.booking--ticket .booking__date[aria-pressed='true'] {
+  color: var(--color-bg);
+  background: var(--color-ink);
+  transform: translateY(-4px);
+  rotate: 0deg;
+}
+
+.booking--ticket .booking__date[aria-pressed='true'] .booking__date-month {
+  color: color-mix(in srgb, var(--color-bg) 75%, transparent);
+}
+
+.booking--ticket .booking__date:disabled {
+  opacity: 0.35;
+}
+
+.booking--ticket .booking__date:disabled .booking__date-day {
+  text-decoration: line-through;
+}
+
+.booking--ticket .booking__dates-more {
+  align-self: stretch;
+  width: 6rem;
+  white-space: normal;
+}
+
+.booking__date-bar {
+  display: flex;
+  gap: 2px;
+  margin-top: 0.3rem;
+}
+
+.booking__date-bar i {
+  width: 4px;
+  height: 10px;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 2px;
+}
+
+.booking__date-bar i.on {
+  background: #13a06e;
+}
+
+.booking__date-seats--few ~ .booking__date-bar i.on {
+  background: var(--color-mark, #d6331f);
+}
+
+/* Ô ngày ngoài tầm nhìn (datesShown) bị ẩn: display: grid của ô thường thắng thuộc tính hidden nên phải nói rõ. */
+.booking__date[hidden] {
+  display: none;
+}
+
+/* Số khách: nút tròn viền mực có bóng đáy, số bằng chữ bảng hiệu. */
+.booking--ticket .booking__stepper {
+  max-width: none;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+  border: 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+  border-radius: 0;
+}
+
+.booking--ticket .booking__stepper button {
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+  box-shadow: 0 3px 0 var(--color-ink);
+}
+
+.booking--ticket .booking__stepper button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--color-ink);
+}
+
+.booking--ticket .booking__stepper .booking__count {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  width: 3rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.booking--ticket .booking__input {
+  min-height: 3rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  border-radius: 10px;
+}
+
+.booking--ticket .booking__input:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--color-accent);
+}
+
+/* Điểm đón: mỗi dòng một cách đón, nút radio thật nằm trong dòng; dòng đang chọn nền vàng nhạt và viền mực. */
+.booking__pickups {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.booking__pickup {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border: 2px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.booking__pickup-input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-accent);
+}
+
+.booking__pickup:has(:checked) {
+  background: color-mix(in srgb, var(--color-primary) 35%, var(--color-surface));
+  border-color: var(--color-ink);
+}
+
+.booking__pickup:has(:focus-visible) {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.booking__pickup-label {
+  font-weight: 700;
+}
+
+.booking__pickup-fee {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* Máy in vé: thân tối bo tròn phía trên, màn hình tạm tính chữ đơn cách đều có quầng sáng, nút giữ chỗ, khe in ở đáy. */
+.booking__printer {
+  display: grid;
+  gap: 0;
+  align-content: start;
+  min-width: 0;
+}
+
+.booking__printer-body {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem 1.3rem 2.4rem;
+  color: #fff;
+  background: linear-gradient(color-mix(in srgb, var(--color-ink) 70%, #5a6178), color-mix(in srgb, var(--color-ink) 88%, #2a3048));
+  border: 3px solid var(--color-ink);
+  border-radius: 22px 22px 10px 10px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.15), 8px 8px 0 var(--color-ink);
+}
+
+.booking__printer-brand {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.booking__screen {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--booking-screen-ink, #b8ffd8);
+  background: var(--booking-screen, #0a1a12);
+  border: 2px solid #000;
+  border-radius: 10px;
+  box-shadow: inset 0 0 18px rgba(0, 255, 136, 0.15);
+  text-shadow: 0 0 6px rgba(62, 224, 143, 0.5);
+}
+
+.booking__screen .booking__hold-deal,
+.booking__screen .booking__hold-count {
+  margin: 0;
+  color: inherit;
+  background: none;
+}
+
+.booking__screen .booking__sum {
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+}
+
+.booking__screen .booking__sum-row,
+.booking__screen .booking__sum-row dd {
+  color: inherit;
+}
+
+.booking__screen .booking__sum-row--total {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  font-size: 1.1rem;
+  color: #fff;
+  border-top: 1px dashed rgba(62, 224, 143, 0.35);
+}
+
+.booking__printer-body .booking__submit {
+  width: 100%;
+  margin: 0;
+}
+
+.booking__slot {
+  position: absolute;
+  right: 12%;
+  bottom: 0.8rem;
+  left: 12%;
+  height: 0.55rem;
+  background: #05070d;
+  border-radius: 999px;
+  box-shadow: inset 0 2px 3px #000;
+}
+
+/* Thẻ lên xe: tờ giấy trắng hở phía trên, nằm sát dưới khe và trượt ra từng nấc như máy in nhiệt, rồi dấu "chờ xác nhận" đóng xuống. */
+.booking--ticket .booking__pass {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+  max-width: none;
+  margin: -1.2rem 1.4rem 0;
+  padding: 2rem 1.3rem 1.4rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 16px 30px -18px rgba(0, 0, 0, 0.5);
+  rotate: 0deg;
+  animation: booking-pass-print 1.6s steps(14) both, booking-pass-settle 0.5s 1.6s ease both;
+}
+
+@keyframes booking-pass-print {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes booking-pass-settle {
+  to {
+    transform: rotate(-1deg);
+  }
+}
+
+.booking__pass-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.booking__pass-brand {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.booking__pass-code {
+  padding: 0.2rem 0.5rem;
+  font: 700 0.85rem ui-monospace, Menlo, monospace;
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+.booking__pass-tour {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.booking__pass-route {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.booking__pass-vehicle {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  background: color-mix(in srgb, var(--color-primary) 25%, var(--color-surface));
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+}
+
+.booking__pass-vehicle .booking__vehicle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.booking__pass-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.booking__pass-cell[hidden] {
+  display: none;
+}
+
+.booking__pass-cell dt {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.65rem;
+  color: var(--color-muted);
+}
+
+.booking__pass-cell dd {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.booking__pass-who {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.booking__pass-bar {
+  display: block;
+  width: 100%;
+  height: 3.2rem;
+  fill: var(--color-ink);
+}
+
+.booking__pass-stamp {
+  position: absolute;
+  top: 6.3rem;
+  right: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--color-mark, #d6331f);
+  border: 3px solid var(--color-mark, #d6331f);
+  border-radius: 8px;
+  opacity: 0.85;
+  transform: rotate(12deg);
+  animation: booking-pass-stamp 0.4s 1.8s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+@keyframes booking-pass-stamp {
+  from {
+    opacity: 0;
+    transform: rotate(12deg) scale(2.2);
+  }
+}
+
+.booking__pass-msg {
+  display: grid;
+  gap: 0.6rem;
+  padding-top: 0.9rem;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+.booking__pass-msg-title {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+}
+
+.booking__pass-msg-text {
+  margin: 0;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: var(--color-bg);
+  border-radius: 8px;
+}
+
+.booking__pass-actions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1100px) {
+  .booking__hold--ticket {
+    grid-template-columns: minmax(0, 1fr) 25rem;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .booking__printer {
+    position: sticky;
+    top: calc(var(--header-stuck, 4rem) + 1.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking--ticket .booking__pass,
+  .booking__pass-stamp {
+    animation: none;
+  }
+}
