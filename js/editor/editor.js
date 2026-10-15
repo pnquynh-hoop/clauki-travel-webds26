@@ -247,6 +247,20 @@ function select(key, scroll = false) {
   state.sel = key;
   refresh();
   if (scroll) selectedEl()?.scrollIntoView({ block: 'start' });
+  revealSelected();
+}
+
+// Đưa dòng của khối đang chọn lên đầu bảng, để thấy ngay tên khối và form của nó (danh sách dài thì khỏi phải cuộn tìm).
+// Máy tính: bấm khối trên trang thì chuyển sang tab Khối; điện thoại giữ nguyên (tấm trượt chỉ mở khi bấm Sửa nội dung).
+function revealSelected() {
+  if (state.sel === null) return;
+  if (!isNarrow() && ui.panes.blocks.hidden) openTab('blocks');
+  // Tự cuộn bảng (không dùng scrollIntoView vì nó cuộn cả trang editor và lệch ngang khi tấm trượt cố định trên điện thoại).
+  const pane = ui.panes.blocks;
+  const row = pane.querySelector('.ed-block.is-sel');
+  if (!row) return;
+  pane.scrollTop += row.getBoundingClientRect().top - pane.getBoundingClientRect().top - 8;
+  pane.scrollLeft = 0;
 }
 
 /* ---------- Thao tác trên khối ---------- */
@@ -383,7 +397,7 @@ function addBlockEl() {
 function openContent() {
   openTab('blocks');
   if (isNarrow() && !ui.panel.classList.contains('is-open')) dock('blocks');
-  ui.panes.blocks.scrollTop = 0;
+  revealSelected();
   ui.panes.blocks.querySelector('.ed-form input, .ed-form textarea, .ed-form select')?.focus({ preventScroll: true });
 }
 
@@ -436,11 +450,6 @@ function renderTool() {
   ui.tool.replaceChildren(
     h('span', { class: 'ed-tool__name', text: BLOCKS[section.type]?.label ?? section.type }),
     options.length > 1 ? variantSelect(key, section.variant ?? '', options, `Kiểu của ${blockName(section)}`, 'tool') : null,
-    h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': 'tool:up', disabled: key === 0, onclick: () => move(key, -1), text: 'Lên' }),
-    h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': 'tool:down', disabled: key === list.length - 1, onclick: () => move(key, 1), text: 'Xuống' }),
-    h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': 'tool:hide', onclick: () => toggleHidden(key), text: section.hidden ? 'Hiện' : 'Ẩn' }),
-    h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': 'tool:dup', onclick: () => duplicate(key), text: 'Nhân đôi' }),
-    h('button', { type: 'button', class: 'ed-btn ed-btn--danger', onclick: () => remove(key), text: 'Xoá' }),
     h('button', { type: 'button', class: 'ed-btn', 'data-ed-key': 'tool:edit', onclick: openContent, text: 'Sửa nội dung' }),
   );
 }
@@ -450,15 +459,24 @@ function renderTool() {
 function renderBlocks() {
   const list = sections();
   const headerVariant = headerTarget().variant ?? 'solid';
+  // Danh sách gọn: mỗi khối một dòng. Chỉ khối đang chọn mở rộng (kiểu, các nút, rồi form nội dung ngay bên dưới),
+  // nên danh sách không dài ra theo số khối và luôn thấy khối nào đang sửa.
   const rows = [
-    h('li', { class: `ed-block${state.sel === 'header' ? ' is-sel' : ''}` },
+    h('li', { class: `ed-block${state.sel === 'header' ? ' is-sel' : ' ed-block--compact'}` },
       h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': 'n:header', onclick: () => select('header', true), text: 'Đầu trang (cố định)' }),
-      variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang')),
+      state.sel === 'header' ? variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang') : null),
     ...list.map((section, i) => {
+      const chosen = state.sel === i;
       const options = variantsFor(section);
-      return h('li', { class: `ed-block${state.sel === i ? ' is-sel' : ''}${section.hidden ? ' is-hidden' : ''}` },
-        h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': `n:${i}`, onclick: () => (section.hidden ? null : select(i, true)) },
-          `${i + 1}. ${blockName(section)}`, section.hidden ? h('small', { text: ' đang ẩn' }) : null),
+      const name = h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': `n:${i}`, 'aria-expanded': String(chosen), onclick: () => (section.hidden ? null : select(i, true)) },
+        `${i + 1}. ${blockName(section)}`, section.hidden ? h('small', { text: ' đang ẩn' }) : null);
+      if (!chosen) {
+        // Khối đang ẩn không chọn được, nên giữ nút Hiện ngay ở dòng gọn.
+        return h('li', { class: `ed-block ed-block--compact${section.hidden ? ' is-hidden' : ''}` }, name,
+          section.hidden ? h('button', { type: 'button', class: 'ed-block__show', 'data-ed-key': `a:${i}:hide`, onclick: () => toggleHidden(i), text: 'Hiện' }) : null);
+      }
+      return h('li', { class: 'ed-block is-sel' },
+        name,
         options.length > 1
           ? variantSelect(i, section.variant ?? '', options, `Kiểu của ${blockName(section)}`)
           : h('span', { class: 'ed-block__one', text: 'Một kiểu' }),
@@ -467,12 +485,12 @@ function renderBlocks() {
           h('button', { type: 'button', 'data-ed-key': `a:${i}:down`, disabled: i === list.length - 1, onclick: () => move(i, 1), 'aria-label': `Đưa ${blockName(section)} xuống`, text: 'Xuống' }),
           h('button', { type: 'button', 'data-ed-key': `a:${i}:hide`, onclick: () => toggleHidden(i), text: section.hidden ? 'Hiện' : 'Ẩn' }),
           h('button', { type: 'button', 'data-ed-key': `a:${i}:dup`, onclick: () => duplicate(i), text: 'Nhân đôi' }),
-          h('button', { type: 'button', class: 'is-danger', onclick: () => remove(i), text: 'Xoá' })));
+          h('button', { type: 'button', class: 'is-danger', onclick: () => remove(i), text: 'Xoá' })),
+        contentEl());
     }),
   ];
   ui.panes.blocks.replaceChildren(...[
-    contentEl(),
-    h('p', { class: 'ed-hint', text: `Bấm một khối trên trang hoặc trong danh sách để chọn và sửa nội dung. Trang này có ${list.length} khối.` }),
+    h('p', { class: 'ed-hint', text: `Bấm một khối trên trang hoặc trong danh sách để sửa. Trang này có ${list.length} khối.` }),
     h('ol', { class: 'ed-blocks' }, rows),
     pageOf(state.content) ? addBlockEl() : null,
   ].filter(Boolean));
@@ -680,7 +698,7 @@ function refresh() {
   ui.redo.disabled = !state.future.length;
   ui.undo.title = state.past.length ? `Hoàn tác: ${state.past.at(-1).label}` : '';
   ui.brand.textContent = state.brands.find((b) => b.id === state.id)?.label ?? state.id;
-  ui.status.textContent = isOriginal() ? 'Bản gốc' : 'Đang thử, chưa lưu vào repo';
+  ui.status.textContent = isOriginal() ? 'Bản gốc' : (isNarrow() ? 'Bản thử' : 'Đang thử, chưa lưu vào repo');
   ui.status.classList.toggle('is-draft', !isOriginal());
   const pages = state.content.pages ?? [{ path: '/', title: 'Trang chủ' }];
   ui.pageSelect.replaceChildren(...pages.map((p) => {
