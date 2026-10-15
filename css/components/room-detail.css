@@ -10,6 +10,11 @@
   padding-top: 0;
 }
 
+/* display: block ở trên đè mất [hidden]: khối không còn phần nào để hiện thì ẩn lại ở đây. */
+.room-detail[hidden] {
+  display: none;
+}
+
 /* ---------- Ảnh bìa ---------- */
 
 .room-detail__cover {
