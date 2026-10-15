@@ -31,7 +31,7 @@ export const BLOCKS = {
   'room-detail': { label: 'Chi tiết phòng, tour', variants: [] },
   'catalog-list': { label: 'Danh sách tour, phòng', variants: [] },
   'custom-trip': { label: 'Tự ghép tour riêng', variants: [] },
-  'tour-pick': { label: 'Gợi ý tour', variants: [['reel', 'Vòng quay chọn cách đi']] },
+  'tour-pick': { label: 'Gợi ý tour', variants: [['reel', 'Vòng quay chọn cách đi'], ['claw', 'Máy gắp thú']] },
 };
 
 // Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.

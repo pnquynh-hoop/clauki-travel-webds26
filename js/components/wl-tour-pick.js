@@ -1,10 +1,13 @@
 /* wl-tour-pick.js - gợi ý tour cho khách chưa biết chọn gì: trả lời một câu vui là ra một thẻ tour.
    Kiểu reel: câu "Hôm nay mình đi bằng [ô chữ]", bấm quay thì ô chữ chạy như máy quay số rồi dừng ở một lựa chọn,
-   bên cạnh hiện thẻ một tour của lựa chọn đó. Mỗi lựa chọn (options) trỏ tới id tour trong catalog (AGENTS.md mục 5),
-   thẻ kết quả dựng bằng catalog-card.js nên giống hệt thẻ ở trang tất cả tour. */
+   bên cạnh hiện thẻ một tour của lựa chọn đó. Kiểu claw: máy gắp thú, mỗi viên quà một lựa chọn, bấm gắp thì móc
+   gắp một viên ngẫu nhiên rồi nhả ra thẻ tour (mã ở tour-pick-claw.js). Hai kiểu đọc cùng dữ liệu: mỗi lựa chọn
+   (options) trỏ tới id tour trong catalog (AGENTS.md mục 5); thẻ kết quả dựng bằng catalog-card.js nên giống hệt
+   thẻ ở trang tất cả tour. */
 import { catalogItem } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
 import { cardEl, fill, isComplete } from './catalog-card.js';
+import { machineEl, grab } from './tour-pick-claw.js';
 
 // Ô chữ chạy qua đủ nhiều vòng mỗi lần quay để trông như quay thật, không nhảy thẳng tới kết quả.
 const CYCLES = 8;
@@ -28,7 +31,13 @@ export class WlTourPick extends HTMLElement {
 
   // Khối bị gỡ khỏi trang (đổi trang, đổi brand) giữa lúc đang quay thì huỷ hẹn giờ, khỏi vẽ vào khối đã mất.
   disconnectedCallback() {
+    this.stop();
+  }
+
+  stop() {
     clearTimeout(this._timer);
+    (this._timers ?? []).forEach(clearTimeout);
+    this._timers = [];
   }
 
   // Chỉ giữ lựa chọn có chữ và có ít nhất một tour thật trong danh mục; tour của lựa chọn cũng lọc như vậy.
@@ -71,29 +80,49 @@ export class WlTourPick extends HTMLElement {
     const index = Math.floor(Math.random() * n);
     const animate = !reducedMotion();
     this._button.disabled = true;
+    this.stop();
     this.moveTo(this._pos % n, false);
     this._strip.getBoundingClientRect();
     this.moveTo((CYCLES - 1) * n + index, animate);
-    clearTimeout(this._timer);
     const land = () => this.land(this._options[index]);
     if (animate) this._timer = setTimeout(land, SPIN_MS + 50);
     else land();
   }
 
-  land(option) {
-    const tour = random(option.tours);
+  // Mỗi tour của các lựa chọn là một viên nang; tour có trong nhiều lựa chọn thì vẫn chỉ một viên (lựa chọn đầu tiên).
+  prizes() {
+    const seen = new Set();
+    return this._options.flatMap((option) => option.tours
+      .filter((tour) => !seen.has(tour.id) && seen.add(tour.id))
+      .map((tour) => ({ option, tour })));
+  }
+
+  // Gắp: chọn ngẫu nhiên một viên nang, để tour-pick-claw.js chạy móc, rơi xong mới hiện đúng tour của viên đó.
+  grab() {
+    const index = Math.floor(Math.random() * this._prizes.length);
+    const { option, tour } = this._prizes[index];
+    this._button.disabled = true;
+    this.stop();
+    this._timers = grab(this._claw, index, !reducedMotion(), () => this.land(option, tour));
+  }
+
+  // reel chỉ biết lựa chọn trúng nên chọn ngẫu nhiên một tour của nó; claw đã biết đúng tour của viên gắp được.
+  land(option, tour = random(option.tours)) {
     this._note.textContent = fill(this.labels.note, { option: option.label, tour: tour.name, start: tour.start ?? '', end: tour.end ?? '' }) ?? '';
     const card = this.resultCard(tour);
     card.classList.add('tour-pick__card');
     this._result.replaceChildren(card);
+    // Điện thoại: thẻ nằm dưới máy, có thể ngoài màn hình; cuộn vừa đủ cho thẻ hiện ra (đang thấy rồi thì không cuộn).
+    card.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
     this._button.disabled = false;
     this._button.textContent = this.labels.again ?? this.labels.spin ?? '';
   }
 
   render() {
     const section = this._data;
-    this.className = `tour-pick tour-pick--${section.variant ?? 'reel'}`;
-    clearTimeout(this._timer);
+    const variant = section.variant === 'claw' ? 'claw' : 'reel';
+    this.className = `tour-pick tour-pick--${variant}`;
+    this.stop();
     this._options = this.options();
     const eyebrow = textEl('p', 'tour-pick__eyebrow', section.eyebrow);
     // Không có lựa chọn nào dùng được thì chỉ hiện phần chữ, không dựng nút quay vô dụng.
@@ -104,11 +133,14 @@ export class WlTourPick extends HTMLElement {
 
     const title = document.createElement('h2');
     title.className = 'tour-pick__title';
-    title.append(section.title ? `${section.title} ` : '', this.reelEl());
+    // reel: ô chữ quay nằm ngay trong câu tiêu đề; claw: tiêu đề thường, máy gắp đặt dưới đoạn dẫn.
+    title.append(section.title ? `${section.title} ` : '', variant === 'reel' ? this.reelEl() : '');
+    this._prizes = variant === 'claw' ? this.prizes() : [];
+    this._claw = variant === 'claw' ? machineEl(this._prizes, this.labels.sign) : null;
 
     this._button = textEl('button', 'btn tour-pick__spin', this.labels.spin) ?? document.createElement('button');
     this._button.type = 'button';
-    this._button.addEventListener('click', () => this.spin());
+    this._button.addEventListener('click', () => (variant === 'claw' ? this.grab() : this.spin()));
     this._note = document.createElement('p');
     this._note.className = 'tour-pick__note';
     this._note.setAttribute('aria-live', 'polite');
@@ -117,8 +149,8 @@ export class WlTourPick extends HTMLElement {
     const empty = textEl('p', 'tour-pick__empty', this.labels.empty);
     if (empty) this._result.append(empty);
 
-    const ask = groupEl('tour-pick__ask', [eyebrow, title, textEl('p', 'tour-pick__lead', section.lead), this._button, this._note]);
+    const ask = groupEl('tour-pick__ask', [eyebrow, title, textEl('p', 'tour-pick__lead', section.lead), this._claw?.machine, this._button, this._note]);
     this.replaceChildren(groupEl('tour-pick__inner container', [ask, this._result]));
-    this.moveTo(0, false);
+    if (variant === 'reel') this.moveTo(0, false);
   }
 }
