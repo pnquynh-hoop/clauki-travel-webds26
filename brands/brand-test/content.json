@@ -835,6 +835,16 @@
       "description": "Năm ngày dọc bờ biển phía nam Iceland, mỗi tối đợi cực quang ở nơi trời tối nhất.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Săn cực quang 5 ngày"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "cuc-quang",
@@ -1101,6 +1111,16 @@
       "description": "Þingvellir, Geysir, Gullfoss và hồ nước nóng trong năm tiếng có nắng.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Vòng Tròn Vàng trong một ngày"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "vong-tron-vang",
@@ -1257,6 +1277,16 @@
       "description": "Hai ngày ở công viên quốc gia Vatnajökull, vào hang băng xanh mùa đông.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Sông băng và hang băng xanh"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "song-bang",
@@ -1328,6 +1358,16 @@
       "title": "Vòng quanh đảo mùa đông",
       "description": "Năm ngày, bảy chặng, từ đồng dung nham tới đầm băng trôi.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Vòng quanh đảo mùa đông"
+            }
+          ]
+        },
         {
           "type": "journey",
           "id": "lich-trinh",
@@ -1552,6 +1592,16 @@
       "description": "Một ngày mùa đông chỉ có năm tiếng nắng ở thủ đô Iceland.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Một ngày ở Reykjavík"
+            }
+          ]
+        },
+        {
           "type": "day-plan",
           "id": "mot-ngay",
           "eyebrow": "Một ngày mùa đông",
@@ -1675,6 +1725,16 @@
       "title": "Nhà nghỉ",
       "description": "Nhà mái kính, nhà gỗ ven hồ và phòng trang trại ngựa ở bờ biển phía nam.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Nhà nghỉ"
+            }
+          ]
+        },
         {
           "type": "stays",
           "id": "hang-nha",
@@ -2030,6 +2090,16 @@
       "description": "Một đến ba đêm ở trang trại ngựa Iceland, tính tiền theo khách.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Ở trang trại ngựa"
+            }
+          ]
+        },
+        {
           "type": "host",
           "id": "chu-trai",
           "eyebrow": "Chủ trại",
@@ -2151,6 +2221,16 @@
       "description": "Lửa Băng bắt đầu từ một đêm mất điện ở Vík.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Về chúng tôi"
+            }
+          ]
+        },
+        {
           "type": "host",
           "id": "ve-chung-toi",
           "variant": "tv",
@@ -2238,6 +2318,16 @@
       "title": "Cẩm nang mùa đêm dài",
       "description": "Giờ nào làm gì, tháng nào có nắng, khi nào hoàn tiền.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Cẩm nang mùa đêm dài"
+            }
+          ]
+        },
         {
           "type": "clock",
           "id": "theo-gio",
@@ -2472,6 +2562,16 @@
       "title": "Liên hệ",
       "description": "Gọi văn phòng Lửa Băng ở Reykjavík, giờ làm việc theo giờ Iceland.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Liên hệ"
+            }
+          ]
+        },
         {
           "type": "contact",
           "id": "lien-he",
