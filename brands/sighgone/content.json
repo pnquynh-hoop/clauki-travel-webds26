@@ -2263,6 +2263,16 @@
       "description": "Chọn ngày, số khách, gửi tin giữ chỗ cho tour Sài Gòn lên đèn. SighGone gọi lại xác nhận, trả tiền khi gặp hướng dẫn viên.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Đặt tour"
+            }
+          ]
+        },
+        {
           "type": "booking",
           "id": "dat-tour",
           "variant": "calendar",
@@ -2520,6 +2530,16 @@
       "description": "Đặt trước bao lâu, trời mưa thì sao, đón ở đâu: hỏi SighGone như nhắn tin.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Hỏi đáp"
+            }
+          ]
+        },
+        {
           "type": "faq",
           "id": "hoi-dap",
           "variant": "chat",
@@ -2640,6 +2660,16 @@
       "title": "Cẩm nang",
       "description": "Sài Gòn theo giờ: giờ nào ăn gì, đi đâu, có kẹt xe không; mặc gì, tháng nào mưa.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Cẩm nang"
+            }
+          ]
+        },
         {
           "type": "clock",
           "id": "theo-gio",
@@ -2874,6 +2904,20 @@
       "description": "Một ngày đổi bốn cách đi: xe ra bến, phà qua sông, ca nô vào rừng đước, rồi đi bộ trên cầu gỗ giữa rừng ngập mặn.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Rừng Sác Cần Giờ"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "can-gio",
@@ -2935,6 +2979,20 @@
       "description": "Mỗi khách một tài xế, chạy qua bốn quận, ăn bảy món ở những chỗ người Sài Gòn ăn, rồi nhìn thành phố từ trên cao.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Sài Gòn lên đèn"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "len-den",
@@ -2991,6 +3049,20 @@
       "title": "Hẻm Chợ Lớn",
       "description": "Xe đưa sang Quận 5, rồi đổi sang xích lô len qua phố thuốc bắc, phố lồng đèn, dừng ở chợ Bình Tây và chùa Bà Thiên Hậu.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Hẻm Chợ Lớn"
+            }
+          ]
+        },
         {
           "type": "room-detail",
           "id": "tour",
@@ -3053,6 +3125,20 @@
       "description": "Ba tiếng đi bộ trước giờ kẹt xe: cà phê vợt đầu hẻm, chợ sáng, nhà thờ, bưu điện, rồi một con hẻm treo đèn lồng.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Sài Gòn thức giấc"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "thuc-giac",
@@ -3109,6 +3195,20 @@
       "title": "Đạp xe Thanh Đa",
       "description": "Đạp xe trên bán đảo cách trung tâm 6 km mà còn đường làng, đò ngang, vườn rau, rồi ngồi bờ đê xem nắng tắt.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Đạp xe Thanh Đa"
+            }
+          ]
+        },
         {
           "type": "room-detail",
           "id": "tour",
@@ -3167,6 +3267,20 @@
       "description": "Thuyền gỗ tám chỗ rời bến Bạch Đằng, luồn qua kênh nhỏ, ra sông lớn đúng lúc hoàng hôn rồi về khi thành phố lên đèn.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Sông Sài Gòn chiều"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tour",
           "item": "song-chieu",
@@ -3223,6 +3337,20 @@
       "title": "Củ Chi sớm",
       "description": "Rời thành phố lúc 6 giờ để tới địa đạo khi rừng còn mát, đi hầm, ăn khoai mì chấm muối mè, về kịp bữa trưa.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Củ Chi sớm"
+            }
+          ]
+        },
         {
           "type": "room-detail",
           "id": "tour",
@@ -3281,6 +3409,16 @@
       "description": "Bảy tour ghép theo lịch, sáng, chiều, tối và cả ngày.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tất cả tour"
+            }
+          ]
+        },
+        {
           "type": "catalog-list",
           "id": "tat-ca-tour",
           "eyebrow": "Tất cả tour",
@@ -3311,6 +3449,20 @@
       "title": "Tour riêng",
       "description": "Đi riêng cả nhóm, giờ giấc theo nhóm mình.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Tour",
+              "href": "page:tour"
+            },
+            {
+              "label": "Tour riêng"
+            }
+          ]
+        },
         {
           "type": "custom-trip",
           "id": "tu-ghep",
@@ -3389,6 +3541,16 @@
       "description": "Bốn tiếng ngồi sau xe máy, bảy món ăn, bốn quận.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Sài Gòn lên đèn"
+            }
+          ]
+        },
+        {
           "type": "intro",
           "id": "noi-dung",
           "eyebrow": "Tối nay",
@@ -3418,6 +3580,16 @@
       "description": "Ai dẫn bạn đi và vì sao nhóm chỉ 8 khách.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Về SighGone"
+            }
+          ]
+        },
+        {
           "type": "intro",
           "id": "noi-dung",
           "eyebrow": "Về SighGone",
@@ -3431,6 +3603,16 @@
       "title": "Liên hệ",
       "description": "Điểm hẹn, giờ làm việc, số điện thoại của SighGone.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Liên hệ"
+            }
+          ]
+        },
         {
           "type": "intro",
           "id": "noi-dung",

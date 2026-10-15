@@ -1,0 +1,63 @@
+/* breadcrumb.css - giao diện của <wl-breadcrumb>: một dòng chữ nhỏ, các bước ngăn bằng dấu gạch chéo vẽ bằng CSS (không phải chữ),
+   bước cuối đậm hơn và không có liên kết. Dài quá thì xuống dòng; bước cuối cắt bằng dấu ba chấm trên điện thoại. */
+
+.breadcrumb {
+  display: block;
+  /* Ghi đè khoảng đệm dọc của `main > *`: đây là một dòng nhỏ sát dưới header, không phải một khối nội dung. */
+  padding-block: 1rem 0.75rem;
+}
+
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  list-style: none;
+  color: var(--color-muted);
+}
+
+.breadcrumb__item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Gạch chéo ngăn giữa hai bước, vẽ bằng viền nên không thành chữ cho trình đọc màn hình. */
+.breadcrumb__item + .breadcrumb__item::before {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.9rem;
+  margin-inline: 0.6rem;
+  background: linear-gradient(to top right, transparent calc(50% - 1px), currentColor calc(50% - 1px), currentColor calc(50% + 1px), transparent calc(50% + 1px));
+  opacity: 0.45;
+}
+
+.breadcrumb__link {
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+}
+
+.breadcrumb__link:hover {
+  border-bottom-color: currentColor;
+}
+
+.breadcrumb__current {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dưới header kiểu overlay: header ghim ở mép trên và không chiếm chỗ, nên dòng này đứng đầu trang sẽ bị che.
+   Đẩy xuống thêm đúng chiều cao cả header (wl-breadcrumb.js đo vào --breadcrumb-top; chưa đo được thì dùng --header-stuck như hero.css). */
+body:has(.header--overlay) main > .breadcrumb:first-child {
+  padding-top: calc(1rem + var(--breadcrumb-top, var(--header-stuck, 4rem)));
+}

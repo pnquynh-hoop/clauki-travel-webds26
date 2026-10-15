@@ -35,6 +35,7 @@ export const BLOCKS = {
   'room-detail': { label: 'Chi tiết phòng, tour', variants: [] },
   'catalog-list': { label: 'Danh sách tour, phòng', variants: [] },
   'custom-trip': { label: 'Tự ghép tour riêng', variants: [] },
+  breadcrumb: { label: 'Đường dẫn trang', variants: [] },
   'tour-pick': { label: 'Gợi ý tour', variants: [['reel', 'Vòng quay chọn cách đi'], ['claw', 'Máy gắp thú']] },
 };
 
@@ -117,6 +118,14 @@ const FIELDS = {
     },
   ],
   intro: HEAD,
+  breadcrumb: [
+    { key: 'home', label: 'Chữ bước đầu (trang chủ)', type: 'text' },
+    {
+      key: 'items', label: 'Các bước', type: 'list',
+      fields: [{ key: 'label', label: 'Chữ', type: 'text' }, { key: 'href', label: 'Liên kết (ví dụ page:tour), bỏ trống ở bước cuối', type: 'text' }],
+      item: { label: 'Bước mới', href: '' },
+    },
+  ],
   gallery: [
     ...HEAD,
     {
