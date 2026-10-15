@@ -18,8 +18,8 @@ import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } fr
 export const FRAMES = [
   { id: 'me-rach', label: 'Homestay, tính tiền theo khách', hint: 'nhà dân, homestay, một chỗ ở, giá theo đầu người' },
   { id: 'ganh-som', label: 'Nghỉ dưỡng nhiều hạng phòng', hint: 'resort, khách sạn, nhà nghỉ có vài hạng phòng giá khác nhau' },
-  { id: 'bac-tra', label: 'Tour nhiều ngày theo lịch', hint: 'tour vài ngày, ngày khởi hành cố định, giá theo khách' },
-  { id: 'sighgone', label: 'Tour trong ngày', hint: 'tour vài giờ trong thành phố, nhiều chuyến, nhiều phương tiện' },
+  { id: 'bac-tra', label: 'Tour nhiều ngày theo lịch', hint: 'tour từ 2 ngày trở lên, có đêm nghỉ, ngày khởi hành cố định, giá theo khách; chỉ chọn khi mô tả nói rõ nhiều ngày' },
+  { id: 'sighgone', label: 'Tour trong ngày', hint: 'tour trong một ngày ở bất kỳ nơi nào (thành phố, núi, sông, đảo), chia chặng theo giờ, nhiều chuyến mỗi ngày; chọn khi mô tả không nói nhiều ngày' },
 ];
 
 // Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
@@ -77,7 +77,7 @@ Mô tả không liên quan tới du lịch, lưu trú, hoặc có nội dung kh�
 
 Mô tả: ${brief}
 
-Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất.'}
+Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất theo loại hình và số ngày; mô tả là tour mà không nói rõ nhiều ngày thì chọn "sighgone", không mặc định "bac-tra".'}
 Luật màu (bắt buộc):
 - Nền trang (bg) và nền thẻ (surface) sáng, gần trắng, ngả ấm hay mát nhẹ; chữ (ink) gần đen cùng tông nền, không dùng đen thuần #000000; chữ phụ (muted) là xám cùng tông.
 - Màu nút (primary) là màu thương hiệu rõ ràng nhưng không chói: độ bão hoà vừa phải, không dùng màu neon, cyan sáng, hồng sáng, vàng chói. Chọn theo nơi chốn và khí hậu (biển: xanh lam hoặc xanh ngọc đậm; núi, rừng: xanh rêu, nâu đất; nắng gió: cam đất, vàng đất; phố cổ: đỏ gạch, vàng đất; đồng quê: xanh lá trầm).
