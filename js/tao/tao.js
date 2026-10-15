@@ -2,9 +2,10 @@
    rồi xuất bản thành /<tên>/ (Supabase, js/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
    là chính core.js dựng bằng các component <wl-*>, nhận nháp mới qua sự kiện wl:draft mỗi khi AI viết thêm.
    Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
-import { FRAMES, generateSite } from './generate.js';
+import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
 import { readPexelsKey, savePexelsKey } from './photos.js';
+import { iconEl } from '../icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
@@ -20,7 +21,7 @@ const PREVIEW_MS = 350;
 // Mô tả ngắn hơn chừng này ký tự thì AI khó đoán được nơi chốn, loại hình, giá.
 const MIN_BRIEF = 12;
 
-const state = { brands: [], draft: null, busy: false, device: DESKTOP, timer: 0, pending: null, frameReady: false };
+const state = { brands: [], draft: null, busy: false, refining: false, originalBrief: null, device: DESKTOP, timer: 0, pending: null, frameReady: false };
 const ui = {};
 
 const builtIn = () => state.brands.map((b) => b.id);
@@ -50,6 +51,47 @@ function preview(content, theme, now = false) {
 }
 
 const fit = () => fitFrame(ui.stage, ui.wrap, state.device);
+
+/* ---------- Tinh chỉnh mô tả ---------- */
+
+// Nút Tinh chỉnh: nhờ AI viết lại mô tả cho rõ và đủ ý trước khi tạo website. Bản gốc được giữ để Hoàn tác; những gì mô tả còn thiếu
+// hiện ngay dưới ô để người dùng bổ sung. Dùng một yêu cầu AI.
+async function refine() {
+  if (state.busy || state.refining) return;
+  const brief = ui.brief.value.trim();
+  if (brief.length < MIN_BRIEF) {
+    ui.refineNote.textContent = 'Gõ vài chữ về nơi của bạn trước, rồi mới tinh chỉnh được.';
+    ui.brief.focus();
+    return;
+  }
+  state.refining = true;
+  ui.refine.disabled = true;
+  ui.refineLabel.textContent = 'Đang tinh chỉnh...';
+  ui.refineNote.textContent = '';
+  try {
+    const { text, missing } = await refineBrief(brief);
+    state.originalBrief = brief;
+    ui.brief.value = text;
+    ui.undoRefine.hidden = false;
+    ui.refineNote.textContent = missing.length
+      ? `Đã viết lại mô tả. Còn thiếu: ${missing.join('; ')}. Thêm vào cho website sát hơn.`
+      : 'Đã viết lại mô tả cho rõ hơn. Đọc lại và sửa nếu cần rồi bấm Tạo website.';
+  } catch (err) {
+    ui.refineNote.textContent = err.message;
+  } finally {
+    state.refining = false;
+    ui.refine.disabled = false;
+    ui.refineLabel.textContent = 'Tinh chỉnh';
+  }
+}
+
+function undoRefine() {
+  if (state.originalBrief == null) return;
+  ui.brief.value = state.originalBrief;
+  state.originalBrief = null;
+  ui.undoRefine.hidden = true;
+  ui.refineNote.textContent = 'Đã về mô tả ban đầu.';
+}
 
 /* ---------- Tạo ---------- */
 
@@ -164,6 +206,11 @@ function build() {
   ui.framePick = h('select', { class: 'ed-select', id: 'tao-frame' },
     h('option', { value: '', text: 'Để AI chọn theo mô tả' }),
     FRAMES.map((f) => h('option', { value: f.id, text: f.label })));
+  ui.refineLabel = h('span', { text: 'Tinh chỉnh' });
+  ui.refine = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost tao-refine', title: 'Nhờ AI viết lại mô tả cho rõ và đủ ý trước khi tạo website', onclick: refine },
+    iconEl('wand-sparkles', 'tao-refine__icon'), ui.refineLabel);
+  ui.undoRefine = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', hidden: true, onclick: undoRefine, text: 'Hoàn tác' });
+  ui.refineNote = h('p', { class: 'tao-note', 'aria-live': 'polite' });
   ui.photoOn = h('input', { type: 'checkbox', checked: true });
   ui.pexelsKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán khoá Pexels', 'aria-label': 'Khoá Pexels' });
   ui.pexelsKey.value = readPexelsKey();
@@ -195,7 +242,8 @@ function build() {
     h('p', { class: 'ed-hint', text: 'Kể về nơi của bạn: ở đâu, cho ai, ở hay đi tour, giá khoảng bao nhiêu. AI viết trên một khung có sẵn (bố cục, ảnh có giấy phép), trang hiện dần bên cạnh.' }),
     h('label', { class: 'ed-field', for: 'tao-brief' }, h('span', { text: 'Mô tả nơi của bạn' })),
     ui.brief,
-    h('div', { class: 'ed-row' }, micButton(h, ui.brief)),
+    h('div', { class: 'ed-row' }, micButton(h, ui.brief), ui.refine, ui.undoRefine),
+    ui.refineNote,
     h('div', { class: 'ed-chips' }, EXAMPLES.map((text) => h('button', { type: 'button', onclick: () => { ui.brief.value = text; }, text }))),
     h('label', { class: 'ed-field', for: 'tao-frame' }, h('span', { text: 'Khung trang' })),
     ui.framePick,

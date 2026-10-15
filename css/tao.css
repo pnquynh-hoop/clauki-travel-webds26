@@ -133,3 +133,15 @@
     overflow-y: auto;
   }
 }
+
+/* Nút Tinh chỉnh: icon cây đũa phép cạnh chữ, nằm cùng hàng với nút Nói. */
+.tao-refine {
+  gap: 0.4rem;
+}
+
+.tao-refine__icon svg {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
