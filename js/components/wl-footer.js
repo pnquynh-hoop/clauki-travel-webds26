@@ -1,5 +1,7 @@
 /* wl-footer.js - chân trang: tên thương hiệu, khẩu hiệu, nút CTA, các cột menu, liên hệ, địa chỉ, ghi chú, nguồn ảnh.
-   Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ footer.variant. */
+   Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ footer.variant:
+   - columns (mặc định): các cột menu, liên hệ, địa chỉ; có thể thêm ảnh nền, lời hẹn, dòng chữ chạy;
+   - line: cả footer là ga cuối của một tuyến: menu thành các ga nối nhau bằng một đường kẻ, nút CTA là ga cuối. HTML khác hẳn nên rẽ nhánh JS. */
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
 
@@ -13,11 +15,12 @@ function columnEl(title, items) {
   return groupEl('footer__col', [textEl('p', 'footer__col-title', title), ...rows]);
 }
 
-function columnsEl(content, footer) {
+// withNav: false thì bỏ cột menu (kiểu line đã dùng menu làm các ga).
+function columnsEl(content, footer, withNav = true) {
   const contact = content.contact ?? {};
   const nav = (content.nav ?? []).map((item) => linkEl(item.href, item.label, 'footer__link'));
   return groupEl('footer__cols', [
-    columnEl(footer.navTitle, nav),
+    withNav ? columnEl(footer.navTitle, nav) : null,
     columnEl(footer.contactTitle, [
       linkEl(telHref(contact.phone), contact.phone, 'footer__link'),
       linkEl(contact.email && `mailto:${contact.email}`, contact.email, 'footer__link'),
@@ -140,6 +143,37 @@ function tickerEl(items = []) {
   return ticker;
 }
 
+// Kiểu line: mỗi mục menu là một ga (chấm tròn, số thứ tự, tên) trên một đường kẻ chung; ga cuối là nút CTA của trang.
+// Điện thoại: đường kẻ dọc bên trái; từ 900px: đường kẻ ngang, các ga cách đều. Trang đang mở thì ga đó đặc màu (aria-current).
+function lineEl(nav, cta, label) {
+  const stops = nav.filter((item) => item.href && item.label).map((item, i) => {
+    const link = linkEl(item.href, item.label, 'footer__stop-link');
+    const dot = textEl('span', 'footer__stop-dot', ' ');
+    dot.setAttribute('aria-hidden', 'true');
+    const number = textEl('span', 'footer__stop-no', String(i + 1).padStart(2, '0'));
+    number.setAttribute('aria-hidden', 'true');
+    link.replaceChildren(dot, number, textEl('span', 'footer__stop-name', item.label));
+    return groupEl('footer__stop', [link]);
+  });
+  const end = linkEl(cta?.href, cta?.label, 'btn footer__cta');
+  if (end) {
+    const dot = textEl('span', 'footer__stop-dot', ' ');
+    dot.setAttribute('aria-hidden', 'true');
+    stops.push(groupEl('footer__stop footer__stop--end', [dot, end, textEl('p', 'footer__cta-note', cta?.note)]));
+  }
+  if (!stops.length) return null;
+  const list = document.createElement('ol');
+  list.className = 'footer__line';
+  if (label) list.setAttribute('aria-label', label);
+  for (const stop of stops) {
+    const li = document.createElement('li');
+    li.className = stop.className;
+    li.append(...stop.childNodes);
+    list.append(li);
+  }
+  return list;
+}
+
 export class WlFooter extends HTMLElement {
   // Khi cuộn: ảnh nền trôi chậm hơn trang, dòng chữ chạy nhanh lên một chút rồi chậm dần, cuộn ngược thì chạy ngược.
   // Listener gắn vào window nên phải gỡ khi khối bị gỡ.
@@ -193,10 +227,35 @@ export class WlFooter extends HTMLElement {
     this._raf = this._boost > 0.02 ? requestAnimationFrame(() => this.easeTicker()) : 0;
   }
 
+  // Kiểu line: lời đầu (nhãn nhỏ và khẩu hiệu lớn), tuyến các ga, liên hệ và điểm hẹn, ghi chú và nguồn ảnh.
+  renderLine(content, footer) {
+    const head = groupEl('footer__line-head', [
+      textEl('p', 'footer__line-eyebrow', footer.lineTitle),
+      textEl('p', 'footer__line-slogan', content.brand?.slogan),
+    ]);
+    const fine = groupEl('footer__fine', [
+      textEl('p', 'footer__note', footer.note),
+      creditsEl(footer.creditsTitle, content.credits),
+    ]);
+    const main = groupEl('footer__line-main container', [
+      head,
+      lineEl(content.nav ?? [], this.site?.cta, footer.navTitle),
+      columnsEl(content, footer, false),
+      fine,
+    ]);
+    this.replaceChildren(...[wiresEl(footer.wires), main].filter(Boolean));
+    this._ticker = null;
+    this._photo = null;
+  }
+
   render() {
     const content = this._data;
     const footer = content.footer ?? {};
     this.className = `footer footer--${footer.variant ?? 'columns'}`;
+    if (footer.variant === 'line') {
+      this.renderLine(content, footer);
+      return;
+    }
 
     const brand = groupEl('footer__brand', [
       textEl('p', 'footer__name', content.brand?.name),

@@ -4209,7 +4209,8 @@
     }
   ],
   "footer": {
-    "variant": "columns",
+    "variant": "line",
+    "lineTitle": "Ga cuối",
     "wires": true,
     "plate": {
       "number": "8",

@@ -605,3 +605,218 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 @media (prefers-reduced-motion: reduce) {
   .footer__wire { animation: none; }
 }
+
+/* ========= KIỂU LINE: GA CUỐI CỦA MỘT TUYẾN =========
+   Nền tối (màu mực), khẩu hiệu lớn, rồi menu thành các ga trên một đường kẻ màu chính; nút CTA là ga cuối. Điện thoại: đường kẻ dọc
+   bên trái, từ 900px: đường kẻ ngang. Màu lấy từ biến CSS: nền `--color-ink`, chữ `--color-bg`, đường và ga `--color-primary`. */
+/* Dây điện (footer.wires) là dải nền trang nằm trên cùng, nên footer không đệm trên: đệm nằm ở .footer__line-main, dưới dây điện. */
+.footer--line {
+  padding-block: 0 2rem;
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.footer--line .footer__wires {
+  margin-bottom: 0;
+}
+
+.footer__line-main {
+  display: grid;
+  gap: 3rem;
+  padding-top: 4rem;
+}
+
+.footer__line-eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.footer__line-slogan {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.6rem, 9vw, 5.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+/* Đường kẻ: là ::before của danh sách, các ga đè lên. Điện thoại dọc, màn rộng ngang. */
+.footer__line {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__line::before {
+  content: '';
+  position: absolute;
+  top: 1.4rem;
+  bottom: 1.4rem;
+  left: calc(0.8rem - 3px);
+  width: 6px;
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+.footer__stop {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1.1rem;
+  padding-block: 0.7rem;
+}
+
+.footer__stop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__stop-dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--color-ink);
+  border: 5px solid var(--color-primary);
+  border-radius: 50%;
+  transition: transform var(--duration, 0.2s) ease, background-color var(--duration, 0.2s) ease;
+}
+
+.footer__stop-no {
+  min-width: 1.4rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.8rem;
+  color: var(--color-primary);
+}
+
+.footer__stop-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.footer__stop-link:hover .footer__stop-dot,
+.footer__stop-link:focus-visible .footer__stop-dot {
+  transform: scale(1.25);
+}
+
+.footer__stop-link:hover .footer__stop-name,
+.footer__stop-link:focus-visible .footer__stop-name {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--color-primary);
+  text-underline-offset: 0.25em;
+}
+
+.footer__stop-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+/* Trang đang mở: ga đặc màu và sáng thêm quầng. */
+.footer__stop-link[aria-current='page'] .footer__stop-dot {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Ga cuối: chấm lớn đặc, nút CTA bên cạnh, dòng ghi chú dưới nút. */
+.footer__stop--end .footer__stop-dot {
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.footer__stop--end .footer__cta-note {
+  flex-basis: 100%;
+  margin: 0.25rem 0 0 calc(1.6rem + 1.1rem);
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--color-bg) 70%, transparent);
+}
+
+.footer--line .footer__col-title {
+  color: var(--color-primary);
+}
+
+.footer--line .footer__link,
+.footer--line .footer__address {
+  color: var(--color-bg);
+}
+
+.footer--line .footer__cols {
+  padding-top: 2rem;
+  border-top: 2px dashed color-mix(in srgb, var(--color-bg) 25%, transparent);
+}
+
+.footer--line .footer__fine,
+.footer--line .footer__note,
+.footer--line .footer__credits-title,
+.footer--line .footer__credit-link {
+  color: color-mix(in srgb, var(--color-bg) 70%, transparent);
+}
+
+@media (min-width: 900px) {
+  .footer__line {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  .footer__line::before {
+    top: calc(0.7rem + 0.8rem - 3px);
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 6px;
+  }
+
+  .footer__stop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding-block: 0.7rem 0;
+  }
+
+  .footer__stop-link {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .footer__stop-name {
+    font-size: 1.1rem;
+  }
+
+  .footer__stop--end {
+    align-items: flex-start;
+  }
+
+  .footer__stop--end .footer__cta-note {
+    flex-basis: auto;
+    margin-left: 0;
+  }
+
+  .footer--line .footer__cols {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__stop-dot {
+    transition: none;
+  }
+}
+
