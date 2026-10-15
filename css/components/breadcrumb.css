@@ -61,3 +61,10 @@
 body:has(.header--overlay) main > .breadcrumb:first-child {
   padding-top: calc(1rem + var(--breadcrumb-top, var(--header-stuck, 4rem)));
 }
+
+/* Khối đứng ngay dưới breadcrumb: đệm trên của nó (6rem của `main > *`, 5rem của vài component) cộng với dòng breadcrumb thành khoảng
+   trống quá lớn, nhìn như lỗi. Thu đệm trên lại cho vừa một nhịp thở. Không áp cho khối bắt đầu bằng ảnh tràn (hero, room-detail)
+   vì chúng tự có đệm trên bằng 0. [class] để mạnh hơn bộ chọn theo class của từng component. */
+main > wl-breadcrumb + [class]:not(wl-hero):not(wl-room-detail) {
+  padding-top: 1.5rem;
+}
