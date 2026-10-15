@@ -706,16 +706,28 @@ export class WlBooking extends HTMLElement {
     button.setAttribute('aria-label', `${weekday} ${viDate(dep.date)}, ${String(seats ?? '').toLowerCase()}`);
     const few = dep.seats > 0 && dep.seats <= (section.fewSeats ?? 4);
     button.append(...[
-      textEl('span', 'booking__date-dow', weekday.charAt(0).toUpperCase() + weekday.slice(1)),
+      textEl('span', 'booking__date-dow', this._data.variant === 'ticket' ? new Intl.DateTimeFormat('vi-VN', { weekday: 'short', timeZone: 'UTC' }).format(date) : weekday.charAt(0).toUpperCase() + weekday.slice(1)),
       textEl('span', 'booking__date-day', dep.date.slice(8, 10)),
       textEl('span', 'booking__date-month', fill(labels.month, { m: Number(dep.date.slice(5, 7)), y: dep.date.slice(0, 4) })),
       textEl('span', few ? 'booking__date-seats booking__date-seats--few' : 'booking__date-seats', seats),
+      this.seatBarEl(dep.seats),
     ].filter(Boolean));
     button.addEventListener('click', () => {
       this._departure = dep;
       this.updateCalendar();
     });
     return button;
+  }
+
+  // Kiểu ticket: dưới mỗi ngày là một hàng vạch, mỗi vạch một chỗ (sáng là còn); chữ số chỗ đã có ở trên nên vạch chỉ để nhìn nhanh.
+  seatBarEl(left) {
+    if (this._data.variant !== 'ticket') return null;
+    const total = this._data.seatMap?.total ?? 8;
+    const bar = document.createElement('span');
+    bar.className = 'booking__date-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.append(...Array.from({ length: total }, (_, i) => Object.assign(document.createElement('i'), { className: i < left ? 'on' : '' })));
+    return bar;
   }
 
   // Danh sách có tiêu đề (đã gồm, chưa gồm). Danh sách trống thì bỏ cả cột.
@@ -940,10 +952,28 @@ export class WlBooking extends HTMLElement {
     return fieldset;
   }
 
+  // Kiểu ticket: điểm đón là danh sách nút radio (mỗi dòng một cách đón, phí ở bên phải). Giá trị đang chọn nằm trong một ô ẩn
+  // để pickup() đọc giống ô chọn thường; radio ghi vào đó ở sự kiện input của chính nó, trước khi form nghe input và tính lại.
+  pickupRadios(prefix, pickups) {
+    const control = Object.assign(document.createElement('input'), { type: 'hidden', value: pickups[0].id });
+    const list = document.createElement('div');
+    list.className = 'booking__pickups';
+    list.append(...pickups.map((p, i) => {
+      const radio = Object.assign(document.createElement('input'), { type: 'radio', name: `${prefix}-pickup`, value: p.id, checked: i === 0, className: 'booking__pickup-input' });
+      radio.addEventListener('input', () => { control.value = p.id; });
+      const label = document.createElement('label');
+      label.className = 'booking__pickup';
+      label.append(radio, textEl('span', 'booking__pickup-label', p.label), textEl('span', 'booking__pickup-fee', p.fee ? `+ ${this.money(p.fee)}` : this._data.labels?.pickupFree));
+      return label;
+    }), control);
+    return { field: list, control };
+  }
+
   // Ô chọn điểm đón: mỗi lựa chọn ghi phí nếu có (phí cả đơn).
   pickupField(prefix) {
     const pickups = this._data.pickups ?? [];
     if (!pickups.length) return null;
+    if (this._data.variant === 'ticket') return this.pickupRadios(prefix, pickups);
     const select = document.createElement('select');
     select.className = 'booking__input';
     pickups.forEach((p) => {
@@ -1049,8 +1079,9 @@ export class WlBooking extends HTMLElement {
     this.fillDates();
 
     // Bước 1 và 2 (chọn tour, chọn ngày) ở khối chính; "đã gồm", điều khoản đi sau form để trên điện thoại form không bị đẩy xuống cuối.
+    const tourPick = this.tourPickEl(prefix);
     const info = groupEl('booking__info', [
-      this.tourPickEl(prefix),
+      tourPick,
       textEl('h3', 'booking__step-title', labels.departures),
       dates,
     ]);
@@ -1086,6 +1117,7 @@ export class WlBooking extends HTMLElement {
     this._form = document.createElement('form');
     this._form.className = 'booking__hold';
     this._form.noValidate = true;
+    if (section.variant === 'ticket') return this.ticketBody(prefix, tourPick, dates, sum, extra);
     this._form.append(...[
       textEl('h3', 'booking__step-title', labels.holdTitle),
       price,
@@ -1104,6 +1136,44 @@ export class WlBooking extends HTMLElement {
     // Có tiêu đề cho form thì ba khối thành ba bước đánh số 1, 2, 3; không có thì chỉ là các tiêu đề thường.
     if (labels.holdTitle) layout.classList.add('booking__layout--steps');
     return groupEl('booking__body', [layout, this._ticket]);
+  }
+
+  // Kiểu ticket (quầy vé): form là cả khối, cột trái là các bước đánh số trong khung (tour, ngày, số khách, điểm đón, thông tin),
+  // cột phải là "máy in vé": hoá đơn tạm tính sống, nút giữ chỗ, và phiếu trượt ra khỏi khe khi gửi.
+  ticketBody(prefix, tourPick, dates, sum, extra) {
+    const section = this._data;
+    const labels = section.labels ?? {};
+    const f = this._fields;
+    const box = (title, ...children) => {
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'booking__box';
+      fieldset.append(textEl('legend', 'booking__step-title', title), ...children.filter(Boolean));
+      return fieldset;
+    };
+    tourPick?.classList.add('booking__box');
+    const steps = groupEl('booking__steps', [
+      tourPick,
+      box(labels.departures, dates),
+      box(labels.guestsTitle ?? labels.guests, f.guests.field, this.seatPickEl(prefix)),
+      f.pickup ? box(labels.pickup, f.pickup.field) : null,
+      box(labels.contactTitle ?? labels.name, f.name.field, f.phone.field),
+    ]);
+    const screen = document.createElement('div');
+    screen.className = 'booking__screen';
+    screen.append(...[this.dealActive() ? textEl('p', 'booking__hold-deal', section.deal.label) : null, this.countdownEl(), sum].filter(Boolean));
+    const slot = document.createElement('div');
+    slot.className = 'booking__slot';
+    slot.setAttribute('aria-hidden', 'true');
+    this._ticket = this.ticketEl();
+    const printer = groupEl('booking__printer', [
+      groupEl('booking__printer-body', [textEl('p', 'booking__printer-brand', labels.printer), screen, this._submit, slot]),
+      this._ticket,
+    ]);
+    this._form.classList.add('booking__hold--ticket');
+    this._form.append(steps, printer);
+    this._form.addEventListener('input', () => this.updateCalendar());
+    this._form.addEventListener('submit', (e) => this.submitCalendar(e));
+    return groupEl('booking__body', [this._form, extra]);
   }
 
   // Tạm tính theo số khách: giá một khách nhân số khách, trừ ưu đãi mỗi khách nếu còn hạn; tiền cọc tính riêng.
@@ -1235,8 +1305,10 @@ export class WlBooking extends HTMLElement {
   render() {
     const section = this._data;
     // Kiểu wall (tờ lịch treo tường) chỉ đổi cách chọn ngày, còn lại là calendar: dùng chung mã và kiểu của calendar.
-    const variant = section.variant === 'wall' ? 'calendar' : (section.variant ?? 'calendar');
-    this.className = `booking booking--${variant}${section.variant === 'wall' ? ' booking--wall' : ''}`;
+    // Kiểu ticket (quầy vé) cũng là calendar, đổi bố cục và cách chọn điểm đón.
+    const skin = ['wall', 'ticket'].includes(section.variant) ? section.variant : null;
+    const variant = skin ? 'calendar' : (section.variant ?? 'calendar');
+    this.className = `booking booking--${variant}${skin ? ` booking--${skin}` : ''}`;
     // Dựng lại từ đầu (đổi thương hiệu): bỏ đồng hồ và sơ đồ ghế của lần trước.
     this.stopCountdown();
     this._seatButtons = null;

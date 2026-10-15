@@ -2275,7 +2275,7 @@
         {
           "type": "booking",
           "id": "dat-tour",
-          "variant": "wall",
+          "variant": "ticket",
           "tours": true,
           "pickups": [
             {
@@ -2294,13 +2294,14 @@
               "fee": 100000
             }
           ],
-          "eyebrow": "Tour buổi tối",
-          "title": "Chọn tour, chọn ngày, chọn nơi đón",
-          "lead": "Đón tận khách sạn: quận 1 miễn phí, quận khác cộng một khoản phí cho cả đoàn.",
+          "eyebrow": "Quầy vé",
+          "title": "Giữ chỗ, in vé.",
+          "lead": "Chọn xong, máy in ra thẻ lên xe kèm tin nhắn soạn sẵn. Đón tận khách sạn: quận 1 miễn phí, quận khác cộng một khoản phí cho cả đoàn.",
           "price": 890000,
           "priceNote": "một khách",
           "currency": "đồng",
           "fewSeats": 3,
+          "datesShown": 14,
           "defaultGuests": 2,
           "includes": [
             "Mỗi khách một tài xế",
@@ -2504,13 +2505,17 @@
           "labels": {
             "departures": "Ngày khởi hành",
             "tour": "Chọn tour",
-            "pickup": "Điểm đón",
+            "pickup": "Đón ở đâu?",
+            "pickupFree": "Miễn phí",
+            "guestsTitle": "Mấy người đi?",
+            "contactTitle": "Bạn là ai?",
+            "printer": "SighGone, máy in vé số 08",
             "pickupLine": "Phí đón, {label}",
             "moreDates": "Xem thêm {n} ngày",
             "holdTitle": "Thông tin của bạn",
             "prevMonth": "Tháng trước",
             "nextMonth": "Tháng sau",
-            "month": "tháng {m}, {y}",
+            "month": "th {m}",
             "seats": "Còn {n} chỗ",
             "soldOut": "Hết chỗ",
             "includesTitle": "Đã gồm",
