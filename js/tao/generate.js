@@ -12,6 +12,7 @@ import { setIn } from '../editor/form.js';
 import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
+import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
@@ -77,7 +78,13 @@ Mô tả không liên quan tới du lịch, lưu trú, hoặc có nội dung kh�
 Mô tả: ${brief}
 
 Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất.'}
-Màu: chọn bộ màu hợp nơi chốn và khí hậu, mã hex 6 số; nền trang (bg) và nền thẻ (surface) phải là màu sáng (gần trắng, có thể ngả ấm hay mát); chữ (ink), chữ phụ (muted), màu nhấn (accent) trên nền trang và trên nền thẻ phải tương phản từ 4.5; chữ trên nút (onPrimary) trên màu nút (primary) từ 4.5.
+Luật màu (bắt buộc):
+- Nền trang (bg) và nền thẻ (surface) sáng, gần trắng, ngả ấm hay mát nhẹ; chữ (ink) gần đen cùng tông nền, không dùng đen thuần #000000; chữ phụ (muted) là xám cùng tông.
+- Màu nút (primary) là màu thương hiệu rõ ràng nhưng không chói: độ bão hoà vừa phải, không dùng màu neon, cyan sáng, hồng sáng, vàng chói. Chọn theo nơi chốn và khí hậu (biển: xanh lam hoặc xanh ngọc đậm; núi, rừng: xanh rêu, nâu đất; nắng gió: cam đất, vàng đất; phố cổ: đỏ gạch, vàng đất; đồng quê: xanh lá trầm).
+- Màu nhấn (accent) cùng bảng với màu nút (cùng họ màu hoặc màu bổ sung đã trầm), đủ đậm để dùng làm chữ trên nền sáng. Tổng cộng tối đa hai màu chủ đạo cộng các màu trung tính; không dùng ba màu nhấn khác họ.
+- Tương phản từ 4.5: chữ, chữ phụ, màu nhấn trên nền trang và trên nền thẻ; chữ trên nút (onPrimary) trên màu nút (primary).
+dacTrung: các component đặc trưng chỉ được dùng khi thật sự phù hợp với nơi này. Dưới đây là danh sách (khoá: điều kiện phù hợp). Chỉ chọn khoá nào mà mô tả của người dùng thật sự thoả điều kiện; nghi ngờ thì không chọn; mảng rỗng là bình thường và là lựa chọn mặc định.
+${SIGNATURE.filter((s) => !s.hard).map((s) => `- ${s.key}: ${s.fit}`).join('\n')}
 phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá sau: "montserrat" (hiện đại, gọn, hợp thành phố, resort hiện đại), "lora" (có chân, cổ điển, hợp núi, làng quê, truyền thống), "unbounded" (tròn, vui, trẻ trung, hợp tour ăn uống, bạn bè), "playfair" (sang trọng, hợp nghỉ dưỡng cao cấp), hoặc "" để giữ kiểu chữ của khung.
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
@@ -88,12 +95,13 @@ cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu 
 Trả về JSON đúng dạng:
 {"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
  "phongChu": "",
+ "dacTrung": [],
  "anhTimKiem": ["", "", "", "", ""],
  "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
 }
 
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
-const brandProfile = ({ anhTimKiem, ...rest }) => rest;
+const brandProfile = ({ anhTimKiem, dacTrung, ...rest }) => rest;
 
 function groupPrompt(profile, fields, idx) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
@@ -177,11 +185,40 @@ function darkenToPass(fg, bgs) {
   return color;
 }
 
+// Luật độ chói áp bằng mã ngoài lời nhắc cho AI (AI hay vẫn chọn màu gắt): màu nút và màu nhấn bị hạ độ bão hoà xuống tối đa 70% và
+// giữ độ sáng trong khoảng 22% tới 52%.
+function toHsl(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (!d) return [0, 0, l];
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return [(h * 60 + 360) % 360, s, l];
+}
+
+function fromHsl([h, s, l]) {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  const [r, g, b] = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][Math.floor(h / 60) % 6];
+  return `#${[r, g, b].map((v) => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('')}`;
+}
+
+function soften(hex) {
+  const [h, s, l] = toHsl(hex);
+  return fromHsl([h, Math.min(s, 0.7), Math.min(0.52, Math.max(0.22, l))]);
+}
+
 function paletteVars(mau) {
   if (!mau) return null;
   const m = Object.fromEntries(Object.keys(PALETTE).map((k) => [k, String(mau[k] ?? '').trim().toLowerCase()]));
   if (!Object.values(m).every((v) => HEX.test(v))) return null;
   if ((contrastRatio(m.bg, WHITE) ?? 9) > 1.6 || (contrastRatio(m.surface, WHITE) ?? 9) > 1.6) return null;
+  m.primary = soften(m.primary);
+  m.accent = soften(m.accent);
   const bgs = [m.bg, m.surface];
   m.ink = darkenToPass(m.ink, bgs);
   m.muted = darkenToPass(m.muted, bgs);
@@ -325,6 +362,52 @@ async function photoTask({ profile, content, theme, photos, on }) {
   return kept.length;
 }
 
+/* ---------- Trộn bộ: chọn kiểu trình bày ---------- */
+
+const MIX_HINT = {
+  hero: 'coverflow (chồng thẻ ảnh xoay, nhiều ảnh), full (một ảnh phủ kín, mây vén khi cuộn, hợp thiên nhiên), stacked (chữ trên, ảnh tràn ngang, gọn, hiện đại), haze (ảnh phủ sương, rê chuột thì tan, huyền ảo, hợp đêm)',
+  intro: '"" (căn trái), center (căn giữa), headline (tiêu đề rất lớn, mạnh)',
+  gallery: '"" (lưới ảnh), slices (dải ảnh xoè như bình phong), plates (ô biển số, ảnh loang theo con trỏ, hợp nhiều lựa chọn ngắn)',
+  reviews: 'postcard (bưu thiếp nghiêng, ấm), notes (giấy note dán, trẻ trung, vui)',
+  faq: '"" (danh sách gập mở, gọn), chat (khung nhắn tin với chủ nhà, thân mật)',
+};
+
+// Khung chỉ cho bố cục và dữ liệu nền; kiểu trình bày của từng khối ở trang chủ do AI chọn trong các kiểu chung (kể cả kiểu vốn của thương hiệu
+// khác), theo giọng nơi chốn, và trộn các kiểu khác nhau. Kiểu không hợp lệ, hay bị cấm, không bao giờ được áp.
+async function layoutTask({ profile, content, theme, on }) {
+  const home = (content.pages ?? [{ sections: content.sections ?? [] }]).find((p) => !p.path || p.path === '/') ?? content.pages?.[0];
+  if (!home) return null;
+  const entries = home.sections.map((section, i) => ({ i, section, options: choicesFor(section) }))
+    .filter((e) => MIX_VARIANTS[e.section.type] && e.options.length > 1);
+  if (!entries.length) return null;
+  const list = entries.map((e) => `${e.i}\t${e.section.type}\tkiểu có thể chọn: ${e.options.map((o) => o || '""').join(', ')}\tgợi ý: ${MIX_HINT[e.section.type] ?? ''}`).join('\n');
+  const out = await generateJson(`Chọn kiểu trình bày cho các khối ở trang chủ một website du lịch, hợp giọng nơi chốn, theo hồ sơ:
+${JSON.stringify(brandProfile(profile))}
+
+Danh sách khối (số, loại, các kiểu chọn được, gợi ý):
+${list}
+
+Luật: mỗi khối chỉ chọn một kiểu trong danh sách "kiểu có thể chọn" của nó. Trộn các kiểu khác nhau cho trang có nhịp, không chọn kiểu đầu tiên cho mọi khối; hero hợp với cảnh và giọng của nơi chốn.
+Header: "solid" (nền trang), "center" (tên ở giữa), "overlay" (trong suốt đè lên ảnh, chỉ hợp khi hero chọn "full").
+Trả JSON một dòng: {"kieu": {"số khối": "kiểu"}, "header": ""}`);
+  const picked = {};
+  for (const e of entries) {
+    const value = out.kieu?.[e.i];
+    if (typeof value === 'string' && e.options.includes(value)) {
+      if (value) e.section.variant = value;
+      else delete e.section.variant;
+      picked[e.section.type] = value || 'mặc định';
+    }
+  }
+  const hero = home.sections.find((s) => s.type === 'hero');
+  let header = HEADER_CHOICES.includes(out.header) ? out.header : null;
+  if (header === 'overlay' && hero?.variant !== 'full') header = 'solid';
+  if (header) (content.header ??= {}).variant = header;
+  on.update?.(content, theme);
+  on.layout?.({ picked, header });
+  return picked;
+}
+
 /* ---------- Chạy ---------- */
 
 // on.profile(profile, info) khi có hồ sơ, on.field(done, total) mỗi dòng chữ nhận được, on.update(content, theme)
@@ -343,6 +426,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const res = await fetch(`/brands/${frame}/content.json`);
   if (!res.ok) throw new Error(`Không tải được khung ${frame} (mã ${res.status}).`);
   const template = await res.json();
+  // Luật component: bỏ khối đặc trưng của thương hiệu khung, đổi kiểu bị cấm (rules.js) trước khi tách chữ cho AI viết.
+  const rules = sanitizeFrame(template, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
   const content = structuredClone(template);
   const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);
@@ -354,10 +439,13 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (font) applyFont(theme, font.key);
   const profileSec = sec();
   on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars), font: font?.label ?? null });
+  on.rules?.(rules);
   on.update?.(content, theme);
 
   // Tìm ảnh chạy song song với việc viết chữ; lỗi mạng hay không tìm được thì giữ ảnh của khung.
   const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0);
+  // Chọn kiểu trình bày của các khối ở trang chủ (trộn bộ), song song với việc viết chữ.
+  const layoutRun = layoutTask({ profile, content, theme, on }).catch(() => null);
   const got = new Set();
   let first = 0;
   let mismatched = 0;
@@ -383,6 +471,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   // Lượt gửi lại hỏng thì thôi: các chỗ thiếu giữ chữ của khung, người dùng sửa sau bằng editor.
   if (missing.length) await streamLines('', groupPrompt(profile, fields, missing), handle).catch(() => {});
   const photoCount = await photoRun;
+  await layoutRun;
   on.update?.(content, theme);
   const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount };
   return { content, theme, profile, stats };
