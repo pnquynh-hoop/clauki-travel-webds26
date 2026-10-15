@@ -3891,6 +3891,48 @@
           }
         },
         {
+          "type": "gallery",
+          "id": "nhin-truoc",
+          "variant": "slices",
+          "eyebrow": "Nhìn trước tuyến",
+          "title": "Sáu ga, sáu khung hình",
+          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+          "listLabel": "Ảnh sáu ga của tuyến số 1",
+          "images": [
+            {
+              "src": "images/tuyen-nguyen-hue.webp",
+              "alt": "Phố đi bộ Nguyễn Huệ, đài phun nước hoa sen và trụ sở Ủy ban Nhân dân Thành phố phía xa",
+              "caption": "14:30, Nhà hát Thành phố và phố đi bộ Nguyễn Huệ"
+            },
+            {
+              "src": "images/tuyen-tren-cao.webp",
+              "alt": "Sài Gòn lúc hoàng hôn nhìn từ trên cao, kênh Nhiêu Lộc và những dòng đèn xe",
+              "caption": "14:45, Sài Gòn nhìn từ trên cao"
+            },
+            {
+              "src": "images/tuyen-ben-thanh.webp",
+              "alt": "Chợ Bến Thành nhìn từ ngã tư, xe máy và taxi qua lại dưới trời nắng",
+              "caption": "15:40, Chợ Bến Thành"
+            },
+            {
+              "src": "images/tuyen-dinh.webp",
+              "alt": "Dinh Độc Lập và bãi cỏ dưới trời nhiều mây",
+              "caption": "16:20, Dinh Độc Lập"
+            },
+            {
+              "src": "images/tuyen-nha-tho.webp",
+              "alt": "Nhà thờ Đức Bà lúc chiều, dòng xe máy chạy ngang quảng trường",
+              "caption": "17:00, Nhà thờ Đức Bà"
+            },
+            {
+              "src": "images/tuyen-bitexco.webp",
+              "alt": "Bitexco và các toà nhà ven sông lên đèn",
+              "caption": "17:30, Bitexco lúc hoàng hôn"
+            }
+          ]
+        },
+        {
           "type": "booking",
           "id": "giu-cho",
           "variant": "calendar",
@@ -3985,84 +4027,6 @@
             "copy": "Chép nội dung",
             "copied": "Đã chép"
           }
-        },
-        {
-          "type": "reviews",
-          "id": "khach-ke",
-          "variant": "postcard",
-          "eyebrow": "Khách kể",
-          "title": "Thở phào rồi mới viết",
-          "lead": "Từ tháng 6 đến tháng 9/2026: 1.240 chuyến, 6.900 khách, điểm trung bình 4,7 trên 5.",
-          "scoreLabel": "điểm",
-          "dateLabel": "Ngày đi",
-          "items": [
-            {
-              "rating": 5,
-              "text": "Tài xế chạy chậm như đi dạo, dừng đúng chỗ cho mình chụp. Bảy món mà muốn ăn thêm món tám.",
-              "name": "Thu Hà",
-              "from": "Hà Nội",
-              "stamp": {
-                "value": "18:00",
-                "label": "Sài Gòn lên đèn"
-              },
-              "date": "12.09.2026"
-            },
-            {
-              "rating": 4,
-              "text": "Lần đầu ngồi xích lô, chú đạp xe kể chuyện Chợ Lớn suốt đường. Con gái mình nhớ tên từng con phố.",
-              "name": "Minh Khoa",
-              "from": "Cần Thơ",
-              "stamp": {
-                "value": "07:00",
-                "label": "Hẻm Chợ Lớn"
-              },
-              "date": "27.08.2026"
-            },
-            {
-              "rating": 5,
-              "text": "Đi phà xong lên ca nô, rồi đi bộ trong rừng. Một ngày mà như ba chuyến đi khác nhau.",
-              "name": "Bảo Ngọc",
-              "from": "Đà Nẵng",
-              "stamp": {
-                "value": "07:00",
-                "label": "Rừng Sác Cần Giờ"
-              },
-              "date": "06.09.2026"
-            },
-            {
-              "rating": 4,
-              "text": "Có nửa ngày trống giữa hai cuộc họp, đặt tour sáng sớm. Về khách sạn kịp tắm rồi đi làm.",
-              "name": "Đức Anh",
-              "from": "Hải Phòng",
-              "stamp": {
-                "value": "06:30",
-                "label": "Sài Gòn thức giấc"
-              },
-              "date": "18.09.2026"
-            },
-            {
-              "rating": 4,
-              "text": "Thuyền vào kênh nhỏ tới mức phải cúi đầu qua cầu. Hoàng hôn ngoài sông lớn đẹp hơn mình tưởng.",
-              "name": "Lan Chi",
-              "from": "Huế",
-              "stamp": {
-                "value": "16:30",
-                "label": "Sông Sài Gòn chiều"
-              },
-              "date": "03.10.2026"
-            },
-            {
-              "rating": 4,
-              "text": "Không nghĩ giữa thành phố còn đường làng để đạp xe. Nước dừa ở vườn ngọt lịm.",
-              "name": "Quốc Bảo",
-              "from": "Nha Trang",
-              "stamp": {
-                "value": "15:00",
-                "label": "Đạp xe Thanh Đa"
-              },
-              "date": "09.10.2026"
-            }
-          ]
         },
         {
           "type": "faq",
@@ -4372,6 +4336,48 @@
       "license": "CC BY 3.0",
       "source": "https://commons.wikimedia.org/wiki/File:Becamex_tower,_Hamnghi_tphcmvn_-_panoramio.jpg",
       "note": "Ảnh chụp tháp Bitexco (tên tệp gốc trên Commons ghi nhầm). Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-nguyen-hue.webp",
+      "author": "Steffen Schmitz (more photos)",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City,_Nguyen_Hue_Street,_2020-01_CN-04.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-tren-cao.webp",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Vista_de_Ciudad_Ho_Chi_Minh_desde_Bitexco_Financial_Tower,_Vietnam,_2013-08-14,_DD_09.JPG",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-ben-thanh.webp",
+      "author": "chee.hong",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ben_Thanh_Market_(8236616059).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-dinh.webp",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Palacio_de_la_Reunificaci%C3%B3n,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_01.JPG",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-nha-tho.webp",
+      "author": "Erwin Verbruggen from Amsterdam, The Netherlands",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Saigon_Notre-Dame_Basilica_(14585782826).jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/tuyen-bitexco.webp",
+      "author": "Gurval Le Bouter",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Saigon_skyline_night_view.jpg",
+      "note": "Đã thu nhỏ, chuyển sang WebP"
     }
   ]
 }
