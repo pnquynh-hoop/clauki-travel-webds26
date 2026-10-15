@@ -1,6 +1,6 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
    Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Bungee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Bungee&family=Phudu:wght@600;800;900&display=swap');
 
 /* SighGone: tour trong ngày quanh Sài Gòn. Màu lấy từ phố: giấy báo cũ làm nền, vàng taxi và mũ xe ôm cho nút,
    xanh biển số nhà cho chữ nhấn. Bungee là chữ bảng hiệu (--font-hand): số trên biển số, đồng hồ, nhãn, dòng nhấn ở footer.
@@ -18,6 +18,8 @@
   --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
   --font-hand: 'Bungee', system-ui, sans-serif;
+  /* Chữ poster của hero kiểu ride: Phudu, font đậm vẽ cho tiếng Việt, dấu không bị cắt ở cỡ rất lớn. */
+  --font-ride: 'Phudu', system-ui, sans-serif;
   --radius: 0.875rem;
   /* Nút như bảng hiệu dán tường: viền mực, bóng in lệch không nhoè; rê chuột thì nút nhấc lên, bóng dài ra. */
   --btn-border: #111114;

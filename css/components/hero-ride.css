@@ -8,6 +8,7 @@
   --ride-ink: var(--color-ink);
   --ride-paper: var(--color-bg);
   --ride-yellow: var(--color-primary);
+  --ride-on-yellow: var(--color-on-primary);
   --ride-plate: var(--color-accent);
   /* Màu cảnh vẽ: mặc định pha từ màu thương hiệu, theme muốn đổi thì khai lại các biến này. */
   --ride-alert: #d6331f;
@@ -91,7 +92,7 @@
   height: 0.92em;
   font-size: 0.6em;
   line-height: 1;
-  color: var(--ride-ink);
+  color: var(--ride-on-yellow);
   background: var(--ride-yellow);
   border: 0.09em solid var(--ride-ink);
   border-radius: 50%;
@@ -220,7 +221,7 @@
   font-family: var(--font-ride, var(--font-heading));
   font-size: 1.7rem;
   font-weight: 800;
-  color: var(--ride-ink);
+  color: var(--ride-on-yellow);
   background: var(--ride-yellow);
   border-right: 3px solid var(--ride-ink);
   border-radius: calc(var(--ride-radius) - 0.2rem) 0 0 calc(var(--ride-radius) - 0.2rem);
@@ -656,7 +657,7 @@
   line-height: 1;
   letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
-  color: var(--ride-ink);
+  color: var(--ride-on-yellow);
   background: var(--ride-yellow);
   border-radius: 999px;
 }
