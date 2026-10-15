@@ -7,14 +7,15 @@
   display: block;
 }
 
-/* Khối liên hệ thường đứng đầu trang, header kiểu overlay nằm đè lên: chừa thêm chỗ cho header. */
-.contact:first-child {
+/* Khối liên hệ thường đứng đầu trang. Header kiểu overlay nằm đè lên, không chiếm chỗ: chừa thêm chỗ cho header;
+   header kiểu khác đã chiếm chỗ của nó nên không cộng thêm. */
+body:has(.header--overlay) main > .contact:first-child {
   padding-top: max(var(--space-section), calc(var(--header-stuck, 0px) + 2.5rem));
 }
 
 .contact__inner {
   display: grid;
-  grid-template-areas: 'head' 'photo' 'ways' 'message';
+  grid-template-areas: 'head' 'photo' 'ways' 'directions' 'message';
   gap: 2.5rem;
 }
 
@@ -48,6 +49,7 @@
 /* Băng keo: dải trong mờ dán chéo trên mép giấy, nghiêng ngược chiều tờ giấy. */
 .contact__photo::before,
 .contact__note::before,
+.contact__directions::before,
 .contact__message::before {
   content: '';
   position: absolute;
@@ -64,6 +66,7 @@
 /* Bóng đổ chung của các tờ giấy: mép dưới hơi nhấc khỏi mặt bàn. */
 .contact__photo,
 .contact__note,
+.contact__directions,
 .contact__message {
   position: relative;
   box-shadow:
@@ -237,10 +240,62 @@ a.contact__note:focus-visible {
   }
 }
 
+/* Tờ chỉ đường: số bước đóng khung như biển số nhà, từ 760px các bước nằm thành hàng.
+   Tờ rộng hết khung thì không nghiêng: nửa độ trên bề ngang cả khung đã lệch gần 1rem giữa hai đầu,
+   các bước và ô nhập bên trong trông như đặt sai hàng chứ không như giấy dán. */
+
+.contact__directions {
+  --rot: 0deg;
+  grid-area: directions;
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+  margin-top: 1rem;
+  padding: 2rem 1.3rem 1.6rem;
+  background: var(--color-surface);
+}
+
+.contact__directions-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.contact__steps {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.contact__step {
+  position: relative;
+  padding-left: 3rem;
+  counter-increment: step;
+}
+
+.contact__step::before {
+  content: counter(step);
+  position: absolute;
+  top: -0.1rem;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  font-family: var(--font-hand, var(--font-heading));
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+  border: 2px solid var(--color-ink);
+  border-radius: 6px;
+}
+
 /* Tờ soạn tin nhắn */
 
 .contact__message {
-  --rot: -0.5deg;
+  --rot: 0deg;
   grid-area: message;
   display: grid;
   gap: 1.75rem;
@@ -350,6 +405,7 @@ textarea.contact__input {
     grid-template-areas:
       'head photo'
       'ways ways'
+      'directions directions'
       'message message';
     column-gap: 3rem;
     align-items: center;
@@ -357,6 +413,15 @@ textarea.contact__input {
 
   .contact__ways {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact__directions {
+    padding: 2.5rem;
+  }
+
+  .contact__steps {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1.5rem;
   }
 
   .contact__message {
@@ -369,5 +434,255 @@ textarea.contact__input {
 @media (min-width: 1024px) {
   .contact__ways {
     grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+}
+
+/* Kiểu plate (nhãn và tiêu đề dùng chung với kiểu bell): tiêu đề rất lớn, đèn báo mở cửa là nhãn tối ngay dưới tiêu đề, biển số nhà đứng chỗ ảnh.
+   Các cách liên hệ là thẻ màu viền mực, bóng in lệch, nghiêng nhẹ xen kẽ (không băng keo); tờ chỉ đường và form
+   đứng thẳng, từ 1024px nằm cạnh nhau. Chỉ ghi đè trong .contact--plate nên kiểu notes giữ nguyên. */
+
+.contact--plate .contact__eyebrow,
+.contact--bell .contact__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+}
+
+.contact--plate .contact__eyebrow::before,
+.contact--bell .contact__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.contact--plate .contact__title,
+.contact--bell .contact__title {
+  margin-top: 1rem;
+  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.contact--plate .contact__head .contact__status {
+  display: flex;
+  width: fit-content;
+  margin-top: 1.4rem;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--color-bg);
+  background: var(--color-ink);
+  border-radius: 8px;
+}
+
+.contact--plate .contact__head .contact__lamp {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.contact__plate {
+  --plate-size: 5rem;
+  --plate-street: 1rem;
+  --plate-tilt: 4deg;
+  grid-area: photo;
+  justify-self: center;
+  margin: 1rem;
+}
+
+.contact--plate .contact__ways {
+  gap: 1.6rem;
+}
+
+.contact--plate .contact__way:nth-child(3n + 1) {
+  --rot: -2deg;
+  --paper: var(--color-primary);
+}
+
+.contact--plate .contact__way:nth-child(3n + 2) {
+  --rot: 1.5deg;
+  --paper: color-mix(in srgb, var(--color-mark, var(--color-accent)) 20%, var(--color-surface));
+}
+
+.contact--plate .contact__way:nth-child(3n + 3) {
+  --rot: -1deg;
+  --paper: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface));
+}
+
+.contact--plate .contact__note {
+  gap: 0.4rem;
+  padding: 1.6rem;
+  border: 3px solid var(--color-ink);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: 6px 6px 0 var(--color-ink);
+}
+
+.contact--plate a.contact__note:hover,
+.contact--plate a.contact__note:focus-visible {
+  box-shadow: 8px 10px 0 var(--color-ink);
+}
+
+.contact--plate .contact__note::before,
+.contact--plate .contact__directions::before,
+.contact--plate .contact__message::before {
+  content: none;
+}
+
+.contact--plate .contact__icon {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-bottom: 0.2rem;
+  color: var(--color-ink);
+}
+
+.contact--plate .contact__label {
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.contact--plate .contact__value,
+.contact--plate .contact__note--email .contact__value {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Email dài hơn số điện thoại: nhỏ hơn một nấc để nằm gọn một dòng trong thẻ. */
+.contact--plate .contact__note--email .contact__value {
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+}
+
+.contact--plate .contact__directions,
+.contact--plate .contact__message {
+  align-self: start;
+  margin-top: 0;
+  rotate: none;
+}
+
+.contact--plate .contact__directions {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.contact--plate .contact__directions-title,
+.contact--plate .contact__message-title {
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.contact--plate .contact__steps {
+  gap: 0.8rem;
+}
+
+.contact--plate .contact__step {
+  font-size: 1.05rem;
+}
+
+/* Số bước như biển số nhà nhỏ; vạch đứt nối các số thành con đường đi bộ từ bước này sang bước sau. */
+.contact--plate .contact__step::before {
+  font-size: 0.95rem;
+  color: var(--color-surface);
+  background: var(--color-accent);
+  border: 0;
+  box-shadow: inset 0 0 0 2px var(--color-accent), inset 0 0 0 3.5px var(--color-surface);
+}
+
+.contact--plate .contact__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 2.1rem;
+  bottom: -0.9rem;
+  left: calc(1.05rem - 1px);
+  border-left: 2px dashed color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+
+.contact--plate .contact__message {
+  gap: 1rem;
+  padding: 1.6rem;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+.contact--plate .contact__input {
+  border: 2px solid var(--color-ink);
+  border-radius: 10px;
+}
+
+/* Ô viết không kẻ dòng như kiểu notes: thẻ gọn như form trong bản thiết kế. */
+.contact--plate textarea.contact__input {
+  background: var(--color-bg);
+}
+
+@media (min-width: 760px) {
+  .contact--plate .contact__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .contact--plate .contact__ways {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  }
+
+  .contact--plate .contact__steps,
+  .contact--plate .contact__message {
+    grid-template-columns: none;
+  }
+
+  .contact--plate .contact__directions,
+  .contact--plate .contact__message {
+    padding-inline: 0;
+  }
+
+  .contact--plate .contact__message {
+    padding: 1.6rem;
+  }
+
+  .contact__plate {
+    --plate-size: 6.5rem;
+    --plate-street: 1.1rem;
+    margin: 2rem 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact--plate .contact__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'head photo'
+      'ways ways'
+      'directions message';
+    gap: 4rem 3rem;
+    align-items: start;
+  }
+
+  .contact--plate .contact__head {
+    align-self: center;
+  }
+
+  .contact--plate .contact__ways {
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  }
+
+  .contact__plate {
+    align-self: center;
+    justify-self: end;
   }
 }

@@ -1,30 +1,34 @@
 /* wl-contact.js - trang liên hệ. Kiểu notes: mỗi cách liên hệ là một tờ giấy note dán băng keo
    (gọi, email, điểm hẹn, văn phòng); tờ gọi có đèn báo đang nghe máy hay không theo giờ thật ở nơi đến.
+   Kiểu plate: tiêu đề rất lớn, đèn báo mở cửa nằm ngay dưới tiêu đề, các cách liên hệ là thẻ màu viền mực,
+   tờ chỉ đường và form nằm cạnh nhau. Có plate thì biển số nhà đứng chỗ ảnh (ở mọi kiểu).
+   Tuỳ chọn tờ chỉ đường (directions): các bước đánh số tới điểm hẹn và nút mở bản đồ.
    Bên dưới là tờ giấy kẻ dòng để soạn sẵn tin nhắn rồi gửi bằng SMS hoặc email: trang tĩnh không có máy chủ
    nhận thư, nên tin đi thẳng tới số điện thoại và email thật của thương hiệu. */
 import { asset } from '../core.js';
-import { textEl, telHref } from '../dom.js';
+import { textEl, linkEl, telHref } from '../dom.js';
 import { iconEl } from '../icon.js';
+import { plateEl } from './plate.js';
 
 // Số, email, địa chỉ lấy từ site.contact chứ không chép vào từng tờ, để đổi số điện thoại chỉ phải sửa một chỗ.
-const KINDS = {
+export const KINDS = {
   phone: { icon: 'phone', value: (c) => c.phone, href: (c) => telHref(c.phone) },
   email: { icon: 'mail', value: (c) => c.email, href: (c) => (c.email ? `mailto:${c.email}` : null) },
   address: { icon: 'building-2', value: (c) => c.address },
 };
 
 // Thay {tên} trong mẫu chữ bằng giá trị tương ứng.
-const fill = (template, values) => (template ?? '').replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
+export const fill = (template, values) => (template ?? '').replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');
 
 // "07:30" thành số phút trong ngày; sai dạng thì ra NaN, đèn báo tự bỏ.
-function toMinutes(time) {
+export function toMinutes(time) {
   const [h, m] = String(time).split(':').map(Number);
   return h * 60 + m;
 }
 
 // Giờ ở nơi đến (place.timezone) chứ không theo đồng hồ máy khách:
 // khách mở trang từ nước khác vẫn thấy đúng lúc này gọi có người nghe không.
-function nowMinutes(timeZone) {
+export function nowMinutes(timeZone) {
   try {
     const parts = new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
       .formatToParts(new Date());
@@ -126,6 +130,13 @@ export class WlContact extends HTMLElement {
     this._io?.disconnect();
     clearInterval(this._timer);
     this._status = null;
+    // Kiểu bell (bảng chuông cửa) khác hẳn cấu trúc HTML nên dựng ở tệp riêng, chỉ tải khi dùng.
+    if (section.variant === 'bell') {
+      import('./contact-bell.js').then(({ renderBell }) => {
+        if (this._data === section) this._timer = renderBell(this, section);
+      });
+      return;
+    }
 
     const head = document.createElement('div');
     head.className = 'contact__head';
@@ -133,11 +144,14 @@ export class WlContact extends HTMLElement {
       textEl('p', 'contact__eyebrow', section.eyebrow),
       textEl('h2', 'contact__title', section.title),
       textEl('p', 'contact__lead', section.lead),
+      // Kiểu plate: đèn báo là một nhãn riêng dưới tiêu đề, thấy ngay khi mở trang, không nằm trong thẻ gọi.
+      section.variant === 'plate' ? this.statusEl() : null,
     ].filter(Boolean));
 
     const inner = document.createElement('div');
     inner.className = 'container contact__inner';
-    inner.append(...[head, photoEl(section.image), this.waysEl(), this.messageEl()].filter(Boolean));
+    const visual = plateEl(section.plate, 'contact__plate') ?? photoEl(section.image);
+    inner.append(...[head, visual, this.waysEl(), this.directionsEl(), this.messageEl()].filter(Boolean));
     this.replaceChildren(inner);
     this.startStatus();
   }
@@ -149,7 +163,8 @@ export class WlContact extends HTMLElement {
     const list = document.createElement('ul');
     list.className = 'contact__ways';
     notes.forEach(([way, note], i) => {
-      const status = way.kind === 'phone' ? this.statusEl() : null;
+      // Đèn báo đã nằm dưới tiêu đề (kiểu plate) thì tờ gọi không có đèn thứ hai.
+      const status = way.kind === 'phone' && !this._status ? this.statusEl() : null;
       if (status) note.append(status);
       const li = document.createElement('li');
       li.className = 'contact__way';
@@ -194,6 +209,27 @@ export class WlContact extends HTMLElement {
     const open = now >= toMinutes(hours.from) && now < toMinutes(hours.to);
     this._status.classList.toggle('is-open', open);
     this._statusText.textContent = fill(open ? labels.open : labels.closed, hours);
+  }
+
+  // Tờ chỉ đường tới điểm hẹn: các bước đánh số, nút mở bản đồ. Không có bước nào thì không có tờ này.
+  directionsEl() {
+    const directions = this._data.directions;
+    const steps = (directions?.steps ?? []).map((step) => textEl('li', 'contact__step', step)).filter(Boolean);
+    if (!steps.length) return null;
+    const list = document.createElement('ol');
+    list.className = 'contact__steps';
+    list.append(...steps);
+    const href = directions.link?.href;
+    const link = linkEl(href, directions.link?.label, 'btn btn--ghost contact__map');
+    // Bản đồ là trang ngoài: mở tab mới để khách không rời trang liên hệ.
+    if (link && href.startsWith('http')) {
+      link.target = '_blank';
+      link.rel = 'noopener';
+    }
+    const box = document.createElement('div');
+    box.className = 'contact__directions';
+    box.append(...[textEl('h3', 'contact__directions-title', directions.title), list, link].filter(Boolean));
+    return box;
   }
 
   // Tờ soạn tin nhắn: bên trái lời dặn nên nhắn kèm gì, bên phải ô nhập và nút gửi.

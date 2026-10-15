@@ -1,0 +1,340 @@
+/* cards.css - giao diện của <wl-cards>: khối thẻ trình bày, nội dung gì cũng được.
+   Viền và bóng thẻ đọc --card-border, --card-shadow như các khối thẻ khác, nên thẻ theo phong cách của từng thương hiệu.
+   --card-color là màu riêng của một thẻ (dữ liệu ghi color), thiếu thì xoay vòng bốn màu pha từ màu nhấn và màu mực.
+   Ở kiểu badge màu này tô đặc dải đầu thẻ và vòng tròn, chữ trên đó dùng --color-surface: bốn màu xoay vòng đều
+   đậm hơn hoặc nhạt hơn mặt thẻ như màu nhấn (đạt tương phản trên nền), nên chữ đọc được ở cả theme sáng lẫn tối. */
+
+.cards {
+  display: block;
+}
+
+/* Nhãn nhỏ như chữ bảng hiệu, chấm tròn phía trước tô --color-mark (thiếu thì màu nhấn), giống nhãn của khối route. */
+.cards__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.cards__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.cards__heading {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.cards__lead {
+  max-width: 40rem;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  color: var(--color-muted);
+}
+
+.cards__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Bốn màu xoay vòng cho thẻ không ghi color. */
+.cards__item:nth-child(4n + 1) { --card-tone: var(--color-accent); }
+.cards__item:nth-child(4n + 2) { --card-tone: var(--color-mark, color-mix(in srgb, var(--color-accent) 60%, var(--color-ink))); }
+.cards__item:nth-child(4n + 3) { --card-tone: color-mix(in srgb, var(--color-accent) 55%, var(--color-ink)); }
+.cards__item:nth-child(4n + 4) { --card-tone: color-mix(in srgb, var(--color-mark, var(--color-accent)) 60%, var(--color-ink)); }
+
+.cards__card {
+  --tone: var(--card-color, var(--card-tone));
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.4rem;
+  overflow: hidden;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: var(--card-border, 2px solid var(--color-ink));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, 4px 4px 0 var(--color-ink));
+}
+
+/* Ảnh tràn hết bề ngang thẻ ở đầu thẻ. */
+.cards__image {
+  width: calc(100% + 2.8rem);
+  max-width: none;
+  margin: -1.4rem -1.4rem 0.5rem;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* Icon đứng một mình ở đầu thẻ, màu nhấn (hoặc màu riêng của thẻ) để đọc nhanh thẻ nói về gì. */
+.cards__icon {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  color: var(--card-color, var(--color-accent));
+}
+
+.cards__icon svg,
+.cards__chip-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cards__title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.cards__meta {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.cards__text {
+  color: var(--color-ink);
+}
+
+.cards__facts {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0;
+}
+
+/* Nhãn chữ thường, giá trị chữ đậm: căn theo đường chân chữ để hai phần nằm trên cùng một dòng. */
+.cards__fact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.cards__fact dt {
+  color: var(--color-muted);
+}
+
+.cards__fact dt::after {
+  content: ':';
+}
+
+.cards__fact dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cards__quote {
+  margin: 0;
+  font-style: italic;
+  color: var(--color-ink);
+}
+
+/* Chip: nhãn ngắn có icon (ví dụ lĩnh vực chuyên môn), nền pha nhạt màu riêng của chip (thiếu thì màu của thẻ);
+   chữ luôn màu mực. */
+.cards__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cards__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--chip-color, var(--card-color, var(--color-accent))) 20%, var(--color-surface));
+  border-radius: 999px;
+}
+
+.cards__chip-icon {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Liên kết nằm cuối thẻ dù chữ phía trên dài ngắn khác nhau. */
+.cards__link {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* Kiểu badge: thẻ đeo treo trên móc. Dải màu đặc đầu thẻ ghi nhãn chung, vòng tròn ảnh hoặc chữ tắt cùng màu,
+   chữ căn giữa. Mỗi thẻ treo ở một độ dài dây (--drop) và nghiêng quanh móc một góc (--tilt) khác nhau, nên cả dãy
+   lệch như thẻ treo thật nhưng vẫn theo một quy luật: mọi dây cùng bắt đầu từ một đường ngang, thẻ nào dây dài thì
+   treo thấp hơn. Bộ góc lặp theo chu kỳ 5 thẻ, khác số cột, để hai hàng không lặp cùng một dáng.
+   Rê chuột hay Tab tới thì thẻ thẳng lại, nhấc lên và nổi trên các thẻ khác, như chọn nhân vật trong game.
+   Hàng thiếu thẻ thì các thẻ dồn vào giữa. */
+
+.cards--badge .cards__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4.5rem 1.6rem;
+  padding-top: 2.2rem;
+}
+
+.cards--badge .cards__item {
+  flex: 0 1 17rem;
+}
+
+.cards--badge .cards__item:nth-child(5n + 1) { --tilt: -2.6deg; --drop: 0.3rem; }
+.cards--badge .cards__item:nth-child(5n + 2) { --tilt: 1.8deg; --drop: 1.2rem; }
+.cards--badge .cards__item:nth-child(5n + 3) { --tilt: -1deg; --drop: 0rem; }
+.cards--badge .cards__item:nth-child(5n + 4) { --tilt: 3deg; --drop: 0.8rem; }
+.cards--badge .cards__item:nth-child(5n + 5) { --tilt: -1.8deg; --drop: 1.5rem; }
+
+/* Thẻ xoay quanh móc (đỉnh của kẹp dây), không quanh tâm thẻ, nên trông như đang treo. */
+.cards--badge .cards__card {
+  position: relative;
+  align-items: center;
+  padding: 2.4rem 1.2rem 1.4rem;
+  overflow: visible;
+  text-align: center;
+  box-shadow: 0 20px 30px -20px color-mix(in srgb, var(--color-ink) 55%, transparent);
+  translate: 0 var(--drop, 0rem);
+  rotate: var(--tilt, 0deg);
+  transform-origin: 50% -1.4rem;
+  transition:
+    translate calc(var(--duration) * 1.5) cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate calc(var(--duration) * 1.5) cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale calc(var(--duration) * 1.5) ease;
+}
+
+.cards--badge .cards__card:hover,
+.cards--badge .cards__card:focus-within {
+  z-index: 1;
+  translate: 0 calc(var(--drop, 0rem) - 0.5rem);
+  rotate: 0deg;
+  scale: 1.04;
+}
+
+/* Cuộn tới thì các thẻ đung đưa quanh móc rồi dừng ở góc của mình, lần lượt từng thẻ (một lần, wl-cards.js thêm
+   is-swinging). Không giữ khung hình cuối, để sau khi dừng rê chuột vẫn đổi được góc. */
+.cards--badge .cards__list.is-swinging .cards__card {
+  animation: cards-swing 1.8s ease-in-out backwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+@keyframes cards-swing {
+  0% { rotate: calc(var(--tilt, 0deg) + 9deg); }
+  28% { rotate: calc(var(--tilt, 0deg) - 5deg); }
+  52% { rotate: calc(var(--tilt, 0deg) + 2.6deg); }
+  74% { rotate: calc(var(--tilt, 0deg) - 1deg); }
+  100% { rotate: var(--tilt, 0deg); }
+}
+
+.cards--badge .cards__card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2.6rem;
+  background: var(--tone);
+  border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
+}
+
+.cards__clip {
+  position: absolute;
+  top: -1.4rem;
+  left: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  translate: -50% 0;
+  border: 4px solid color-mix(in srgb, var(--color-muted) 70%, var(--color-surface));
+  border-bottom: 0;
+  border-radius: 1.2rem 1.2rem 0 0;
+}
+
+/* Dây đeo đi lên từ kẹp, dài thêm đúng bằng --drop, nên đỉnh mọi dây nằm trên cùng một đường ngang; mờ dần ở đầu trên
+   như dây còn vắt tiếp lên móc. */
+.cards__clip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 3px;
+  height: calc(var(--drop, 0rem) + 0.8rem);
+  translate: -50% 0;
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-muted) 70%, var(--color-surface)), transparent);
+}
+
+/* Nhãn chung nằm trên dải màu đặc. */
+.cards__tag {
+  position: relative;
+  margin: -1.8rem 0 1rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-surface);
+}
+
+.cards__face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  overflow: hidden;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.8rem;
+  color: var(--color-surface);
+  background: var(--tone);
+  border: 4px solid var(--color-surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--color-ink);
+}
+
+.cards__face-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cards--badge .cards__title {
+  font-size: 1.5rem;
+}
+
+.cards--badge .cards__facts {
+  justify-items: center;
+}
+
+.cards--badge .cards__chips {
+  justify-content: center;
+}
+
+/* Giảm chuyển động: thẻ vẫn nghiêng (góc nghiêng đứng yên), chỉ bỏ chuyển tiếp; wl-cards.js không thêm is-swinging. */
+@media (prefers-reduced-motion: reduce) {
+  .cards--badge .cards__card {
+    transition: none;
+  }
+}

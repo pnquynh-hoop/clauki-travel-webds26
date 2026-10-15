@@ -9,7 +9,7 @@
 import { start } from './core.js';
 
 const COMPONENTS = {
-  'wl-intro': { load: () => import('./components/wl-intro.js').then((m) => m.WlIntro), css: ['intro'] },
+  'wl-intro': { load: () => import('./components/wl-intro.js').then((m) => m.WlIntro), css: ['intro', 'intro-morph', 'plate'] },
   'wl-journey': { load: () => import('./components/wl-journey.js').then((m) => m.WlJourney), css: ['journey'] },
   'wl-hero': { load: () => import('./components/wl-hero.js').then((m) => m.WlHero), css: ['hero', 'hero-reveal', 'hero-haze', 'hero-ride'] },
   'wl-header': { load: () => import('./components/wl-header.js').then((m) => m.WlHeader), css: ['header'] },
@@ -30,7 +30,7 @@ const COMPONENTS = {
   'wl-clock': { load: () => import('./components/wl-clock.js').then((m) => m.WlClock), css: ['clock'] },
   'wl-tips': { load: () => import('./components/wl-tips.js').then((m) => m.WlTips), css: ['tips'] },
   'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },
-  'wl-contact': { load: () => import('./components/wl-contact.js').then((m) => m.WlContact), css: ['contact'] },
+  'wl-contact': { load: () => import('./components/wl-contact.js').then((m) => m.WlContact), css: ['contact', 'contact-bell', 'plate'] },
   'wl-catalog-list': { load: () => import('./components/wl-catalog-list.js').then((m) => m.WlCatalogList), css: ['catalog-list'] },
   'wl-breadcrumb': { load: () => import('./components/wl-breadcrumb.js').then((m) => m.WlBreadcrumb), css: ['breadcrumb'] },
   'wl-backdrop': { load: () => import('./components/wl-backdrop.js').then((m) => m.WlBackdrop), css: ['backdrop'] },
@@ -38,6 +38,10 @@ const COMPONENTS = {
   // Thẻ kết quả dùng chung giao diện thẻ của catalog-list, nên tải kèm catalog-list.css.
   'wl-tour-pick': { load: () => import('./components/wl-tour-pick.js').then((m) => m.WlTourPick), css: ['tour-pick', 'catalog-list'] },
   'wl-route': { load: () => import('./components/wl-route.js').then((m) => m.WlRoute), css: ['route', 'lightbox'] },
+  'wl-cards': { load: () => import('./components/wl-cards.js').then((m) => m.WlCards), css: ['cards'] },
+  'wl-pictogram': { load: () => import('./components/wl-pictogram.js').then((m) => m.WlPictogram), css: ['pictogram'] },
+  'wl-medals': { load: () => import('./components/wl-medals.js').then((m) => m.WlMedals), css: ['medals'] },
+  'wl-coins': { load: () => import('./components/wl-coins.js').then((m) => m.WlCoins), css: ['coins'] },
 };
 
 start(COMPONENTS);

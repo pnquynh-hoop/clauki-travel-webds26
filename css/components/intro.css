@@ -10,12 +10,32 @@
   padding: 3rem 1.25rem;
 }
 
+/* Nhãn nhỏ: thương hiệu đổi kiểu bằng các biến --eyebrow-* trong theme.css (font, màu, giãn chữ, chấm tròn phía trước
+   tô --color-mark); không khai thì giữ kiểu mặc định: chữ thường màu nhấn, giãn rộng, không chấm. */
 .intro__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--eyebrow-dot, 0rem) * 0.7);
   margin: 0 0 0.5rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-family: var(--eyebrow-font, inherit);
+  font-size: var(--eyebrow-size, 0.8rem);
+  line-height: 1.2;
+  letter-spacing: var(--eyebrow-tracking, 0.12em);
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--eyebrow-color, var(--color-accent));
+}
+
+.intro__eyebrow::before {
+  content: '';
+  flex: none;
+  width: var(--eyebrow-dot, 0rem);
+  height: var(--eyebrow-dot, 0rem);
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.intro--center .intro__eyebrow {
+  justify-content: center;
 }
 
 .intro__title {
@@ -33,15 +53,101 @@
   color: var(--color-muted);
 }
 
+/* Khối đứng đầu trang dưới header kiểu overlay (header nằm đè lên, không chiếm chỗ): chừa thêm chỗ cho header.
+   Header kiểu khác đã chiếm chỗ của nó trên trang nên không cộng thêm, kẻo khoảng trống bị gấp đôi. */
+body:has(.header--overlay) main > .intro:first-child {
+  padding-top: max(3rem, calc(var(--header-stuck, 0px) + 2.5rem));
+}
+
 /* Kiểu center: căn giữa và thu hẹp khối, hợp với một câu ngắn đứng riêng giữa hai khối nhiều ảnh. */
 .intro--center {
   max-width: 40rem;
   text-align: center;
 }
 
+/* Kiểu headline: tiêu đề rất lớn, căn trái theo khung nội dung chung của trang; hợp trang ngắn một ý như trang 404. */
+/* Đệm dưới nhỏ: con đường (road) ở cuối khối dẫn thẳng xuống khối sau, không để một khoảng trống lớn ở giữa. */
+.intro--headline {
+  max-width: calc(var(--container) + 2.5rem);
+  padding-bottom: 0;
+}
+
+/* Có con đường thì kéo khối sau lên sát đường: bù phần đệm trên chung của mọi section (--space-section, base.css). */
+.intro--headline:has(.intro__road):not(:last-child) {
+  margin-bottom: calc(1.5rem - var(--space-section));
+}
+
+.intro--headline .intro__title {
+  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.intro--headline .intro__lead {
+  max-width: 40rem;
+  font-size: 1.25rem;
+  color: var(--color-ink);
+}
+
+/* Biển số nhà (plate.js) đứng trên tiêu đề, to và nghiêng như vừa đóng lên tường. */
+.intro__plate {
+  --plate-size: clamp(4rem, 14vw, 8rem);
+  --plate-street: clamp(0.85rem, 2vw, 1.1rem);
+  --plate-tilt: -4deg;
+  margin: 0.5rem 0 2.5rem 0.5rem;
+}
+
+/* Con đường kẻ đứt, phương tiện màu --color-mark chạy hết đường rồi quay đầu chạy về. */
+.intro__road {
+  position: relative;
+  height: 3.4rem;
+  margin-top: 2.5rem;
+  overflow: hidden;
+  border-bottom: 4px dashed var(--color-ink);
+}
+
+.intro__rider {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 0;
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-mark, var(--color-accent));
+  animation: intro-ride 14s linear infinite;
+}
+
+.intro__rider svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes intro-ride {
+  0% { left: 0; scale: 1 1; }
+  49.9% { left: calc(100% - 3rem); scale: 1 1; }
+  50% { left: calc(100% - 3rem); scale: -1 1; }
+  99.9% { left: 0; scale: -1 1; }
+  100% { left: 0; scale: 1 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__rider {
+    animation: none;
+  }
+}
+
 /* Viết cho điện thoại trước; màn hình từ 760px trở lên thì cho khối thoáng hơn. */
 @media (min-width: 760px) {
   .intro {
     padding-block: 5rem;
+  }
+
+  body:has(.header--overlay) main > .intro:first-child {
+    padding-top: max(5rem, calc(var(--header-stuck, 0px) + 2.5rem));
+  }
+
+  .intro--headline {
+    padding-bottom: 0;
   }
 }
