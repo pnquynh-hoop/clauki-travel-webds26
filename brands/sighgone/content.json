@@ -2150,6 +2150,30 @@
           ]
         },
         {
+          "type": "tour-pick",
+          "id": "gap-thu",
+          "variant": "claw",
+          "eyebrow": "Rảnh buổi nào?",
+          "title": "Gắp đại một chuyến.",
+          "lead": "Mỗi viên là một chuyến đi. Bấm gắp, viên nào rơi ra thì đi chuyến đó, sáng, chiều hay tối đều có.",
+          "options": [
+            { "label": "Sáng sớm", "items": ["thuc-giac", "cho-lon", "cu-chi"] },
+            { "label": "Chiều", "items": ["thanh-da", "song-chieu"] },
+            { "label": "Tối", "items": ["len-den"] },
+            { "label": "Cả ngày", "items": ["can-gio"] }
+          ],
+          "labels": {
+            "sign": "Gắp chuyến đi",
+            "spin": "Gắp thử",
+            "again": "Gắp lần nữa",
+            "empty": "Bấm gắp, máy chọn giúp một chuyến.",
+            "note": "Gắp trúng {tour}, đi buổi {option}, {start} đến {end}.",
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
+          }
+        },
+        {
           "type": "reviews",
           "id": "khach-ke",
           "variant": "postcard",
