@@ -1,77 +1,19 @@
-/* wl-room-detail.js - trang chi tiết một hạng phòng hoặc một tour, dàn như một trang tạp chí:
-   - ảnh bìa gần kín màn hình, tên hạng chữ rất lớn; đáy ảnh là dải thông số mảnh (diện tích, số khách...);
-     ảnh phóng chậm khi vào trang và trôi chậm khi cuộn;
-   - câu dẫn chữ lớn, tiện nghi; bên cạnh là thẻ đặt phòng (giá, ghi chú giá, nút đặt, ngày còn trống) dính khi cuộn;
-   - dải phim ảnh: từ 1024px khối ghim lại, cuộn dọc thì dải trôi ngang như đi một vòng quanh phòng;
-     điện thoại thì vuốt ngang; bấm ảnh thì xem lớn toàn màn hình;
-   - dải "nhìn ra từ hiên" tràn màn hình có câu chữ đè lên;
-   - thẻ ảnh dẫn sang các hạng khác, liên kết không có ảnh thành một dòng chữ bên dưới.
-   Nút đặt lấy từ site.cta và phát wl:choose-room (detail.id = room) để form đặt chỗ chọn sẵn hạng này,
-   kể cả khi form nằm ở trang khác (core.js giữ lựa chọn rồi phát lại).
-   Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog: tên, ảnh (ảnh bìa rồi ảnh các chặng), giá, thông số,
-   ngày còn chỗ, gồm, chưa gồm, nên mang, và các mục khác cùng buổi; trường nào section ghi riêng thì dùng của section.
-   Kiểu ticket (tour theo ngày), theo trang chi tiết của bản mẫu SighGone: thẻ đặt thành vé giữ chỗ, ngày còn chỗ là
-   các ô bấm chọn, nút giữ chỗ phát wl:choose với id và ngày đã chọn để trang đặt tour chọn sẵn cả hai; section có
-   route thì cột trái là lộ trình (component route) đứng cạnh vé, còn câu dẫn và các danh sách xuống dưới dải ảnh
-   thành tờ hoá đơn. */
-import { asset, catalogItem } from '../core.js';
+/* wl-room-detail.js - trang chi tiết một hạng phòng hoặc một tour dựng sẵn trong một khối, dàn như trang tạp chí.
+   Khối này chỉ ghép các khối riêng theo thứ tự: item-cover (ảnh bìa), item-booking (cột trái và thẻ đặt),
+   photo-strip (dải ảnh), included (tờ hoá đơn, chỉ ở kiểu ticket), scene (cảnh đáng chờ), rồi tự dựng phần cuối là thẻ
+   ảnh các mục khác cùng buổi. Mỗi khối con nhận cùng dữ liệu của section và tự lấy phần mình cần.
+   Trang muốn sắp xếp, ẩn, đổi kiểu từng phần thì dùng thẳng các khối riêng đó trong sections (như trang tour SighGone);
+   khối này giữ cho các trang đã viết theo kiểu một khối (Bậc Trà, brand-test) chạy như cũ.
+   Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog; trường nào section ghi riêng thì dùng của section. */
+import { catalogItem } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
-import { iconEl } from '../icon.js';
-import { parallax } from '../effects/parallax.js';
-import { pinHorizontal } from '../effects/pin-scroll.js';
-import { openLightbox } from '../effects/lightbox.js';
+import { imgEl, childEl, lazyChildEl } from './item-detail.js';
+import { WlItemCover } from './wl-item-cover.js';
+import { WlItemBooking } from './wl-item-booking.js';
+import { WlPhotoStrip } from './wl-photo-strip.js';
+import { WlScene } from './wl-scene.js';
 
-function fill(template, values) {
-  return (template ?? '').replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ''));
-}
-
-function imgEl(image, className, lazy) {
-  if (!image?.src) return null;
-  const img = document.createElement('img');
-  img.className = className;
-  img.src = asset(image.src);
-  img.alt = image.alt ?? '';
-  if (lazy) img.loading = 'lazy';
-  return img;
-}
-
-const pad = (n) => String(n).padStart(2, '0');
-// Số ngày còn chỗ hiện trong thẻ đặt, và số mục khác cùng gu ở cuối trang.
-const DAYS_SHOWN = 6;
-// Vé giữ chỗ (kiểu ticket) chỉ có chỗ cho 5 ô ngày trên một hàng.
-const TICKET_DAYS = 5;
 const OTHERS_SHOWN = 3;
-
-function todayIso(timezone) {
-  try {
-    return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date());
-  } catch {
-    return new Date().toISOString().slice(0, 10);
-  }
-}
-
-// "2026-10-20" thành "Thứ Ba, 20/10"; tính theo giờ UTC để ngày không lệch theo múi giờ của máy.
-function dayLabel(iso) {
-  const date = new Date(`${iso}T00:00:00Z`);
-  if (Number.isNaN(date.getTime())) return iso;
-  const text = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(date);
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-// "2026-10-20" thành thứ viết ngắn và ngày tháng cho ô ngày của vé ("Th 3", "20/10"), cũng theo giờ UTC.
-function dayChip(iso) {
-  const date = new Date(`${iso}T00:00:00Z`);
-  if (Number.isNaN(date.getTime())) return { dow: '', day: iso };
-  const dow = new Intl.DateTimeFormat('vi-VN', { weekday: 'short', timeZone: 'UTC' }).format(date);
-  return { dow, day: `${date.getUTCDate()}/${date.getUTCMonth() + 1}` };
-}
-
-// Ảnh bìa rồi ảnh của từng chặng (chú thích là tên chặng), bỏ ảnh trùng.
-function itemImages(item) {
-  const seen = new Set();
-  const list = [item.image, ...(item.stages ?? []).map((st) => st.image && { ...st.image, caption: st.place })];
-  return list.filter((image) => image?.src && !seen.has(image.src) && seen.add(image.src));
-}
 
 // Mục khác cùng buổi trước, rồi tới mục chung chủ đề; chỉ lấy mục có trang (href).
 function itemOthers(catalog, item) {
@@ -93,289 +35,6 @@ export class WlRoomDetail extends HTMLElement {
 
   get labels() {
     return this._data.labels ?? {};
-  }
-
-  money(amount) {
-    return `${amount.toLocaleString('vi-VN')} ${this._section.currency ?? ''}`.trim();
-  }
-
-  /* ---------- Ảnh bìa ---------- */
-
-  // Chưa có ảnh thì vẫn có phần chữ và dải thông số, chỉ không có ảnh bìa.
-  coverEl(section) {
-    const image = section.images?.[0];
-    const cover = document.createElement('header');
-    cover.className = image?.src ? 'room-detail__cover' : 'room-detail__cover room-detail__cover--plain';
-    const img = imgEl(image, 'room-detail__cover-img', false);
-    const text = groupEl('room-detail__cover-text container', [
-      textEl('p', 'room-detail__eyebrow', section.eyebrow),
-      textEl('h2', 'room-detail__title', section.title),
-    ]);
-    const facts = this.factsEl(section.facts ?? []);
-    if (!img && !text && !facts) return null;
-    cover.append(...[img, text, facts].filter(Boolean));
-    parallax(img, 0.18, 1.18);
-    return cover;
-  }
-
-  // Dải thông số ở đáy ảnh bìa: nhãn nhỏ in hoa, giá trị chữ lớn, ngăn nhau bằng vạch mảnh.
-  factsEl(facts) {
-    const items = facts.filter((f) => f.label && f.value);
-    if (!items.length) return null;
-    const dl = document.createElement('dl');
-    dl.className = 'room-detail__facts container';
-    dl.append(...items.map((f) => groupEl('room-detail__fact', [
-      groupEl('room-detail__fact-label', [iconEl(f.icon, 'room-detail__fact-icon'), textEl('dt', '', f.label)]),
-      textEl('dd', '', f.value),
-    ])));
-    return dl;
-  }
-
-  /* ---------- Câu dẫn, tiện nghi, thẻ đặt phòng ---------- */
-
-  amenitiesEl(amenities) {
-    const items = amenities.filter((a) => a.text);
-    if (!items.length) return null;
-    const list = document.createElement('ul');
-    list.className = 'room-detail__amenities';
-    list.append(...items.map((a) => {
-      const li = document.createElement('li');
-      li.className = 'room-detail__amenity';
-      li.append(...[iconEl(a.icon, 'room-detail__icon'), textEl('span', '', a.text)].filter(Boolean));
-      return li;
-    }));
-    return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels.amenities), list]);
-  }
-
-  // Gồm, chưa gồm, nên mang (của tour trong catalog): mỗi nhóm một danh sách ngắn có tiêu đề.
-  listsEl(section) {
-    const groups = [['includes', 'check'], ['excludes', 'x'], ['bring', 'backpack']].map(([key, icon]) => {
-      const items = (section[key] ?? []).filter(Boolean);
-      if (!items.length) return null;
-      const list = document.createElement('ul');
-      list.className = `room-detail__list room-detail__list--${key}`;
-      list.append(...items.map((text) => {
-        const li = document.createElement('li');
-        li.append(...[iconEl(icon, 'room-detail__icon'), textEl('span', '', text)].filter(Boolean));
-        return li;
-      }));
-      return groupEl('room-detail__block', [textEl('h3', 'room-detail__subtitle', this.labels[key]), list]);
-    });
-    return groupEl('room-detail__lists', groups);
-  }
-
-  priceEl(section) {
-    if (!section.price) return null;
-    return groupEl('room-detail__price', [
-      textEl('p', 'room-detail__from', this.labels.from),
-      groupEl('room-detail__amount-row', [
-        textEl('strong', 'room-detail__amount', this.money(section.price)),
-        textEl('span', 'room-detail__per', this.labels.perNight),
-      ]),
-      textEl('p', 'room-detail__price-note', section.priceNote),
-    ]);
-  }
-
-  // Nút đặt mặc định theo site.cta; section ghi book (label, href) thì dùng nút riêng, ví dụ gọi điện khi
-  // trang đặt chỗ chưa nhận sản phẩm này.
-  bookEl(section) {
-    const cta = this.site?.cta;
-    const href = section.book?.href ?? cta?.href;
-    const label = section.book?.label ?? this.labels.book ?? cta?.label;
-    if (!href || !label) return null;
-    const a = document.createElement('a');
-    a.className = 'btn room-detail__book';
-    a.href = href;
-    a.textContent = label;
-    if (section.room && !section.book) {
-      a.addEventListener('click', () => {
-        document.dispatchEvent(new CustomEvent('wl:choose-room', { detail: { id: section.room } }));
-      });
-    } else if (section.item && !section.book) {
-      // Trang chi tiết lấy từ danh mục: phát wl:choose (core.js giữ lại nếu khối đặt chỗ ở trang khác) để chọn sẵn tour này.
-      a.addEventListener('click', () => {
-        document.dispatchEvent(new CustomEvent('wl:choose', { detail: { id: section.item } }));
-      });
-    }
-    return a;
-  }
-
-  // Khoảng ngày còn trống: "1 đến 15/5: còn 3 căn"; hết căn thì gạch khoảng ngày và ghi nhãn hết phòng.
-  availabilityEl(ranges) {
-    const items = ranges.filter((r) => r.label);
-    if (!items.length) return null;
-    const list = document.createElement('ul');
-    list.className = 'room-detail__dates';
-    list.append(...items.map((r) => {
-      const li = document.createElement('li');
-      const soldOut = Number(r.left) === 0;
-      li.className = soldOut ? 'room-detail__date is-sold-out' : 'room-detail__date';
-      li.append(...[
-        textEl('span', 'room-detail__date-label', r.label),
-        textEl('span', 'room-detail__date-left', soldOut ? this.labels.soldOut : fill(this.labels.left, { n: r.left })),
-      ].filter(Boolean));
-      return li;
-    }));
-    return groupEl('room-detail__availability', [textEl('p', 'room-detail__card-title', this.labels.availability), list]);
-  }
-
-  // Vé giữ chỗ: mỗi ngày còn chỗ là một ô radio (dùng được bằng bàn phím); ngày hết chỗ khoá lại.
-  // Mặc định chọn ngày gần nhất còn chỗ.
-  daysEl(section) {
-    const days = (section.availability ?? []).filter((d) => d.date).slice(0, TICKET_DAYS);
-    if (!days.length) return null;
-    const name = `${this.id || 'room-detail'}-day`;
-    const firstOpen = days.find((d) => Number(d.left) > 0);
-    this._day = firstOpen?.date ?? null;
-    const chips = days.map((d) => {
-      const soldOut = Number(d.left) === 0;
-      const { dow, day } = dayChip(d.date);
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = name;
-      input.value = d.date;
-      input.disabled = soldOut;
-      input.checked = d === firstOpen;
-      input.addEventListener('change', () => { this._day = d.date; });
-      const label = document.createElement('label');
-      label.className = soldOut ? 'room-detail__day is-full' : 'room-detail__day';
-      label.append(input, ...[
-        textEl('span', 'room-detail__day-dow', dow),
-        textEl('span', 'room-detail__day-date', day),
-        textEl('span', 'room-detail__day-left', soldOut ? this.labels.soldOut : fill(this.labels.left, { n: d.left })),
-      ].filter(Boolean));
-      return label;
-    });
-    const fieldset = document.createElement('fieldset');
-    fieldset.className = 'room-detail__days';
-    const legend = textEl('legend', 'room-detail__card-title', this.labels.chooseDay ?? this.labels.availability);
-    fieldset.append(...[legend, ...chips].filter(Boolean));
-    return fieldset;
-  }
-
-  // Nút giữ chỗ của vé: phát wl:choose kèm ngày đang chọn rồi mới sang trang đặt; core.js giữ lựa chọn và phát lại
-  // khi trang đặt dựng xong.
-  ticketBookEl(section) {
-    // Bỏ room, item khi gọi bookEl để nút không phát thêm wl:choose chỉ có id; vé tự phát một lần, kèm ngày.
-    const a = this.bookEl({ ...section, room: null, item: null });
-    if (a && section.room && !section.book) {
-      a.addEventListener('click', () => {
-        document.dispatchEvent(new CustomEvent('wl:choose', { detail: { id: section.room, date: this._day } }));
-      });
-    }
-    return a;
-  }
-
-  // Kiểu ticket có route: lộ trình (component route) đứng ở cột trái, cạnh vé, như bản mẫu.
-  // core.js chỉ tải những khối có trong sections của trang, nên ở đây tự tải wl-route. Phải đăng ký xong rồi mới
-  // tạo thẻ và gán dữ liệu: gán trước khi đăng ký thì khối không bao giờ tự vẽ. CSS route.css tải kèm ở app.js.
-  routeEl(section) {
-    if (!section.route) return null;
-    const slot = document.createElement('div');
-    slot.className = 'room-detail__route';
-    import('./wl-route.js').then(({ WlRoute }) => {
-      if (!customElements.get('wl-route')) customElements.define('wl-route', WlRoute);
-      const route = document.createElement('wl-route');
-      route.site = this.site;
-      route.data = { type: 'route', ...section.route, item: this._data.item };
-      slot.replaceChildren(route);
-    });
-    return slot;
-  }
-
-  // Tờ hoá đơn (kiểu ticket): đã gồm, chưa gồm, nên mang, tổng một khách, lời cảm ơn; câu dẫn đứng bên cạnh khi
-  // cột trên đã nhường chỗ cho lộ trình.
-  receiptEl(section, withLead) {
-    const lists = this.listsEl(section);
-    if (!lists) return withLead ? groupEl('room-detail__receipt container', [textEl('p', 'room-detail__lead', section.lead)]) : null;
-    const total = section.price && this.labels.total
-      ? groupEl('room-detail__bill-total', [textEl('span', '', this.labels.total), textEl('span', '', this.money(section.price))])
-      : null;
-    const bill = groupEl('room-detail__bill', [
-      textEl('h3', 'room-detail__bill-title', this.labels.receipt),
-      textEl('p', 'room-detail__bill-sub', section.title),
-      lists,
-      total,
-      textEl('p', 'room-detail__bill-thanks', this.labels.thanks),
-    ]);
-    return groupEl('room-detail__receipt container', [bill, withLead ? textEl('p', 'room-detail__lead', section.lead) : null]);
-  }
-
-  cardEl(section) {
-    if (section.variant === 'ticket') {
-      return groupEl('room-detail__card room-detail__ticket', [
-        this.priceEl(section),
-        this.daysEl(section),
-        this.ticketBookEl(section),
-        textEl('p', 'room-detail__ticket-note', section.ticketNote),
-      ]);
-    }
-    return groupEl('room-detail__card', [
-      this.priceEl(section),
-      this.bookEl(section),
-      this.availabilityEl(section.availability ?? []),
-    ]);
-  }
-
-  /* ---------- Dải phim ảnh ---------- */
-
-  // Mỗi khung là một nút mở hộp xem ảnh lớn ở đúng ảnh đó; dưới ảnh là số thứ tự và chú thích (nếu có).
-  filmEl(images) {
-    if (images.length < 2) return null;
-    const track = document.createElement('ol');
-    track.className = 'room-detail__film-track';
-    track.append(...images.map((image, i) => {
-      const li = document.createElement('li');
-      li.className = 'room-detail__frame';
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'room-detail__frame-btn';
-      button.setAttribute('aria-label', fill(this.labels.open, { n: i + 1 }) || image.alt || '');
-      // Không lazy: dải bị dịch ngang bằng transform nên trình duyệt có thể không nạp kịp ảnh ở cuối dải.
-      button.append(imgEl(image, 'room-detail__frame-img', false));
-      button.addEventListener('click', () => openLightbox(images, i, this.labels.lightbox ?? {}));
-      li.append(button, groupEl('room-detail__frame-caption', [
-        textEl('span', 'room-detail__frame-no', pad(i + 1)),
-        textEl('span', '', image.caption),
-      ]));
-      return li;
-    }));
-    const head = groupEl('room-detail__film-head container', [
-      textEl('h3', 'room-detail__film-title', this.labels.gallery),
-      textEl('p', 'room-detail__film-count', pad(images.length)),
-    ]);
-    const stage = groupEl('room-detail__film-stage', [head, groupEl('room-detail__film-window', [track])]);
-    const film = document.createElement('section');
-    film.className = 'room-detail__film';
-    if (this.labels.gallery) film.setAttribute('aria-label', this.labels.gallery);
-    film.append(stage);
-    pinHorizontal(film, track);
-    return film;
-  }
-
-  /* ---------- Phần dưới ---------- */
-
-  // Dải ảnh tràn màn hình, câu tả cảnh chữ lớn nghiêng đè lên góc dưới, ảnh trôi chậm khi cuộn.
-  viewEl(view) {
-    if (!view?.image?.src) return null;
-    const figure = document.createElement('figure');
-    figure.className = 'room-detail__view';
-    const img = imgEl(view.image, 'room-detail__view-img', true);
-    const best = view.best && [this.labels.best, view.best].filter(Boolean).join(': ');
-    const lines = [
-      textEl('p', 'room-detail__view-label', this.labels.view),
-      textEl('p', 'room-detail__view-text', view.text),
-      textEl('p', 'room-detail__view-best', best),
-    ].filter(Boolean);
-    figure.append(img);
-    if (lines.length) {
-      const caption = document.createElement('figcaption');
-      caption.className = 'room-detail__view-caption container';
-      caption.append(...lines);
-      figure.append(caption);
-    }
-    parallax(img, 0.12, 1.2);
-    return figure;
   }
 
   // Hạng khác có ảnh thành thẻ ảnh đứng (cả thẻ là liên kết); liên kết không có ảnh thành dòng chữ dưới các thẻ.
@@ -410,51 +69,21 @@ export class WlRoomDetail extends HTMLElement {
     return nav;
   }
 
-  // Ghép dữ liệu từ catalog (nếu section ghi item) với dữ liệu riêng của section; của section được ưu tiên.
-  withItem(section) {
-    const item = catalogItem(this.site, section.item);
-    if (!item) return section;
-    const today = todayIso(this.site?.place?.timezone);
-    const availability = (item.availability ?? [])
-      .filter((day) => day.date >= today)
-      .slice(0, DAYS_SHOWN)
-      .map((day) => ({ label: dayLabel(day.date), date: day.date, left: day.left }));
-    const merged = {
-      room: item.id,
-      eyebrow: item.tagline,
-      title: item.name,
-      lead: item.text,
-      images: itemImages(item),
-      facts: item.facts,
-      price: item.price,
-      currency: this.site?.catalog?.currency,
-      availability,
-      includes: item.includes,
-      excludes: item.excludes,
-      bring: item.bring,
-      others: itemOthers(this.site?.catalog, item),
-    };
-    return { ...merged, ...section };
-  }
-
   render() {
-    const section = this.withItem(this._data);
-    this._section = section;
+    const section = this._data;
     this.className = section.variant ? `room-detail room-detail--${section.variant}` : 'room-detail';
-    // Kiểu ticket: cột trái là lộ trình (nếu có) hoặc câu dẫn; danh sách gồm, chưa gồm xuống tờ hoá đơn dưới dải ảnh.
+    const item = catalogItem(this.site, section.item);
+    const others = section.others ?? (item ? itemOthers(this.site?.catalog, item) : []);
     const ticket = section.variant === 'ticket';
-    const route = ticket ? this.routeEl(section) : null;
-    const content = ticket
-      ? [route ?? textEl('p', 'room-detail__lead', section.lead)]
-      : [textEl('p', 'room-detail__lead', section.lead), this.amenitiesEl(section.amenities ?? []), this.listsEl(section)];
-    const body = groupEl('room-detail__layout container', [groupEl('room-detail__content', content), this.cardEl(section)]);
     this.replaceChildren(...[
-      this.coverEl(section),
-      body,
-      this.filmEl(section.images ?? []),
-      ticket ? this.receiptEl(section, Boolean(route)) : null,
-      this.viewEl(section.view),
-      this.othersEl(section.others ?? []),
+      childEl('wl-item-cover', WlItemCover, this.site, section),
+      childEl('wl-item-booking', WlItemBooking, this.site, section),
+      childEl('wl-photo-strip', WlPhotoStrip, this.site, section),
+      // Kiểu ticket: đã gồm, chưa gồm thành tờ hoá đơn, mượn khối included (tải khi cần).
+      ticket ? lazyChildEl('room-detail__included', 'wl-included', () => import('./wl-included.js').then((m) => m.WlIncluded),
+        this.site, { type: 'included', variant: 'receipt', item: section.item, title: this.labels.receipt, labels: this.labels }) : null,
+      section.view ? childEl('wl-scene', WlScene, this.site, section) : null,
+      this.othersEl(others),
     ].filter(Boolean));
   }
 }

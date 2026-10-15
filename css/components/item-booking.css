@@ -1,0 +1,367 @@
+/* item-booking.css - giao diện của <wl-item-booking>: cột trái (câu dẫn, tiện nghi, đã gồm; hoặc lộ trình ở kiểu
+   ticket) và thẻ đặt bên phải, từ 1024px thẻ dính khi cuộn. Kiểu ticket: thẻ đặt thành vé giữ chỗ.
+   Tách từ room-detail.css, giữ nguyên giao diện. */
+
+.item-booking {
+  display: block;
+  padding-block: 0;
+}
+
+/* ---------- Câu dẫn, tiện nghi, thẻ đặt phòng ---------- */
+
+.item-booking__layout {
+  display: grid;
+  gap: 3rem;
+  margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.item-booking__layout > *,
+.item-booking__content > * {
+  min-width: 0;
+}
+
+.item-booking__content {
+  display: grid;
+  align-content: start;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+/* Câu dẫn như lời mở đầu bài báo: chữ tiêu đề cỡ lớn, dòng ngắn. */
+.item-booking__lead {
+  margin: 0;
+  max-width: 26ch;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.item-booking__subtitle {
+  margin: 0 0 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Tiện nghi: hai cột thanh mảnh, mỗi dòng có đường kẻ dưới. */
+.item-booking__amenities {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.item-booking__amenity {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 1rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+/* Gồm, chưa gồm, nên mang (tour trong catalog): ba nhóm cạnh nhau khi đủ chỗ, mỗi dòng có đường kẻ dưới như tiện nghi. */
+.item-booking__lists {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.item-booking__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.item-booking__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  line-height: 1.4;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.item-booking__list--excludes li {
+  color: var(--color-muted);
+}
+
+.item-booking__list--excludes .item-booking__icon {
+  color: var(--color-muted);
+}
+
+/* Ô giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
+.item-booking__icon {
+  flex: 0 0 1.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+}
+
+.item-booking__icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Thẻ đặt phòng: nền sáng, vạch màu nhấn trên đầu như nẹp gỗ, từ 1024px dính khi cuộn. */
+.item-booking__card {
+  display: grid;
+  gap: 1.5rem;
+  align-self: start;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 3px solid var(--color-accent);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--color-surface);
+  box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+
+.item-booking__from {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.item-booking__amount-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.item-booking__amount {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--color-ink);
+}
+
+.item-booking__per {
+  color: var(--color-muted);
+}
+
+.item-booking__price-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.item-booking__book {
+  width: 100%;
+  min-height: 3.25rem;
+  transition: transform var(--duration) ease, box-shadow var(--duration) ease, background-color var(--duration) ease;
+}
+
+.item-booking__book:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.item-booking__card-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.item-booking__dates {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item-booking__date {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.6rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.item-booking__date:last-child {
+  border-bottom: 0;
+}
+
+.item-booking__date-left {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.item-booking__date.is-sold-out {
+  color: var(--color-muted);
+}
+
+.item-booking__date.is-sold-out .item-booking__date-label {
+  text-decoration: line-through;
+}
+
+.item-booking__date.is-sold-out .item-booking__date-left {
+  color: var(--color-muted);
+}
+
+@media (min-width: 760px) {
+  .item-booking__amenities {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+}
+
+/* Từ 1024px: câu dẫn và tiện nghi 7 phần, thẻ đặt phòng 4 phần, thẻ dính khi cuộn. */
+@media (min-width: 1024px) {
+  .item-booking__layout {
+    grid-template-columns: 7fr 4fr;
+    gap: 5rem;
+  }
+
+  .item-booking__card {
+    position: sticky;
+    top: calc(var(--header-stuck, 4rem) + 1.5rem);
+  }
+}
+
+/* Kiểu ticket: thẻ đặt thành vé giữ chỗ. Viền, bóng đọc --card-border, --card-shadow (SighGone: viền mực, bóng in
+   lệch); dưới phần giá là đường xé nét đứt với hai khấc tròn hai bên như cuống vé; các ngày là ô bấm chọn. */
+.item-booking__ticket {
+  --ticket-pad: 1.5rem;
+  gap: 1.1rem;
+  padding: var(--ticket-pad);
+  border: var(--card-border, 2px solid var(--color-ink));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, none);
+}
+
+.item-booking__ticket .item-booking__price {
+  position: relative;
+  padding-bottom: 1.1rem;
+  border-bottom: 3px dashed color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+/* Khấc tròn: nửa hình tròn màu nền trang khoét vào hai mép vé, ngay tại đường xé. */
+.item-booking__ticket .item-booking__price::before,
+.item-booking__ticket .item-booking__price::after {
+  content: '';
+  position: absolute;
+  bottom: -0.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--color-bg);
+  border: var(--card-border, 2px solid var(--color-ink));
+  border-radius: 50%;
+}
+
+.item-booking__ticket .item-booking__price::before {
+  left: calc(-1 * var(--ticket-pad) - 0.95rem);
+  clip-path: inset(0 0 0 50%);
+}
+
+.item-booking__ticket .item-booking__price::after {
+  right: calc(-1 * var(--ticket-pad) - 0.95rem);
+  clip-path: inset(0 50% 0 0);
+}
+
+.item-booking__days {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.item-booking__days legend {
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+
+/* Ô ngày: ô đang chọn nền màu nút, nhấc lên; ngày hết chỗ mờ, gạch ngang, không bấm được. */
+.item-booking__day {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.5rem 0.2rem;
+  text-align: center;
+  border: 2px solid var(--color-ink);
+  border-radius: calc(var(--radius) * 0.6);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.item-booking__day input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.item-booking__day:has(input:checked) {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  box-shadow: 0 3px 0 var(--color-ink);
+  transform: translateY(-3px);
+}
+
+.item-booking__day:has(input:focus-visible) {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.item-booking__day.is-full {
+  opacity: 0.4;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.item-booking__day-dow {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.7rem;
+}
+
+.item-booking__day-date {
+  font-weight: 800;
+}
+
+.item-booking__day-left {
+  font-size: 0.7rem;
+}
+
+.item-booking__ticket .item-booking__book {
+  justify-self: stretch;
+  text-align: center;
+}
+
+.item-booking__ticket-note {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item-booking__day {
+    transition: none;
+  }
+}
+
+/* Kiểu ticket: lộ trình nằm trong cột trái cạnh vé. Lộ trình tự bọc nội dung trong .container để căn giữa trang;
+   ở đây nó đã nằm trong cột nên cho rộng hết cột. */
+.item-booking__route .container {
+  width: 100%;
+}

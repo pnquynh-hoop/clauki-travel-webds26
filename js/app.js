@@ -25,8 +25,14 @@ const COMPONENTS = {
   'wl-cloud-band': { load: () => import('./components/wl-cloud-band.js').then((m) => m.WlCloudBand), css: ['cloud-band'] },
   'wl-process': { load: () => import('./components/wl-process.js').then((m) => m.WlProcess), css: ['process'] },
   'wl-reviews': { load: () => import('./components/wl-reviews.js').then((m) => m.WlReviews), css: ['reviews'] },
-  // Kiểu ticket của room-detail có thể đặt lộ trình (route) vào bên trong, nên tải kèm route.css.
-  'wl-room-detail': { load: () => import('./components/wl-room-detail.js').then((m) => m.WlRoomDetail), css: ['room-detail', 'lightbox', 'route'] },
+  // Các khối của trang chi tiết (tour, hạng phòng). room-detail dựng cả trang bằng cách ghép các khối kia nên tải kèm
+  // CSS của chúng; item-booking có thể lồng lộ trình (route) nên tải kèm route.css.
+  'wl-room-detail': { load: () => import('./components/wl-room-detail.js').then((m) => m.WlRoomDetail), css: ['room-detail', 'item-cover', 'item-booking', 'photo-strip', 'scene', 'included', 'route', 'lightbox'] },
+  'wl-item-cover': { load: () => import('./components/wl-item-cover.js').then((m) => m.WlItemCover), css: ['item-cover'] },
+  'wl-item-booking': { load: () => import('./components/wl-item-booking.js').then((m) => m.WlItemBooking), css: ['item-booking', 'route', 'lightbox'] },
+  'wl-photo-strip': { load: () => import('./components/wl-photo-strip.js').then((m) => m.WlPhotoStrip), css: ['photo-strip', 'lightbox'] },
+  'wl-scene': { load: () => import('./components/wl-scene.js').then((m) => m.WlScene), css: ['scene'] },
+  'wl-included': { load: () => import('./components/wl-included.js').then((m) => m.WlIncluded), css: ['included'] },
   'wl-clock': { load: () => import('./components/wl-clock.js').then((m) => m.WlClock), css: ['clock'] },
   'wl-tips': { load: () => import('./components/wl-tips.js').then((m) => m.WlTips), css: ['tips'] },
   'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },

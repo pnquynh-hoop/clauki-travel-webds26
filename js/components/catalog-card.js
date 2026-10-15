@@ -20,6 +20,21 @@ export function isComplete(item) {
   return Boolean(item?.id && item.name && Number.isFinite(item.price));
 }
 
+// Các mục cùng gu với một mục: cùng buổi được 2 điểm, mỗi chủ đề chung thêm 1 điểm; bỏ chính nó, chỉ lấy mục có
+// trang chi tiết (href) để thẻ nào cũng bấm sang được. Cùng cách chọn với "mục khác" trong room-detail.
+export function relatedItems(catalog, id, count = 3) {
+  const items = catalog?.items ?? [];
+  const item = items.find((x) => x.id === id);
+  if (!item) return [];
+  const topics = item.tags?.topics ?? [];
+  const score = (other) => (other.tags?.buoi === item.tags?.buoi ? 2 : 0)
+    + (other.tags?.topics ?? []).filter((t) => topics.includes(t)).length;
+  return items
+    .filter((other) => other.id !== id && other.href)
+    .sort((a, b) => score(b) - score(a))
+    .slice(0, count);
+}
+
 // Ngày hôm nay theo múi giờ của nơi chốn (dạng 2026-10-20, giống availability), không theo giờ máy của khách.
 function today(timezone) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date());

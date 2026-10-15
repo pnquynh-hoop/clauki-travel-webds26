@@ -1,0 +1,208 @@
+/* included.css - giao diện của <wl-included> ("gồm gì").
+   Mặc định: tiêu đề, câu dẫn, ba nhóm danh sách cạnh nhau khi đủ chỗ, mỗi dòng có icon và đường kẻ dưới.
+   receipt: tờ hoá đơn in nhiệt hơi nghiêng, mép trên và dưới răng cưa, chữ máy in (đơn cách);
+   dấu + cho đã gồm, - cho chưa gồm, * cho nên mang; câu dẫn chữ lớn đứng bên cạnh. */
+
+.included {
+  display: block;
+}
+
+.included__inner {
+  display: grid;
+  gap: 2rem;
+}
+
+.included__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.included__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.included__head .included__lead {
+  margin: 1rem 0 0;
+  max-width: 40rem;
+  color: var(--color-muted);
+}
+
+.included__lists {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.included__subtitle {
+  margin: 0 0 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.included__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+}
+
+.included__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.75rem;
+  line-height: 1.4;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.included__list--excludes li,
+.included__list--excludes .included__icon {
+  color: var(--color-muted);
+}
+
+/* Ô giữ chỗ cố định cho icon, nên icon nạp sau cũng không làm chữ nhảy. */
+.included__icon {
+  flex: 0 0 1.5rem;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+}
+
+/* ---------- Kiểu receipt ---------- */
+
+.included--receipt .included__inner {
+  gap: 3rem;
+  align-items: start;
+}
+
+.included__bill {
+  --zig: 10px;
+  display: grid;
+  gap: 0.4rem;
+  max-width: 28rem;
+  padding: 2rem 1.6rem 2.4rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+  background: var(--color-surface);
+  box-shadow: 0 20px 40px -24px color-mix(in srgb, var(--color-ink) 50%, transparent);
+  transform: rotate(-1.2deg);
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--zig) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--zig) 51% repeat-x;
+}
+
+.included__bill-title {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.included__bill-sub {
+  margin: 0;
+  padding-bottom: 0.8rem;
+  text-align: center;
+  color: var(--color-muted);
+  border-bottom: 2px dashed color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+.included__bill .included__lists {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.included__bill .included__subtitle {
+  margin: 0.8rem 0 0.2rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--color-ink);
+}
+
+.included__bill .included__list {
+  display: grid;
+  gap: 0.25rem;
+  border: 0;
+}
+
+.included__bill .included__list li {
+  gap: 0.6rem;
+  padding: 0;
+  border: 0;
+}
+
+.included__bill .included__list li::before {
+  content: '*';
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.included__bill .included__list--includes li::before {
+  content: '+';
+}
+
+.included__bill .included__list--excludes li::before {
+  content: '-';
+  color: var(--color-muted);
+}
+
+.included__total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 25%, transparent);
+}
+
+.included__thanks {
+  margin: 0.6rem 0 0;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* Câu giới thiệu đứng cạnh tờ hoá đơn: chữ tiêu đề cỡ lớn như lời mở đầu bài báo. */
+.included--receipt .included__lead {
+  margin: 0;
+  max-width: 26ch;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .included--receipt .included__inner {
+    grid-template-columns: 26rem minmax(0, 1fr);
+    gap: 5rem;
+  }
+
+  .included--receipt .included__lead {
+    padding-top: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .included__bill {
+    transform: none;
+  }
+}

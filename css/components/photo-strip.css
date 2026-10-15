@@ -1,0 +1,163 @@
+/* photo-strip.css - giao diện của <wl-photo-strip>: dải ảnh như cuộn phim; từ 1024px khối ghim lại, cuộn dọc thì
+   dải trôi ngang; điện thoại vuốt ngang. Tách từ room-detail.css, giữ nguyên giao diện. */
+
+.photo-strip {
+  display: block;
+  padding-block: 0;
+}
+
+/* ---------- Dải phim ảnh ---------- */
+
+/* Điện thoại và khi giảm chuyển động: dải cuộn ngang bằng tay, mỗi khung bắt vào mép trái. */
+.photo-strip__film {
+  margin-top: clamp(4rem, 9vw, 7rem);
+}
+
+.photo-strip__film-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.photo-strip__film-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.photo-strip__film-count {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-style: italic;
+  color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.photo-strip__film-window {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+/* Lề trái của dải thẳng hàng với khung nội dung, lề phải chừa một khoảng để khung cuối không dính mép. */
+.photo-strip__film-track {
+  --film-inset: max(1rem, (100% - var(--container)) / 2);
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0 var(--film-inset);
+  list-style: none;
+}
+
+.photo-strip__frame {
+  display: grid;
+  gap: 0.75rem;
+  scroll-snap-align: start;
+  scroll-margin-left: 1rem;
+}
+
+.photo-strip__frame-btn {
+  display: block;
+  width: 80vw;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: zoom-in;
+}
+
+.photo-strip__frame-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform calc(var(--duration) * 5) ease;
+}
+
+.photo-strip__frame-btn:hover .photo-strip__frame-img,
+.photo-strip__frame-btn:focus-visible .photo-strip__frame-img {
+  transform: scale(1.05);
+}
+
+.photo-strip__frame-caption {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 80vw;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.photo-strip__frame-no {
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+/* Từ 1024px, JS thêm is-pinned: khung sân khấu dính dưới header, dải trôi ngang theo độ cuộn,
+   vạch dưới đáy dài dần cho biết đã xem tới đâu. Chiều cao khối ngoài do JS đặt. */
+.photo-strip__film.is-pinned {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.photo-strip__film.is-pinned .photo-strip__film-stage {
+  position: sticky;
+  top: var(--header-stuck, 4rem);
+  display: grid;
+  /* Cột lưới khoá theo bề ngang màn hình; không có minmax(0, 1fr) thì khung dải giãn theo dải ảnh và JS đo sai quãng trôi. */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  height: calc(100vh - var(--header-stuck, 4rem));
+  overflow: hidden;
+}
+
+.photo-strip__film.is-pinned .photo-strip__film-stage::after {
+  content: '';
+  position: absolute;
+  bottom: 2rem;
+  left: max(1rem, (100% - var(--container)) / 2);
+  width: min(100% - 2rem, var(--container));
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(var(--pin-progress, 0));
+  transform-origin: left;
+}
+
+.photo-strip__film.is-pinned .photo-strip__film-window {
+  overflow: visible;
+}
+
+.photo-strip__film.is-pinned .photo-strip__film-track {
+  will-change: transform;
+}
+
+/* Khung giữ tỉ lệ thật của ảnh: cao cố định, ngang theo ảnh, nên ảnh dọc và ảnh ngang xen nhau như một dãy tranh. */
+.photo-strip__film.is-pinned .photo-strip__frame-btn {
+  width: auto;
+  height: min(60vh, 38rem);
+  aspect-ratio: auto;
+}
+
+.photo-strip__film.is-pinned .photo-strip__frame-img {
+  width: auto;
+  max-width: none;
+}
+
+.photo-strip__film.is-pinned .photo-strip__frame-caption {
+  max-width: 28rem;
+}
+
+@media (min-width: 760px) {
+  .photo-strip__frame-btn {
+    width: min(46vw, 26rem);
+  }
+}
