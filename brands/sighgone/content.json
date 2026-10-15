@@ -9,6 +9,7 @@
   "brand": {
     "name": "SighGone",
     "logo": "images/logo.svg",
+    "logoDark": "images/logo-dark.svg",
     "slogan": "Every sigh, gone."
   },
   "cta": {
@@ -54,6 +55,7 @@
     "lang": { "vi": "VI", "en": "EN", "label": "Ngôn ngữ" },
     "variant": "solid",
     "menu": "Menu",
+    "modeLabel": "Chế độ tối",
     "note": "Mỗi ngày 5:30 đến 22:30, nhóm tối đa 8 khách"
   },
   "contact": {

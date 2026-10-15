@@ -5,7 +5,9 @@
    ghi nháp trên máy (draft.js), rồi báo trang trong khung dựng lại bằng chính các component <wl-*>.
    Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/editor.css, tiền tố ed-), không đọc biến của brand. */
 import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
-import { BLOCKS, HEADER_VARIANTS, variantsFor, COLORS, CONTRAST, FONTS, TEMPLATES } from './manifest.js';
+import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES } from './manifest.js';
+import { paletteEl } from './palette.js';
+import { menuOrderEl } from './menu-order.js';
 import { buildForm, imageLibrary, setIn, getIn } from './form.js';
 import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPageTo, insertBlock, applyFont } from './ops.js';
 import { contrastRatio, AA } from './contrast.js';
@@ -474,11 +476,12 @@ function renderTool() {
     return;
   }
   const options = variantsFor(section);
-  ui.tool.replaceChildren(
+  // replaceChildren in null thành chữ "null", nên bỏ phần trống (khối chỉ có một kiểu thì không có ô chọn kiểu).
+  ui.tool.replaceChildren(...[
     h('span', { class: 'ed-tool__name', text: BLOCKS[section.type]?.label ?? section.type }),
     options.length > 1 ? variantSelect(key, section.variant ?? '', options, `Kiểu của ${blockName(section)}`, 'tool') : null,
     h('button', { type: 'button', class: 'ed-btn', 'data-ed-key': 'tool:edit', onclick: openContent, text: 'Sửa nội dung' }),
-  );
+  ].filter(Boolean));
 }
 
 /* ---------- Tab Khối ---------- */
@@ -491,7 +494,8 @@ function renderBlocks() {
   const rows = [
     h('li', { class: `ed-block${state.sel === 'header' ? ' is-sel' : ' ed-block--compact'}` },
       h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': 'n:header', onclick: () => select('header', true), text: 'Đầu trang (cố định)' }),
-      state.sel === 'header' ? variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang') : null),
+      state.sel === 'header' ? variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang') : null,
+      state.sel === 'header' ? menuOrderEl({ h, state, commit }) : null),
     ...list.map((section, i) => {
       const chosen = state.sel === i;
       const options = variantsFor(section);
@@ -559,15 +563,6 @@ function textField(label, path, value) {
 }
 
 function renderTheme() {
-  const checks = contrastChecks();
-  const colors = COLORS.map(([name, label]) => {
-    const value = colorOf(name);
-    const hex = /^#[0-9a-f]{6}$/i.test(value) ? value : '#000000';
-    const input = h('input', { type: 'color', value: hex, 'aria-label': label, 'data-ed-key': `c:${name}` });
-    input.addEventListener('change', () => setThemeVar(name, input.value, `Đổi ${label.toLowerCase()}`));
-    return h('label', { class: `ed-color${state.theme.vars[name] ? ' is-changed' : ''}` }, input,
-      h('span', {}, label, h('small', { text: value })));
-  });
   const font = h('select', { class: 'ed-select', 'aria-label': 'Cặp font', 'data-ed-key': 'font' },
     FONTS.map((f) => h('option', { value: f.key, text: f.label, selected: (state.theme.font ?? '') === f.key })));
   font.addEventListener('change', () => setFont(font.value));
@@ -576,10 +571,8 @@ function renderTheme() {
   const c = state.content;
   ui.panes.theme.replaceChildren(
     h('h3', { class: 'ed-h', text: 'Màu' }),
-    h('div', { class: 'ed-colors' }, colors),
-    h('ul', { class: 'ed-checks', 'aria-live': 'polite' }, checks.map((x) => h('li', { class: x.ok ? 'ok' : 'bad' },
-      h('span', { text: x.label }),
-      h('b', { text: x.r === null ? 'không đo được' : `${x.r.toFixed(2)} ${x.ok ? 'đạt AA' : 'chưa đạt, cần từ 4,5'}` })))),
+    // Khung chat AI gợi ý màu và bảng màu hai nửa Sáng, Tối (palette.js).
+    paletteEl({ h, state, commit, frameDoc, rerender: renderTheme }),
     h('h3', { class: 'ed-h', text: 'Font' }),
     font,
     h('h3', { class: 'ed-h' }, 'Bo góc: ', h('span', { text: `${radiusPx()}px` })),

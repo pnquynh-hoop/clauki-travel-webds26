@@ -629,3 +629,62 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
   outline: 2px solid currentColor;
   outline-offset: 1px;
 }
+
+/* Nút đổi sáng, tối: ẩn cho tới khi thương hiệu có bảng màu tối (theme-mode.js gắn data-modes="dark" lên <html>).
+   Nút tròn viền mảnh như nút Menu; đang sáng thì hiện mặt trăng, đang tối thì hiện mặt trời.
+   Điện thoại đứng cạnh nút đặt (cùng order), từ 1024px đứng giữa menu và nút đặt. */
+.header__mode {
+  display: none;
+}
+
+:root[data-modes~='dark'] .header__mode {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  order: -1;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+:root[data-modes~='dark'] .header__mode:hover {
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+
+.header__mode-icon {
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.header__mode-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.header__mode[aria-pressed='true'] .header__mode-icon--moon,
+.header__mode[aria-pressed='false'] .header__mode-icon--sun {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  :root[data-modes~='dark'] .header__mode {
+    order: 0;
+  }
+}
+
+/* Logo cho chế độ tối (brand.logoDark): ẩn khi đang sáng; đang tối thì thay cho logo thường. */
+.header__brand .header__logo-dark,
+:root[data-mode='dark'] .header__brand .header__logo-light {
+  display: none;
+}
+
+:root[data-mode='dark'] .header__brand .header__logo-dark {
+  display: block;
+}

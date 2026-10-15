@@ -3,7 +3,8 @@
    mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở.
    Component không tải sẵn: trước khi dựng, core.js tải JS và CSS của đúng các khối trang đó dùng (bảng tra ở app.js). */
 
-import { readDraft, applyDraftTheme } from './editor/draft.js';
+import { readDraft } from './editor/draft.js';
+import { applyTheme } from './theme-mode.js';
 // Song ngữ: chọn ngôn ngữ, ghép bản dịch content.<lang>.json vào nội dung (xem chú thích đầu i18n.js).
 import { localize, langFor, BASE_LANG } from './i18n.js';
 
@@ -349,7 +350,8 @@ async function render(raw, useDraft = true) {
   // applyBrand chạy trước: nó ghi nhớ thương hiệu đang chọn, các khối cần điều đó để lấy đúng ảnh.
   const theme = draft?.theme ?? guestTheme;
   applyBrand(data, page, theme?.base);
-  applyDraftTheme(theme);
+  // Biến của nháp, rồi bảng màu tối nếu thương hiệu có và khách đang chọn chế độ tối (theme-mode.js).
+  applyTheme(theme);
   try {
     renderSections(data, page);
     renderFixed(data, page);
