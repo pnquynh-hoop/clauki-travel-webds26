@@ -3273,6 +3273,102 @@
           }
         },
         {
+          "type": "booking",
+          "id": "giu-cho",
+          "variant": "calendar",
+          "eyebrow": "Giữ chỗ",
+          "title": "Chuyến đầu chỉ 8 ghế",
+          "lead": "Không cần cọc. Gửi tin giữ chỗ, SighGone gọi xác nhận, trả tiền khi gặp hướng dẫn viên.",
+          "price": 890000,
+          "priceNote": "một khách",
+          "currency": "đồng",
+          "fewSeats": 3,
+          "defaultGuests": 2,
+          "deal": {
+            "amount": 200000,
+            "until": "2026-10-31",
+            "label": "Giữ chỗ trước 31/10 giảm 200.000 đồng mỗi khách"
+          },
+          "seatMap": {
+            "total": 8
+          },
+          "includes": [
+            "Vé metro, xích lô 45 phút",
+            "Vé lên tầng cao Bitexco",
+            "Ba món ăn vặt, nước suối",
+            "Hướng dẫn viên người Sài Gòn"
+          ],
+          "excludes": [
+            "Đồ uống thêm",
+            "Đưa đón khách sạn"
+          ],
+          "bring": [
+            "Giày đi bộ",
+            "Áo mưa mỏng (mùa mưa)",
+            "Máy ảnh"
+          ],
+          "departures": [
+            {
+              "date": "2026-11-01",
+              "seats": 3
+            },
+            {
+              "date": "2026-11-02",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-08",
+              "seats": 8
+            },
+            {
+              "date": "2026-11-09",
+              "seats": 8
+            }
+          ],
+          "labels": {
+            "departures": "Ngày khởi hành",
+            "month": "tháng {m}, {y}",
+            "seats": "Còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "includesTitle": "Đã gồm",
+            "excludesTitle": "Chưa gồm",
+            "bringTitle": "Nên mang",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "guestsValue": "{guests} khách",
+            "baseLine": "{price} × {guests} khách",
+            "dealLine": "Giá mở bán",
+            "total": "Tạm tính",
+            "dealCountdown": "Giá mở bán còn {d} ngày {h}:{m}:{s}",
+            "seatPick": "Chọn ghế",
+            "seatMap": "Sơ đồ ghế của chuyến đang chọn",
+            "seatTaken": "Ghế {n} đã có người"
+          },
+          "errors": {
+            "name": "Nhập họ tên giúp SighGone nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "brand": "SighGone, phiếu giữ chỗ",
+            "from": "Ga Nhà hát Thành phố",
+            "to": "Bitexco lúc hoàng hôn",
+            "guest": "Khách",
+            "date": "Ngày đi",
+            "seats": "Số chỗ",
+            "total": "Tạm tính",
+            "stamp": "Chờ xác nhận",
+            "template": "Chào SighGone, mình là {name}, số {phone}. Mình muốn giữ {guests} chỗ tour Tuyến số 1 ngày {date}, ghế {seats}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi SighGone",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép"
+          }
+        },
+        {
           "type": "reviews",
           "id": "khach-ke",
           "variant": "postcard",
