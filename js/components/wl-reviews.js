@@ -1,6 +1,8 @@
 /* wl-reviews.js - khách nói gì về chuyến đi. Kiểu postcard: mỗi đánh giá là một tấm bưu thiếp,
    bên trái là lời nhắn (điểm, lời kể, người gửi), bên phải là tem (con số và tên nơi khách nhắc tới)
-   và dấu bưu điện (ngày chuyến đi). Cuộn tới thì các tấm rơi xuống bàn lần lượt. */
+   và dấu bưu điện (ngày chuyến đi). Cuộn tới thì các tấm rơi xuống bàn lần lượt.
+   Kiểu notes (SighGone): bức tường giấy note dán băng keo, mỗi tờ có lời kể, người gửi và (tuỳ chọn) một thước đo
+   "trước chuyến, sau chuyến" vẽ bằng các vòng tròn nhỏ; cuộn tới thì các tờ dán lên lần lượt. */
 import { textEl } from '../dom.js';
 
 // Con số trên tem: số thì viết theo kiểu Việt Nam (1.400), chữ thì giữ nguyên.
@@ -79,6 +81,38 @@ function cardEl(item, index, section) {
   return li;
 }
 
+// Thước đo của kiểu notes: `meter` (số) là số vòng tròn nhỏ "trước chuyến"; section.meter ghi chữ: before (trước), after (sau),
+// label (cho trình đọc màn hình, có {n}). Thiếu số hoặc thiếu section.meter thì bỏ cả dòng.
+function meterEl(item, section) {
+  const meter = section.meter;
+  if (!meter || !Number.isFinite(item.meter) || item.meter < 1) return null;
+  const puffs = document.createElement('span');
+  puffs.className = 'reviews__puffs';
+  if (meter.label) puffs.setAttribute('aria-label', meter.label.replace('{n}', item.meter));
+  puffs.append(...Array.from({ length: Math.min(item.meter, 9) }, () => document.createElement('i')));
+  const before = document.createElement('span');
+  before.append(...[meter.before ? `${meter.before} ` : null, puffs].filter(Boolean));
+  const line = document.createElement('p');
+  line.className = 'reviews__meter';
+  line.append(before, ...[textEl('span', 'reviews__after', meter.after)].filter(Boolean));
+  return line;
+}
+
+// Một tờ note: lời kể, người gửi (tên, nơi ở, đi cùng ai), thước đo. Màu giấy và độ nghiêng do CSS xoay vòng theo thứ tự.
+function noteEl(item, index, section) {
+  const li = document.createElement('li');
+  li.className = 'reviews__sticky';
+  li.style.setProperty('--i', String(index));
+  const figure = document.createElement('figure');
+  figure.className = 'reviews__note';
+  const where = [item.from, item.note].filter(Boolean).join(', ');
+  const who = item.name ? textEl('figcaption', 'reviews__who', item.name) : null;
+  if (who && where) who.append(textEl('small', null, where));
+  figure.append(...[textEl('blockquote', 'reviews__text', item.text), who, meterEl(item, section)].filter(Boolean));
+  li.append(figure);
+  return li;
+}
+
 export class WlReviews extends HTMLElement {
   disconnectedCallback() {
     this._io?.disconnect();
@@ -94,9 +128,10 @@ export class WlReviews extends HTMLElement {
     this.className = `reviews reviews--${section.variant ?? 'postcard'}`;
     const items = (section.items ?? []).filter((item) => item.text);
 
+    const notes = section.variant === 'notes';
     const list = document.createElement('ul');
-    list.className = 'reviews__list';
-    list.append(...items.map((item, i) => cardEl(item, i, section)));
+    list.className = notes ? 'reviews__wall' : 'reviews__list';
+    list.append(...items.map((item, i) => (notes ? noteEl(item, i, section) : cardEl(item, i, section))));
 
     const inner = document.createElement('div');
     inner.className = 'container';
