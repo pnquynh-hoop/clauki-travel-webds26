@@ -611,7 +611,7 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
    bên trái, từ 900px: đường kẻ ngang. Màu lấy từ biến CSS: nền `--color-ink`, chữ `--color-bg`, đường và ga `--color-primary`. */
 /* Dây điện (footer.wires) là dải nền trang nằm trên cùng, nên footer không đệm trên: đệm nằm ở .footer__line-main, dưới dây điện. */
 .footer--line {
-  padding-block: 0 2rem;
+  padding-block: 0 1.25rem;
   color: var(--color-bg);
   background: var(--color-ink);
 }
@@ -622,12 +622,12 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 
 .footer__line-main {
   display: grid;
-  gap: 3rem;
-  padding-top: 4rem;
+  gap: 1.5rem;
+  padding-top: 2rem;
 }
 
 .footer__line-eyebrow {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.4rem;
   font-family: var(--font-hand, var(--font-heading));
   font-size: 0.8rem;
   letter-spacing: 0.12em;
@@ -638,7 +638,7 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 .footer__line-slogan {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(2.6rem, 9vw, 5.5rem);
+  font-size: clamp(2rem, 6.5vw, 3.5rem);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -0.03em;
@@ -671,7 +671,7 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1.1rem;
-  padding-block: 0.7rem;
+  padding-block: 0.45rem;
 }
 
 .footer__stop-link {
@@ -757,7 +757,8 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 }
 
 .footer--line .footer__cols {
-  padding-top: 2rem;
+  gap: 1rem 2rem;
+  padding-top: 1.25rem;
   border-top: 2px dashed color-mix(in srgb, var(--color-bg) 25%, transparent);
 }
 
@@ -775,7 +776,7 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   }
 
   .footer__line::before {
-    top: calc(0.7rem + 0.8rem - 3px);
+    top: calc(0.45rem + 0.8rem - 3px);
     right: 0;
     bottom: auto;
     left: 0;
@@ -786,14 +787,14 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   .footer__stop {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.6rem;
-    padding-block: 0.7rem 0;
+    gap: 0.4rem;
+    padding-block: 0.45rem 0;
   }
 
   .footer__stop-link {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.6rem;
+    gap: 0.35rem;
   }
 
   .footer__stop-name {
@@ -812,6 +813,32 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   .footer--line .footer__cols {
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   }
+
+  /* Ga cuối chỉ có nút (dòng ghi chú giá đã có ở nút đặt trên header), biển số nhà nằm cạnh địa chỉ, ghi chú và nguồn ảnh cùng một hàng:
+     để footer không cao hơn nhu cầu. */
+  .footer__stop--end .footer__cta-note {
+    display: none;
+  }
+
+  .footer--line .footer__col:last-child {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 1rem;
+  }
+
+  .footer--line .footer__col:last-child .footer__col-title {
+    grid-column: 1 / -1;
+  }
+
+  .footer--line .footer__plate {
+    margin-bottom: 0;
+  }
+
+  .footer--line .footer__fine {
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -820,3 +847,13 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   }
 }
 
+
+/* Kiểu line: biển số nhà và địa chỉ sát nhau hơn, ghi chú và nguồn ảnh không thêm khoảng trống phía trên. */
+.footer--line .footer__plate {
+  margin-bottom: 0.3rem;
+}
+
+.footer--line .footer__fine {
+  margin-top: 0;
+  padding-top: 0.75rem;
+}
