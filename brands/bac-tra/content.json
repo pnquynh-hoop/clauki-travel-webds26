@@ -840,6 +840,20 @@
       "description": "Săn mây Suối Giàng và đèo Khau Phạ, 3 ngày 2 đêm, tháng 11 đến tháng 2.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Các tour",
+              "href": "page:/#cac-tour"
+            },
+            {
+              "label": "Mùa mây"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tong-quan",
           "eyebrow": "Tháng 11 đến tháng 2, 3 ngày 2 đêm",
@@ -1265,6 +1279,20 @@
       "title": "Mùa trà xuân",
       "description": "Hái búp chè đầu mùa ở Suối Giàng, ở cùng gia đình làm chè, 3 ngày 2 đêm, tháng 3 và tháng 4.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Các tour",
+              "href": "page:/#cac-tour"
+            },
+            {
+              "label": "Mùa trà xuân"
+            }
+          ]
+        },
         {
           "type": "room-detail",
           "id": "tong-quan",
@@ -1738,6 +1766,20 @@
       "description": "Mùa vàng Mù Cang Chải, cốm mới Tú Lệ, 3 ngày 2 đêm, tháng 9 và tháng 10.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Các tour",
+              "href": "page:/#cac-tour"
+            },
+            {
+              "label": "Mùa lúa chín"
+            }
+          ]
+        },
+        {
           "type": "room-detail",
           "id": "tong-quan",
           "eyebrow": "Tháng 9 và tháng 10, 3 ngày 2 đêm",
@@ -2131,6 +2173,16 @@
       "description": "Đường đi thế nào, mang gì, sáng sớm trên núi lạnh ra sao, say xe, trẻ em, cọc, đổi, huỷ.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Chuẩn bị lên núi"
+            }
+          ]
+        },
+        {
           "type": "hero",
           "id": "chuan-bi",
           "variant": "stacked",
@@ -2323,6 +2375,16 @@
       "description": "Bậc Trà bắt đầu thế nào và những gia đình đón khách dọc cung đường.",
       "sections": [
         {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Về chúng tôi"
+            }
+          ]
+        },
+        {
           "type": "host",
           "id": "ve-chung-toi",
           "eyebrow": "Về chúng tôi",
@@ -2463,6 +2525,16 @@
       "title": "Liên hệ",
       "description": "Liên hệ văn phòng Bậc Trà: tổng đài đặt tour, email, hợp tác, giờ làm việc và địa chỉ văn phòng.",
       "sections": [
+        {
+          "type": "breadcrumb",
+          "label": "Đường dẫn trang",
+          "home": "Trang chủ",
+          "items": [
+            {
+              "label": "Liên hệ"
+            }
+          ]
+        },
         {
           "type": "contact",
           "id": "lien-he",
