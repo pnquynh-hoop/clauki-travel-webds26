@@ -2111,45 +2111,47 @@
           "id": "cach-di",
           "variant": "slices",
           "eyebrow": "Cách đi",
-          "title": "Bảy phương tiện, một thành phố",
+          "title": "Một thành phố, sáu tốc độ",
           "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
           "touchHint": "Chạm vào một dải để mở ảnh lớn.",
-          "listLabel": "Bảy cách đi Sài Gòn cùng SighGone, mỗi lần mở một ảnh",
+          "linkLabel": "Xem các tour này",
+          "listLabel": "Sáu cách đi Sài Gòn cùng SighGone, mỗi lần mở một ảnh",
           "images": [
             {
               "src": "images/di-bo.webp",
               "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng",
-              "caption": "Đi bộ qua hẻm và chợ sáng"
+              "caption": "Đi bộ qua hẻm và chợ sáng",
+              "href": "page:tour#di=di-bo"
             },
             {
               "src": "images/xich-lo.webp",
               "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn",
-              "caption": "Xích lô qua phố người Hoa"
+              "caption": "Xích lô qua phố người Hoa",
+              "href": "page:tour#di=xich-lo"
             },
             {
               "src": "images/xe-dap.webp",
               "alt": "Chiếc xe đạp của người bán hàng rong chở đầy bưởi và chuối trên vỉa hè Sài Gòn",
-              "caption": "Xe đạp trên đường làng Thanh Đa"
+              "caption": "Xe đạp trên đường làng Thanh Đa",
+              "href": "page:tour#di=xe-dap"
             },
             {
               "src": "images/xe-may-dem.webp",
               "alt": "Ngã tư Sài Gòn về đêm nhìn từ trên cao, xe máy và ô tô thành những vệt đèn rực rỡ",
-              "caption": "Xe máy có tài xế, ăn đêm bốn quận"
+              "caption": "Xe máy có tài xế, ăn đêm bốn quận",
+              "href": "page:tour#di=xe-may"
             },
             {
               "src": "images/thuyen.webp",
               "alt": "Mũi chiếc thuyền gỗ xanh lướt trên sông Sài Gòn, phía xa là các toà cao ốc trung tâm",
-              "caption": "Thuyền gỗ vào kênh nhỏ"
-            },
-            {
-              "src": "images/pha.webp",
-              "alt": "Chiếc phà chở người và xe máy băng qua sông, bờ bên kia là rặng dừa",
-              "caption": "Phà Bình Khánh sang Cần Giờ"
+              "caption": "Thuyền gỗ vào kênh nhỏ",
+              "href": "page:tour#di=thuyen"
             },
             {
               "src": "images/ca-no.webp",
               "alt": "Tàu cao tốc rẽ sóng trên sông, bờ cây xanh thẫm phía sau",
-              "caption": "Ca nô vào rừng đước"
+              "caption": "Ca nô vào rừng đước",
+              "href": "page:tour#di=ca-no"
             }
           ]
         },

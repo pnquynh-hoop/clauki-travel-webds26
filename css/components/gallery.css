@@ -369,3 +369,28 @@
     margin-top: 0.5rem;
   }
 }
+
+/* Liên kết trong chú thích dải: .gallery__cap để pointer-events none cho cú bấm xuống nút ảnh, riêng liên kết thì nhận lại. */
+.gallery__link {
+  display: inline-block;
+  justify-self: start;
+  width: fit-content;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-on-primary);
+  text-decoration: none;
+  background: var(--color-primary);
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.gallery__link:hover {
+  text-decoration: underline;
+}
+
+.gallery__link:focus-visible {
+  outline: 3px solid var(--color-bg);
+  outline-offset: 2px;
+}
