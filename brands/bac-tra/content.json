@@ -59,6 +59,59 @@
       "lon": 104.47
     }
   },
+  "catalog": {
+    "currency": "đ",
+    "items": [
+      {
+        "id": "mua-may",
+        "name": "Mùa mây",
+        "tagline": "Tháng 11 đến tháng 2, 3 ngày 2 đêm",
+        "href": "page:tour/mua-may",
+        "image": {
+          "src": "images/footer.jpg",
+          "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
+        },
+        "price": 3690000,
+        "unit": "khách"
+      },
+      {
+        "id": "tra-xuan",
+        "name": "Mùa trà xuân",
+        "tagline": "Tháng 3 và tháng 4, 3 ngày 2 đêm",
+        "href": "page:tour/tra-xuan",
+        "image": {
+          "src": "images/journey-3.jpg",
+          "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
+        },
+        "price": 3890000,
+        "unit": "khách"
+      },
+      {
+        "id": "tour-moi",
+        "name": "Trà trên mây, lúa trên núi",
+        "tagline": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm",
+        "href": "page:tour-moi",
+        "image": {
+          "src": "images/season-water.jpg",
+          "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
+        },
+        "price": 5490000,
+        "unit": "khách"
+      },
+      {
+        "id": "lua-chin",
+        "name": "Mùa lúa chín",
+        "tagline": "Tháng 9 và tháng 10, 3 ngày 2 đêm",
+        "href": "page:tour/lua-chin",
+        "image": {
+          "src": "images/journey-2.jpg",
+          "alt": "Cánh đồng lúa Mường Lò chín vàng"
+        },
+        "price": 4290000,
+        "unit": "khách"
+      }
+    ]
+  },
   "pages": [
     {
       "path": "/",
@@ -119,52 +172,15 @@
           "type": "cloud-band"
         },
         {
-          "type": "intro",
+          "type": "catalog-list",
           "id": "cac-tour",
           "eyebrow": "Các tour",
           "title": "Bốn tour, một cung đường",
-          "lead": "Cùng đi Thác Bà, Suối Giàng, Tú Lệ, Mù Cang Chải; mỗi mùa Bậc Trà dừng lâu ở nơi đẹp nhất của mùa đó. Tháng 7 và 8 mưa lũ, đội nghỉ chạy tour."
-        },
-        {
-          "type": "room-detail",
-          "others": [
-            {
-              "label": "Mùa mây",
-              "href": "page:tour/mua-may",
-              "note": "Tháng 11 đến tháng 2, 3 ngày 2 đêm, từ 3.690.000đ",
-              "image": {
-                "src": "images/footer.jpg",
-                "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
-              }
-            },
-            {
-              "label": "Mùa trà xuân",
-              "href": "page:tour/tra-xuan",
-              "note": "Tháng 3 và tháng 4, 3 ngày 2 đêm, từ 3.890.000đ",
-              "image": {
-                "src": "images/journey-3.jpg",
-                "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            },
-            {
-              "label": "Mùa lúa chín",
-              "href": "page:tour/lua-chin",
-              "note": "Tháng 9 và tháng 10, 3 ngày 2 đêm, từ 4.290.000đ",
-              "image": {
-                "src": "images/journey-2.jpg",
-                "alt": "Cánh đồng lúa Mường Lò chín vàng"
-              }
-            }
-          ]
+          "lead": "Cùng đi Thác Bà, Suối Giàng, Tú Lệ, Mù Cang Chải; mỗi mùa Bậc Trà dừng lâu ở nơi đẹp nhất của mùa đó. Tháng 7 và 8 mưa lũ, đội nghỉ chạy tour.",
+          "labels": {
+            "count": "{n} tour",
+            "priceNote": "một {unit}"
+          }
         },
         {
           "type": "reviews",
@@ -1231,39 +1247,16 @@
           ]
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Các mùa khác",
+          "pick": [
+            "tra-xuan",
+            "tour-moi",
+            "lua-chin"
+          ],
           "labels": {
-            "others": "Các mùa khác"
-          },
-          "others": [
-            {
-              "label": "Mùa trà xuân",
-              "href": "page:tour/tra-xuan",
-              "note": "Tháng 3 và tháng 4, 3 ngày 2 đêm, từ 3.890.000đ",
-              "image": {
-                "src": "images/journey-3.jpg",
-                "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            },
-            {
-              "label": "Mùa lúa chín",
-              "href": "page:tour/lua-chin",
-              "note": "Tháng 9 và tháng 10, 3 ngày 2 đêm, từ 4.290.000đ",
-              "image": {
-                "src": "images/journey-2.jpg",
-                "alt": "Cánh đồng lúa Mường Lò chín vàng"
-              }
-            }
-          ]
+            "priceNote": "một {unit}"
+          }
         }
       ]
     },
@@ -1726,39 +1719,16 @@
           ]
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Các mùa khác",
+          "pick": [
+            "mua-may",
+            "tour-moi",
+            "lua-chin"
+          ],
           "labels": {
-            "others": "Các mùa khác"
-          },
-          "others": [
-            {
-              "label": "Mùa mây",
-              "href": "page:tour/mua-may",
-              "note": "Tháng 11 đến tháng 2, 3 ngày 2 đêm, từ 3.690.000đ",
-              "image": {
-                "src": "images/footer.jpg",
-                "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            },
-            {
-              "label": "Mùa lúa chín",
-              "href": "page:tour/lua-chin",
-              "note": "Tháng 9 và tháng 10, 3 ngày 2 đêm, từ 4.290.000đ",
-              "image": {
-                "src": "images/journey-2.jpg",
-                "alt": "Cánh đồng lúa Mường Lò chín vàng"
-              }
-            }
-          ]
+            "priceNote": "một {unit}"
+          }
         }
       ]
     },
@@ -2142,39 +2112,16 @@
           ]
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Các mùa khác",
+          "pick": [
+            "mua-may",
+            "tra-xuan",
+            "tour-moi"
+          ],
           "labels": {
-            "others": "Các mùa khác"
-          },
-          "others": [
-            {
-              "label": "Mùa mây",
-              "href": "page:tour/mua-may",
-              "note": "Tháng 11 đến tháng 2, 3 ngày 2 đêm, từ 3.690.000đ",
-              "image": {
-                "src": "images/footer.jpg",
-                "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
-              }
-            },
-            {
-              "label": "Mùa trà xuân",
-              "href": "page:tour/tra-xuan",
-              "note": "Tháng 3 và tháng 4, 3 ngày 2 đêm, từ 3.890.000đ",
-              "image": {
-                "src": "images/journey-3.jpg",
-                "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            }
-          ]
+            "priceNote": "một {unit}"
+          }
         }
       ]
     },
@@ -2216,55 +2163,48 @@
           ]
         },
         {
-          "type": "room-detail",
+          "type": "tips",
           "id": "mang-theo",
-          "amenities": [
+          "eyebrow": "Nên mang theo",
+          "title": "Tám thứ nên có trong ba lô",
+          "items": [
             {
-              "icon": "shirt",
-              "text": "Áo ấm cho buổi sáng, kể cả mùa hè"
+              "title": "Áo ấm, kể cả mùa hè",
+              "text": "Năm giờ sáng trên Suối Giàng là lúc lạnh nhất trong ngày, cũng là lúc mây đẹp nhất. Mặc áo ấm từ 5:00 đến 8:00."
             },
             {
-              "icon": "footprints",
-              "text": "Giày đế bám để đi bờ ruộng"
+              "title": "Giày đế bám",
+              "text": "Bờ ruộng hẹp, trơn sau mưa. Giày đế bám quan trọng hơn giày đắt."
             },
             {
-              "icon": "umbrella",
-              "text": "Áo mưa mỏng, mùa nước đổ mưa chiều"
+              "title": "Áo mưa mỏng",
+              "text": "Mùa nước đổ hay mưa chiều, gấp gọn một chiếc trong ba lô là đủ."
             },
             {
-              "icon": "waves",
-              "text": "Đồ bơi cho suối khoáng Tú Lệ"
+              "title": "Đồ bơi",
+              "text": "Tú Lệ có suối khoáng nóng khoảng 35 độ, tắm buổi chiều sau chặng đèo."
             },
             {
-              "icon": "pill",
-              "text": "Thuốc say xe, uống trước khi lên đèo"
+              "title": "Thuốc say xe",
+              "text": "Đường đèo khoảng 300 km mỗi chiều. Uống thuốc trước khi lên đèo 30 phút, ngồi hàng ghế đầu."
             },
             {
-              "icon": "flashlight",
-              "text": "Đèn pin nhỏ nếu đi săn mây lúc 5 giờ"
+              "title": "Đèn pin nhỏ",
+              "text": "Đi săn mây phải đi bộ 15 phút trong tối ra mỏm đồi lúc 5 giờ sáng.",
+              "link": {
+                "label": "Xem tour mùa mây",
+                "href": "page:tour/mua-may"
+              }
             },
             {
-              "icon": "sun",
-              "text": "Mũ, kem chống nắng cho buổi trưa"
+              "title": "Mũ, kem chống nắng",
+              "text": "Sáng sớm lạnh nhưng trưa trên núi nắng gắt."
             },
             {
-              "icon": "id-card",
-              "text": "Giấy tờ tuỳ thân để nhà dân khai báo lưu trú"
+              "title": "Giấy tờ tuỳ thân",
+              "text": "Nhà dân cần khai báo lưu trú cho khách mỗi đêm."
             }
-          ],
-          "view": {
-            "image": {
-              "src": "images/hero.jpg",
-              "alt": "Ruộng bậc thang xanh trong sương, một chòi nhỏ giữa sườn đồi"
-            },
-            "text": "Năm giờ sáng trên Suối Giàng là lúc lạnh nhất trong ngày, cũng là lúc mây đẹp nhất.",
-            "best": "5:00 đến 8:00"
-          },
-          "labels": {
-            "amenities": "Nên mang theo",
-            "view": "Sáng sớm trên đồi chè",
-            "best": "Mặc áo ấm từ"
-          }
+          ]
         },
         {
           "type": "gallery",
@@ -2369,48 +2309,11 @@
           ]
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Soạn đồ xong thì chọn mùa",
           "labels": {
-            "others": "Soạn đồ xong thì chọn mùa"
-          },
-          "others": [
-            {
-              "label": "Mùa mây",
-              "href": "page:tour/mua-may",
-              "note": "Tháng 11 đến tháng 2, 3 ngày 2 đêm, từ 3.690.000đ",
-              "image": {
-                "src": "images/footer.jpg",
-                "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
-              }
-            },
-            {
-              "label": "Mùa trà xuân",
-              "href": "page:tour/tra-xuan",
-              "note": "Tháng 3 và tháng 4, 3 ngày 2 đêm, từ 3.890.000đ",
-              "image": {
-                "src": "images/journey-3.jpg",
-                "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            },
-            {
-              "label": "Mùa lúa chín",
-              "href": "page:tour/lua-chin",
-              "note": "Tháng 9 và tháng 10, 3 ngày 2 đêm, từ 4.290.000đ",
-              "image": {
-                "src": "images/journey-2.jpg",
-                "alt": "Cánh đồng lúa Mường Lò chín vàng"
-              }
-            }
-          ]
+            "priceNote": "một {unit}"
+          }
         }
       ]
     },
@@ -2643,45 +2546,11 @@
           "lead": "Đường bạn tìm không có trên bản đồ của Bậc Trà. Chọn một mùa bên dưới để đi tiếp."
         },
         {
-          "type": "room-detail",
-          "others": [
-            {
-              "label": "Mùa mây",
-              "href": "page:tour/mua-may",
-              "note": "Tháng 11 đến tháng 2, 3 ngày 2 đêm, từ 3.690.000đ",
-              "image": {
-                "src": "images/footer.jpg",
-                "alt": "Mây trắng vắt ngang các dãy núi dưới đèo Khau Phạ"
-              }
-            },
-            {
-              "label": "Mùa trà xuân",
-              "href": "page:tour/tra-xuan",
-              "note": "Tháng 3 và tháng 4, 3 ngày 2 đêm, từ 3.890.000đ",
-              "image": {
-                "src": "images/journey-3.jpg",
-                "alt": "Cây chè Shan tuyết cổ thụ ở Suối Giàng"
-              }
-            },
-            {
-              "label": "Trà trên mây, lúa trên núi",
-              "href": "page:tour-moi",
-              "note": "Tour mới 2027, tháng 5 và tháng 6, 4 ngày 3 đêm, từ 5.490.000đ",
-              "image": {
-                "src": "images/season-water.jpg",
-                "alt": "Ruộng bậc thang mùa nước đổ phản chiếu bầu trời"
-              }
-            },
-            {
-              "label": "Mùa lúa chín",
-              "href": "page:tour/lua-chin",
-              "note": "Tháng 9 và tháng 10, 3 ngày 2 đêm, từ 4.290.000đ",
-              "image": {
-                "src": "images/journey-2.jpg",
-                "alt": "Cánh đồng lúa Mường Lò chín vàng"
-              }
-            }
-          ]
+          "type": "catalog-list",
+          "title": "Bốn mùa vẫn mở",
+          "labels": {
+            "priceNote": "một {unit}"
+          }
         }
       ]
     }

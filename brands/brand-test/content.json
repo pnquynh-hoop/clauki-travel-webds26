@@ -577,47 +577,14 @@
           "lead": "Cực quang chỉ thấy được khi trời đủ tối. Mùa đông lạnh và ngắn ngày, nhưng là mùa duy nhất bầu trời phía bắc đổi màu."
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Năm cách gặp mùa đông Iceland",
           "labels": {
-            "others": "Năm cách gặp mùa đông Iceland"
-          },
-          "others": [
-            {
-              "label": "Săn cực quang 5 ngày",
-              "href": "page:tour/cuc-quang",
-              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Cực quang xanh lục trên bầu trời đêm"
-              }
-            },
-            {
-              "label": "Vòng Tròn Vàng trong một ngày",
-              "href": "page:tour/vong-tron-vang",
-              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Thác nước viền băng giữa vách đá"
-              }
-            },
-            {
-              "label": "Sông băng và hang băng xanh",
-              "href": "page:tour/song-bang",
-              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Người đi bộ trên mặt sông băng xanh"
-              }
-            },
-            {
-              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
-              "href": "page:mot-ngay"
-            },
-            {
-              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
-              "href": "page:cam-nang"
-            }
-          ]
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}, {buoi}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ",
+            "count": "{n} cách gặp mùa đông"
+          }
         },
         {
           "type": "stays",
@@ -1564,46 +1531,17 @@
           "type": "cloud-band"
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Đi một chặng thôi cũng được",
           "labels": {
-            "others": "Đi một chặng thôi cũng được"
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}, {buoi}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
           },
-          "others": [
-            {
-              "label": "Săn cực quang 5 ngày",
-              "href": "page:tour/cuc-quang",
-              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Cực quang xanh lục trên bầu trời đêm"
-              }
-            },
-            {
-              "label": "Vòng Tròn Vàng trong một ngày",
-              "href": "page:tour/vong-tron-vang",
-              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Thác nước viền băng giữa vách đá"
-              }
-            },
-            {
-              "label": "Sông băng và hang băng xanh",
-              "href": "page:tour/song-bang",
-              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Người đi bộ trên mặt sông băng xanh"
-              }
-            },
-            {
-              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
-              "href": "page:mot-ngay"
-            },
-            {
-              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
-              "href": "page:cam-nang"
-            }
+          "pick": [
+            "cuc-quang",
+            "vong-tron-vang",
+            "song-bang"
           ]
         }
       ]
@@ -2893,46 +2831,17 @@
           "lead": "Trang bạn tìm không có. Thử một trong các tour dưới đây, hoặc quay về trang chủ."
         },
         {
-          "type": "room-detail",
+          "type": "catalog-list",
+          "title": "Đường còn mở",
           "labels": {
-            "others": "Đường còn mở"
+            "duration": "{n} giờ",
+            "priceNote": "một {unit}, {buoi}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
           },
-          "others": [
-            {
-              "label": "Săn cực quang 5 ngày",
-              "href": "page:tour/cuc-quang",
-              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Cực quang xanh lục trên bầu trời đêm"
-              }
-            },
-            {
-              "label": "Vòng Tròn Vàng trong một ngày",
-              "href": "page:tour/vong-tron-vang",
-              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Thác nước viền băng giữa vách đá"
-              }
-            },
-            {
-              "label": "Sông băng và hang băng xanh",
-              "href": "page:tour/song-bang",
-              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
-              "image": {
-                "src": "images/khung.svg",
-                "alt": "Người đi bộ trên mặt sông băng xanh"
-              }
-            },
-            {
-              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
-              "href": "page:mot-ngay"
-            },
-            {
-              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
-              "href": "page:cam-nang"
-            }
+          "pick": [
+            "cuc-quang",
+            "vong-tron-vang",
+            "song-bang"
           ]
         }
       ]
