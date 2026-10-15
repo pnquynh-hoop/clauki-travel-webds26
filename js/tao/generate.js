@@ -303,8 +303,9 @@ function imageSlots(content) {
     }
   };
   for (const page of content.pages ?? [{ sections: content.sections ?? [] }]) for (const section of page.sections ?? []) walk(section, [], section);
-  // Trang chi tiết (catalog) cũng có ảnh của khung; để nguyên thì tour mới hiện ảnh món ăn, phố của khung.
+  // Trang chi tiết (catalog) và chân trang cũng có ảnh của khung; để nguyên thì tour mới hiện ảnh món ăn, phố của khung.
   walk(content.catalog, [], { type: 'catalog' });
+  walk(content.footer, [], { type: 'footer' });
   return slots;
 }
 
