@@ -24,6 +24,10 @@
       "href": "page:tour"
     },
     {
+      "label": "Tuyến số 1",
+      "href": "page:tuyen-so-1"
+    },
+    {
       "label": "Cách đi",
       "href": "page:/#cach-di"
     },
@@ -3089,6 +3093,326 @@
       ]
     },
     {
+      "path": "tuyen-so-1",
+      "title": "Tuyến số 1",
+      "description": "Tour mới của SighGone: metro trên cao, ăn vặt chợ Bến Thành, xích lô quanh Dinh Độc Lập, Nhà thờ Đức Bà, hoàng hôn trên Bitexco. Chuyến đầu 01/11/2026, giá mở bán 690.000 đồng.",
+      "header": {
+        "variant": "minimal"
+      },
+      "sections": [
+        {
+          "type": "hero",
+          "id": "tuyen-so-1",
+          "variant": "ride",
+          "eyebrow": "Chuyến đầu 01.11.2026",
+          "title": "Tuyến số",
+          "mark": "1",
+          "lead": "6 ga. 4 giờ. Một Sài Gòn.",
+          "price": {
+            "now": "690.000 đ",
+            "was": "890.000 đ"
+          },
+          "poster": {
+            "image": {
+              "src": "images/ride-landmark.webp",
+              "alt": "Toà tháp Landmark 81 trước mặt trời vàng",
+              "width": 349,
+              "height": 1600
+            }
+          },
+          "start": {
+            "time": "14:30",
+            "short": "Nhà hát"
+          },
+          "stopsLabel": "Các ga trên Tuyến số 1",
+          "stops": [
+            {
+              "time": "14:45",
+              "place": "Landmark 81",
+              "short": "Metro",
+              "note": "Ngắm tháp qua cửa kính toa tàu",
+              "how": "Metro trên cao",
+              "image": {
+                "src": "images/ride-landmark.webp",
+                "alt": "Toà tháp Landmark 81",
+                "width": 349,
+                "height": 1600
+              },
+              "effect": "grid",
+              "scene": {
+                "h": 80,
+                "hm": 68,
+                "b": 21,
+                "bm": 26,
+                "fade": 64,
+                "z": 3,
+                "speed": 0.55,
+                "signGap": 7
+              }
+            },
+            {
+              "time": "15:40",
+              "place": "Chợ Bến Thành",
+              "short": "Bến Thành",
+              "note": "Ba món ăn vặt quanh chợ",
+              "how": "Đi bộ",
+              "image": {
+                "src": "images/ride-benthanh.webp",
+                "alt": "Tháp đồng hồ chợ Bến Thành",
+                "width": 893,
+                "height": 900
+              },
+              "scene": {
+                "h": 50,
+                "hm": 40,
+                "b": 21,
+                "bm": 31,
+                "fade": 78,
+                "z": 7,
+                "speed": 1.25
+              }
+            },
+            {
+              "time": "16:20",
+              "place": "Dinh Độc Lập",
+              "short": "Dinh",
+              "note": "Vòng quanh dinh dưới hàng me",
+              "how": "Xích lô",
+              "image": {
+                "src": "images/ride-dinh.webp",
+                "alt": "Mặt tiền Dinh Độc Lập",
+                "width": 1400,
+                "height": 459
+              },
+              "scene": {
+                "h": 40,
+                "hm": 32,
+                "b": 22,
+                "bm": 30,
+                "fade": 72,
+                "z": 6,
+                "speed": 1,
+                "dx": 9,
+                "signY": 34,
+                "signGap": 8
+              }
+            },
+            {
+              "time": "17:00",
+              "place": "Nhà thờ Đức Bà",
+              "short": "Nhà thờ",
+              "note": "Hai công trình hơn trăm tuổi",
+              "how": "Đi bộ",
+              "image": {
+                "src": "images/ride-nhatho.webp",
+                "alt": "Nhà thờ Đức Bà với hai tháp chuông",
+                "width": 1029,
+                "height": 1200
+              },
+              "scene": {
+                "h": 60,
+                "hm": 48,
+                "b": 15,
+                "bm": 28,
+                "fade": 80,
+                "z": 4,
+                "speed": 0.8
+              }
+            },
+            {
+              "time": "17:30",
+              "place": "Bitexco",
+              "short": "Bitexco",
+              "note": "Xem hoàng hôn, rồi thành phố lên đèn",
+              "how": "Thang máy",
+              "image": {
+                "src": "images/ride-bitexco.webp",
+                "alt": "Tháp Bitexco với sân đỗ trực thăng nhô ra",
+                "width": 1095,
+                "height": 1500
+              },
+              "effect": "floors",
+              "scene": {
+                "h": 84,
+                "hm": 70,
+                "b": 12,
+                "bm": 24,
+                "fade": 82,
+                "z": 5,
+                "speed": 0.9
+              }
+            }
+          ],
+          "end": {
+            "kicker": "Ga cuối, 17:30",
+            "title": "Thành phố lên đèn, bạn ở tầng cao nhất"
+          }
+        },
+        {
+          "type": "reviews",
+          "id": "khach-ke",
+          "variant": "postcard",
+          "eyebrow": "Khách kể",
+          "title": "Thở phào rồi mới viết",
+          "lead": "Từ tháng 6 đến tháng 9/2026: 1.240 chuyến, 6.900 khách, điểm trung bình 4,7 trên 5.",
+          "scoreLabel": "điểm",
+          "dateLabel": "Ngày đi",
+          "items": [
+            {
+              "rating": 5,
+              "text": "Tài xế chạy chậm như đi dạo, dừng đúng chỗ cho mình chụp. Bảy món mà muốn ăn thêm món tám.",
+              "name": "Thu Hà",
+              "from": "Hà Nội",
+              "stamp": {
+                "value": "18:00",
+                "label": "Sài Gòn lên đèn"
+              },
+              "date": "12.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Lần đầu ngồi xích lô, chú đạp xe kể chuyện Chợ Lớn suốt đường. Con gái mình nhớ tên từng con phố.",
+              "name": "Minh Khoa",
+              "from": "Cần Thơ",
+              "stamp": {
+                "value": "07:00",
+                "label": "Hẻm Chợ Lớn"
+              },
+              "date": "27.08.2026"
+            },
+            {
+              "rating": 5,
+              "text": "Đi phà xong lên ca nô, rồi đi bộ trong rừng. Một ngày mà như ba chuyến đi khác nhau.",
+              "name": "Bảo Ngọc",
+              "from": "Đà Nẵng",
+              "stamp": {
+                "value": "07:00",
+                "label": "Rừng Sác Cần Giờ"
+              },
+              "date": "06.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Có nửa ngày trống giữa hai cuộc họp, đặt tour sáng sớm. Về khách sạn kịp tắm rồi đi làm.",
+              "name": "Đức Anh",
+              "from": "Hải Phòng",
+              "stamp": {
+                "value": "06:30",
+                "label": "Sài Gòn thức giấc"
+              },
+              "date": "18.09.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Thuyền vào kênh nhỏ tới mức phải cúi đầu qua cầu. Hoàng hôn ngoài sông lớn đẹp hơn mình tưởng.",
+              "name": "Lan Chi",
+              "from": "Huế",
+              "stamp": {
+                "value": "16:30",
+                "label": "Sông Sài Gòn chiều"
+              },
+              "date": "03.10.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Không nghĩ giữa thành phố còn đường làng để đạp xe. Nước dừa ở vườn ngọt lịm.",
+              "name": "Quốc Bảo",
+              "from": "Nha Trang",
+              "stamp": {
+                "value": "15:00",
+                "label": "Đạp xe Thanh Đa"
+              },
+              "date": "09.10.2026"
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "id": "hoi-dap",
+          "variant": "chat",
+          "eyebrow": "Hỏi đáp",
+          "title": "Hỏi trước, đi nhẹ người",
+          "lead": "Chọn một câu gợi ý, SighGone trả lời ngay như đang nhắn tin.",
+          "chat": {
+            "label": "Nhắn tin với SighGone",
+            "avatar": {
+              "src": "images/favicon.svg",
+              "alt": ""
+            },
+            "tagline": "Trả lời từ 5:30 đến 22:30",
+            "cover": {
+              "src": "images/di-bo.webp",
+              "alt": "Con hẻm nhỏ ở Quận 3, người bán rau ngồi bên lề, nhà phố treo đèn lồng"
+            },
+            "greeting": "Chào bạn, SighGone đây. Muốn biết gì trước khi đi, cứ chọn một câu bên dưới nhé.",
+            "pick": "Chọn câu bạn muốn hỏi",
+            "done": "Bạn đã hỏi hết các câu gợi ý",
+            "reset": "Bắt đầu lại",
+            "again": "Hỏi lại từ đầu",
+            "groupsLabel": "Nhóm câu hỏi",
+            "groupDone": "Hết câu trong nhóm này, chọn nhóm khác nhé",
+            "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho SighGone nhé:",
+            "you": "Bạn hỏi:"
+          },
+          "ask": {
+            "text": "Chưa thấy điều bạn cần?",
+            "action": "Gọi",
+            "image": {
+              "src": "images/xich-lo.webp",
+              "alt": "Một bác tài đạp xích lô trên con phố Sài Gòn"
+            }
+          },
+          "items": [
+            {
+              "group": "Trước khi đặt",
+              "question": "Đặt trước bao lâu?",
+              "answer": "Tour ghép đặt trước 2 tiếng là được nếu còn chỗ. Tour riêng nên đặt trước 2 ngày để SighGone xếp xe, xếp người."
+            },
+            {
+              "group": "Trước khi đặt",
+              "question": "Có cần trả tiền trước không?",
+              "answer": "Không. Bạn gửi tin giữ chỗ, SighGone gọi xác nhận, rồi trả tiền mặt hoặc chuyển khoản khi gặp hướng dẫn viên."
+            },
+            {
+              "group": "Trước khi đặt",
+              "question": "Đi một mình được không?",
+              "answer": "Được, nhiều người đi một mình lắm. Bạn ghép chung nhóm tối đa 8 người, tour xe máy thì ai cũng có tài xế riêng."
+            },
+            {
+              "group": "Trong tour",
+              "question": "Ăn chay được không?",
+              "answer": "Được. Ghi chú lúc giữ chỗ, quán đổi món chay cho bạn, giá không đổi."
+            },
+            {
+              "group": "Trong tour",
+              "question": "Trẻ em đi được tour nào?",
+              "answer": "Tour ban ngày nhận trẻ mọi tuổi, dưới 6 tuổi miễn phí. Tour đêm bằng xe máy nhận trẻ từ 6 tuổi, ngồi cùng xe bố hoặc mẹ."
+            },
+            {
+              "group": "Thời tiết, huỷ",
+              "question": "Trời mưa thì sao?",
+              "answer": "Mưa nhỏ vẫn đi, có áo mưa. Mưa to hoặc triều cường, SighGone gọi trước 3 tiếng để dời lịch, không mất phí."
+            },
+            {
+              "group": "Thời tiết, huỷ",
+              "question": "Huỷ có mất tiền không?",
+              "answer": "Huỷ trước 24 giờ: hoàn đủ. Trong 24 giờ: hoàn một nửa. Không tới mà không báo thì không hoàn."
+            },
+            {
+              "group": "Đón, trả",
+              "question": "Đón ở đâu?",
+              "answer": "Điểm hẹn ở Nhà hát Thành phố, miễn phí. Đón tận khách sạn Quận 1, Quận 3 thêm 50.000 đồng mỗi nhóm."
+            },
+            {
+              "group": "Đón, trả",
+              "question": "Có trả về khách sạn không?",
+              "answer": "Tour xe máy và tour có xe 16 chỗ trả tận nơi. Tour đi bộ, xe đạp kết thúc ở trung tâm, hướng dẫn viên gọi xe giúp nếu cần."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "path": "404",
       "title": "Lạc đường",
       "description": "Trang này không có.",
@@ -3275,6 +3599,41 @@
       "license": "CC BY-SA 2.0",
       "source": "https://commons.wikimedia.org/wiki/File:Basa_fish_-_Vinh_Long_Market.jpg",
       "note": "Đã thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ride-landmark.webp",
+      "author": "Gzzz",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Landmark_81_(3).jpg",
+      "note": "Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ride-benthanh.webp",
+      "author": "Bahnfrend",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Ben_Thanh_Market,_2023_(02).jpg",
+      "note": "Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ride-dinh.webp",
+      "author": "LWYang",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2019-09-13_Dinh_Th%E1%BB%91ng_Nh%E1%BA%A5t.jpg",
+      "note": "Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ride-nhatho.webp",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Nuestra_Se%C3%B1ora,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_09.JPG",
+      "note": "Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
+    },
+    {
+      "file": "images/ride-bitexco.webp",
+      "author": "trungydang",
+      "license": "CC BY 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Becamex_tower,_Hamnghi_tphcmvn_-_panoramio.jpg",
+      "note": "Ảnh chụp tháp Bitexco (tên tệp gốc trên Commons ghi nhầm). Đã tách nền, cắt khung, thu nhỏ, chuyển sang WebP"
     }
   ]
 }

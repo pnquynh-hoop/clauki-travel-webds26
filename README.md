@@ -24,7 +24,7 @@ Các thương hiệu dùng chung một bộ component `<wl-*>`. Cùng một comp
 nhau nhờ ba lớp, đều nằm ngoài mã nguồn:
 
 1. **Kiểu trình bày (`variant`)** trong `content.json`: component gắn class `<khối>--<variant>`, CSS và JS của
-   kiểu đó đổi bố cục, hiệu ứng. Ví dụ `hero` có `full`, `coverflow`, `stacked`, `haze`.
+   kiểu đó đổi bố cục, hiệu ứng. Ví dụ `hero` có `full`, `coverflow`, `stacked`, `haze`, `ride`.
 2. **Dữ liệu**: trường nào có thì hiện phần đó, thiếu thì bỏ. Ví dụ cả ba footer cùng kiểu `columns`, nhưng mỗi
    bên có ảnh nền, lời hẹn, dòng chữ chạy riêng; chỉ Bậc Trà bật `clouds` (mây trôi), chỉ Mé Rạch có
    `directions` (đường về vườn).
@@ -39,7 +39,7 @@ của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiể
 | Component | Bậc Trà | Gành Sớm | Mé Rạch | SighGone |
 | --------- | ------- | -------- | ------- | -------- |
 | `header` (cố định) | `overlay`: trong suốt đè lên hero | `solid`: nền màu trang hơi trong | `center`: tên thương hiệu đứng giữa | `solid` |
-| `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` | `haze`: ảnh phủ sương, rê chuột thì tan |
+| `hero` | `full`: ba lớp ảnh, mây vén khi cuộn | `coverflow`: chồng thẻ ảnh xoay vòng | `stacked`: chữ trên, ảnh tràn ngang; hiệu ứng `reveal` | `haze`: ảnh phủ sương, rê chuột thì tan (trang `tuyen-so-1`: `ride`, cuộn qua từng ga) |
 | `booking` | `calendar`: ngày khởi hành, phiếu giữ chỗ | `stay`: ngày nhận, trả phòng, hạng nhà | `request`: giá theo khách, soạn tin nhắn giữ phòng | `calendar` |
 | `faq` | `chat` | `chat` | `chat` | `chat` |
 | `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `columns`, dây điện, biển số nhà |
