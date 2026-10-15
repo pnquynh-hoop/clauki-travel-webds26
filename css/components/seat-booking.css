@@ -1,0 +1,247 @@
+/* seat-booking.css - giao diện của <wl-seat-booking>: bên trái tiêu đề và ảnh tách nền, bên phải thẻ form
+   (điện thoại xếp dọc). Nền tối như khối giá để hai khối đứng ở hai đầu trang nối nhịp. Viền và bóng thẻ
+   đọc --card-border, --card-shadow nếu theme.css có khai báo. */
+
+.seat-booking {
+  position: relative;
+  display: block;
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.seat-booking__inner {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.seat-booking__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.seat-booking__title {
+  margin: 0 0 1.25rem;
+  max-width: 10em;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 1.2rem + 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.seat-booking__lead {
+  max-width: 28rem;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.86;
+}
+
+.seat-booking__pic {
+  width: clamp(10rem, 24vw, 21rem);
+  height: auto;
+  margin-top: 2rem;
+  filter: drop-shadow(0 1rem 1.25rem rgb(0 0 0 / 0.35));
+}
+
+.seat-booking__form {
+  display: grid;
+  gap: 1.25rem;
+  align-self: start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent));
+  border-radius: calc(var(--radius) + 0.4rem);
+  box-shadow: var(--card-shadow, 0 1rem 2.5rem rgb(0 0 0 / 0.25));
+}
+
+.seat-booking__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.seat-booking__field label,
+.seat-booking__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.seat-booking__field input,
+.seat-booking__field select {
+  min-height: 3.4rem;
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+}
+
+.seat-booking__field input:focus-visible,
+.seat-booking__field select:focus-visible {
+  border-color: var(--color-accent);
+}
+
+.seat-booking__error {
+  min-height: 1.1em;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+}
+
+.seat-booking__guests {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.seat-booking__step {
+  width: 3.4rem;
+  height: 3.4rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.seat-booking__step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.seat-booking__guests output {
+  min-width: 2ch;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.seat-booking__seats {
+  display: grid;
+  grid-template-columns: repeat(4, 3.4rem);
+  gap: 0.5rem 1rem;
+}
+
+.seat-booking__seats button {
+  height: 3.4rem;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius) var(--radius) 0.3rem 0.3rem;
+  cursor: pointer;
+  transition: translate var(--duration) ease, background-color var(--duration) ease;
+}
+
+.seat-booking__seats button:not(:disabled):hover {
+  translate: 0 -3px;
+}
+
+.seat-booking__seats button[aria-pressed='true'] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 4px 0 var(--color-ink);
+}
+
+/* Ghế đã có người: gạch chéo, không dựa vào màu. */
+.seat-booking__seats button.is-taken {
+  color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--color-ink) 25%, transparent) 0 6px, transparent 6px 12px), var(--color-bg);
+  border-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+  cursor: not-allowed;
+}
+
+.seat-booking__total[hidden] {
+  display: none;
+}
+
+.seat-booking__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding-top: 1.25rem;
+  font-weight: 700;
+  border-top: 2px dashed var(--color-ink);
+}
+
+.seat-booking__total strong {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.seat-booking__submit {
+  width: 100%;
+  min-height: 3.5rem;
+  font-size: 1.05rem;
+}
+
+.seat-booking__done {
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius);
+}
+
+.seat-booking__done-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+}
+
+.seat-booking__draft {
+  margin: 0 0 1rem;
+  color: var(--color-muted);
+}
+
+.seat-booking__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.seat-booking__edit {
+  padding: 0;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Gửi xong thì ẩn các ô, chỉ còn thẻ xác nhận; bấm sửa thì hiện lại. */
+.seat-booking__form.is-done > :not(.seat-booking__done) {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .seat-booking__inner {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .seat-booking__side {
+    grid-column: 1 / 6;
+  }
+
+  .seat-booking__form {
+    grid-column: 7 / 13;
+  }
+}

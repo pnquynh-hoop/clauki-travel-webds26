@@ -31,6 +31,9 @@ const COMPONENTS = {
   'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },
   'wl-contact': { load: () => import('./components/wl-contact.js').then((m) => m.WlContact), css: ['contact'] },
   'wl-catalog-list': { load: () => import('./components/wl-catalog-list.js').then((m) => m.WlCatalogList), css: ['catalog-list'] },
+  'wl-deal': { load: () => import('./components/wl-deal.js').then((m) => m.WlDeal), css: ['deal'] },
+  'wl-checklist': { load: () => import('./components/wl-checklist.js').then((m) => m.WlChecklist), css: ['checklist'] },
+  'wl-seat-booking': { load: () => import('./components/wl-seat-booking.js').then((m) => m.WlSeatBooking), css: ['seat-booking'] },
   'wl-custom-trip': { load: () => import('./components/wl-custom-trip.js').then((m) => m.WlCustomTrip), css: ['custom-trip'] },
   // Thẻ kết quả dùng chung giao diện thẻ của catalog-list, nên tải kèm catalog-list.css.
   'wl-tour-pick': { load: () => import('./components/wl-tour-pick.js').then((m) => m.WlTourPick), css: ['tour-pick', 'catalog-list'] },

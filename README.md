@@ -62,6 +62,7 @@ Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khá
 | | `day-plan` | một ngày ở vườn, xuồng trôi theo cuộn |
 | SighGone (tour trong ngày ở Sài Gòn) | `clock` | đồng hồ 24 giờ: giờ nào ăn gì, đi đâu, tour hợp giờ đó (trang `cam-nang`) |
 | | `tips`, `policy` | thẻ mẹo có biểu đồ nhỏ; bảng chính sách huỷ (trang `cam-nang`, `hoi-dap`) |
+| | `deal`, `checklist`, `seat-booking` | trang `tuyen-so-1`: giá ưu đãi có đồng hồ đếm ngược, danh sách gồm gì, giữ chỗ có sơ đồ ghế |
 
 Trường dữ liệu và kiểu trình bày của từng component ghi ở mục 12 của `AGENTS.md`.
 

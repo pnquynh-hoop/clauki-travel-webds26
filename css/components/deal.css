@@ -1,0 +1,184 @@
+/* deal.css - giao diện của <wl-deal>: khối giá ưu đãi có hạn trên nền tối (màu chữ của thương hiệu làm nền).
+   Bên trái tiêu đề và câu dẫn, bên phải thẻ giá có đồng hồ đếm ngược và hàng ghế; ảnh tách nền đè mép dưới.
+   Viền và bóng thẻ đọc --card-border, --card-shadow nếu theme.css có khai báo. */
+
+.deal {
+  position: relative;
+  display: block;
+  padding-bottom: calc(var(--space-section) + 2rem);
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.deal__inner {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.deal__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.deal__title {
+  margin: 0 0 1.25rem;
+  max-width: 12em;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 1.2rem + 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.deal__lead {
+  max-width: 30rem;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.86;
+}
+
+.deal__card {
+  align-self: start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent));
+  border-radius: calc(var(--radius) + 0.4rem);
+  box-shadow: var(--card-shadow, 0 1rem 2.5rem rgb(0 0 0 / 0.25));
+}
+
+.deal__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.deal__now {
+  font-family: var(--font-heading);
+  font-size: clamp(2.6rem, 1.6rem + 4vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.deal__was {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration-thickness: 3px;
+}
+
+.deal__badge {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-radius: 999px;
+}
+
+.deal__clock {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.deal__clock div {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.8rem 0.25rem;
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+  border-radius: var(--radius);
+}
+
+.deal__clock b {
+  font-family: var(--font-heading);
+  font-size: clamp(1.7rem, 1rem + 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.deal__clock span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.deal__ended {
+  margin: 0 0 1.5rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.deal__seats {
+  margin-bottom: 1.75rem;
+}
+
+.deal__seat-text {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+
+.deal__seat-map {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.deal__seat-map i {
+  width: 1.7rem;
+  height: 1.7rem;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 0.4rem 0.4rem 0.15rem 0.15rem;
+}
+
+.deal__seat-map i.is-taken {
+  background: var(--color-accent);
+}
+
+.deal__cta {
+  width: 100%;
+  min-height: 3.5rem;
+  font-size: 1.05rem;
+}
+
+/* Ảnh tách nền đè mép dưới khối; chỉ trang trí nên không nhận chuột. */
+.deal__pic {
+  position: absolute;
+  right: 1.5vw;
+  bottom: -3.5rem;
+  z-index: 1;
+  width: clamp(6rem, 10vw, 10rem);
+  height: auto;
+  filter: drop-shadow(0 1rem 1.25rem rgb(0 0 0 / 0.3));
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .deal__inner {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  .deal__head {
+    grid-column: 1 / 7;
+  }
+
+  .deal__card {
+    grid-column: 8 / 13;
+  }
+}

@@ -1,0 +1,116 @@
+/* checklist.css - giao diện của <wl-checklist>: ba thẻ cạnh nhau (điện thoại xếp dọc), dải tiêu đề mỗi thẻ một màu
+   (nhấn chính, nhấn phụ, màu chữ của thương hiệu); ảnh tách nền đè mép khối. Viền, bóng đọc --card-border, --card-shadow. */
+
+.checklist {
+  position: relative;
+  display: block;
+  padding-bottom: calc(var(--space-section) + 2rem);
+}
+
+.checklist__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.checklist__title {
+  margin: 0 0 1.25rem;
+  max-width: 12em;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 1.2rem + 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.04;
+  text-wrap: balance;
+  color: var(--color-ink);
+}
+
+.checklist__lead {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.checklist__grid {
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+}
+
+.checklist__group {
+  overflow: hidden;
+  background: var(--color-surface);
+  border: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent));
+  border-radius: calc(var(--radius) + 0.3rem);
+  box-shadow: var(--card-shadow, none);
+}
+
+.checklist__group-title {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  border-bottom: var(--card-border, 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent));
+}
+
+.checklist__group--0 .checklist__group-title {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.checklist__group--1 .checklist__group-title {
+  color: var(--color-bg);
+  background: var(--color-ink);
+}
+
+.checklist__group--2 .checklist__group-title {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.checklist__list {
+  margin: 0;
+  padding: 1.25rem 1.5rem 1.5rem 2.75rem;
+}
+
+.checklist__item {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.checklist__pic {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  filter: drop-shadow(0 1rem 1.25rem rgb(0 0 0 / 0.25));
+  pointer-events: none;
+}
+
+.checklist__pic--right {
+  right: 4vw;
+  bottom: -2rem;
+  width: clamp(7rem, 17vw, 16rem);
+}
+
+.checklist__pic--top {
+  top: calc(var(--space-section) * 0.4);
+  right: 5vw;
+  width: clamp(8rem, 22vw, 21rem);
+}
+
+.checklist__pic--left {
+  bottom: -2rem;
+  left: 3vw;
+  width: clamp(7rem, 15vw, 14rem);
+}
+
+@media (min-width: 760px) {
+  .checklist__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
