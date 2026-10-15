@@ -2275,7 +2275,7 @@
         {
           "type": "booking",
           "id": "dat-tour",
-          "variant": "calendar",
+          "variant": "wall",
           "tours": true,
           "pickups": [
             {
@@ -2507,6 +2507,8 @@
             "pickup": "Điểm đón",
             "pickupLine": "Phí đón, {label}",
             "moreDates": "Xem thêm {n} ngày",
+            "prevMonth": "Tháng trước",
+            "nextMonth": "Tháng sau",
             "month": "tháng {m}, {y}",
             "seats": "Còn {n} chỗ",
             "soldOut": "Hết chỗ",
@@ -3597,7 +3599,7 @@
         {
           "type": "booking",
           "id": "dat-cho",
-          "variant": "calendar",
+          "variant": "wall",
           "eyebrow": "Giữ chỗ",
           "title": "Chọn tối đi, chọn nơi đón",
           "lead": "Tour Sài Gòn lên đèn khởi hành 18:00 mỗi tối. Đón tận khách sạn: quận 1 miễn phí, quận khác cộng phí.",
@@ -3641,6 +3643,8 @@
             "pickup": "Điểm đón",
             "pickupLine": "Phí đón, {label}",
             "moreDates": "Xem thêm {n} ngày",
+            "prevMonth": "Tháng trước",
+            "nextMonth": "Tháng sau",
             "month": "tháng {m}, {y}",
             "seats": "Còn {n} chỗ",
             "soldOut": "Hết chỗ",

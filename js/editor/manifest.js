@@ -24,7 +24,12 @@ export const BLOCKS = {
     variants: [['', 'Ảnh và chữ'], ['tv', 'Tivi kể chuyện']],
     needs: { tv: (s) => Array.isArray(s.stories) && s.stories.length > 0 },
   },
-  booking: { label: 'Đặt chỗ', variants: [] },
+  booking: {
+    label: 'Đặt chỗ',
+    variants: [['calendar', 'Thẻ ngày kiểu lịch xé'], ['wall', 'Tờ lịch treo tường']],
+    // Hai kiểu chọn ngày chỉ dùng được với dữ liệu lịch khởi hành (departures hoặc tours); stay và request có ô nhập khác.
+    needs: { calendar: (s) => Array.isArray(s.departures) || Boolean(s.tours), wall: (s) => Array.isArray(s.departures) || Boolean(s.tours) },
+  },
   journey: { label: 'Lịch trình con đường', variants: [] },
   process: { label: 'Các bước', variants: [] },
   'day-plan': { label: 'Một ngày theo giờ', variants: [] },

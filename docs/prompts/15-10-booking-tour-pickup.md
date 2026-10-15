@@ -16,3 +16,9 @@ thì tour đã chọn sẵn. Bậc Trà vẫn chạy đúng. Dùng cho trang `da
 - Phí đón tính cho cả đơn, không nhân số khách (khách sạn xa tốn một chuyến đón cho cả nhóm).
 - Dữ liệu lịch và giá lấy từ `catalog` (một nguồn), không chép lại ngày vào section.
 - Nút đặt ở trang chi tiết dùng `wl:choose` (core.js giữ lại và phát lại khi trang đặt tour dựng xong), thay vì tên cũ.
+
+## Bổ sung sau khi xem trang
+
+Người dùng thấy 42 thẻ ngày xếp quá dài. Làm hai bước: lịch dài chỉ hiện 8 ngày đầu kèm nút "Xem thêm"; rồi (theo yêu cầu "variant phá cách mới")
+thêm kiểu `wall` cho `booking`: tờ lịch treo tường lưới 7 cột, mỗi tháng một tờ, đổi tháng thì tờ cũ bị xé rơi xuống. Cùng dữ liệu và form
+với `calendar`, chỉ đổi cách chọn ngày; thử trên Bậc Trà bằng dữ liệu tạm rồi hoàn lại.
