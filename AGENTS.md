@@ -139,6 +139,7 @@ export class WlHero extends HTMLElement {
 - Ngôn ngữ lấy từ `?lang=en` (link chia sẻ, được nhớ lại) rồi tới lần chọn trước; thương hiệu không có ngôn ngữ đó thì về tiếng Việt. Đổi ngôn ngữ không tải lại trang: `core.js` dựng lại, đặt `<html lang>`, gán `site.lang`, `site.languages`.
 - Nút VI, EN nằm ở dòng thông tin trên cùng của header, hiện khi có `languages` và `header.lang`.
 - Component định dạng ngày, tiền bằng `pageLocale()` của `js/i18n.js` thay vì ghi cứng `'vi-VN'`.
+- **Site khách và editor:** không có file riêng nên bản dịch nằm ngay trong nội dung, `translations.<lang>` (cùng dạng `content.en.json`), kèm `translationNotes.<lang>.manual` (vị trí các câu người dùng tự sửa, AI không ghi đè). Người dùng chỉ sửa tiếng Việt; bản dịch do AI làm, sửa tay được. Phần không dùng AI ở `js/i18n-text.js` (rút chữ, theo dõi câu nào cần dịch lại, dựng file bản dịch, bật tắt ngôn ngữ); phần gọi AI ở `js/ai/translate.js`, chỉ gọi khi bật bản tiếng Anh, chuyển sang English, và gom một lượt lúc bấm Xem thử hoặc Lưu (dịch câu tiếng Việt vừa đổi, kiểm tra câu tiếng Anh tự sửa). Vị trí ghi theo khoá như `pages[tour].sections[danh-sach].title`, nên đổi thứ tự khối không làm lệch.
 
 **Danh mục sản phẩm (`catalog`):** tour hoặc hạng phòng khai **một lần**, các khối (danh sách, chi tiết, đặt chỗ, landing page) đọc chung qua `el.site.catalog`, không chép lặp ở từng section. Ví dụ đầy đủ ở `brands/sighgone/content.json`.
 ```json
