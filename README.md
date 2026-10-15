@@ -45,7 +45,7 @@ của một kiểu (ví dụ `.faq--chat`) là mọi thương hiệu dùng kiể
 | `footer` (cố định) | `columns`, có mây | `columns` | `columns`, có đường về vườn | `columns`, dây điện, biển số nhà |
 | `to-top` (cố định) | có | có | có | có |
 | `reviews` | `postcard` | `postcard` | `postcard` | `postcard` |
-| `gallery` | | `slices` | `slices` | `slices` |
+| `gallery` | | `slices` | `slices` | `slices` (trang chủ: `plates`, ô biển số nhà, ảnh loang theo con trỏ) |
 
 Khối `faq`, `footer`, `reviews`, `gallery` dùng chung cả kiểu; chỗ khác nhau nằm ở dữ liệu và biến màu, font.
 

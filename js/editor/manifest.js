@@ -10,7 +10,7 @@ export const BLOCKS = {
     needs: { ride: (s) => Array.isArray(s.stops) && s.stops.length > 0 },
   },
   intro: { label: 'Đoạn giới thiệu', variants: [['', 'Căn trái'], ['center', 'Căn giữa']] },
-  gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong']] },
+  gallery: { label: 'Thư viện ảnh', variants: [['', 'Lưới ảnh'], ['slices', 'Dải ảnh xoè như bình phong'], ['plates', 'Ô biển số nhà, ảnh loang theo con trỏ']] },
   faq: { label: 'Hỏi đáp', variants: [['', 'Danh sách gập mở'], ['chat', 'Khung nhắn tin']] },
   reviews: { label: 'Khách kể', variants: [['postcard', 'Bưu thiếp']] },
   stays: {
@@ -142,7 +142,7 @@ const FIELDS = {
     ...HEAD,
     {
       key: 'images', label: 'Ảnh', type: 'list',
-      fields: [{ key: '', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
+      fields: [{ key: '', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }, { key: 'note', label: 'Dòng phụ (kiểu ô biển số)', type: 'text', optional: true }, { key: 'href', label: 'Liên kết (ví dụ page:tour)', type: 'text', optional: true }],
       item: { src: '', alt: '', caption: '' },
     },
   ],
