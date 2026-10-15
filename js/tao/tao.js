@@ -223,6 +223,8 @@ async function create() {
   let head = [];
   let progress = '';
   let photoNote = '';
+  let ruleNote = '';
+  let layoutNote = '';
   const tick = setInterval(() => setStatus([...head, progress || `Đang lập hồ sơ thương hiệu... ${sec()} giây`]), 200);
   // Bảng cuộn riêng: đưa khung trạng thái vào tầm nhìn để thấy tiến độ ngay khi bấm Tạo.
   ui.status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -235,6 +237,16 @@ async function create() {
       frames: FRAMES.map((f) => f.id).filter((id) => builtIn().includes(id)),
       photos: { on: ui.photoOn.checked, pexelsKey: ui.pexelsKey.value.trim() },
       on: {
+        rules: (r) => {
+          ruleNote = [
+            r.kept.length ? `Khối đặc trưng dùng vì hợp nơi này: ${r.kept.join(', ')}.` : 'Không dùng khối đặc trưng của thương hiệu khác.',
+            r.removedPages.length ? `Bỏ trang: ${r.removedPages.join(', ')}.` : '',
+          ].filter(Boolean).join(' ');
+        },
+        layout: (l) => {
+          const picked = Object.entries(l.picked).map(([type, variant]) => `${type} ${variant}`).join(', ');
+          layoutNote = [picked && `Kiểu trình bày: ${picked}.`, l.header && `Đầu trang: ${l.header}.`].filter(Boolean).join(' ');
+        },
         photos: (info) => { photoNote = `Ảnh: ${info.photos} ảnh thật theo nơi chốn từ ${info.source}, thay vào ${info.slots} chỗ; nguồn ảnh ghi ở cuối trang.`; },
         profile: (p, info) => {
           head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'} ${info.font ? `Kiểu chữ: ${info.font}.` : 'Giữ kiểu chữ của khung.'}`];
@@ -249,7 +261,7 @@ async function create() {
     });
     preview(result.content, result.theme, true);
     const s = result.stats;
-    setStatus([...head, photoNote || (ui.photoOn.checked ? 'Không tìm được ảnh hợp nơi chốn nên giữ ảnh của khung.' : ''), `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
+    setStatus([...head, ruleNote, layoutNote, photoNote || (ui.photoOn.checked ? 'Không tìm được ảnh hợp nơi chốn nên giữ ảnh của khung.' : ''), `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung, sửa sau bằng editor.` : ''], 'ok');
     ui.slug.value = slugify(result.profile.ten);
     showPublish();

@@ -12,6 +12,8 @@ const OK_LICENSE = /^(CC[ -]BY(?:[ -]SA)?[ -]\d\.\d|CC0|Public domain|PD)/i;
 const BAD_TITLE = /(logo|map|flag|diagram|coat of arms|emblem|stamp|poster|screenshot|chart|montage|collage|aerial view of a map|\.svg|\.gif|\.pdf|\.tif)/i;
 const MIN_WIDTH = 1400;
 
+const fold = (text) => String(text).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase();
+
 const plain = (html) => (html ? new DOMParser().parseFromString(String(html), 'text/html').body.textContent.replace(/\s+/g, ' ').trim() : '');
 
 async function searchCommons(query, limit = 20) {
@@ -34,6 +36,7 @@ async function searchCommons(query, limit = 20) {
     if (ratio < 1.25 || ratio > 2.3 || BAD_TITLE.test(page.title) || !OK_LICENSE.test(license)) continue;
     const description = plain(meta.ImageDescription?.value) || plain(meta.ObjectName?.value) || page.title.replace(/^File:|\.\w+$/g, '');
     found.push({
+      text: fold(`${page.title} ${description}`),
       src: info.thumburl.split('?')[0],
       alt: description.slice(0, 160),
       credit: { file: info.thumburl.split('?')[0], author: plain(meta.Artist?.value) || 'Wikimedia Commons', license, source: info.descriptionurl, note: 'Wikimedia Commons, đã thu nhỏ' },
@@ -43,12 +46,14 @@ async function searchCommons(query, limit = 20) {
 }
 
 // Tìm kiếm của Commons yêu cầu mọi từ cùng có mặt, nên truy vấn dài ("Ha Giang buckwheat fields") hay không ra gì. Không đủ ảnh thì bỏ dần
-// từ cuối (giữ tên địa danh ở đầu) cho tới còn hai từ.
+// từ cuối cho tới còn hai từ. Commons khớp mờ ("hiking" ra "hitchhiking", "An Giang" ra "Hà Giang") nên chỉ nhận ảnh
+// có tên hoặc mô tả chứa hai từ đầu (địa danh), để ruộng bậc thang Hà Giang không lọt vào site của An Giang.
 async function searchCommonsLoose(query) {
   const words = query.trim().split(/\s+/);
+  const anchor = fold(words.slice(0, 2).join(' '));
   let best = [];
   for (let n = words.length; n >= Math.min(2, words.length); n -= 1) {
-    const found = await searchCommons(words.slice(0, n).join(' '));
+    const found = (await searchCommons(words.slice(0, n).join(' '))).filter((p) => p.text.includes(anchor));
     if (found.length >= 3) return found;
     if (found.length > best.length) best = found;
   }
