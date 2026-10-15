@@ -193,6 +193,7 @@ export function composeFooter(content, kind, frames, base, keepKeys = []) {
     if (!donor) return null;
     footer = structuredClone(frames[donor].footer);
     absolute(footer, donor);
+    if (footer.navTitle === frames[donor].brand?.name) footer.navTitle = content.brand?.name ?? footer.navTitle;
     delete footer.hours;
     const files = new Set();
     const collect = (n) => {
