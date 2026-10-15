@@ -2937,8 +2937,20 @@
           "lead": "Sáng sớm đi bộ, chiều đạp xe, tối ngồi xe máy đi ăn: mỗi tour vài tiếng, nhóm tối đa 8 khách.",
           "labels": {
             "count": "{n} tour đang hiện",
+            "duration": "{n} giờ",
             "priceNote": "một {unit}, {buoi}",
             "seatsLeft": "Chuyến {date} còn {n} chỗ"
+          },
+          "filters": {
+            "label": "Bộ lọc tour",
+            "vehicle": "Đi bằng",
+            "buoi": "Buổi",
+            "topic": "Thích",
+            "reset": "Xoá lọc"
+          },
+          "empty": {
+            "text": "Chưa có tour hợp lựa chọn này. Tự ghép một tour riêng theo ý mình?",
+            "link": { "label": "Tự ghép tour riêng", "href": "page:tour-rieng" }
           }
         }
       ]
