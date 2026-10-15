@@ -702,3 +702,39 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
   padding-top: 0;
   border-top: 0;
 }
+
+/* Kiểu headline trên điện thoại: hai cột menu (tour, trang) đứng cạnh nhau thay vì xếp dọc, liên hệ và biển số nhà chiếm cả hàng;
+   khoảng cách dọc thu lại. Bản một cột dài gần 1,6 màn hình, giờ còn khoảng một màn hình rưỡi trở xuống. */
+@media (max-width: 759px) {
+  .footer--headline .footer__main {
+    gap: 1.75rem;
+    padding-top: 1.25rem;
+  }
+
+  .footer--headline .footer__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1.25rem;
+  }
+
+  .footer--headline .footer__col:nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .footer--headline .footer__col {
+    gap: 0.1rem;
+  }
+
+  .footer--headline .footer__link {
+    padding-block: 0.3rem;
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  .footer--headline .footer__col--plate {
+    margin-top: -0.25rem;
+  }
+
+  .footer--headline .footer__plate-no {
+    font-size: 2.6rem;
+  }
+}
