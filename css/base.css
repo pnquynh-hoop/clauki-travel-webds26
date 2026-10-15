@@ -10,7 +10,7 @@
    Biến tuỳ chọn (theme.css không khai báo thì dùng giá trị pha sẵn ở dưới):
    --color-tint
    Biến tuỳ chọn không có giá trị ở dưới (component tự có giá trị thay thế):
-   --font-hand  --footer-top  --footer-gap
+   --font-hand  --footer-top  --footer-gap  --color-mark
    --btn-border  --btn-shadow  --btn-shadow-hover  --btn-lift (viền, bóng, độ nhấc khi rê chuột của nút .btn)
    --card-border  --card-shadow (viền, bóng của thẻ thông tin: clock, tips, policy, con dấu của hero haze)
 

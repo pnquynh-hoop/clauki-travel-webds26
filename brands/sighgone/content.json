@@ -65,35 +65,43 @@
     "vehicles": {
       "di-bo": {
         "label": "Đi bộ",
-        "color": "#1f4fbf"
+        "color": "#1f4fbf",
+        "icon": "footprints"
       },
       "xich-lo": {
         "label": "Xích lô",
-        "color": "#d6331f"
+        "color": "#d6331f",
+        "icon": "bike"
       },
       "xe-dap": {
         "label": "Xe đạp",
-        "color": "#13a06e"
+        "color": "#13a06e",
+        "icon": "bike"
       },
       "xe-may": {
         "label": "Xe máy",
-        "color": "#ffcc1d"
+        "color": "#ffcc1d",
+        "icon": "bike"
       },
       "thuyen": {
         "label": "Thuyền",
-        "color": "#0f8fa3"
+        "color": "#0f8fa3",
+        "icon": "sailboat"
       },
       "ca-no": {
         "label": "Ca nô",
-        "color": "#ff7a1a"
+        "color": "#ff7a1a",
+        "icon": "ship"
       },
       "pha": {
         "label": "Phà",
-        "color": "#7a4dd8"
+        "color": "#7a4dd8",
+        "icon": "ship"
       },
       "xe": {
         "label": "Xe đưa đón",
-        "color": "#5a5f6b"
+        "color": "#5a5f6b",
+        "icon": "bus"
       }
     },
     "buoi": {
@@ -2875,6 +2883,21 @@
             "label": "Gọi giữ chỗ",
             "href": "tel:0123456789"
           }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "can-gio",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
         }
       ]
     },
@@ -2916,6 +2939,21 @@
             "view": "Cảnh đáng chờ",
             "best": "Giờ đẹp nhất",
             "others": "Tour khác cùng gu"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "len-den",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
           }
         }
       ]
@@ -2962,6 +3000,21 @@
           "book": {
             "label": "Gọi giữ chỗ",
             "href": "tel:0123456789"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "cho-lon",
+          "eyebrow": "Hành trình",
+          "title": "{stages} ga, {vehicles} cách đi.",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
           }
         }
       ]
@@ -3085,6 +3138,21 @@
           "eyebrow": "Tối nay",
           "title": "Tối nay đi đâu?",
           "lead": "Sáu giờ chiều có người đón ở khách sạn, mười giờ đêm đưa về, giữa hai mốc đó là bảy món ăn."
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "len-den",
+          "eyebrow": "Tối nay đi đâu",
+          "title": "{stages} điểm dừng trong một tối",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
         }
       ]
     },

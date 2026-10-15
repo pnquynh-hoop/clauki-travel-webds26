@@ -20,6 +20,8 @@
   --font-hand: 'Bungee', system-ui, sans-serif;
   /* Chữ poster của hero kiểu ride: Phudu, font đậm vẽ cho tiếng Việt, dấu không bị cắt ở cỡ rất lớn. */
   --font-ride: 'Phudu', system-ui, sans-serif;
+  /* Chấm đỏ ghế nhựa trước các nhãn nhỏ (ví dụ nhãn của khối hành trình). */
+  --color-mark: #d6331f;
   --radius: 0.875rem;
   /* Nút như bảng hiệu dán tường: viền mực, bóng in lệch không nhoè; rê chuột thì nút nhấc lên, bóng dài ra. */
   --btn-border: #111114;
