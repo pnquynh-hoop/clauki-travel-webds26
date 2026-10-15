@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Khung giữ chỗ cho bộ dữ liệu thử: nền xám trong suốt và biểu tượng ảnh ở giữa, hợp cả nền sáng lẫn nền tối. -->
+  <rect width="400" height="300" fill="#8796a3" fill-opacity="0.18"/>
+  <g fill="none" stroke="#8796a3" stroke-opacity="0.7" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="160" y="115" width="80" height="70" rx="8"/>
+    <circle cx="183" cy="138" r="7"/>
+    <path d="M166 179 l24 -24 l18 18 l12 -12 l14 14"/>
+  </g>
+</svg>

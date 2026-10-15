@@ -1,149 +1,542 @@
 {
   "id": "brand-test",
   "meta": {
-    "title": "Lượn Vịnh - Bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè",
-    "description": "Hai mươi lăm phút bay thấp từ Tuần Châu sang vịnh Lan Hạ, hạ cánh trước nhà bè, ngủ một đêm giữa núi đá, sáng chèo kayak rồi theo tàu về.",
+    "title": "Lửa Băng - Iceland mùa đêm dài, săn cực quang đoàn nhỏ",
+    "description": "Tour mùa đông Iceland cho khách Việt: săn cực quang, sông băng, hang băng xanh, trang trại ngựa. Đoàn tối đa 10 khách, trưởng đoàn nói tiếng Việt.",
     "favicon": ""
   },
   "brand": {
-    "name": "Lượn Vịnh",
+    "name": "Lửa Băng",
     "logo": "",
-    "slogan": "Ngắm vịnh từ trên mây, ngủ lại bên sóng"
+    "slogan": "Iceland mùa đêm dài"
   },
   "cta": {
-    "label": "Giữ ghế",
-    "href": "page:/#giu-ghe",
-    "note": "6.900.000 đồng mỗi khách, gồm chuyến bay và một đêm nhà bè"
+    "label": "Giữ chỗ",
+    "href": "page:tour/cuc-quang#dat-cho",
+    "note": "Săn cực quang 5 ngày, từ 68.900.000 đồng mỗi khách"
   },
   "toTop": {
     "label": "Lên đầu trang"
   },
   "nav": [
     {
-      "label": "Chuyến bay",
-      "href": "page:/#chuyen-bay"
+      "label": "Trang chủ",
+      "href": "page:/"
     },
     {
-      "label": "Ảnh",
-      "href": "page:/#thu-vien"
+      "label": "Săn cực quang",
+      "href": "page:tour/cuc-quang"
     },
     {
-      "label": "Khách kể",
-      "href": "page:/#khach-ke"
+      "label": "Hành trình",
+      "href": "page:hanh-trinh"
     },
     {
-      "label": "Hỏi đáp",
-      "href": "page:hoi-dap"
+      "label": "Nhà nghỉ",
+      "href": "page:nha-nghi"
+    },
+    {
+      "label": "Cẩm nang",
+      "href": "page:cam-nang"
+    },
+    {
+      "label": "Về chúng tôi",
+      "href": "page:ve-chung-toi"
+    },
+    {
+      "label": "Liên hệ",
+      "href": "page:lien-he"
     }
   ],
   "header": {
-    "variant": "solid",
-    "menu": "Menu"
+    "variant": "overlay",
+    "menu": "Menu",
+    "note": "Mùa cực quang từ tháng 9 đến tháng 3, đoàn tối đa 10 khách"
   },
   "contact": {
     "phone": "0123 456 789",
-    "email": "giu-ghe@luonvinh.clauki",
-    "address": "Bến bay Tuần Châu, Hạ Long"
+    "email": "giu-cho@luabang.clauki",
+    "address": "Văn phòng Lửa Băng, phố Laugavegur, Reykjavík, Iceland"
   },
   "place": {
-    "name": "Hạ Long",
-    "lat": 20.93,
-    "lon": 107.0,
-    "timezone": "Asia/Ho_Chi_Minh"
+    "name": "Reykjavík",
+    "lat": 64.15,
+    "lon": -21.94,
+    "timezone": "Atlantic/Reykjavik"
   },
   "catalog": {
     "currency": "đồng",
     "vehicles": {
-      "thuy-phi-co": {
-        "label": "Thuỷ phi cơ",
-        "color": "#2b6cb0"
+      "xe-buyt": {
+        "label": "Xe buýt đoàn",
+        "color": "#e0b04f",
+        "icon": "bus"
       },
-      "kayak": {
-        "label": "Kayak",
-        "color": "#e8743b"
+      "xe-dia-hinh": {
+        "label": "Xe địa hình",
+        "color": "#8a9bab",
+        "icon": "car-front"
       },
-      "nha-be": {
-        "label": "Nhà bè",
-        "color": "#4a7c59"
+      "xe-cam-trai": {
+        "label": "Xe cắm trại",
+        "color": "#c47a3d",
+        "icon": "caravan"
+      },
+      "xe-truot-tuyet": {
+        "label": "Xe trượt tuyết",
+        "color": "#5fa8e8",
+        "icon": "snowflake"
+      },
+      "di-bo": {
+        "label": "Đi bộ trên băng",
+        "color": "#7ee0c3",
+        "icon": "footprints"
+      },
+      "thuyen": {
+        "label": "Thuyền",
+        "color": "#2fb5a5",
+        "icon": "ship"
+      },
+      "may-bay": {
+        "label": "Máy bay nội địa",
+        "color": "#b49cf0",
+        "icon": "plane"
       }
+    },
+    "buoi": {
+      "ngay": "Ban ngày",
+      "dem": "Ban đêm",
+      "nhieu-ngay": "Nhiều ngày"
+    },
+    "topics": {
+      "cuc-quang": "Cực quang",
+      "bang": "Băng tuyết",
+      "suoi-nong": "Suối nóng",
+      "bien": "Biển",
+      "chup-anh": "Chụp ảnh"
     },
     "items": [
       {
-        "id": "bay-va-be",
-        "name": "Bay ngắm vịnh, ngủ nhà bè",
-        "text": "Hai ngày một đêm: thuỷ phi cơ, kayak, một đêm trên nhà bè",
-        "href": "page:/#giu-ghe",
+        "id": "cuc-quang",
+        "name": "Săn cực quang 5 ngày",
+        "tagline": "Ngủ xa ánh đèn thành phố, đợi trời đổi màu xanh lục",
+        "text": "Năm ngày dọc bờ biển phía nam: thác nước đóng băng, bãi cát đen, đầm phá đầy băng trôi. Mỗi tối đoàn chọn chỗ trời quang nhất để đợi cực quang.",
+        "href": "page:tour/cuc-quang",
         "image": {
-          "src": "images/nha-be.webp",
-          "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
+          "src": "images/khung.svg",
+          "alt": "Cực quang xanh lục trên bầu trời đêm"
         },
-        "price": 6900000,
+        "price": 68900000,
         "unit": "khách",
+        "start": "13:30",
+        "end": "12:00",
+        "maxGuests": 10,
         "tags": {
-          "buoi": "ca-ngay",
+          "buoi": "nhieu-ngay",
           "topics": [
-            "song-nuoc"
+            "cuc-quang",
+            "bang",
+            "chup-anh"
           ]
         },
-        "maxGuests": 12,
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "5 ngày 4 đêm"
+          },
+          {
+            "label": "Ánh sáng ban ngày",
+            "value": "Khoảng 5 đến 6 tiếng"
+          },
+          {
+            "label": "Nhiệt độ",
+            "value": "Âm 8 đến 2 độ C"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 10 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "13:30",
+            "place": "Sân bay Keflavík",
+            "vehicle": "xe-buyt",
+            "text": "Trưởng đoàn đón ở cửa ra, phát áo phao và đinh giày.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng"
+            }
+          },
+          {
+            "time": "16:00",
+            "place": "Đồng dung nham Reykjanes",
+            "vehicle": "di-bo",
+            "text": "Đi bộ ngắn trên đồng dung nham phủ rêu, trời đã chạng vạng."
+          },
+          {
+            "time": "Ngày 2, 10:30",
+            "place": "Thác Seljalandsfoss",
+            "vehicle": "xe-dia-hinh",
+            "text": "Đi vòng ra sau màn nước đóng băng hai bên mép.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Thác nước viền băng giữa vách đá"
+            }
+          },
+          {
+            "time": "Ngày 2, 14:00",
+            "place": "Bãi cát đen Reynisfjara",
+            "vehicle": "xe-dia-hinh",
+            "text": "Cột đá bazan, sóng lớn bất ngờ: đứng xa mép nước ít nhất 30 m."
+          },
+          {
+            "time": "Ngày 3, 09:30",
+            "place": "Sông băng Sólheimajökull",
+            "vehicle": "di-bo",
+            "text": "Đeo đinh giày, đi bộ ba tiếng trên mặt sông băng cùng người dẫn đường.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Người đi bộ trên mặt sông băng xanh"
+            }
+          },
+          {
+            "time": "Ngày 3, 21:00",
+            "place": "Cánh đồng ngoài Vík",
+            "vehicle": "xe-truot-tuyet",
+            "text": "Ra cánh đồng tối, tắt đèn xe, đợi cực quang tới nửa đêm.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Cánh đồng tuyết tối om dưới bầu trời đầy sao"
+            }
+          },
+          {
+            "time": "Ngày 4, 11:00",
+            "place": "Đầm băng Jökulsárlón",
+            "vehicle": "thuyen",
+            "text": "Thuyền lội nước len giữa những tảng băng xanh trôi ra biển.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Thuyền lội nước giữa những tảng băng trôi"
+            }
+          },
+          {
+            "time": "Ngày 5, 09:00",
+            "place": "Về Reykjavík",
+            "vehicle": "xe-buyt",
+            "text": "Xe về thủ đô, kịp chuyến bay buổi chiều."
+          }
+        ],
+        "includes": [
+          "Xe đưa đón từ sân bay Keflavík",
+          "4 đêm nhà gỗ, phòng đôi",
+          "Bữa sáng và bữa tối",
+          "Đi bộ sông băng có người dẫn",
+          "Thuyền đầm Jökulsárlón",
+          "Áo phao, đinh giày, bảo hiểm"
+        ],
+        "excludes": [
+          "Vé máy bay quốc tế",
+          "Bữa trưa",
+          "Phụ thu phòng đơn",
+          "Tắm suối nóng tự chọn"
+        ],
+        "bring": [
+          "Áo giữ nhiệt ba lớp",
+          "Găng tay và mũ len",
+          "Giày chống nước cổ cao",
+          "Pin dự phòng (pin tụt nhanh khi lạnh)",
+          "Chân máy ảnh nếu muốn chụp cực quang"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-21",
+            "left": 0
+          },
+          {
+            "date": "2026-10-28",
+            "left": 2
+          },
+          {
+            "date": "2026-11-04",
+            "left": 6
+          },
+          {
+            "date": "2026-11-11",
+            "left": 10
+          },
+          {
+            "date": "2026-11-18",
+            "left": 4
+          },
+          {
+            "date": "2026-11-25",
+            "left": 1
+          },
+          {
+            "date": "2026-12-02",
+            "left": 8
+          },
+          {
+            "date": "2026-12-09",
+            "left": 10
+          }
+        ]
+      },
+      {
+        "id": "vong-tron-vang",
+        "name": "Vòng Tròn Vàng trong một ngày",
+        "tagline": "Ba điểm nổi tiếng nhất, đi trong năm tiếng có nắng",
+        "text": "Công viên quốc gia Þingvellir, mạch nước phun Geysir và thác Gullfoss, cộng một hồ nước nóng ngoài trời trước khi trời tối.",
+        "href": "page:tour/vong-tron-vang",
+        "image": {
+          "src": "images/khung.svg",
+          "alt": "Thác nước viền băng giữa vách đá"
+        },
+        "price": 4900000,
+        "unit": "khách",
+        "start": "09:00",
+        "end": "18:30",
+        "maxGuests": 16,
+        "tags": {
+          "buoi": "ngay",
+          "topics": [
+            "suoi-nong",
+            "chup-anh"
+          ]
+        },
+        "facts": [
+          {
+            "label": "Thời lượng",
+            "value": "9 tiếng rưỡi"
+          },
+          {
+            "label": "Đi bộ",
+            "value": "Khoảng 4 km"
+          },
+          {
+            "label": "Nhóm",
+            "value": "Tối đa 16 khách"
+          }
+        ],
+        "stages": [
+          {
+            "time": "09:00",
+            "place": "Đón ở Reykjavík",
+            "vehicle": "xe-buyt",
+            "text": "Đón ở sảnh khách sạn, trời còn tối."
+          },
+          {
+            "time": "10:30",
+            "place": "Þingvellir",
+            "vehicle": "di-bo",
+            "text": "Đi giữa khe nứt nơi hai mảng lục địa tách nhau mỗi năm vài cm.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+            }
+          },
+          {
+            "time": "12:30",
+            "place": "Mạch nước Geysir",
+            "vehicle": "di-bo",
+            "text": "Strokkur phun cao 20 m, cứ năm đến mười phút một lần."
+          },
+          {
+            "time": "13:30",
+            "place": "Thác Gullfoss",
+            "vehicle": "xe-buyt",
+            "text": "Thác hai tầng, mùa đông viền băng trắng.",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Thác Gullfoss hai tầng viền băng trắng"
+            }
+          },
+          {
+            "time": "15:00",
+            "place": "Hồ nước nóng Secret Lagoon",
+            "vehicle": "xe-buyt",
+            "text": "Ngâm mình trong nước 38 độ giữa trời âm độ."
+          },
+          {
+            "time": "18:30",
+            "place": "Về Reykjavík",
+            "vehicle": "xe-buyt",
+            "text": "Về tới trung tâm, trời đã tối hẳn."
+          }
+        ],
+        "includes": [
+          "Xe và hướng dẫn viên",
+          "Vé hồ nước nóng",
+          "Bánh mì kẹp và cà phê"
+        ],
+        "excludes": [
+          "Bữa tối",
+          "Khăn tắm (thuê tại chỗ)"
+        ],
+        "bring": [
+          "Đồ bơi",
+          "Áo khoác chống gió"
+        ],
+        "availability": [
+          {
+            "date": "2026-10-16",
+            "left": 3
+          },
+          {
+            "date": "2026-10-17",
+            "left": 0
+          },
+          {
+            "date": "2026-10-18",
+            "left": 12
+          },
+          {
+            "date": "2026-10-19",
+            "left": 9
+          },
+          {
+            "date": "2026-10-20",
+            "left": 16
+          }
+        ]
+      },
+      {
+        "id": "song-bang",
+        "name": "Sông băng và hang băng xanh",
+        "tagline": "Hai ngày ở công viên Vatnajökull, chui vào lòng sông băng",
+        "text": "Hang băng chỉ mở từ tháng 11 đến tháng 3, khi sông băng đủ lạnh để vách băng không sập. Mỗi năm hang mỗi khác.",
+        "href": "page:tour/song-bang",
+        "image": {
+          "src": "images/khung.svg",
+          "alt": "Người đi bộ trên mặt sông băng xanh"
+        },
+        "price": 21900000,
+        "unit": "khách",
+        "start": "08:00",
+        "end": "17:00",
+        "maxGuests": 8,
+        "tags": {
+          "buoi": "nhieu-ngay",
+          "topics": [
+            "bang"
+          ]
+        },
         "facts": [
           {
             "label": "Thời lượng",
             "value": "2 ngày 1 đêm"
+          },
+          {
+            "label": "Mở cửa",
+            "value": "Tháng 11 đến tháng 3"
           }
         ],
         "stages": [
           {
             "time": "08:00",
-            "place": "Bến bay",
-            "vehicle": "thuy-phi-co",
-            "text": "Bay 25 phút ngắm vịnh từ trên cao.",
-            "image": {
-              "src": "images/buong-lai.webp",
-              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ"
-            }
+            "place": "Höfn",
+            "vehicle": "xe-buyt",
+            "text": "Gặp người dẫn đường, thử mũ bảo hiểm và đinh giày."
           },
           {
-            "time": "09:00",
-            "place": "Làng bè",
-            "vehicle": "kayak",
-            "text": "Chèo kayak vào làng chài nổi.",
-            "image": {
-              "src": "images/kayak-nui-da.webp",
-              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng"
-            }
+            "time": "10:00",
+            "place": "Bãi đỗ chân sông băng",
+            "vehicle": "xe-dia-hinh",
+            "text": "Xe địa hình bánh lớn chạy qua đồng đá cuội."
           },
           {
-            "time": "18:00",
-            "place": "Nhà bè",
-            "vehicle": "nha-be",
-            "text": "Ăn tối hải sản, ngủ trên bè."
+            "time": "11:00",
+            "place": "Hang băng xanh",
+            "vehicle": "di-bo",
+            "text": "Chui vào hang, vách băng xanh trong như thuỷ tinh."
+          },
+          {
+            "time": "Ngày 2, 09:00",
+            "place": "Mũ băng Vatnajökull",
+            "vehicle": "xe-truot-tuyet",
+            "text": "Chạy xe trượt tuyết một tiếng trên mũ băng lớn nhất châu Âu."
+          },
+          {
+            "time": "Ngày 2, 15:00",
+            "place": "Bãi kim cương",
+            "vehicle": "di-bo",
+            "text": "Những mảnh băng trong suốt nằm trên cát đen."
           }
+        ],
+        "includes": [
+          "Người dẫn đường có chứng chỉ",
+          "Mũ, đinh giày, dây đai",
+          "1 đêm nhà nghỉ ở Höfn"
+        ],
+        "excludes": [
+          "Bữa ăn"
         ],
         "availability": [
           {
             "date": "2026-11-07",
-            "left": 6
+            "left": 8
           },
           {
-            "date": "2026-11-14",
+            "date": "2026-11-21",
+            "left": 3
+          },
+          {
+            "date": "2026-12-05",
             "left": 0
           }
         ]
       },
       {
-        "id": "chi-bay",
-        "name": "Chỉ bay ngắm vịnh",
-        "text": "25 phút trên thuỷ phi cơ, về trong buổi sáng",
+        "id": "ca-voi",
+        "name": "Ngắm cá voi ở phía bắc",
+        "tagline": "Bay ra Akureyri, ra vịnh Eyjafjörður tìm cá voi lưng gù",
+        "text": "Ba ngày ở thủ phủ miền bắc. Cá voi lưng gù ở lại vịnh cả mùa đông nên ra khơi gần như chắc gặp.",
         "image": {
-          "src": "images/nui-da-lan-ha.webp",
-          "alt": "Núi đá vôi giữa vịnh nhìn từ trên cao"
+          "src": "images/khung.svg",
+          "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
         },
-        "price": 3200000,
+        "price": 32500000,
         "unit": "khách",
-        "start": "08:00",
-        "end": "09:30",
-        "maxGuests": 12
+        "maxGuests": 12,
+        "tags": {
+          "buoi": "nhieu-ngay",
+          "topics": [
+            "bien"
+          ]
+        },
+        "stages": [
+          {
+            "time": "07:30",
+            "place": "Sân bay nội địa Reykjavík",
+            "vehicle": "may-bay",
+            "text": "Bay 45 phút ra Akureyri."
+          },
+          {
+            "time": "10:00",
+            "place": "Bến cảng Akureyri",
+            "vehicle": "thuyen",
+            "text": "Ra vịnh ba tiếng, có áo liền thân giữ ấm."
+          },
+          {
+            "time": "Ngày 2, 20:00",
+            "place": "Hồ Mývatn",
+            "vehicle": "xe-dia-hinh",
+            "text": "Tối ra hồ đợi cực quang, sáng tắm suối nóng Mývatn."
+          }
+        ],
+        "availability": [
+          {
+            "date": "2026-11-12",
+            "left": 5
+          }
+        ]
+      },
+      {
+        "id": "tam-suoi",
+        "name": "Tắm suối nóng giữa đồng tuyết",
+        "price": 3200000,
+        "unit": "khách"
       }
     ]
   },
@@ -154,83 +547,151 @@
         {
           "type": "hero",
           "id": "gioi-thieu",
-          "variant": "coverflow",
-          "eyebrow": "Thuỷ phi cơ, vịnh Hạ Long và Lan Hạ",
-          "title": "Ngắm vịnh từ trên mây",
-          "lead": "Hai mươi lăm phút bay thấp qua hàng nghìn đảo đá, hạ cánh ngay trước nhà bè và ở lại một đêm giữa vịnh.",
+          "variant": "haze",
+          "eyebrow": "Iceland mùa đông, đoàn tối đa 10 khách",
+          "title": "Đêm dài, trời xanh lục",
+          "lead": "Từ tháng 10 đến tháng 3, mặt trời chỉ lên năm tiếng mỗi ngày. Phần còn lại là bóng tối, băng tuyết và nếu may mắn, cực quang.",
           "link": {
-            "label": "Xem chuyến bay",
-            "href": "#chuyen-bay"
+            "label": "Xem tour săn cực quang",
+            "href": "page:tour/cuc-quang"
           },
-          "slidesLabel": "Ảnh chuyến bay Lượn Vịnh, dùng phím mũi tên trái phải để đổi ảnh",
-          "prevLabel": "Trước",
-          "nextLabel": "Sau",
-          "slides": [
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Cực quang xanh lục trên bầu trời đêm"
+          },
+          "haze": {
+            "word": "băng",
+            "hint": "Rê chuột để lau lớp sương giá",
+            "stamp": "Trời đã quang"
+          }
+        },
+        {
+          "type": "cloud-band"
+        },
+        {
+          "type": "intro",
+          "id": "vi-sao",
+          "variant": "center",
+          "eyebrow": "Vì sao đi mùa đông",
+          "title": "Mùa hè Iceland sáng suốt đêm, không có cực quang",
+          "lead": "Cực quang chỉ thấy được khi trời đủ tối. Mùa đông lạnh và ngắn ngày, nhưng là mùa duy nhất bầu trời phía bắc đổi màu."
+        },
+        {
+          "type": "room-detail",
+          "labels": {
+            "others": "Năm cách gặp mùa đông Iceland"
+          },
+          "others": [
             {
+              "label": "Săn cực quang 5 ngày",
+              "href": "page:tour/cuc-quang",
+              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
               "image": {
-                "src": "images/nui-da-lan-ha.webp",
-                "alt": "Những núi đá vôi phủ cây xanh mọc thẳng từ mặt vịnh lặng"
-              },
-              "caption": "Núi đá Lan Hạ"
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              }
             },
             {
+              "label": "Vòng Tròn Vàng trong một ngày",
+              "href": "page:tour/vong-tron-vang",
+              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
               "image": {
-                "src": "images/hero.webp",
-                "alt": "Thuỷ phi cơ cánh đỏ trắng bay thấp sát mặt nước xanh, phía sau là bờ rừng thông"
-              },
-              "caption": "Bay thấp sát mặt nước"
+                "src": "images/khung.svg",
+                "alt": "Thác nước viền băng giữa vách đá"
+              }
             },
             {
+              "label": "Sông băng và hang băng xanh",
+              "href": "page:tour/song-bang",
+              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
               "image": {
-                "src": "images/cheo-kayak.webp",
-                "alt": "Khách chèo kayak vàng trên làn nước xanh ngọc giữa các đảo đá"
-              },
-              "caption": "Sáng chèo kayak"
+                "src": "images/khung.svg",
+                "alt": "Người đi bộ trên mặt sông băng xanh"
+              }
+            },
+            {
+              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
+              "href": "page:mot-ngay"
+            },
+            {
+              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
+              "href": "page:cam-nang"
             }
           ]
         },
         {
-          "type": "intro",
-          "id": "chuyen-bay",
-          "variant": "center",
-          "eyebrow": "Chuyến bay",
-          "title": "Cất cánh ở Tuần Châu, hạ cánh trước cửa nhà bè",
-          "lead": "Máy bay bay ở độ cao vài trăm mét, đủ thấp để thấy rõ làng chài. Tối ăn hải sản trên bè, sáng chèo kayak rồi theo tàu về."
-        },
-        {
-          "type": "gallery",
-          "id": "thu-vien",
-          "variant": "slices",
-          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
-          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
-          "listLabel": "Năm ảnh của chuyến đi, mỗi lần mở một ảnh",
-          "eyebrow": "Từ buồng lái tới mặt nước",
-          "title": "Một ngày nhìn vịnh từ hai phía",
-          "images": [
+          "type": "stays",
+          "id": "nha-nghi-doc-duong",
+          "eyebrow": "Ngủ ở đâu",
+          "title": "Nhà gỗ dọc bờ biển phía nam",
+          "lead": "Các nhà nghỉ đều cách thị trấn gần nhất ít nhất 5 km, để đêm đủ tối mà nhìn trời.",
+          "currency": "đồng",
+          "priceNote": "Giá một đêm cho 2 khách, gồm bữa sáng và xông hơi.",
+          "labels": {
+            "count": "Số phòng",
+            "countValue": "{n} phòng",
+            "area": "Diện tích",
+            "guests": "Tối đa",
+            "guestsValue": "{n} khách",
+            "perNight": "một đêm",
+            "book": "Đặt nhà này",
+            "best": "Đẹp nhất lúc"
+          },
+          "rooms": [
             {
-              "src": "images/buong-lai.webp",
-              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
-              "caption": "Ngồi sau buồng lái"
+              "id": "nha-kinh",
+              "label": "Nhà mái kính",
+              "text": "Nằm trên giường nhìn thẳng lên trời qua mái kính, có rèm điện khi muốn ngủ.",
+              "count": 4,
+              "area": "22 m²",
+              "maxGuests": 2,
+              "price": 9800000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+              },
+              "view": {
+                "text": "Cực quang ngay trên gối.",
+                "best": "22:00 đến 1:00"
+              }
             },
             {
-              "src": "images/lang-be.webp",
-              "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
-              "caption": "Làng chài trên bè"
+              "id": "nha-go",
+              "label": "Nhà gỗ ven hồ",
+              "text": "Bếp riêng, bồn tắm nóng ngoài hiên nhìn ra hồ đóng băng.",
+              "count": 6,
+              "area": "40 m²",
+              "maxGuests": 4,
+              "price": 7200000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              },
+              "view": {
+                "text": "Hồ phẳng như gương khi trời lặng gió.",
+                "best": "Hoàng hôn 16:00"
+              }
             },
             {
-              "src": "images/nha-be.webp",
-              "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
-              "caption": "Nhà bè giữa vịnh"
+              "id": "phong-trang-trai",
+              "label": "Phòng trong trang trại ngựa",
+              "text": "Ở chung nhà với chủ trại, sáng cho ngựa Iceland ăn cỏ khô.",
+              "count": 3,
+              "area": "18 m²",
+              "maxGuests": 2,
+              "price": 4100000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+              }
             },
             {
-              "src": "images/kayak-nui-da.webp",
-              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
-              "caption": "Len giữa các đảo"
-            },
-            {
-              "src": "images/thuyen-hoang-hon.webp",
-              "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
-              "caption": "Chiều trên vịnh"
+              "id": "leu-bang",
+              "label": "Lều trên băng",
+              "text": "Một đêm duy nhất trong mùa, chỉ mở khi băng đủ dày. Không có ảnh để giữ bất ngờ.",
+              "count": 1,
+              "maxGuests": 2,
+              "price": 15500000
             }
           ]
         },
@@ -238,105 +699,1483 @@
           "type": "reviews",
           "id": "khach-ke",
           "variant": "postcard",
-          "eyebrow": "Khách đã bay",
-          "title": "Bưu thiếp gửi về từ trên mây",
-          "lead": "Mùa hè 2026: 96 chuyến bay, 1.104 khách, điểm trung bình 4,8 trên 5.",
+          "eyebrow": "Khách đã đi",
+          "title": "Bưu thiếp gửi về từ xứ băng",
+          "lead": "Có người thấy cực quang ngay đêm đầu, có người đợi ba đêm vẫn trắng tay.",
           "scoreLabel": "điểm",
-          "dateLabel": "Ngày bay",
+          "dateLabel": "Ngày đi",
           "items": [
             {
               "rating": 5,
-              "text": "Lúc máy bay nghiêng cánh qua làng chài, cả khoang cùng nín thở. Tối nằm trên bè nghe sóng vỗ, không tin vừa bay qua chỗ đó.",
-              "name": "Thanh Tâm",
-              "from": "Hà Nội, đi cùng chồng",
+              "text": "Đêm thứ ba trời quang đúng mười phút, cả đoàn hét lên khi dải xanh lục cuộn qua đầu. Mười phút đó đáng cả chuyến bay hai mươi tiếng.",
+              "name": "Khánh Linh",
+              "from": "Hà Nội",
+              "note": "đi cùng chồng",
               "stamp": {
-                "value": 300,
-                "unit": "m",
-                "label": "Ba Trái Đào"
+                "value": -12,
+                "unit": "độ",
+                "label": "Vík"
               },
-              "date": "18.06.2026"
-            },
-            {
-              "rating": 5,
-              "text": "Con trai mười tuổi được ngồi ghế đầu, nhìn thẳng vào buồng lái suốt chuyến. Sáng hôm sau cả nhà chèo kayak qua hang tới trưa.",
-              "name": "Minh Đức",
-              "from": "TP.HCM, đi cùng vợ con",
-              "stamp": {
-                "value": 450,
-                "unit": "m",
-                "label": "Vịnh Lan Hạ"
-              },
-              "date": "02.07.2026"
+              "date": "09.01.2026"
             },
             {
               "rating": 4,
-              "text": "Hôm đó gió mạnh nên chuyến bay dời sang chiều, phải chờ hơn ba tiếng. Bù lại bay lúc hoàng hôn, nước vịnh đỏ rực dưới cánh.",
-              "name": "Phương Linh",
-              "from": "Đà Nẵng, đi cùng bạn thân",
+              "text": "Lạnh hơn mình tưởng nhiều, may mà trưởng đoàn bắt mặc đủ ba lớp. Hang băng xanh đẹp tới mức chụp không ra.",
+              "name": "Quốc Bảo",
+              "from": "TP.HCM",
+              "note": "đi một mình",
               "stamp": {
-                "value": 250,
-                "unit": "m",
-                "label": "Hang Sáng Tối"
+                "value": 1100,
+                "unit": "năm",
+                "label": "Sông băng"
               },
-              "date": "27.07.2026"
+              "date": "22.02.2026"
             },
             {
               "rating": 5,
-              "text": "Bữa tối hải sản dọn ngay trên bè, mực câu lúc chiều. Đêm vịnh tối hẳn, thấy cả sao, sáng ra sương phủ kín núi đá.",
-              "name": "Gia Bảo",
-              "from": "Cần Thơ, đi một mình",
+              "text": "Ngâm suối nóng mà tóc đóng băng, lần đầu trong đời thấy vậy. Bọn trẻ nhà mình đòi đi lại mùa đông năm sau.",
+              "name": "Gia đình chị Hạnh",
+              "from": "Đà Nẵng",
+              "note": "hai người lớn, hai bé",
               "stamp": {
-                "value": 400,
-                "unit": "m",
-                "label": "Cái Bèo"
+                "value": 38,
+                "unit": "độ",
+                "label": "Suối nóng"
               },
-              "date": "14.08.2026"
+              "date": "28.12.2025"
+            },
+            {
+              "rating": 5,
+              "text": "Ngày chỉ sáng năm tiếng nên lịch đi rất gọn. Không phải dậy sớm, chín giờ sáng trời vẫn còn tối om.",
+              "name": "Minh Thư",
+              "from": "Cần Thơ",
+              "note": "đi cùng bạn thân",
+              "stamp": {
+                "value": 5,
+                "unit": "giờ",
+                "label": "Ánh sáng"
+              },
+              "date": "15.12.2025"
+            },
+            {
+              "rating": 3,
+              "text": "Hai đêm liền mây kín, không thấy cực quang. Đoàn đã báo trước là trời quyết định, nhưng vẫn tiếc.",
+              "name": "Hoàng Nam",
+              "from": "Huế",
+              "note": "đi cùng đồng nghiệp",
+              "stamp": {
+                "value": 0,
+                "unit": "lần",
+                "label": "Cực quang"
+              },
+              "date": "03.11.2025"
+            },
+            {
+              "rating": 5,
+              "text": "Bãi cát đen và mấy tảng băng trong suốt nằm trên đó, như ai đổ kim cương ra bãi biển.",
+              "name": "Thanh Tâm",
+              "from": "Hải Phòng",
+              "stamp": {
+                "value": 64,
+                "unit": "độ Bắc",
+                "label": "Vĩ độ"
+              },
+              "date": "11.03.2026"
+            }
+          ]
+        },
+        {
+          "type": "gallery",
+          "id": "thu-vien",
+          "variant": "slices",
+          "eyebrow": "Thư viện ảnh",
+          "title": "Màu của mùa đêm dài",
+          "lead": "Khung ảnh để trống, chú thích tả cảnh sẽ gặp.",
+          "hint": "Rê chuột hoặc bấm vào một dải để mở ảnh, dùng phím mũi tên để chuyển ảnh.",
+          "touchHint": "Chạm vào một dải để mở ảnh lớn.",
+          "listLabel": "Sáu ảnh, mỗi lần mở một ảnh",
+          "images": [
+            {
+              "src": "images/khung.svg",
+              "alt": "Cực quang xanh lục trên bầu trời đêm",
+              "caption": "Cực quang xanh lục cuộn trên đồng tuyết ngoài Vík.",
+              "credit": "Ảnh giữ chỗ"
+            },
+            {
+              "src": "images/khung.svg",
+              "alt": "Thuyền lội nước giữa những tảng băng trôi",
+              "caption": "Thuyền lội nước giữa băng trôi ở Jökulsárlón."
+            },
+            {
+              "src": "images/khung.svg",
+              "alt": "Người đi bộ trên mặt sông băng xanh",
+              "caption": "Hang băng xanh trong lòng sông băng Vatnajökull, chỉ mở vào mùa đông."
+            },
+            {
+              "src": "images/khung.svg",
+              "alt": "Thác nước viền băng giữa vách đá",
+              "caption": "Thác Gullfoss viền băng trắng."
+            },
+            {
+              "src": "images/khung.svg",
+              "alt": "Làng ven biển dưới chân vách đá phủ tuyết",
+              "caption": "Làng chài Vík dưới chân vách đá, đèn bật từ bốn giờ chiều."
+            },
+            {
+              "src": "images/khung.svg",
+              "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng",
+              "caption": "Chuyến bay nội địa ra Akureyri, ngoài cửa sổ là mũ băng trắng xoá."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "id": "hoi-nhanh",
+          "eyebrow": "Hỏi nhanh",
+          "title": "Mấy điều ai cũng hỏi",
+          "items": [
+            {
+              "question": "Có chắc thấy cực quang không?",
+              "answer": "Không ai hứa chắc được. Đi 5 đêm, khả năng gặp ít nhất một lần khoảng 70 đến 80 phần trăm."
+            },
+            {
+              "question": "Lạnh tới mức nào?",
+              "answer": "Ven biển phía nam thường âm 5 đến 2 độ, nhưng gió làm cảm giác lạnh hơn nhiều."
+            },
+            {
+              "question": "Có cần visa không?",
+              "answer": "Iceland thuộc khối Schengen. Lửa Băng gửi thư mời và lịch trình để bạn nộp hồ sơ."
+            },
+            {
+              "question": "Trẻ em đi được không?",
+              "answer": "Được, từ 8 tuổi. Riêng đi bộ sông băng và hang băng phải từ 12 tuổi."
+            },
+            {
+              "question": "Ăn gì ở Iceland?",
+              "answer": "Súp thịt cừu, cá tuyết, bánh mì lúa mạch đen nướng dưới đất nóng. Có thể báo trước nếu ăn chay."
+            },
+            {
+              "question": "Mang tiền mặt không?",
+              "answer": "Gần như không cần. Mọi nơi đều quẹt thẻ, kể cả nhà vệ sinh ở trạm dừng."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tour/cuc-quang",
+      "title": "Săn cực quang 5 ngày",
+      "description": "Năm ngày dọc bờ biển phía nam Iceland, mỗi tối đợi cực quang ở nơi trời tối nhất.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "cuc-quang",
+          "priceNote": "Phòng đôi, gồm bữa sáng và tối",
+          "view": {
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Cực quang xanh lục trên bầu trời đêm"
+            },
+            "text": "Khi cực quang mạnh, cả bầu trời chuyển xanh lục rồi tím ở mép dưới.",
+            "best": "22:00 đến 1:00"
+          },
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày khởi hành còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Khoảnh khắc đáng đợi",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác mùa đông"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "cuc-quang",
+          "eyebrow": "Hành trình",
+          "title": "{stages} chặng, {vehicles} cách đi",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        },
+        {
+          "type": "booking",
+          "id": "dat-cho",
+          "variant": "calendar",
+          "eyebrow": "Mùa đông 2026 đến 2027",
+          "title": "Chọn ngày khởi hành",
+          "lead": "Bảy chuyến, đều bay tới Keflavík ngày đầu và về thủ đô trưa ngày thứ năm.",
+          "price": 68900000,
+          "priceNote": "một khách, phòng đôi",
+          "deal": {
+            "amount": 3000000,
+            "until": "2026-11-30",
+            "label": "Đặt trước 30/11/2026: giảm 3.000.000 đồng mỗi khách"
+          },
+          "includes": [
+            "Xe đưa đón từ sân bay Keflavík",
+            "4 đêm nhà gỗ, phòng đôi",
+            "Bữa sáng và bữa tối",
+            "Đi bộ sông băng có người dẫn",
+            "Thuyền đầm Jökulsárlón",
+            "Áo phao, đinh giày, bảo hiểm"
+          ],
+          "excludes": [
+            "Vé máy bay quốc tế",
+            "Bữa trưa",
+            "Phụ thu phòng đơn",
+            "Tắm suối nóng tự chọn"
+          ],
+          "departures": [
+            {
+              "date": "2026-11-04",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-11",
+              "seats": 10
+            },
+            {
+              "date": "2026-11-18",
+              "seats": 3
+            },
+            {
+              "date": "2026-11-25",
+              "seats": 0
+            },
+            {
+              "date": "2026-12-02",
+              "seats": 8
+            },
+            {
+              "date": "2027-01-13",
+              "seats": 10
+            },
+            {
+              "date": "2027-02-10",
+              "seats": 2
+            }
+          ],
+          "currency": "đồng",
+          "deposit": 15000000,
+          "fewSeats": 3,
+          "defaultGuests": 2,
+          "labels": {
+            "departures": "Ngày khởi hành",
+            "month": "tháng {m}, {y}",
+            "seats": "Còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "includesTitle": "Đã gồm",
+            "excludesTitle": "Chưa gồm",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "guestsValue": "{guests} khách",
+            "baseLine": "{price} × {guests} khách",
+            "dealLine": "Ưu đãi đặt sớm",
+            "total": "Tạm tính",
+            "deposit": "Cọc khi được gọi xác nhận"
+          },
+          "policies": [
+            {
+              "title": "Cọc và thanh toán",
+              "items": [
+                {
+                  "label": "Cọc",
+                  "text": "15.000.000 đồng mỗi khách sau khi Lửa Băng gọi xác nhận còn chỗ."
+                },
+                {
+                  "label": "Phần còn lại",
+                  "text": "trả trước ngày khởi hành 30 ngày, vì phải giữ phòng nhà gỗ từ sớm."
+                }
+              ]
+            },
+            {
+              "title": "Thời tiết và đổi lịch",
+              "items": [
+                {
+                  "label": "Bão tuyết",
+                  "text": "đường đóng thì đoàn ở lại nơi nghỉ, Lửa Băng chịu tiền phòng thêm."
+                },
+                {
+                  "label": "Không thấy cực quang",
+                  "text": "không hoàn tiền vì trời quyết định; được giảm 20% nếu đi lại trong hai năm."
+                },
+                {
+                  "label": "Huỷ",
+                  "text": "trước 45 ngày hoàn toàn bộ cọc; từ 30 đến 44 ngày hoàn một nửa."
+                }
+              ],
+              "note": "Iceland mùa đông có thể đóng đường trong vài giờ. Trưởng đoàn theo dõi trang cảnh báo đường bộ mỗi sáng."
+            }
+          ],
+          "errors": {
+            "name": "Bạn nhập họ tên giúp Lửa Băng nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "brand": "Lửa Băng - Phiếu giữ chỗ",
+            "from": "Keflavík",
+            "to": "Jökulsárlón",
+            "guest": "Khách",
+            "date": "Khởi hành",
+            "seats": "Số chỗ",
+            "total": "Tạm tính",
+            "stamp": "Chờ xác nhận",
+            "template": "Lửa Băng ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {guests} chỗ tour săn cực quang khởi hành ngày {date}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi Lửa Băng",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép"
+          }
+        },
+        {
+          "type": "faq",
+          "id": "hoi-dap",
+          "variant": "chat",
+          "eyebrow": "Hỏi đáp",
+          "title": "Hỏi trước khi bay nửa vòng trái đất",
+          "lead": "Chọn nhóm rồi chọn câu, Lửa Băng trả lời như đang nhắn tin.",
+          "chat": {
+            "label": "Nhắn tin với Lửa Băng",
+            "tagline": "Trả lời từ 9:00 đến 17:00 giờ Reykjavík",
+            "cover": {
+              "src": "images/khung.svg",
+              "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+            },
+            "greeting": "Chào bạn, Lửa Băng đây. Đi Iceland mùa đông có nhiều thứ phải chuẩn bị, cứ chọn một câu bên dưới nhé.",
+            "pick": "Chọn câu bạn muốn hỏi",
+            "done": "Bạn đã hỏi hết các câu gợi ý",
+            "reset": "Bắt đầu lại",
+            "again": "Hỏi lại từ đầu",
+            "groupsLabel": "Nhóm câu hỏi",
+            "groupDone": "Hết câu trong nhóm này, chọn nhóm khác nhé",
+            "closing": "Còn điều gì chưa rõ, bạn gọi thẳng cho Lửa Băng nhé:",
+            "you": "Bạn hỏi:"
+          },
+          "ask": {
+            "text": "Chưa thấy điều bạn cần?",
+            "action": "Gọi",
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+            }
+          },
+          "items": [
+            {
+              "group": "Giấy tờ",
+              "question": "Xin visa mất bao lâu?",
+              "answer": "Khoảng 15 ngày làm việc. Nên nộp trước ngày bay ít nhất hai tháng vào mùa cao điểm."
+            },
+            {
+              "group": "Giấy tờ",
+              "question": "Có cần bảo hiểm riêng không?",
+              "answer": "Tour đã gồm bảo hiểm du lịch. Hồ sơ visa vẫn cần bảo hiểm Schengen tối thiểu 30.000 euro."
+            },
+            {
+              "group": "Giấy tờ",
+              "question": "Đổi tiền ở đâu?",
+              "answer": "Không cần đổi nhiều. Thẻ Visa, Mastercard dùng được gần như mọi nơi."
+            },
+            {
+              "group": "Thời tiết",
+              "question": "Gặp bão tuyết thì sao?",
+              "answer": "Đoàn ở lại nơi nghỉ, Lửa Băng chịu tiền phòng thêm. Lịch trình được đổi để bù điểm bị lỡ."
+            },
+            {
+              "group": "Thời tiết",
+              "question": "Mấy giờ trời sáng?",
+              "answer": "Tháng 12 khoảng 11:15 mới có nắng và 15:30 đã tối. Tháng 3 thì sáng từ 8:00 tới 19:30."
+            },
+            {
+              "group": "Thời tiết",
+              "question": "Mặc gì cho đủ ấm?",
+              "answer": "Ba lớp: áo giữ nhiệt, áo lông cừu, áo khoác chống gió nước. Thêm mũ len, găng, tất len dày."
+            },
+            {
+              "group": "Trên đường",
+              "question": "Một ngày đi bao xa?",
+              "answer": "Thường 150 đến 250 km, chia nhiều chặng dừng chụp ảnh, ăn trưa, đi bộ."
+            },
+            {
+              "group": "Trên đường",
+              "question": "Có wifi không?",
+              "answer": "Xe có wifi, nhà gỗ có wifi. Ra cánh đồng đợi cực quang thì nên tắt điện thoại cho mắt quen bóng tối."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tour/vong-tron-vang",
+      "title": "Vòng Tròn Vàng trong một ngày",
+      "description": "Þingvellir, Geysir, Gullfoss và hồ nước nóng trong năm tiếng có nắng.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "vong-tron-vang",
+          "priceNote": "Khởi hành mỗi ngày từ Reykjavík",
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày khởi hành còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Khoảnh khắc đáng đợi",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác mùa đông"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "vong-tron-vang",
+          "eyebrow": "Hành trình",
+          "title": "Một ngày, {stages} điểm dừng",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        },
+        {
+          "type": "process",
+          "id": "mac-am",
+          "variant": "morph",
+          "eyebrow": "Trước khi lên xe",
+          "title": "Mặc thế nào cho âm mười độ",
+          "lead": "Không cần áo thật dày, cần nhiều lớp đúng thứ tự. Lớp nào ướt thì thay lớp đó.",
+          "steps": [
+            {
+              "name": "Lớp giữ nhiệt",
+              "text": "Áo len lông cừu mỏng sát người, không mặc áo cotton vì giữ mồ hôi.",
+              "color": "#7ee0c3",
+              "shape": "M -150 0 C -90 -100 75 -108 150 0 C 75 108 -90 100 -150 0 Z",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng"
+              },
+              "dew": true
+            },
+            {
+              "name": "Lớp giữa",
+              "text": "Áo lông vũ hoặc áo nỉ dày, giữ hơi ấm cơ thể.",
+              "color": "#6cc6d9",
+              "shape": "M -140 12 C -82 -74 62 -84 138 30 C 66 88 -84 86 -140 12 Z",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thuyền lội nước giữa những tảng băng trôi"
+              }
+            },
+            {
+              "name": "Lớp ngoài",
+              "text": "Áo khoác chống gió, chống nước, có mũ trùm.",
+              "color": "#5a9bd6",
+              "shape": "M -128 10 C -74 -60 52 -70 122 24 C 56 74 -76 72 -128 10 Z"
+            },
+            {
+              "name": "Tay và đầu",
+              "text": "Găng hai lớp, mũ len che tai, khăn quàng che miệng khi gió lớn.",
+              "color": "#7f7fd8",
+              "shape": "M -122 8 C -64 -26 50 -34 116 6 C 52 28 -64 32 -122 8 Z",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              },
+              "heat": true
+            },
+            {
+              "name": "Giày đinh",
+              "text": "Giày cổ cao chống nước, gắn đinh khi đi trên băng.",
+              "color": "#a07ad6",
+              "shape": "M -74 4 C -38 -16 30 -20 68 2 C 30 16 -38 18 -74 4 Z",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Người đi bộ trên mặt sông băng xanh"
+              }
+            }
+          ]
+        },
+        {
+          "type": "reviews",
+          "id": "khach-ke",
+          "variant": "postcard",
+          "eyebrow": "Khách kể",
+          "title": "Một ngày, ba điểm, năm tiếng nắng",
+          "scoreLabel": "điểm",
+          "dateLabel": "Ngày đi",
+          "items": [
+            {
+              "rating": 5,
+              "text": "Ngày chỉ sáng năm tiếng nên lịch đi rất gọn. Không phải dậy sớm, chín giờ sáng trời vẫn còn tối om.",
+              "name": "Minh Thư",
+              "from": "Cần Thơ",
+              "note": "đi cùng bạn thân",
+              "stamp": {
+                "value": 5,
+                "unit": "giờ",
+                "label": "Ánh sáng"
+              },
+              "date": "15.12.2025"
+            },
+            {
+              "rating": 3,
+              "text": "Hai đêm liền mây kín, không thấy cực quang. Đoàn đã báo trước là trời quyết định, nhưng vẫn tiếc.",
+              "name": "Hoàng Nam",
+              "from": "Huế",
+              "note": "đi cùng đồng nghiệp",
+              "stamp": {
+                "value": 0,
+                "unit": "lần",
+                "label": "Cực quang"
+              },
+              "date": "03.11.2025"
+            },
+            {
+              "rating": 5,
+              "text": "Bãi cát đen và mấy tảng băng trong suốt nằm trên đó, như ai đổ kim cương ra bãi biển.",
+              "name": "Thanh Tâm",
+              "from": "Hải Phòng",
+              "stamp": {
+                "value": 64,
+                "unit": "độ Bắc",
+                "label": "Vĩ độ"
+              },
+              "date": "11.03.2026"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tour/song-bang",
+      "title": "Sông băng và hang băng xanh",
+      "description": "Hai ngày ở công viên quốc gia Vatnajökull, vào hang băng xanh mùa đông.",
+      "sections": [
+        {
+          "type": "room-detail",
+          "id": "tour",
+          "item": "song-bang",
+          "labels": {
+            "from": "Giá",
+            "perNight": "một khách",
+            "book": "Giữ chỗ",
+            "availability": "Ngày khởi hành còn chỗ",
+            "left": "còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "gallery": "Dọc đường",
+            "open": "Xem ảnh {n} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            },
+            "includes": "Đã gồm",
+            "excludes": "Chưa gồm",
+            "bring": "Nên mang",
+            "view": "Khoảnh khắc đáng đợi",
+            "best": "Giờ đẹp nhất",
+            "others": "Tour khác mùa đông"
+          }
+        },
+        {
+          "type": "route",
+          "id": "hanh-trinh",
+          "item": "song-bang",
+          "eyebrow": "Hành trình",
+          "title": "{stages} chặng, {vehicles} cách đi",
+          "labels": {
+            "open": "Xem ảnh {place} cỡ lớn",
+            "lightbox": {
+              "close": "Đóng",
+              "prev": "Ảnh trước",
+              "next": "Ảnh sau"
+            }
+          }
+        },
+        {
+          "type": "faq",
+          "id": "hoi-dap",
+          "eyebrow": "Riêng tour này",
+          "title": "Trước khi chui vào lòng băng",
+          "items": [
+            {
+              "question": "Hang băng có an toàn không?",
+              "answer": "Người dẫn đường kiểm tra hang mỗi sáng. Hang nào có dấu hiệu sập thì đổi sang hang khác."
+            },
+            {
+              "question": "Có cần sức khoẻ tốt không?",
+              "answer": "Đi bộ khoảng 2 km trên băng, có đoạn phải cúi người. Không hợp với người sợ chỗ hẹp."
+            },
+            {
+              "question": "Vì sao hang màu xanh?",
+              "answer": "Băng nén rất chặt hấp thụ ánh sáng đỏ, chỉ để lại ánh xanh."
+            },
+            {
+              "question": "Tháng 4 còn hang không?",
+              "answer": "Không. Từ tháng 4 băng tan, hang đóng để tránh sập."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "hanh-trinh",
+      "title": "Vòng quanh đảo mùa đông",
+      "description": "Năm ngày, bảy chặng, từ đồng dung nham tới đầm băng trôi.",
+      "sections": [
+        {
+          "type": "journey",
+          "id": "lich-trinh",
+          "variant": "road",
+          "eyebrow": "Lịch trình",
+          "title": "Con đường năm ngày giữa băng và lửa",
+          "lead": "Đi chậm vì ngày ngắn và đường trơn. Mỗi tối ngủ ở nơi đủ tối để nhìn trời.",
+          "days": [
+            {
+              "title": "Ngày 1",
+              "text": "Keflavík, Reykjanes"
+            },
+            {
+              "title": "Ngày 2",
+              "text": "Seljalandsfoss, Vík"
+            },
+            {
+              "title": "Ngày 3",
+              "text": "Sólheimajökull"
+            },
+            {
+              "title": "Ngày 4",
+              "text": "Jökulsárlón, Höfn"
+            },
+            {
+              "title": "Ngày 5",
+              "text": "Về Reykjavík"
+            }
+          ],
+          "note": "Độ cao làm tròn theo bản đồ địa hình, chỉ để hình dung.",
+          "planLabel": "Ở đây làm gì?",
+          "finish": {
+            "eyebrow": "Hết năm ngày, xe về thủ đô",
+            "title": "Chuyến gần nhất: thứ Tư 04/11/2026, còn 6 chỗ",
+            "text": "Đặt trước 30/11/2026 giảm 3.000.000 đồng mỗi khách"
+          },
+          "stops": [
+            {
+              "time": "Ngày 1, 13:30",
+              "title": "Sân bay Keflavík",
+              "altitude": 50,
+              "text": "Đáp xuống lúc trời đã chạng vạng. Lấy áo phao, lên xe.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng"
+              },
+              "plan": [
+                {
+                  "time": "13:30",
+                  "text": "Gặp trưởng đoàn ở cửa ra, nhận áo phao và đinh giày."
+                },
+                {
+                  "kind": "tip",
+                  "time": "Mang theo",
+                  "text": "Áo khoác trong hành lý xách tay, cửa sân bay đã âm độ."
+                }
+              ]
+            },
+            {
+              "time": "Ngày 1, 16:00",
+              "title": "Đồng dung nham Reykjanes",
+              "altitude": 30,
+              "text": "Rêu xanh phủ dung nham nguội, khói bốc từ khe đất.",
+              "night": "Đêm 1: nhà gỗ gần Grindavík",
+              "plan": [
+                {
+                  "time": "16:00",
+                  "text": "Đi bộ 40 phút trên đường gỗ giữa đồng dung nham."
+                },
+                {
+                  "time": "19:00",
+                  "text": "Ăn tối súp cừu."
+                },
+                {
+                  "kind": "night",
+                  "time": "Đêm 1",
+                  "text": "Nhà gỗ gần Grindavík, có xông hơi."
+                }
+              ]
+            },
+            {
+              "time": "Ngày 2, 10:30",
+              "title": "Thác Seljalandsfoss",
+              "altitude": 60,
+              "text": "Đi vòng ra sau màn nước, mép thác đóng băng.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thác nước viền băng giữa vách đá"
+              },
+              "plan": [
+                {
+                  "time": "10:30",
+                  "text": "Trời vừa hửng sáng, thác còn trong bóng núi.",
+                  "image": {
+                    "src": "images/khung.svg",
+                    "alt": "Thác nước viền băng giữa vách đá"
+                  }
+                },
+                {
+                  "kind": "tip",
+                  "time": "Mang theo",
+                  "text": "Áo mưa mỏng, bụi nước đóng băng trên áo."
+                }
+              ]
+            },
+            {
+              "time": "Ngày 2, 14:00",
+              "title": "Bãi cát đen Reynisfjara",
+              "altitude": 10,
+              "text": "Cột đá bazan, sóng lớn bất ngờ.",
+              "night": "Đêm 2: nhà mái kính ngoài Vík",
+              "plan": [
+                {
+                  "time": "14:00",
+                  "text": "Đứng xa mép nước ít nhất 30 m, sóng lén có thể kéo người."
+                },
+                {
+                  "kind": "night",
+                  "time": "Đêm 2",
+                  "text": "Nhà mái kính, nằm trên giường nhìn trời.",
+                  "image": {
+                    "src": "images/khung.svg",
+                    "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+                  }
+                }
+              ]
+            },
+            {
+              "time": "Ngày 3, 09:30",
+              "title": "Sông băng Sólheimajökull",
+              "altitude": 200,
+              "text": "Ba tiếng trên mặt sông băng, có người dẫn đường.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Người đi bộ trên mặt sông băng xanh"
+              },
+              "plan": [
+                {
+                  "time": "09:30",
+                  "text": "Thử mũ, đinh giày, rìu băng."
+                },
+                {
+                  "time": "10:00",
+                  "text": "Đi bộ trên băng, qua những khe nứt xanh."
+                },
+                {
+                  "time": "Tối",
+                  "text": "Ra cánh đồng đợi cực quang.",
+                  "link": {
+                    "label": "Xem giờ nào làm gì",
+                    "href": "page:cam-nang"
+                  }
+                }
+              ]
+            },
+            {
+              "time": "Ngày 4, 11:00",
+              "title": "Đầm băng Jökulsárlón",
+              "altitude": 5,
+              "text": "Băng xanh trôi chậm ra biển.",
+              "night": "Đêm 3 và 4: nhà nghỉ ở Höfn",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thuyền lội nước giữa những tảng băng trôi"
+              },
+              "plan": [
+                {
+                  "time": "11:00",
+                  "text": "Thuyền lội nước 40 phút giữa băng trôi."
+                },
+                {
+                  "time": "13:00",
+                  "text": "Bãi kim cương: băng trong suốt nằm trên cát đen."
+                },
+                {
+                  "kind": "night",
+                  "time": "Đêm 3 và 4",
+                  "text": "Nhà nghỉ ở Höfn, ăn tôm hùm đá."
+                }
+              ]
+            },
+            {
+              "time": "Ngày 5, 09:00",
+              "title": "Về Reykjavík",
+              "altitude": 40,
+              "text": "Xe chạy dọc bờ biển về thủ đô, kịp bay buổi chiều.",
+              "plan": [
+                {
+                  "time": "09:00",
+                  "text": "Rời Höfn, đường về khoảng 450 km."
+                },
+                {
+                  "time": "16:00",
+                  "text": "Về tới Reykjavík."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "cloud-band"
+        },
+        {
+          "type": "room-detail",
+          "labels": {
+            "others": "Đi một chặng thôi cũng được"
+          },
+          "others": [
+            {
+              "label": "Săn cực quang 5 ngày",
+              "href": "page:tour/cuc-quang",
+              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              }
+            },
+            {
+              "label": "Vòng Tròn Vàng trong một ngày",
+              "href": "page:tour/vong-tron-vang",
+              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thác nước viền băng giữa vách đá"
+              }
+            },
+            {
+              "label": "Sông băng và hang băng xanh",
+              "href": "page:tour/song-bang",
+              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Người đi bộ trên mặt sông băng xanh"
+              }
+            },
+            {
+              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
+              "href": "page:mot-ngay"
+            },
+            {
+              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
+              "href": "page:cam-nang"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "mot-ngay",
+      "title": "Một ngày ở Reykjavík",
+      "description": "Một ngày mùa đông chỉ có năm tiếng nắng ở thủ đô Iceland.",
+      "sections": [
+        {
+          "type": "day-plan",
+          "id": "mot-ngay",
+          "eyebrow": "Một ngày mùa đông",
+          "title": "Mặt trời mọc lúc 11 giờ, lặn lúc 4 giờ chiều",
+          "nowLabel": "Ở Reykjavík lúc này",
+          "liveLabel": "Đang diễn ra ở Reykjavík",
+          "hint": "Cuộn xuống để đi qua một ngày ngắn",
+          "moreLabel": "Ở đây có gì",
+          "stops": [
+            {
+              "time": "08:00",
+              "title": "Ăn sáng trong bóng tối",
+              "text": "Phố còn tối như nửa đêm, quán cà phê đã đông người.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              },
+              "details": [
+                {
+                  "label": "Nên thử",
+                  "value": "Bánh quế quế, sữa chua skyr"
+                },
+                {
+                  "label": "Lưu ý",
+                  "value": "Trời chưa sáng, đi bộ trên vỉa hè có băng"
+                }
+              ]
+            },
+            {
+              "time": "10:00",
+              "title": "Bể bơi nước nóng ngoài trời",
+              "text": "Người Reykjavík đi bơi mỗi sáng, kể cả khi tuyết rơi.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thuyền lội nước giữa những tảng băng trôi"
+              },
+              "details": [
+                {
+                  "label": "Giá vé",
+                  "value": "Khoảng 250.000 đồng"
+                },
+                {
+                  "label": "Quy định",
+                  "value": "Tắm tráng không mặc đồ trước khi xuống bể"
+                }
+              ]
+            },
+            {
+              "time": "11:15",
+              "title": "Mặt trời lên",
+              "text": "Ánh nắng nằm ngang, cả thành phố hồng lên trong ba tiếng.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              },
+              "details": [
+                {
+                  "label": "Chụp ở đâu",
+                  "value": "Đỉnh nhà thờ Hallgrímskirkja"
+                }
+              ]
+            },
+            {
+              "time": "13:00",
+              "title": "Ăn trưa súp cừu",
+              "text": "Súp nóng múc trong bát bánh mì, ăn hết cả bát.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+              },
+              "details": [
+                {
+                  "label": "Giá",
+                  "value": "Khoảng 600.000 đồng"
+                },
+                {
+                  "label": "Ăn chay",
+                  "value": "Có súp rau củ thay thế"
+                }
+              ]
+            },
+            {
+              "time": "15:45",
+              "title": "Hoàng hôn ở bến cảng",
+              "text": "Mặt trời lặn sau núi Esja, đèn phố bật từ lúc bốn giờ.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+              }
+            },
+            {
+              "time": "18:00",
+              "title": "Đi bộ phố đèn",
+              "text": "Phố Laugavegur sáng đèn, cửa hàng mở tới tối."
+            },
+            {
+              "time": "22:00",
+              "title": "Ra ngoại ô đợi cực quang",
+              "text": "Xe đưa ra bán đảo Grótta, cách trung tâm 15 phút, đủ tối để nhìn trời.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng"
+              },
+              "details": [
+                {
+                  "label": "Khả năng gặp",
+                  "value": "Tuỳ mây và gió mặt trời, xem dự báo lúc 18:00"
+                },
+                {
+                  "label": "Mang theo",
+                  "value": "Chân máy ảnh, bình trà nóng"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "nha-nghi",
+      "title": "Nhà nghỉ",
+      "description": "Nhà mái kính, nhà gỗ ven hồ và phòng trang trại ngựa ở bờ biển phía nam.",
+      "sections": [
+        {
+          "type": "stays",
+          "id": "hang-nha",
+          "variant": "headland",
+          "eyebrow": "Ba cách ngủ dưới trời bắc cực",
+          "title": "Chọn chỗ nằm đợi cực quang",
+          "lead": "Cả ba nằm quanh một hồ đóng băng ngoài Vík, cách đèn thị trấn 6 km.",
+          "hint": "Bấm một mốc trên ảnh để xem chỗ ở đó và cảnh nhìn ra.",
+          "scene": {
+            "image": {
+              "src": "images/khung.svg",
+              "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+            }
+          },
+          "currency": "đồng",
+          "priceNote": "Giá cho 2 khách, gồm bữa sáng, xông hơi và đánh thức khi có cực quang.",
+          "labels": {
+            "count": "Số căn",
+            "countValue": "{n} căn",
+            "area": "Diện tích",
+            "guests": "Tối đa",
+            "guestsValue": "{n} khách",
+            "perNight": "một đêm",
+            "book": "Đặt chỗ này",
+            "best": "Đẹp nhất lúc"
+          },
+          "rooms": [
+            {
+              "id": "nha-kinh",
+              "label": "Nhà mái kính",
+              "short": "Mái kính",
+              "x": 18,
+              "y": 62,
+              "count": 4,
+              "area": "22 m²",
+              "maxGuests": 2,
+              "price": 9800000,
+              "text": "Giường đặt dưới mái kính, có rèm điện khi muốn ngủ.",
+              "view": {
+                "image": {
+                  "src": "images/khung.svg",
+                  "alt": "Cực quang xanh lục trên bầu trời đêm"
+                },
+                "text": "Cực quang ngay trên gối.",
+                "best": "22:00 đến 1:00"
+              }
+            },
+            {
+              "id": "nha-go",
+              "label": "Nhà gỗ ven hồ",
+              "short": "Nhà gỗ",
+              "x": 52,
+              "y": 40,
+              "count": 6,
+              "area": "40 m²",
+              "maxGuests": 4,
+              "price": 7200000,
+              "text": "Bếp riêng, bồn nước nóng ngoài hiên.",
+              "view": {
+                "image": {
+                  "src": "images/khung.svg",
+                  "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+                },
+                "text": "Hồ phẳng như gương khi lặng gió.",
+                "best": "hoàng hôn 16:00"
+              }
+            },
+            {
+              "id": "phong-trang-trai",
+              "label": "Phòng trang trại ngựa",
+              "short": "Trang trại",
+              "x": 80,
+              "y": 24,
+              "count": 3,
+              "area": "18 m²",
+              "maxGuests": 2,
+              "price": 4100000,
+              "text": "Ở chung nhà với chủ trại, sáng cho ngựa ăn cỏ khô.",
+              "view": {
+                "image": {
+                  "src": "images/khung.svg",
+                  "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+                },
+                "text": "Đàn ngựa lông dày đứng giữa đồng tuyết.",
+                "best": "buổi sáng"
+              }
             }
           ]
         },
         {
           "type": "booking",
-          "id": "giu-ghe",
-          "variant": "request",
-          "eyebrow": "Giữ ghế",
-          "title": "Giữ ghế cho chuyến bay của bạn",
-          "lead": "Mỗi chuyến chỉ 12 ghế. Trang soạn sẵn tin nhắn, Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
-          "image": {
-            "src": "images/nha-be.webp",
-            "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá"
-          },
-          "price": 6900000,
+          "id": "dat-phong",
+          "variant": "stay",
+          "eyebrow": "Đặt phòng",
+          "title": "Giữ phòng cho mùa đông",
+          "lead": "Chọn ngày và chỗ ở, trang soạn sẵn tin nhắn để bạn gửi. Lửa Băng gọi lại trong giờ làm việc ở Reykjavík.",
           "currency": "đồng",
-          "childPrice": 4900000,
-          "maxGuests": 12,
-          "maxNights": 1,
-          "defaultAdults": 2,
-          "defaultDates": {
-            "checkIn": "2027-06-12",
-            "checkOut": "2027-06-13"
-          },
-          "perks": [
+          "rooms": [
             {
-              "minNights": 1,
-              "months": [
-                5,
-                6,
-                7,
-                8
-              ],
-              "text": "Bay từ tháng 5 đến tháng 8: tặng một buổi câu mực đêm trên bè."
+              "id": "nha-kinh",
+              "label": "Nhà mái kính",
+              "price": 9800000,
+              "maxGuests": 2,
+              "area": "22 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+              }
+            },
+            {
+              "id": "nha-go",
+              "label": "Nhà gỗ ven hồ",
+              "price": 7200000,
+              "maxGuests": 4,
+              "area": "40 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              }
+            },
+            {
+              "id": "phong-trang-trai",
+              "label": "Phòng trang trại ngựa",
+              "price": 4100000,
+              "maxGuests": 2,
+              "area": "18 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+              }
+            }
+          ],
+          "includedGuests": 2,
+          "extraGuestPrice": 1200000,
+          "defaultDates": {
+            "checkIn": "2026-12-20",
+            "checkOut": "2026-12-24"
+          },
+          "offer": {
+            "label": "Ưu đãi đêm dài",
+            "note": "Ở từ 4 đêm trong tháng 12 và tháng 1, miễn tiền 1 đêm",
+            "bookBy": "2026-11-30",
+            "from": "2026-12-01",
+            "to": "2027-01-31",
+            "minNights": 4,
+            "freeNights": 1
+          },
+          "availability": [
+            {
+              "from": "2026-12-01",
+              "to": "2026-12-19",
+              "left": {
+                "nha-kinh": 2,
+                "nha-go": 4,
+                "phong-trang-trai": 3
+              }
+            },
+            {
+              "from": "2026-12-20",
+              "to": "2027-01-02",
+              "left": {
+                "nha-kinh": 0,
+                "nha-go": 1,
+                "phong-trang-trai": 2
+              }
+            },
+            {
+              "from": "2027-01-03",
+              "to": "2027-02-28",
+              "left": {
+                "nha-kinh": 4,
+                "nha-go": 6,
+                "phong-trang-trai": 3
+              }
             }
           ],
           "labels": {
-            "place": "Lượn Vịnh",
-            "placeFacts": "Bay Tuần Châu sang Lan Hạ, một đêm nhà bè",
-            "perGuest": "{price} mỗi khách, gồm bay và một đêm",
-            "checkIn": "Ngày bay",
+            "checkIn": "Ngày nhận phòng",
+            "checkOut": "Ngày trả phòng",
+            "room": "Chọn chỗ ở",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "capacity": "{area}, tối đa {max} khách",
+            "perNight": "{price} một đêm",
+            "nightsNote": "{nights} đêm, {nights} lần có cơ hội thấy cực quang",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "summary": "Tạm tính",
+            "roomLine": "Tiền phòng",
+            "roomDetail": "{nights} đêm × {price}",
+            "extraLine": "Thêm khách",
+            "extraDetail": "{guests} khách × {nights} đêm × {price}",
+            "total": "Tổng cộng",
+            "includes": "Giá gồm bữa sáng và xông hơi cho 2 khách.",
+            "left": "Còn {n} căn",
+            "soldOut": "Hết phòng"
+          },
+          "errors": {
+            "dates": "Ngày trả phòng phải sau ngày nhận phòng.",
+            "name": "Bạn nhập họ tên giúp Lửa Băng.",
+            "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678.",
+            "soldOut": "Chỗ này đã kín trong những ngày bạn chọn. Bạn thử chỗ khác hoặc ngày khác."
+          },
+          "message": {
+            "title": "Tin nhắn giữ phòng đã soạn sẵn",
+            "lead": "Gửi tin này bằng một trong các cách dưới đây. Lửa Băng gọi lại xác nhận trong giờ làm việc.",
+            "template": "Lửa Băng ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {room} từ {checkIn} đến {checkOut} ({nights} đêm), {guests} khách. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi {phone}",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép",
+            "edit": "Sửa lại thông tin"
+          }
+        },
+        {
+          "type": "offer",
+          "id": "uu-dai",
+          "variant": "postcard",
+          "eyebrow": "Ưu đãi đêm dài",
+          "title": "Ở 4 đêm giữa mùa tối nhất,",
+          "titleAccent": "trả 3",
+          "lead": "Đặt trước 30/11/2026 cho kỳ nghỉ từ tháng 12/2026 đến hết tháng 1/2027, những tuần trời tối lâu nhất trong năm.",
+          "deadline": "2026-11-30T23:59:59+00:00",
+          "from": "2026-12-01",
+          "to": "2027-01-31",
+          "nights": 4,
+          "freeNights": 1,
+          "currency": "đồng",
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Cực quang xanh lục trên bầu trời đêm"
+          },
+          "caption": "Đêm dài nhất năm",
+          "captionPlace": "Ngoài Vík, Iceland",
+          "note": {
+            "label": "Bưu thiếp, mùa đông 2026",
+            "greeting": "Bạn thân mến,",
+            "text": "Tháng 12 ở đây trời tối từ bốn giờ chiều. Ở bốn đêm, bạn chỉ trả ba, đêm còn lại để Lửa Băng mời, hi vọng là đêm có cực quang.",
+            "sign": "Thân, Lửa Băng"
+          },
+          "facts": [
+            {
+              "label": "Hạn đặt, giờ Reykjavík",
+              "value": "23:59 ngày 30/11/2026"
+            },
+            {
+              "label": "Ngày nhận phòng",
+              "value": "Từ 01/12/2026 đến 31/01/2027"
+            },
+            {
+              "label": "Ưu đãi",
+              "value": "Ở từ 4 đêm, miễn tiền 1 đêm"
+            }
+          ],
+          "rooms": [
+            {
+              "id": "nha-kinh",
+              "label": "Nhà mái kính",
+              "price": 9800000,
+              "maxGuests": 2,
+              "area": "22 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+              }
+            },
+            {
+              "id": "nha-go",
+              "label": "Nhà gỗ ven hồ",
+              "price": 7200000,
+              "maxGuests": 4,
+              "area": "40 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              }
+            },
+            {
+              "id": "phong-trang-trai",
+              "label": "Phòng trang trại ngựa",
+              "price": 4100000,
+              "maxGuests": 2,
+              "area": "18 m²",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+              }
+            }
+          ],
+          "sea": [
+            {
+              "months": [
+                12,
+                1,
+                2
+              ],
+              "kind": "stormy",
+              "label": "giữa đông, có thể có bão tuyết"
+            },
+            {
+              "months": [
+                3,
+                10,
+                11
+              ],
+              "kind": "windy",
+              "label": "giao mùa, gió lớn, cực quang vẫn thấy được"
+            },
+            {
+              "months": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "kind": "calm",
+              "label": "mùa sáng, đêm không đủ tối để thấy cực quang"
+            }
+          ],
+          "labels": {
+            "seasons": "Trời Iceland theo tháng",
+            "window": "Kỳ nghỉ ưu đãi: tháng {from} đến {to}",
+            "monthOne": "Tháng {n}",
+            "monthRange": "Tháng {from} đến {to}",
+            "back": "Mặt sau bưu thiếp",
+            "postmarkTop": "Hạn đặt 23:59",
+            "postmarkBottom": "Lửa Băng, Vík",
+            "date": "30/11/2026",
+            "daysLeft": "còn {d} ngày",
+            "timeLeft": "{h} giờ {m} phút",
+            "countdownSr": "Hạn đặt 23:59 ngày 30/11/2026, giờ Reykjavík. Còn {d} ngày {h} giờ {m} phút.",
+            "ended": "Ưu đãi đêm dài đã hết hạn.",
+            "stamp": "4 đêm, trả 3",
+            "stampAlt": "Tem {room}: {alt}",
+            "million": "{n} triệu",
+            "perNight": "một đêm",
+            "roomFact": "Chỗ ở",
+            "room": "Chọn tem để chọn chỗ ở",
+            "slip": "Kỳ nghỉ 4 đêm, {room}",
+            "full": "Giá 4 đêm",
+            "pay": "Bạn trả (3 đêm)",
+            "perNightTotal": "Tính ra mỗi đêm"
+          }
+        }
+      ]
+    },
+    {
+      "path": "trang-trai",
+      "title": "Ở trang trại ngựa",
+      "description": "Một đến ba đêm ở trang trại ngựa Iceland, tính tiền theo khách.",
+      "sections": [
+        {
+          "type": "host",
+          "id": "chu-trai",
+          "eyebrow": "Chủ trại",
+          "title": "Nhà bà Guðrún nuôi ngựa từ năm 1962",
+          "story": [
+            "Trang trại có 40 con ngựa Iceland, giống ngựa nhỏ lông dày, đi được năm kiểu bước.",
+            "Khách ở chung nhà với bà Guðrún, sáng dậy cùng cho ngựa ăn cỏ khô rồi cưỡi một vòng quanh đồng tuyết."
+          ],
+          "quote": {
+            "text": "Ngựa ở đây không sợ lạnh, chỉ sợ người đứng sau lưng nó.",
+            "by": "Bà Guðrún, chủ trại"
+          },
+          "facts": [
+            {
+              "value": "1962",
+              "label": "năm bắt đầu nuôi ngựa"
+            },
+            {
+              "value": "40",
+              "label": "con ngựa Iceland"
+            },
+            {
+              "value": "3",
+              "label": "phòng cho khách"
+            }
+          ],
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+          },
+          "imageSecond": {
+            "src": "images/khung.svg",
+            "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+          }
+        },
+        {
+          "type": "booking",
+          "id": "giu-phong",
+          "variant": "request",
+          "eyebrow": "Giữ phòng",
+          "title": "Gửi yêu cầu, bà Guðrún nhờ Lửa Băng gọi lại",
+          "lead": "Chưa cần trả trước. Trang soạn sẵn tin nhắn để bạn gửi.",
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
+          },
+          "price": 2100000,
+          "currency": "đồng",
+          "childPrice": 900000,
+          "maxGuests": 6,
+          "maxNights": 3,
+          "defaultAdults": 2,
+          "defaultDates": {
+            "checkIn": "2027-01-15",
+            "checkOut": "2027-01-17"
+          },
+          "perks": [
+            {
+              "minNights": 2,
+              "months": [
+                12,
+                1,
+                2
+              ],
+              "text": "Ở từ 2 đêm giữa đông: được cưỡi ngựa một tiếng miễn phí."
+            },
+            {
+              "minNights": 3,
+              "months": [
+                1
+              ],
+              "text": "Ở 3 đêm tháng 1: bà Guðrún dạy nướng bánh mì dưới đất nóng."
+            }
+          ],
+          "labels": {
+            "place": "Trang trại bà Guðrún",
+            "placeFacts": "3 phòng trong nhà chính, 40 con ngựa",
+            "perGuest": "{price} mỗi khách một đêm",
+            "checkIn": "Ngày đến",
             "checkOut": "Ngày về",
             "adults": "Người lớn",
             "adultsLess": "Bớt một người lớn",
             "adultsMore": "Thêm một người lớn",
-            "children": "Trẻ 2 đến 11 tuổi",
+            "children": "Trẻ dưới 12 tuổi",
             "childrenLess": "Bớt một trẻ",
             "childrenMore": "Thêm một trẻ",
             "name": "Họ tên",
@@ -344,21 +2183,21 @@
             "summary": "Tạm tính",
             "guestLine": "Người lớn",
             "guestDetail": "{adults} khách × {nights} đêm × {price}",
-            "childLine": "Trẻ em",
-            "childDetail": "{children} trẻ",
+            "childLine": "Trẻ dưới 12 tuổi",
+            "childDetail": "{children} bé",
             "free": "Miễn phí",
             "total": "Tổng cộng",
-            "includes": "Đã gồm chuyến bay 25 phút, một đêm nhà bè, bữa tối hải sản, bữa sáng, kayak và tàu về Tuần Châu."
+            "includes": "Đã gồm bữa sáng, bữa tối cùng nhà chủ và áo liền thân khi cưỡi ngựa."
           },
           "errors": {
-            "dates": "Ngày về phải là ngày ngay sau ngày bay; gói này ở một đêm.",
-            "name": "Bạn nhập họ tên để Lượn Vịnh giữ đúng ghế.",
+            "dates": "Ngày về phải sau ngày đến; trang trại nhận ở 1 đến 3 đêm.",
+            "name": "Bạn nhập họ tên giúp Lửa Băng.",
             "phone": "Số điện thoại chưa đúng, ví dụ 0912 345 678."
           },
           "message": {
-            "title": "Tin nhắn giữ ghế đã soạn sẵn",
-            "lead": "Gửi tin này bằng một trong các cách dưới đây. Lượn Vịnh gọi lại xác nhận giờ bay trong ngày.",
-            "template": "Chào Lượn Vịnh, tôi là {name}, số {phone}. Tôi muốn giữ ghế bay ngày {checkIn}, về ngày {checkOut} ({nights} đêm nhà bè), {adults} người lớn và {children} trẻ em. Tạm tính {total}.",
+            "title": "Tin nhắn giữ phòng đã soạn sẵn",
+            "lead": "Gửi tin này bằng một trong các cách dưới đây.",
+            "template": "Chào Lửa Băng, tôi là {name}, số {phone}. Tôi muốn ở trang trại ngựa từ {checkIn} đến {checkOut} ({nights} đêm), {adults} người lớn và {children} trẻ dưới 12 tuổi. Tạm tính {total}.",
             "sms": "Gửi tin nhắn",
             "call": "Gọi {phone}",
             "copy": "Chép nội dung",
@@ -369,176 +2208,732 @@
       ]
     },
     {
-      "path": "hoi-dap",
-      "title": "Hỏi đáp",
-      "description": "Câu hỏi thường gặp trước khi bay ngắm vịnh và ngủ nhà bè.",
+      "path": "ve-chung-toi",
+      "title": "Về chúng tôi",
+      "description": "Lửa Băng bắt đầu từ một đêm mất điện ở Vík.",
       "sections": [
         {
-          "type": "faq",
-          "id": "hoi-dap",
-          "eyebrow": "Hỏi đáp",
-          "title": "Trước khi lên máy bay",
-          "lead": "Những điều khách hay hỏi nhất về chuyến bay và đêm trên bè.",
-          "ask": {
-            "text": "Chưa thấy điều bạn cần?",
-            "action": "Gọi"
+          "type": "host",
+          "id": "ve-chung-toi",
+          "variant": "tv",
+          "eyebrow": "Về chúng tôi",
+          "title": "Những chuyện kể bên lò sưởi",
+          "tv": {
+            "hint": "Lướt xuống để bật tivi",
+            "channelHint": "Chuyển kênh để xem tiếp",
+            "offHint": "Hết kênh thì tivi tự tắt",
+            "power": "Bật, tắt tivi",
+            "channel": "Kênh {n}: {title}"
           },
-          "items": [
+          "stories": [
             {
-              "question": "Gió to hay trời mưa thì sao?",
-              "answer": "Phi công quyết định cất cánh theo thời tiết lúc bay. Chuyến bị huỷ thì bạn chọn bay ngày khác hoặc nhận lại toàn bộ tiền."
+              "title": "Đêm mất điện ở Vík",
+              "text": "Năm 2018, bão tuyết làm cả thị trấn mất điện. Hai người bạn Việt ra ngoài và thấy cực quang rõ nhất đời, vì không còn đèn nào.",
+              "quote": {
+                "text": "Phải tắt hết đèn mới thấy trời.",
+                "by": "Người sáng lập"
+              },
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              }
             },
             {
-              "question": "Có giới hạn hành lý không?",
-              "answer": "Mỗi khách mang tối đa 10 kg lên máy bay. Hành lý lớn hơn gửi theo tàu sang bè, tới nơi trước bữa tối."
+              "title": "Người dẫn đường đầu tiên",
+              "text": "Einar, một người lái xe tải chở cá, đồng ý chở đoàn đầu tiên đi tìm chỗ tối. Anh vẫn lái xe cho Lửa Băng tới giờ.",
+              "quote": {
+                "text": "Tôi biết chỗ nào không có đèn trong bán kính hai mươi cây số.",
+                "by": "Einar"
+              },
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cửa sổ máy bay nhìn xuống mũ băng trắng"
+              }
             },
             {
-              "question": "Trẻ em đi được không?",
-              "answer": "Trẻ từ 2 tuổi trở lên được bay, ngồi ghế riêng và thắt dây an toàn. Trẻ dưới 12 tuổi tính giá trẻ em."
+              "title": "Tiếng Việt giữa xứ băng",
+              "text": "Mỗi đoàn có một trưởng đoàn nói tiếng Việt, ở Iceland ít nhất ba mùa đông.",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              }
             },
             {
-              "question": "Nhà bè có điều hoà và phòng tắm riêng không?",
-              "answer": "Mỗi phòng trên bè có điều hoà và phòng tắm riêng, nước nóng chạy bằng điện mặt trời."
-            },
-            {
-              "question": "Về lại Tuần Châu bằng gì?",
-              "answer": "Trưa hôm sau tàu của bè đưa bạn về bến Tuần Châu, khoảng hai tiếng rưỡi đi giữa các đảo."
+              "title": "Không hứa cực quang",
+              "text": "Lửa Băng không bao giờ hứa chắc chắn thấy cực quang. Chỉ hứa đưa bạn tới chỗ tối nhất có thể.",
+              "quote": {
+                "text": "Trời quyết định, mình chỉ chọn chỗ đứng.",
+                "by": "Trưởng đoàn"
+              }
             }
-          ]
-        }
-      ],
-      "header": {
-        "variant": "minimal"
-      }
-    },
-    {
-      "path": "nha-be",
-      "title": "Một đêm nhà bè",
-      "description": "Thử khối room-detail: một đêm ở nhà bè giữa vịnh sau chuyến bay thuỷ phi cơ.",
-      "sections": [
-        {
-          "type": "room-detail",
-          "id": "chi-tiet",
-          "eyebrow": "Sau chuyến bay",
-          "title": "Một đêm nhà bè",
-          "lead": "Hạ cánh xuống mặt vịnh, chèo kayak vào làng bè, tối ngủ trên nhà bè nghe nước vỗ dưới sàn gỗ.",
-          "images": [
-            {
-              "src": "images/nha-be.webp",
-              "alt": "Dãy nhà bè mái xanh nổi trên vịnh, kayak đỏ vàng xếp bên mép bè, sau lưng là núi đá",
-              "caption": "Nhà bè giữa vịnh."
-            },
-            {
-              "src": "images/lang-be.webp",
-              "alt": "Làng bè nuôi cá nổi giữa vịnh, phía sau là dãy núi đá",
-              "caption": "Làng chài trên bè."
-            },
-            {
-              "src": "images/kayak-nui-da.webp",
-              "alt": "Một chiếc kayak nhỏ dưới chân ba khối núi đá dựng đứng",
-              "caption": "Len giữa các đảo bằng kayak."
-            },
-            {
-              "src": "images/buong-lai.webp",
-              "alt": "Buồng lái thuỷ phi cơ nhìn qua kính chắn gió ra mặt hồ",
-              "caption": "Ngồi sau buồng lái."
-            },
-            {
-              "src": "images/thuyen-hoang-hon.webp",
-              "alt": "Thuyền buồm gỗ in bóng trên vịnh lúc chiều muộn",
-              "caption": "Chiều trên vịnh."
-            }
+          ],
+          "story": [
+            "Lửa Băng bắt đầu từ một đêm mất điện ở Vík năm 2018.",
+            "Mỗi đoàn tối đa 10 khách, có trưởng đoàn nói tiếng Việt."
           ],
           "facts": [
             {
-              "icon": "clock",
-              "label": "Thời lượng",
-              "value": "2 ngày 1 đêm"
+              "value": "2018",
+              "label": "năm đón đoàn đầu tiên"
             },
             {
-              "icon": "users",
-              "label": "Nhóm",
-              "value": "Tối đa 6 khách"
-            },
-            {
-              "icon": "plane",
-              "label": "Phương tiện",
-              "value": "Thuỷ phi cơ, kayak"
+              "value": "10",
+              "label": "khách tối đa mỗi đoàn"
             }
           ],
-          "price": 6900000,
-          "currency": "đồng",
-          "priceNote": "Mỗi khách, gồm chuyến bay, một đêm nhà bè, bữa tối hải sản và kayak.",
-          "amenities": [
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Cực quang xanh lục trên bầu trời đêm"
+          }
+        },
+        {
+          "type": "intro",
+          "id": "cam-ket",
+          "eyebrow": "Cam kết",
+          "title": "Đi chậm, ở xa đèn, trả tiền thẳng cho người địa phương",
+          "lead": "Nhà nghỉ, trang trại, người dẫn đường đều là gia đình địa phương. Lửa Băng chỉ giữ phần công tổ chức."
+        }
+      ]
+    },
+    {
+      "path": "cam-nang",
+      "title": "Cẩm nang mùa đêm dài",
+      "description": "Giờ nào làm gì, tháng nào có nắng, khi nào hoàn tiền.",
+      "sections": [
+        {
+          "type": "clock",
+          "id": "theo-gio",
+          "eyebrow": "Cẩm nang",
+          "title": "Reykjavík theo giờ, giữa tháng 12",
+          "lead": "Ngày chỉ sáng năm tiếng. Xoay đồng hồ để xem giờ đó nên ăn gì, làm gì, gió mạnh tới đâu.",
+          "windows": [
             {
-              "icon": "plane",
-              "text": "Chuyến bay ngắm vịnh 25 phút"
+              "from": 0,
+              "to": 9,
+              "name": "Đêm sâu",
+              "color": "#24364a",
+              "eat": "ngủ cho đủ",
+              "do": "ngủ, sáng dậy muộn cũng chưa lỡ gì"
             },
             {
-              "icon": "sailboat",
-              "text": "Kayak vào làng bè"
+              "from": 9,
+              "to": 11,
+              "name": "Trời hửng",
+              "color": "#5a6f8f",
+              "eat": "bánh quế quế, sữa chua skyr",
+              "do": "bơi bể nước nóng ngoài trời",
+              "item": "tam-suoi"
             },
             {
-              "icon": "utensils",
-              "text": "Bữa tối hải sản trên bè"
+              "from": 11,
+              "to": 16,
+              "name": "Năm tiếng nắng",
+              "color": "#e8b86b",
+              "eat": "súp cừu trong bát bánh mì",
+              "do": "đi xa nhất có thể khi trời còn sáng",
+              "item": "vong-tron-vang"
             },
             {
-              "icon": "bed-double",
-              "text": "Phòng ngủ riêng trên nhà bè"
+              "from": 16,
+              "to": 18,
+              "name": "Hoàng hôn dài",
+              "color": "#d77a61",
+              "eat": "cà phê, bánh quế",
+              "do": "ra bến cảng ngắm trời đổi màu"
+            },
+            {
+              "from": 18,
+              "to": 21,
+              "name": "Tối sớm",
+              "color": "#6f5aa8",
+              "eat": "cá tuyết, tôm hùm đá",
+              "do": "xem dự báo cực quang, chuẩn bị đồ ấm",
+              "item": "song-bang"
+            },
+            {
+              "from": 21,
+              "to": 24,
+              "name": "Giờ cực quang",
+              "color": "#2fbf8f",
+              "eat": "trà nóng trong bình giữ nhiệt",
+              "do": "ra ngoại ô, tắt đèn, ngẩng đầu",
+              "item": "cuc-quang"
             }
           ],
-          "view": {
-            "image": {
-              "src": "images/hoang-hon.webp",
-              "alt": "Hoàng hôn trên vịnh, núi đá in bóng"
-            },
-            "text": "Nắng tắt sau dãy núi đá ngay trước hiên bè.",
-            "best": "chiều muộn"
-          },
-          "availability": [
-            {
-              "label": "Tháng 11/2026",
-              "left": 4
-            },
-            {
-              "label": "Tháng 12/2026",
-              "left": 0
-            }
+          "traffic": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            3,
+            3,
+            3,
+            4,
+            4,
+            5,
+            5,
+            4,
+            3,
+            2,
+            1
           ],
-          "others": [
+          "labels": {
+            "range": "Kéo để đổi giờ",
+            "now": "Bây giờ ở Reykjavík: {h}h",
+            "eat": "Ăn",
+            "do": "Làm",
+            "traffic": "Gió",
+            "trafficValue": "cấp {n} trên 5",
+            "tour": "Hợp với tour {name}"
+          }
+        },
+        {
+          "type": "tips",
+          "id": "meo",
+          "eyebrow": "Mẹo nhỏ",
+          "title": "Trước khi ra khỏi nhà",
+          "items": [
             {
-              "label": "Chuyến bay ngắm vịnh",
-              "href": "page:/#chuyen-bay",
-              "image": {
-                "src": "images/nui-da-lan-ha.webp",
-                "alt": "Núi đá vôi giữa vịnh nhìn từ trên cao"
+              "title": "Tháng nào có nắng?",
+              "text": "Giữa tháng 12 chỉ khoảng 4 tiếng nắng, giữa tháng 6 thì gần như sáng suốt ngày. Cột càng cao càng nhiều giờ sáng.",
+              "chart": {
+                "values": [
+                  5,
+                  8,
+                  11,
+                  14,
+                  18,
+                  21,
+                  20,
+                  16,
+                  12,
+                  9,
+                  6,
+                  4
+                ],
+                "max": 24,
+                "labels": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+                ],
+                "label": "Số giờ có ánh sáng trong ngày theo tháng: ít nhất tháng 12, nhiều nhất tháng 6"
               },
-              "note": "Xem ở trang chủ"
+              "link": {
+                "label": "Đi mùa tối nhất",
+                "href": "page:tour/cuc-quang"
+              }
             },
             {
-              "label": "Hỏi đáp",
-              "href": "page:hoi-dap"
+              "title": "Khi nào thấy cực quang?",
+              "text": "Cần ba điều: trời tối, trời quang, gió mặt trời đủ mạnh. Tháng 9 đến tháng 3 là mùa.",
+              "chart": {
+                "values": [
+                  5,
+                  5,
+                  4,
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  3,
+                  4,
+                  5,
+                  5
+                ],
+                "max": 5,
+                "labels": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12"
+                ],
+                "label": "Khả năng thấy cực quang theo tháng: cao từ tháng 10 đến tháng 2, gần như không có từ tháng 5 đến tháng 7"
+              }
+            },
+            {
+              "title": "Lái xe được không?",
+              "text": "Không nên tự lái mùa đông nếu chưa quen đường băng. Gió có thể giật bung cửa xe khi mở.",
+              "link": {
+                "label": "Để trưởng đoàn lái",
+                "href": "page:hanh-trinh"
+              }
+            },
+            {
+              "title": "Ngắn gọn thôi",
+              "text": "Mẹo này không có biểu đồ và cũng không có liên kết, để thử thẻ thiếu trường."
+            }
+          ]
+        },
+        {
+          "type": "policy",
+          "id": "chinh-sach",
+          "eyebrow": "Chính sách huỷ",
+          "title": "Huỷ, hoàn, đổi khi trời xấu",
+          "lead": "Tính theo ngày khởi hành của tour, giờ Reykjavík.",
+          "rows": [
+            {
+              "when": "Báo huỷ trước 45 ngày",
+              "what": "Hoàn toàn bộ cọc",
+              "tone": "ok"
+            },
+            {
+              "when": "Báo huỷ từ 30 đến 44 ngày",
+              "what": "Hoàn một nửa cọc",
+              "tone": "mid"
+            },
+            {
+              "when": "Báo huỷ dưới 30 ngày",
+              "what": "Không hoàn cọc",
+              "tone": "no"
+            },
+            {
+              "when": "Bão tuyết đóng đường",
+              "what": "Ở lại miễn phí, đổi lịch bù điểm bị lỡ",
+              "tone": "ok"
+            },
+            {
+              "when": "Không thấy cực quang cả chuyến",
+              "what": "Giảm 20% nếu đi lại trong hai năm",
+              "tone": "mid"
+            }
+          ],
+          "note": "Chuyến bay quốc tế bị huỷ vì bão thì Lửa Băng giữ chỗ cho chuyến sau gần nhất, không mất cọc."
+        }
+      ]
+    },
+    {
+      "path": "lien-he",
+      "title": "Liên hệ",
+      "description": "Gọi văn phòng Lửa Băng ở Reykjavík, giờ làm việc theo giờ Iceland.",
+      "sections": [
+        {
+          "type": "contact",
+          "id": "lien-he",
+          "variant": "notes",
+          "eyebrow": "Liên hệ",
+          "title": "Văn phòng ở Reykjavík, nói tiếng Việt",
+          "lead": "Iceland chậm hơn Việt Nam 7 tiếng. Gọi trong giờ làm việc ở Reykjavík, hoặc để lại lời nhắn để được gọi lại.",
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Làng ven biển dưới chân vách đá phủ tuyết",
+            "caption": "Văn phòng nhìn ra bến cảng cũ"
+          },
+          "hours": {
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "labels": {
+            "open": "Văn phòng đang mở, tới {to} giờ Reykjavík",
+            "closed": "Văn phòng đã nghỉ, từ {from} giờ Reykjavík sẽ gọi lại"
+          },
+          "ways": [
+            {
+              "kind": "phone",
+              "label": "Tổng đài",
+              "text": "Gọi từ Việt Nam: chiều và tối giờ Việt Nam là giờ làm việc ở đây."
+            },
+            {
+              "kind": "email",
+              "label": "Email đặt tour",
+              "text": "Hồ sơ visa, thư mời, hoá đơn công ty."
+            },
+            {
+              "kind": "address",
+              "label": "Văn phòng",
+              "text": "Ghé uống cà phê trước ngày khởi hành."
+            },
+            {
+              "icon": "map-pin",
+              "label": "Điểm hẹn ngày đầu",
+              "value": "Cửa ra số 2, sân bay Keflavík",
+              "text": "Trưởng đoàn cầm bảng tên tiếng Việt."
+            },
+            {
+              "icon": "siren",
+              "label": "Khẩn cấp ngoài giờ",
+              "value": "112",
+              "href": "tel:112",
+              "text": "Số khẩn cấp của Iceland, có người nghe tiếng Anh."
+            }
+          ],
+          "message": {
+            "title": "Để lại lời nhắn",
+            "lead": "Văn phòng đọc tin nhắn mỗi sáng giờ Reykjavík.",
+            "tipsTitle": "Nhắn kèm mấy điều này",
+            "tips": [
+              "Tour và tháng muốn đi",
+              "Số khách, có trẻ em không",
+              "Đã có visa Schengen chưa",
+              "Có muốn ở nhà mái kính không"
+            ],
+            "name": "Bạn tên gì?",
+            "text": "Lửa Băng giúp gì được cho bạn?",
+            "placeholder": "Ví dụ: nhà mình 4 người, muốn đi cuối tháng 12, chưa có visa.",
+            "sms": "Gửi tin nhắn",
+            "email": "Gửi email",
+            "template": "Chào Lửa Băng, mình là {name}. {text}",
+            "subject": "Hỏi tour mùa đông, {name}"
+          },
+          "errors": {
+            "name": "Bạn cho Lửa Băng biết tên để tiện gọi lại nhé.",
+            "text": "Bạn viết vài chữ điều cần hỏi nhé."
+          }
+        }
+      ]
+    },
+    {
+      "path": "dem-cuc-quang",
+      "title": "Đêm cực quang",
+      "description": "Landing page một mục tiêu: giữ chỗ tour săn cực quang mùa đông.",
+      "header": {
+        "variant": "minimal"
+      },
+      "sections": [
+        {
+          "type": "hero",
+          "id": "dem-cuc-quang",
+          "variant": "stacked",
+          "effect": "reveal",
+          "revealHint": "Cuộn xuống để tắt đèn",
+          "eyebrow": "Chỉ 7 chuyến mùa đông này",
+          "title": "Năm đêm, một lần trời xanh lục",
+          "lead": "Đoàn tối đa 10 khách, trưởng đoàn nói tiếng Việt, mỗi tối đổi chỗ đợi theo dự báo mây.",
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Cực quang xanh lục trên bầu trời đêm"
+          },
+          "link": {
+            "label": "Xem ngày khởi hành",
+            "href": "#dat-cho"
+          },
+          "stats": [
+            {
+              "value": "5",
+              "label": "đêm đợi cực quang"
+            },
+            {
+              "value": "10",
+              "label": "khách tối đa mỗi đoàn"
+            },
+            {
+              "value": "âm 8 độ",
+              "label": "đêm lạnh nhất thường gặp"
+            }
+          ]
+        },
+        {
+          "type": "offer",
+          "id": "goi",
+          "eyebrow": "Ba cách đi",
+          "title": "Chọn cách đi, xem giá 5 đêm",
+          "titleAccent": "trước 30/11",
+          "lead": "Ưu đãi đặt sớm áp dụng cho cả ba cách đi.",
+          "deadline": "2026-11-30T23:59:59+00:00",
+          "from": "2026-11-01",
+          "to": "2027-02-28",
+          "nights": 5,
+          "freeNights": 1,
+          "currency": "đồng",
+          "image": {
+            "src": "images/khung.svg",
+            "alt": "Thuyền lội nước giữa những tảng băng trôi"
+          },
+          "caption": "Mùa đông 2026",
+          "captionPlace": "Bờ biển phía nam",
+          "note": {
+            "greeting": "Gửi bạn,",
+            "text": "Đặt sớm thì đêm thứ năm Lửa Băng mời.",
+            "sign": "Lửa Băng"
+          },
+          "rooms": [
+            {
+              "id": "ghep",
+              "label": "Đoàn ghép, phòng đôi",
+              "price": 13800000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Làng ven biển dưới chân vách đá phủ tuyết"
+              }
+            },
+            {
+              "id": "rieng",
+              "label": "Phòng riêng",
+              "price": 17200000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Nhà gỗ mái kính giữa đồng tuyết"
+              }
+            },
+            {
+              "id": "kinh",
+              "label": "Nhà mái kính cả 5 đêm",
+              "price": 21500000,
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              }
             }
           ],
           "labels": {
-            "from": "Giá mỗi khách",
-            "perNight": "mỗi khách",
-            "book": "Giữ ghế",
-            "availability": "Còn chỗ",
-            "left": "còn {n} chỗ",
-            "soldOut": "hết chỗ",
-            "amenities": "Có trong giá",
-            "gallery": "Một vòng quanh vịnh",
-            "open": "Xem ảnh {n} cỡ lớn",
-            "lightbox": {
-              "close": "Đóng",
-              "prev": "Ảnh trước",
-              "next": "Ảnh sau"
-            },
-            "view": "Nhìn ra từ bè",
-            "best": "Đẹp nhất lúc",
-            "others": "Xem thêm"
+            "room": "Chọn cách đi",
+            "slip": "5 đêm, {room}",
+            "full": "Giá 5 đêm",
+            "pay": "Bạn trả (4 đêm)",
+            "perNightTotal": "Tính ra mỗi đêm",
+            "million": "{n} triệu",
+            "perNight": "một đêm",
+            "stamp": "5 đêm, trả 4",
+            "stampAlt": "Tem {room}: {alt}",
+            "daysLeft": "còn {d} ngày",
+            "timeLeft": "{h} giờ {m} phút",
+            "ended": "Ưu đãi đã hết hạn."
           }
+        },
+        {
+          "type": "booking",
+          "id": "dat-cho",
+          "variant": "calendar",
+          "eyebrow": "Giữ chỗ ngay",
+          "title": "Chọn đêm bạn muốn đợi trời",
+          "lead": "Gửi tin giữ chỗ, chưa cần trả tiền.",
+          "price": 68900000,
+          "priceNote": "một khách, phòng đôi",
+          "deal": {
+            "amount": 3000000,
+            "until": "2026-11-30",
+            "label": "Đặt trước 30/11/2026: giảm 3.000.000 đồng mỗi khách"
+          },
+          "includes": [
+            "Xe đưa đón từ sân bay Keflavík",
+            "4 đêm nhà gỗ, phòng đôi",
+            "Bữa sáng và bữa tối",
+            "Đi bộ sông băng có người dẫn",
+            "Thuyền đầm Jökulsárlón",
+            "Áo phao, đinh giày, bảo hiểm"
+          ],
+          "excludes": [
+            "Vé máy bay quốc tế",
+            "Bữa trưa",
+            "Phụ thu phòng đơn",
+            "Tắm suối nóng tự chọn"
+          ],
+          "departures": [
+            {
+              "date": "2026-11-04",
+              "seats": 6
+            },
+            {
+              "date": "2026-11-11",
+              "seats": 10
+            },
+            {
+              "date": "2026-11-18",
+              "seats": 3
+            },
+            {
+              "date": "2026-11-25",
+              "seats": 0
+            },
+            {
+              "date": "2026-12-02",
+              "seats": 8
+            }
+          ],
+          "currency": "đồng",
+          "deposit": 15000000,
+          "fewSeats": 3,
+          "defaultGuests": 2,
+          "labels": {
+            "departures": "Ngày khởi hành",
+            "month": "tháng {m}, {y}",
+            "seats": "Còn {n} chỗ",
+            "soldOut": "Hết chỗ",
+            "includesTitle": "Đã gồm",
+            "excludesTitle": "Chưa gồm",
+            "name": "Họ tên",
+            "phone": "Số điện thoại",
+            "phoneExample": "0123 456 789",
+            "guests": "Số khách",
+            "guestsLess": "Bớt một khách",
+            "guestsMore": "Thêm một khách",
+            "guestsValue": "{guests} khách",
+            "baseLine": "{price} × {guests} khách",
+            "dealLine": "Ưu đãi đặt sớm",
+            "total": "Tạm tính",
+            "deposit": "Cọc khi được gọi xác nhận"
+          },
+          "policies": [
+            {
+              "title": "Cọc và thanh toán",
+              "items": [
+                {
+                  "label": "Cọc",
+                  "text": "15.000.000 đồng mỗi khách sau khi Lửa Băng gọi xác nhận còn chỗ."
+                },
+                {
+                  "label": "Phần còn lại",
+                  "text": "trả trước ngày khởi hành 30 ngày, vì phải giữ phòng nhà gỗ từ sớm."
+                }
+              ]
+            },
+            {
+              "title": "Thời tiết và đổi lịch",
+              "items": [
+                {
+                  "label": "Bão tuyết",
+                  "text": "đường đóng thì đoàn ở lại nơi nghỉ, Lửa Băng chịu tiền phòng thêm."
+                },
+                {
+                  "label": "Không thấy cực quang",
+                  "text": "không hoàn tiền vì trời quyết định; được giảm 20% nếu đi lại trong hai năm."
+                },
+                {
+                  "label": "Huỷ",
+                  "text": "trước 45 ngày hoàn toàn bộ cọc; từ 30 đến 44 ngày hoàn một nửa."
+                }
+              ],
+              "note": "Iceland mùa đông có thể đóng đường trong vài giờ. Trưởng đoàn theo dõi trang cảnh báo đường bộ mỗi sáng."
+            }
+          ],
+          "errors": {
+            "name": "Bạn nhập họ tên giúp Lửa Băng nhé.",
+            "phone": "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0."
+          },
+          "message": {
+            "brand": "Lửa Băng - Phiếu giữ chỗ",
+            "from": "Keflavík",
+            "to": "Jökulsárlón",
+            "guest": "Khách",
+            "date": "Khởi hành",
+            "seats": "Số chỗ",
+            "total": "Tạm tính",
+            "stamp": "Chờ xác nhận",
+            "template": "Lửa Băng ơi, mình là {name}, số điện thoại {phone}. Mình muốn giữ {guests} chỗ tour săn cực quang khởi hành ngày {date}. Tạm tính {total}.",
+            "sms": "Gửi tin nhắn",
+            "call": "Gọi Lửa Băng",
+            "copy": "Chép nội dung",
+            "copied": "Đã chép"
+          }
+        },
+        {
+          "type": "reviews",
+          "id": "khach-ke",
+          "variant": "postcard",
+          "title": "Người đã đợi được trời",
+          "scoreLabel": "điểm",
+          "items": [
+            {
+              "rating": 5,
+              "text": "Đêm thứ ba trời quang đúng mười phút, cả đoàn hét lên khi dải xanh lục cuộn qua đầu. Mười phút đó đáng cả chuyến bay hai mươi tiếng.",
+              "name": "Khánh Linh",
+              "from": "Hà Nội",
+              "note": "đi cùng chồng",
+              "stamp": {
+                "value": -12,
+                "unit": "độ",
+                "label": "Vík"
+              },
+              "date": "09.01.2026"
+            },
+            {
+              "rating": 4,
+              "text": "Lạnh hơn mình tưởng nhiều, may mà trưởng đoàn bắt mặc đủ ba lớp. Hang băng xanh đẹp tới mức chụp không ra.",
+              "name": "Quốc Bảo",
+              "from": "TP.HCM",
+              "note": "đi một mình",
+              "stamp": {
+                "value": 1100,
+                "unit": "năm",
+                "label": "Sông băng"
+              },
+              "date": "22.02.2026"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "404",
+      "title": "Lạc giữa đồng tuyết",
+      "sections": [
+        {
+          "type": "intro",
+          "id": "lac-duong",
+          "variant": "center",
+          "eyebrow": "Không tìm thấy trang",
+          "title": "Tuyết phủ mất lối này rồi",
+          "lead": "Trang bạn tìm không có. Thử một trong các tour dưới đây, hoặc quay về trang chủ."
+        },
+        {
+          "type": "room-detail",
+          "labels": {
+            "others": "Đường còn mở"
+          },
+          "others": [
+            {
+              "label": "Săn cực quang 5 ngày",
+              "href": "page:tour/cuc-quang",
+              "note": "Tháng 10 đến tháng 3, từ 68.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Cực quang xanh lục trên bầu trời đêm"
+              }
+            },
+            {
+              "label": "Vòng Tròn Vàng trong một ngày",
+              "href": "page:tour/vong-tron-vang",
+              "note": "Khởi hành mỗi ngày, từ 4.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Thác nước viền băng giữa vách đá"
+              }
+            },
+            {
+              "label": "Sông băng và hang băng xanh",
+              "href": "page:tour/song-bang",
+              "note": "Tháng 11 đến tháng 3, từ 21.900.000 đồng",
+              "image": {
+                "src": "images/khung.svg",
+                "alt": "Người đi bộ trên mặt sông băng xanh"
+              }
+            },
+            {
+              "label": "Một ngày ở Reykjavík khi trời chỉ sáng năm tiếng",
+              "href": "page:mot-ngay"
+            },
+            {
+              "label": "Cẩm nang: giờ nào làm gì giữa mùa đêm dài",
+              "href": "page:cam-nang"
+            }
+          ]
         }
       ]
     }
@@ -546,88 +2941,44 @@
   "footer": {
     "variant": "columns",
     "image": {
-      "src": "images/hoang-hon.webp",
-      "alt": "Mặt trời lặn đỏ cam trên vịnh, một con tàu nhỏ đi qua dưới dãy núi đá"
+      "src": "images/khung.svg",
+      "alt": "Đàn ngựa lông dày đứng giữa đồng tuyết lúc hoàng hôn"
     },
-    "title": "Mai bay sớm,",
-    "titleAccent": "vịnh còn sương",
+    "title": "Hẹn bạn",
+    "titleAccent": "dưới bầu trời xanh lục",
+    "clouds": true,
     "marquee": [
-      "Tuần Châu",
-      "Ba Trái Đào",
-      "Vịnh Lan Hạ",
-      "Làng chài Cái Bèo",
-      "Hang Sáng Tối",
-      "Đảo Cát Bà"
+      "Reykjavík",
+      "Þingvellir",
+      "Geysir",
+      "Gullfoss",
+      "Seljalandsfoss",
+      "Vík",
+      "Sólheimajökull",
+      "Jökulsárlón",
+      "Höfn",
+      "Akureyri"
     ],
+    "plate": {
+      "number": "64°",
+      "lines": [
+        "Vĩ độ Bắc",
+        "Reykjavík"
+      ],
+      "label": "Reykjavík nằm ở vĩ độ 64 độ Bắc"
+    },
     "navTitle": "Khám phá",
     "contactTitle": "Liên hệ",
-    "addressTitle": "Bến bay",
-    "note": "Lượn Vịnh là thương hiệu giả tưởng; dữ liệu trang này do AI viết theo prompt mẫu của đội, làm cho cuộc thi Web Design 2026. Thông tin liên hệ là dữ liệu giả.",
+    "addressTitle": "Văn phòng",
+    "note": "Lửa Băng là thương hiệu giả tưởng để thử độ linh hoạt của các component; ảnh trên trang là ảnh giữ chỗ, thông tin liên hệ là dữ liệu giả.",
     "creditsTitle": "Nguồn ảnh"
   },
   "credits": [
     {
-      "file": "images/hero.webp",
-      "author": "Andrew W (Tawker)",
-      "license": "CC BY 2.5",
-      "source": "https://commons.wikimedia.org/wiki/File:SeaPlane_SaltSpring_Island.jpg",
-      "note": "Chụp ở đảo Salt Spring, Canada; đã thu nhỏ"
-    },
-    {
-      "file": "images/buong-lai.webp",
-      "author": "Tony Webster from Minneapolis, Minnesota, United States",
-      "license": "CC BY-SA 2.0",
-      "source": "https://commons.wikimedia.org/wiki/File:N17CJ_-_1968_Cessna_206_Seaplane_(49044266068).jpg",
-      "note": "Chụp ở Mỹ; đã thu nhỏ"
-    },
-    {
-      "file": "images/nui-da-lan-ha.webp",
-      "author": "Christophe95",
-      "license": "CC BY-SA 4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_05.jpg",
-      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
-    },
-    {
-      "file": "images/lang-be.webp",
-      "author": "Christophe95",
-      "license": "CC BY-SA 4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Lan_Ha_Bay_14.jpg",
-      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
-    },
-    {
-      "file": "images/cheo-kayak.webp",
-      "author": "Christophe95",
-      "license": "CC BY-SA 4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Kayaking_in_Ha_Long_Bay_2.jpg",
-      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
-    },
-    {
-      "file": "images/kayak-nui-da.webp",
-      "author": "Arian Zwegers",
-      "license": "CC BY 2.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Halong_Bay,_kayaking_(6225416547).jpg",
-      "note": "Đã thu nhỏ"
-    },
-    {
-      "file": "images/thuyen-hoang-hon.webp",
-      "author": "Vyacheslav Argenberg",
-      "license": "CC BY 4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Ha_Long_Bay,_Vietnam,_Sunset_in_Ha_Long_Bay.jpg",
-      "note": "Đã thu nhỏ"
-    },
-    {
-      "file": "images/nha-be.webp",
-      "author": "Christophe95",
-      "license": "CC BY-SA 4.0",
-      "source": "https://commons.wikimedia.org/wiki/File:Kayaks_in_Ha_Long_Bay.jpg",
-      "note": "Chụp ở vịnh Hạ Long, Lan Hạ; đã thu nhỏ"
-    },
-    {
-      "file": "images/hoang-hon.webp",
-      "author": "Mustang Joe",
+      "file": "images/khung.svg",
+      "author": "ClauKi",
       "license": "CC0",
-      "source": "https://commons.wikimedia.org/wiki/File:Ha_Long_Bay_Sunset,_Vietnam.jpg",
-      "note": "Đã thu nhỏ"
+      "note": "khung giữ chỗ của bộ dữ liệu thử, không phải ảnh thật"
     }
   ]
 }

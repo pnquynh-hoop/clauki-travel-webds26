@@ -15,7 +15,7 @@ rồi mở http://localhost:5500. `serve.py` có file thì trả file, không c�
 để các trang con như `/ganh-som/phong` mở được; nó chỉ dùng trên máy, không deploy. `python3 -m http.server` và
 Live Server chỉ mở được trang chủ. Nếu mở bằng cách nhấp đúp vào file, trình duyệt sẽ chặn việc đọc JSON.
 
-Địa chỉ: `/<thương hiệu>/<trang>`, ví dụ `/ganh-som/`, `/brand-test/hoi-dap`; `/` là thương hiệu mặc định.
+Địa chỉ: `/<thương hiệu>/<trang>`, ví dụ `/ganh-som/`, `/sighgone/tour/can-gio`; `/` là thương hiệu mặc định.
 Đổi thương hiệu bằng nút tròn ở góc dưới trái (của BTC, trong `wd2026.js`): trang đang mở được giữ nguyên.
 
 ## Một component, nhiều cách hiển thị

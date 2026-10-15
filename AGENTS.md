@@ -160,9 +160,10 @@ export class WlHero extends HTMLElement {
   - mỗi thương hiệu có ít nhất 2 section mà các thương hiệu khác không dùng, gắn với loại hình của nó;
   - thương hiệu nào dùng section nào ghi ở cột "Thương hiệu dùng" trong bảng mục 12.
 
-**`brands/brand-test/`: "Lượn Vịnh", bản cấu hình do AI viết theo [prompt mẫu](docs/prompts/tao-thuong-hieu-moi.md)** (bay thuỷ phi cơ ngắm vịnh, ngủ một đêm nhà bè), chỉ dùng các khối chạy bằng dữ liệu thuần; minh chứng đổi file cấu hình là ra landing page mới. Bộ dữ liệu thử cũ "Lối Mây" (đủ mọi loại section) còn trong lịch sử Git.
-- Viết component mới thì thử trên `/brand-test/` trước. brand-test có hai trang (`/` và `hoi-dap`) để thử chuyển trang. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
-- Có trong nút đổi thương hiệu với nhãn "Lượn Vịnh (AI tạo)" để BGK thấy thương hiệu sinh từ cấu hình; thông tin gửi BTC ghi rõ đây là bản AI tạo, ngoài các thương hiệu chính.
+**`brands/brand-test/`: thương hiệu thử, không gắn với một chủ đề cố định.** Chủ đề và dữ liệu thay được bất cứ lúc nào, bộ cũ còn trong lịch sử Git. Vai trò:
+- Cho BGK thấy một thương hiệu sinh ra chỉ từ file cấu hình (`content.json`, `theme.css`), ngoài các thương hiệu chính. Có trong nút đổi thương hiệu; dữ liệu do AI viết thì nhãn ghi "(AI tạo)" và thông tin gửi BTC ghi rõ.
+- Thử hệ thống: viết component mới thì thử trên `/brand-test/` trước. Dữ liệu nên khác xa các thương hiệu chính (nơi chốn, mùa, phương tiện, màu nền sáng hay tối, lượng dữ liệu) và có cả trường hợp thiếu trường, để kiểm component có thích nghi không.
+- Ảnh được để khung giữ chỗ (`images/khung.svg`) vì brand-test dùng để xem bố cục. Tên trường riêng trong brand-test chỉ là đề xuất: người viết component đặt tên khác thì sửa brand-test cho khớp.
 
 **`brands/<id>/theme.css`**
 - chỉ có `@import` Google Fonts (nếu cần) và một khối `:root { }`;
