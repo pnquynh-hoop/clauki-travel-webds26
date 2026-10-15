@@ -351,11 +351,13 @@
   margin-top: 0;
 }
 
+/* Chữ trong ô nhập viết thường (không đậm theo nhãn của ô) cho dễ đọc; chỉ nhãn phía trên ô in đậm. */
 .ed-select,
 .ed-input {
   width: 100%;
   min-height: 2.3rem;
   padding: 0.35rem 0.6rem;
+  font-weight: 400;
   background: #fff;
   border: 1px solid var(--ed-line);
   border-radius: 8px;
@@ -1084,4 +1086,216 @@
 .ed-body * {
   scrollbar-width: thin;
   scrollbar-color: rgb(120 120 128 / 0.55) transparent;
+}
+
+/* ---------- Màu sáng, tối (palette.js) ----------
+   Khung chat AI ở trên, dưới là lưới ba cột: tên màu, ô màu sáng, ô màu tối; chưa có bảng tối thì còn hai cột. */
+
+.ed-palette {
+  display: grid;
+  gap: 1rem;
+}
+
+.ed-palette__ai {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 12px;
+}
+
+.ed-palette__ai .ed-chips {
+  margin-top: 0;
+}
+
+.ed-palette__ai .ed-ai__out:empty {
+  display: none;
+}
+
+/* Kết quả AI gợi ý: cao tối đa 18rem, dài hơn thì cuộn bên trong khung, để bảng màu và các phần phía dưới không bị đẩy đi;
+   hai nút Đồng ý, Bỏ dính ở đáy khung nên luôn thấy. Mỗi màu một dòng: tên và màu được gợi ý. */
+.ed-palette__ai .ed-ai__out {
+  max-height: 18rem;
+  margin-top: 0.2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-top: 1px solid var(--ed-line);
+}
+
+.ed-palette__ai .ed-ai__say {
+  margin: 0.6rem 0 0.3rem;
+}
+
+.ed-palette__ai .ed-diff {
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.ed-palette__ai .ed-diff li {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.82rem;
+}
+
+.ed-palette__ai .ed-diff li.is-skip {
+  grid-template-columns: 1fr;
+}
+
+.ed-palette__ai .ed-ai__out > .ed-row {
+  position: sticky;
+  bottom: 0;
+  padding: 0.5rem 0 0.2rem;
+  background: #fff;
+}
+
+.ed-palette__view {
+  align-items: center;
+}
+
+.ed-palette__view .ed-seg {
+  color: var(--ed-ink);
+  background: #fff;
+  border: 1px solid var(--ed-line);
+}
+
+.ed-palette__view .ed-seg[aria-pressed='true'] {
+  color: var(--ed-accent-ink);
+  background: var(--ed-accent);
+  border-color: var(--ed-accent);
+}
+
+.ed-palette__grid {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ed-palette__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6.6rem 6.6rem;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ed-palette__grid.is-light-only .ed-palette__row {
+  grid-template-columns: minmax(0, 1fr) 6.6rem;
+}
+
+.ed-palette__head span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ed-muted);
+}
+
+.ed-palette__name {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ed-palette__cell {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.35rem;
+  background: #fff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+
+.ed-palette__cell.is-changed {
+  border-color: var(--ed-accent);
+}
+
+.ed-palette__cell.is-empty {
+  border: 1px dashed var(--ed-line);
+}
+
+.ed-palette__cell input {
+  flex: none;
+  width: 2rem;
+  height: 1.8rem;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.ed-palette__cell small {
+  font-size: 0.7rem;
+  color: var(--ed-muted);
+  white-space: nowrap;
+}
+
+.ed-palette__group {
+  margin: 0.4rem 0 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--ed-muted);
+}
+
+/* ---------- Thứ tự menu (menu-order.js) ----------
+   Mỗi mục một dòng: tay nắm kéo, tên mục, nút Lên, Xuống. Mục đang kéo nổi lên, viền màu nhấn. */
+
+.ed-menu-order__wrap {
+  margin-top: 0.8rem;
+}
+
+.ed-menu-order {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-menu-order__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 10px;
+}
+
+.ed-menu-order__item.is-dragging {
+  position: relative;
+  z-index: 1;
+  border-color: var(--ed-accent);
+  box-shadow: 0 8px 20px -10px rgb(0 0 0 / 0.45);
+}
+
+.ed-menu-order__handle {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--ed-muted);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.ed-menu-order__item.is-dragging .ed-menu-order__handle {
+  cursor: grabbing;
+}
+
+.ed-menu-order__grip,
+.ed-menu-order__grip svg {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.ed-menu-order__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -3,6 +3,8 @@
 import { asset } from '../core.js';
 import { textEl, linkEl, groupEl, telHref } from '../dom.js';
 import { setLang } from '../i18n.js';
+import { iconEl } from '../icon.js';
+import { toggleMode, MODE_EVENT } from '../theme-mode.js';
 
 // Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
 // Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);
@@ -16,7 +18,16 @@ function brandEl(brand, home) {
     const img = document.createElement('img');
     img.src = asset(brand.logo);
     img.alt = '';
-    a.append(img, textEl('span', 'header__brand-name', brand.name) ?? '');
+    // Logo cho chế độ tối (brand.logoDark, tuỳ chọn): CSS chỉ hiện một trong hai theo data-mode trên <html>.
+    let dark = null;
+    if (brand.logoDark) {
+      img.className = 'header__logo-light';
+      dark = document.createElement('img');
+      dark.className = 'header__logo-dark';
+      dark.src = asset(brand.logoDark);
+      dark.alt = '';
+    }
+    a.append(...[img, dark, textEl('span', 'header__brand-name', brand.name) ?? ''].filter(Boolean));
   } else {
     a.textContent = brand.name ?? '';
   }
@@ -54,6 +65,21 @@ function topbarEl(note, phone, lang) {
   return inner && groupEl('header__topbar', [inner]);
 }
 
+// Nút đổi sáng, tối (chữ cho trình đọc màn hình ở header.modeLabel, ví dụ "Chế độ tối"): luôn dựng nhưng CSS chỉ hiện
+// khi thương hiệu có bảng màu tối (theme-mode.js gắn data-modes lên <html>). aria-pressed là đang ở chế độ tối.
+// Hai icon: mặt trăng khi đang sáng (bấm để tối), mặt trời khi đang tối.
+function modeEl(label) {
+  if (!label) return null;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'header__mode';
+  button.setAttribute('aria-label', label);
+  button.setAttribute('aria-pressed', String(document.documentElement.dataset.mode === 'dark'));
+  button.append(...[iconEl('moon', 'header__mode-icon header__mode-icon--moon'), iconEl('sun', 'header__mode-icon header__mode-icon--sun')].filter(Boolean));
+  button.addEventListener('click', toggleMode);
+  return button;
+}
+
 export class WlHeader extends HTMLElement {
   connectedCallback() {
     // Phím Escape đóng menu điện thoại. Cuộn khỏi đầu trang thì bật lớp is-scrolled để CSS hiện đường kẻ dưới header.
@@ -63,7 +89,10 @@ export class WlHeader extends HTMLElement {
       if (e.key === 'Escape') this.setOpen(false);
     };
     this._onScroll = () => this.classList.toggle('is-scrolled', window.scrollY > 8);
+    // Chế độ sáng, tối đổi (bấm nút này hoặc editor đổi xem trước) thì cập nhật trạng thái nút.
+    this._onMode = (e) => this._mode?.setAttribute('aria-pressed', String(e.detail.mode === 'dark'));
     document.addEventListener('keydown', this._onKey);
+    document.addEventListener(MODE_EVENT, this._onMode);
     window.addEventListener('scroll', this._onScroll, { passive: true });
     // Thanh chính là phần còn dính trên màn hình khi cuộn (dải thông tin phía trên trượt khuất), nên đo nó.
     this._resize = new ResizeObserver(() => this.saveStuckHeight());
@@ -71,6 +100,7 @@ export class WlHeader extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('keydown', this._onKey);
+    document.removeEventListener(MODE_EVENT, this._onMode);
     window.removeEventListener('scroll', this._onScroll);
     this._resize.disconnect();
   }
@@ -126,8 +156,9 @@ export class WlHeader extends HTMLElement {
     const bar = document.createElement('div');
     bar.className = 'header__bar container';
     const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn header__cta');
+    this._mode = modeEl(header.modeLabel);
     // Nút Menu đứng ngay sau tên thương hiệu: điện thoại thì cùng hàng, phím Tab đi qua nút trước rồi mới tới menu.
-    bar.append(...[brandEl(content.brand ?? {}, this.site?.home), toggle, nav, cta].filter(Boolean));
+    bar.append(...[brandEl(content.brand ?? {}, this.site?.home), toggle, nav, this._mode, cta].filter(Boolean));
     // Đổi thương hiệu thì thanh cũ bị thay: theo dõi thanh mới (đổi bề ngang màn hình thì thanh cũng đổi cao).
     this._bar = bar;
     this._resize?.disconnect();

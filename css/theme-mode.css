@@ -1,0 +1,30 @@
+/* theme-mode.css - quy tắc của chế độ tối (js/theme-mode.js). Luôn tải, nhưng chỉ có tác dụng khi <html> có
+   data-mode="dark", tức thương hiệu có bảng màu tối (--dark-*) và khách đang chọn chế độ tối.
+   Vật vốn sáng ngoài đời (giấy note, vé, biển, chữ đè trên ảnh) giữ bảng màu sáng: trong phạm vi các khối đó, biến màu
+   trả về bản sáng mà theme-mode.js đã chép ra --light-*. Gom ở đây để không phải sửa CSS của từng khối. */
+
+/* Giữ bảng màu sáng trong chế độ tối: ảnh đầu trang có chữ, sương vẽ trên ảnh (hero haze), poster và cảnh thành phố
+   (hero ride), giấy note của khách kể, biển số nhà (khối dùng plate.js, footer, ô biển số của gallery).
+   Biến nào thương hiệu không có bản sáng (--light-* rỗng) thì không hợp lệ, khối tự dùng giá trị dự phòng của nó. */
+:root[data-mode='dark'] :is(.hero--haze, .hero--ride, .reviews__sticky, .gallery__plates, .plate, .footer__plate) {
+  --color-primary: var(--light-color-primary);
+  --color-on-primary: var(--light-color-on-primary);
+  --color-bg: var(--light-color-bg);
+  --color-surface: var(--light-color-surface);
+  --color-ink: var(--light-color-ink);
+  --color-muted: var(--light-color-muted);
+  --color-accent: var(--light-color-accent);
+  --color-tint: var(--light-color-tint);
+  --color-mark: var(--light-color-mark);
+  --card-border: var(--light-card-border);
+  --card-shadow: var(--light-card-shadow);
+  --btn-border: var(--light-btn-border);
+  --btn-shadow: var(--light-btn-shadow);
+  --btn-shadow-hover: var(--light-btn-shadow-hover);
+  --eyebrow-color: var(--light-eyebrow-color);
+}
+
+/* Số chốt của huy chương tô màu riêng từ dữ liệu (thường đậm, chọn cho nền sáng): trên thẻ tối pha sáng lên cho đủ đọc. */
+:root[data-mode='dark'] .medals__value {
+  color: color-mix(in srgb, var(--medal) 55%, var(--color-ink));
+}
