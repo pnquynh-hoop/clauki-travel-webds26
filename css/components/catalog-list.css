@@ -348,3 +348,16 @@ a.catalog-list__card:hover .catalog-list__media img {
     transform: none;
   }
 }
+
+/* Kiểu compact: khối phụ ở cuối trang (tour cùng gu, gợi ý ở 404), tiêu đề cỡ thường như các khối khác thay vì
+   tiêu đề rất lớn của trang tất cả tour. */
+.catalog-list--compact .catalog-list__head {
+  gap: 0.5rem;
+}
+
+.catalog-list--compact .catalog-list__title {
+  max-width: none;
+  font-size: clamp(1.9rem, 1.3rem + 2.6vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
