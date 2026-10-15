@@ -182,8 +182,8 @@ function onFrameLoad() {
   const doc = frameDoc();
   if (!doc) return;
   const style = doc.createElement('style');
-  style.textContent = `[data-ed-hover] { outline: 2px dashed #22d3ee; outline-offset: -2px; }
-    [data-ed-sel] { outline: 3px solid #22d3ee; outline-offset: -3px; }`;
+  style.textContent = `[data-ed-hover] { outline: 2px dashed #0891b2; outline-offset: -2px; }
+    [data-ed-sel] { outline: 3px solid #0891b2; outline-offset: -3px; }`;
   doc.head.append(style);
   doc.addEventListener('click', onFrameClick, true);
   doc.addEventListener('mouseover', onFrameHover);

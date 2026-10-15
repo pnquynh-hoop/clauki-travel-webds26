@@ -9,8 +9,10 @@
   --ed-ink-3: #2e2e33;
   --ed-paper: #f4f4f5;
   --ed-line: rgb(24 24 27 / 0.12);
-  --ed-accent: #22d3ee;
-  --ed-accent-ink: #083344;
+  /* Nhấn xanh ngọc đậm (dịu hơn cyan sáng #22d3ee cũ, chữ trắng trên nền này đạt 5,4), kèm bản sáng cho chữ nhỏ trên nền tối. */
+  --ed-accent: #0e7490;
+  --ed-accent-ink: #ffffff;
+  --ed-accent-text: #7dd3e0;
   --ed-red: #b91c1c;
   --ed-green: #166534;
   --ed-muted: #52525b;
@@ -82,7 +84,7 @@
 }
 
 .ed-top__status.is-draft {
-  color: var(--ed-accent);
+  color: var(--ed-accent-text);
 }
 
 .ed-top__group {
@@ -1075,4 +1077,11 @@
 
 .ed-ai__config .ed-input {
   margin-top: 0.4rem;
+}
+
+/* Thanh cuộn mảnh trong editor và trang tạo web (thay thanh to có mũi tên của hệ thống). */
+.ed-body,
+.ed-body * {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(120 120 128 / 0.55) transparent;
 }
