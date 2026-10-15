@@ -461,6 +461,8 @@
 .ride__strip--far { z-index: 2; bottom: 17svh; height: 25svh; }
 .ride__strip--near { z-index: 8; height: 31svh; }
 .ride--live .ride__stage.is-calm .ride__strip { opacity: calc(1 - var(--calm, 1)); }
+/* Các công trình chưa vào cảnh: ở màn mở đầu công trình đầu tiên đang nằm sẵn bên trái, lộ ra sau chữ như một toà tháp thừa. */
+.ride--live .ride__stage.is-calm .ride__world { opacity: calc(1 - var(--calm, 1)); }
 
 .ride__strip-set {
   position: relative;
