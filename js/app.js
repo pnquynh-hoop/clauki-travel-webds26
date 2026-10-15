@@ -25,7 +25,8 @@ const COMPONENTS = {
   'wl-cloud-band': { load: () => import('./components/wl-cloud-band.js').then((m) => m.WlCloudBand), css: ['cloud-band'] },
   'wl-process': { load: () => import('./components/wl-process.js').then((m) => m.WlProcess), css: ['process'] },
   'wl-reviews': { load: () => import('./components/wl-reviews.js').then((m) => m.WlReviews), css: ['reviews'] },
-  'wl-room-detail': { load: () => import('./components/wl-room-detail.js').then((m) => m.WlRoomDetail), css: ['room-detail', 'lightbox'] },
+  // Kiểu ticket của room-detail có thể đặt lộ trình (route) vào bên trong, nên tải kèm route.css.
+  'wl-room-detail': { load: () => import('./components/wl-room-detail.js').then((m) => m.WlRoomDetail), css: ['room-detail', 'lightbox', 'route'] },
   'wl-clock': { load: () => import('./components/wl-clock.js').then((m) => m.WlClock), css: ['clock'] },
   'wl-tips': { load: () => import('./components/wl-tips.js').then((m) => m.WlTips), css: ['tips'] },
   'wl-policy': { load: () => import('./components/wl-policy.js').then((m) => m.WlPolicy), css: ['policy'] },

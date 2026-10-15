@@ -9,7 +9,11 @@
    Nút đặt lấy từ site.cta và phát wl:choose-room (detail.id = room) để form đặt chỗ chọn sẵn hạng này,
    kể cả khi form nằm ở trang khác (core.js giữ lựa chọn rồi phát lại).
    Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog: tên, ảnh (ảnh bìa rồi ảnh các chặng), giá, thông số,
-   ngày còn chỗ, gồm, chưa gồm, nên mang, và các mục khác cùng buổi; trường nào section ghi riêng thì dùng của section. */
+   ngày còn chỗ, gồm, chưa gồm, nên mang, và các mục khác cùng buổi; trường nào section ghi riêng thì dùng của section.
+   Kiểu ticket (tour theo ngày), theo trang chi tiết của bản mẫu SighGone: thẻ đặt thành vé giữ chỗ, ngày còn chỗ là
+   các ô bấm chọn, nút giữ chỗ phát wl:choose với id và ngày đã chọn để trang đặt tour chọn sẵn cả hai; section có
+   route thì cột trái là lộ trình (component route) đứng cạnh vé, còn câu dẫn và các danh sách xuống dưới dải ảnh
+   thành tờ hoá đơn. */
 import { asset, catalogItem } from '../core.js';
 import { textEl, groupEl } from '../dom.js';
 import { iconEl } from '../icon.js';
@@ -34,6 +38,8 @@ function imgEl(image, className, lazy) {
 const pad = (n) => String(n).padStart(2, '0');
 // Số ngày còn chỗ hiện trong thẻ đặt, và số mục khác cùng gu ở cuối trang.
 const DAYS_SHOWN = 6;
+// Vé giữ chỗ (kiểu ticket) chỉ có chỗ cho 5 ô ngày trên một hàng.
+const TICKET_DAYS = 5;
 const OTHERS_SHOWN = 3;
 
 function todayIso(timezone) {
@@ -50,6 +56,14 @@ function dayLabel(iso) {
   if (Number.isNaN(date.getTime())) return iso;
   const text = new Intl.DateTimeFormat('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(date);
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// "2026-10-20" thành thứ viết ngắn và ngày tháng cho ô ngày của vé ("Th 3", "20/10"), cũng theo giờ UTC.
+function dayChip(iso) {
+  const date = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return { dow: '', day: iso };
+  const dow = new Intl.DateTimeFormat('vi-VN', { weekday: 'short', timeZone: 'UTC' }).format(date);
+  return { dow, day: `${date.getUTCDate()}/${date.getUTCMonth() + 1}` };
 }
 
 // Ảnh bìa rồi ảnh của từng chặng (chú thích là tên chặng), bỏ ảnh trùng.
@@ -205,7 +219,97 @@ export class WlRoomDetail extends HTMLElement {
     return groupEl('room-detail__availability', [textEl('p', 'room-detail__card-title', this.labels.availability), list]);
   }
 
+  // Vé giữ chỗ: mỗi ngày còn chỗ là một ô radio (dùng được bằng bàn phím); ngày hết chỗ khoá lại.
+  // Mặc định chọn ngày gần nhất còn chỗ.
+  daysEl(section) {
+    const days = (section.availability ?? []).filter((d) => d.date).slice(0, TICKET_DAYS);
+    if (!days.length) return null;
+    const name = `${this.id || 'room-detail'}-day`;
+    const firstOpen = days.find((d) => Number(d.left) > 0);
+    this._day = firstOpen?.date ?? null;
+    const chips = days.map((d) => {
+      const soldOut = Number(d.left) === 0;
+      const { dow, day } = dayChip(d.date);
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = name;
+      input.value = d.date;
+      input.disabled = soldOut;
+      input.checked = d === firstOpen;
+      input.addEventListener('change', () => { this._day = d.date; });
+      const label = document.createElement('label');
+      label.className = soldOut ? 'room-detail__day is-full' : 'room-detail__day';
+      label.append(input, ...[
+        textEl('span', 'room-detail__day-dow', dow),
+        textEl('span', 'room-detail__day-date', day),
+        textEl('span', 'room-detail__day-left', soldOut ? this.labels.soldOut : fill(this.labels.left, { n: d.left })),
+      ].filter(Boolean));
+      return label;
+    });
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'room-detail__days';
+    const legend = textEl('legend', 'room-detail__card-title', this.labels.chooseDay ?? this.labels.availability);
+    fieldset.append(...[legend, ...chips].filter(Boolean));
+    return fieldset;
+  }
+
+  // Nút giữ chỗ của vé: phát wl:choose kèm ngày đang chọn rồi mới sang trang đặt; core.js giữ lựa chọn và phát lại
+  // khi trang đặt dựng xong.
+  ticketBookEl(section) {
+    // Bỏ room, item khi gọi bookEl để nút không phát thêm wl:choose chỉ có id; vé tự phát một lần, kèm ngày.
+    const a = this.bookEl({ ...section, room: null, item: null });
+    if (a && section.room && !section.book) {
+      a.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('wl:choose', { detail: { id: section.room, date: this._day } }));
+      });
+    }
+    return a;
+  }
+
+  // Kiểu ticket có route: lộ trình (component route) đứng ở cột trái, cạnh vé, như bản mẫu.
+  // core.js chỉ tải những khối có trong sections của trang, nên ở đây tự tải wl-route. Phải đăng ký xong rồi mới
+  // tạo thẻ và gán dữ liệu: gán trước khi đăng ký thì khối không bao giờ tự vẽ. CSS route.css tải kèm ở app.js.
+  routeEl(section) {
+    if (!section.route) return null;
+    const slot = document.createElement('div');
+    slot.className = 'room-detail__route';
+    import('./wl-route.js').then(({ WlRoute }) => {
+      if (!customElements.get('wl-route')) customElements.define('wl-route', WlRoute);
+      const route = document.createElement('wl-route');
+      route.site = this.site;
+      route.data = { type: 'route', ...section.route, item: this._data.item };
+      slot.replaceChildren(route);
+    });
+    return slot;
+  }
+
+  // Tờ hoá đơn (kiểu ticket): đã gồm, chưa gồm, nên mang, tổng một khách, lời cảm ơn; câu dẫn đứng bên cạnh khi
+  // cột trên đã nhường chỗ cho lộ trình.
+  receiptEl(section, withLead) {
+    const lists = this.listsEl(section);
+    if (!lists) return withLead ? groupEl('room-detail__receipt container', [textEl('p', 'room-detail__lead', section.lead)]) : null;
+    const total = section.price && this.labels.total
+      ? groupEl('room-detail__bill-total', [textEl('span', '', this.labels.total), textEl('span', '', this.money(section.price))])
+      : null;
+    const bill = groupEl('room-detail__bill', [
+      textEl('h3', 'room-detail__bill-title', this.labels.receipt),
+      textEl('p', 'room-detail__bill-sub', section.title),
+      lists,
+      total,
+      textEl('p', 'room-detail__bill-thanks', this.labels.thanks),
+    ]);
+    return groupEl('room-detail__receipt container', [bill, withLead ? textEl('p', 'room-detail__lead', section.lead) : null]);
+  }
+
   cardEl(section) {
+    if (section.variant === 'ticket') {
+      return groupEl('room-detail__card room-detail__ticket', [
+        this.priceEl(section),
+        this.daysEl(section),
+        this.ticketBookEl(section),
+        textEl('p', 'room-detail__ticket-note', section.ticketNote),
+      ]);
+    }
     return groupEl('room-detail__card', [
       this.priceEl(section),
       this.bookEl(section),
@@ -314,7 +418,7 @@ export class WlRoomDetail extends HTMLElement {
     const availability = (item.availability ?? [])
       .filter((day) => day.date >= today)
       .slice(0, DAYS_SHOWN)
-      .map((day) => ({ label: dayLabel(day.date), left: day.left }));
+      .map((day) => ({ label: dayLabel(day.date), date: day.date, left: day.left }));
     const merged = {
       room: item.id,
       eyebrow: item.tagline,
@@ -337,18 +441,18 @@ export class WlRoomDetail extends HTMLElement {
     const section = this.withItem(this._data);
     this._section = section;
     this.className = section.variant ? `room-detail room-detail--${section.variant}` : 'room-detail';
-    const body = groupEl('room-detail__layout container', [
-      groupEl('room-detail__content', [
-        textEl('p', 'room-detail__lead', section.lead),
-        this.amenitiesEl(section.amenities ?? []),
-        this.listsEl(section),
-      ]),
-      this.cardEl(section),
-    ]);
+    // Kiểu ticket: cột trái là lộ trình (nếu có) hoặc câu dẫn; danh sách gồm, chưa gồm xuống tờ hoá đơn dưới dải ảnh.
+    const ticket = section.variant === 'ticket';
+    const route = ticket ? this.routeEl(section) : null;
+    const content = ticket
+      ? [route ?? textEl('p', 'room-detail__lead', section.lead)]
+      : [textEl('p', 'room-detail__lead', section.lead), this.amenitiesEl(section.amenities ?? []), this.listsEl(section)];
+    const body = groupEl('room-detail__layout container', [groupEl('room-detail__content', content), this.cardEl(section)]);
     this.replaceChildren(...[
       this.coverEl(section),
       body,
       this.filmEl(section.images ?? []),
+      ticket ? this.receiptEl(section, Boolean(route)) : null,
       this.viewEl(section.view),
       this.othersEl(section.others ?? []),
     ].filter(Boolean));
