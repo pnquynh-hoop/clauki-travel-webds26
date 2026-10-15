@@ -20,6 +20,10 @@
   },
   "nav": [
     {
+      "label": "Tour",
+      "href": "page:tour"
+    },
+    {
       "label": "Cách đi",
       "href": "page:/#cach-di"
     },
@@ -2926,11 +2930,16 @@
       "description": "Bảy tour ghép theo lịch, sáng, chiều, tối và cả ngày.",
       "sections": [
         {
-          "type": "intro",
-          "id": "noi-dung",
-          "eyebrow": "Tour",
-          "title": "Bảy tour, chọn theo giờ rảnh",
-          "lead": "Sáng sớm đi bộ, chiều đạp xe, tối ngồi xe máy đi ăn: mỗi tour vài tiếng, nhóm tối đa 8 khách."
+          "type": "catalog-list",
+          "id": "tat-ca-tour",
+          "eyebrow": "Tất cả tour",
+          "title": "Chọn cách thở ra.",
+          "lead": "Sáng sớm đi bộ, chiều đạp xe, tối ngồi xe máy đi ăn: mỗi tour vài tiếng, nhóm tối đa 8 khách.",
+          "labels": {
+            "count": "{n} tour đang hiện",
+            "priceNote": "một {unit}, {buoi}",
+            "seatsLeft": "Chuyến {date} còn {n} chỗ"
+          }
         }
       ]
     },
