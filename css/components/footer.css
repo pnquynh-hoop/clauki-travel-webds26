@@ -605,3 +605,100 @@ menu, liên hệ, địa chỉ; dưới cùng là ghi chú, nguồn ảnh gập 
 @media (prefers-reduced-motion: reduce) {
   .footer__wire { animation: none; }
 }
+
+/* =========================================================
+   KIỂU HEADLINE: nền trang, không ảnh, không tấm thông tin. Lời hẹn chữ bảng hiệu (--font-hand) rất lớn hai dòng:
+   dòng đầu màu nhấn, dòng sau màu mực. Các cột chữ thường tự chia theo bề ngang, biển số nhà đứng riêng một cột,
+   to hơn, có bóng in lệch màu mực. */
+
+.footer--headline {
+  padding-block: 0 3rem;
+  background: var(--color-bg);
+}
+
+.footer--headline .footer__main {
+  gap: 3rem;
+  padding-top: 2rem;
+}
+
+.footer--headline .footer__heading {
+  margin: 0;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: clamp(2.6rem, 11vw, 9.5rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+  overflow-wrap: anywhere;
+  text-shadow: none;
+}
+
+.footer--headline .footer__heading-accent {
+  display: block;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--color-ink);
+}
+
+.footer--headline .footer__cols {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 2rem;
+}
+
+.footer--headline .footer__col {
+  gap: 0.45rem;
+}
+
+.footer--headline .footer__col-title {
+  margin-bottom: 0.4rem;
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.footer--headline .footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 400;
+}
+
+.footer__hours {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding-block: 0.2rem;
+}
+
+.footer__icon {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.footer__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.footer--headline .footer__plate {
+  padding: 0.9rem 1.1rem;
+  box-shadow: inset 0 0 0 3px var(--color-accent), inset 0 0 0 6px var(--color-bg), 6px 6px 0 var(--color-ink);
+}
+
+.footer--headline .footer__plate-no {
+  font-size: 3.2rem;
+}
+
+.footer--headline .footer__plate-street {
+  font-size: 0.85rem;
+}
+
+.footer--headline .footer__fine {
+  padding-top: 0;
+  border-top: 0;
+}

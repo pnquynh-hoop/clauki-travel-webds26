@@ -1,0 +1,318 @@
+/* medals.css - giao diện của <wl-medals>: bảng thành tựu. Thẻ theo --card-border, --card-shadow như các khối thẻ khác.
+   Huy chương tô --medal-color (dữ liệu ghi color), thiếu thì màu nhấn; icon màu mặt thẻ, vòng chỉ trong như huy chương
+   dập, hai dải ruy băng phía dưới. Chưa mở: xám, mờ, có ổ khoá. Mở: nảy lên, có màu, vệt sáng lướt qua một lần,
+   nhãn đã mở khoá bật ra. Số chốt cũng tô màu huy chương, nên color phải đạt tương phản trên mặt thẻ. */
+
+.medals {
+  display: block;
+}
+
+/* Nhãn nhỏ như chữ bảng hiệu, chấm tròn phía trước, giống nhãn của các khối cards, pictogram. */
+.medals__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.medals__eyebrow::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--color-mark, var(--color-accent));
+}
+
+.medals__heading {
+  margin-top: 1rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+}
+
+.medals__lead {
+  max-width: 40rem;
+  margin-top: 1rem;
+  font-size: 1.08rem;
+  color: var(--color-ink);
+}
+
+/* Thanh kinh nghiệm như trong game: vạch sọc màu chủ đạo dài theo số huy chương đã mở (--p từ 0 tới 1). */
+.medals__progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  max-width: 34rem;
+  margin-top: 2rem;
+}
+
+.medals__progress-label {
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.medals__track {
+  flex: 1 1 12rem;
+  height: 1.1rem;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--color-ink);
+}
+
+.medals__track > span {
+  display: block;
+  width: calc(var(--p, 0) * 100%);
+  height: 100%;
+  background: repeating-linear-gradient(-45deg, var(--color-primary) 0 0.5rem,
+    color-mix(in srgb, var(--color-primary) 75%, var(--color-ink)) 0.5rem 1rem);
+  transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.medals__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.6rem;
+  margin-top: 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* isolation: dải ruy băng (z-index âm) nằm sau huy chương nhưng vẫn trên nền thẻ.
+   Điện thoại: thẻ ngang, huy chương nhỏ ở cột trái, chữ cột phải, để bốn thẻ không kéo dài cả trang.
+   Từ 760px: thẻ dọc, huy chương to ở trên, chữ căn giữa. */
+.medals__item {
+  --medal: var(--medal-color, var(--color-accent));
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 4.2rem 1fr;
+  align-items: start;
+  column-gap: 1.1rem;
+  row-gap: 0.4rem;
+  padding: 2.8rem 1.1rem 1.2rem;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: var(--card-border, 2px solid var(--color-ink));
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow, 4px 4px 0 var(--color-ink));
+}
+
+.medals__medal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  margin-bottom: 1.4rem;
+  color: var(--color-surface);
+  background: var(--medal);
+  border: 3px solid var(--color-ink);
+  border-radius: 50%;
+  grid-row: 1 / span 3;
+  box-shadow:
+    inset 0 0 0 6px var(--medal),
+    inset 0 0 0 8px color-mix(in srgb, var(--color-surface) 70%, transparent),
+    0 4px 0 var(--color-ink);
+  transition: filter 0.4s ease, opacity 0.4s ease, rotate 0.8s ease;
+}
+
+/* Hai dải ruy băng thò ra dưới huy chương, cắt đuôi hình chữ V. */
+.medals__medal::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 68%;
+  left: 50%;
+  width: 3.8rem;
+  height: 3.4rem;
+  translate: -50% 0;
+  background: linear-gradient(90deg, var(--medal) 0 50%, color-mix(in srgb, var(--medal) 70%, var(--color-ink)) 50%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 80% 84%, 60% 100%, 60% 40%, 40% 40%, 40% 100%, 20% 84%, 0 100%);
+}
+
+/* Vệt sáng lướt qua lúc vừa mở khoá. */
+.medals__medal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 35%, color-mix(in srgb, var(--color-surface) 75%, transparent) 50%, transparent 65%)
+    no-repeat 150% 0 / 250% 100%;
+  opacity: 0;
+}
+
+.medals__icon {
+  display: block;
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.medals__icon svg,
+.medals__lock svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.medals__lock {
+  position: absolute;
+  right: -0.5rem;
+  bottom: -0.3rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0.4rem;
+  color: var(--color-surface);
+  background: var(--color-ink);
+  border-radius: 50%;
+  transition: opacity 0.35s ease, translate 0.35s ease, rotate 0.35s ease;
+}
+
+.medals__item:not(.is-unlocked) .medals__medal {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.medals__item.is-unlocked .medals__medal {
+  animation: medals-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.medals__item.is-unlocked .medals__medal::after {
+  animation: medals-shine 0.9s 0.2s ease-out;
+}
+
+.medals__item.is-unlocked .medals__lock {
+  opacity: 0;
+  translate: 0.4rem 1.5rem;
+  rotate: 30deg;
+}
+
+/* Rê chuột vào thẻ đã mở: huy chương xoay một vòng như tung đồng xu. */
+.medals__item.is-unlocked:hover .medals__medal {
+  rotate: y 360deg;
+}
+
+@keyframes medals-pop {
+  0% { scale: 0.6; }
+  60% { scale: 1.15; }
+  100% { scale: 1; }
+}
+
+@keyframes medals-shine {
+  0% { opacity: 1; background-position: 150% 0; }
+  100% { opacity: 1; background-position: -100% 0; }
+}
+
+/* Nhãn đã mở khoá: nghiêng nhẹ ở góc thẻ, bật ra sau khi huy chương nảy. */
+.medals__badge {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  font-family: var(--font-hand, var(--font-body));
+  font-size: 0.62rem;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  rotate: 6deg;
+  scale: 0;
+  transition: scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s;
+}
+
+.medals__item.is-unlocked .medals__badge {
+  scale: 1;
+}
+
+.medals__name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.medals__text {
+  color: var(--color-muted);
+}
+
+/* Số chốt nằm ở đáy thẻ dù chữ phía trên dài ngắn khác nhau, ngăn bằng vạch đứt. */
+.medals__stat {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.45rem;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.8rem;
+  font-size: 0.9rem;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+.medals__value {
+  font-family: var(--font-hand, var(--font-heading));
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--medal);
+}
+
+@media (min-width: 760px) {
+  .medals__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 2rem 1.3rem 1.4rem;
+    text-align: center;
+  }
+
+  .medals__medal {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .medals__icon {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+
+  .medals__stat {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .medals__track > span,
+  .medals__medal,
+  .medals__lock,
+  .medals__badge {
+    transition: none;
+  }
+
+  .medals__item.is-unlocked .medals__medal,
+  .medals__item.is-unlocked .medals__medal::after {
+    animation: none;
+  }
+
+  .medals__item.is-unlocked:hover .medals__medal {
+    rotate: none;
+  }
+}
