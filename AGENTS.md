@@ -51,7 +51,7 @@ Khi chưa chắc một thư viện có hợp lệ không: **không tự quyết*
    - đọc `/brands/brands.json`; đọc thương hiệu và trang từ đường dẫn `/<id>/<trang>` (`/` là trang chủ của thương hiệu mặc định, `?brand=<id>` của địa chỉ cũ vẫn nhận); chỉ nhận id có trong danh sách;
    - gọi `WebDesign2026.init`: `wd2026.js` tải `brands/<id>/content.json`, nhớ lựa chọn sau F5 và hiện nút tròn để BGK đổi thương hiệu (BTC đặt ở góc dưới phải; `base.css` chuyển sang góc dưới trái và cho luôn hiện);
    - mỗi lần có sự kiện `webdesign2026:datachange`: đổi mọi link `page:` trong dữ liệu thành đường dẫn thật; chọn trang đang mở trong `pages` (thương hiệu chưa có `pages` thì cả `sections` là trang chủ; đổi thương hiệu thì giữ trang, thương hiệu mới không có trang đó thì về trang chủ hoặc trang `404` nếu nó tự khai); đổi `href` của `<link id="brand-theme">` thành `/brands/<id>/theme.css`, điền `title` (trang con: `<tiêu đề trang> - <tên thương hiệu>`), `description`, `favicon`, cập nhật đường dẫn trên địa chỉ;
-   - sau đó dựng section của trang đang mở: với mỗi phần tử trong `sections` của trang, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng; mục menu trỏ đúng trang đang mở được gắn `aria-current="page"`;
+   - sau đó dựng section của trang đang mở: với mỗi phần tử trong `sections` của trang, bỏ qua phần tử có `"hidden": true`, tạo `<wl-<type>>`, gán `el.site` rồi gán `el.data`, gắn vào `<main>` theo đúng thứ tự mảng; mục menu (header) trỏ đúng trang đang mở được gắn `aria-current="page"` (chữ đậm, vạch màu nhấn dưới chữ; điện thoại thì thanh màu bên trái), mục menu của trang cha của trang đang mở (ví dụ "Tour" khi đang xem `tour/can-gio`, trừ mục về trang chủ) được gắn `data-parent` (vạch nhạt hơn);
    - `type` chưa có component đăng ký thì bỏ qua khối đó và cảnh báo trong console, không làm sập trang;
    - `id` của section được gán làm `id` của thẻ, để menu và nút CTA (`"href": "#dat-tour"`) nhảy tới được;
    - `el.site` gồm `brand`, `cta`, `nav`, `place` (nơi chốn, toạ độ, múi giờ), `contact` (điện thoại, email, địa chỉ), `catalog` (danh mục sản phẩm, xem mục 5), `home` (đường dẫn trang chủ của thương hiệu); `core.js` export `catalogItem(site, id)` để tra một sản phẩm theo id; thương hiệu nào thiếu khoá nào thì khoá đó là `undefined`; `<main>` được thay toàn bộ bằng `replaceChildren`, nên đổi thương hiệu không bị nhân đôi khối.
@@ -129,7 +129,7 @@ export class WlHero extends HTMLElement {
   { "path": "hoi-dap", "title": "Hỏi đáp", "description": "...", "sections": [ ... ] }
 ]
 ```
-- **Link:** `#neo` nhảy tới khối trong trang đang mở; `page:hoi-dap` sang trang khác; `page:/#dat-cho` về trang chủ, tới khối `dat-cho`. Thương hiệu nhiều trang thì menu và `cta` nên dùng `page:`, để ở trang con vẫn bấm được.
+- **Link:** `#neo` nhảy tới khối trong trang đang mở; `page:hoi-dap` sang trang khác; `page:/#dat-cho` về trang chủ, tới khối `dat-cho`. Thương hiệu nhiều trang thì menu và `cta` nên dùng `page:`, để ở trang con vẫn bấm được. Menu của thương hiệu nhiều trang chỉ gồm liên kết sang trang, không trộn với liên kết nhảy tới một khối trong trang (`#neo`, `page:/#neo`): khách bấm vào phải biết là sẽ sang trang khác. Thương hiệu một trang (Mé Rạch) thì toàn bộ menu là liên kết `#neo`.
 - Trang con khai `"path": "404"` thì hiện khi địa chỉ trỏ tới trang không có; không khai thì về trang chủ.
 - Trang khai `"header": { "variant": "minimal" }` thì dùng header rút gọn (chỉ logo và nút đặt), hợp với landing page một mục tiêu.
 

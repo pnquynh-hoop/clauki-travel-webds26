@@ -24,16 +24,12 @@
       "href": "page:nha"
     },
     {
-      "label": "Thư viện ảnh",
-      "href": "page:/#thu-vien"
-    },
-    {
       "label": "Ưu đãi hè 2027",
       "href": "page:uu-dai"
     },
     {
       "label": "Hỏi đáp",
-      "href": "page:dat-phong#hoi-dap"
+      "href": "page:dat-phong"
     }
   ],
   "header": {
