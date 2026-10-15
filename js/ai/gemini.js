@@ -63,9 +63,8 @@ async function modelFor(systemInstruction, json = false) {
   return getGenerativeModel(ai, {
     model: demo?.model || DEFAULT_MODEL,
     ...(systemInstruction && { systemInstruction }),
+    // Mức chặn để mặc định của Gemini: mức chặt nhất từng chặn nhầm chữ mẫu như tour địa đạo Củ Chi của khung SighGone.
     generationConfig: { temperature: 0.4, ...(json && { responseMimeType: 'application/json' }) },
-    safetySettings: ['HARM_CATEGORY_HARASSMENT', 'HARM_CATEGORY_HATE_SPEECH', 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'HARM_CATEGORY_DANGEROUS_CONTENT']
-      .map((category) => ({ category, threshold: 'BLOCK_LOW_AND_ABOVE' })),
   });
 }
 
