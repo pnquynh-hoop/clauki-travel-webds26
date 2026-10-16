@@ -521,6 +521,7 @@ async function startGuest(here, ids) {
   currentPage = here.page;
   listenPage();
   listenDraft();
+  listenLang();
   await render({ ...site.content, id: here.guest });
 }
 
@@ -531,6 +532,14 @@ function listenPage() {
   document.addEventListener(LEGACY_CHOOSE, onChoose);
   document.addEventListener('click', onLinkClick);
   addEventListener('popstate', onPopState);
+}
+
+// Khách đổi ngôn ngữ (nút ở header): dựng lại trang đang mở bằng bản dịch, không tải lại trang.
+// Chung cho thương hiệu có sẵn và site khách: site khách rẽ sang startGuest từ sớm, thiếu chỗ này thì bấm EN không có gì xảy ra.
+function listenLang() {
+  document.addEventListener('wl:lang', () => {
+    if (lastRaw) render(lastRaw).catch(showError);
+  });
 }
 
 // Trong khung của editor, trình tạo web: nhận nháp mới qua DRAFT_EVENT rồi dựng lại trang đang mở.
@@ -578,12 +587,9 @@ export async function start(components = {}) {
     currentPage = here.page;
     saveBrand(here.id);
     listenPage();
+    listenLang();
     // Gắn trước init vì init bắn sự kiện ngay lần nạp đầu.
     // Lỗi trong listener không lọt ra try bên ngoài, nên phải bắt riêng.
-    // Khách đổi ngôn ngữ (nút ở header): dựng lại trang đang mở bằng bản dịch, không tải lại trang.
-    document.addEventListener('wl:lang', () => {
-      if (lastRaw) render(lastRaw).catch(showError);
-    });
     document.addEventListener(CHANGE_EVENT, (e) => {
       render(e.detail).then(skipReloadPrompt).catch(showError);
     });
