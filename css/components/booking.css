@@ -1003,6 +1003,8 @@ form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
 
 /* Nút trên cuống phiếu cỡ nhỏ, bo tròn hai đầu. */
 .booking__ticket-stub .btn {
+  /* Tên thương hiệu dài (nút "Gọi ...") thì chữ xuống dòng nằm giữa nút. */
+  text-align: center;
   min-height: 2.4rem;
   padding: 0.45rem 1.05rem;
   font-size: 0.92rem;

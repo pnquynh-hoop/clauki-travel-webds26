@@ -4,6 +4,7 @@
    - finalCheck: lúc xem thử hoặc xuất bản, gom một lượt: dịch nốt câu chờ và kiểm tra các câu người dùng tự sửa.
    AI lỗi hay hết lượt thì không chặn: câu chưa dịch hiện tiếng Việt, stats.error ghi lý do để editor báo. */
 import { streamLines, cleanText } from './gemini.js';
+import { translatePrompt, reviewPrompt } from './prompts/translate.js';
 import { pendingWork, memoryOf, placeholders } from '../i18n-text.js';
 
 // Tên ngôn ngữ đưa vào lời dặn; ngôn ngữ chưa có ở đây thì Intl tự gọi tên (ví dụ "tiếng Nhật").
@@ -19,41 +20,6 @@ function langName(lang) {
   } catch {
     return lang;
   }
-}
-
-const RULES = `Luật:
-- Dịch sát nghĩa, tự nhiên, ngắn gọn như chữ trên một website du lịch; giữ vai trò của câu (chữ nút ngắn, tiêu đề gọn).
-- Giữ nguyên tên thương hiệu và tên người. Địa danh Việt Nam viết theo cách quen thuộc với người đọc ngôn ngữ đó (tiếng Anh: bỏ dấu, ví dụ Cho Lon, Ben Thanh, Can Gio).
-- Giữ nguyên mọi chỗ trong ngoặc nhọn như {n}, {price}, {name}: không dịch, không thêm, không bớt.
-- Giữ nguyên con số, giờ, giá. Đơn vị tiền "đồng" hoặc "đ" viết là VND.
-- Không HTML, không dấu chấm giữa hay gạch dài làm dấu ngăn.`;
-
-const oneLine = (text) => String(text).replace(/\s+/g, ' ');
-
-function translatePrompt(lang, items) {
-  const lines = items.map((e, i) => `${i + 1}|${e.key}|${oneLine(e.text)}`).join('\n');
-  return `Dịch chữ của một website du lịch từ tiếng Việt sang ${langName(lang)}.
-
-Mỗi dòng dưới đây gồm: số, vị trí, chữ tiếng Việt.
-Trả về đúng ${items.length} dòng, mỗi dòng dạng: số|vị trí|bản dịch
-Chép lại đúng số và vị trí như đầu vào, theo đúng thứ tự, không thêm chữ nào khác, không xuống dòng trong một bản dịch.
-
-${RULES}
-
-${lines}`;
-}
-
-function reviewPrompt(lang, items) {
-  const lines = items.map((e, i) => `${i + 1}|${oneLine(e.text)}|${oneLine(e.en)}`).join('\n');
-  return `Người dùng tự viết bản ${langName(lang)} cho chữ của một website du lịch. Kiểm tra từng câu.
-
-Mỗi dòng dưới đây gồm: số, câu tiếng Việt gốc, câu người dùng viết.
-Chỉ báo câu có lỗi thật: sai chính tả, sai ngữ pháp, hoặc sai nghĩa rõ so với câu tiếng Việt. Câu viết khác cách dịch thông thường nhưng vẫn đúng và đúng ý thì coi là ổn, không báo.
-Mỗi câu có lỗi trả về một dòng dạng: số|câu đã sửa|lý do ngắn bằng tiếng Việt
-Câu đã sửa chỉ sửa chỗ sai, giữ cách viết của người dùng, giữ nguyên các chỗ trong ngoặc nhọn như {n}.
-Không có câu nào lỗi thì trả về đúng một dòng: OK
-
-${lines}`;
 }
 
 // Chia thành nhóm liền nhau (câu cùng khối đi chung, đủ ngữ cảnh).
@@ -82,7 +48,7 @@ async function runPool(tasks) {
    gửi lại các câu thiếu một lần. */
 async function askTranslate(lang, items, onLine) {
   const got = new Map();
-  const ask = (group) => () => streamLines('', translatePrompt(lang, group), (line) => {
+  const ask = (group) => () => streamLines('', translatePrompt(langName(lang), group), (line) => {
     const m = line.match(/^\s*(\d+)\s*\|\s*([^|]+?)\s*\|(.*)$/);
     const item = m && group[Number(m[1]) - 1];
     const value = m ? cleanText(m[3], 1000) : '';
@@ -138,7 +104,7 @@ export async function reviewEnglish({ content, state }) {
   const { review } = pendingWork(content, state);
   const issues = [];
   const failed = new Set();
-  const ask = (group) => () => streamLines('', reviewPrompt(state.lang, group), (line) => {
+  const ask = (group) => () => streamLines('', reviewPrompt(langName(state.lang), group), (line) => {
     const m = line.match(/^\s*(\d+)\s*\|(.*)\|(.*)$/);
     const item = m && group[Number(m[1]) - 1];
     const suggestion = m ? cleanText(m[2], 1000) : '';

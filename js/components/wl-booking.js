@@ -1264,7 +1264,12 @@ export class WlBooking extends HTMLElement {
     const line = document.createElement('span');
     line.className = 'booking__ticket-line';
     line.setAttribute('aria-hidden', 'true');
-    const route = groupEl('booking__ticket-route', [textEl('span', '', m.from), m.from && m.to ? line : null, textEl('span', '', m.to)]);
+    this._routeLine = line;
+    line.hidden = !(m.from && m.to);
+    // Điểm đi, điểm đến: chữ mặc định trong message, gửi phiếu thì đổi theo điểm đón và tour khách đã chọn (submitCalendar).
+    this._routeFrom = Object.assign(document.createElement('span'), { textContent: m.from ?? '' });
+    this._routeTo = Object.assign(document.createElement('span'), { textContent: m.to ?? '' });
+    const route = groupEl('booking__ticket-route', [this._routeFrom, line, this._routeTo]);
     this._draft = document.createElement('p');
     this._draft.className = 'booking__ticket-msg';
 
@@ -1400,6 +1405,11 @@ export class WlBooking extends HTMLElement {
       t.date.textContent = date;
       t.seats.textContent = fill(section.labels?.guestsValue ?? '{guests}', values);
       t.total.textContent = values.total;
+      const from = values.pickup || section.message?.from || '';
+      const to = this._tour?.name || section.message?.to || '';
+      this._routeFrom.textContent = from;
+      this._routeTo.textContent = to;
+      this._routeLine.hidden = !(from && to);
     }
     const text = fill(section.message?.template, values);
     this._draft.textContent = text;
