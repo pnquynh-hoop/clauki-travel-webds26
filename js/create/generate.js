@@ -13,7 +13,7 @@ import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
 import { MENU, FOOTERS, composeFooter, composeHome, loadFrames, borrowPages } from './mix.js';
-import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE, FRAME_WORDS } from './rules.js';
+import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
@@ -27,17 +27,16 @@ export const FRAMES = [
 const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'total', 'availability', 'seatsLeft', 'soldOut', 'home', 'view',
   'group', 'hint', 'phone', 'name', 'book', 'from', 'perNight', 'duration', 'unit', 'left', 'placeholder', 'question']);
 
-// Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
+// Trường kỹ thuật và dữ liệu có cấu trúc: giữ nguyên, không đưa cho AI. Mọi chữ khác (kể cả nhãn, tin nhắn mẫu, câu báo lỗi, gợi ý)
+// là dữ liệu như nhau, đều được viết lại cho nơi mới. vehicles, buoi, topics là bảng tra (id nối với tour), đổi nhãn sẽ lệch nghĩa.
 const SKIP = new Set([
-  'labels', 'errors', 'message', 'languages', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
-  'source', 'author', 'credit', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
-  'touchHint', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
-  'scoreLabel', 'dateLabel', 'navTitle', 'contactTitle', 'creditsTitle', 'action', 'availability', 'tags', 'vehicles',
-  'buoi', 'topics', 'departures', 'traffic', 'rating', 'unit', 'item', 'phone', 'email',
+  'id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon',
+  'logo', 'alt', 'languages', 'currency', 'kind', 'effect', 'date', 'time', 'availability', 'item', 'rating', 'tags', 'vehicles', 'buoi',
+  'topics', 'unit', 'phone', 'email',
 ]);
-// Khoá kỹ thuật không bao giờ đưa AI, kể cả khi có tên cũ (đường dẫn, nguồn ảnh, giấy phép).
-const NEVER = new Set(['id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon', 'logo', 'alt']);
 const NOT_TEXT = /^(https?:|images\/|#|\/|\d{4}-\d{2}|[\d\s.,:+-]+$|page:|tel:|mailto:)/;
+// Mã như "can-gio", "len-den" (id tour trong danh sách chọn), không phải chữ.
+const SLUG = /^[a-z0-9]+(-[a-z0-9]+)+$/;
 // Khoảng 30 dòng mỗi luồng: mỗi luồng xong trong khoảng 15 giây; tối đa 8 luồng để vẫn dưới 15 request mỗi phút.
 const FIELDS_PER_GROUP = 30;
 const MAX_GROUPS = 8;
@@ -45,20 +44,24 @@ const MAX_GROUPS = 8;
 // Tên và khẩu hiệu lấy thẳng từ hồ sơ, không đưa AI viết lại lần nữa.
 const FROM_PROFILE = ['brand.name', 'brand.slogan'];
 
-// Chữ giao diện (labels, message, errors...) bỏ qua để AI khỏi viết lại hàng trăm nhãn chung; nhưng nhãn nào có tên thương hiệu hay
-// nơi chốn của khung (oldNames, ví dụ "Bạn nhập họ tên giúp SighGone nhé.") thì vẫn đưa AI viết lại, kẻo tên cũ lọt sang site mới.
-function extractFields(node, path = [], out = [], oldNames = null, skipped = false) {
-  if (Array.isArray(node)) node.forEach((v, i) => extractFields(v, [...path, i], out, oldNames, skipped));
-  else if (node && typeof node === 'object') {
-    for (const [k, v] of Object.entries(node)) {
-      const skip = skipped || SKIP.has(k);
-      if (!skip || (oldNames && !NEVER.has(k))) extractFields(v, [...path, k], out, oldNames, skip);
+// Mọi chuỗi chữ của khung, gộp chuỗi giống hệt nhau (nhãn đặt chỗ lặp ở 7 trang tour) thành một dòng: AI viết một lần, áp cho mọi
+// chỗ (paths). Nhờ gộp, đưa cả nhãn cho AI vẫn ít dòng hơn khi tách riêng nhãn giao diện (SighGone 736 dòng thay vì 873).
+function extractFields(template) {
+  const byValue = new Map();
+  const walk = (node, path) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...path, i]));
+    else if (node && typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) if (!SKIP.has(k)) walk(v, [...path, k]);
+    } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim()) && !SLUG.test(node.trim())) {
+      const key = path.join('.');
+      if (FROM_PROFILE.includes(key)) return;
+      const field = byValue.get(node);
+      if (field) field.paths.push(key);
+      else byValue.set(node, { key, value: node, paths: [key] });
     }
-  } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim())
-    && (!skipped || oldNames?.test(node))) {
-    out.push({ path, key: path.join('.'), value: node });
-  }
-  return out;
+  };
+  walk(template, []);
+  return [...byValue.values()];
 }
 
 // Chia nhóm liền nhau, số ký tự mỗi nhóm gần bằng nhau. Mỗi dòng mang vị trí đầy đủ (pages.0.sections.2.title),
@@ -77,7 +80,8 @@ function splitGroups(fields) {
 }
 
 const RULES = `Luật:
-- Tiếng Việt tự nhiên, giọng riêng của thương hiệu; dùng chi tiết cụ thể của nơi chốn trong hồ sơ.
+- Tiếng Việt tự nhiên, viết đúng giọng trong hồ sơ (giong: xưng hô, từ địa phương, nhịp câu) cho mọi câu nói với khách, kể cả tin nhắn
+  mẫu, câu báo lỗi, lời cảm ơn; nhãn nút, nhãn ngắn thì giữ rõ nghĩa, không chêm phương ngữ. Dùng chi tiết cụ thể của nơi chốn trong hồ sơ.
 - Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML. Không cụm sáo rỗng như "trải nghiệm tuyệt vời", "đẳng cấp", "hàng đầu", "không thể bỏ qua"; không mở đầu câu bằng "Trải nghiệm".
 - Không bịa tiện nghi, con số, số lượt khách hay điểm đánh giá không có trong hồ sơ; câu mẫu nói về điều hồ sơ không có thì viết chung chung hoặc nói về điều hồ sơ có.
 - Tên người, tên nơi đúng như hồ sơ. Giá đúng như hồ sơ.`;
@@ -107,6 +111,10 @@ phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá s
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
+giong: một câu tả giọng văn của website, theo vùng miền và loại khách trong mô tả: xưng hô với khách (mình, bạn, anh chị, cô chú...),
+mức dùng từ địa phương, nhịp câu. Ví dụ miền Tây: "thân tình kiểu miệt vườn, xưng tụi mình, gọi khách là bạn, chêm vừa phải nè, nhen,
+ghe, xuồng"; nghỉ dưỡng cao cấp: "trang nhã, xưng chúng tôi, gọi quý khách, câu ngắn, không chêm phương ngữ"; tour cho bạn trẻ ở phố:
+"trẻ, vui, xưng tụi mình, câu ngắn". Mô tả có nói giọng hay vùng miền thì theo đúng mô tả.
 gia: giá thấp nhất (một khách, hay một đêm nếu là chỗ ở) bằng đồng Việt Nam, số nguyên đủ các số 0 ("1 triệu 2" là 1200000, "45 triệu" là 45000000);
 mô tả ghi giá ngoại tệ thì đổi sang đồng theo tỉ giá gần đúng; mô tả không nói giá thì 0 (giữ giá của khung), không tự đặt giá.
 donViGia: đơn vị tính, không kèm tiền tệ: "khách", "đêm", "phòng", "nhóm".
@@ -114,7 +122,7 @@ anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy
 cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
 Trả về JSON đúng dạng:
-{"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
+{"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "giong": "", "gia": 0, "donViGia": "", "khung": "",
  "phongChu": "",
  "dacTrung": [],
  "trangChu": ["", "", "", "", ""],
@@ -127,13 +135,13 @@ Trả về JSON đúng dạng:
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
 const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
 
-// Tên thương hiệu, nơi chốn, tên sản phẩm trong catalog và cụm chữ riêng (FRAME_WORDS) của mọi khung (trang và khối mượn từ khung khác cũng
-// mang chữ của khung đó), để dò chữ còn sót của nơi cũ, kể cả trong nhãn giao diện. pool: { id khung: content }.
+// Tên thương hiệu, nơi chốn và tên sản phẩm trong catalog của mọi khung (trang và khối mượn từ khung khác cũng mang chữ của khung đó),
+// lấy thẳng từ dữ liệu, để dò chữ còn sót của nơi cũ sau khi AI viết. pool: { id khung: content }.
 // Cụm nào có trong chữ của hồ sơ mới (site mới cũng ở Sài Gòn) thì không coi là chữ cũ; chỉ xét trường chữ, vì khung (khung: "sighgone")
 // hay khoá khối cũng nằm trong hồ sơ.
 function oldNamesOf(pool, profile = {}) {
   const own = [profile.ten, profile.slogan, profile.noiChon, profile.chuNha, ...(Array.isArray(profile.chiTiet) ? profile.chiTiet : [])].join(' ').toLowerCase();
-  const names = Object.entries(pool).flatMap(([id, f]) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name), ...(FRAME_WORDS[id] ?? [])])
+  const names = Object.values(pool).flatMap((f) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name)])
     .filter((n) => typeof n === 'string' && n.trim().length > 2 && !own.includes(n.toLowerCase()));
   // Khớp nguyên từ ("ghe" không khớp trong "nghe", "Quận 1" không khớp "Quận 10"); \b của JS không hiểu chữ có dấu nên dùng \p{L}.
   const list = [...new Set(names)].map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
@@ -147,8 +155,7 @@ const holes = (text) => (text.match(/\{\w+\}/g) ?? []).sort().join(' ');
 function frameNote(template) {
   const names = [template.brand?.name, template.place?.name, ...(template.catalog?.items ?? []).map((item) => item.name)].filter(Boolean).slice(0, 12);
   if (!names.length) return '';
-  const words = FRAME_WORDS[template.id] ?? [];
-  return `Trang mẫu vốn là website của một thương hiệu khác (${names.join(', ')}).${words.length ? ` Các cụm sau là của riêng trang mẫu, không được còn trong chữ mới: ${words.join(', ')}.` : ''} Mọi chữ nói về nơi chốn, địa danh, món ăn, phương tiện, lịch trình, con người, câu chuyện của trang mẫu phải đổi hẳn sang nơi mới, kể cả danh sách đã gồm, nên mang, các chặng; chỉ được chép nguyên chữ giao diện chung không nói về nơi chốn (tên nút, nhãn ngắn như "Đóng", "Trang chủ", "Hết chỗ").`;
+  return `Trang mẫu vốn là website của một thương hiệu khác (${names.join(', ')}). Mọi chữ nói về nơi chốn, địa danh, món ăn, phương tiện, lịch trình, con người, câu chuyện của trang mẫu phải đổi hẳn sang nơi mới, kể cả danh sách đã gồm, nên mang, các chặng; chỉ được chép nguyên chữ giao diện chung không nói về nơi chốn (tên nút, nhãn ngắn như "Đóng", "Trang chủ", "Hết chỗ").`;
 }
 
 // redo: lượt viết lại các dòng mà lượt trước chép y nguyên chữ của trang mẫu; banned: các cụm của trang mẫu còn trong các dòng đó.
@@ -628,7 +635,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (borrowed.length) rules.borrowed = borrowed;
   const content = structuredClone(template);
   const oldNames = oldNamesOf(pool, profile);
-  const fields = extractFields(template, [], [], oldNames).filter((f) => !FROM_PROFILE.includes(f.key));
+  const fields = extractFields(template);
   rebase(content, frame);
   applyProfile(content, profile, slug);
   const frameCss = await fetch(`/brands/${frame}/theme.css`).then((r) => (r.ok ? r.text() : '')).catch(() => '');
@@ -669,7 +676,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
     redoing.delete(i);
     written.set(i, value);
     if (!first) first = sec();
-    setIn(content, fields[i].key, value);
+    for (const path of fields[i].paths) setIn(content, path, value);
     on.field?.(got.size, fields.length);
     on.update?.(content, theme);
   };
