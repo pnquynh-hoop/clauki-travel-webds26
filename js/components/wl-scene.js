@@ -1,8 +1,9 @@
 /* wl-scene.js - cảnh đáng chờ: ảnh tràn màn hình, nhãn nhỏ, câu tả cảnh chữ lớn nghiêng đè lên góc dưới, giờ đẹp
-   nhất; ảnh trôi chậm khi cuộn. Dữ liệu ở section.view (image, text, best). Tách từ room-detail. */
+   nhất; ảnh trôi chậm khi cuộn. Dữ liệu ở section.view (image, text, best), hoặc view của mục danh mục khi section ghi item
+   (hạng phòng). Tách từ room-detail. */
 import { textEl } from '../dom.js';
 import { parallax } from '../effects/parallax.js';
-import { imgEl } from './item-detail.js';
+import { imgEl, itemSection } from './item-detail.js';
 
 export class WlScene extends HTMLElement {
   set data(section) {
@@ -38,6 +39,6 @@ export class WlScene extends HTMLElement {
 
   render() {
     this.className = this._data.variant ? `scene scene--${this._data.variant}` : 'scene';
-    this.replaceChildren(...[this.viewEl(this._data.view)].filter(Boolean));
+    this.replaceChildren(...[this.viewEl(itemSection(this.site, this._data).view)].filter(Boolean));
   }
 }
