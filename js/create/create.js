@@ -12,6 +12,7 @@ import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
 import { createProgress, swatches, meter } from './progress.js';
 import { addEnglish } from './english.js';
+import { clearLog } from '../editor/chat-log.js';
 
 const EXAMPLES = [
   { label: 'Homestay Đà Lạt', text: 'Homestay nhà gỗ ở Đà Lạt cho nhóm bạn, có bếp nướng ngoài sân, 450 nghìn mỗi khách một đêm' },
@@ -226,6 +227,8 @@ async function create() {
   // Lượt tạo mới: lượt dịch nền của website cũ (nếu còn chạy) không được ghi vào bảng tiến trình mới.
   state.run += 1;
   state.english = null;
+  // Website mới thì lịch sử nhờ AI của bản nháp cũ không còn đúng.
+  clearLog(DRAFT_SLUG);
   steps.start();
   const photosOn = ui.photoOn.checked;
   if (!photosOn) steps.set('photos', 'skip', 'Đã tắt, giữ ảnh của khung');

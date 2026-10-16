@@ -1471,3 +1471,71 @@
   margin: 0.25rem 0 0;
   font-size: 0.85rem;
 }
+
+/* Lịch sử nhờ AI (#201): gập sẵn dưới khung chat, lượt mới nhất ở trên, câu đã gõ bấm được để chép lại vào ô yêu cầu. */
+.ed-history {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.ed-history summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.ed-history__list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-history__item {
+  padding: 0.5rem 0.6rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-left: 3px solid var(--ed-line);
+  border-radius: 6px;
+}
+
+.ed-history__item.is-applied {
+  border-left-color: var(--ed-green);
+}
+
+.ed-history__item.is-error {
+  border-left-color: var(--ed-red);
+}
+
+.ed-history__meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 0.2rem;
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+.ed-history__text {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--ed-ink);
+  text-align: left;
+  background: none;
+  border: 0;
+}
+
+button.ed-history__text {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--ed-line);
+  text-underline-offset: 0.2em;
+}
+
+.ed-history__changes {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+  color: var(--ed-muted);
+}
