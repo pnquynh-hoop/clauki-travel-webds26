@@ -6,6 +6,7 @@
    Kiểu request (nhà dân tính tiền theo khách): một ảnh lớn của nhà, ngày đến và ngày về (ở tối đa maxNights đêm),
    số người lớn và số trẻ em, họ tên, số điện thoại, tạm tính theo đầu người. Hai kiểu dùng chung ô nhập, khung tin nhắn. */
 import { asset } from '../core.js';
+import { roomsOf } from './rooms.js';
 import { textEl, groupEl, telHref } from '../dom.js';
 import { iconEl } from '../icon.js';
 
@@ -137,8 +138,14 @@ export class WlBooking extends HTMLElement {
   }
 
   // Số căn còn trống của một hạng, theo khoảng ngày chứa ngày nhận phòng; ngoài các khoảng đã ghi thì không biết.
+  // Hạng lấy từ danh mục (items) thì đọc availability của chính hạng đó (theo ngày hoặc theo khoảng), cùng nguồn với trang chi tiết.
   roomsLeft(roomId, checkIn) {
     const day = dayNumber(checkIn);
+    if (this._data.items) {
+      const own = this._rooms.find((r) => r.id === roomId)?.availability ?? [];
+      const hit = own.find((a) => (a.date ? dayNumber(a.date) === day : day >= dayNumber(a.from) && day <= dayNumber(a.to)));
+      return hit?.left;
+    }
     const period = (this._data.availability ?? []).find((p) => day >= dayNumber(p.from) && day <= dayNumber(p.to));
     return period?.left?.[roomId];
   }
@@ -427,7 +434,8 @@ export class WlBooking extends HTMLElement {
     const labels = section.labels ?? {};
     const prefix = this.id || 'booking';
     // Bỏ hạng thiếu giá hoặc sức chứa: thiếu một trong hai thì không tính được tiền, không giới hạn được số khách.
-    const rooms = (section.rooms ?? []).filter((r) => r.id && r.label && r.price > 0 && r.maxGuests > 0);
+    // Hạng lấy từ catalog.items khi section ghi items, không thì từ rooms (rooms.js).
+    const rooms = roomsOf(section, this.site).filter((r) => r.id && r.label && r.price > 0 && r.maxGuests > 0);
     this._rooms = rooms;
     if (!rooms.length) return null;
 
