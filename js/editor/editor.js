@@ -13,7 +13,8 @@ import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPag
 import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../dom.js';
-import { mountAi } from './ai.js';
+import { mountAi, refreshAiHistory } from './ai.js';
+import { addTurn } from './chat-log.js';
 import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../sites.js';
 import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
 
@@ -768,6 +769,9 @@ function resetAll() {
     state.tr = JSON.parse(state.trBase);
     state.trIssues = [];
   });
+  // Ghi một mốc vào lịch sử nhờ AI để lượt nhờ sau biết trang đã về bản gốc, không hiểu nhầm "như lúc nãy" là bản đã sửa.
+  ['ai', 'palette'].forEach((kind) => addTurn(state.id, kind, { text: 'Về bản gốc', say: 'Mọi thay đổi trước đó đã bỏ', status: 'reset' }));
+  refreshAiHistory();
   toast('Đã về bản gốc. Bấm Hoàn tác nếu muốn lấy lại.');
 }
 
@@ -793,6 +797,8 @@ function refresh() {
     return h('option', { value: path, text: p.title ?? (path === '/' ? 'Trang chủ' : path), selected: path === state.page });
   }), h('option', { value: NEW_PAGE, text: '+ Thêm trang mới' }));
   // Nháp của trình tạo web: thoát là về /tao, và có nút Xuất bản (mở phần xuất bản của /tao với bản vừa chỉnh).
+  // Đổi thương hiệu trong khung thì lịch sử nhờ AI đổi theo.
+  refreshAiHistory();
   ui.exit.href = isTaoDraft() ? '/tao' : pageUrl(state.id, state.page);
   ui.exit.textContent = isTaoDraft() ? 'Về trang tạo' : 'Thoát';
   ui.publish.hidden = !isTaoDraft();

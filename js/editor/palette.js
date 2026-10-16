@@ -10,6 +10,7 @@ import { contrastRatio, AA } from './contrast.js';
 import { darkName } from '../theme-mode.js';
 import { streamLines, cleanText } from '../ai/gemini.js';
 import { micButton } from '../ai/speech.js';
+import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
 const HEX = /^#[0-9a-f]{6}$/i;
 const MODE_LABEL = 'Chế độ tối';
@@ -27,6 +28,18 @@ let text = '';
 let proposal = null;
 let busy = false;
 let out = null;
+let historyBox = null;
+// Lịch sử khung chat màu tách riêng khỏi tab AI (#201).
+const KIND = 'palette';
+
+function renderHistory() {
+  if (!historyBox) return;
+  const id = api.state.id;
+  historyBox.replaceChildren(...[historyEl(api.h, readLog(id, KIND), {
+    onClear: () => { clearLog(id, KIND); renderHistory(); },
+    onPick: (value) => { const area = document.getElementById('ed-palette-ai'); if (area) fill(area, value); },
+  })].filter(Boolean));
+}
 
 /* ---------- Đọc màu ---------- */
 
@@ -175,7 +188,7 @@ async function send(value) {
   text = value;
   proposal = { say: '', items: [], same: 0, done: false, error: '' };
   renderOut();
-  const prompt = `Yêu cầu: ${value.trim()}\n\nBảng màu hiện tại (JSON):\n${JSON.stringify(context())}`;
+  const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${value.trim()}\n\nBảng màu hiện tại (JSON):\n${JSON.stringify(context())}`;
   try {
     await streamLines(SYSTEM, prompt, (line) => {
       let op;
@@ -197,7 +210,14 @@ async function send(value) {
   } finally {
     proposal.done = true;
     busy = false;
+    const ok = proposal.items.filter((p) => p.ok);
+    addTurn(api.state.id, KIND, {
+      text: value.trim(), say: proposal.error || proposal.say,
+      changes: ok.map((p) => `${p.label} (${p.mode === 'dark' ? 'tối' : 'sáng'}): ${p.from || 'chưa có'} -> ${p.to}`),
+      status: proposal.error ? 'error' : ok.length ? 'proposed' : 'empty',
+    });
     renderOut();
+    renderHistory();
   }
 }
 
@@ -209,6 +229,7 @@ function accept() {
     ok.forEach((p) => put(p.key, p.to));
     ensureModeLabel();
   });
+  markLast(api.state.id, KIND, 'applied');
   proposal = { say: `Đã áp ${ok.length} màu. Bấm Hoàn tác nếu muốn bỏ.`, items: [], done: true, applied: true };
   preview(toDark ? 'dark' : 'light');
 }
@@ -242,7 +263,7 @@ function renderOut() {
     error ? h('p', { class: 'ed-err', text: error }) : null,
     done && ok.length ? h('div', { class: 'ed-row' },
       h('button', { type: 'button', class: 'ed-btn', onclick: accept, text: `Đồng ý (${ok.length} màu)` }),
-      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => { proposal = null; out.replaceChildren(); }, text: 'Bỏ' })) : null,
+      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => { markLast(api.state.id, KIND, 'rejected'); renderHistory(); proposal = null; out.replaceChildren(); }, text: 'Bỏ' })) : null,
     done && !applied && !ok.length && !error ? noteEl(items.length, same) : null,
   ].filter(Boolean));
 }
@@ -271,7 +292,9 @@ function aiEl() {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) send(area.value);
   });
   out = h('div', { class: 'ed-ai__out', 'aria-live': 'polite' });
+  historyBox = h('div', { class: 'ed-ai__history' });
   renderOut();
+  renderHistory();
   return h('div', { class: 'ed-palette__ai' },
     h('label', { class: 'ed-field', for: 'ed-palette-ai' }, h('span', { text: 'Nhờ AI gợi ý màu sáng, tối' })),
     area,
@@ -280,7 +303,8 @@ function aiEl() {
       micButton(h, area)),
     // Câu mẫu chỉ điền vào ô để sửa thêm, chưa gửi: người dùng bấm Gợi ý màu khi đã viết xong.
     h('div', { class: 'ed-chips' }, EXAMPLES.map((example) => h('button', { type: 'button', onclick: () => fill(area, example), text: example }))),
-    out);
+    out,
+    historyBox);
 }
 
 function colorInput(name, label, value, mode) {

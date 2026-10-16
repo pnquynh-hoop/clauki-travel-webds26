@@ -8,6 +8,7 @@ import { headerTarget, checkNewPage, addPage, insertBlock, applyFont } from './o
 import { getIn, setIn } from './form.js';
 import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL } from '../ai/gemini.js';
 import { micButton } from '../ai/speech.js';
+import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
 const SITE_FIELDS = {
   'brand.name': 'Tên thương hiệu',
@@ -190,6 +191,24 @@ function checkColors(items) {
 
 let pane = null;
 let out = null;
+let historyBox = null;
+
+const KIND = 'ai';
+const short = (value) => String(value ?? '').replace(/\s+/g, ' ').slice(0, 60);
+
+// Lịch sử nhờ AI của thương hiệu đang mở (#201); bấm một lượt thì chép lại câu đã gõ để sửa rồi gửi lại.
+function renderHistory() {
+  if (!historyBox) return;
+  const id = api.state.id;
+  historyBox.replaceChildren(...[historyEl(api.h, readLog(id, KIND), {
+    onClear: () => { clearLog(id, KIND); renderHistory(); },
+    onPick: (text) => { const area = pane.querySelector('textarea'); area.value = text; area.focus(); },
+  })].filter(Boolean));
+}
+
+export function refreshAiHistory() {
+  renderHistory();
+}
 
 function renderProposal(say, items, done, error) {
   const { h } = api;
@@ -214,11 +233,15 @@ function accept() {
   const ok = proposal.filter((p) => p.ok);
   if (!ok.length) return;
   api.commit(`AI: ${pane.querySelector('textarea').value.trim().slice(0, 40)}`, () => ok.forEach((p) => p.run()));
+  markLast(api.state.id, KIND, 'applied');
+  renderHistory();
   proposal = [];
   out.replaceChildren(api.h('p', { class: 'ed-ok', text: `Đã áp ${ok.length} thay đổi. Bấm Hoàn tác nếu muốn bỏ.` }));
 }
 
 function reject() {
+  markLast(api.state.id, KIND, 'rejected');
+  renderHistory();
   proposal = [];
   out.replaceChildren();
 }
@@ -232,7 +255,9 @@ async function send(text) {
   const button = pane.querySelector('[data-ai-send]');
   button.disabled = true;
   renderProposal('', [], false);
-  const prompt = `Yêu cầu: ${text.trim()}\n\nTrang hiện tại (JSON):\n${JSON.stringify(context())}`;
+  // Gửi kèm vài lượt gần nhất để AI hiểu những câu như "đổi lại như lúc nãy".
+  const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${text.trim()}\n\nTrang hiện tại (JSON):\n${JSON.stringify(context())}`;
+  let failed = '';
   try {
     await streamLines(SYSTEM, prompt, (line) => {
       let op;
@@ -251,10 +276,17 @@ async function send(text) {
     checkColors(proposal);
     renderProposal(say, proposal, true);
   } catch (err) {
+    failed = err.message;
     renderProposal(say, proposal, true, err.message);
   } finally {
     busy = false;
     button.disabled = false;
+    const ok = proposal.filter((p) => p.ok);
+    addTurn(api.state.id, KIND, {
+      text: text.trim(), say: failed || say, changes: ok.map((p) => `${p.what}: ${short(p.from)} -> ${short(p.to)}`),
+      status: failed ? 'error' : ok.length ? 'proposed' : 'empty',
+    });
+    renderHistory();
   }
 }
 
@@ -306,6 +338,7 @@ export function mountAi(target, options) {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) send(textarea.value);
   });
   out = h('div', { class: 'ed-ai__out', 'aria-live': 'polite' });
+  historyBox = h('div', { class: 'ed-ai__history' });
   pane.replaceChildren(
     h('p', { class: 'ed-hint', text: 'Gõ hoặc nói yêu cầu. AI đề xuất từng thay đổi kèm trước và sau, bấm Đồng ý mới áp; một lần Hoàn tác là bỏ hết.' }),
     h('p', { class: 'ed-ai__status' }),
@@ -316,7 +349,9 @@ export function mountAi(target, options) {
       micButton(h, textarea)),
     h('div', { class: 'ed-chips' }, EXAMPLES.map((text) => h('button', { type: 'button', onclick: () => { textarea.value = text; send(text); }, text }))),
     out,
+    historyBox,
     configEl(),
   );
   renderStatus();
+  renderHistory();
 }
