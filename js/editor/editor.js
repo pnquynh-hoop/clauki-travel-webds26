@@ -14,6 +14,7 @@ import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../dom.js';
 import { mountAi } from './ai.js';
+import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../sites.js';
 import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
 
 const HISTORY_MAX = 60;
@@ -132,7 +133,9 @@ function save() {
   const at = timeLabel(state.savedAt);
   ui.save.textContent = 'Đã lưu';
   setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
-  toast(`Đã lưu lúc ${at}. Bản nháp nằm trên trình duyệt này, mở lại ?sua là còn. Muốn đưa vào repo thì bấm Tải content.json.`);
+  toast(isTaoDraft()
+    ? `Đã lưu lúc ${at} vào nháp của trang tạo web. Bấm Xuất bản để đưa website lên mạng.`
+    : `Đã lưu lúc ${at}. Bản nháp nằm trên trình duyệt này, mở lại ?sua là còn. Muốn đưa vào repo thì bấm Tải content.json.`);
 }
 
 const timeLabel = (date) => (date ?? new Date()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -157,9 +160,13 @@ function redo() {
 
 // Giống hệt bản gốc thì xoá nháp (trang khách không còn dải "đang thử"); khác thì ghi nháp.
 function isOriginal() {
-  return JSON.stringify(state.content) === JSON.stringify(state.raw) && !Object.keys(state.theme.vars).length
+  return JSON.stringify(state.content) === JSON.stringify(state.raw) && JSON.stringify(state.theme) === state.themeRaw
     && JSON.stringify(state.tr) === state.trBase;
 }
+
+// Bản nháp /nhap/ của trình tạo web: editor sửa thẳng nháp của /tao (clauki-tao), không tạo nháp riêng, để Xuất bản ở /tao
+// dùng đúng bản đã chỉnh tay.
+const isTaoDraft = () => state.id === DRAFT_SLUG;
 
 // Nháp gửi thẳng cho trang trong khung (xem trước được cả khi bộ nhớ bị chặn), đồng thời ghi trên máy.
 function persist() {
@@ -167,7 +174,11 @@ function persist() {
   // Site khách: ghi kèm base trong theme để core.js dựng nháp trên đúng thương hiệu khung.
   const theme = state.baseId && state.baseId !== state.id ? { ...state.theme, base: state.baseId } : state.theme;
   const draft = original ? null : { base: fingerprint(state.raw), content: state.content, theme, ...draftPart() };
-  if (original) clearDraft(state.id);
+  if (isTaoDraft()) {
+    const ok = writeTaoDraft({ ...(readTaoDraft() ?? {}), content: state.content, theme, ...draftPart(), edited: !original, at: new Date().toISOString() });
+    if (ok) state.savedAt = new Date();
+    else toast('Trình duyệt chặn bộ nhớ: xem thử được trong editor, nhưng thoát ra là mất.');
+  } else if (original) clearDraft(state.id);
   else if (!writeDraft(state.id, draft)) {
     toast('Trình duyệt chặn bộ nhớ: xem thử được trong editor, nhưng thoát ra là mất.');
   } else {
@@ -211,7 +222,7 @@ function onFrameLoad() {
 
 // Trang trong khung vừa dựng xong: đổi thương hiệu (nút của BTC trong khung) hoặc đổi trang thì editor theo.
 async function onRendered(detail) {
-  if (detail.id !== state.id || !state.raw) await loadBrand(detail.id, detail.raw, detail.base);
+  if (detail.id !== state.id || !state.raw) await loadBrand(detail.id, detail.raw, detail.base, detail.theme);
   if (detail.id !== state.id) return;
   if (norm(detail.page) !== state.page) state.sel = null;
   state.page = norm(detail.page);
@@ -225,7 +236,8 @@ async function onRendered(detail) {
 }
 
 // base: thương hiệu làm khung của site khách (lấy theme.css, ảnh từ thư mục đó); thương hiệu có sẵn thì chính nó.
-async function loadBrand(id, raw, base = null) {
+// guestTheme: theme của site khách (màu, font AI chọn), là bản gốc để so và để Về bản gốc, không phải theme rỗng.
+async function loadBrand(id, raw, base = null, guestTheme = null) {
   const token = ++state.loadToken;
   state.id = id;
   state.baseId = base ?? id;
@@ -233,9 +245,16 @@ async function loadBrand(id, raw, base = null) {
   state.tr = null;
   state.trIssues = [];
   state.trReport = '';
-  const draft = readDraft(id, raw);
+  // Nháp /nhap/ chính là nội dung đang dựng (raw), nên không đọc nháp riêng; dọn nháp riêng cũ nếu còn.
+  if (id === DRAFT_SLUG) clearDraft(id);
+  const draft = id === DRAFT_SLUG ? null : readDraft(id, raw);
+  const startTheme = clone(guestTheme ?? {});
+  delete startTheme.base;
+  startTheme.vars ??= {};
+  state.themeRaw = JSON.stringify(startTheme);
   state.content = clone(draft?.content ?? raw);
-  state.theme = clone(draft?.theme ?? { vars: {} });
+  state.theme = clone(draft?.theme ?? startTheme);
+  delete state.theme.base;
   state.theme.vars ??= {};
   state.past = [];
   state.future = [];
@@ -255,7 +274,7 @@ async function loadBrand(id, raw, base = null) {
   state.baseCss = css;
   state.base = vars;
   state.trBase = JSON.stringify(english);
-  state.tr = clone(draft?.i18n ?? english);
+  state.tr = clone(draft?.i18n ?? (id === DRAFT_SLUG ? readTaoDraft()?.i18n : null) ?? english);
   state.view = 'vi';
   // Khách đang xem bản tiếng Anh rồi bấm Chỉnh sửa: mở sẵn bản tiếng Anh (sau khi khung dựng xong lần này).
   if (startView() === 'en') setTimeout(() => setView('en'));
@@ -745,7 +764,7 @@ function resetAll() {
   }
   commit('Về bản gốc', () => {
     state.content = clone(state.raw);
-    state.theme = { vars: {} };
+    state.theme = JSON.parse(state.themeRaw);
     state.tr = JSON.parse(state.trBase);
     state.trIssues = [];
   });
@@ -763,8 +782,8 @@ function refresh() {
   ui.redo.disabled = !state.future.length;
   ui.undo.title = state.past.length ? `Hoàn tác: ${state.past.at(-1).label}` : '';
   ui.brand.textContent = state.brands.find((b) => b.id === state.id)?.label ?? state.id;
-  ui.status.textContent = isOriginal() ? 'Bản gốc' : `Đã lưu ${timeLabel(state.savedAt)}`;
-  ui.status.title = isOriginal() ? '' : 'Bản nháp nằm trên trình duyệt này, chưa vào repo. Tải content.json để đưa vào repo.';
+  ui.status.textContent = isOriginal() ? (isTaoDraft() ? 'Bản AI tạo' : 'Bản gốc') : `Đã lưu ${timeLabel(state.savedAt)}`;
+  ui.status.title = isOriginal() ? '' : (isTaoDraft() ? 'Đã lưu vào nháp của trang tạo web, bấm Xuất bản để đưa lên mạng.' : 'Bản nháp nằm trên trình duyệt này, chưa vào repo. Tải content.json để đưa vào repo.');
   ui.save.disabled = isOriginal();
   ui.save.title = isOriginal() ? 'Chưa có thay đổi' : 'Lưu bản nháp trên trình duyệt này';
   ui.status.classList.toggle('is-draft', !isOriginal());
@@ -773,7 +792,10 @@ function refresh() {
     const path = norm(p.path);
     return h('option', { value: path, text: p.title ?? (path === '/' ? 'Trang chủ' : path), selected: path === state.page });
   }), h('option', { value: NEW_PAGE, text: '+ Thêm trang mới' }));
-  ui.exit.href = pageUrl(state.id, state.page);
+  // Nháp của trình tạo web: thoát là về /tao, và có nút Xuất bản (mở phần xuất bản của /tao với bản vừa chỉnh).
+  ui.exit.href = isTaoDraft() ? '/tao' : pageUrl(state.id, state.page);
+  ui.exit.textContent = isTaoDraft() ? 'Về trang tạo' : 'Thoát';
+  ui.publish.hidden = !isTaoDraft();
   const bad = !contrastChecks().every((c) => c.ok);
   ui.themeBtn.disabled = bad;
   ui.themeBtn.title = bad ? 'Màu chưa đạt tương phản AA' : '';
@@ -950,6 +972,7 @@ function build() {
   ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, text: 'Tải theme.css' });
   ui.save = h('button', { type: 'button', class: 'ed-btn ed-btn--save', onclick: save, text: 'Lưu' });
   ui.exit = h('a', { class: 'ed-btn ed-btn--ghost', text: 'Thoát' });
+  ui.publish = h('a', { class: 'ed-btn', href: '/tao#xuat-ban', hidden: true, text: 'Xuất bản' });
 
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, ui.brand, ui.status),
@@ -962,6 +985,7 @@ function build() {
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: downloadContent, text: 'Tải content.json' }),
       h('span', { class: 'ed-top__wide' }, ui.themeBtn),
       ui.save,
+      ui.publish,
       ui.exit));
 
   ui.frame = h('iframe', { class: 'ed-frame', title: 'Trang đang chỉnh', 'data-ed-frame': true });
