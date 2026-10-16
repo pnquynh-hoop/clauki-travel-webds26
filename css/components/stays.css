@@ -397,3 +397,12 @@
     margin-left: auto;
   }
 }
+
+/* Liên kết sang trang chi tiết của hạng (hạng lấy từ catalog có href). */
+.stays__detail {
+  justify-self: start;
+  margin-top: 0.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}

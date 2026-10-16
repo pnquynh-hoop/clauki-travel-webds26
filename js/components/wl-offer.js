@@ -7,6 +7,7 @@
    Nút đặt lấy từ site.cta; bấm thì phát wl:choose-room để khối đặt chỗ chọn sẵn hạng đang chọn. */
 import { asset } from '../core.js';
 import { textEl, groupEl, clamp } from '../dom.js';
+import { roomsOf } from './rooms.js';
 
 const MINUTE = 60 * 1000;
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -337,7 +338,7 @@ export class WlOffer extends HTMLElement {
     clearInterval(this._timer);
     const section = this._data;
     this.className = section.variant ? `offer offer--${section.variant}` : 'offer';
-    this._rooms = (section.rooms ?? []).filter((room) => room.label && room.price > 0);
+    this._rooms = roomsOf(section, this.site).filter((room) => room.label && room.price > 0);
     this._stamp = null;
     this._inputs = [];
 

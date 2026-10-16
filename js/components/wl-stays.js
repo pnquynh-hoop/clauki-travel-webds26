@@ -3,9 +3,11 @@
    - headland (Gành Sớm): ảnh mỏm gành thật đã tách nền đặt thẳng lên nền trang, trên đó có mốc của từng hạng nhà.
      Bấm một mốc thì ngay trên mốc hiện khung ảnh cảnh nhìn ra từ ban công của hạng đó, có vạch mảnh nối xuống mốc;
      thẻ bên cạnh hiện tên, mô tả, các con số và giá của hạng đó.
+   Hạng phòng lấy từ catalog.items khi section ghi items (rooms.js), hạng có href thì thẻ có liên kết xem chi tiết.
    Nút "đặt hạng này" phát sự kiện wl:choose-room (detail.id là id hạng) để khối đặt chỗ chọn sẵn hạng đó. */
 import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl, linkEl } from '../dom.js';
+import { roomsOf } from './rooms.js';
 
 function fill(template, values) {
   return (template ?? '').replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ''));
@@ -87,6 +89,8 @@ export class WlStays extends HTMLElement {
       groupEl('stays__view', [textEl('p', 'stays__view-text', view?.text), textEl('p', 'stays__best', this.bestText(view))]),
       this.factsEl(room),
       groupEl('stays__foot', [this.priceEl(room), this.bookLink(room)]),
+      // Hạng có trang chi tiết (href trong catalog): liên kết xem kỹ trước khi đặt.
+      room.href ? linkEl(room.href, this._data.labels?.detail, 'stays__detail') : null,
     ]);
     const image = brief ? null : imgEl(view?.image ?? room.image, '', lazy);
     card.append(...[image, body].filter(Boolean));
@@ -165,7 +169,7 @@ export class WlStays extends HTMLElement {
     const section = this._data;
     const variant = section.variant;
     this.className = variant ? `stays stays--${variant}` : 'stays';
-    const rooms = (section.rooms ?? []).filter((room) => room.label);
+    const rooms = roomsOf(section, this.site).filter((room) => room.label);
 
     if (variant === 'headland' && rooms.length && section.scene?.image?.src) {
       this.replaceChildren(this.headlandEl(rooms));
