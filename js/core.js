@@ -49,6 +49,8 @@ let lastRendered = null;
 let editorDraft = null;
 // Site khách (tạo bằng /tao): theme gồm base (thương hiệu làm khung) và vars; null là thương hiệu có sẵn.
 let guestTheme = null;
+// Site khách đã xuất bản là cố định: không dựng theo nháp trên máy, không mở editor (chỉ bản nháp /nhap/ sửa được).
+let guestReadOnly = false;
 
 function showError(err) {
   const note = document.createElement('p');
@@ -319,6 +321,7 @@ function replayChoice() {
 
 // Nháp "Thử chỉnh" của thương hiệu này: trong khung editor lấy bản editor vừa gửi, ngoài ra đọc trên máy.
 function draftFor(raw) {
+  if (guestReadOnly) return null;
   if (IN_EDITOR && editorDraft?.content?.id === raw.id) return editorDraft;
   return readDraft(raw.id, raw);
 }
@@ -367,7 +370,7 @@ async function render(raw, useDraft = true) {
   firstRender = false;
   // page là trang thật sự đã dựng (ví dụ "404" khi địa chỉ trỏ tới trang không có), để editor sửa đúng trang đó.
   // guest và base: site khách (không phải thương hiệu có sẵn) và thương hiệu làm khung của nó, để nút Thử chỉnh và editor biết.
-  lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft), guest: Boolean(guestTheme), base: guestTheme?.base ?? null };
+  lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft), guest: Boolean(guestTheme), base: guestTheme?.base ?? null, theme: guestTheme };
   document.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
   // Trong khung editor thì báo cả lên thẻ iframe: editor nghe một lần ở đó, không phụ thuộc lúc khung tải.
   if (IN_EDITOR) window.frameElement.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
@@ -455,6 +458,7 @@ async function startGuest(here, ids) {
   const site = await loadSite(here.guest);
   if (!site) throw new Error(isDraft ? 'Chưa có bản nháp: mở /tao để tạo website.' : `Không có trang /${here.guest}/.`);
   guestTheme = site.theme?.base && ids.includes(site.theme.base) ? site.theme : { ...site.theme, base: ids[0] };
+  guestReadOnly = !isDraft;
   currentPage = here.page;
   listenPage();
   listenDraft();
@@ -492,8 +496,14 @@ export async function start(components = {}) {
       return;
     }
     // Địa chỉ có ?sua: mở editor; trang thật chạy trong khung của editor, nên trang ngoài không dựng gì.
-    // Site khách cũng sửa được: bản sửa là nháp trên máy này (như thương hiệu có sẵn), không đụng bản đã xuất bản.
-    if (new URLSearchParams(location.search).has('sua') && !IN_EDITOR) {
+    // Bản nháp /nhap/ của trình tạo web cũng sửa được (nháp trên máy này).
+    let wantsEditor = new URLSearchParams(location.search).has('sua') && !IN_EDITOR;
+    // Site khách đã xuất bản không sửa được: bỏ ?sua khỏi địa chỉ rồi dựng như trang xem bình thường.
+    if (wantsEditor && here.guest && here.guest !== (await import('./sites.js')).DRAFT_SLUG) {
+      history.replaceState(history.state, '', location.pathname + location.hash);
+      wantsEditor = false;
+    }
+    if (wantsEditor) {
       const { openEditor } = await import('./editor/editor.js');
       openEditor({ brands: list.brands, id: here.guest ?? here.id ?? list.default, page: here.page });
       return;
