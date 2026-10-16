@@ -23,14 +23,20 @@ export const FRAMES = [
   { id: 'sighgone', label: 'Tour trong ngày', hint: 'tour trong một ngày ở bất kỳ nơi nào (thành phố, núi, sông, đảo), chia chặng theo giờ, nhiều chuyến mỗi ngày; chọn khi mô tả không nói nhiều ngày' },
 ];
 
+// Nhãn giao diện ngắn, chép nguyên là đúng (không nói về nơi chốn): lượt viết lại chữ sót không gửi lại các khoá này.
+const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'total', 'availability', 'seatsLeft', 'soldOut', 'home', 'view',
+  'group', 'hint', 'phone', 'name', 'book', 'from', 'perNight', 'duration', 'unit', 'left', 'placeholder', 'question']);
+
 // Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
 const SKIP = new Set([
   'labels', 'errors', 'message', 'languages', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
   'source', 'author', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
-  'touchHint', 'listLabel', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
+  'touchHint', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
   'scoreLabel', 'dateLabel', 'navTitle', 'contactTitle', 'creditsTitle', 'action', 'availability', 'tags', 'vehicles',
-  'buoi', 'topics', 'departures', 'windows', 'traffic', 'chart', 'stamp', 'rating', 'unit', 'item', 'phone', 'email',
+  'buoi', 'topics', 'departures', 'traffic', 'rating', 'unit', 'item', 'phone', 'email',
 ]);
+// Khoá kỹ thuật không bao giờ đưa AI, kể cả khi có tên cũ (đường dẫn, nguồn ảnh, giấy phép).
+const NEVER = new Set(['id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credits', 'timezone', 'favicon', 'logo', 'alt']);
 const NOT_TEXT = /^(https?:|images\/|#|\/|\d{4}-\d{2}|[\d\s.,:+-]+$|page:|tel:|mailto:)/;
 // Khoảng 30 dòng mỗi luồng: mỗi luồng xong trong khoảng 15 giây; tối đa 8 luồng để vẫn dưới 15 request mỗi phút.
 const FIELDS_PER_GROUP = 30;
@@ -39,11 +45,17 @@ const MAX_GROUPS = 8;
 // Tên và khẩu hiệu lấy thẳng từ hồ sơ, không đưa AI viết lại lần nữa.
 const FROM_PROFILE = ['brand.name', 'brand.slogan'];
 
-function extractFields(node, path = [], out = []) {
-  if (Array.isArray(node)) node.forEach((v, i) => extractFields(v, [...path, i], out));
+// Chữ giao diện (labels, message, errors...) bỏ qua để AI khỏi viết lại hàng trăm nhãn chung; nhưng nhãn nào có tên thương hiệu hay
+// nơi chốn của khung (oldNames, ví dụ "Bạn nhập họ tên giúp SighGone nhé.") thì vẫn đưa AI viết lại, kẻo tên cũ lọt sang site mới.
+function extractFields(node, path = [], out = [], oldNames = null, skipped = false) {
+  if (Array.isArray(node)) node.forEach((v, i) => extractFields(v, [...path, i], out, oldNames, skipped));
   else if (node && typeof node === 'object') {
-    for (const [k, v] of Object.entries(node)) if (!SKIP.has(k)) extractFields(v, [...path, k], out);
-  } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim())) {
+    for (const [k, v] of Object.entries(node)) {
+      const skip = skipped || SKIP.has(k);
+      if (!skip || (oldNames && !NEVER.has(k))) extractFields(v, [...path, k], out, oldNames, skip);
+    }
+  } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim())
+    && (!skipped || oldNames?.test(node))) {
     out.push({ path, key: path.join('.'), value: node });
   }
   return out;
@@ -115,13 +127,30 @@ Trả về JSON đúng dạng:
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
 const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
 
-function groupPrompt(profile, fields, idx) {
+// Tên thương hiệu và nơi chốn của mọi khung (SighGone, Sài Gòn, Gành Sớm...; trang và khối mượn từ khung khác cũng mang tên của khung
+// đó), để dò nhãn giao diện còn mang tên cũ.
+function oldNamesOf(frames) {
+  const names = frames.flatMap((f) => [f?.brand?.name, f?.place?.name]).filter((n) => typeof n === 'string' && n.trim().length > 2);
+  return names.length ? new RegExp(names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i') : null;
+}
+
+// Khung mẫu là website của một thương hiệu khác: nêu tên nó, nơi chốn và các sản phẩm của nó để AI biết chữ nào là của nơi cũ phải đổi.
+function frameNote(template) {
+  const names = [template.brand?.name, template.place?.name, ...(template.catalog?.items ?? []).map((item) => item.name)].filter(Boolean).slice(0, 12);
+  if (!names.length) return '';
+  return `Trang mẫu vốn là website của một thương hiệu khác (${names.join(', ')}). Mọi chữ nói về nơi chốn, địa danh, món ăn, phương tiện, lịch trình, con người, câu chuyện của trang mẫu phải đổi hẳn sang nơi mới, kể cả danh sách đã gồm, nên mang, các chặng; chỉ được chép nguyên chữ giao diện chung không nói về nơi chốn (tên nút, nhãn ngắn như "Đóng", "Trang chủ", "Hết chỗ").`;
+}
+
+// redo: lượt viết lại các dòng mà lượt trước chép y nguyên chữ của trang mẫu.
+function groupPrompt(profile, fields, idx, note = '', redo = false) {
   const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
   return `Bạn viết lại chữ của một phần website du lịch cho thương hiệu mới. Khung trang giữ nguyên.
 
 Hồ sơ thương hiệu (bắt buộc theo đúng):
 ${JSON.stringify(brandProfile(profile))}
 
+${note}
+${redo ? 'Các dòng dưới đây ở lượt trước bị chép y nguyên chữ của trang mẫu. Viết lại cho nơi mới; chỉ dòng nào đúng là chữ giao diện chung, không nói gì về nơi chốn, mới được chép lại y nguyên.\n' : ''}
 Mỗi dòng dưới đây gồm: số, vị trí, chữ của trang mẫu. Viết lại từng dòng cho thương hiệu mới, cùng vai trò, độ dài gần bằng chữ cũ.
 
 Trả về đúng ${idx.length} dòng, mỗi dòng dạng: số|vị trí|chữ mới
@@ -536,7 +565,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const borrowed = borrowPages(template, pool, frame, approved);
   if (borrowed.length) rules.borrowed = borrowed;
   const content = structuredClone(template);
-  const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
+  const fields = extractFields(template, [], [], oldNamesOf(Object.values(pool))).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);
   applyProfile(content, profile, slug);
   const frameCss = await fetch(`/brands/${frame}/theme.css`).then((r) => (r.ok ? r.text() : '')).catch(() => '');
@@ -557,17 +586,22 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const got = new Set();
   let first = 0;
   let mismatched = 0;
+  const note = frameNote(template);
+  const written = new Map();
+  const redoing = new Set();
   const handle = (line) => {
     const m = line.match(/^\s*(\d+)\s*\|\s*([^|]+?)\s*\|(.*)$/);
     const i = m ? Number(m[1]) - 1 : -1;
     // Vị trí chép lại phải khớp số thứ tự; lệch thì để gửi lại, không áp nhầm chỗ.
-    if (!m || !fields[i] || m[2] !== fields[i].key || got.has(i)) {
+    if (!m || !fields[i] || m[2] !== fields[i].key || (got.has(i) && !redoing.has(i))) {
       mismatched += 1;
       return;
     }
     const value = cleanText(m[3], 600);
     if (!value) return;
     got.add(i);
+    redoing.delete(i);
+    written.set(i, value);
     if (!first) first = sec();
     setIn(content, fields[i].key, value);
     on.field?.(got.size, fields.length);
@@ -581,7 +615,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
     const todo = idx.filter((i) => !got.has(i));
     if (!todo.length) return;
     try {
-      await streamLines('', groupPrompt(profile, fields, todo), handle);
+      await streamLines('', groupPrompt(profile, fields, todo, note), handle);
     } catch (err) {
       // Hết lượt mọi khoá thì dừng hẳn (báo cho người dùng); lỗi lẻ của một nhóm (AI im quá lâu, quá tải, mạng) thì để các
       // chỗ đó cho lượt gửi lại ở cuối, không bỏ cả website.
@@ -600,9 +634,19 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   // Lượt gửi lại hỏng thì thôi: các chỗ thiếu giữ chữ của khung, người dùng sửa sau bằng editor.
   if (missing.length) await runGroup(missing).catch(() => {});
   if (blocked.length) console.warn('Dòng bị bộ lọc an toàn chặn, giữ chữ của khung:', blocked);
+  // Dòng AI chép y nguyên chữ của trang mẫu (từ 12 ký tự, không phải nhãn giao diện ngắn) thường là chữ riêng của nơi cũ còn sót
+  // (đã gồm, các chặng, món theo giờ...): gửi lại một lượt với lời dặn gắt hơn. Lỗi thì thôi, giữ như cũ.
+  const leftover = fields.map((f, i) => i).filter((i) => written.get(i) === fields[i].value && fields[i].value.length >= 12
+    && !UI_KEYS.has(fields[i].key.split('.').filter((k) => !/^\d+$/.test(k)).at(-1)));
+  if (leftover.length) {
+    leftover.forEach((i) => redoing.add(i));
+    on.redo?.(leftover.length);
+    await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => streamLines('', groupPrompt(profile, fields, g.map((k) => leftover[k]), note, true), handle).catch(() => {})));
+  }
+  const redone = leftover.filter((i) => written.get(i) !== fields[i].value).length;
   const photoCount = await photoRun;
   await layoutRun;
   on.update?.(content, theme);
-  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount, blocked: blocked.length };
+  const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount, blocked: blocked.length, leftover: leftover.length, redone };
   return { content, theme, profile, stats };
 }
