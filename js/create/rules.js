@@ -27,8 +27,6 @@ export const SIGNATURE = [
   { key: 'pictogram', fit: 'doanh nghiệp đã hoạt động lâu, có số liệu để khoe bằng hình' },
   { key: 'medals', fit: 'có thành tích, giải thưởng, chứng nhận thật' },
   { key: 'coins', fit: 'cần nói rõ tiền khách trả đi đâu (cộng đồng, người dân địa phương)' },
-  { key: 'booking:wall', fit: 'tour có lịch khởi hành dài nhiều tuần, cần xem theo tờ lịch tháng' },
-  { key: 'booking:ticket', fit: 'tour trong ngày đi bằng xe, tàu, thuyền, cần giữ chỗ như đặt vé' },
   { key: 'item-booking:ticket', fit: 'tour trong ngày đi bằng xe, tàu, thuyền, cần giữ chỗ như đặt vé' },
   { key: 'included:receipt', fit: 'tour có danh sách gồm gì, không gồm gì cần trình bày như hoá đơn' },
   { key: 'contact:bell', fit: 'chỗ ở trong hẻm, nhà phố, khách phải gọi hay bấm chuông' },
@@ -50,8 +48,14 @@ export const isBanned = (section, keep) => {
 };
 
 // Kiểu của khối vẫn dùng được (ví dụ stays có kiểu headland là đặc trưng nhưng stays thường thì không): đổi sang kiểu chung hợp lệ đầu tiên.
-const fallbackVariant = (section, keep) => variantsFor(section).map(([value]) => value)
-  .find((value) => !isBanned({ ...section, variant: value || undefined }, keep));
+const ALWAYS = { 'booking:ticket': 'wall' };
+
+// Kiểu ưu tiên khi phải đổi: quầy vé (booking ticket) bị cấm thì đổi sang tờ lịch tháng (wall), không phải dãy thẻ ngày.
+const PREFER = { booking: 'wall' };
+const fallbackVariant = (section, keep) => {
+  const ok = variantsFor(section).map(([value]) => value).filter((value) => !isBanned({ ...section, variant: value || undefined }, keep));
+  return ok.includes(PREFER[section.type]) ? PREFER[section.type] : ok[0];
+};
 
 // Kiểu chung được trộn ở trang chủ: khối nào có nhiều hơn một kiểu hợp lệ thì AI chọn theo giọng nơi chốn. Giá trị rỗng là kiểu mặc định.
 // Hợp lệ còn phụ thuộc dữ liệu của khối (variantsFor kiểm).
@@ -84,6 +88,11 @@ export function sanitizeFrame(content, keepKeys = []) {
   const report = { removed: new Set(), kept: new Set(), removedPages: [] };
   const pages = content.pages ?? [{ path: '/', sections: content.sections ?? [] }];
   for (const page of pages) {
+    // Kiểu luôn đổi ở site AI tạo: chọn ngày bằng tờ lịch tháng (wall) thay cho dãy thẻ ngày của quầy vé, gọn hơn khi có nhiều ngày.
+    for (const section of page.sections ?? []) {
+      const to = ALWAYS[`${section.type}:${section.variant ?? ''}`];
+      if (to && variantsFor(section).some(([value]) => value === to)) section.variant = to;
+    }
     // Trang dựng quanh một khối gắn chặt với thương hiệu khác (như tuyen-so-1 quanh hero ride) thì bỏ cả trang, kẻo còn lại chữ của nơi khác.
     const hard = (page.sections ?? []).map(signatureOf).find((sig) => sig?.hard);
     if (hard && page.path && page.path !== '/') {
@@ -97,7 +106,7 @@ export function sanitizeFrame(content, keepKeys = []) {
         report.kept.add(sig.key);
         return true;
       }
-      // Kiểu đặc trưng của một khối thường (như booking:ticket): đổi kiểu thay vì bỏ khối.
+      // Kiểu đặc trưng của một khối thường (như item-booking:ticket): đổi kiểu thay vì bỏ khối.
       if (section.variant && sig.key.includes(':') && !sig.drop) {
         const next = fallbackVariant(section, keep);
         if (next !== undefined) {

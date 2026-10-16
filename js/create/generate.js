@@ -95,6 +95,9 @@ phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá s
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
+gia: giá thấp nhất (một khách, hay một đêm nếu là chỗ ở) bằng đồng Việt Nam, số nguyên đủ các số 0 ("1 triệu 2" là 1200000, "45 triệu" là 45000000);
+mô tả ghi giá ngoại tệ thì đổi sang đồng theo tỉ giá gần đúng; mô tả không nói giá thì 0 (giữ giá của khung), không tự đặt giá.
+donViGia: đơn vị tính, không kèm tiền tệ: "khách", "đêm", "phòng", "nhóm".
 anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) đứng ĐẦU truy vấn rồi tới một cảnh
 cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
@@ -221,13 +224,17 @@ function soften(hex) {
   return fromHsl([h, Math.min(s, 0.7), Math.min(0.52, Math.max(0.22, l))]);
 }
 
-function paletteVars(mau) {
+function paletteVars(mau, withDark = false) {
   if (!mau) return null;
   const m = Object.fromEntries(Object.keys(PALETTE).map((k) => [k, String(mau[k] ?? '').trim().toLowerCase()]));
   if (!Object.values(m).every((v) => HEX.test(v))) return null;
   if ((contrastRatio(m.bg, WHITE) ?? 9) > 1.6 || (contrastRatio(m.surface, WHITE) ?? 9) > 1.6) return null;
   m.primary = soften(m.primary);
   m.accent = soften(m.accent);
+  // Màu nhấn khác họ với màu nút (xanh lá với nâu) làm trang lệch pha: giữ độ đậm nhạt của màu nhấn nhưng kéo về sắc của màu nút.
+  const [hp] = toHsl(m.primary);
+  const [ha, sa, la] = toHsl(m.accent);
+  if (sa > 0.15 && Math.min(Math.abs(ha - hp), 360 - Math.abs(ha - hp)) > 35) m.accent = fromHsl([hp, sa, la]);
   const bgs = [m.bg, m.surface];
   m.ink = darkenToPass(m.ink, bgs);
   m.muted = darkenToPass(m.muted, bgs);
@@ -239,7 +246,45 @@ function paletteVars(mau) {
     m.onPrimary = WHITE;
     m.primary = darkenToPass(m.primary, [WHITE]);
   }
-  return Object.fromEntries(Object.entries(PALETTE).map(([key, name]) => [name, m[key]]));
+  return { ...Object.fromEntries(Object.entries(PALETTE).map(([key, name]) => [name, m[key]])), ...extraVars(m, withDark) };
+}
+
+const lightenToPass = (fg, bgs) => {
+  let color = fg;
+  for (let step = 0; step < 20 && !bgs.every((bg) => (contrastRatio(color, bg) ?? 0) >= AA + 0.05); step += 1) color = mixToward(color, WHITE, 0.08);
+  return color;
+};
+
+// Biến màu phụ và bảng màu tối của khung (nền nhạt, dấu nhấn, chữ nhãn, --dark-*) vẫn mang màu thương hiệu khung (vàng, đỏ, xanh của
+// SighGone) nên lệch với bảng màu mới: dựng lại cả từ màu nút và màu nhấn, cùng sắc, đủ tương phản.
+function extraVars(m, withDark) {
+  const [h, s] = toHsl(m.primary);
+  const dark = { bg: fromHsl([h, Math.min(s, 0.18), 0.08]), surface: fromHsl([h, Math.min(s, 0.16), 0.12]) };
+  const darkBgs = [dark.bg, dark.surface];
+  const darkPrimary = fromHsl([h, Math.min(s, 0.6), 0.62]);
+  const darkOn = (contrastRatio(INK, darkPrimary) ?? 0) >= (contrastRatio(WHITE, darkPrimary) ?? 0) ? INK : WHITE;
+  const darkAccent = lightenToPass(m.accent, darkBgs);
+  const darkInk = fromHsl([h, 0.12, 0.93]);
+  const light = {
+    '--color-tint': mixToward(m.bg, m.primary, 0.12),
+    '--color-mark': m.accent,
+    '--eyebrow-color': m.accent,
+  };
+  // Bảng màu tối chỉ dựng khi khung có chế độ tối (theme.css khai --dark-*); khung khác chưa thiết kế cho nền tối.
+  if (!withDark) return light;
+  return {
+    ...light,
+    '--dark-color-bg': dark.bg,
+    '--dark-color-surface': dark.surface,
+    '--dark-color-ink': darkInk,
+    '--dark-color-muted': lightenToPass(fromHsl([h, 0.08, 0.7]), darkBgs),
+    '--dark-color-accent': darkAccent,
+    '--dark-color-primary': darkPrimary,
+    '--dark-color-on-primary': darkOn,
+    '--dark-color-tint': fromHsl([h, Math.min(s, 0.16), 0.16]),
+    '--dark-color-mark': darkAccent,
+    '--dark-eyebrow-color': darkAccent,
+  };
 }
 
 /* ---------- Khung, ảnh, số liệu ---------- */
@@ -277,8 +322,12 @@ function scalePrices(content, price) {
     }
   };
   walk(content, (node, k, v) => { if (k === 'price') found.push(v); });
-  const base = Math.min(...found);
-  if (!found.length || !(price > 0) || !Number.isFinite(base)) return;
+  // Giá gốc để so là giá thấp nhất của các tour, phòng chính (catalog); giá phụ như chặng ghép 50.000 đồng mà làm gốc thì tour bị nhân lên
+  // hàng chục triệu.
+  const main = (content.catalog?.items ?? []).map((item) => item.price).filter((v) => typeof v === 'number' && v > 0);
+  const base = Math.min(...(main.length ? main : found));
+  // Giá dưới 50.000 đồng là AI ghi sai đơn vị ("45" thay cho 45 triệu, hay ghi theo ngoại tệ): bỏ qua, giữ giá của khung.
+  if (!found.length || !(price >= 50000) || !Number.isFinite(base)) return;
   const ratio = price / base;
   walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
 }
@@ -287,6 +336,8 @@ function applyProfile(content, profile, slug) {
   content.id = slug;
   if (content.place && profile.noiChon) content.place.name = profile.noiChon;
   content.contact = { ...content.contact, phone: '0123 456 789', email: `xin-chao@${slug}.clauki` };
+  // Nhãn cột menu ở chân trang của khung có thể là tên thương hiệu khung (SighGone), mà nhãn không qua AI viết lại: đổi theo tên mới.
+  if (content.footer?.navTitle && content.footer.navTitle === content.brand?.name) content.footer.navTitle = profile.ten || content.footer.navTitle;
   if (content.brand) {
     content.brand.name = profile.ten || content.brand.name;
     content.brand.slogan = profile.slogan || content.brand.slogan;
@@ -460,7 +511,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);
   applyProfile(content, profile, slug);
-  const vars = paletteVars(profile.mau);
+  const frameCss = await fetch(`/brands/${frame}/theme.css`).then((r) => (r.ok ? r.text() : '')).catch(() => '');
+  const vars = paletteVars(profile.mau, frameCss.includes('--dark-color-bg'));
   const theme = { base: frame, vars: vars ?? {} };
   // Kiểu chữ AI chọn (khoá có trong danh sách của editor); khoá lạ hay rỗng thì giữ kiểu chữ của khung.
   const font = FONTS.find((f) => f.key && f.key === profile.phongChu);
