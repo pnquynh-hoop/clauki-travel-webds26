@@ -3,10 +3,10 @@
    không mở thêm khung riêng của BTC; mục Đổi thương hiệu bấm giúp hộp chọn của BTC. Site khách không có nút của BTC nên có nút
    chữ "Thử chỉnh".
    Thương hiệu có sẵn: Đổi thương hiệu (mở hộp chọn của BTC), Tạo mới (trình tạo web /tao), Chỉnh sửa (editor).
-   Site khách đã xuất bản: chỉ Chỉnh sửa (nháp trên máy này, không đụng bản đã xuất bản) và Tạo bản sao (chép sang trình tạo web
-   để đặt tên mới rồi xuất bản). Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
+   Site khách đã xuất bản là cố định nên chỉ có Tạo bản sao (chép cả nội dung lẫn màu, font sang trình tạo web để đặt tên mới
+   rồi xuất bản); bản nháp /nhap/ thì có Tạo mới và Chỉnh sửa. Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
    core.js tải tệp này sau khi trang dựng xong; editor thật (editor.js) chỉ tải khi bấm vào nút. */
-import { clearDraft, readDraft } from './draft.js';
+import { clearDraft } from './draft.js';
 import { writeTaoDraft, DRAFT_SLUG } from '../sites.js';
 
 const CSS_ID = 'ed-launch-css';
@@ -54,12 +54,11 @@ function openBrandPicker() {
   document.querySelector('.wd2026-trigger')?.click();
 }
 
-// Tạo bản sao của site khách đang xem (kèm bản sửa trên máy nếu có) thành nháp của trình tạo web, rồi mở /tao để đặt tên mới.
+// Tạo bản sao của site khách đang xem (bản đã xuất bản, kèm màu và font của nó) thành nháp của trình tạo web, rồi mở /tao để đặt tên mới.
 function copySite(current) {
-  const saved = readDraft(current.id, current.raw);
-  const content = structuredClone(saved?.content ?? current.raw);
+  const content = structuredClone(current.raw);
   delete content.id;
-  const theme = { ...structuredClone(saved?.theme ?? {}), base: current.base };
+  const theme = { ...structuredClone(current.theme ?? {}), base: current.base };
   const ok = writeTaoDraft({ brief: '', profile: null, copyOf: current.id, content, theme, at: new Date().toISOString() });
   if (!ok) {
     alert('Trình duyệt chặn bộ nhớ nên chưa chép được. Hãy cho phép lưu dữ liệu trang rồi thử lại.');
@@ -160,7 +159,7 @@ export function mountLauncher({ current: first, reset }) {
   const fillMenu = (detail) => {
     const published = detail.guest && detail.id !== DRAFT_SLUG;
     menu.replaceChildren(...(published
-      ? [link('Chỉnh sửa', editorUrl()), action('Tạo bản sao', () => copySite(detail))]
+      ? [action('Tạo bản sao', () => copySite(detail))]
       : [
         ...(detail.guest ? [] : [action('Đổi thương hiệu', () => { setOpen(false); openBrandPicker(); })]),
         link('Tạo mới', '/tao'),
