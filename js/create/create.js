@@ -26,7 +26,7 @@ const PREVIEW_MS = 350;
 // Mô tả ngắn hơn chừng này ký tự thì AI khó đoán được nơi chốn, loại hình, giá.
 const MIN_BRIEF = 12;
 
-const state = { brands: [], draft: null, busy: false, refining: false, originalBrief: null, device: DESKTOP, timer: 0, pending: null, frameReady: false, english: null, run: 0 };
+const state = { brands: [], draft: null, busy: false, refining: false, originalBrief: null, device: DESKTOP, timer: 0, pending: null, frameReady: false, english: null, run: 0, armed: false, armTimer: 0 };
 const ui = {};
 
 const builtIn = () => state.brands.map((b) => b.id);
@@ -218,10 +218,8 @@ async function create() {
     ui.brief.focus();
     return;
   }
-  // Đã chỉnh tay mà tạo lại thì mất hết các chỗ đó: hỏi trước.
-  if (state.draft?.edited && !confirm('Website đang có chỗ đã chỉnh tay. Tạo lại bằng AI sẽ thay toàn bộ. Tiếp tục?')) return;
   state.busy = true;
-  ui.create.disabled = true;
+  lock(true);
   ui.publish.hidden = true;
   setStatus([]);
   const steps = ui.progress;
@@ -296,8 +294,49 @@ async function create() {
   } finally {
     if (!state.english) steps.stop();
     state.busy = false;
-    ui.create.disabled = false;
+    lock(false);
   }
+}
+
+/* ---------- Nút Tạo, khoá khi đang tạo ---------- */
+
+const ARM_MS = 5000;
+const hasSite = () => Boolean(state.draft?.content);
+
+// Đang tạo thì khoá mọi ô nhập và nút trong bảng (fieldset disabled), nút Tạo hiện "Đang tạo...".
+function lock(on) {
+  ui.fields.disabled = on;
+  ui.create.disabled = on;
+  updateCreate();
+}
+
+function updateCreate() {
+  ui.create.textContent = state.busy ? 'Đang tạo...' : state.armed ? 'Bấm lần nữa để tạo lại' : hasSite() ? 'Tạo lại' : 'Tạo website';
+  ui.create.classList.toggle('is-armed', Boolean(state.armed));
+  ui.createNote.textContent = state.armed
+    ? (state.draft?.edited ? 'Website đang có chỗ đã chỉnh tay. Tạo lại sẽ thay toàn bộ website hiện tại.' : 'Tạo lại sẽ thay website hiện tại bằng một bản mới.')
+    : '';
+}
+
+function disarm() {
+  clearTimeout(state.armTimer);
+  state.armed = false;
+  updateCreate();
+}
+
+// Đã có website thì phải bấm hai lần (lần đầu chỉ báo sẽ thay website hiện tại), tránh lỡ tay mất bản đang có; 5 giây không
+// bấm tiếp hay bấm Esc thì thôi.
+function onCreateClick() {
+  if (state.busy) return;
+  if (hasSite() && !state.armed) {
+    state.armed = true;
+    updateCreate();
+    clearTimeout(state.armTimer);
+    state.armTimer = setTimeout(disarm, ARM_MS);
+    return;
+  }
+  disarm();
+  create();
 }
 
 /* Dịch bản tiếng Anh sau khi website đã xong. Chỉ ghi kết quả vào nháp khi nháp vẫn là đúng website vừa tạo (chưa tạo lại,
@@ -397,7 +436,7 @@ function build() {
 
   ui.brief = h('textarea', { class: 'ed-input', id: 'tao-brief', rows: '5', placeholder: 'Ví dụ: homestay nhà gỗ ở Đà Lạt cho nhóm bạn, có bếp nướng, 450 nghìn mỗi khách' });
   ui.brief.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) create();
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) onCreateClick();
   });
   ui.framePick = h('select', { class: 'ed-select', id: 'tao-frame' },
     h('option', { value: '', text: 'Để AI chọn theo mô tả' }),
@@ -415,7 +454,8 @@ function build() {
   ui.unsplashKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán Access Key của Unsplash', 'aria-label': 'Khoá Unsplash' });
   ui.unsplashKey.value = readUnsplashKey();
   ui.unsplashKey.addEventListener('change', () => saveUnsplashKey(ui.unsplashKey.value.trim()));
-  ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: create, text: 'Tạo website' });
+  ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: onCreateClick, text: 'Tạo website' });
+  ui.createNote = h('p', { class: 'tao-create-note', 'aria-live': 'polite' });
   ui.bar = h('progress', { class: 'tao-bar', max: '1', value: '0', 'aria-label': 'Tiến độ viết chữ' });
   ui.status = h('div', { class: 'tao-status', role: 'status', 'aria-live': 'polite' });
   ui.progress = createProgress();
@@ -447,6 +487,7 @@ function build() {
       h('header', { class: 'tao-head' },
         h('h1', { class: 'tao-title', text: 'Tạo website bằng lời' }),
         h('p', { class: 'tao-lead', text: 'Kể về nơi của bạn, AI dựng website trên một khung có sẵn (bố cục, ảnh có giấy phép), trang hiện dần bên cạnh.' })),
+      ui.fields = h('fieldset', { class: 'tao-fields' },
       h('section', { class: 'tao-step' },
         step(1, 'Kể về nơi của bạn', 'tao-brief'),
         h('div', { class: 'tao-brief' }, ui.brief,
@@ -468,11 +509,11 @@ function build() {
           ui.enOn),
         h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Unsplash (tuỳ chọn)' }),
           h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Unsplash trước, truy vấn nào Unsplash không ra thì tìm trên Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
-          ui.unsplashKey)),
+          ui.unsplashKey))),
       ui.status,
       ui.progress.el,
       ui.publish),
-    h('div', { class: 'tao-panel__foot' }, ui.bar, ui.create),
+    h('div', { class: 'tao-panel__foot' }, ui.bar, ui.createNote, ui.create),
     ui.resizer);
 
   ui.frame = h('iframe', { class: 'ed-frame', title: 'Xem trước website đang tạo', 'data-ed-frame': true });
@@ -501,6 +542,7 @@ export function openBuilder({ brands }) {
   state.brands = brands;
   build();
   onBriefInput();
+  ui.create.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.armed) disarm(); });
   // Có nháp từ lần trước thì hiện lại, để tải lại trang không mất website đang làm.
   const draft = readTaoDraft();
   if (draft?.content) {
@@ -525,4 +567,5 @@ export function openBuilder({ brands }) {
       ui.slug.focus();
     }
   }
+  updateCreate();
 }
