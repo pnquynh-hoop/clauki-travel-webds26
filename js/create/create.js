@@ -4,7 +4,7 @@
    Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
-import { usingFallback } from '../ai/gemini.js';
+import { usingFallback, backupInUse } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
@@ -278,7 +278,8 @@ async function create() {
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
     steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh`,
-      usingFallback() ? 'Model chính hết lượt nên đã chuyển sang Gemini 3.1 Flash Lite' : '']);
+      usingFallback() ? 'Model chính hết lượt trên mọi khoá nên đã chuyển sang Gemini 3.1 Flash Lite' : '',
+      backupInUse() ? `Khoá chính hết lượt nên đã dùng khoá dự phòng ${backupInUse()}` : '']);
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
   } catch (err) {
