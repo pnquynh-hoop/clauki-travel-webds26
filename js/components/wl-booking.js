@@ -138,8 +138,14 @@ export class WlBooking extends HTMLElement {
   }
 
   // Số căn còn trống của một hạng, theo khoảng ngày chứa ngày nhận phòng; ngoài các khoảng đã ghi thì không biết.
+  // Hạng lấy từ danh mục (items) thì đọc availability của chính hạng đó (theo ngày hoặc theo khoảng), cùng nguồn với trang chi tiết.
   roomsLeft(roomId, checkIn) {
     const day = dayNumber(checkIn);
+    if (this._data.items) {
+      const own = this._rooms.find((r) => r.id === roomId)?.availability ?? [];
+      const hit = own.find((a) => (a.date ? dayNumber(a.date) === day : day >= dayNumber(a.from) && day <= dayNumber(a.to)));
+      return hit?.left;
+    }
     const period = (this._data.availability ?? []).find((p) => day >= dayNumber(p.from) && day <= dayNumber(p.to));
     return period?.left?.[roomId];
   }

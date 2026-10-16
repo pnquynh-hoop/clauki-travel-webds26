@@ -8,7 +8,7 @@
 function toRoom(item) {
   return {
     id: item.id, label: item.name, text: item.text, price: item.price, maxGuests: item.maxGuests, area: item.area,
-    count: item.count, image: item.image, view: item.view, href: item.href,
+    count: item.count, image: item.image, view: item.view, href: item.href, availability: item.availability,
   };
 }
 
