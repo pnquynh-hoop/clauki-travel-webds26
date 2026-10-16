@@ -11,6 +11,7 @@ export const STEPS = [
   { key: 'write', title: 'Viết chữ', wait: 'Viết lại mọi chữ của khung cho nơi này' },
   { key: 'photos', title: 'Tìm ảnh thật', wait: 'Ảnh có giấy phép đúng nơi chốn' },
   { key: 'done', title: 'Hoàn tất', wait: 'Xem trước bên cạnh, rồi xuất bản' },
+  { key: 'english', title: 'Dịch tiếng Anh', wait: 'Chạy nền sau khi xong, thêm nút VI, EN cho site' },
 ];
 
 const LABEL = { wait: 'chờ', run: 'đang làm', done: 'xong', skip: 'bỏ qua', fail: 'lỗi' };

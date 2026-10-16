@@ -179,7 +179,14 @@ function explain(err, aborted) {
 // rồi model dự phòng) khi canRetry() còn đúng (chưa nhận được gì); quá tải thì đợi chút rồi thử lại một lần trên cùng đường.
 async function withRetry(once, canRetry = () => true) {
   const abort = new AbortController();
-  const timer = setTimeout(() => abort.abort(), TIMEOUT_MS);
+  // Hạn chờ tính từ lần cuối nhận được dữ liệu (alive), không tính cả lượt: nhóm chữ dài stream đều đặn hơn 60 giây khi AI chậm
+  // vẫn chạy tiếp, chỉ dừng khi AI im lặng quá TIMEOUT_MS.
+  let timer = 0;
+  const alive = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => abort.abort(), TIMEOUT_MS);
+  };
+  alive();
   let busyRetried = false;
   try {
     for (;;) {
@@ -187,7 +194,7 @@ async function withRetry(once, canRetry = () => true) {
       if (!route) throw new AiError('quota', 'AI đang nghỉ (mọi khoá đều hết lượt miễn phí), hãy thử lại sau một phút hoặc sửa tay.');
       lastRoute = route;
       try {
-        return await once(abort.signal, route);
+        return await once(abort.signal, route, alive);
       } catch (err) {
         const why = explain(err, abort.signal.aborted);
         if (why.kind === 'quota') {
@@ -209,7 +216,7 @@ async function withRetry(once, canRetry = () => true) {
 // Gửi prompt, nhận từng dòng (JSON Lines) ngay khi về; onLine được gọi với mỗi dòng không rỗng.
 export function streamLines(systemInstruction, prompt, onLine) {
   let got = 0;
-  return withRetry(async (signal, route) => {
+  return withRetry(async (signal, route, alive) => {
     let buffer = '';
     const emit = (line) => {
       if (!line) return;
@@ -217,6 +224,7 @@ export function streamLines(systemInstruction, prompt, onLine) {
       onLine(line);
     };
     const take = (text) => {
+      alive();
       buffer += text;
       let i;
       while ((i = buffer.indexOf('\n')) >= 0) {

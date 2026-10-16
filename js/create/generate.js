@@ -25,7 +25,7 @@ export const FRAMES = [
 
 // Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
 const SKIP = new Set([
-  'labels', 'errors', 'message', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
+  'labels', 'errors', 'message', 'languages', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
   'source', 'author', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
   'touchHint', 'listLabel', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
   'scoreLabel', 'dateLabel', 'navTitle', 'contactTitle', 'creditsTitle', 'action', 'availability', 'tags', 'vehicles',
@@ -332,6 +332,15 @@ function scalePrices(content, price) {
   walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
 }
 
+// Ngôn ngữ của khung (SighGone có tiếng Anh) không đi theo: bản dịch của khung không khớp chữ mới. Bỏ trên khung trước khi tách
+// chữ cho AI viết; bản tiếng Anh của site mới do bước dịch ở /tao thêm vào (english.js).
+function dropLanguages(content) {
+  delete content.languages;
+  delete content.translations;
+  delete content.translationNotes;
+  if (content.header?.lang) delete content.header.lang;
+}
+
 function applyProfile(content, profile, slug) {
   content.id = slug;
   if (content.place && profile.noiChon) content.place.name = profile.noiChon;
@@ -517,6 +526,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (!res.ok) throw new Error(`Không tải được khung ${frame} (mã ${res.status}).`);
   const template = await res.json();
   // Luật component: bỏ khối đặc trưng của thương hiệu khung, đổi kiểu bị cấm (rules.js) trước khi tách chữ cho AI viết.
+  dropLanguages(template);
   const rules = sanitizeFrame(template, Array.isArray(profile.dacTrung) ? profile.dacTrung : []);
   // Ghép khối chung từ nhiều khung theo trangChu của AI; không dùng được thì giữ trang chủ của khung và để layoutTask chọn kiểu.
   const pool = { ...(await framesRun), [frame]: template };
@@ -571,7 +581,10 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
     try {
       await streamLines('', groupPrompt(profile, fields, todo), handle);
     } catch (err) {
-      if (err.kind !== 'blocked') throw err;
+      // Hết lượt mọi khoá thì dừng hẳn (báo cho người dùng); lỗi lẻ của một nhóm (AI im quá lâu, quá tải, mạng) thì để các
+      // chỗ đó cho lượt gửi lại ở cuối, không bỏ cả website.
+      if (err.kind === 'quota') throw err;
+      if (err.kind !== 'blocked') return;
       if (todo.length === 1) {
         blocked.push(fields[todo[0]].key);
         return;
