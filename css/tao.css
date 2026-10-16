@@ -714,17 +714,17 @@
   pointer-events: none;
 }
 
-/* Nút Tạo lại ở bước xác nhận: đổi sang màu cảnh báo kèm dòng nhắc phía trên. */
+/* Nút Tạo lại ở bước xác nhận: nền cam rất nhạt, viền và chữ cam đất (cảnh báo nhẹ, không đỏ chói), kèm dòng nhắc phía trên. */
 .tao-create.is-armed {
-  color: #fff;
-  background: var(--ed-red);
-  border-color: var(--ed-red);
+  color: #9a3412;
+  background: #fff7ed;
+  border: 2px solid #c2410c;
 }
 
 .tao-create-note {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--ed-red);
+  color: #9a3412;
 }
 
 .tao-create-note:empty {
