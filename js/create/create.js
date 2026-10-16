@@ -270,6 +270,7 @@ async function create() {
           else steps.set('photos', 'skip', 'Không đủ ảnh hợp nơi chốn, giữ ảnh của khung');
         },
         photos: (info) => steps.set('photos', 'done', `${info.photos} ảnh từ ${info.source}, thay vào ${info.slots} chỗ, nguồn ghi ở cuối trang`),
+        redo: (n) => steps.note('write', `Viết lại thêm ${n} chỗ còn chép y chữ của trang mẫu`),
         field: (done, total) => {
           steps.note('write', [`${done}/${total} chỗ`, meter(done, total)]);
           ui.bar.value = done / total;
@@ -281,6 +282,7 @@ async function create() {
     const s = result.stats;
     if (steps.state('layout') !== 'done') steps.set('layout', 'done', ruleNote);
     steps.set('write', 'done', [`${s.written}/${s.fields} chỗ, ${s.groups} luồng song song`,
+      s.leftover ? `Viết lại ${s.redone}/${s.leftover} chỗ AI chép y chữ của trang mẫu` : '',
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
     steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh, chỉnh tay hay xuất bản được ngay`,
