@@ -49,10 +49,10 @@ export function dayChip(iso) {
   return { dow, day: `${date.getUTCDate()}/${date.getUTCMonth() + 1}` };
 }
 
-// Ảnh bìa rồi ảnh của từng chặng (chú thích là tên chặng), bỏ ảnh trùng.
+// Ảnh bìa, rồi ảnh riêng của mục (images: hạng phòng không có chặng), rồi ảnh của từng chặng (chú thích là tên chặng), bỏ ảnh trùng.
 function itemImages(item) {
   const seen = new Set();
-  const list = [item.image, ...(item.stages ?? []).map((st) => st.image && { ...st.image, caption: st.place })];
+  const list = [item.image, ...(item.images ?? []), ...(item.stages ?? []).map((st) => st.image && { ...st.image, caption: st.place })];
   return list.filter((image) => image?.src && !seen.has(image.src) && seen.add(image.src));
 }
 
@@ -79,6 +79,8 @@ export function itemSection(site, section) {
     includes: item.includes,
     excludes: item.excludes,
     bring: item.bring,
+    // Cảnh nhìn ra (hạng phòng): khối scene đọc view.
+    view: item.view,
   };
   return { ...merged, ...section };
 }
