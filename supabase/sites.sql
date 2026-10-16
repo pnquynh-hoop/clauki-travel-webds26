@@ -3,7 +3,8 @@
 -- Rào nội dung ở database: tên đúng dạng và không trùng tên dành riêng, mọi địa chỉ phải thuộc danh sách cho phép, JSON dưới 400 KB
 -- (site dựng trên khung SighGone có danh mục tour và ảnh Wikimedia đã gần 200 KB).
 -- Dán toàn bộ vào SQL Editor của Supabase rồi bấm Run. Chạy lại được nhiều lần (xoá bảng cũ, kể cả dữ liệu).
--- Đã có dữ liệu mà chỉ cần đổi danh sách địa chỉ cho phép: chạy riêng khối create or replace function site_ok bên dưới, không chạy cả file.
+-- Đã có dữ liệu mà chỉ cần đổi luật nội dung: chạy riêng ba khối create or replace function url_ok, logo_ok, site_ok bên dưới
+-- cùng câu grant execute, không chạy cả file.
 -- Khoá demo KHÔNG nằm trong file này: chạy riêng câu insert ở cuối file, thay <KHOÁ DEMO> bằng khoá thật.
 
 drop view  if exists public_sites;
@@ -44,15 +45,29 @@ language sql stable security definer set search_path = public, extensions as $$
   );
 $$;
 
--- Mọi chuỗi trông giống địa chỉ phải thuộc danh sách cho phép; JSON dưới 400 KB.
+-- Một chuỗi trông giống địa chỉ phải thuộc danh sách cho phép.
+create or replace function url_ok(v text) returns boolean
+language sql immutable as $$
+  select v !~* '^\s*(https?:|//|data:|javascript:|vbscript:)'
+      or v ~ '^https://(images\.unsplash\.com|images\.pexels\.com|upload\.wikimedia\.org|thumb\.wikimedia\.org|commons\.wikimedia\.org|www\.pexels\.com|unsplash\.com/photos|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/';
+$$;
+
+-- Logo, logo nền tối, favicon: thêm được ảnh nhúng PNG, JPEG, WebP (editor thu nhỏ trên máy), dưới 60.000 ký tự; không nhận SVG.
+create or replace function logo_ok(v text) returns boolean
+language sql immutable as $$
+  select v is null or url_ok(v)
+      or (v ~ '^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$' and length(v) < 60000);
+$$;
+
+-- JSON dưới 400 KB; mọi chuỗi qua url_ok, riêng ba trường logo qua logo_ok.
 create or replace function site_ok(c jsonb) returns boolean
 language sql immutable as $$
   select pg_column_size(c) < 400000
+     and logo_ok(c #>> '{brand,logo}') and logo_ok(c #>> '{brand,logoDark}') and logo_ok(c #>> '{meta,favicon}')
      and not exists (
        select 1
-       from jsonb_path_query(c, 'strict $.** ? (@.type() == "string")') s(v)
-       where (v #>> '{}') ~* '^\s*(https?:|//|data:|javascript:|vbscript:)'
-         and (v #>> '{}') !~ '^https://(images\.unsplash\.com|images\.pexels\.com|upload\.wikimedia\.org|thumb\.wikimedia\.org|commons\.wikimedia\.org|www\.pexels\.com|unsplash\.com/photos|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/'
+       from jsonb_path_query(c #- '{brand,logo}' #- '{brand,logoDark}' #- '{meta,favicon}', 'strict $.** ? (@.type() == "string")') s(v)
+       where not url_ok(v #>> '{}')
      );
 $$;
 
@@ -74,7 +89,7 @@ grant select (slug, content, theme, hidden)     on sites to anon;
 grant update (content, theme, updated_at)       on sites to anon;
 
 grant usage on schema public to anon;
-grant execute on function may_demo(), site_ok(jsonb) to anon;
+grant execute on function may_demo(), site_ok(jsonb), url_ok(text), logo_ok(text) to anon;
 
 create view public_sites as
   select slug, content, theme from sites where not hidden;

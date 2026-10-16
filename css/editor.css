@@ -1539,3 +1539,19 @@ button.ed-history__text {
   font-size: 0.78rem;
   color: var(--ed-muted);
 }
+
+/* Logo ở tab Giao diện: ảnh xem trước trên nền ô vuông xám nhạt để thấy được cả logo nền trong suốt. */
+.ed-logo {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ed-logo__img {
+  justify-self: start;
+  max-width: 100%;
+  max-height: 64px;
+  padding: 0.4rem;
+  background: repeating-conic-gradient(#f4f4f5 0% 25%, #fff 0% 50%) 50% / 16px 16px;
+  border: 1px solid var(--ed-line);
+  border-radius: 6px;
+}
