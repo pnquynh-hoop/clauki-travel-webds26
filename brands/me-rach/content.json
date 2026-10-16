@@ -8,6 +8,7 @@
   "brand": {
     "name": "Mé Rạch",
     "logo": "images/logo-merach.webp",
+    "logoMark": true,
     "slogan": "Sáng ra chợ nổi, chiều về mé rạch"
   },
   "cta": {
