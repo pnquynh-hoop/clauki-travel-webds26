@@ -414,14 +414,28 @@ function applyPhotos(content, photos) {
 
 async function photoTask({ profile, content, theme, photos, on }) {
   const queries = (Array.isArray(profile.anhTimKiem) ? profile.anhTimKiem : []).filter((q) => typeof q === 'string' && q.trim()).slice(0, 6);
-  if (!photos?.on || !queries.length) return 0;
+  if (!photos?.on) return 0;
+  const source = photos.pexelsKey ? 'Pexels' : 'Wikimedia Commons';
+  // on.photoStage báo từng nấc (tìm, lọc, không đủ ảnh) cho bảng tiến trình của /tao.
+  if (!queries.length) {
+    on.photoStage?.('none', { found: 0 });
+    return 0;
+  }
+  on.photoStage?.('search', { source, queries });
   const found = await findPhotos(queries, { pexelsKey: photos.pexelsKey });
-  if (found.length < 3) return 0;
+  if (found.length < 3) {
+    on.photoStage?.('none', { found: found.length });
+    return 0;
+  }
+  on.photoStage?.('vet', { found: found.length });
   const kept = await vetPhotos(profile, found);
-  if (kept.length < 3) return 0;
+  if (kept.length < 3) {
+    on.photoStage?.('none', { found: kept.length });
+    return 0;
+  }
   const count = applyPhotos(content, kept);
   on.update?.(content, theme);
-  on.photos?.({ photos: kept.length, slots: count, source: photos.pexelsKey ? 'Pexels' : 'Wikimedia Commons' });
+  on.photos?.({ photos: kept.length, slots: count, source });
   return kept.length;
 }
 
@@ -518,7 +532,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const font = FONTS.find((f) => f.key && f.key === profile.phongChu);
   if (font) applyFont(theme, font.key);
   const profileSec = sec();
-  on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars), font: font?.label ?? null });
+  on.profile?.(profile, { sec: profileSec, frame, palette: Boolean(vars), vars: theme.vars, font: font?.label ?? null });
   on.rules?.(rules);
   on.update?.(content, theme);
 

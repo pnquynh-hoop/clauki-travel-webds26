@@ -10,6 +10,7 @@ import { iconEl } from '../icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
+import { createProgress, swatches, meter } from './progress.js';
 
 const EXAMPLES = [
   { label: 'Homestay Đà Lạt', text: 'Homestay nhà gỗ ở Đà Lạt cho nhóm bạn, có bếp nướng ngoài sân, 450 nghìn mỗi khách một đêm' },
@@ -219,16 +220,14 @@ async function create() {
   state.busy = true;
   ui.create.disabled = true;
   ui.publish.hidden = true;
-  const t0 = performance.now();
-  const sec = () => ((performance.now() - t0) / 1000).toFixed(1);
-  let head = [];
-  let progress = '';
-  let photoNote = '';
+  setStatus([]);
+  const steps = ui.progress;
+  steps.start();
+  const photosOn = ui.photoOn.checked;
+  if (!photosOn) steps.set('photos', 'skip', 'Đã tắt, giữ ảnh của khung');
   let ruleNote = '';
-  let layoutNote = '';
-  const tick = setInterval(() => setStatus([...head, progress || `Đang lập hồ sơ thương hiệu... ${sec()} giây`]), 200);
-  // Bảng cuộn riêng: đưa khung trạng thái vào tầm nhìn để thấy tiến độ ngay khi bấm Tạo.
-  ui.status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  // Bảng cuộn riêng: đưa tiến trình vào tầm nhìn để thấy ngay khi bấm Tạo.
+  steps.el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   try {
     const frameId = ui.framePick.value;
     const result = await generateSite({
@@ -236,25 +235,37 @@ async function create() {
       frameId,
       slug: DRAFT_SLUG,
       frames: FRAMES.map((f) => f.id).filter((id) => builtIn().includes(id)),
-      photos: { on: ui.photoOn.checked, pexelsKey: ui.pexelsKey.value.trim() },
+      photos: { on: photosOn, pexelsKey: ui.pexelsKey.value.trim() },
       on: {
+        profile: (p, info) => {
+          steps.set('profile', 'done', `${p.ten}: ${p.slogan}`);
+          steps.set('style', 'done', [
+            `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}`,
+            h('p', { class: 'tao-progress__row' }, swatches(info.vars), info.palette ? 'Bộ màu riêng theo nơi chốn' : 'Giữ bộ màu của khung'),
+            info.font ? `Kiểu chữ: ${info.font}` : 'Giữ kiểu chữ của khung',
+          ]);
+          steps.set('layout', 'run');
+          steps.set('write', 'run', 'Chia chữ thành nhiều luồng viết song song');
+          state.draft = { brief, profile: p };
+        },
         rules: (r) => {
           ruleNote = [
-            r.kept.length ? `Khối đặc trưng dùng vì hợp nơi này: ${r.kept.join(', ')}.` : 'Không dùng khối đặc trưng của thương hiệu khác.',
-            r.removedPages.length ? `Bỏ trang: ${r.removedPages.join(', ')}.` : '',
-          ].filter(Boolean).join(' ');
+            r.kept.length ? `Khối đặc trưng hợp nơi này: ${r.kept.join(', ')}` : 'Không dùng khối đặc trưng của thương hiệu khác',
+            r.removedPages.length ? `Bỏ trang: ${r.removedPages.join(', ')}` : '',
+          ].filter(Boolean).join('. ');
         },
         layout: (l) => {
           const picked = Object.entries(l.picked).map(([type, variant]) => `${type} ${variant}`).join(', ');
-          layoutNote = [picked && `Kiểu trình bày: ${picked}.`, l.header && `Đầu trang: ${l.header}.`].filter(Boolean).join(' ');
+          steps.set('layout', 'done', [picked && `Trang chủ: ${picked}`, l.header && `Đầu trang: ${l.header}`, ruleNote]);
         },
-        photos: (info) => { photoNote = `Ảnh: ${info.photos} ảnh thật theo nơi chốn từ ${info.source}, thay vào ${info.slots} chỗ; nguồn ảnh ghi ở cuối trang.`; },
-        profile: (p, info) => {
-          head = [`${p.ten}: ${p.slogan}`, `Khung: ${FRAMES.find((f) => f.id === info.frame)?.label}. ${info.palette ? 'Bộ màu riêng theo nơi chốn.' : 'Giữ bộ màu của khung.'} ${info.font ? `Kiểu chữ: ${info.font}.` : 'Giữ kiểu chữ của khung.'}`];
-          state.draft = { brief, profile: p };
+        photoStage: (stage, info) => {
+          if (stage === 'search') steps.set('photos', 'run', `Đang tìm trên ${info.source}`);
+          else if (stage === 'vet') steps.note('photos', `Tìm được ${info.found} ảnh, AI đang loại ảnh lạc đề`);
+          else steps.set('photos', 'skip', 'Không đủ ảnh hợp nơi chốn, giữ ảnh của khung');
         },
+        photos: (info) => steps.set('photos', 'done', `${info.photos} ảnh từ ${info.source}, thay vào ${info.slots} chỗ, nguồn ghi ở cuối trang`),
         field: (done, total) => {
-          progress = `Đang viết chữ: ${done}/${total} chỗ, ${sec()} giây`;
+          steps.note('write', [`${done}/${total} chỗ`, meter(done, total)]);
           ui.bar.value = done / total;
         },
         update: (content, theme) => preview(content, theme),
@@ -262,15 +273,18 @@ async function create() {
     });
     preview(result.content, result.theme, true);
     const s = result.stats;
-    setStatus([...head, ruleNote, layoutNote, photoNote || (ui.photoOn.checked ? 'Không tìm được ảnh hợp nơi chốn nên giữ ảnh của khung.' : ''), `Xong sau ${s.total} giây: hồ sơ lúc ${s.profile} giây, dòng chữ đầu tiên lúc ${s.first} giây, viết ${s.written}/${s.fields} chỗ, ${s.groups} luồng song song.`,
-      usingFallback() ? 'Model chính hết lượt nên đã chuyển sang Gemini 3.1 Flash Lite.' : '',
-      s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn của AI chặn)` : ''}, sửa sau bằng editor.` : ''], 'ok');
+    if (steps.state('layout') !== 'done') steps.set('layout', 'done', ruleNote);
+    steps.set('write', 'done', [`${s.written}/${s.fields} chỗ, ${s.groups} luồng song song`,
+      s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
+    if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
+    steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh`,
+      usingFallback() ? 'Model chính hết lượt nên đã chuyển sang Gemini 3.1 Flash Lite' : '']);
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
   } catch (err) {
-    setStatus([...head, err.message], err.kind === 'refused' ? 'warn' : 'error');
+    steps.fail(err.message);
   } finally {
-    clearInterval(tick);
+    steps.stop();
     state.busy = false;
     ui.create.disabled = false;
   }
@@ -344,6 +358,7 @@ function build() {
   ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: create, text: 'Tạo website' });
   ui.bar = h('progress', { class: 'tao-bar', max: '1', value: '0', 'aria-label': 'Tiến độ viết chữ' });
   ui.status = h('div', { class: 'tao-status', role: 'status', 'aria-live': 'polite' });
+  ui.progress = createProgress();
 
   ui.slug = h('input', { class: 'ed-input', id: 'tao-slug', maxlength: '30', autocomplete: 'off' });
   ui.slug.addEventListener('input', () => {
@@ -390,6 +405,7 @@ function build() {
           h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Pexels thay vì Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
           ui.pexelsKey)),
       ui.status,
+      ui.progress.el,
       ui.publish),
     h('div', { class: 'tao-panel__foot' }, ui.bar, ui.create),
     ui.resizer);
