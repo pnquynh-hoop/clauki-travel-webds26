@@ -415,14 +415,14 @@ function applyPhotos(content, photos) {
 async function photoTask({ profile, content, theme, photos, on }) {
   const queries = (Array.isArray(profile.anhTimKiem) ? profile.anhTimKiem : []).filter((q) => typeof q === 'string' && q.trim()).slice(0, 6);
   if (!photos?.on) return 0;
-  const source = photos.pexelsKey ? 'Pexels' : 'Wikimedia Commons';
+  const source = photos.unsplashKey ? 'Unsplash' : 'Wikimedia Commons';
   // on.photoStage báo từng nấc (tìm, lọc, không đủ ảnh) cho bảng tiến trình của /tao.
   if (!queries.length) {
     on.photoStage?.('none', { found: 0 });
     return 0;
   }
   on.photoStage?.('search', { source, queries });
-  const found = await findPhotos(queries, { pexelsKey: photos.pexelsKey });
+  const found = await findPhotos(queries, { unsplashKey: photos.unsplashKey });
   if (found.length < 3) {
     on.photoStage?.('none', { found: found.length });
     return 0;
@@ -435,7 +435,9 @@ async function photoTask({ profile, content, theme, photos, on }) {
   }
   const count = applyPhotos(content, kept);
   on.update?.(content, theme);
-  on.photos?.({ photos: kept.length, slots: count, source });
+  // Có truy vấn Unsplash không ra ảnh thì truy vấn đó lấy từ Commons: báo đúng các nguồn thật sự dùng.
+  const used = [...new Set(kept.map((p) => (p.credit?.note === 'Unsplash' ? 'Unsplash' : 'Wikimedia Commons')))].join(' và ');
+  on.photos?.({ photos: kept.length, slots: count, source: used || source });
   return kept.length;
 }
 

@@ -5,7 +5,7 @@
 import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
 import { usingFallback } from '../ai/gemini.js';
-import { readPexelsKey, savePexelsKey } from './photos.js';
+import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
@@ -235,7 +235,7 @@ async function create() {
       frameId,
       slug: DRAFT_SLUG,
       frames: FRAMES.map((f) => f.id).filter((id) => builtIn().includes(id)),
-      photos: { on: photosOn, pexelsKey: ui.pexelsKey.value.trim() },
+      photos: { on: photosOn, unsplashKey: ui.unsplashKey.value.trim() },
       on: {
         profile: (p, info) => {
           steps.set('profile', 'done', `${p.ten}: ${p.slogan}`);
@@ -352,9 +352,9 @@ function build() {
   ui.undoRefine = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', hidden: true, onclick: undoRefine, text: 'Hoàn tác' });
   ui.refineNote = h('p', { class: 'tao-note', 'aria-live': 'polite' });
   ui.photoOn = h('input', { type: 'checkbox', role: 'switch', checked: true, 'aria-label': 'Tìm ảnh thật theo nơi chốn' });
-  ui.pexelsKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán khoá Pexels', 'aria-label': 'Khoá Pexels' });
-  ui.pexelsKey.value = readPexelsKey();
-  ui.pexelsKey.addEventListener('change', () => savePexelsKey(ui.pexelsKey.value.trim()));
+  ui.unsplashKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán Access Key của Unsplash', 'aria-label': 'Khoá Unsplash' });
+  ui.unsplashKey.value = readUnsplashKey();
+  ui.unsplashKey.addEventListener('change', () => saveUnsplashKey(ui.unsplashKey.value.trim()));
   ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: create, text: 'Tạo website' });
   ui.bar = h('progress', { class: 'tao-bar', max: '1', value: '0', 'aria-label': 'Tiến độ viết chữ' });
   ui.status = h('div', { class: 'tao-status', role: 'status', 'aria-live': 'polite' });
@@ -399,11 +399,11 @@ function build() {
         h('div', { class: 'tao-option' },
           h('label', { class: 'tao-option__label', for: 'tao-frame', text: 'Khung trang' }), ui.framePick),
         h('label', { class: 'tao-toggle' },
-          h('span', { class: 'tao-toggle__text' }, h('strong', { text: 'Ảnh thật theo nơi chốn' }), h('small', { text: 'Wikimedia Commons, có ghi nguồn' })),
+          h('span', { class: 'tao-toggle__text' }, h('strong', { text: 'Ảnh thật theo nơi chốn' }), h('small', { text: 'Wikimedia Commons hoặc Unsplash, có ghi nguồn' })),
           ui.photoOn),
-        h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Pexels (tuỳ chọn)' }),
-          h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Pexels thay vì Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
-          ui.pexelsKey)),
+        h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Unsplash (tuỳ chọn)' }),
+          h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Unsplash trước, truy vấn nào Unsplash không ra thì tìm trên Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
+          ui.unsplashKey)),
       ui.status,
       ui.progress.el,
       ui.publish),

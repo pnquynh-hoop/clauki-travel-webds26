@@ -3,6 +3,7 @@
 -- Rào nội dung ở database: tên đúng dạng và không trùng tên dành riêng, mọi địa chỉ phải thuộc danh sách cho phép, JSON dưới 400 KB
 -- (site dựng trên khung SighGone có danh mục tour và ảnh Wikimedia đã gần 200 KB).
 -- Dán toàn bộ vào SQL Editor của Supabase rồi bấm Run. Chạy lại được nhiều lần (xoá bảng cũ, kể cả dữ liệu).
+-- Đã có dữ liệu mà chỉ cần đổi danh sách địa chỉ cho phép: chạy riêng khối create or replace function site_ok bên dưới, không chạy cả file.
 -- Khoá demo KHÔNG nằm trong file này: chạy riêng câu insert ở cuối file, thay <KHOÁ DEMO> bằng khoá thật.
 
 drop view  if exists public_sites;
@@ -51,7 +52,7 @@ language sql immutable as $$
        select 1
        from jsonb_path_query(c, 'strict $.** ? (@.type() == "string")') s(v)
        where (v #>> '{}') ~* '^\s*(https?:|//|data:|javascript:|vbscript:)'
-         and (v #>> '{}') !~ '^https://(images\.unsplash\.com|images\.pexels\.com|upload\.wikimedia\.org|thumb\.wikimedia\.org|commons\.wikimedia\.org|www\.pexels\.com|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/'
+         and (v #>> '{}') !~ '^https://(images\.unsplash\.com|images\.pexels\.com|upload\.wikimedia\.org|thumb\.wikimedia\.org|commons\.wikimedia\.org|www\.pexels\.com|unsplash\.com/photos|clauki\.xachbalo\.com/brands|zalo\.me|maps\.google\.com|www\.google\.com/maps)/'
      );
 $$;
 
