@@ -158,12 +158,12 @@ async function refine() {
   ui.refineLabel.textContent = 'Đang tinh chỉnh...';
   ui.refineNote.textContent = '';
   try {
-    const { text, added, missing } = await refineBrief(brief);
+    const { text, added, assumed, missing } = await refineBrief(brief);
     state.originalBrief = brief;
     ui.brief.value = text;
     onBriefInput();
     ui.undoRefine.hidden = false;
-    showRefineResult(added, missing);
+    showRefineResult(added, assumed, missing);
   } catch (err) {
     ui.refineBox.hidden = true;
     ui.refineNote.textContent = err.message;
@@ -176,9 +176,16 @@ async function refine() {
 
 // Kết quả tinh chỉnh: chi tiết AI đã thêm (để người dùng biết mà sửa hay xoá) và ý còn thiếu; bấm một ý thiếu thì chèn sẵn dòng
 // "ý đó: " vào cuối mô tả để điền tiếp.
-function showRefineResult(added, missing) {
+function showRefineResult(added, assumed, missing) {
   const group = (title, chips) => (chips.length ? h('div', { class: 'tao-refine-box__group' }, h('p', { class: 'tao-refine-box__label', text: title }), h('div', { class: 'tao-chips' }, chips)) : null);
   const addedChips = added.map((text) => h('span', { class: 'tao-chip', text }));
+  // Giá trị mẫu AI tự điền cho mục người dùng chưa nói (giá, thời lượng, hạng phòng...): bấm thì bôi đen đúng cụm đó trong ô mô tả để gõ đè.
+  const assumedChips = assumed.map((g) => h('button', { type: 'button', class: 'tao-chip tao-chip--assumed', title: 'Bấm để chọn cụm này trong mô tả rồi gõ giá trị của bạn',
+    onclick: () => {
+      const at = ui.brief.value.indexOf(g.value);
+      ui.brief.focus();
+      if (at >= 0) ui.brief.setSelectionRange(at, at + g.value.length);
+    } }, h('strong', { text: `${g.label}: ` }), g.value));
   const missingChips = missing.map((text) => h('button', { type: 'button', class: 'tao-chip tao-chip--missing', title: 'Bấm để thêm dòng này vào mô tả', text,
     onclick: (e) => {
       ui.brief.value = `${ui.brief.value.trimEnd()}\n${text}: `;
@@ -188,8 +195,10 @@ function showRefineResult(added, missing) {
       ui.brief.setSelectionRange(ui.brief.value.length, ui.brief.value.length);
     } }));
   ui.refineBox.replaceChildren(
-    h('p', { class: 'tao-refine-box__lead', text: 'Đã viết lại và bổ sung mô tả. Đọc lại, sửa hay xoá phần không đúng ý rồi bấm Tạo website.' }),
-    ...[group('AI đã thêm', addedChips), group('Còn thiếu, bấm để thêm vào mô tả', missingChips)].filter(Boolean),
+    h('p', { class: 'tao-refine-box__lead', text: assumed.length
+      ? 'Đã viết lại, bổ sung và điền giá trị mẫu cho các mục còn thiếu. Bấm một giá trị mẫu để sửa thành số của bạn, rồi bấm Tạo website.'
+      : 'Đã viết lại và bổ sung mô tả. Đọc lại, sửa hay xoá phần không đúng ý rồi bấm Tạo website.' }),
+    ...[group('AI đã thêm', addedChips), group('Giá trị mẫu AI điền, bấm để sửa', assumedChips), group('Còn thiếu, bấm để thêm vào mô tả', missingChips)].filter(Boolean),
   );
   ui.refineBox.hidden = false;
 }

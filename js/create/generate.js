@@ -102,7 +102,8 @@ function writePrompt(profile, fields, idx, note, redo = false) {
 
 // Viết lại và bổ sung mô tả của người dùng thành một prompt đầy đủ trước khi tạo website: giữ nguyên mọi sự thật và con số người dùng đã
 // nói, thêm chi tiết hợp lý về nơi chốn (cảnh quan, mùa đẹp, món, hoạt động, không khí, đối tượng, giọng điệu) để AI ở bước sau có nhiều chất liệu.
-// Không bịa con số mới (giá, số phòng, sức chứa, giờ): thiếu thì ghi vào `thieu`; chi tiết đã thêm ghi vào `themVao` để người dùng biết mà sửa.
+// Mục loại hình cần mà người dùng chưa nói (NEEDS trong ai/prompts/create.js) thì AI điền giá trị mẫu, trả trong `giaDinh`; chi tiết đã thêm
+// ghi vào `themVao` để người dùng biết mà sửa.
 // Mô tả không phải du lịch hoặc lưu trú thì từ chối, như bước lập hồ sơ.
 export async function refineBrief(brief) {
   const out = await generateJson(refinePrompt(brief));
@@ -111,10 +112,14 @@ export async function refineBrief(brief) {
     err.kind = 'refused';
     throw err;
   }
-  const text = cleanText(out.moTa, 1200);
+  const text = cleanText(out.moTa, 1500);
   if (!text) throw new Error('AI chưa viết lại được, hãy thử lại.');
   const list = (v) => (Array.isArray(v) ? v : []).map((s) => cleanText(s, 60)).filter(Boolean).slice(0, 5);
-  return { text, added: list(out.themVao), missing: list(out.thieu) };
+  // Giá trị mẫu phải nằm đúng trong đoạn đã viết, để bấm vào thì chọn được đúng chỗ đó trong ô mô tả mà sửa.
+  const assumed = (Array.isArray(out.giaDinh) ? out.giaDinh : [])
+    .map((g) => ({ label: cleanText(g?.muc, 40), value: cleanText(g?.giaTri, 120) }))
+    .filter((g) => g.label && g.value && text.includes(g.value)).slice(0, 8);
+  return { text, added: list(out.themVao), assumed, missing: list(out.thieu) };
 }
 
 /* ---------- Màu ---------- */

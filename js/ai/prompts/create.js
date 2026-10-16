@@ -83,27 +83,44 @@ ${WRITE_RULES}
 ${rows}`;
 }
 
-// Tinh chỉnh mô tả: viết lại và bổ sung mô tả của người dùng trước khi tạo website (nút Tinh chỉnh).
+// Thông tin một website cần theo loại hình: thiếu mục nào thì AI điền giá trị mẫu hợp lý (ghi vào giaDinh để người dùng thấy và sửa),
+// để bước tạo website có đủ dữ liệu (giá, thời lượng, hạng phòng...) thay vì giữ số liệu của khung.
+const NEEDS = {
+  tour: ['nơi chốn cụ thể', 'thời lượng (số giờ hoặc số ngày đêm)', 'giá mỗi khách', 'số khách tối đa mỗi đoàn', 'phương tiện di chuyển',
+    'giờ hoặc ngày khởi hành', 'điểm đón', 'những gì đã gồm trong giá', 'đối tượng khách'],
+  luuTru: ['nơi chốn cụ thể', 'loại chỗ ở (homestay, khu nghỉ, khách sạn)', 'số phòng hoặc các hạng phòng', 'giá mỗi đêm (hoặc mỗi khách mỗi đêm)',
+    'sức chứa mỗi phòng', 'tiện nghi chính', 'ăn uống (bữa sáng, bếp)', 'giờ nhận, trả phòng', 'đối tượng khách'],
+};
+
+// Tinh chỉnh mô tả: viết lại và bổ sung mô tả của người dùng trước khi tạo website (nút Tinh chỉnh); mục loại hình cần mà người dùng
+// chưa nói thì điền giá trị mẫu, ghi vào giaDinh.
 export function refinePrompt(brief) {
   return `Bạn giúp người dùng viết lại và bổ sung mô tả để một AI khác dựng website cho một nơi lưu trú hoặc một tour du lịch (thương hiệu giả tưởng).
 Đây là bản mô tả cho AI đọc, không phải lời quảng cáo cho khách.
 
 Mô tả gốc của người dùng: ${brief}
 
-Viết thành một đoạn tiếng Việt đầy đủ, 5 tới 8 câu, khoảng 500 tới 900 ký tự, theo thứ tự: loại hình (ở hay đi tour) và nơi chốn cụ thể, dành cho ai,
-điều khiến nơi này riêng biệt, cảnh quan và mùa đẹp, món ăn hoặc hoạt động quanh đó, không khí và giọng điệu của thương hiệu, giá và đơn vị tính (nếu có).
+Trước hết xác định loại hình: tour hay lưu trú. Website cần đủ các mục sau:
+- Tour: ${NEEDS.tour.join('; ')}.
+- Lưu trú: ${NEEDS.luuTru.join('; ')}.
+
+Viết thành một đoạn tiếng Việt đầy đủ, 6 tới 10 câu, khoảng 600 tới 1100 ký tự, có đủ mọi mục của loại hình đó, theo thứ tự: loại hình và nơi chốn,
+dành cho ai, điều khiến nơi này riêng biệt, cảnh quan và mùa đẹp, món ăn hoặc hoạt động quanh đó, rồi các thông tin cụ thể (thời lượng, giá, số khách,
+phương tiện, giờ khởi hành hay các hạng phòng, tiện nghi, giờ nhận trả phòng), cuối cùng là không khí và giọng điệu của thương hiệu.
 Luật:
-- Giữ nguyên mọi sự thật, tên riêng, con số và chi tiết người dùng đã nói (buổi trong ngày, thời lượng, số người, giá, phương tiện). Không đổi, không mâu thuẫn với chúng; sửa chính tả, viết hoa tên địa danh.
-- Được bổ sung chi tiết hợp lý, cụ thể cho đúng nơi chốn đó dựa vào hiểu biết thật về địa phương: cảnh quan, khí hậu, mùa đẹp, đặc sản, hoạt động quanh đó, không khí của chỗ ở hay của tour, kiểu khách hợp. Không bịa địa danh không có thật.
-- Không thêm con số mới mà người dùng chưa nói: giá, số phòng, sức chứa, số người, khoảng cách, giờ giấc. Thiếu thì ghi vào "thieu" bằng cụm ngắn. Ý cốt lõi gồm: loại hình, nơi chốn cụ thể, đối tượng khách, số lượng, điểm riêng, giá cụ thể ("giá rẻ" chưa phải giá cụ thể).
+- Giữ nguyên mọi sự thật, tên riêng, con số và chi tiết người dùng đã nói. Không đổi, không mâu thuẫn với chúng; sửa chính tả, viết hoa tên địa danh.
+- Mục nào người dùng chưa nói thì tự điền một giá trị mẫu hợp lý, sát giá và cách làm phổ biến ở Việt Nam năm 2026 cho đúng loại hình và nơi chốn
+  (ví dụ tour ăn đêm 4 giờ khoảng 500 tới 800 nghìn mỗi khách; homestay Đà Lạt khoảng 400 tới 700 nghìn mỗi khách mỗi đêm). Ghi từng mục đã điền
+  vào "giaDinh" dạng {"muc": "tên mục ngắn", "giaTri": "đúng cụm chữ đã viết trong moTa"} để người dùng thấy và sửa. Chỉ có một giá trị cho mỗi mục.
+- Được bổ sung chi tiết cụ thể đúng nơi chốn dựa vào hiểu biết thật về địa phương: cảnh quan, khí hậu, mùa đẹp, đặc sản, hoạt động. Không bịa địa danh không có thật.
 - Câu khẳng định, cụ thể. Không lời mời gọi ("hãy", "tham gia ngay", "chào đón"), không tiếng lóng. ${NO_CLICHES}. ${NO_MARKS}
-- "themVao": các chi tiết bạn đã bổ sung, mỗi chi tiết một cụm ngắn, tối đa 5.
+- "themVao": các chi tiết về nơi chốn bạn đã bổ sung (cảnh, món, hoạt động), mỗi chi tiết một cụm ngắn, tối đa 5.
 - ${REFUSE}
 
-Ví dụ. Gốc: "homestay đà lạt giá rẻ cho nhóm bạn". Trả về:
-{"moTa": "Homestay ở Đà Lạt dành cho nhóm bạn đi chung, giá rẻ. Chỗ ở nằm gần những đồi thông, buổi sáng sương mỏng và trời se lạnh, tối thường nhóm lửa hoặc nướng đồ ngoài sân. Khách có thể đi chợ đêm Đà Lạt, uống cà phê trên đồi và ăn món nóng như bánh tráng nướng, lẩu gà lá é. Không khí thân mật, thoải mái, hợp những chuyến đi tụ tập vài ngày.", "themVao": ["đồi thông và sương sớm", "nhóm lửa, nướng đồ ngoài sân", "chợ đêm, cà phê, món nóng"], "thieu": ["giá cụ thể mỗi đêm", "số phòng và sức chứa", "điểm riêng của chỗ ở"]}
+Ví dụ. Gốc: "homestay đà lạt cho nhóm bạn". Trả về:
+{"loai": "luuTru", "moTa": "Homestay ở Đà Lạt dành cho nhóm bạn đi chung. Chỗ ở nằm gần những đồi thông, buổi sáng sương mỏng và trời se lạnh, tối thường nhóm lửa nướng đồ ngoài sân. Nhà có 4 phòng, mỗi phòng 4 khách, giá 450 nghìn mỗi khách một đêm, đã gồm bữa sáng. Có bếp chung, sân nướng, wifi và chỗ đậu xe máy. Nhận phòng từ 14 giờ, trả phòng trước 12 giờ. Khách hay đi chợ đêm Đà Lạt, uống cà phê trên đồi, ăn bánh tráng nướng, lẩu gà lá é. Không khí thân mật, thoải mái, hợp những chuyến tụ tập vài ngày.", "themVao": ["đồi thông và sương sớm", "chợ đêm, cà phê, món nóng"], "giaDinh": [{"muc": "Số phòng", "giaTri": "4 phòng, mỗi phòng 4 khách"}, {"muc": "Giá", "giaTri": "450 nghìn mỗi khách một đêm"}, {"muc": "Tiện nghi", "giaTri": "bếp chung, sân nướng, wifi và chỗ đậu xe máy"}, {"muc": "Giờ nhận, trả phòng", "giaTri": "Nhận phòng từ 14 giờ, trả phòng trước 12 giờ"}]}
 
-Trả về JSON một dòng: {"moTa": "", "themVao": [""], "thieu": [""]}`;
+Trả về JSON một dòng: {"loai": "", "moTa": "", "themVao": [""], "giaDinh": [{"muc": "", "giaTri": ""}]}`;
 }
 
 // Lọc ảnh tìm được: giữ ảnh đúng nơi chốn, viết mô tả tiếng Việt. photos: [{ i, alt }] với alt là mô tả gốc của ảnh.
