@@ -399,7 +399,7 @@
 }
 
 /* Liên kết sang trang chi tiết của hạng (hạng lấy từ catalog có href). */
-.stays__detail {
+.stays__more {
   justify-self: start;
   margin-top: 0.25rem;
   font-weight: 700;

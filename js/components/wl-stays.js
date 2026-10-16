@@ -90,7 +90,7 @@ export class WlStays extends HTMLElement {
       this.factsEl(room),
       groupEl('stays__foot', [this.priceEl(room), this.bookLink(room)]),
       // Hạng có trang chi tiết (href trong catalog): liên kết xem kỹ trước khi đặt.
-      room.href ? linkEl(room.href, this._data.labels?.detail, 'stays__detail') : null,
+      room.href ? linkEl(room.href, this._data.labels?.detail, 'stays__more') : null,
     ]);
     const image = brief ? null : imgEl(view?.image ?? room.image, '', lazy);
     card.append(...[image, body].filter(Boolean));
