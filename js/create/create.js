@@ -609,7 +609,7 @@ export function openBuilder({ brands }) {
       ui.slug.value = slugify(draft.profile.ten);
     } else if (draft.editOf) {
       // Máy demo đang sửa một site đã xuất bản (mục Sửa trang này): giữ tên cũ để Xuất bản là cập nhật.
-      setStatus([`Đang sửa /${draft.editOf}/ (máy demo), còn trên máy này.`, 'Chỉnh tay xong, bấm Cập nhật để ghi đè trang đã xuất bản.'], 'ok');
+      setStatus([`Đang sửa /${draft.editOf}/, còn trên máy này.`, 'Chỉnh tay xong, bấm Cập nhật để ghi đè trang đã xuất bản.'], 'ok');
       ui.slug.value = draft.editOf;
     } else if (draft.copyOf) {
       // Bản sao của một site đã xuất bản (nút Tạo bản sao): gợi ý tên mới để khỏi trùng với bản gốc.

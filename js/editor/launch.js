@@ -1,12 +1,13 @@
 /* launch.js - lối vào editor và trình tạo web trên trang khách: một nút duy nhất ở góc dưới trái, bấm vào thì mở một menu nhỏ.
    Trang thương hiệu có sẵn đã có nút tròn của BTC ở đó (wd2026.js), nên nút tròn đó chính là nút này: bấm nó mở menu của mình,
    không mở thêm khung riêng của BTC; mục Đổi thương hiệu bấm giúp hộp chọn của BTC. Site khách không có nút của BTC nên có nút
-   chữ "Thử chỉnh".
+   tròn "Thử chỉnh" (icon bút) ở đúng chỗ đó.
    Thương hiệu có sẵn: Đổi thương hiệu (mở hộp chọn của BTC), Tạo mới (trình tạo web /tao), Chỉnh sửa (editor).
    Site khách đã xuất bản là cố định nên chỉ có Mã QR, chia sẻ và Tạo bản sao (chép cả nội dung lẫn màu, font sang trình tạo web để
    đặt tên mới rồi xuất bản); máy demo (có khoá) có thêm Sửa trang này; bản nháp /nhap/ thì có Tạo mới và Chỉnh sửa. Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
    core.js tải tệp này sau khi trang dựng xong; editor thật (editor.js) chỉ tải khi bấm vào nút. */
 import { clearDraft } from './draft.js';
+import { iconEl } from '../icon.js';
 import { writeTaoDraft, DRAFT_SLUG, readDemoKey, publicLink } from '../sites.js';
 
 const CSS_ID = 'ed-launch-css';
@@ -87,7 +88,10 @@ export function mountLauncher({ current: first, reset }) {
   loadCss();
   const wrap = document.createElement('div');
   wrap.className = 'ed-fab';
-  const pill = button('Thử chỉnh', 'ed-launch');
+  // Nút tròn chỉ có icon bút, cùng cỡ và chỗ với nút tròn của BTC; tên "Thử chỉnh" cho trình đọc màn hình và khi rê chuột (title).
+  const pill = button('', 'ed-launch');
+  pill.setAttribute('aria-label', 'Thử chỉnh');
+  pill.append(iconEl('pencil', 'ed-launch__icon') ?? 'Sửa');
   // Nút mở menu: nút tròn của BTC nếu có (gắn sau, xem bindFab), không thì nút chữ.
   let open = pill;
   const label = 'Đổi thương hiệu, tạo mới, chỉnh sửa; bản sửa chỉ lưu trên máy này';
@@ -177,7 +181,7 @@ export function mountLauncher({ current: first, reset }) {
     // Máy demo (có khoá, dán ở Tuỳ chọn của /tao) thì sửa được trang đã xuất bản; máy khác chỉ chia sẻ và tạo bản sao.
     menu.replaceChildren(...(published
       ? [
-        ...(readDemoKey() ? [action('Sửa trang này (máy demo)', () => copySite(detail, true))] : []),
+        ...(readDemoKey() ? [action('Sửa trang này', () => copySite(detail, true))] : []),
         action('Mã QR, chia sẻ', () => { setOpen(false); openShare(detail); }),
         action('Tạo bản sao', () => copySite(detail)),
       ]
