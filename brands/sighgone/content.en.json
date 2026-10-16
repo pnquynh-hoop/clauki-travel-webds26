@@ -1003,7 +1003,7 @@
             "phone": "A phone number has 10 digits and starts with 0."
           },
           "message": {
-            "guest": "Guest",
+            "guest": "Booked by",
             "msgTitle": "Ready-to-send message",
             "seats": "Guests",
             "total": "Estimate",
@@ -2136,7 +2136,7 @@
           },
           "message": {
             "brand": "SighGone, seat hold slip",
-            "guest": "Guest",
+            "guest": "Booked by",
             "seats": "Seats",
             "total": "Estimate",
             "stamp": "Awaiting confirmation",
@@ -2702,7 +2702,7 @@
           },
           "message": {
             "brand": "SighGone",
-            "guest": "Guest",
+            "guest": "Booked by",
             "msgTitle": "Ready-made message",
             "seats": "Guests",
             "total": "Estimated total",
