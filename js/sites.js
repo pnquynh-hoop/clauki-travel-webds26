@@ -8,7 +8,7 @@ export { SITE_SLUG_RE as SLUG_RE } from './core.js';
 
 const SUPABASE = {
   url: 'https://xpiopwkdtvhmqhwnhvdx.supabase.co',
-  key: '',
+  key: 'sb_publishable_rvm6H4aYw0i_sbk1M2CHTQ_P15BH761',
 };
 
 // Nháp của trình tạo web: chỉ trên máy này, xem ở /nhap/.
