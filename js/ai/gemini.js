@@ -54,6 +54,9 @@ const PUBLIC_CONFIG = {
 const TIMEOUT_MS = 60000;
 // Máy chủ báo quá tải thường chỉ vài giây: đợi chừng này rồi thử lại một lần.
 const RETRY_MS = 1500;
+// Đường đang quá tải (503) sau một lần thử lại thì nghỉ chừng này rồi chuyển đường kế tiếp; các khoá dùng chung model nên thường
+// quá tải cùng lúc, đi hết thì tới model dự phòng.
+const BUSY_COOL_MS = 20000;
 let sdk = null;
 const apps = new Map();
 
@@ -168,7 +171,8 @@ function explain(err, aborted) {
   const text = String(err?.message ?? err);
   if (aborted) return new AiError('timeout', 'AI trả lời quá lâu, đã dừng. Hãy thử lại.');
   if (/\[429\b|RESOURCE_EXHAUSTED|quota/i.test(text)) return new AiError('quota', 'AI đang nghỉ (hết lượt miễn phí), hãy thử lại sau hoặc sửa tay.');
-  if (/\[50[03]\b|high demand|overloaded|UNAVAILABLE/i.test(text)) return new AiError('busy', 'Máy chủ AI đang quá tải, hãy thử lại sau vài giây.');
+  // 500 (INTERNAL), 503, 504 của Gemini thường chỉ thoáng qua: coi như quá tải để thử lại, đổi đường gọi.
+  if (/\[50[034]\b|high demand|overloaded|UNAVAILABLE|INTERNAL|DEADLINE_EXCEEDED/i.test(text)) return new AiError('busy', 'Máy chủ AI đang quá tải, hãy thử lại sau vài giây.');
   if (/\[40[13]\b|PERMISSION_DENIED|API key|referr?er/i.test(text)) return new AiError('denied', 'Trang này chưa được phép gọi AI (kiểm cấu hình và giới hạn tên miền của key).');
   if (/SAFETY|blocked/i.test(text)) return new AiError('blocked', 'Yêu cầu bị bộ lọc an toàn chặn. Hãy viết lại yêu cầu.');
   if (/Failed to fetch|NetworkError|network|offline/i.test(text)) return new AiError('network', 'Không kết nối được AI. Kiểm tra mạng rồi thử lại.');
@@ -176,7 +180,8 @@ function explain(err, aborted) {
 }
 
 // Chạy once(signal, route) với giới hạn thời gian. Hết lượt (429) thì đường đó nghỉ COOL_MS và thử đường kế tiếp (khoá dự phòng,
-// rồi model dự phòng) khi canRetry() còn đúng (chưa nhận được gì); quá tải thì đợi chút rồi thử lại một lần trên cùng đường.
+// rồi model dự phòng) khi canRetry() còn đúng (chưa nhận được gì); quá tải thì đợi chút rồi thử lại một lần trên cùng đường, vẫn quá tải
+// thì đường đó nghỉ BUSY_COOL_MS và sang đường kế tiếp.
 async function withRetry(once, canRetry = () => true) {
   const abort = new AbortController();
   // Hạn chờ tính từ lần cuối nhận được dữ liệu (alive), không tính cả lượt: nhóm chữ dài stream đều đặn hơn 60 giây khi AI chậm
@@ -199,6 +204,10 @@ async function withRetry(once, canRetry = () => true) {
         const why = explain(err, abort.signal.aborted);
         if (why.kind === 'quota') {
           cooling.set(route.id, Date.now() + COOL_MS);
+          if (canRetry() && nextRoute()) continue;
+        }
+        if (why.kind === 'busy' && busyRetried) {
+          cooling.set(route.id, Date.now() + BUSY_COOL_MS);
           if (canRetry() && nextRoute()) continue;
         }
         if (why.kind !== 'busy' || busyRetried || !canRetry()) throw why;

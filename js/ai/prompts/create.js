@@ -4,7 +4,8 @@
 import { NO_MARKS, NO_CLICHES, NO_INVENT, REFUSE, HEADER_HINT, lineFormat } from './shared.js';
 
 const WRITE_RULES = `Luật:
-- Tiếng Việt tự nhiên, giọng riêng của thương hiệu; dùng chi tiết cụ thể của nơi chốn trong hồ sơ.
+- Tiếng Việt tự nhiên, viết đúng giọng trong hồ sơ (giong: xưng hô, từ địa phương, nhịp câu) cho mọi câu nói với khách, kể cả tin nhắn
+  mẫu, câu báo lỗi, lời cảm ơn; nhãn nút, nhãn ngắn thì giữ rõ nghĩa, không chêm phương ngữ. Dùng chi tiết cụ thể của nơi chốn trong hồ sơ.
 - ${NO_MARKS} ${NO_CLICHES}; không mở đầu câu bằng "Trải nghiệm".
 - ${NO_INVENT} không có trong hồ sơ; câu mẫu nói về điều hồ sơ không có thì viết chung chung hoặc nói về điều hồ sơ có.
 - Tên người, tên nơi đúng như hồ sơ. Giá đúng như hồ sơ.`;
@@ -40,6 +41,10 @@ phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá s
 
 Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
 không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
+giong: một câu tả giọng văn của website, theo vùng miền và loại khách trong mô tả: xưng hô với khách (mình, bạn, anh chị, cô chú...),
+mức dùng từ địa phương, nhịp câu. Ví dụ miền Tây: "thân tình kiểu miệt vườn, xưng tụi mình, gọi khách là bạn, chêm vừa phải nè, nhen,
+ghe, xuồng"; nghỉ dưỡng cao cấp: "trang nhã, xưng chúng tôi, gọi quý khách, câu ngắn, không chêm phương ngữ"; tour cho bạn trẻ ở phố:
+"trẻ, vui, xưng tụi mình, câu ngắn". Mô tả có nói giọng hay vùng miền thì theo đúng mô tả.
 gia: giá thấp nhất (một khách, hay một đêm nếu là chỗ ở) bằng đồng Việt Nam, số nguyên đủ các số 0 ("1 triệu 2" là 1200000, "45 triệu" là 45000000);
 mô tả ghi giá ngoại tệ thì đổi sang đồng theo tỉ giá gần đúng; mô tả không nói giá thì 0 (giữ giá của khung), không tự đặt giá.
 donViGia: đơn vị tính, không kèm tiền tệ: "khách", "đêm", "phòng", "nhóm".
@@ -47,7 +52,7 @@ anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy
 cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
 
 Trả về JSON đúng dạng:
-{"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
+{"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "giong": "", "gia": 0, "donViGia": "", "khung": "",
  "phongChu": "",
  "dacTrung": [],
  "trangChu": ["", "", "", "", ""],
@@ -64,8 +69,9 @@ export function frameNote(names) {
 }
 
 /* Viết lại chữ của một nhóm dòng. profile: hồ sơ đã bỏ các khoá không dành cho viết chữ; lines: [{ n, key, value }] (n đánh từ 1);
-   note: frameNote; redo: lượt viết lại các dòng mà lượt trước chép y nguyên chữ của trang mẫu. */
-export function groupPrompt({ profile, lines, note = '', redo = false }) {
+   note: frameNote; redo: lượt viết lại các dòng mà lượt trước chép y nguyên chữ của trang mẫu; banned: cụm của trang mẫu còn trong các
+   dòng gửi lại. */
+export function groupPrompt({ profile, lines, note = '', redo = false, banned = [] }) {
   const rows = lines.map((l) => `${l.n}\t${l.key}\t${l.value.replace(/\s+/g, ' ')}`).join('\n');
   return `Bạn viết lại chữ của một phần website du lịch cho thương hiệu mới. Khung trang giữ nguyên.
 
@@ -73,10 +79,11 @@ Hồ sơ thương hiệu (bắt buộc theo đúng):
 ${JSON.stringify(profile)}
 
 ${note}
-${redo ? 'Các dòng dưới đây ở lượt trước bị chép y nguyên chữ của trang mẫu. Viết lại cho nơi mới; chỉ dòng nào đúng là chữ giao diện chung, không nói gì về nơi chốn, mới được chép lại y nguyên.\n' : ''}
+${redo ? 'Các dòng dưới đây ở lượt trước bị chép y nguyên chữ của trang mẫu. Viết lại cho nơi mới; chỉ dòng nào đúng là chữ giao diện chung, không nói gì về nơi chốn, mới được chép lại y nguyên.\n' : ''}${banned.length ? `Các cụm sau là của trang mẫu và không được còn trong dòng nào, kể cả nhãn ngắn: ${banned.join(', ')}. Viết lại cả câu cho hợp nơi mới, không chỉ xoá cụm đó.\n` : ''}
 Mỗi dòng dưới đây gồm: số, vị trí, chữ của trang mẫu. Viết lại từng dòng cho thương hiệu mới, cùng vai trò, độ dài gần bằng chữ cũ.
 
 ${lineFormat(lines.length, 'chữ mới')}
+Chỗ trong ngoặc nhọn như {name}, {n}, {price} là chỗ code tự điền: giữ đúng y nguyên, không dịch, không bỏ, không thêm.
 
 ${WRITE_RULES}
 

@@ -28,17 +28,16 @@ export const FRAMES = [
 const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'total', 'availability', 'seatsLeft', 'soldOut', 'home', 'view',
   'group', 'hint', 'phone', 'name', 'book', 'from', 'perNight', 'duration', 'unit', 'left', 'placeholder', 'question']);
 
-// Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
+// Trường kỹ thuật và dữ liệu có cấu trúc: giữ nguyên, không đưa cho AI. Mọi chữ khác (kể cả nhãn, tin nhắn mẫu, câu báo lỗi, gợi ý)
+// là dữ liệu như nhau, đều được viết lại cho nơi mới. vehicles, buoi, topics là bảng tra (id nối với tour), đổi nhãn sẽ lệch nghĩa.
 const SKIP = new Set([
-  'labels', 'errors', 'message', 'languages', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
-  'source', 'author', 'credit', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
-  'touchHint', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
-  'scoreLabel', 'dateLabel', 'navTitle', 'contactTitle', 'creditsTitle', 'action', 'availability', 'tags', 'vehicles',
-  'buoi', 'topics', 'departures', 'traffic', 'rating', 'unit', 'item', 'phone', 'email',
+  'id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon',
+  'logo', 'alt', 'languages', 'currency', 'kind', 'effect', 'date', 'time', 'availability', 'item', 'rating', 'tags', 'vehicles', 'buoi',
+  'topics', 'unit', 'phone', 'email',
 ]);
-// Khoá kỹ thuật không bao giờ đưa AI, kể cả khi có tên cũ (đường dẫn, nguồn ảnh, giấy phép).
-const NEVER = new Set(['id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon', 'logo', 'alt']);
 const NOT_TEXT = /^(https?:|images\/|#|\/|\d{4}-\d{2}|[\d\s.,:+-]+$|page:|tel:|mailto:)/;
+// Mã như "can-gio", "len-den" (id tour trong danh sách chọn), không phải chữ.
+const SLUG = /^[a-z0-9]+(-[a-z0-9]+)+$/;
 // Khoảng 30 dòng mỗi luồng: mỗi luồng xong trong khoảng 15 giây; tối đa 8 luồng để vẫn dưới 15 request mỗi phút.
 const FIELDS_PER_GROUP = 30;
 const MAX_GROUPS = 8;
@@ -46,20 +45,24 @@ const MAX_GROUPS = 8;
 // Tên và khẩu hiệu lấy thẳng từ hồ sơ, không đưa AI viết lại lần nữa.
 const FROM_PROFILE = ['brand.name', 'brand.slogan'];
 
-// Chữ giao diện (labels, message, errors...) bỏ qua để AI khỏi viết lại hàng trăm nhãn chung; nhưng nhãn nào có tên thương hiệu hay
-// nơi chốn của khung (oldNames, ví dụ "Bạn nhập họ tên giúp SighGone nhé.") thì vẫn đưa AI viết lại, kẻo tên cũ lọt sang site mới.
-function extractFields(node, path = [], out = [], oldNames = null, skipped = false) {
-  if (Array.isArray(node)) node.forEach((v, i) => extractFields(v, [...path, i], out, oldNames, skipped));
-  else if (node && typeof node === 'object') {
-    for (const [k, v] of Object.entries(node)) {
-      const skip = skipped || SKIP.has(k);
-      if (!skip || (oldNames && !NEVER.has(k))) extractFields(v, [...path, k], out, oldNames, skip);
+// Mọi chuỗi chữ của khung, gộp chuỗi giống hệt nhau (nhãn đặt chỗ lặp ở 7 trang tour) thành một dòng: AI viết một lần, áp cho mọi
+// chỗ (paths). Nhờ gộp, đưa cả nhãn cho AI vẫn ít dòng hơn khi tách riêng nhãn giao diện (SighGone 736 dòng thay vì 873).
+function extractFields(template) {
+  const byValue = new Map();
+  const walk = (node, path) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...path, i]));
+    else if (node && typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) if (!SKIP.has(k)) walk(v, [...path, k]);
+    } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim()) && !SLUG.test(node.trim())) {
+      const key = path.join('.');
+      if (FROM_PROFILE.includes(key)) return;
+      const field = byValue.get(node);
+      if (field) field.paths.push(key);
+      else byValue.set(node, { key, value: node, paths: [key] });
     }
-  } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim())
-    && (!skipped || oldNames?.test(node))) {
-    out.push({ path, key: path.join('.'), value: node });
-  }
-  return out;
+  };
+  walk(template, []);
+  return [...byValue.values()];
 }
 
 // Chia nhóm liền nhau, số ký tự mỗi nhóm gần bằng nhau. Mỗi dòng mang vị trí đầy đủ (pages.0.sections.2.title),
@@ -80,22 +83,32 @@ function splitGroups(fields) {
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
 const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
 
-// Tên thương hiệu và nơi chốn của mọi khung (SighGone, Sài Gòn, Gành Sớm...; trang và khối mượn từ khung khác cũng mang tên của khung
-// đó), để dò nhãn giao diện còn mang tên cũ.
-function oldNamesOf(frames) {
-  const names = frames.flatMap((f) => [f?.brand?.name, f?.place?.name]).filter((n) => typeof n === 'string' && n.trim().length > 2);
-  return names.length ? new RegExp(names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i') : null;
+// Tên thương hiệu, nơi chốn và tên sản phẩm trong catalog của mọi khung (trang và khối mượn từ khung khác cũng mang chữ của khung đó),
+// lấy thẳng từ dữ liệu, để dò chữ còn sót của nơi cũ sau khi AI viết. pool: { id khung: content }.
+// Cụm nào có trong chữ của hồ sơ mới (site mới cũng ở Sài Gòn) thì không coi là chữ cũ; chỉ xét trường chữ, vì khung (khung: "sighgone")
+// hay khoá khối cũng nằm trong hồ sơ.
+function oldNamesOf(pool, profile = {}) {
+  const own = [profile.ten, profile.slogan, profile.noiChon, profile.chuNha, ...(Array.isArray(profile.chiTiet) ? profile.chiTiet : [])].join(' ').toLowerCase();
+  const names = Object.values(pool).flatMap((f) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name)])
+    .filter((n) => typeof n === 'string' && n.trim().length > 2 && !own.includes(n.toLowerCase()));
+  // Khớp nguyên từ ("ghe" không khớp trong "nghe", "Quận 1" không khớp "Quận 10"); \b của JS không hiểu chữ có dấu nên dùng \p{L}.
+  const list = [...new Set(names)].map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${list})(?![\\p{L}\\p{N}])`, 'u') : null;
 }
+
+// Chỗ giữ chỗ trong ngoặc nhọn ({name}, {n}...) code điền lúc chạy: chữ mới phải giữ đúng bộ đó, thiếu hay thừa thì bỏ dòng.
+const holes = (text) => (text.match(/\{\w+\}/g) ?? []).sort().join(' ');
 
 // Tên của khung mẫu (thương hiệu, nơi chốn, sản phẩm) cho lời dặn frameNote: AI biết chữ nào là của nơi cũ phải đổi.
 function frameNames(template) {
   return [template.brand?.name, template.place?.name, ...(template.catalog?.items ?? []).map((item) => item.name)].filter(Boolean).slice(0, 12);
 }
 
-// Lời nhắc viết lại một nhóm dòng; idx là chỉ số trong fields, số gửi AI đánh từ 1 để khớp lại khi nhận.
-function writePrompt(profile, fields, idx, note, redo = false) {
+// Lời nhắc viết lại một nhóm dòng; idx là chỉ số trong fields, số gửi AI đánh từ 1 để khớp lại khi nhận. banned: cụm của khung còn
+// trong các dòng gửi lại.
+function writePrompt(profile, fields, idx, note, redo = false, banned = []) {
   const lines = idx.map((i) => ({ n: i + 1, key: fields[i].key, value: fields[i].value }));
-  return groupPrompt({ profile: brandProfile(profile), lines, note, redo });
+  return groupPrompt({ profile: brandProfile(profile), lines, note, redo, banned });
 }
 
 /* ---------- Tinh chỉnh mô tả ---------- */
@@ -255,7 +268,22 @@ function rebase(content, base) {
     }
   };
   walk(content);
-  if (content.brand) content.brand.logo = '';
+  // Ảnh logo, favicon của thương hiệu khung dùng ở chỗ khác (ảnh đại diện trong khung chat hỏi đáp): bỏ, component hiện chữ tắt của tên mới.
+  const dropMarks = (node) => {
+    if (Array.isArray(node)) node.forEach(dropMarks);
+    else if (node && typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) {
+        if (v && typeof v === 'object' && typeof v.src === 'string' && /\/(favicon|logo)[^/]*$/i.test(v.src)) delete node[k];
+        else dropMarks(v);
+      }
+    }
+  };
+  dropMarks(content.pages ?? content.sections);
+  // Logo (cả bản cho chế độ tối) là của thương hiệu khung: bỏ, header hiện tên chữ tới khi người dùng tải logo hay tạo logo chữ.
+  if (content.brand) {
+    content.brand.logo = '';
+    delete content.brand.logoDark;
+  }
   if (content.meta) content.meta.favicon = '';
 }
 
@@ -305,6 +333,20 @@ function applyProfile(content, profile, slug) {
     content.brand.slogan = profile.slogan || content.brand.slogan;
   }
   scalePrices(content, Number(profile.gia));
+  // Link chỉ đường của khung (Google Maps tìm "Nhà hát Thành phố Hồ Chí Minh") không qua AI viết lại: đổi sang tìm nơi chốn mới.
+  if (profile.noiChon) {
+    const query = encodeURIComponent(profile.noiChon);
+    const walk = (node) => {
+      if (Array.isArray(node)) node.forEach(walk);
+      else if (node && typeof node === 'object') {
+        for (const [k, v] of Object.entries(node)) {
+          if (typeof v === 'string' && v.startsWith('https://www.google.com/maps/search/')) node[k] = `https://www.google.com/maps/search/?api=1&query=${query}`;
+          else walk(v);
+        }
+      }
+    };
+    walk(content);
+  }
 }
 
 /* ---------- Ảnh theo nơi chốn ---------- */
@@ -338,7 +380,9 @@ async function vetPhotos(profile, photos) {
     const out = await generateJson(vetPhotosPrompt(profile.noiChon, photos.map((p, i) => ({ i, alt: p.alt }))));
     const kept = (out.giu ?? []).filter((g) => photos[g.i] && typeof g.alt === 'string' && g.alt.trim())
       .map((g) => ({ ...photos[g.i], alt: cleanText(g.alt, 140) }));
-    if (kept.length) return kept;
+    // AI chỉ giữ được vài ảnh thì vẫn dùng cả danh sách: ảnh tìm theo tên địa danh mới, đúng nơi hơn ảnh của khung (trước đây giữ dưới
+    // 3 ảnh là bỏ hết, site Phú Quốc còn nguyên ảnh Quy Nhơn).
+    if (kept.length >= 3) return kept;
   } catch {
     // Không vet được: dùng nguyên danh sách.
   }
@@ -377,6 +421,15 @@ function applyPhotos(content, photos) {
   };
   recredit(content);
   return slots.length;
+}
+
+// Không có ảnh mới: ảnh của trang hay khối mượn từ khung khác (ruộng bậc thang Mù Cang Chải, xích lô Sài Gòn trong site biển) đổi sang
+// ảnh của chính khung, để site không lẫn ảnh của ba nơi.
+function localizeBorrowed(content, frame) {
+  const slots = imageSlots(content);
+  const own = slots.filter((s) => s.src.startsWith(`/brands/${frame}/`)).map((s) => ({ src: s.src, alt: s.alt }));
+  if (!own.length) return;
+  slots.filter((s) => /^\/brands\//.test(s.src) && !s.src.startsWith(`/brands/${frame}/`)).forEach((slot, i) => Object.assign(slot, own[i % own.length]));
 }
 
 async function photoTask({ profile, content, theme, photos, on }) {
@@ -479,7 +532,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const borrowed = borrowPages(template, pool, frame, approved);
   if (borrowed.length) rules.borrowed = borrowed;
   const content = structuredClone(template);
-  const fields = extractFields(template, [], [], oldNamesOf(Object.values(pool))).filter((f) => !FROM_PROFILE.includes(f.key));
+  const oldNames = oldNamesOf(pool, profile);
+  const fields = extractFields(template);
   rebase(content, frame);
   applyProfile(content, profile, slug);
   const frameCss = await fetch(`/brands/${frame}/theme.css`).then((r) => (r.ok ? r.text() : '')).catch(() => '');
@@ -494,7 +548,10 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   on.update?.(content, theme);
 
   // Tìm ảnh chạy song song với việc viết chữ; lỗi mạng hay không tìm được thì giữ ảnh của khung.
-  const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0);
+  const photoRun = photoTask({ profile, content, theme, photos, on }).catch(() => 0).then((count) => {
+    if (!count) localizeBorrowed(content, frame);
+    return count;
+  });
   // Chọn kiểu trình bày của các khối ở trang chủ (trộn bộ), song song với việc viết chữ.
   const layoutRun = mixed ? applyMixed({ mixed, profile, content, theme, on }) : layoutTask({ profile, content, theme, on }).catch(() => null);
   const got = new Set();
@@ -512,12 +569,12 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
       return;
     }
     const value = cleanText(m[3], 600);
-    if (!value) return;
+    if (!value || holes(value) !== holes(fields[i].value)) return;
     got.add(i);
     redoing.delete(i);
     written.set(i, value);
     if (!first) first = sec();
-    setIn(content, fields[i].key, value);
+    for (const path of fields[i].paths) setIn(content, path, value);
     on.field?.(got.size, fields.length);
     on.update?.(content, theme);
   };
@@ -550,12 +607,17 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (blocked.length) console.warn('Dòng bị bộ lọc an toàn chặn, giữ chữ của khung:', blocked);
   // Dòng AI chép y nguyên chữ của trang mẫu (từ 12 ký tự, không phải nhãn giao diện ngắn) thường là chữ riêng của nơi cũ còn sót
   // (đã gồm, các chặng, món theo giờ...): gửi lại một lượt với lời dặn gắt hơn. Lỗi thì thôi, giữ như cũ.
-  const leftover = fields.map((f, i) => i).filter((i) => written.get(i) === fields[i].value && fields[i].value.length >= 12
-    && !UI_KEYS.has(fields[i].key.split('.').filter((k) => !/^\d+$/.test(k)).at(-1)));
+  // Dòng còn cụm chữ của khung (oldNames: "thở dài", "Quận 1", tên tour cũ) thì luôn gửi lại, kể cả nhãn ngắn hay khi AI đã đổi chữ khác đi.
+  const leftover = fields.map((f, i) => i).filter((i) => !blocked.includes(fields[i].key) && ((written.get(i) === fields[i].value && fields[i].value.length >= 12
+    && !UI_KEYS.has(fields[i].key.split('.').filter((k) => !/^\d+$/.test(k)).at(-1))) || oldNames?.test(written.get(i) ?? fields[i].value)));
   if (leftover.length) {
     leftover.forEach((i) => redoing.add(i));
     on.redo?.(leftover.length);
-    await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => streamLines('', writePrompt(profile, fields, g.map((k) => leftover[k]), note, true), handle).catch(() => {})));
+    const bannedIn = (idx) => [...new Set(idx.flatMap((i) => (written.get(i) ?? fields[i].value).match(new RegExp(oldNames?.source ?? '$^', 'gu')) ?? []))];
+    await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => {
+      const idx = g.map((k) => leftover[k]);
+      return streamLines('', writePrompt(profile, fields, idx, note, true, bannedIn(idx)), handle).catch(() => {});
+    }));
   }
   const redone = leftover.filter((i) => written.get(i) !== fields[i].value).length;
   const photoCount = await photoRun;
