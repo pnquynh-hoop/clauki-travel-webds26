@@ -36,6 +36,22 @@ export const SIGNATURE = [
   { key: 'hero:ride', hard: true, dropPage: true, fit: 'chỉ dùng cho Sài Gòn, cần ảnh các toà nhà tách nền của thành phố' },
   { key: 'stays:headland', hard: true, fit: 'cần ảnh mỏm đá tách nền của đúng chỗ ở đó' },
 ];
+
+// Cụm chữ mang giọng riêng, địa danh, người của từng khung (ngoài tên thương hiệu, nơi chốn, tên tour hay hạng phòng trong catalog, vốn đã
+// tự dò). Trường nào chứa một cụm ở đây thì đưa AI viết lại, kể cả nhãn giao diện, và viết lại thêm một lượt nếu AI chép y nguyên;
+// nhờ vậy site mới không còn "thở dài", "ga đầu", "Quận 1" của SighGone. Nhãn chung ("Đóng", "Họ tên") và từ thường gặp ở nơi khác
+// ("quán", "xuồng", "bình minh", "bưu thiếp" của kiểu đánh giá postcard) không nằm ở đây, kẻo AI phải viết lại cả chữ mới vốn đúng.
+export const FRAME_WORDS = {
+  sighgone: ['thở dài', 'thở ra', 'ga đầu', 'Quận 1', 'Bốn quận', 'bảy món', 'Bitexco', 'Nhà hát Thành phố', 'máy in vé', 'cửa vàng',
+    'Số 8', 'Kẹt xe', 'kẹt xe', 'đồng xu', 'Gắp', 'gắp', 'Chợ Lớn', 'Cần Giờ', 'Củ Chi', 'Thanh Đa', 'Tuyến số 1'],
+  'bac-tra': ['Suối Giàng', 'Khau Phạ', 'La Pán Tẩn', 'Mường Lò', 'Tây Bắc', 'từ Hà Nội', 'đồi chè', 'hái chè', 'nhà chè', 'anh Lực',
+    'bà Lò', 'ông Sử', 'chị Hoa', 'anh Chứ', 'cô Dua', 'Mùa nước đổ'],
+  'ganh-som': ['Phù Cát', 'mỏm gành', 'hè 2027', '4 đêm, trả 3', 'thức dậy cùng bình minh',
+    'biển còn động', 'gió mùa đông bắc'],
+  'me-rach': ['Ninh Kiều', 'Cái Răng', 'cô Út', 'Cô gọi', 'chú Sáu', 'ven rạch', 'đời làm vườn', 'vườn trái', 'câu con', 'Con đã',
+    'tiếng ếch', 'Tiếng ếch', 'chung mâm'],
+};
+
 const SIGNATURE_BY_KEY = new Map(SIGNATURE.map((item) => [item.key, item]));
 
 // Khối này có phải đặc trưng không (theo loại, hoặc theo loại và kiểu).

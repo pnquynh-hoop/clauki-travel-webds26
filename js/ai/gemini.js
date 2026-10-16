@@ -54,6 +54,9 @@ const PUBLIC_CONFIG = {
 const TIMEOUT_MS = 60000;
 // Máy chủ báo quá tải thường chỉ vài giây: đợi chừng này rồi thử lại một lần.
 const RETRY_MS = 1500;
+// Đường đang quá tải (503) sau một lần thử lại thì nghỉ chừng này rồi chuyển đường kế tiếp; các khoá dùng chung model nên thường
+// quá tải cùng lúc, đi hết thì tới model dự phòng.
+const BUSY_COOL_MS = 20000;
 let sdk = null;
 const apps = new Map();
 
@@ -176,7 +179,8 @@ function explain(err, aborted) {
 }
 
 // Chạy once(signal, route) với giới hạn thời gian. Hết lượt (429) thì đường đó nghỉ COOL_MS và thử đường kế tiếp (khoá dự phòng,
-// rồi model dự phòng) khi canRetry() còn đúng (chưa nhận được gì); quá tải thì đợi chút rồi thử lại một lần trên cùng đường.
+// rồi model dự phòng) khi canRetry() còn đúng (chưa nhận được gì); quá tải thì đợi chút rồi thử lại một lần trên cùng đường, vẫn quá tải
+// thì đường đó nghỉ BUSY_COOL_MS và sang đường kế tiếp.
 async function withRetry(once, canRetry = () => true) {
   const abort = new AbortController();
   // Hạn chờ tính từ lần cuối nhận được dữ liệu (alive), không tính cả lượt: nhóm chữ dài stream đều đặn hơn 60 giây khi AI chậm
@@ -199,6 +203,10 @@ async function withRetry(once, canRetry = () => true) {
         const why = explain(err, abort.signal.aborted);
         if (why.kind === 'quota') {
           cooling.set(route.id, Date.now() + COOL_MS);
+          if (canRetry() && nextRoute()) continue;
+        }
+        if (why.kind === 'busy' && busyRetried) {
+          cooling.set(route.id, Date.now() + BUSY_COOL_MS);
           if (canRetry() && nextRoute()) continue;
         }
         if (why.kind !== 'busy' || busyRetried || !canRetry()) throw why;
