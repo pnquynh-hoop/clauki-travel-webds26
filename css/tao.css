@@ -477,3 +477,222 @@
   }
 }
 
+
+/* Tiến trình AI dựng website: các bước dọc nối bằng một vạch, dấu tròn đổi theo trạng thái (số, vòng quay, dấu tích, gạch, chấm than). */
+.tao-progress {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem 0.4rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 10px;
+}
+
+.tao-progress[hidden] {
+  display: none;
+}
+
+.tao-progress__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tao-progress__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.6rem 1fr;
+  gap: 0.7rem;
+  padding-bottom: 0.85rem;
+}
+
+/* Vạch nối dấu này với dấu bước sau; bước đã xong thì vạch màu nhấn. */
+.tao-progress__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 1.7rem;
+  bottom: 0.15rem;
+  left: calc(0.8rem - 1px);
+  width: 2px;
+  background: var(--ed-line);
+}
+
+.tao-progress__step[data-state='done']:not(:last-child)::before {
+  background: var(--ed-accent);
+}
+
+.tao-progress__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ed-muted);
+  background: var(--ed-paper);
+  border: 2px solid var(--ed-line);
+  border-radius: 50%;
+}
+
+.tao-progress__step[data-state='run'] .tao-progress__mark {
+  color: var(--ed-accent);
+  border-color: color-mix(in srgb, var(--ed-accent) 25%, transparent);
+  border-top-color: var(--ed-accent);
+  animation: tao-spin 0.9s linear infinite;
+}
+
+/* Số trong dấu quay ngược lại để đứng yên khi vòng quay. */
+.tao-progress__step[data-state='run'] .tao-progress__mark span {
+  animation: tao-spin 0.9s linear infinite reverse;
+}
+
+.tao-progress__step[data-state='done'] .tao-progress__mark {
+  color: var(--ed-accent-ink);
+  background: var(--ed-accent);
+  border-color: var(--ed-accent);
+}
+
+/* Dấu tích vẽ bằng hai viền của một hình chữ nhật xoay, thay cho số. */
+.tao-progress__step[data-state='done'] .tao-progress__mark span {
+  width: 0.35rem;
+  height: 0.65rem;
+  margin-top: -0.15rem;
+  font-size: 0;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.tao-progress__step[data-state='skip'] .tao-progress__mark span,
+.tao-progress__step[data-state='fail'] .tao-progress__mark span {
+  font-size: 0;
+}
+
+.tao-progress__step[data-state='skip'] .tao-progress__mark span::before {
+  content: '';
+  display: block;
+  width: 0.6rem;
+  height: 2px;
+  background: currentColor;
+}
+
+.tao-progress__step[data-state='fail'] .tao-progress__mark {
+  color: #fff;
+  background: var(--ed-red);
+  border-color: var(--ed-red);
+}
+
+.tao-progress__step[data-state='fail'] .tao-progress__mark span::before {
+  content: '!';
+  font-size: 0.85rem;
+}
+
+.tao-progress__body {
+  min-width: 0;
+  padding-top: 0.15rem;
+}
+
+.tao-progress__title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ed-ink);
+}
+
+.tao-progress__step[data-state='wait'] .tao-progress__title {
+  color: var(--ed-muted);
+  font-weight: 600;
+}
+
+.tao-progress__time {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ed-muted);
+}
+
+.tao-progress__detail {
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ed-muted);
+  overflow-wrap: anywhere;
+}
+
+.tao-progress__detail p {
+  margin: 0;
+}
+
+.tao-progress__step[data-state='fail'] .tao-progress__detail {
+  color: var(--ed-red);
+}
+
+.tao-progress__row {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.tao-swatches {
+  display: inline-flex;
+}
+
+.tao-swatch {
+  width: 0.95rem;
+  height: 0.95rem;
+  background: var(--swatch);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--ed-line);
+}
+
+.tao-swatch + .tao-swatch {
+  margin-left: -0.3rem;
+}
+
+.tao-meter {
+  display: block;
+  height: 0.3rem;
+  margin-top: 0.3rem;
+  overflow: hidden;
+  background: var(--ed-paper);
+  border-radius: 99px;
+}
+
+.tao-meter span {
+  display: block;
+  height: 100%;
+  background: var(--ed-accent);
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.tao-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes tao-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tao-progress__step[data-state='run'] .tao-progress__mark,
+  .tao-progress__step[data-state='run'] .tao-progress__mark span {
+    animation: none;
+  }
+
+  .tao-meter span {
+    transition: none;
+  }
+}
