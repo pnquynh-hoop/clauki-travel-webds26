@@ -8,7 +8,7 @@
 import { COLORS, CONTRAST } from './manifest.js';
 import { contrastRatio, AA } from './contrast.js';
 import { darkName } from '../theme-mode.js';
-import { streamLines, cleanText } from '../ai/gemini.js';
+import { streamLines, cleanText, usageMark, modelsSince } from '../ai/gemini.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
@@ -186,8 +186,9 @@ async function send(value) {
   if (busy || !value.trim()) return;
   busy = true;
   text = value;
-  proposal = { say: '', items: [], same: 0, done: false, error: '' };
+  proposal = { say: '', items: [], same: 0, done: false, error: '', model: '' };
   renderOut();
+  const mark = usageMark();
   const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${value.trim()}\n\nBảng màu hiện tại (JSON):\n${JSON.stringify(context())}`;
   try {
     await streamLines(SYSTEM, prompt, (line) => {
@@ -209,12 +210,13 @@ async function send(value) {
     proposal.error = err.message;
   } finally {
     proposal.done = true;
+    proposal.model = modelsSince(mark);
     busy = false;
     const ok = proposal.items.filter((p) => p.ok);
     addTurn(api.state.id, KIND, {
       text: value.trim(), say: proposal.error || proposal.say,
       changes: ok.map((p) => `${p.label} (${p.mode === 'dark' ? 'tối' : 'sáng'}): ${p.from || 'chưa có'} -> ${p.to}`),
-      status: proposal.error ? 'error' : ok.length ? 'proposed' : 'empty',
+      status: proposal.error ? 'error' : ok.length ? 'proposed' : 'empty', model: proposal.model,
     });
     renderOut();
     renderHistory();
@@ -243,7 +245,7 @@ function swatch(color) {
 function renderOut() {
   if (!out || !proposal) return;
   const { h } = api;
-  const { say, items, same, done, error, applied } = proposal;
+  const { say, items, same, done, error, applied, model } = proposal;
   const ok = items.filter((p) => p.ok);
   const group = (mode, title) => {
     const rows = items.filter((p) => p.mode === mode);
@@ -265,6 +267,7 @@ function renderOut() {
       h('button', { type: 'button', class: 'ed-btn', onclick: accept, text: `Đồng ý (${ok.length} màu)` }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => { markLast(api.state.id, KIND, 'rejected'); renderHistory(); proposal = null; out.replaceChildren(); }, text: 'Bỏ' })) : null,
     done && !applied && !ok.length && !error ? noteEl(items.length, same) : null,
+    done && !applied && model ? h('p', { class: 'ed-model', text: `Model: ${model}` }) : null,
   ].filter(Boolean));
 }
 

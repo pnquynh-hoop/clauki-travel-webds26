@@ -1,7 +1,7 @@
 /* chat-log.js - lịch sử nhờ AI trong editor (#201): tab AI (kind "ai") và khung chat gợi ý màu (kind "palette") mỗi bên một
    lịch sử riêng, theo từng thương hiệu hay site (localStorage clauki-ai-log:<id>), nên tải lại trang hay mở lại editor vẫn còn.
    Mỗi lượt: câu đã gõ, câu tóm tắt của AI, các thay đổi AI đề xuất (dạng gọn "chỗ: cũ -> mới"), trạng thái (đã áp, bỏ, lỗi,
-   chưa áp) và giờ. Lưu tối đa KEEP lượt; khi nhờ tiếp chỉ gửi SEND lượt gần nhất (cắt lượt cũ trước cho vừa SEND_CHARS ký tự)
+   chưa áp), model đã dùng và giờ. Lưu tối đa KEEP lượt; khi nhờ tiếp chỉ gửi SEND lượt gần nhất (cắt lượt cũ trước cho vừa SEND_CHARS ký tự)
    để AI hiểu những câu như "đổi lại như lúc nãy". Chỉ lưu những gì đã gửi AI, không có dữ liệu khách hay đơn đặt chỗ.
    Bộ nhớ bị chặn thì vẫn chat được, chỉ không lưu. */
 
@@ -85,7 +85,8 @@ export function historyEl(h, turns, { onClear, onPick } = {}) {
   return h('details', { class: 'ed-history' },
     h('summary', { text: `Lịch sử nhờ AI (${turns.length})` }),
     h('ol', { class: 'ed-history__list' }, [...turns].reverse().map((t) => h('li', { class: `ed-history__item is-${t.status}` },
-      h('p', { class: 'ed-history__meta' }, h('span', { text: time(t.at) }), h('span', { class: 'ed-history__status', text: STATUS[t.status] ?? t.status })),
+      h('p', { class: 'ed-history__meta' }, h('span', { text: time(t.at) }), t.model ? h('span', { text: t.model }) : null,
+        h('span', { class: 'ed-history__status', text: STATUS[t.status] ?? t.status })),
       onPick && t.status !== 'reset'
         ? h('button', { type: 'button', class: 'ed-history__text', title: 'Chép lại vào ô yêu cầu', onclick: () => onPick(t.text), text: t.text })
         : h('p', { class: 'ed-history__text', text: t.text }),

@@ -6,7 +6,7 @@
 import { BLOCKS, HEADER_VARIANTS, COLORS, FONTS, TEMPLATES, variantsFor, fieldsFor } from './manifest.js';
 import { headerTarget, checkNewPage, addPage, insertBlock, applyFont } from './ops.js';
 import { getIn, setIn } from './form.js';
-import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL } from '../ai/gemini.js';
+import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL, usageMark, modelsSince } from '../ai/gemini.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
@@ -210,7 +210,8 @@ export function refreshAiHistory() {
   renderHistory();
 }
 
-function renderProposal(say, items, done, error) {
+// model: chuỗi model đã dùng cho lượt này (modelsSince), hiện dưới đề xuất khi AI trả lời xong.
+function renderProposal(say, items, done, error, model = '') {
   const { h } = api;
   const ok = items.filter((p) => p.ok);
   out.replaceChildren(...[
@@ -226,6 +227,7 @@ function renderProposal(say, items, done, error) {
       h('button', { type: 'button', class: 'ed-btn', 'data-ed-key': 'ai:accept', onclick: accept, text: `Đồng ý (${ok.length} thay đổi)` }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: reject, text: 'Bỏ' })) : null,
     done && !ok.length && !error && !say ? h('p', { class: 'ed-err', text: 'AI chưa đưa ra thay đổi nào. Hãy viết yêu cầu cụ thể hơn.' }) : null,
+    done && model ? h('p', { class: 'ed-model', text: `Model: ${model}` }) : null,
   ].filter(Boolean));
 }
 
@@ -258,6 +260,7 @@ async function send(text) {
   // Gửi kèm vài lượt gần nhất để AI hiểu những câu như "đổi lại như lúc nãy".
   const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${text.trim()}\n\nTrang hiện tại (JSON):\n${JSON.stringify(context())}`;
   let failed = '';
+  const mark = usageMark();
   try {
     await streamLines(SYSTEM, prompt, (line) => {
       let op;
@@ -274,7 +277,7 @@ async function send(text) {
       renderProposal(say, proposal, false);
     });
     checkColors(proposal);
-    renderProposal(say, proposal, true);
+    renderProposal(say, proposal, true, '', modelsSince(mark));
   } catch (err) {
     failed = err.message;
     renderProposal(say, proposal, true, err.message);
@@ -284,7 +287,7 @@ async function send(text) {
     const ok = proposal.filter((p) => p.ok);
     addTurn(api.state.id, KIND, {
       text: text.trim(), say: failed || say, changes: ok.map((p) => `${p.what}: ${short(p.from)} -> ${short(p.to)}`),
-      status: failed ? 'error' : ok.length ? 'proposed' : 'empty',
+      status: failed ? 'error' : ok.length ? 'proposed' : 'empty', model: modelsSince(mark),
     });
     renderHistory();
   }
