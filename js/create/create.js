@@ -447,7 +447,8 @@ async function publish() {
     content.contact = { ...content.contact, email: `xin-chao@${slug}.clauki` };
     if (update) await updateSite(slug, content, state.draft.theme);
     else await publishSite(slug, content, state.draft.theme);
-    ui.publishNote.textContent = `${update ? 'Đã cập nhật trang.' : 'Đã xuất bản. Trang đã cố định, chỉ máy demo sửa được.'}${state.publishModel ? ` Dịch nốt tiếng Anh bằng ${state.publishModel}.` : ''}`;
+    // Xuất bản mới: khối chia sẻ bên dưới đã đủ báo xong; cập nhật (máy demo) thì báo một câu ngắn.
+    ui.publishNote.textContent = [update ? 'Đã cập nhật trang.' : '', state.publishModel ? `Dịch nốt tiếng Anh bằng ${state.publishModel}.` : ''].filter(Boolean).join(' ');
     state.publishModel = '';
     // Link công khai (tên miền con trên web thật), mã QR, chép, chia sẻ.
     const { shareEl } = await import('../share.js');
