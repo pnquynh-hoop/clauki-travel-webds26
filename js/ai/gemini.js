@@ -171,7 +171,8 @@ function explain(err, aborted) {
   const text = String(err?.message ?? err);
   if (aborted) return new AiError('timeout', 'AI trả lời quá lâu, đã dừng. Hãy thử lại.');
   if (/\[429\b|RESOURCE_EXHAUSTED|quota/i.test(text)) return new AiError('quota', 'AI đang nghỉ (hết lượt miễn phí), hãy thử lại sau hoặc sửa tay.');
-  if (/\[50[03]\b|high demand|overloaded|UNAVAILABLE/i.test(text)) return new AiError('busy', 'Máy chủ AI đang quá tải, hãy thử lại sau vài giây.');
+  // 500 (INTERNAL), 503, 504 của Gemini thường chỉ thoáng qua: coi như quá tải để thử lại, đổi đường gọi.
+  if (/\[50[034]\b|high demand|overloaded|UNAVAILABLE|INTERNAL|DEADLINE_EXCEEDED/i.test(text)) return new AiError('busy', 'Máy chủ AI đang quá tải, hãy thử lại sau vài giây.');
   if (/\[40[13]\b|PERMISSION_DENIED|API key|referr?er/i.test(text)) return new AiError('denied', 'Trang này chưa được phép gọi AI (kiểm cấu hình và giới hạn tên miền của key).');
   if (/SAFETY|blocked/i.test(text)) return new AiError('blocked', 'Yêu cầu bị bộ lọc an toàn chặn. Hãy viết lại yêu cầu.');
   if (/Failed to fetch|NetworkError|network|offline/i.test(text)) return new AiError('network', 'Không kết nối được AI. Kiểm tra mạng rồi thử lại.');
