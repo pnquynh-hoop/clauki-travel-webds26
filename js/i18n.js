@@ -132,9 +132,10 @@ async function loadTranslation(dataRoot, id, lang) {
 }
 
 // Nội dung theo ngôn ngữ đang chọn: tiếng Việt hoặc thương hiệu chưa có bản dịch thì trả nguyên bản gốc.
+// Site khách không có file riêng nên bản dịch nằm ngay trong nội dung (translations.en); có thì dùng, không thì tải file.
 export async function localize(raw, dataRoot) {
   const lang = langFor(raw);
   if (lang === BASE_LANG) return raw;
-  const translation = await loadTranslation(dataRoot, raw.id, lang);
+  const translation = raw.translations?.[lang] ?? await loadTranslation(dataRoot, raw.id, lang);
   return translation ? mergeTranslation(raw, translation) : raw;
 }
