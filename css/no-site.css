@@ -1,0 +1,104 @@
+/* no-site.css - trang trung tính của ClauKi khi địa chỉ site khách không có (core.js, showNoSite). Không theo thương hiệu nào:
+   màu và font của ClauKi như editor và /tao, chỉ tải khi cần. */
+.no-site-page body {
+  min-height: 100vh;
+  margin: 0;
+  color: #18181b;
+  background: #f4f4f5;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.no-site-page main {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+}
+
+.no-site {
+  width: min(100%, 34rem);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  background: #fff;
+  border: 1px solid rgb(24 24 27 / 0.12);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -24px rgb(24 24 27 / 0.35);
+}
+
+.no-site__brand {
+  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0e7490;
+}
+
+.no-site__title {
+  margin: 0 0 0.6rem;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  line-height: 1.15;
+}
+
+.no-site__lead {
+  margin: 0 0 1.5rem;
+  line-height: 1.55;
+  color: #52525b;
+  overflow-wrap: anywhere;
+}
+
+.no-site__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.no-site__btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: #0e7490;
+  border: 1px solid #0e7490;
+  border-radius: 10px;
+}
+
+.no-site__btn--ghost {
+  color: #18181b;
+  background: #fff;
+  border-color: rgb(24 24 27 / 0.2);
+}
+
+.no-site__btn:hover {
+  filter: brightness(0.95);
+}
+
+.no-site__btn:focus-visible {
+  outline: 3px solid #18181b;
+  outline-offset: 2px;
+}
+
+.no-site__label {
+  margin: 1.75rem 0 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #52525b;
+}
+
+.no-site__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.no-site__list .no-site__btn {
+  min-height: 2.4rem;
+  font-size: 0.9rem;
+}
