@@ -177,7 +177,7 @@ export function mountLauncher({ current: first, reset }) {
     // Máy demo (có khoá, dán ở Tuỳ chọn của /tao) thì sửa được trang đã xuất bản; máy khác chỉ chia sẻ và tạo bản sao.
     menu.replaceChildren(...(published
       ? [
-        ...(readDemoKey() ? [action('Sửa trang này (máy demo)', () => copySite(detail, true))] : []),
+        ...(readDemoKey() ? [action('Sửa trang này', () => copySite(detail, true))] : []),
         action('Mã QR, chia sẻ', () => { setOpen(false); openShare(detail); }),
         action('Tạo bản sao', () => copySite(detail)),
       ]

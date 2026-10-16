@@ -1,9 +1,10 @@
 /* share.css - khối chia sẻ site khách (js/share.js): mã QR, link, nút chép, chia sẻ, tải mã QR; và hộp thoại chứa nó trên trang khách.
    Thuộc công cụ ClauKi nên màu cố định (xám kẽm, xanh ngọc), không đọc biến màu của thương hiệu. */
 
-/* Màu của khối; khai cả trên hộp thoại vì nút Đóng nằm ngoài .share. */
+/* Màu của khối; khai cả trên hộp thoại và bản phóng to vì nút Đóng, Thu nhỏ nằm ngoài .share. */
 .share,
-.share-dialog {
+.share-dialog,
+.share-zoom {
   --share-ink: #18181b;
   --share-paper: #ffffff;
   --share-muted: #52525b;
@@ -49,9 +50,13 @@
   }
 }
 
-/* Ô trắng chứa mã QR: lề trắng của mã (4 ô theo chuẩn) đã nằm trong ảnh, nên ô không cần đệm thêm. */
+/* Ô trắng chứa mã QR (cũng là nút phóng to): lề trắng của mã (4 ô theo chuẩn) đã nằm trong ảnh, nên ô không cần đệm thêm. */
 .share__tile {
   grid-area: qr;
+  display: block;
+  width: 100%;
+  padding: 0;
+  cursor: zoom-in;
   overflow: hidden;
   background: var(--share-paper);
   border: 1px solid var(--share-line);
@@ -122,7 +127,12 @@
   border-color: var(--share-accent);
 }
 
+.share__tile:disabled {
+  cursor: default;
+}
+
 .share__btn:focus-visible,
+.share__tile:focus-visible,
 .share__url:focus-visible {
   outline: 3px solid var(--share-accent);
   outline-offset: 3px;
@@ -181,4 +191,54 @@
 
 .share-dialog .share {
   margin: 0.75rem 1rem 1rem;
+}
+
+/* Mã QR phóng to cả màn hình: nền trắng để điện thoại quét từ xa, bấm vào đâu cũng thu nhỏ. */
+.share-zoom {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 1.5rem;
+  font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  color: var(--share-ink);
+  cursor: zoom-out;
+  background: #ffffff;
+  border: 0;
+}
+
+.share-zoom[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.share-zoom::backdrop {
+  background: #ffffff;
+}
+
+.share-zoom__qr {
+  width: min(80vmin, 40rem);
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}
+
+.share-zoom__url {
+  margin: 0;
+  font-size: clamp(1.25rem, 4vmin, 2.5rem);
+  font-weight: 700;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.share-zoom__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
