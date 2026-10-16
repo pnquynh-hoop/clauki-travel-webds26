@@ -7,6 +7,7 @@ import { BLOCKS, HEADER_VARIANTS, COLORS, FONTS, TEMPLATES, variantsFor, fieldsF
 import { headerTarget, checkNewPage, addPage, insertBlock, applyFont } from './ops.js';
 import { getIn, setIn } from './form.js';
 import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL } from '../ai/gemini.js';
+import { editSystem, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
@@ -56,26 +57,7 @@ function context() {
   };
 }
 
-const SYSTEM = `Bạn là trợ lý sửa website du lịch và lưu trú của ClauKi. Bạn chỉ trả về các thao tác sửa dữ liệu, mỗi dòng đúng một object JSON, không markdown, không chữ nào khác.
-Các thao tác (block là số i của khối trong "blocks"):
-{"op":"say","text":"một câu tiếng Việt tóm tắt sẽ đổi gì"}  luôn là dòng đầu tiên
-{"op":"variant","block":0,"value":"full"}  đổi kiểu khối, value phải nằm trong "variants" của khối đó; "" là kiểu mặc định
-{"op":"header","value":"center"}  đổi kiểu đầu trang, value trong header.variants
-{"op":"move","block":3,"to":1}  dời khối tới vị trí mới
-{"op":"hide","block":2}  {"op":"show","block":2}  {"op":"remove","block":2}
-{"op":"add","type":"tips","after":1}  thêm khối mới (type trong "addable") ngay sau khối after; after -1 là đầu trang
-{"op":"text","block":1,"field":"title","value":"..."}  sửa chữ, field phải là khoá có trong "text" của khối
-{"op":"site","field":"brand.slogan","value":"..."}  field trong "site"
-{"op":"color","name":"--color-primary","value":"#2f5d46"}  mã hex 6 số
-{"op":"font","value":"lora"}  value trong "fonts"
-{"op":"radius","value":12}  bo góc, số px từ 0 tới 32
-{"op":"page","title":"Cẩm nang","menu":true}  thêm trang mới
-Luật:
-- Chỉ làm đúng điều được yêu cầu, ít thao tác nhất có thể, tối đa ${MAX_OPS} thao tác.
-- Yêu cầu không liên quan tới website du lịch, lưu trú này thì chỉ trả một dòng say giải thích lịch sự vì sao không làm và gợi ý cách hỏi.
-- Đổi màu: giữ tương phản tối thiểu 4.5 giữa --color-ink và --color-bg, --color-muted và --color-bg, --color-accent và --color-bg, --color-on-primary và --color-primary; đổi màu nền thì đổi luôn màu chữ cho hợp.
-- Chữ tiếng Việt tự nhiên, ngắn; không dùng dấu chấm giữa, gạch dài, HTML; không cụm sáo rỗng như "trải nghiệm tuyệt vời", "đẳng cấp", "hàng đầu"; không bịa con số, tiện nghi, điểm đánh giá.
-- Không đổi số điện thoại, email, giá.`;
+const SYSTEM = editSystem(MAX_OPS);
 
 /* ---------- Kiểm từng thao tác ---------- */
 
@@ -256,7 +238,7 @@ async function send(text) {
   button.disabled = true;
   renderProposal('', [], false);
   // Gửi kèm vài lượt gần nhất để AI hiểu những câu như "đổi lại như lúc nãy".
-  const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${text.trim()}\n\nTrang hiện tại (JSON):\n${JSON.stringify(context())}`;
+  const prompt = requestPrompt({ history: contextText(readLog(api.state.id, KIND)), request: text, label: 'Trang hiện tại', data: context() });
   let failed = '';
   try {
     await streamLines(SYSTEM, prompt, (line) => {
