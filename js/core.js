@@ -52,6 +52,49 @@ let guestTheme = null;
 // Site khách đã xuất bản là cố định: không dựng theo nháp trên máy, không mở editor (chỉ bản nháp /nhap/ sửa được).
 let guestReadOnly = false;
 
+// Trang trung tính của ClauKi khi địa chỉ site khách không có: câu báo, nút tạo website, nút xem các thương hiệu mẫu.
+// CSS riêng (css/no-site.css) chỉ tải khi cần.
+function showNoSite(err, brands = []) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/css/no-site.css';
+  document.head.append(link);
+  document.title = err.isDraft ? 'Chưa có bản nháp - ClauKi' : 'Không có website này - ClauKi';
+  document.documentElement.classList.add('no-site-page');
+  const el = (tag, className, text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  };
+  const button = (href, text, ghost) => {
+    const a = el('a', ghost ? 'no-site__btn no-site__btn--ghost' : 'no-site__btn', text);
+    a.href = href;
+    return a;
+  };
+  const card = el('section', 'no-site');
+  card.setAttribute('aria-labelledby', 'no-site-title');
+  const title = el('h1', 'no-site__title', err.isDraft ? 'Chưa có bản nháp nào' : 'Không có website này');
+  title.id = 'no-site-title';
+  const lead = el('p', 'no-site__lead', err.isDraft
+    ? 'Bản nháp nằm trên trình duyệt đã tạo ra nó. Máy này chưa có nháp nào, hãy tạo một website mới.'
+    : `Địa chỉ /${err.slug}/ chưa có website nào. Có thể địa chỉ bị gõ nhầm, hoặc website đã được gỡ.`);
+  const actions = el('div', 'no-site__actions');
+  actions.append(button('/tao', 'Tạo website của bạn'), button('/', 'Về trang chủ', true));
+  card.append(el('p', 'no-site__brand', 'ClauKi'), title, lead, actions);
+  const samples = brands.filter((b) => b.id !== 'brand-test');
+  if (samples.length) {
+    const list = el('ul', 'no-site__list');
+    samples.forEach((b) => {
+      const li = el('li');
+      li.append(button(`/${b.id}/`, b.label, true));
+      list.append(li);
+    });
+    card.append(el('p', 'no-site__label', 'Hoặc xem các website mẫu'), list);
+  }
+  document.getElementById('main').replaceChildren(card);
+}
+
 function showError(err) {
   const note = document.createElement('p');
   note.textContent = err.message;
@@ -468,9 +511,11 @@ function onPopState() {
 async function startGuest(here, ids) {
   const { loadSite, RESERVED, DRAFT_SLUG } = await import('./sites.js');
   const isDraft = here.guest === DRAFT_SLUG;
-  if (RESERVED.includes(here.guest) && !isDraft) throw new Error('Địa chỉ này không có trang.');
+  // Không có site (gõ nhầm, đã gỡ, chưa có nháp): báo bằng trang trung tính của ClauKi, không mượn giao diện thương hiệu nào.
+  const missing = () => Object.assign(new Error(isDraft ? 'Chưa có bản nháp.' : `Không có trang /${here.guest}/.`), { kind: 'no-site', slug: here.guest, isDraft });
+  if (RESERVED.includes(here.guest) && !isDraft) throw missing();
   const site = await loadSite(here.guest);
-  if (!site) throw new Error(isDraft ? 'Chưa có bản nháp: mở /tao để tạo website.' : `Không có trang /${here.guest}/.`);
+  if (!site) throw missing();
   guestTheme = site.theme?.base && ids.includes(site.theme.base) ? site.theme : { ...site.theme, base: ids[0] };
   guestReadOnly = !isDraft;
   currentPage = here.page;
@@ -500,8 +545,11 @@ function listenDraft() {
 // components: bảng tra thẻ, cách tải JS, các file CSS (khai ở app.js).
 export async function start(components = {}) {
   registry = components;
+  // Giữ danh sách thương hiệu ngoài try để trang báo không có site (showNoSite) liệt kê được các website mẫu.
+  let brandList = null;
   try {
     const list = await loadBrandList();
+    brandList = list;
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
     if (here.tool === 'tao') {
@@ -547,6 +595,7 @@ export async function start(components = {}) {
       overrideCss: false,
     });
   } catch (err) {
-    showError(err);
+    if (err.kind === 'no-site') showNoSite(err, brandList?.brands);
+    else showError(err);
   }
 }
