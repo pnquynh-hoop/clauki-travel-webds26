@@ -217,6 +217,8 @@ async function create() {
     ui.brief.focus();
     return;
   }
+  // Đã chỉnh tay mà tạo lại thì mất hết các chỗ đó: hỏi trước.
+  if (state.draft?.edited && !confirm('Website đang có chỗ đã chỉnh tay. Tạo lại bằng AI sẽ thay toàn bộ. Tiếp tục?')) return;
   state.busy = true;
   ui.create.disabled = true;
   ui.publish.hidden = true;
@@ -375,6 +377,8 @@ function build() {
     ui.slug,
     h('p', { class: 'tao-hint' }, 'Địa chỉ: ', ui.url),
     h('div', { class: 'ed-row' }, ui.publishBtn,
+      // Chỉnh tay ngay trên nháp (editor sửa thẳng nháp của trang này), xong bấm Xuất bản trong editor là quay lại đây.
+      h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/?sua`, text: 'Chỉnh tay' }),
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/`, target: '_blank', rel: 'noopener', text: 'Mở nháp trong tab mới' })),
     ui.publishNote);
 
@@ -446,7 +450,7 @@ export function openBuilder({ brands }) {
     ui.brief.value = draft.brief ?? '';
     onBriefInput();
     if (draft.profile) {
-      setStatus([`${draft.profile.ten}: ${draft.profile.slogan}`, 'Nháp lần trước, còn trên máy này.'], 'ok');
+      setStatus([`${draft.profile.ten}: ${draft.profile.slogan}`, draft.edited ? 'Nháp đã chỉnh tay, còn trên máy này.' : 'Nháp lần trước, còn trên máy này.'], 'ok');
       ui.slug.value = slugify(draft.profile.ten);
     } else if (draft.copyOf) {
       // Bản sao của một site đã xuất bản (nút Tạo bản sao): gợi ý tên mới để khỏi trùng với bản gốc.
@@ -454,5 +458,10 @@ export function openBuilder({ brands }) {
       ui.slug.value = `${draft.copyOf.slice(0, 24)}-copy`;
     }
     showPublish();
+    // Từ editor bấm Xuất bản: đưa phần xuất bản vào tầm nhìn, con trỏ ở ô tên trang.
+    if (location.hash === '#xuat-ban') {
+      ui.publish.scrollIntoView({ block: 'center' });
+      ui.slug.focus();
+    }
   }
 }
