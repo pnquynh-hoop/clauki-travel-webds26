@@ -121,6 +121,8 @@ export class WlGallery extends HTMLElement {
   plateEl(image, i) {
     const plate = document.createElement(image.href ? 'a' : 'div');
     plate.className = 'gallery__plate';
+    // Ô làm cho nhãn ngắn (Đi bộ, Xích lô); chú thích dài như một câu thì CSS cho chữ nhỏ lại để khỏi tràn ô.
+    if (image.caption?.length > 24) plate.classList.add('gallery__plate--long');
     if (image.href) plate.href = image.href;
     else plate.tabIndex = 0;
     const photo = document.createElement('span');

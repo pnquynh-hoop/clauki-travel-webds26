@@ -477,6 +477,15 @@
   font-size: clamp(1.3rem, 2.6vw, 1.9rem);
   font-weight: 800;
   line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+/* Chú thích dài (wl-gallery.js gắn lớp này khi quá 24 ký tự): chữ nhỏ và thưa dòng hơn để cả câu nằm gọn trong ô hẹp ở 390px.
+   overflow-wrap ở trên cho từ rất dài (Jökulsárlón) xuống dòng thay vì tràn ra ngoài viền. */
+.gallery__plate--long .gallery__plate-name {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 .gallery__plate-icon svg {
