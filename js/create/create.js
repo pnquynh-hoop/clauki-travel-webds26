@@ -4,7 +4,7 @@
    Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
-import { usingFallback, backupInUse } from '../ai/gemini.js';
+import { backupInUse, usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
@@ -158,12 +158,13 @@ async function refine() {
   ui.refineLabel.textContent = 'Đang tinh chỉnh...';
   ui.refineNote.textContent = '';
   try {
+    const mark = usageMark();
     const { text, added, assumed, missing } = await refineBrief(brief);
     state.originalBrief = brief;
     ui.brief.value = text;
     onBriefInput();
     ui.undoRefine.hidden = false;
-    showRefineResult(added, assumed, missing);
+    showRefineResult(added, assumed, missing, modelsSince(mark));
   } catch (err) {
     ui.refineBox.hidden = true;
     ui.refineNote.textContent = err.message;
@@ -176,7 +177,7 @@ async function refine() {
 
 // Kết quả tinh chỉnh: chi tiết AI đã thêm (để người dùng biết mà sửa hay xoá) và ý còn thiếu; bấm một ý thiếu thì chèn sẵn dòng
 // "ý đó: " vào cuối mô tả để điền tiếp.
-function showRefineResult(added, assumed, missing) {
+function showRefineResult(added, assumed, missing, model = '') {
   const group = (title, chips) => (chips.length ? h('div', { class: 'tao-refine-box__group' }, h('p', { class: 'tao-refine-box__label', text: title }), h('div', { class: 'tao-chips' }, chips)) : null);
   const addedChips = added.map((text) => h('span', { class: 'tao-chip', text }));
   // Giá trị mẫu AI tự điền cho mục người dùng chưa nói (giá, thời lượng, hạng phòng...): bấm thì bôi đen đúng cụm đó trong ô mô tả để gõ đè.
@@ -198,7 +199,8 @@ function showRefineResult(added, assumed, missing) {
     h('p', { class: 'tao-refine-box__lead', text: assumed.length
       ? 'Đã viết lại, bổ sung và điền giá trị mẫu cho các mục còn thiếu. Bấm một giá trị mẫu để sửa thành số của bạn, rồi bấm Tạo website.'
       : 'Đã viết lại và bổ sung mô tả. Đọc lại, sửa hay xoá phần không đúng ý rồi bấm Tạo website.' }),
-    ...[group('AI đã thêm', addedChips), group('Giá trị mẫu AI điền, bấm để sửa', assumedChips), group('Còn thiếu, bấm để thêm vào mô tả', missingChips)].filter(Boolean),
+    ...[group('AI đã thêm', addedChips), group('Giá trị mẫu AI điền, bấm để sửa', assumedChips), group('Còn thiếu, bấm để thêm vào mô tả', missingChips),
+      model ? h('p', { class: 'ed-model', text: `Model: ${model}` }) : null].filter(Boolean),
   );
   ui.refineBox.hidden = false;
 }
@@ -247,6 +249,7 @@ async function create() {
   steps.el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   try {
     const frameId = ui.framePick.value;
+    const mark = usageMark();
     const result = await generateSite({
       brief,
       frameId,
@@ -298,7 +301,7 @@ async function create() {
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
     steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh, chỉnh tay hay xuất bản được ngay`,
-      usingFallback() ? 'Model chính hết lượt trên mọi khoá nên đã chuyển sang Gemini 3.1 Flash Lite' : '',
+      modelsSince(mark) ? `Model đã dùng: ${modelsSince(mark)}` : '',
       backupInUse() ? `Khoá chính hết lượt nên đã dùng khoá dự phòng ${backupInUse()}` : '']);
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
@@ -361,6 +364,7 @@ async function translateInBackground(result, steps) {
   const run = state.run;
   const mine = () => run === state.run;
   steps.set('english', 'run', 'Chạy nền: dịch theo lô, chữ giao diện lấy lại từ bản tiếng Anh của khung');
+  const mark = usageMark();
   try {
     const en = await addEnglish(made, {
       frame: result.profile.khung,
@@ -377,6 +381,7 @@ async function translateInBackground(result, steps) {
     steps.set('english', t.failed && !t.translated && !t.reused ? 'skip' : 'done', [
       `${t.translated} câu AI dịch, ${t.reused} câu lấy lại; nút VI, EN đã có trên site`,
       t.failed ? `${t.failed} câu chưa dịch được nên hiện tiếng Việt${t.error ? ` (${t.error})` : ''}` : '',
+      modelsSince(mark) ? `Model đã dùng: ${modelsSince(mark)}` : '',
     ]);
   } catch (err) {
     if (mine()) steps.set('english', 'skip', `Chưa dịch được (${err.message}), site chỉ có tiếng Việt`);
@@ -421,7 +426,9 @@ async function publish() {
     if (content.languages?.includes('en')) {
       ui.publishNote.textContent = 'Đang dịch nốt các chỗ vừa sửa sang tiếng Anh...';
       try {
+        const mark = usageMark();
         content = (await addEnglish(content, { state: state.draft.i18n ?? null })).content;
+        state.publishModel = modelsSince(mark);
       } catch {
         // Không dịch được thì xuất bản với bản tiếng Anh đang có; câu thiếu hiện tiếng Việt.
       }
@@ -431,7 +438,8 @@ async function publish() {
     await publishSite(slug, content, state.draft.theme);
     const url = `${location.origin}/${slug}/`;
     ui.publishNote.replaceChildren('Đã xuất bản: ', h('a', { href: url, target: '_blank', rel: 'noopener', text: url }),
-      '. Trang đã cố định, chỉ máy demo sửa được.');
+      '. Trang đã cố định, chỉ máy demo sửa được.', state.publishModel ? ` Dịch nốt tiếng Anh bằng ${state.publishModel}.` : '');
+    state.publishModel = '';
   } catch (err) {
     ui.publishNote.textContent = err.message;
   } finally {

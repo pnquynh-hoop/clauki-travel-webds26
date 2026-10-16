@@ -28,6 +28,18 @@ export const usingFallback = () => lastRoute?.model === FALLBACK_MODEL;
 // Đang dùng khoá dự phòng thứ mấy (1, 2), 0 là Firebase.
 export const backupInUse = () => (lastRoute?.key ? BACKUP_KEYS.indexOf(lastRoute.key) + 1 : 0);
 
+// Các lượt gọi đã xong (model, khoá), để chỗ nào gọi AI cũng báo được đã dùng model gì: lấy mốc usageMark() trước khi gọi, xong thì
+// modelsSince(mốc). Một việc có nhiều lượt song song (tạo website) có thể dùng nhiều model khi model chính hết lượt giữa chừng.
+const calls = [];
+export const usageMark = () => calls.length;
+// "gemini-3.5-flash-lite" -> "Gemini 3.5 Flash Lite".
+export const modelLabel = (id) => String(id).split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+// Chuỗi gọn như "Gemini 3.5 Flash Lite" hay "Gemini 3.5 Flash Lite, Gemini 3.1 Flash Lite (dự phòng)"; chưa có lượt nào xong thì ''.
+export function modelsSince(mark = 0) {
+  const used = [...new Set(calls.slice(mark).map((c) => c.model))];
+  return used.map((m) => `${modelLabel(m)}${m === FALLBACK_MODEL ? ' (dự phòng)' : ''}`).join(', ');
+}
+
 function routes() {
   const main = readDemo()?.model || DEFAULT_MODEL;
   const sources = [null, ...BACKUP_KEYS];
@@ -199,7 +211,9 @@ async function withRetry(once, canRetry = () => true) {
       if (!route) throw new AiError('quota', 'AI đang nghỉ (mọi khoá đều hết lượt miễn phí), hãy thử lại sau một phút hoặc sửa tay.');
       lastRoute = route;
       try {
-        return await once(abort.signal, route, alive);
+        const out = await once(abort.signal, route, alive);
+        calls.push({ model: route.model, key: route.key });
+        return out;
       } catch (err) {
         const why = explain(err, abort.signal.aborted);
         if (why.kind === 'quota') {

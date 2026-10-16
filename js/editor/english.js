@@ -9,6 +9,7 @@ import {
   withoutLanguage, buildTranslation, addMemory,
 } from '../i18n-text.js';
 import { currentLang } from '../i18n.js';
+import { usageMark, modelsSince } from '../ai/gemini.js';
 import { norm } from './ops.js';
 
 const LANG = 'en';
@@ -69,8 +70,10 @@ function setBusy(text) {
 async function runAi(label, task) {
   if (api.state.trBusy) return null;
   setBusy('Đang gọi AI...');
+  const mark = usageMark();
   try {
     const result = await task((done, total) => setBusy(`Đang dịch ${done}/${total} câu...`));
+    result.model = modelsSince(mark);
     api.commit(label, () => {
       api.state.tr = applyResults(tr(), api.state.content, result);
     });
@@ -92,7 +95,7 @@ async function sync() {
     const out = await syncTranslation({ content: api.state.content, state: tr(), memory, on: { progress } });
     return { translated: out.translated, stats: out.stats };
   });
-  if (result?.stats) report(result.stats);
+  if (result?.stats) report(result.stats, 0, result.model);
 }
 
 /* Lượt gom ở hành động cuối (Xem thử, Lưu): dịch câu còn chờ và kiểm tra câu tự sửa trong một lượt. Chạy nền, không
@@ -108,15 +111,17 @@ export async function finalCheck() {
   });
   if (!result) return;
   api.state.trIssues = result.issues;
-  report(result.stats, result.issues.length);
+  report(result.stats, result.issues.length, result.model);
 }
 
-function report(stats, issues = 0) {
+// model: model đã dùng cho lượt dịch (modelsSince), ghi cuối câu báo.
+function report(stats, issues = 0, model = '') {
   const parts = [];
   if (stats.total) parts.push(`đã dịch ${stats.total - stats.failed}/${stats.total} câu`);
   if (stats.failed) parts.push(`${stats.failed} câu chưa dịch được nên hiện tiếng Việt`);
   if (issues) parts.push(`${issues} câu bạn sửa nên xem lại (tab English)`);
   if (stats.error) parts.push(stats.error);
+  if (model && parts.length) parts.push(`model ${model}`);
   if (parts.length) api.toast(`Bản tiếng Anh: ${parts.join('; ')}.`);
   api.state.trReport = parts.join('; ');
 }

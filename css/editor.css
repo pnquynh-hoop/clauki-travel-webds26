@@ -339,6 +339,13 @@
   color: var(--ed-muted);
 }
 
+/* Dòng nhỏ ghi model AI đã dùng cho một kết quả (tab AI, gợi ý màu, Tinh chỉnh). */
+.ed-model {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
 .ed-h {
   margin: 1.2rem 0 0.5rem;
   font-family: inherit;
