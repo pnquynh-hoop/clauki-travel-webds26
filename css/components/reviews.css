@@ -321,12 +321,22 @@
   list-style: none;
 }
 
+/* Giấy note ngoài đời luôn sáng, chữ luôn tối. Brand nền tối (brand-test) có màu mực sáng, mặt thẻ tối nên chữ chìm vào giấy:
+   ép độ sáng nhưng giữ sắc màu của brand (mực tối nhất 0.3, chữ phụ 0.5, mặt giấy sáng ít nhất 0.96).
+   Brand nền sáng vốn đã thoả các mức này nên trông như cũ. Khai trên .reviews__sticky để đọc đúng bảng màu sáng
+   mà theme-mode.css trả về cho tờ note ở chế độ tối. */
+.reviews__sticky {
+  --note-ink: oklch(from var(--color-ink) min(l, 0.3) c h);
+  --note-muted: oklch(from var(--color-muted) min(l, 0.5) c h);
+  --note-surface: oklch(from var(--color-surface) max(l, 0.96) c h);
+}
+
 .reviews__sticky:nth-child(6n + 1) { --paper: color-mix(in srgb, var(--color-primary) 38%, #fff); --rot: -1.5deg; }
 .reviews__sticky:nth-child(6n + 2) { --paper: color-mix(in srgb, var(--color-mark, var(--color-accent)) 16%, #fff); --rot: 1.2deg; }
 .reviews__sticky:nth-child(6n + 3) { --paper: color-mix(in srgb, var(--color-accent) 14%, #fff); --rot: -0.8deg; }
-.reviews__sticky:nth-child(6n + 4) { --paper: var(--color-surface); --rot: 1.6deg; }
+.reviews__sticky:nth-child(6n + 4) { --paper: var(--note-surface); --rot: 1.6deg; }
 .reviews__sticky:nth-child(6n + 5) { --paper: color-mix(in srgb, var(--color-primary) 18%, #fff); --rot: -1.2deg; }
-.reviews__sticky:nth-child(6n) { --paper: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface)); --rot: 0.9deg; }
+.reviews__sticky:nth-child(6n) { --paper: color-mix(in srgb, var(--color-accent) 8%, var(--note-surface)); --rot: 0.9deg; }
 
 .reviews__note {
   position: relative;
@@ -336,9 +346,9 @@
   height: 100%;
   margin: 0;
   padding: 1.6rem 1.3rem 1.2rem;
-  color: var(--color-ink);
-  background: var(--paper, var(--color-surface));
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 8%, transparent), 0 18px 30px -18px color-mix(in srgb, var(--color-ink) 45%, transparent);
+  color: var(--note-ink);
+  background: var(--paper, var(--note-surface));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--note-ink) 8%, transparent), 0 18px 30px -18px color-mix(in srgb, var(--note-ink) 45%, transparent);
   transform: rotate(var(--rot, -1.5deg));
   transition: transform calc(var(--duration, 0.2s) * 1.5) cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -374,7 +384,7 @@
 .reviews__who small {
   display: block;
   font-weight: 500;
-  color: var(--color-muted);
+  color: var(--note-muted);
 }
 
 .reviews__meter {
