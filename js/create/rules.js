@@ -36,6 +36,7 @@ export const SIGNATURE = [
   { key: 'hero:ride', hard: true, dropPage: true, fit: 'chỉ dùng cho Sài Gòn, cần ảnh các toà nhà tách nền của thành phố' },
   { key: 'stays:headland', hard: true, fit: 'cần ảnh mỏm đá tách nền của đúng chỗ ở đó' },
 ];
+
 const SIGNATURE_BY_KEY = new Map(SIGNATURE.map((item) => [item.key, item]));
 
 // Khối này có phải đặc trưng không (theo loại, hoặc theo loại và kiểu).
