@@ -86,8 +86,9 @@ export class WlCustomTrip extends HTMLElement {
   }
 
   // Bấm lộ trình gợi ý thì thay cả chuyến bằng các chặng của lộ trình đó; id không có trong kho thì bỏ qua.
+  // Lộ trình không có chặng nào trong kho (brand chưa khai legs, id ghi sai) thì không hiện, kẻo bấm vào không ra gì.
   presetsEl() {
-    const presets = (this._data.presets ?? []).filter((p) => p.name && p.legs?.length);
+    const presets = (this._data.presets ?? []).filter((p) => p.name && p.legs?.some((id) => this.leg(id)));
     const buttons = presets.map((preset) => {
       const el = button('custom-trip__preset', null, () => {
         this._plan.legs = preset.legs.filter((id) => this.leg(id));

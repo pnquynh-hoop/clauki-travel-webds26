@@ -124,12 +124,14 @@ export class WlTourPick extends HTMLElement {
     this.className = `tour-pick tour-pick--${variant}`;
     this.stop();
     this._options = this.options();
-    const eyebrow = textEl('p', 'tour-pick__eyebrow', section.eyebrow);
-    // Không có lựa chọn nào dùng được thì chỉ hiện phần chữ, không dựng nút quay vô dụng.
-    if (!this._options.length) {
-      this.replaceChildren(...[groupEl('tour-pick__inner container', [eyebrow, textEl('h2', 'tour-pick__title', section.title)])].filter(Boolean));
+    // Không có lựa chọn nào có tour (brand không có danh mục, id ghi sai) thì ẩn cả khối: tiêu đề kiểu reel là nửa câu hỏi
+    // chờ ô chữ quay nối vào ("Hôm nay mình đi bằng"), để một mình thì cụt nghĩa.
+    this.hidden = !this._options.length;
+    if (this.hidden) {
+      this.replaceChildren();
       return;
     }
+    const eyebrow = textEl('p', 'tour-pick__eyebrow', section.eyebrow);
 
     const title = document.createElement('h2');
     title.className = 'tour-pick__title';

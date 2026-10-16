@@ -6,6 +6,11 @@
   display: block;
 }
 
+/* display: block ở trên đè mất [hidden]: khối không có lựa chọn nào có tour thì ẩn lại ở đây. */
+.tour-pick[hidden] {
+  display: none;
+}
+
 .tour-pick--reel {
   color: var(--color-surface);
   background: var(--color-accent);
