@@ -1,43 +1,94 @@
 /* share.css - khối chia sẻ site khách (js/share.js): mã QR, link, nút chép, chia sẻ, tải mã QR; và hộp thoại chứa nó trên trang khách.
    Thuộc công cụ ClauKi nên màu cố định (xám kẽm, xanh ngọc), không đọc biến màu của thương hiệu. */
 
-.share {
+/* Màu của khối; khai cả trên hộp thoại vì nút Đóng nằm ngoài .share. */
+.share,
+.share-dialog {
   --share-ink: #18181b;
   --share-paper: #ffffff;
   --share-muted: #52525b;
+  --share-line: #e4e4e7;
   --share-accent: #0e7490;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+}
+
+.share {
+  container-type: inline-size;
+  padding: 0.9rem;
   color: var(--share-ink);
+  background: #f4f4f5;
+  border: 1px solid var(--share-line);
+  border-radius: 0.9rem;
+}
+
+/* Hẹp: mã QR cạnh link, hàng nút trải cả bề ngang bên dưới. */
+.share__grid {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  grid-template-areas:
+    'qr text'
+    'actions actions'
+    'note note';
+  align-items: center;
+  gap: 0.75rem 0.9rem;
+}
+
+/* Rộng: hàng nút nằm cạnh mã QR, dưới link. */
+@container (min-width: 26rem) {
+  .share__grid {
+    grid-template-columns: 6.75rem minmax(0, 1fr);
+    grid-template-areas:
+      'qr text'
+      'qr actions'
+      'qr note';
+    align-items: start;
+    gap: 0.5rem 1rem;
+  }
+
+  .share__text {
+    align-self: end;
+  }
+}
+
+/* Ô trắng chứa mã QR: lề trắng của mã (4 ô theo chuẩn) đã nằm trong ảnh, nên ô không cần đệm thêm. */
+.share__tile {
+  grid-area: qr;
+  overflow: hidden;
   background: var(--share-paper);
-  border: 1px solid #d4d4d8;
-  border-radius: 0.75rem;
+  border: 1px solid var(--share-line);
+  border-radius: 0.6rem;
 }
 
 .share__qr {
   display: block;
-  width: 11rem;
-  height: 11rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   image-rendering: pixelated;
 }
 
-.share__body {
+.share__text {
+  grid-area: text;
   display: grid;
-  flex: 1 1 14rem;
-  gap: 0.6rem;
+  gap: 0.2rem;
   min-width: 0;
 }
 
 .share__url {
+  font-size: 0.95rem;
   font-weight: 700;
+  line-height: 1.35;
   color: var(--share-accent);
   overflow-wrap: anywhere;
 }
 
+.share__hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--share-muted);
+}
+
 .share__actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -46,11 +97,13 @@
 .share__btn {
   display: inline-flex;
   align-items: center;
-  min-height: 2.5rem;
-  padding: 0.45rem 0.95rem;
+  justify-content: center;
+  min-height: 2.4rem;
+  padding: 0.4rem 0.9rem;
   font: inherit;
   font-size: 0.875rem;
   font-weight: 700;
+  white-space: nowrap;
   color: var(--share-ink);
   text-decoration: none;
   cursor: pointer;
@@ -76,16 +129,29 @@
 }
 
 .share__note {
+  grid-area: note;
   margin: 0;
   font-size: 0.8rem;
   color: var(--share-muted);
 }
 
-/* Hộp thoại "Mã QR, chia sẻ" trên trang khách đã xuất bản. */
+.share__note:empty {
+  display: none;
+}
+
 .share-dialog {
-  width: min(32rem, calc(100vw - 2rem));
+  /* CSS reset của trang (margin: 0) làm <dialog> mất canh giữa mặc định: đặt lại. */
+  position: fixed;
+  inset: 0;
+  width: min(30rem, calc(100vw - 2rem));
+  height: fit-content;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
   padding: 0;
+  overflow: auto;
   font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  color: var(--share-ink);
+  background: var(--share-paper);
   border: 0;
   border-radius: 0.9rem;
   box-shadow: 0 12px 40px rgb(0 0 0 / 0.3);
@@ -103,11 +169,16 @@
   padding: 0.9rem 1rem 0;
 }
 
+/* Tiêu đề, nút của công cụ: không theo font, cỡ chữ tiêu đề của thương hiệu. */
 .share-dialog__title {
   margin: 0;
+  font-family: inherit;
   font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .share-dialog .share {
-  border: 0;
+  margin: 0.75rem 1rem 1rem;
 }

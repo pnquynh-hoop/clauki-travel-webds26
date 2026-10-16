@@ -67,7 +67,8 @@ export function shareEl(url, { name = 'site', title = '' } = {}) {
   const share = typeof navigator.share === 'function'
     ? h('button', { type: 'button', class: 'share__btn', text: 'Chia sẻ', onclick: () => navigator.share({ title, url }).catch(() => {}) })
     : null;
-  const link = h('a', { class: 'share__url', href: url, target: '_blank', rel: 'noopener', text: url });
+  // Chữ của link chỉ là tên miền (mua-la-do.xachbalo.com): ngắn, vừa cạnh mã QR; link bấm vẫn đủ https.
+  const link = h('a', { class: 'share__url', href: url, target: '_blank', rel: 'noopener', text: url.replace(/^https?:\/\//, '').replace(/\/$/, '') });
   qrCanvas(url).then((canvas) => {
     const data = canvas.toDataURL('image/png');
     img.src = data;
@@ -76,6 +77,10 @@ export function shareEl(url, { name = 'site', title = '' } = {}) {
   }).catch((err) => {
     img.replaceWith(h('p', { class: 'share__note', text: `${err.message} Link vẫn dùng được.` }));
   });
-  return h('div', { class: 'share' }, img,
-    h('div', { class: 'share__body' }, link, h('div', { class: 'share__actions' }, copy, share, download), note));
+  // .share là container: khối hẹp (bảng /tao kéo nhỏ, điện thoại) thì hàng nút xuống dưới cả bề ngang, rộng thì nằm cạnh mã QR.
+  return h('div', { class: 'share' }, h('div', { class: 'share__grid' },
+    h('div', { class: 'share__tile' }, img),
+    h('div', { class: 'share__text' }, link, h('p', { class: 'share__hint', text: 'Quét mã để mở trên điện thoại' })),
+    h('div', { class: 'share__actions' }, copy, share, download),
+    note));
 }
