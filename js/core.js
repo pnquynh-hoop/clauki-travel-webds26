@@ -129,6 +129,10 @@ export const SITE_SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])$/;
 const TOOL_PAGES = ['tao'];
 
 function readLocation(ids) {
+  // Tên miền con abc.xachbalo.com/nha được Cloudflare chuyển tới /s/abc/nha (Redirect Rule, xem FINAL_PLAN): đổi địa chỉ về /abc/nha,
+  // dạng mọi link trong site khách dùng, rồi đọc như thường.
+  const subdomain = location.pathname.match(/^\/s\/([^/]+)(\/.*)?$/);
+  if (subdomain) history.replaceState(history.state, '', `/${subdomain[1]}${subdomain[2] ?? '/'}${location.search}${location.hash}`);
   const parts = location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
   if (parts.length && ids.includes(parts[0])) {
     return { id: parts[0], page: normalizePage(parts.slice(1).join('/')) };

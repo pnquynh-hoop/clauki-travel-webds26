@@ -3,11 +3,11 @@
    không mở thêm khung riêng của BTC; mục Đổi thương hiệu bấm giúp hộp chọn của BTC. Site khách không có nút của BTC nên có nút
    chữ "Thử chỉnh".
    Thương hiệu có sẵn: Đổi thương hiệu (mở hộp chọn của BTC), Tạo mới (trình tạo web /tao), Chỉnh sửa (editor).
-   Site khách đã xuất bản là cố định nên chỉ có Tạo bản sao (chép cả nội dung lẫn màu, font sang trình tạo web để đặt tên mới
-   rồi xuất bản); bản nháp /nhap/ thì có Tạo mới và Chỉnh sửa. Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
+   Site khách đã xuất bản là cố định nên chỉ có Mã QR, chia sẻ và Tạo bản sao (chép cả nội dung lẫn màu, font sang trình tạo web để
+   đặt tên mới rồi xuất bản); máy demo (có khoá) có thêm Sửa trang này; bản nháp /nhap/ thì có Tạo mới và Chỉnh sửa. Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
    core.js tải tệp này sau khi trang dựng xong; editor thật (editor.js) chỉ tải khi bấm vào nút. */
 import { clearDraft } from './draft.js';
-import { writeTaoDraft, DRAFT_SLUG } from '../sites.js';
+import { writeTaoDraft, DRAFT_SLUG, readDemoKey, publicLink } from '../sites.js';
 
 const CSS_ID = 'ed-launch-css';
 
@@ -55,16 +55,32 @@ function openBrandPicker() {
 }
 
 // Tạo bản sao của site khách đang xem (bản đã xuất bản, kèm màu và font của nó) thành nháp của trình tạo web, rồi mở /tao để đặt tên mới.
-function copySite(current) {
+// edit (máy demo): nháp ghi editOf thay cho copyOf và mở thẳng editor; xuất bản lại đúng tên cũ thì /tao cập nhật trang đó (updateSite).
+function copySite(current, edit = false) {
   const content = structuredClone(current.raw);
   delete content.id;
   const theme = { ...structuredClone(current.theme ?? {}), base: current.base };
-  const ok = writeTaoDraft({ brief: '', profile: null, copyOf: current.id, content, theme, at: new Date().toISOString() });
+  const ok = writeTaoDraft({ brief: '', profile: null, [edit ? 'editOf' : 'copyOf']: current.id, content, theme, at: new Date().toISOString() });
   if (!ok) {
     alert('Trình duyệt chặn bộ nhớ nên chưa chép được. Hãy cho phép lưu dữ liệu trang rồi thử lại.');
     return;
   }
-  location.href = '/tao';
+  location.href = edit ? `/${DRAFT_SLUG}/?sua` : '/tao';
+}
+
+// Hộp thoại mã QR, link tên miền con, chép, chia sẻ của site khách đang xem; js/share.js chỉ tải khi bấm.
+async function openShare(current) {
+  const { shareEl } = await import('../share.js');
+  const { h } = await import('../dom.js');
+  const url = publicLink(current.id);
+  const dialog = h('dialog', { class: 'share-dialog', 'aria-labelledby': 'share-dialog-title' },
+    h('div', { class: 'share-dialog__head' },
+      h('h2', { class: 'share-dialog__title', id: 'share-dialog-title', text: 'Mã QR, chia sẻ' }),
+      h('button', { type: 'button', class: 'share__btn', text: 'Đóng', onclick: () => dialog.close() })),
+    shareEl(url, { name: current.id, title: current.raw?.brand?.name ?? '' }));
+  dialog.addEventListener('close', () => dialog.remove());
+  document.body.append(dialog);
+  dialog.showModal();
 }
 
 export function mountLauncher({ current: first, reset }) {
@@ -158,8 +174,13 @@ export function mountLauncher({ current: first, reset }) {
   // Các mục menu theo loại trang: thương hiệu có sẵn, site khách đã xuất bản, hay bản nháp /nhap/ mở riêng.
   const fillMenu = (detail) => {
     const published = detail.guest && detail.id !== DRAFT_SLUG;
+    // Máy demo (có khoá, dán ở Tuỳ chọn của /tao) thì sửa được trang đã xuất bản; máy khác chỉ chia sẻ và tạo bản sao.
     menu.replaceChildren(...(published
-      ? [action('Tạo bản sao', () => copySite(detail))]
+      ? [
+        ...(readDemoKey() ? [action('Sửa trang này (máy demo)', () => copySite(detail, true))] : []),
+        action('Mã QR, chia sẻ', () => { setOpen(false); openShare(detail); }),
+        action('Tạo bản sao', () => copySite(detail)),
+      ]
       : [
         ...(detail.guest ? [] : [action('Đổi thương hiệu', () => { setOpen(false); openBrandPicker(); })]),
         link('Tạo mới', '/tao'),

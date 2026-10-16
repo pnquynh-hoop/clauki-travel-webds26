@@ -7,7 +7,7 @@ import { micButton } from '../ai/speech.js';
 import { backupInUse, usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../icon.js';
-import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
+import { readTaoDraft, writeTaoDraft, publishSite, updateSite, publishReady, publicLink, readDemoKey, saveDemoKey, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
 import { createProgress, swatches, meter } from './progress.js';
@@ -401,9 +401,17 @@ function slugError(slug) {
   return '';
 }
 
+// Máy demo đang sửa một site đã xuất bản (nháp có editOf, mở từ "Sửa trang này") và giữ đúng tên cũ: Xuất bản là cập nhật trang đó.
+const isUpdate = () => Boolean(state.draft?.editOf && ui.slug.value.trim() === state.draft.editOf && readDemoKey());
+
+function syncSlug() {
+  ui.url.textContent = publicLink(ui.slug.value || '...');
+  ui.publishBtn.textContent = isUpdate() ? `Cập nhật /${ui.slug.value}/` : 'Xuất bản';
+}
+
 function showPublish() {
   ui.publish.hidden = !state.draft?.content;
-  ui.url.textContent = `${location.origin}/${ui.slug.value || '...'}/`;
+  syncSlug();
   ui.publishBtn.disabled = !publishReady();
   ui.publishNote.textContent = publishReady() ? '' : 'Chưa nối kho dữ liệu (Supabase), tạm thời chỉ xem nháp trên máy này.';
 }
@@ -413,8 +421,10 @@ async function publish() {
   const problem = slugError(slug);
   ui.publishNote.textContent = problem;
   if (problem || !state.draft?.content) return;
+  const update = isUpdate();
   ui.publishBtn.disabled = true;
-  ui.publishNote.textContent = 'Đang xuất bản...';
+  ui.shareBox.replaceChildren();
+  ui.publishNote.textContent = update ? 'Đang cập nhật...' : 'Đang xuất bản...';
   try {
     // Bản tiếng Anh còn đang dịch nền: chờ xong rồi xuất bản luôn cả hai thứ tiếng.
     if (state.english) {
@@ -435,11 +445,13 @@ async function publish() {
       ui.publishNote.textContent = 'Đang xuất bản...';
     }
     content.contact = { ...content.contact, email: `xin-chao@${slug}.clauki` };
-    await publishSite(slug, content, state.draft.theme);
-    const url = `${location.origin}/${slug}/`;
-    ui.publishNote.replaceChildren('Đã xuất bản: ', h('a', { href: url, target: '_blank', rel: 'noopener', text: url }),
-      '. Trang đã cố định, chỉ máy demo sửa được.', state.publishModel ? ` Dịch nốt tiếng Anh bằng ${state.publishModel}.` : '');
+    if (update) await updateSite(slug, content, state.draft.theme);
+    else await publishSite(slug, content, state.draft.theme);
+    ui.publishNote.textContent = `${update ? 'Đã cập nhật trang.' : 'Đã xuất bản. Trang đã cố định, chỉ máy demo sửa được.'}${state.publishModel ? ` Dịch nốt tiếng Anh bằng ${state.publishModel}.` : ''}`;
     state.publishModel = '';
+    // Link công khai (tên miền con trên web thật), mã QR, chép, chia sẻ.
+    const { shareEl } = await import('../share.js');
+    ui.shareBox.replaceChildren(shareEl(publicLink(slug), { name: slug, title: content.brand?.name ?? '' }));
   } catch (err) {
     ui.publishNote.textContent = err.message;
   } finally {
@@ -477,6 +489,12 @@ function build() {
   ui.unsplashKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán Access Key của Unsplash', 'aria-label': 'Khoá Unsplash' });
   ui.unsplashKey.value = readUnsplashKey();
   ui.unsplashKey.addEventListener('change', () => saveUnsplashKey(ui.unsplashKey.value.trim()));
+  ui.demoKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán khoá máy demo', 'aria-label': 'Khoá máy demo' });
+  ui.demoKey.value = readDemoKey();
+  ui.demoKey.addEventListener('change', () => {
+    saveDemoKey(ui.demoKey.value.trim());
+    syncSlug();
+  });
   ui.create = h('button', { type: 'button', class: 'ed-btn tao-create', onclick: onCreateClick, text: 'Tạo website' });
   ui.createNote = h('p', { class: 'tao-create-note', 'aria-live': 'polite' });
   ui.bar = h('progress', { class: 'tao-bar', max: '1', value: '0', 'aria-label': 'Tiến độ viết chữ' });
@@ -486,12 +504,13 @@ function build() {
   ui.slug = h('input', { class: 'ed-input', id: 'tao-slug', maxlength: '30', autocomplete: 'off' });
   ui.slug.addEventListener('input', () => {
     ui.slug.value = ui.slug.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
-    ui.url.textContent = `${location.origin}/${ui.slug.value || '...'}/`;
+    syncSlug();
     ui.publishNote.textContent = '';
   });
   ui.url = h('code', { class: 'tao-url' });
   ui.publishBtn = h('button', { type: 'button', class: 'ed-btn', onclick: publish, text: 'Xuất bản' });
   ui.publishNote = h('p', { class: 'tao-note', 'aria-live': 'polite' });
+  ui.shareBox = h('div', { class: 'tao-share' });
   ui.publish = h('section', { class: 'tao-publish', 'aria-labelledby': 'tao-publish-h', hidden: true },
     h('h2', { class: 'ed-h', id: 'tao-publish-h', text: 'Xuất bản' }),
     h('label', { class: 'ed-field', for: 'tao-slug' }, h('span', { text: 'Tên trang (địa chỉ)' })),
@@ -501,7 +520,8 @@ function build() {
       // Chỉnh tay ngay trên nháp (editor sửa thẳng nháp của trang này), xong bấm Xuất bản trong editor là quay lại đây.
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/?sua`, text: 'Chỉnh tay' }),
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/`, target: '_blank', rel: 'noopener', text: 'Mở nháp trong tab mới' })),
-    ui.publishNote);
+    ui.publishNote,
+    ui.shareBox);
 
   ui.resizer = resizerEl();
   const step = (n, title, forId) => h('h2', { class: 'tao-step__title' }, h('span', { class: 'tao-step__no', 'aria-hidden': 'true', text: String(n) }), forId ? h('label', { for: forId, text: title }) : title);
@@ -532,7 +552,10 @@ function build() {
           ui.enOn),
         h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Unsplash (tuỳ chọn)' }),
           h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Unsplash trước, truy vấn nào Unsplash không ra thì tìm trên Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
-          ui.unsplashKey))),
+          ui.unsplashKey),
+        h('details', { class: 'tao-photo-key', id: 'cau-hinh' }, h('summary', { text: 'Khoá máy demo' }),
+          h('p', { class: 'ed-hint', text: 'Chỉ máy thuyết trình của đội: có khoá thì trang đã xuất bản có thêm mục Sửa trang này, xuất bản lại đúng tên cũ là cập nhật trang đó. Khoá chỉ lưu trên trình duyệt này, database so mã băm của khoá.' }),
+          ui.demoKey))),
       ui.status,
       ui.progress.el,
       ui.publish),
@@ -566,6 +589,11 @@ export function openBuilder({ brands }) {
   build();
   onBriefInput();
   ui.create.addEventListener('keydown', (e) => { if (e.key === 'Escape' && state.armed) disarm(); });
+  // /tao#cau-hinh: mở sẵn ô khoá máy demo (máy thuyết trình dán khoá trước buổi thi).
+  if (location.hash === '#cau-hinh') {
+    ui.demoKey.closest('details').open = true;
+    ui.demoKey.focus();
+  }
   // Có nháp từ lần trước thì hiện lại, để tải lại trang không mất website đang làm.
   const draft = readTaoDraft();
   if (draft?.content) {
@@ -578,6 +606,10 @@ export function openBuilder({ brands }) {
     if (draft.profile) {
       setStatus([`${draft.profile.ten}: ${draft.profile.slogan}`, draft.edited ? 'Nháp đã chỉnh tay, còn trên máy này.' : 'Nháp lần trước, còn trên máy này.'], 'ok');
       ui.slug.value = slugify(draft.profile.ten);
+    } else if (draft.editOf) {
+      // Máy demo đang sửa một site đã xuất bản (mục Sửa trang này): giữ tên cũ để Xuất bản là cập nhật.
+      setStatus([`Đang sửa /${draft.editOf}/ (máy demo), còn trên máy này.`, 'Chỉnh tay xong, bấm Cập nhật để ghi đè trang đã xuất bản.'], 'ok');
+      ui.slug.value = draft.editOf;
     } else if (draft.copyOf) {
       // Bản sao của một site đã xuất bản (nút Tạo bản sao): gợi ý tên mới để khỏi trùng với bản gốc.
       setStatus([`Bản sao của /${draft.copyOf}/, còn trên máy này.`, 'Đặt tên mới rồi xuất bản, hoặc mở nháp để xem.'], 'ok');
