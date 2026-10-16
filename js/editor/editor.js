@@ -14,6 +14,7 @@ import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../dom.js';
 import { mountAi } from './ai.js';
+import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
 
 const HISTORY_MAX = 60;
 const TOAST_MS = 2600;
@@ -46,6 +47,14 @@ const state = {
   baseId: null,
   // Lúc ghi nháp gần nhất (Date) để hiện "Đã lưu lúc ..." ở thanh trên.
   savedAt: null,
+  // Bản tiếng Anh (english.js): tr là trạng thái song ngữ (null khi chưa bật), trBase là bản gốc lúc mở để biết đã đổi
+  // chưa, view là ngôn ngữ đang xem trong khung, trBusy là chữ báo khi AI đang chạy, trIssues là câu AI báo nên xem lại.
+  tr: null,
+  trBase: 'null',
+  view: 'vi',
+  trBusy: null,
+  trIssues: [],
+  trReport: '',
 };
 const ui = {};
 
@@ -90,13 +99,14 @@ function blockName(section) {
 /* ---------- Kho trạng thái: thao tác, hoàn tác, nháp ---------- */
 
 function snapshot() {
-  return { content: clone(state.content), theme: clone(state.theme), page: state.page, sel: state.sel };
+  return { content: clone(state.content), theme: clone(state.theme), tr: clone(state.tr), page: state.page, sel: state.sel };
 }
 
 // Hoàn tác trả lại cả khối đang chọn, để thanh công cụ không nhảy sang khối khác sau khi dời hay nhân đôi.
 function restore(snap) {
   state.content = snap.content;
   state.theme = snap.theme;
+  state.tr = snap.tr;
   state.sel = snap.sel;
 }
 
@@ -117,6 +127,8 @@ function save() {
     return;
   }
   persist();
+  // Lưu là một hành động cuối: AI dịch câu tiếng Việt mới và kiểm tra câu tiếng Anh tự sửa (chạy nền, không chặn).
+  checkEnglish();
   const at = timeLabel(state.savedAt);
   ui.save.textContent = 'Đã lưu';
   setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
@@ -145,7 +157,8 @@ function redo() {
 
 // Giống hệt bản gốc thì xoá nháp (trang khách không còn dải "đang thử"); khác thì ghi nháp.
 function isOriginal() {
-  return JSON.stringify(state.content) === JSON.stringify(state.raw) && !Object.keys(state.theme.vars).length;
+  return JSON.stringify(state.content) === JSON.stringify(state.raw) && !Object.keys(state.theme.vars).length
+    && JSON.stringify(state.tr) === state.trBase;
 }
 
 // Nháp gửi thẳng cho trang trong khung (xem trước được cả khi bộ nhớ bị chặn), đồng thời ghi trên máy.
@@ -153,7 +166,7 @@ function persist() {
   const original = isOriginal();
   // Site khách: ghi kèm base trong theme để core.js dựng nháp trên đúng thương hiệu khung.
   const theme = state.baseId && state.baseId !== state.id ? { ...state.theme, base: state.baseId } : state.theme;
-  const draft = original ? null : { base: fingerprint(state.raw), content: state.content, theme };
+  const draft = original ? null : { base: fingerprint(state.raw), content: state.content, theme, ...draftPart() };
   if (original) clearDraft(state.id);
   else if (!writeDraft(state.id, draft)) {
     toast('Trình duyệt chặn bộ nhớ: xem thử được trong editor, nhưng thoát ra là mất.');
@@ -164,7 +177,9 @@ function persist() {
   if (!pageOf(state.content)) {
     openPage('/');
   }
-  frameDoc()?.dispatchEvent(new CustomEvent('wl:draft', { detail: draft && clone(draft) }));
+  // Đang xem bản tiếng Anh thì khung cần nội dung kèm bản dịch, kể cả khi chưa sửa gì so với bản gốc.
+  const frame = draft ?? (state.view !== 'vi' ? { content: state.content, theme, ...draftPart() } : null);
+  frameDoc()?.dispatchEvent(new CustomEvent('wl:draft', { detail: frame && clone(frame) }));
   refresh();
 }
 
@@ -215,6 +230,9 @@ async function loadBrand(id, raw, base = null) {
   state.id = id;
   state.baseId = base ?? id;
   state.raw = clone(raw);
+  state.tr = null;
+  state.trIssues = [];
+  state.trReport = '';
   const draft = readDraft(id, raw);
   state.content = clone(draft?.content ?? raw);
   state.theme = clone(draft?.theme ?? { vars: {} });
@@ -232,9 +250,15 @@ async function loadBrand(id, raw, base = null) {
   } catch {
     css = '';
   }
+  const english = await baseEnglish(raw);
   if (token !== state.loadToken) return;
   state.baseCss = css;
   state.base = vars;
+  state.trBase = JSON.stringify(english);
+  state.tr = clone(draft?.i18n ?? english);
+  state.view = 'vi';
+  // Khách đang xem bản tiếng Anh rồi bấm Chỉnh sửa: mở sẵn bản tiếng Anh (sau khi khung dựng xong lần này).
+  if (startView() === 'en') setTimeout(() => setView('en'));
   const brand = state.brands.find((b) => b.id === id);
   document.title = `Thử chỉnh - ${brand?.label ?? id}`;
 }
@@ -282,7 +306,7 @@ function select(key, scroll = false) {
 // Máy tính: bấm khối trên trang thì chuyển sang tab Khối; điện thoại giữ nguyên (tấm trượt chỉ mở khi bấm Sửa nội dung).
 function revealSelected() {
   if (state.sel === null) return;
-  if (!isNarrow() && ui.panes.blocks.hidden) openTab('blocks');
+  if (!isNarrow() && ui.panes.blocks.hidden && state.view === 'vi') openTab('blocks');
   // Tự cuộn bảng (không dùng scrollIntoView vì nó cuộn cả trang editor và lệch ngang khi tấm trượt cố định trên điện thoại).
   const pane = ui.panes.blocks;
   const row = pane.querySelector('.ed-block.is-sel');
@@ -700,6 +724,9 @@ function themeCss() {
 function downloadContent() {
   const out = clone(state.content);
   out.pages?.forEach((p) => delete p.added);
+  // Thương hiệu có sẵn giữ bản tiếng Anh ở file riêng (Tải content.en.json ở tab English).
+  delete out.translations;
+  delete out.translationNotes;
   download('content.json', `${JSON.stringify(out, null, 2)}\n`, 'application/json');
 }
 
@@ -719,6 +746,8 @@ function resetAll() {
   commit('Về bản gốc', () => {
     state.content = clone(state.raw);
     state.theme = { vars: {} };
+    state.tr = JSON.parse(state.trBase);
+    state.trIssues = [];
   });
   toast('Đã về bản gốc. Bấm Hoàn tác nếu muốn lấy lại.');
 }
@@ -748,9 +777,14 @@ function refresh() {
   const bad = !contrastChecks().every((c) => c.ok);
   ui.themeBtn.disabled = bad;
   ui.themeBtn.title = bad ? 'Màu chưa đạt tương phản AA' : '';
+  ui.lang.replaceChildren(langControl());
+  // Tab English chỉ có khi trang đã bật bản tiếng Anh.
+  [...ui.tabs, ...ui.docks].filter((b) => (b.dataset.tab ?? b.dataset.dock) === 'en').forEach((b) => { b.hidden = !state.tr; });
+  if (!state.tr && !ui.panes.en.hidden) openTab('blocks');
   renderBlocks();
   renderTheme();
   renderPages();
+  if (!ui.panes.en.hidden) renderEnglish(ui.panes.en);
   renderTool();
   markSelection();
   if (focusKey) document.querySelector(`[data-ed-key="${CSS.escape(focusKey)}"]`)?.focus({ preventScroll: true });
@@ -782,6 +816,8 @@ function fit() {
 
 function setMode(mode) {
   state.mode = mode;
+  // Xem thử là một hành động cuối: AI dịch câu tiếng Việt mới và kiểm tra câu tiếng Anh tự sửa (chạy nền, không chặn).
+  if (mode === 'view') checkEnglish();
   ui.viewToggle.setAttribute('aria-checked', String(mode === 'view'));
   frameDoc()?.querySelectorAll('[data-ed-hover]').forEach((el) => el.removeAttribute('data-ed-hover'));
   markSelection();
@@ -802,6 +838,7 @@ function openTab(name) {
   Object.entries(ui.panes).forEach(([key, pane]) => {
     pane.hidden = key !== name;
   });
+  if (name === 'en' && state.content) renderEnglish(ui.panes.en);
 }
 
 // Điện thoại: bấm nút ở thanh dưới mở tấm trượt của tab đó; bấm lại nút đang mở thì đóng.
@@ -880,7 +917,7 @@ function resizerEl() {
 
 /* ---------- Dựng khung editor ---------- */
 
-const TABS = [['blocks', 'Khối'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['ai', 'AI']];
+const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['ai', 'AI']];
 
 function build() {
   const css = h('link', { rel: 'stylesheet', href: '/css/editor.css' });
@@ -899,6 +936,7 @@ function build() {
     ui.pageSelect.value = state.page;
     openNewPage();
   });
+  ui.lang = h('div', { class: 'ed-top__group ed-top__lang' });
   ui.undo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: undo, text: 'Hoàn tác' });
   ui.redo = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: redo, text: 'Làm lại' });
   // Công tắc Xem thử: tắt là đang chỉnh (bấm khối để chọn), bật là xem như khách (bấm, cuộn như trang thật).
@@ -916,6 +954,7 @@ function build() {
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, ui.brand, ui.status),
     h('div', { class: 'ed-top__group' }, ui.pageSelect, ui.undo, ui.redo),
+    ui.lang,
     h('div', { class: 'ed-top__group ed-top__wide' }, ui.viewToggle),
     h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
     h('div', { class: 'ed-top__group ed-top__end' },
@@ -934,12 +973,15 @@ function build() {
 
   ui.panes = Object.fromEntries(TABS.map(([key, label]) => [key, h('div', { class: 'ed-pane', role: 'tabpanel', 'aria-label': label, hidden: key !== 'blocks' })]));
   ui.tabs = TABS.map(([key, label]) => h('button', { type: 'button', role: 'tab', class: 'ed-tab', 'data-tab': key, 'aria-selected': String(key === 'blocks'), onclick: () => openTab(key), text: label }));
+  // Tab English ẩn tới khi biết trang đã bật bản tiếng Anh (refresh bật lại).
+  ui.tabs.find((t) => t.dataset.tab === 'en').hidden = true;
   ui.resizer = resizerEl();
   ui.panel = h('aside', { class: 'ed-panel', 'aria-label': 'Bảng chỉnh' },
     ui.resizer,
     h('div', { class: 'ed-tabs', role: 'tablist' }, ui.tabs),
     Object.values(ui.panes));
   ui.docks = TABS.map(([key, label]) => h('button', { type: 'button', class: 'ed-dock__btn', 'data-dock': key, 'aria-pressed': 'false', onclick: () => dock(key), text: label }));
+  ui.docks.find((d) => d.dataset.dock === 'en').hidden = true;
   ui.toast = h('p', { class: 'ed-toast', role: 'status' });
 
   document.body.className = 'ed-body';
@@ -961,5 +1003,6 @@ export function openEditor({ brands, id, page }) {
   build();
   fit();
   renderAi();
+  mountEnglish({ h, state, commit, persist, refresh, toast, openTab, sections, blockName, download });
   openPage(page);
 }

@@ -6,7 +6,7 @@
 import { readDraft } from './editor/draft.js';
 import { applyTheme } from './theme-mode.js';
 // Song ngữ: chọn ngôn ngữ, ghép bản dịch content.<lang>.json vào nội dung (xem chú thích đầu i18n.js).
-import { localize, langFor, BASE_LANG } from './i18n.js';
+import { localize, langFor, mergeTranslation, BASE_LANG } from './i18n.js';
 
 // Mọi đường dẫn tính từ gốc: trang có thể nằm ở /ganh-som/phong, đường dẫn tương đối sẽ trỏ sai thư mục.
 const DATA_ROOT = '/brands';
@@ -163,7 +163,8 @@ function siteInfo(data) {
     home: pageUrl(data.id, HOME),
     // Ngôn ngữ đang hiện và các ngôn ngữ thương hiệu có: header dùng để vẽ nút đổi ngôn ngữ.
     lang: document.documentElement.lang || BASE_LANG,
-    languages: data.languages,
+    // Trong khung editor không có nút đổi ngôn ngữ: khung luôn là tiếng Việt, bấm EN sẽ không đổi gì.
+    languages: IN_EDITOR ? undefined : data.languages,
   };
 }
 
@@ -326,14 +327,26 @@ function draftFor(raw) {
   return readDraft(raw.id, raw);
 }
 
+/* Nội dung theo ngôn ngữ của lần dựng này:
+   - khung editor: theo công tắc ngôn ngữ của editor (draft.view), không theo lần chọn trước của khách;
+   - nháp ngoài editor: theo ngôn ngữ khách chọn nếu nháp có bản dịch (editor gửi kèm draft.translation), không thì
+     tiếng Việt, vì bản dịch trong file có thể chưa khớp chữ vừa sửa;
+   - không có nháp: ghép bản dịch của thương hiệu như thường. */
+async function localized(raw, draft) {
+  const fromDraft = (content, lang) => (lang !== BASE_LANG && draft?.translation
+    ? { lang, source: mergeTranslation(content, draft.translation) }
+    : { lang: BASE_LANG, source: content });
+  if (IN_EDITOR) return fromDraft(draft?.content ?? raw, draft?.view ?? BASE_LANG);
+  if (draft) return fromDraft(draft.content, langFor(draft.content));
+  return { lang: langFor(raw), source: await localize(raw, DATA_ROOT) };
+}
+
 async function render(raw, useDraft = true) {
   const token = ++renderToken;
   lastRaw = raw;
   // Thương hiệu đang có nháp "Thử chỉnh" thì dựng theo nháp; lastRaw vẫn giữ bản gốc để về bản gốc được.
   const draft = useDraft ? draftFor(raw) : null;
-  // Nháp Thử chỉnh luôn là tiếng Việt (editor sửa bản gốc); không có nháp thì ghép bản dịch theo ngôn ngữ đang chọn.
-  const lang = draft ? BASE_LANG : langFor(raw);
-  const source = draft?.content ?? await localize(raw, DATA_ROOT);
+  const { lang, source } = await localized(raw, draft);
   if (token !== renderToken) return;
   document.documentElement.lang = lang;
   const data = resolveLinks(source, raw.id);

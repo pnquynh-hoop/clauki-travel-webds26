@@ -301,7 +301,9 @@
 
 .ed-tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Số tab đổi theo trang (tab English chỉ có khi đã bật bản tiếng Anh): mỗi tab một cột bằng nhau. */
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
   gap: 3px;
   padding: 0.5rem;
   background: var(--ed-ink);
@@ -787,7 +789,8 @@
 
   .ed-dock {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
     gap: 4px;
     padding: 0.4rem;
     background: var(--ed-ink);
@@ -1298,4 +1301,173 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ---------- Bản tiếng Anh (english.js) ---------- */
+
+.ed-tab[hidden],
+.ed-dock__btn[hidden] {
+  display: none;
+}
+
+.ed-lang {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Công tắc ngôn ngữ: một viên chung bao hai lựa chọn, lựa chọn đang bật nổi màu nhấn, để thấy ngay là chọn một trong hai. */
+.ed-lang__seg {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--ed-ink-3);
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 999px;
+}
+
+.ed-lang__opt {
+  min-height: 2rem;
+  padding: 0.25rem 0.85rem;
+  font-weight: 700;
+  color: rgb(242 238 228 / 0.75);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+}
+
+.ed-lang__opt[aria-checked='true'] {
+  color: var(--ed-accent-ink);
+  background: var(--ed-accent);
+}
+
+.ed-lang__short {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .ed-top__lang {
+    flex: none;
+  }
+
+  .ed-lang__long,
+  .ed-lang__note {
+    display: none;
+  }
+
+  .ed-lang__short {
+    display: inline;
+  }
+
+  .ed-lang__opt {
+    padding-inline: 0.6rem;
+  }
+}
+
+/* Số chỗ cần xem, hoặc tiến độ khi AI đang dịch: bấm thì mở tab English. */
+.ed-lang__note {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ed-accent-text);
+  background: transparent;
+  border: 1px solid rgb(125 211 224 / 0.4);
+  border-radius: 999px;
+}
+
+.ed-trs {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-tr {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.55rem 0.6rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+}
+
+/* Câu tiếng Việt gốc: chữ nhỏ màu mờ, chỉ để đối chiếu. */
+.ed-tr__vi {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ed-muted);
+}
+
+.ed-tr__en {
+  min-height: 2.3rem;
+  resize: vertical;
+}
+
+.ed-tr__chip {
+  justify-self: start;
+  padding: 0.05rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--ed-muted);
+  background: var(--ed-paper);
+  border-radius: 999px;
+}
+
+.ed-tr__chip.is-own {
+  color: var(--ed-accent);
+  background: rgb(14 116 144 / 0.1);
+}
+
+.ed-tr__chip.is-todo {
+  color: #854d0e;
+  background: rgb(234 179 8 / 0.16);
+}
+
+.ed-tr__chip.is-warn {
+  color: var(--ed-red);
+  background: rgb(185 28 28 / 0.1);
+}
+
+/* Nút nguy hiểm trong bảng chỉnh (nền trắng): đỏ đậm, vì màu đỏ nhạt của nút này chỉ hợp thanh trên nền tối. */
+.ed-pane .ed-btn--danger {
+  color: var(--ed-red);
+  border-color: rgb(185 28 28 / 0.35);
+}
+
+.ed-tr__more {
+  margin-top: 0.8rem;
+}
+
+.ed-tr__more summary {
+  padding: 0.4rem 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Bảng gom các chỗ cần xem: viền màu nhấn để nổi khỏi danh sách ô bên dưới. */
+.ed-review {
+  margin: 1rem 0;
+  padding: 0.7rem;
+  background: #fff;
+  border: 2px solid var(--ed-accent);
+  border-radius: 10px;
+}
+
+.ed-review__list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ed-review__item + .ed-review__item {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--ed-line);
+}
+
+.ed-review__line {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
 }
