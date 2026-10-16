@@ -257,6 +257,7 @@ async function create() {
           ruleNote = [
             r.kept.length ? `Khối đặc trưng hợp nơi này: ${r.kept.join(', ')}` : 'Không dùng khối đặc trưng của thương hiệu khác',
             r.removedPages.length ? `Bỏ trang: ${r.removedPages.join(', ')}` : '',
+            r.borrowed?.length ? `Thêm trang từ khung khác: ${r.borrowed.join(', ')}` : '',
           ].filter(Boolean).join('. ');
         },
         layout: (l) => {
