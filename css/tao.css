@@ -730,3 +730,20 @@
 .tao-create-note:empty {
   display: none;
 }
+
+/* Giá trị mẫu AI tự điền (giá, thời lượng, hạng phòng): viền liền màu nhấn để khác chip "còn thiếu" viền đứt; bấm để sửa. */
+.tao-chip--assumed {
+  max-width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--ed-accent) 8%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ed-accent) 45%, transparent);
+}
+
+.tao-chip--assumed:hover {
+  border-color: var(--ed-accent);
+}
+
+.tao-chip--assumed strong {
+  font-weight: 700;
+}
