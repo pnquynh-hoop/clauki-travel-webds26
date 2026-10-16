@@ -486,8 +486,11 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
   transition: background-color var(--duration) ease, border-color var(--duration) ease, transform var(--duration) ease;
 }
 
+/* Hero kiểu haze là ảnh tối phủ tới mép trên: sương tan thì logo và menu màu mực chìm vào ảnh,
+   nên header có nền ngay từ đầu trang như lúc đã cuộn. */
 .header--overlay.is-scrolled,
-.header--overlay.is-open {
+.header--overlay.is-open,
+body:has(main > .hero--haze:first-child) .header--overlay {
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
   backdrop-filter: blur(18px) saturate(1.2);
 }
