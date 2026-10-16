@@ -696,3 +696,37 @@
     transition: none;
   }
 }
+
+/* Hai bước đầu của bảng nằm trong một fieldset để khoá cả cụm khi đang tạo; bỏ viền, lề mặc định của fieldset. */
+.tao-fields {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tao-fields:disabled {
+  opacity: 0.55;
+}
+
+.tao-fields:disabled .tao-chip,
+.tao-fields:disabled summary {
+  pointer-events: none;
+}
+
+/* Nút Tạo lại ở bước xác nhận: đổi sang màu cảnh báo kèm dòng nhắc phía trên. */
+.tao-create.is-armed {
+  color: #fff;
+  background: var(--ed-red);
+  border-color: var(--ed-red);
+}
+
+.tao-create-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--ed-red);
+}
+
+.tao-create-note:empty {
+  display: none;
+}
