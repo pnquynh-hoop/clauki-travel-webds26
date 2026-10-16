@@ -1,4 +1,4 @@
-/* tao.js - trình tạo web /tao (#81): mô tả bằng lời, AI viết website mới trên khung có sẵn, xem trước ngay bên cạnh,
+/* create.js - trình tạo web /tao (#81): mô tả bằng lời, AI viết website mới trên khung có sẵn, xem trước ngay bên cạnh,
    rồi xuất bản thành /<tên>/ (Supabase, js/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
    là chính core.js dựng bằng các component <wl-*>, nhận nháp mới qua sự kiện wl:draft mỗi khi AI viết thêm.
    Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
