@@ -12,7 +12,8 @@ import { toggleMode, MODE_EVENT } from '../theme-mode.js';
 // Bấm logo thì về trang chủ của thương hiệu (core.js đưa vào site.home); chưa có thì về đầu trang.
 function brandEl(brand, home) {
   const a = document.createElement('a');
-  a.className = 'header__brand';
+  // logoMark: logo chỉ là dấu hình (logo chữ cái tạo trong editor), nên tên luôn hiện cạnh logo ở mọi kiểu header.
+  a.className = brand.logo && brand.logoMark ? 'header__brand header__brand--mark' : 'header__brand';
   a.href = home ?? '#';
   if (brand.logo) {
     const img = document.createElement('img');

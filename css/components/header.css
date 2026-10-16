@@ -322,6 +322,21 @@
   height: 3.25rem;
 }
 
+/* Logo chỉ là dấu hình (brand.logoMark): ở mọi kiểu header tên hiện cạnh logo. */
+.header__brand--mark {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.header__brand--mark .header__brand-name {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+}
+
 /* Kiểu center hiện cả logo lẫn tên: logo bên trái, tên bên phải, như biển hiệu trước cổng. */
 .header--center .header__brand:has(img) {
   display: flex;

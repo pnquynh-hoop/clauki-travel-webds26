@@ -15,6 +15,7 @@ import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../dom.js';
 import { mountAi, refreshAiHistory } from './ai.js';
 import { addTurn } from './chat-log.js';
+import { fileToLogo, textLogo } from './logo.js';
 import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../sites.js';
 import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
 
@@ -606,6 +607,63 @@ function textField(label, path, value) {
   return h('label', { class: 'ed-field' }, h('span', { text: label }), input);
 }
 
+/* ---------- Logo ---------- */
+
+// Đặt logo và favicon vào nội dung (một commit, Hoàn tác được); logo người dùng tải thì bỏ logo cho nền tối của khung.
+function setLogo(next, label) {
+  commit(label, () => {
+    state.content.brand ??= {};
+    state.content.meta ??= {};
+    if (next) {
+      state.content.brand.logo = next.logo;
+      state.content.meta.favicon = next.favicon;
+    } else {
+      delete state.content.brand.logo;
+      delete state.content.meta.favicon;
+    }
+    // Logo chữ cái chỉ là dấu hình: header hiện tên cạnh logo. Logo tải lên thường đã có tên nên header ẩn tên như cũ.
+    if (next?.mark) state.content.brand.logoMark = true;
+    else delete state.content.brand.logoMark;
+    delete state.content.brand.logoDark;
+  });
+}
+
+function logoEl() {
+  const logo = state.content.brand?.logo;
+  const note = h('p', { class: 'ed-hint', 'aria-live': 'polite' });
+  const file = h('input', { type: 'file', accept: 'image/png,image/jpeg,image/webp', hidden: true });
+  file.addEventListener('change', async () => {
+    const picked = file.files?.[0];
+    if (!picked) return;
+    note.textContent = 'Đang thu nhỏ logo...';
+    try {
+      setLogo(await fileToLogo(picked), 'Tải logo');
+      toast('Đã đổi logo, cả biểu tượng tab. Bấm Hoàn tác nếu muốn bỏ.');
+    } catch (err) {
+      note.textContent = err.message;
+    }
+  });
+  const fromName = async () => {
+    const doc = frameDoc();
+    if (!doc) return;
+    try {
+      setLogo(await textLogo(state.content.brand?.name ?? state.id, doc), 'Tạo logo chữ cái');
+    } catch (err) {
+      note.textContent = `Chưa tạo được logo: ${err.message}`;
+    }
+  };
+  // Ảnh xem trước: đường dẫn tương đối của thương hiệu có sẵn tính từ thư mục của nó.
+  const src = logo && (/^(data:|\/|https:)/.test(logo) ? logo : `/brands/${state.baseId ?? state.id}/${logo}`);
+  return h('div', { class: 'ed-logo' },
+    src ? h('img', { class: 'ed-logo__img', src, alt: 'Logo hiện tại' }) : h('p', { class: 'ed-hint', text: 'Chưa có logo, đầu trang hiện tên bằng chữ.' }),
+    h('div', { class: 'ed-row' },
+      h('button', { type: 'button', class: 'ed-btn', onclick: () => file.click(), text: 'Tải logo' }),
+      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: fromName, text: 'Tạo logo chữ cái' }),
+      logo ? h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => setLogo(null, 'Bỏ logo'), text: 'Bỏ logo' }) : null),
+    h('p', { class: 'ed-hint', text: 'PNG, JPG hoặc WebP. Logo được thu nhỏ ngay trên máy và lưu cùng nội dung trang, không thành file riêng; biểu tượng tab đổi theo.' }),
+    file, note);
+}
+
 function renderTheme() {
   const font = h('select', { class: 'ed-select', 'aria-label': 'Cặp font', 'data-ed-key': 'font' },
     FONTS.map((f) => h('option', { value: f.key, text: f.label, selected: (state.theme.font ?? '') === f.key })));
@@ -621,6 +679,8 @@ function renderTheme() {
     font,
     h('h3', { class: 'ed-h' }, 'Bo góc: ', h('span', { text: `${radiusPx()}px` })),
     radius,
+    h('h3', { class: 'ed-h', text: 'Logo' }),
+    logoEl(),
     h('h3', { class: 'ed-h', text: 'Thông tin chung' }),
     textField('Tên thương hiệu', 'brand.name', c.brand?.name),
     textField('Khẩu hiệu', 'brand.slogan', c.brand?.slogan),

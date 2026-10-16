@@ -109,7 +109,8 @@ function pageUrl(id, page) {
 // Đường dẫn tuyệt đối (ảnh của site khách lấy từ thư mục thương hiệu làm khung, ví dụ /brands/me-rach/images/...) và địa chỉ https (ảnh của
 // site khách tìm theo nơi chốn) giữ nguyên.
 export function asset(path) {
-  if (typeof path === 'string' && (path.startsWith('/') || /^https:\/\//.test(path))) return path;
+  // Logo, favicon tải lên trong editor là ảnh nhúng (data:image/...), dùng nguyên.
+  if (typeof path === 'string' && (path.startsWith('/') || /^(https:\/\/|data:image\/)/.test(path))) return path;
   return `${DATA_ROOT}/${currentId}/${path}`;
 }
 
