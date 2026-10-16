@@ -95,6 +95,8 @@ js/
   create/               trình tạo web /tao: create.js (giao diện), generate.js (AI viết website trên khung có sẵn),
                         progress.js (bảng các bước AI đang làm), english.js (bản tiếng Anh của site mới)
   ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
+  ai/prompts/           mọi lời nhắc gửi Gemini, sửa câu chữ ở đây, không đụng logic: shared.js (luật viết dùng chung),
+                        create.js (trình tạo web), editor.js (tab AI, gợi ý màu), translate.js (dịch)
   sites.js              site khách: nháp /nhap/, đọc và xuất bản trên Supabase
 brands/
   brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định

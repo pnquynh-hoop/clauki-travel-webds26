@@ -7,6 +7,7 @@
    4. Ảnh: tìm ảnh thật theo nơi chốn (photos.js), AI loại ảnh lạc đề và viết mô tả tiếng Việt, rồi thay vào các chỗ ảnh của khung
       (trừ ảnh tách nền và ảnh đại diện); không tìm được thì giữ ảnh của khung. */
 import { streamLines, generateJson, cleanText } from '../ai/gemini.js';
+import { profilePrompt, frameNote, groupPrompt, refinePrompt, vetPhotosPrompt, layoutPrompt } from '../ai/prompts/create.js';
 import { contrastRatio, AA } from '../editor/contrast.js';
 import { setIn } from '../editor/form.js';
 import { findPhotos } from './photos.js';
@@ -76,54 +77,6 @@ function splitGroups(fields) {
   return groups.filter((g) => g.length);
 }
 
-const RULES = `Luật:
-- Tiếng Việt tự nhiên, giọng riêng của thương hiệu; dùng chi tiết cụ thể của nơi chốn trong hồ sơ.
-- Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML. Không cụm sáo rỗng như "trải nghiệm tuyệt vời", "đẳng cấp", "hàng đầu", "không thể bỏ qua"; không mở đầu câu bằng "Trải nghiệm".
-- Không bịa tiện nghi, con số, số lượt khách hay điểm đánh giá không có trong hồ sơ; câu mẫu nói về điều hồ sơ không có thì viết chung chung hoặc nói về điều hồ sơ có.
-- Tên người, tên nơi đúng như hồ sơ. Giá đúng như hồ sơ.`;
-
-function profilePrompt(brief, frameId) {
-  const frames = FRAMES.map((f) => `"${f.id}": ${f.label} (${f.hint})`).join('; ');
-  return `Lập hồ sơ cho một thương hiệu du lịch hoặc lưu trú giả tưởng từ mô tả sau. Chỉ dùng thông tin có trong mô tả;
-chỗ nào mô tả không nói thì đặt tên hoặc chi tiết hợp lý, nhưng không thêm tiện nghi hay con số mới.
-Mô tả không liên quan tới du lịch, lưu trú, hoặc có nội dung không phù hợp thì chỉ trả {"tuChoi": "lý do ngắn, lịch sự, kèm gợi ý cách viết lại"}.
-
-Mô tả: ${brief}
-
-Khung trang có sẵn: ${frames}.${frameId ? ` Người dùng đã chọn khung "${frameId}".` : ' Chọn khung hợp nhất theo loại hình và số ngày; mô tả là tour mà không nói rõ nhiều ngày thì chọn "sighgone", không mặc định "bac-tra".'}
-Luật màu (bắt buộc):
-- Nền trang (bg) và nền thẻ (surface) sáng, gần trắng, ngả ấm hay mát nhẹ; chữ (ink) gần đen cùng tông nền, không dùng đen thuần #000000; chữ phụ (muted) là xám cùng tông.
-- Màu nút (primary) là màu thương hiệu rõ ràng nhưng không chói: độ bão hoà vừa phải, không dùng màu neon, cyan sáng, hồng sáng, vàng chói. Chọn theo nơi chốn và khí hậu (biển: xanh lam hoặc xanh ngọc đậm; núi, rừng: xanh rêu, nâu đất; nắng gió: cam đất, vàng đất; phố cổ: đỏ gạch, vàng đất; đồng quê: xanh lá trầm).
-- Màu nhấn (accent) cùng bảng với màu nút (cùng họ màu hoặc màu bổ sung đã trầm), đủ đậm để dùng làm chữ trên nền sáng. Tổng cộng tối đa hai màu chủ đạo cộng các màu trung tính; không dùng ba màu nhấn khác họ.
-- Tương phản từ 4.5: chữ, chữ phụ, màu nhấn trên nền trang và trên nền thẻ; chữ trên nút (onPrimary) trên màu nút (primary).
-dacTrung: các component đặc trưng chỉ được dùng khi thật sự phù hợp với nơi này. Dưới đây là danh sách (khoá: điều kiện phù hợp). Chỉ chọn khoá nào mà mô tả của người dùng thật sự thoả điều kiện; nghi ngờ thì không chọn; mảng rỗng là bình thường và là lựa chọn mặc định.
-${SIGNATURE.filter((s) => !s.hard).map((s) => `- ${s.key}: ${s.fit}`).join('\n')}
-trangChu: thứ tự các khối chung của trang chủ, từ 5 tới 8 khoá lấy từ danh sách sau (khoá: mô tả). Khung đã có sẵn các khối riêng của nó (đặt chỗ, danh sách tour...) nên code tự giữ; bạn chỉ chọn khối chung, mỗi loại (phần trước dấu hai chấm) tối đa một lần.
-${MENU.map(([key, hint]) => `- ${key}: ${hint}`).join('\n')}
-Luật: khoá đầu là một hero; chọn kiểu hợp giọng nơi chốn và trộn các kiểu khác nhau, tối đa MỘT khoá mặc định (phần sau dấu hai chấm để trống, như "faq:"), các khoá còn lại phải chọn kiểu riêng (như "faq:chat", "gallery:slices"); không chọn kiểu đầu tiên cho mọi loại; nên có reviews và faq; tips và policy chỉ chọn khi khoá đó cũng có trong dacTrung.
-dauTrang: kiểu đầu trang, một trong "solid" (nền trang), "center" (tên ở giữa), "overlay" (trong suốt đè lên ảnh, chỉ khi hero là "hero:full").
-chanTrang: kiểu chân trang, một trong ${FOOTERS.map(([key, hint]) => `"${key}" (${hint})`).join(', ')}. Chọn theo giọng nơi chốn, không mặc định "columns".
-phongChu: chọn một kiểu chữ hợp giọng nơi chốn trong các khoá sau: "montserrat" (hiện đại, gọn, hợp thành phố, resort hiện đại), "lora" (có chân, cổ điển, hợp núi, làng quê, truyền thống), "unbounded" (tròn, vui, trẻ trung, hợp tour ăn uống, bạn bè), "playfair" (sang trọng, hợp nghỉ dưỡng cao cấp), hoặc "" để giữ kiểu chữ của khung.
-
-Tên: ngắn, dễ nhớ, có chất địa phương, không chép nguyên câu mô tả. Khẩu hiệu: tối đa 8 từ, nói một điều cụ thể của nơi này,
-không mở đầu bằng "Trải nghiệm". chiTiet: 3 tới 5 chi tiết ngắn có trong mô tả. Viết gọn, JSON một dòng.
-gia: giá thấp nhất (một khách, hay một đêm nếu là chỗ ở) bằng đồng Việt Nam, số nguyên đủ các số 0 ("1 triệu 2" là 1200000, "45 triệu" là 45000000);
-mô tả ghi giá ngoại tệ thì đổi sang đồng theo tỉ giá gần đúng; mô tả không nói giá thì 0 (giữ giá của khung), không tự đặt giá.
-donViGia: đơn vị tính, không kèm tiền tệ: "khách", "đêm", "phòng", "nhóm".
-anhTimKiem: đúng 5 truy vấn tìm ảnh thật bằng tiếng Anh, mỗi truy vấn 2 tới 5 từ, gồm tên địa danh có thật (tỉnh, huyện, danh thắng) đứng ĐẦU truy vấn rồi tới một cảnh
-cụ thể (phong cảnh, đường đi, món ăn, nhà ở); truy vấn đầu là cảnh đẹp nhất của nơi này; không dùng tên thương hiệu giả, không tìm chân dung.
-
-Trả về JSON đúng dạng:
-{"ten": "", "slogan": "", "noiChon": "", "chuNha": "", "chiTiet": [""], "gia": 0, "donViGia": "", "khung": "",
- "phongChu": "",
- "dacTrung": [],
- "trangChu": ["", "", "", "", ""],
- "dauTrang": "",
- "chanTrang": "",
- "anhTimKiem": ["", "", "", "", ""],
- "mau": {"primary": "", "onPrimary": "", "bg": "", "surface": "", "ink": "", "muted": "", "accent": ""}}`;
-}
-
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
 const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
 
@@ -134,31 +87,15 @@ function oldNamesOf(frames) {
   return names.length ? new RegExp(names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i') : null;
 }
 
-// Khung mẫu là website của một thương hiệu khác: nêu tên nó, nơi chốn và các sản phẩm của nó để AI biết chữ nào là của nơi cũ phải đổi.
-function frameNote(template) {
-  const names = [template.brand?.name, template.place?.name, ...(template.catalog?.items ?? []).map((item) => item.name)].filter(Boolean).slice(0, 12);
-  if (!names.length) return '';
-  return `Trang mẫu vốn là website của một thương hiệu khác (${names.join(', ')}). Mọi chữ nói về nơi chốn, địa danh, món ăn, phương tiện, lịch trình, con người, câu chuyện của trang mẫu phải đổi hẳn sang nơi mới, kể cả danh sách đã gồm, nên mang, các chặng; chỉ được chép nguyên chữ giao diện chung không nói về nơi chốn (tên nút, nhãn ngắn như "Đóng", "Trang chủ", "Hết chỗ").`;
+// Tên của khung mẫu (thương hiệu, nơi chốn, sản phẩm) cho lời dặn frameNote: AI biết chữ nào là của nơi cũ phải đổi.
+function frameNames(template) {
+  return [template.brand?.name, template.place?.name, ...(template.catalog?.items ?? []).map((item) => item.name)].filter(Boolean).slice(0, 12);
 }
 
-// redo: lượt viết lại các dòng mà lượt trước chép y nguyên chữ của trang mẫu.
-function groupPrompt(profile, fields, idx, note = '', redo = false) {
-  const lines = idx.map((i) => `${i + 1}\t${fields[i].key}\t${fields[i].value.replace(/\s+/g, ' ')}`).join('\n');
-  return `Bạn viết lại chữ của một phần website du lịch cho thương hiệu mới. Khung trang giữ nguyên.
-
-Hồ sơ thương hiệu (bắt buộc theo đúng):
-${JSON.stringify(brandProfile(profile))}
-
-${note}
-${redo ? 'Các dòng dưới đây ở lượt trước bị chép y nguyên chữ của trang mẫu. Viết lại cho nơi mới; chỉ dòng nào đúng là chữ giao diện chung, không nói gì về nơi chốn, mới được chép lại y nguyên.\n' : ''}
-Mỗi dòng dưới đây gồm: số, vị trí, chữ của trang mẫu. Viết lại từng dòng cho thương hiệu mới, cùng vai trò, độ dài gần bằng chữ cũ.
-
-Trả về đúng ${idx.length} dòng, mỗi dòng dạng: số|vị trí|chữ mới
-Chép lại đúng số và vị trí như đầu vào, theo đúng thứ tự, không thêm chữ nào khác, không xuống dòng trong một giá trị.
-
-${RULES}
-
-${lines}`;
+// Lời nhắc viết lại một nhóm dòng; idx là chỉ số trong fields, số gửi AI đánh từ 1 để khớp lại khi nhận.
+function writePrompt(profile, fields, idx, note, redo = false) {
+  const lines = idx.map((i) => ({ n: i + 1, key: fields[i].key, value: fields[i].value }));
+  return groupPrompt({ profile: brandProfile(profile), lines, note, redo });
 }
 
 /* ---------- Tinh chỉnh mô tả ---------- */
@@ -168,25 +105,7 @@ ${lines}`;
 // Không bịa con số mới (giá, số phòng, sức chứa, giờ): thiếu thì ghi vào `thieu`; chi tiết đã thêm ghi vào `themVao` để người dùng biết mà sửa.
 // Mô tả không phải du lịch hoặc lưu trú thì từ chối, như bước lập hồ sơ.
 export async function refineBrief(brief) {
-  const out = await generateJson(`Bạn giúp người dùng viết lại và bổ sung mô tả để một AI khác dựng website cho một nơi lưu trú hoặc một tour du lịch (thương hiệu giả tưởng).
-Đây là bản mô tả cho AI đọc, không phải lời quảng cáo cho khách.
-
-Mô tả gốc của người dùng: ${brief}
-
-Viết thành một đoạn tiếng Việt đầy đủ, 5 tới 8 câu, khoảng 500 tới 900 ký tự, theo thứ tự: loại hình (ở hay đi tour) và nơi chốn cụ thể, dành cho ai,
-điều khiến nơi này riêng biệt, cảnh quan và mùa đẹp, món ăn hoặc hoạt động quanh đó, không khí và giọng điệu của thương hiệu, giá và đơn vị tính (nếu có).
-Luật:
-- Giữ nguyên mọi sự thật, tên riêng, con số và chi tiết người dùng đã nói (buổi trong ngày, thời lượng, số người, giá, phương tiện). Không đổi, không mâu thuẫn với chúng; sửa chính tả, viết hoa tên địa danh.
-- Được bổ sung chi tiết hợp lý, cụ thể cho đúng nơi chốn đó dựa vào hiểu biết thật về địa phương: cảnh quan, khí hậu, mùa đẹp, đặc sản, hoạt động quanh đó, không khí của chỗ ở hay của tour, kiểu khách hợp. Không bịa địa danh không có thật.
-- Không thêm con số mới mà người dùng chưa nói: giá, số phòng, sức chứa, số người, khoảng cách, giờ giấc. Thiếu thì ghi vào "thieu" bằng cụm ngắn. Ý cốt lõi gồm: loại hình, nơi chốn cụ thể, đối tượng khách, số lượng, điểm riêng, giá cụ thể ("giá rẻ" chưa phải giá cụ thể).
-- Câu khẳng định, cụ thể. Không lời mời gọi ("hãy", "tham gia ngay", "chào đón"), không tiếng lóng, không sáo rỗng ("tuyệt vời", "đẳng cấp"). Không dùng dấu chấm giữa hay gạch dài làm dấu ngăn, không HTML.
-- "themVao": các chi tiết bạn đã bổ sung, mỗi chi tiết một cụm ngắn, tối đa 5.
-- Mô tả không liên quan tới du lịch hoặc lưu trú, hoặc có nội dung không phù hợp thì chỉ trả {"tuChoi": "lý do ngắn, lịch sự, kèm gợi ý cách viết lại"}.
-
-Ví dụ. Gốc: "homestay đà lạt giá rẻ cho nhóm bạn". Trả về:
-{"moTa": "Homestay ở Đà Lạt dành cho nhóm bạn đi chung, giá rẻ. Chỗ ở nằm gần những đồi thông, buổi sáng sương mỏng và trời se lạnh, tối thường nhóm lửa hoặc nướng đồ ngoài sân. Khách có thể đi chợ đêm Đà Lạt, uống cà phê trên đồi và ăn món nóng như bánh tráng nướng, lẩu gà lá é. Không khí thân mật, thoải mái, hợp những chuyến đi tụ tập vài ngày.", "themVao": ["đồi thông và sương sớm", "nhóm lửa, nướng đồ ngoài sân", "chợ đêm, cà phê, món nóng"], "thieu": ["giá cụ thể mỗi đêm", "số phòng và sức chứa", "điểm riêng của chỗ ở"]}
-
-Trả về JSON một dòng: {"moTa": "", "themVao": [""], "thieu": [""]}`);
+  const out = await generateJson(refinePrompt(brief));
   if (out.tuChoi) {
     const err = new Error(cleanText(out.tuChoi, 300));
     err.kind = 'refused';
@@ -410,14 +329,8 @@ function imageSlots(content) {
 // Gửi danh sách ảnh tìm được cho AI: giữ ảnh đúng nơi chốn, bỏ ảnh lạc đề (nước khác, cảnh không liên quan), viết mô tả ngắn tiếng Việt
 // chỉ dựa vào mô tả có sẵn của ảnh. AI lỗi thì dùng tạm mô tả gốc, vẫn có ảnh.
 async function vetPhotos(profile, photos) {
-  const list = photos.map((p, i) => `${i}\t${p.alt.replace(/\s+/g, ' ')}`).join('\n');
   try {
-    const out = await generateJson(`Nơi chốn của website: ${profile.noiChon}. Dưới đây là danh sách ảnh (số, mô tả gốc thường bằng tiếng Anh).
-Giữ lại ảnh có vẻ chụp đúng nơi chốn hoặc một cảnh hợp với nơi đó; bỏ ảnh chụp ở nơi khác (kể cả cảnh giống nhưng tỉnh khác, ví dụ ruộng bậc thang Hà Giang cho site An Giang), chân dung cận mặt, ảnh không rõ nội dung.
-Với mỗi ảnh giữ lại, viết mô tả tiếng Việt ngắn (tối đa 110 ký tự) cho người không nhìn thấy ảnh, chỉ nói điều có trong mô tả gốc, không bịa.
-Trả JSON một dòng: {"giu": [{"i": 0, "alt": ""}]}
-
-${list}`);
+    const out = await generateJson(vetPhotosPrompt(profile.noiChon, photos.map((p, i) => ({ i, alt: p.alt }))));
     const kept = (out.giu ?? []).filter((g) => photos[g.i] && typeof g.alt === 'string' && g.alt.trim())
       .map((g) => ({ ...photos[g.i], alt: cleanText(g.alt, 140) }));
     if (kept.length) return kept;
@@ -492,14 +405,6 @@ async function photoTask({ profile, content, theme, photos, on }) {
 
 /* ---------- Trộn bộ: chọn kiểu trình bày ---------- */
 
-const MIX_HINT = {
-  hero: 'coverflow (chồng thẻ ảnh xoay, nhiều ảnh), full (một ảnh phủ kín, mây vén khi cuộn, hợp thiên nhiên), stacked (chữ trên, ảnh tràn ngang, gọn, hiện đại), haze (ảnh phủ sương, rê chuột thì tan, huyền ảo, hợp đêm)',
-  intro: '"" (căn trái), center (căn giữa), headline (tiêu đề rất lớn, mạnh)',
-  gallery: '"" (lưới ảnh), slices (dải ảnh xoè như bình phong), plates (ô biển số, ảnh loang theo con trỏ, hợp nhiều lựa chọn ngắn)',
-  reviews: 'postcard (bưu thiếp nghiêng, ấm), notes (giấy note dán, trẻ trung, vui)',
-  faq: '"" (danh sách gập mở, gọn), chat (khung nhắn tin với chủ nhà, thân mật)',
-};
-
 // Khung chỉ cho bố cục và dữ liệu nền; kiểu trình bày của từng khối ở trang chủ do AI chọn trong các kiểu chung (kể cả kiểu vốn của thương hiệu
 // khác), theo giọng nơi chốn, và trộn các kiểu khác nhau. Kiểu không hợp lệ, hay bị cấm, không bao giờ được áp.
 async function layoutTask({ profile, content, theme, on }) {
@@ -508,16 +413,8 @@ async function layoutTask({ profile, content, theme, on }) {
   const entries = home.sections.map((section, i) => ({ i, section, options: choicesFor(section) }))
     .filter((e) => MIX_VARIANTS[e.section.type] && e.options.length > 1);
   if (!entries.length) return null;
-  const list = entries.map((e) => `${e.i}\t${e.section.type}\tkiểu có thể chọn: ${e.options.map((o) => o || '""').join(', ')}\tgợi ý: ${MIX_HINT[e.section.type] ?? ''}`).join('\n');
-  const out = await generateJson(`Chọn kiểu trình bày cho các khối ở trang chủ một website du lịch, hợp giọng nơi chốn, theo hồ sơ:
-${JSON.stringify(brandProfile(profile))}
-
-Danh sách khối (số, loại, các kiểu chọn được, gợi ý):
-${list}
-
-Luật: mỗi khối chỉ chọn một kiểu trong danh sách "kiểu có thể chọn" của nó. Trộn các kiểu khác nhau cho trang có nhịp, không chọn kiểu đầu tiên cho mọi khối; hero hợp với cảnh và giọng của nơi chốn.
-Header: "solid" (nền trang), "center" (tên ở giữa), "overlay" (trong suốt đè lên ảnh, chỉ hợp khi hero chọn "full").
-Trả JSON một dòng: {"kieu": {"số khối": "kiểu"}, "header": ""}`);
+  const blocks = entries.map((e) => ({ i: e.i, type: e.section.type, options: e.options }));
+  const out = await generateJson(layoutPrompt(brandProfile(profile), blocks));
   const picked = {};
   for (const e of entries) {
     const value = out.kieu?.[e.i];
@@ -554,7 +451,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const t0 = performance.now();
   const sec = () => Number(((performance.now() - t0) / 1000).toFixed(1));
   const framesRun = loadFrames(frames).catch(() => ({}));
-  const profile = await generateJson(profilePrompt(brief, frameId));
+  const signature = SIGNATURE.filter((s) => !s.hard);
+  const profile = await generateJson(profilePrompt({ brief, frameId, frames: FRAMES, signature, menu: MENU, footers: FOOTERS }));
   if (profile.tuChoi) {
     const err = new Error(profile.tuChoi);
     err.kind = 'refused';
@@ -597,7 +495,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const got = new Set();
   let first = 0;
   let mismatched = 0;
-  const note = frameNote(template);
+  const note = frameNote(frameNames(template));
   const written = new Map();
   const redoing = new Set();
   const handle = (line) => {
@@ -626,7 +524,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
     const todo = idx.filter((i) => !got.has(i));
     if (!todo.length) return;
     try {
-      await streamLines('', groupPrompt(profile, fields, todo, note), handle);
+      await streamLines('', writePrompt(profile, fields, todo, note), handle);
     } catch (err) {
       // Hết lượt mọi khoá thì dừng hẳn (báo cho người dùng); lỗi lẻ của một nhóm (AI im quá lâu, quá tải, mạng) thì để các
       // chỗ đó cho lượt gửi lại ở cuối, không bỏ cả website.
@@ -652,7 +550,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (leftover.length) {
     leftover.forEach((i) => redoing.add(i));
     on.redo?.(leftover.length);
-    await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => streamLines('', groupPrompt(profile, fields, g.map((k) => leftover[k]), note, true), handle).catch(() => {})));
+    await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => streamLines('', writePrompt(profile, fields, g.map((k) => leftover[k]), note, true), handle).catch(() => {})));
   }
   const redone = leftover.filter((i) => written.get(i) !== fields[i].value).length;
   const photoCount = await photoRun;

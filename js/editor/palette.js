@@ -9,6 +9,7 @@ import { COLORS, CONTRAST } from './manifest.js';
 import { contrastRatio, AA } from './contrast.js';
 import { darkName } from '../theme-mode.js';
 import { streamLines, cleanText } from '../ai/gemini.js';
+import { paletteSystem, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
 
@@ -133,18 +134,7 @@ function createDark() {
 
 const ALLOWED = new Map(COLORS.flatMap(([name, label]) => [[name, { name, label, mode: 'light' }], [darkName(name), { name, label, mode: 'dark' }]]));
 
-const SYSTEM = `Bạn là nhà thiết kế màu cho website của một thương hiệu du lịch. Người dùng nhờ gợi ý bảng màu cho chế độ sáng, chế độ tối hoặc cả hai.
-Chỉ trả về JSON Lines: mỗi dòng một object JSON, không có chữ nào khác, không dùng khối mã.
-{"op":"say","text":"một câu tiếng Việt nói ngắn ý tưởng của bảng màu"}
-{"op":"color","name":"--color-bg","value":"#f2eee4"}  màu chế độ sáng
-{"op":"color","name":"--dark-color-bg","value":"#121318"}  màu chế độ tối (tên có thêm dark-)
-Tên được phép: ${[...ALLOWED.keys()].join(', ')}.
-Ý nghĩa: ${COLORS.map(([n, l]) => `${n} là ${l}`).join('; ')}.
-Quy tắc:
-- Mỗi chế độ phải đạt tương phản tối thiểu 4.5 cho các cặp: ${CONTRAST.map(([a, b]) => `${a} trên ${b}`).join(', ')}.
-- Chế độ tối: nền tối, chữ sáng; màu nhấn sáng hơn bản sáng để đủ tương phản; nút có thể giữ màu thương hiệu.
-- Giữ nhận diện thương hiệu; chỉ trả các màu cần đổi; mã hex đủ 6 số.
-- Người dùng chỉ nói một chế độ thì chỉ đổi chế độ đó. Câu say không dùng dấu chấm giữa hay gạch dài.`;
+const SYSTEM = paletteSystem({ allowed: [...ALLOWED.keys()], colors: COLORS, contrast: CONTRAST });
 
 function context() {
   const pick = (get) => Object.fromEntries(COLORS.map(([name]) => [name, get(name) || null]));
@@ -188,7 +178,7 @@ async function send(value) {
   text = value;
   proposal = { say: '', items: [], same: 0, done: false, error: '' };
   renderOut();
-  const prompt = `${contextText(readLog(api.state.id, KIND))}Yêu cầu: ${value.trim()}\n\nBảng màu hiện tại (JSON):\n${JSON.stringify(context())}`;
+  const prompt = requestPrompt({ history: contextText(readLog(api.state.id, KIND)), request: value, label: 'Bảng màu hiện tại', data: context() });
   try {
     await streamLines(SYSTEM, prompt, (line) => {
       let op;
