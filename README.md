@@ -134,4 +134,4 @@ Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi
 
 Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/icon.js`, không tải cả bộ.
 
-AI trong editor (tab AI, #81): [Firebase JS SDK](https://github.com/firebase/firebase-js-sdk) 13.0.0 (giấy phép Apache 2.0), nạp từ CDN `www.gstatic.com/firebasejs/13.0.0/` bằng `js/ai/gemini.js`, chỉ khi bấm Gửi; gọi Gemini qua Firebase AI Logic, gói Spark miễn phí; model chính hết lượt thì tự chuyển sang Gemini 3.1 Flash Lite trong một phút. Cấu hình của máy demo chỉ dán vào trình duyệt, không nằm trong repo.
+AI trong editor (tab AI, #81): [Firebase JS SDK](https://github.com/firebase/firebase-js-sdk) 13.0.0 (giấy phép Apache 2.0), nạp từ CDN `www.gstatic.com/firebasejs/13.0.0/` bằng `js/ai/gemini.js`, chỉ khi bấm Gửi; gọi Gemini qua Firebase AI Logic, gói Spark miễn phí; hết lượt thì lần lượt thử hai khoá Gemini dự phòng của thành viên (gọi thẳng REST API), cả ba hết lượt mới hạ xuống Gemini 3.1 Flash Lite; đường nào hết lượt thì nghỉ một phút. Cấu hình của máy demo chỉ dán vào trình duyệt, không nằm trong repo.
