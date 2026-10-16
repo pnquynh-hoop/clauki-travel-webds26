@@ -555,6 +555,11 @@ function listenDraft() {
   });
 }
 
+// Ảnh trên nút tròn của BTC (tuỳ chọn logoSrc của wd2026.js, thay chữ cái đầu tên thương hiệu): bốn ô vuông như icon layout-grid
+// của Lucide, nét trắng, lề rộng để icon khoảng 24px giữa nút 52px, giống icon bút của nút Thử chỉnh trên site khách. Bấm nút mở menu
+// Đổi thương hiệu, Tạo mới, Chỉnh sửa (launch.js).
+const FAB_ICON = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 52 52" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>')}`;
+
 // components: bảng tra thẻ, cách tải JS, các file CSS (khai ở app.js).
 export async function start(components = {}) {
   registry = components;
@@ -603,6 +608,7 @@ export async function start(components = {}) {
       labels: list.brands.map((b) => b.label ?? b.id),
       defaultIndex: ids.indexOf(list.default),
       overrideCss: false,
+      logoSrc: FAB_ICON,
     });
   } catch (err) {
     if (err.kind === 'no-site') showNoSite(err, brandList?.brands);
