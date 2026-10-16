@@ -26,7 +26,7 @@ const PREVIEW_MS = 350;
 // Mô tả ngắn hơn chừng này ký tự thì AI khó đoán được nơi chốn, loại hình, giá.
 const MIN_BRIEF = 12;
 
-const state = { brands: [], draft: null, busy: false, refining: false, originalBrief: null, device: DESKTOP, timer: 0, pending: null, frameReady: false };
+const state = { brands: [], draft: null, busy: false, refining: false, originalBrief: null, device: DESKTOP, timer: 0, pending: null, frameReady: false, english: null, run: 0 };
 const ui = {};
 
 const builtIn = () => state.brands.map((b) => b.id);
@@ -225,6 +225,9 @@ async function create() {
   ui.publish.hidden = true;
   setStatus([]);
   const steps = ui.progress;
+  // Lượt tạo mới: lượt dịch nền của website cũ (nếu còn chạy) không được ghi vào bảng tiến trình mới.
+  state.run += 1;
+  state.english = null;
   steps.start();
   const photosOn = ui.photoOn.checked;
   if (!photosOn) steps.set('photos', 'skip', 'Đã tắt, giữ ảnh của khung');
@@ -281,37 +284,53 @@ async function create() {
     steps.set('write', 'done', [`${s.written}/${s.fields} chỗ, ${s.groups} luồng song song`,
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
-    // Bản tiếng Anh dịch sau cùng, khi chữ và chú thích ảnh tiếng Việt đã xong; lỗi thì site vẫn dùng được bằng tiếng Việt.
-    if (ui.enOn.checked) {
-      steps.set('english', 'run', 'Dịch theo lô, chữ giao diện lấy lại từ bản tiếng Anh của khung');
-      try {
-        const en = await addEnglish(result.content, {
-          frame: result.profile.khung,
-          on: { progress: (done, total) => steps.note('english', [`${done}/${total} câu`, meter(done, total)]) },
-        });
-        state.draft = { ...state.draft, i18n: en.i18n };
-        result.content = en.content;
-        preview(en.content, result.theme, true);
-        const t = en.stats;
-        steps.set('english', t.failed && !t.translated && !t.reused ? 'skip' : 'done', [
-          `${t.translated} câu AI dịch, ${t.reused} câu lấy lại`,
-          t.failed ? `${t.failed} câu chưa dịch được nên hiện tiếng Việt${t.error ? ` (${t.error})` : ''}` : '',
-        ]);
-      } catch (err) {
-        steps.set('english', 'skip', `Chưa dịch được (${err.message}), site chỉ có tiếng Việt`);
-      }
-    }
-    steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh`,
+    steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh, chỉnh tay hay xuất bản được ngay`,
       usingFallback() ? 'Model chính hết lượt trên mọi khoá nên đã chuyển sang Gemini 3.1 Flash Lite' : '',
       backupInUse() ? `Khoá chính hết lượt nên đã dùng khoá dự phòng ${backupInUse()}` : '']);
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
+    // Website coi như xong khi đủ bản tiếng Việt; bản tiếng Anh dịch tiếp phía sau, lỗi thì site vẫn dùng được bằng tiếng Việt.
+    if (ui.enOn.checked) state.english = translateInBackground(result, steps);
   } catch (err) {
     steps.fail(err.message);
   } finally {
-    steps.stop();
+    if (!state.english) steps.stop();
     state.busy = false;
     ui.create.disabled = false;
+  }
+}
+
+/* Dịch bản tiếng Anh sau khi website đã xong. Chỉ ghi kết quả vào nháp khi nháp vẫn là đúng website vừa tạo (chưa tạo lại,
+   chưa chỉnh tay); ngược lại bỏ kết quả, phần dịch còn thiếu sẽ được dịch lúc xuất bản. Trả về promise để Xuất bản chờ. */
+async function translateInBackground(result, steps) {
+  const made = state.draft?.content;
+  const run = state.run;
+  const mine = () => run === state.run;
+  steps.set('english', 'run', 'Chạy nền: dịch theo lô, chữ giao diện lấy lại từ bản tiếng Anh của khung');
+  try {
+    const en = await addEnglish(made, {
+      frame: result.profile.khung,
+      on: { progress: (done, total) => mine() && steps.note('english', [`${done}/${total} câu`, meter(done, total)]) },
+    });
+    if (!mine()) return;
+    if (state.draft?.content !== made) {
+      steps.set('english', 'skip', 'Website đã đổi trong lúc dịch, phần tiếng Anh sẽ được dịch lúc xuất bản');
+      return;
+    }
+    state.draft = { ...state.draft, i18n: en.i18n };
+    preview(en.content, result.theme, true);
+    const t = en.stats;
+    steps.set('english', t.failed && !t.translated && !t.reused ? 'skip' : 'done', [
+      `${t.translated} câu AI dịch, ${t.reused} câu lấy lại; nút VI, EN đã có trên site`,
+      t.failed ? `${t.failed} câu chưa dịch được nên hiện tiếng Việt${t.error ? ` (${t.error})` : ''}` : '',
+    ]);
+  } catch (err) {
+    if (mine()) steps.set('english', 'skip', `Chưa dịch được (${err.message}), site chỉ có tiếng Việt`);
+  } finally {
+    if (mine()) {
+      steps.stop();
+      state.english = null;
+    }
   }
 }
 
@@ -338,6 +357,11 @@ async function publish() {
   ui.publishBtn.disabled = true;
   ui.publishNote.textContent = 'Đang xuất bản...';
   try {
+    // Bản tiếng Anh còn đang dịch nền: chờ xong rồi xuất bản luôn cả hai thứ tiếng.
+    if (state.english) {
+      ui.publishNote.textContent = 'Đang chờ dịch xong bản tiếng Anh...';
+      await state.english;
+    }
     let content = { ...structuredClone(state.draft.content), id: slug };
     // Site có bản tiếng Anh: dịch nốt các câu đã đổi sau lần dịch trước (chỉnh tay, AI sửa trong editor) rồi mới xuất bản.
     if (content.languages?.includes('en')) {
