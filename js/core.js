@@ -491,7 +491,7 @@ export async function start(components = {}) {
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
     if (here.tool === 'tao') {
-      const { openBuilder } = await import('./create/tao.js');
+      const { openBuilder } = await import('./create/create.js');
       openBuilder({ brands: list.brands });
       return;
     }
