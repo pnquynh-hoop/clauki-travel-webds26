@@ -11,6 +11,7 @@ import { readTaoDraft, writeTaoDraft, publishSite, publishReady, SLUG_RE, RESERV
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../dom.js';
 import { createProgress, swatches, meter } from './progress.js';
+import { addEnglish } from './english.js';
 
 const EXAMPLES = [
   { label: 'Homestay Đà Lạt', text: 'Homestay nhà gỗ ở Đà Lạt cho nhóm bạn, có bếp nướng ngoài sân, 450 nghìn mỗi khách một đêm' },
@@ -227,6 +228,7 @@ async function create() {
   steps.start();
   const photosOn = ui.photoOn.checked;
   if (!photosOn) steps.set('photos', 'skip', 'Đã tắt, giữ ảnh của khung');
+  if (!ui.enOn.checked) steps.set('english', 'skip', 'Đã tắt, site chỉ có tiếng Việt');
   let ruleNote = '';
   // Bảng cuộn riêng: đưa tiến trình vào tầm nhìn để thấy ngay khi bấm Tạo.
   steps.el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -279,6 +281,26 @@ async function create() {
     steps.set('write', 'done', [`${s.written}/${s.fields} chỗ, ${s.groups} luồng song song`,
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
+    // Bản tiếng Anh dịch sau cùng, khi chữ và chú thích ảnh tiếng Việt đã xong; lỗi thì site vẫn dùng được bằng tiếng Việt.
+    if (ui.enOn.checked) {
+      steps.set('english', 'run', 'Dịch theo lô, chữ giao diện lấy lại từ bản tiếng Anh của khung');
+      try {
+        const en = await addEnglish(result.content, {
+          frame: result.profile.khung,
+          on: { progress: (done, total) => steps.note('english', [`${done}/${total} câu`, meter(done, total)]) },
+        });
+        state.draft = { ...state.draft, i18n: en.i18n };
+        result.content = en.content;
+        preview(en.content, result.theme, true);
+        const t = en.stats;
+        steps.set('english', t.failed && !t.translated && !t.reused ? 'skip' : 'done', [
+          `${t.translated} câu AI dịch, ${t.reused} câu lấy lại`,
+          t.failed ? `${t.failed} câu chưa dịch được nên hiện tiếng Việt${t.error ? ` (${t.error})` : ''}` : '',
+        ]);
+      } catch (err) {
+        steps.set('english', 'skip', `Chưa dịch được (${err.message}), site chỉ có tiếng Việt`);
+      }
+    }
     steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh`,
       usingFallback() ? 'Model chính hết lượt trên mọi khoá nên đã chuyển sang Gemini 3.1 Flash Lite' : '',
       backupInUse() ? `Khoá chính hết lượt nên đã dùng khoá dự phòng ${backupInUse()}` : '']);
@@ -316,7 +338,17 @@ async function publish() {
   ui.publishBtn.disabled = true;
   ui.publishNote.textContent = 'Đang xuất bản...';
   try {
-    const content = { ...structuredClone(state.draft.content), id: slug };
+    let content = { ...structuredClone(state.draft.content), id: slug };
+    // Site có bản tiếng Anh: dịch nốt các câu đã đổi sau lần dịch trước (chỉnh tay, AI sửa trong editor) rồi mới xuất bản.
+    if (content.languages?.includes('en')) {
+      ui.publishNote.textContent = 'Đang dịch nốt các chỗ vừa sửa sang tiếng Anh...';
+      try {
+        content = (await addEnglish(content, { state: state.draft.i18n ?? null })).content;
+      } catch {
+        // Không dịch được thì xuất bản với bản tiếng Anh đang có; câu thiếu hiện tiếng Việt.
+      }
+      ui.publishNote.textContent = 'Đang xuất bản...';
+    }
     content.contact = { ...content.contact, email: `xin-chao@${slug}.clauki` };
     await publishSite(slug, content, state.draft.theme);
     const url = `${location.origin}/${slug}/`;
@@ -355,6 +387,7 @@ function build() {
   ui.undoRefine = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', hidden: true, onclick: undoRefine, text: 'Hoàn tác' });
   ui.refineNote = h('p', { class: 'tao-note', 'aria-live': 'polite' });
   ui.photoOn = h('input', { type: 'checkbox', role: 'switch', checked: true, 'aria-label': 'Tìm ảnh thật theo nơi chốn' });
+  ui.enOn = h('input', { type: 'checkbox', role: 'switch', checked: true, 'aria-label': 'Kèm bản tiếng Anh' });
   ui.unsplashKey = h('input', { class: 'ed-input', type: 'password', autocomplete: 'off', placeholder: 'Dán Access Key của Unsplash', 'aria-label': 'Khoá Unsplash' });
   ui.unsplashKey.value = readUnsplashKey();
   ui.unsplashKey.addEventListener('change', () => saveUnsplashKey(ui.unsplashKey.value.trim()));
@@ -406,6 +439,9 @@ function build() {
         h('label', { class: 'tao-toggle' },
           h('span', { class: 'tao-toggle__text' }, h('strong', { text: 'Ảnh thật theo nơi chốn' }), h('small', { text: 'Wikimedia Commons hoặc Unsplash, có ghi nguồn' })),
           ui.photoOn),
+        h('label', { class: 'tao-toggle' },
+          h('span', { class: 'tao-toggle__text' }, h('strong', { text: 'Kèm bản tiếng Anh' }), h('small', { text: 'AI dịch sau khi viết xong, site có nút VI, EN' })),
+          ui.enOn),
         h('details', { class: 'tao-photo-key' }, h('summary', { text: 'Khoá Unsplash (tuỳ chọn)' }),
           h('p', { class: 'ed-hint', text: 'Có khoá thì tìm ảnh ở Unsplash trước, truy vấn nào Unsplash không ra thì tìm trên Wikimedia Commons. Khoá chỉ lưu trên trình duyệt này, không gửi đi đâu khác.' }),
           ui.unsplashKey)),

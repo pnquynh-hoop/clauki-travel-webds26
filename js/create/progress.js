@@ -10,6 +10,7 @@ export const STEPS = [
   { key: 'layout', title: 'Ghép bố cục', wait: 'Khối nào, kiểu nào, thứ tự ra sao' },
   { key: 'write', title: 'Viết chữ', wait: 'Viết lại mọi chữ của khung cho nơi này' },
   { key: 'photos', title: 'Tìm ảnh thật', wait: 'Ảnh có giấy phép đúng nơi chốn' },
+  { key: 'english', title: 'Dịch tiếng Anh', wait: 'Bản tiếng Anh cho nút VI, EN của site' },
   { key: 'done', title: 'Hoàn tất', wait: 'Xem trước bên cạnh, rồi xuất bản' },
 ];
 
