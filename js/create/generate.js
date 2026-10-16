@@ -30,13 +30,13 @@ const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'tota
 // Trường kỹ thuật, chữ giao diện dùng chung và số liệu: giữ nguyên, không đưa cho AI.
 const SKIP = new Set([
   'labels', 'errors', 'message', 'languages', 'id', 'type', 'variant', 'href', 'src', 'currency', 'path', 'alt', 'file', 'license',
-  'source', 'author', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
+  'source', 'author', 'credit', 'timezone', 'date', 'time', 'kind', 'effect', 'favicon', 'logo', 'credits', 'toTop', 'menu', 'hint',
   'touchHint', 'reset', 'again', 'you', 'pick', 'done', 'power', 'channel', 'channelHint', 'offHint',
   'scoreLabel', 'dateLabel', 'navTitle', 'contactTitle', 'creditsTitle', 'action', 'availability', 'tags', 'vehicles',
   'buoi', 'topics', 'departures', 'traffic', 'rating', 'unit', 'item', 'phone', 'email',
 ]);
 // Khoá kỹ thuật không bao giờ đưa AI, kể cả khi có tên cũ (đường dẫn, nguồn ảnh, giấy phép).
-const NEVER = new Set(['id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credits', 'timezone', 'favicon', 'logo', 'alt']);
+const NEVER = new Set(['id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon', 'logo', 'alt']);
 const NOT_TEXT = /^(https?:|images\/|#|\/|\d{4}-\d{2}|[\d\s.,:+-]+$|page:|tel:|mailto:)/;
 // Khoảng 30 dòng mỗi luồng: mỗi luồng xong trong khoảng 15 giây; tối đa 8 luồng để vẫn dưới 15 request mỗi phút.
 const FIELDS_PER_GROUP = 30;
@@ -447,6 +447,17 @@ function applyPhotos(content, photos) {
   collect(content);
   const fresh = photos.filter((p) => used.has(p.src)).map((p) => p.credit);
   content.credits = [...(content.credits ?? []).filter((c) => used.has(c.file)), ...fresh];
+  // Chú thích tác giả hiện ngay cạnh ảnh (credit của ảnh trong gallery, của khối backdrop) phải theo ảnh mới, không giữ tên tác giả ảnh cũ.
+  const byPhoto = new Map(photos.map((p) => [p.src, p.credit]));
+  const recredit = (node) => {
+    if (Array.isArray(node)) node.forEach(recredit);
+    else if (node && typeof node === 'object') {
+      const credit = byPhoto.get(node.src ?? node.image?.src);
+      if (credit && typeof node.credit === 'string') node.credit = `Ảnh: ${credit.author}, ${credit.license}`;
+      Object.entries(node).forEach(([k, v]) => { if (k !== 'credits') recredit(v); });
+    }
+  };
+  recredit(content);
   return slots.length;
 }
 
