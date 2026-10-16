@@ -78,7 +78,7 @@ async function openShare(current) {
     h('div', { class: 'share-dialog__head' },
       h('h2', { class: 'share-dialog__title', id: 'share-dialog-title', text: 'Mã QR, chia sẻ' }),
       h('button', { type: 'button', class: 'share__btn', text: 'Đóng', onclick: () => dialog.close() })),
-    shareEl(url, { name: current.id, title: current.raw?.brand?.name ?? '' }));
+    shareEl(url, { name: current.id, title: current.raw?.brand?.name ?? '', large: true }));
   dialog.addEventListener('close', () => dialog.remove());
   document.body.append(dialog);
   dialog.showModal();
