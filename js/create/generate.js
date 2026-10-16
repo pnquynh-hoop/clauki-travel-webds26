@@ -12,7 +12,7 @@ import { setIn } from '../editor/form.js';
 import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
-import { MENU, FOOTERS, composeFooter, composeHome, loadFrames } from './mix.js';
+import { MENU, FOOTERS, composeFooter, composeHome, loadFrames, borrowPages } from './mix.js';
 import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
@@ -533,6 +533,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const approved = Array.isArray(profile.dacTrung) ? profile.dacTrung : [];
   const mixed = composeHome(template, profile.trangChu, pool, frame, approved);
   composeFooter(template, profile.chanTrang, pool, frame, approved);
+  const borrowed = borrowPages(template, pool, frame, approved);
+  if (borrowed.length) rules.borrowed = borrowed;
   const content = structuredClone(template);
   const fields = extractFields(template).filter((f) => !FROM_PROFILE.includes(f.key));
   rebase(content, frame);

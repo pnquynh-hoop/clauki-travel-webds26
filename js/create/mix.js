@@ -4,7 +4,7 @@
    danh sách "loại:kiểu" ở hồ sơ (trangChu), code lấy dữ liệu của khối đó từ khung nào có nó, đổi đường dẫn ảnh, rồi xếp vào chỗ của các
    khối chung trong trang chủ của khung. Khối đặc trưng vẫn theo luật ở rules.js. Mỗi lần thêm khối chung mới: thêm một dòng vào MENU. */
 import { variantsFor } from '../editor/manifest.js';
-import { isBanned } from './rules.js';
+import { isBanned, sanitizeFrame } from './rules.js';
 
 // Khối chung được ghép: [loại:kiểu, mô tả cho AI]. Kiểu rỗng là kiểu mặc định.
 export const MENU = [
@@ -213,4 +213,50 @@ export function composeFooter(content, kind, frames, base, keepKeys = []) {
   content.footer = footer;
   content.credits = [...(content.credits ?? []), ...credits.filter((c) => !(content.credits ?? []).some((x) => x.file === c.file))];
   return kind;
+}
+
+// Trang cơ bản mà khung chưa có (khung nghỉ dưỡng Gành Sớm không có trang liên hệ, giới thiệu, 404): mượn từ khung khác, lấy bản
+// còn nhiều khối nhất sau khi dọn theo luật đặc trưng; bỏ các khối gắn với danh mục, đặt chỗ của khung kia (chúng cần dữ liệu không có ở
+// site mới). Chữ của trang mượn được AI viết lại như mọi chữ khác. Trả về danh sách đường dẫn đã mượn.
+const BORROW = ['lien-he', 've-chung-toi', '404'];
+const BOUND = new Set(['stays', 'booking', 'catalog-list', 'item-cover', 'item-booking', 'photo-strip', 'included', 'scene', 'room-detail',
+  'route', 'tour-pick', 'timetable', 'custom-trip', 'clock', 'journey', 'process', 'day-plan', 'cloud-band', 'offer']);
+
+export function borrowPages(content, frames, base, keepKeys = []) {
+  if (!Array.isArray(content.pages)) return [];
+  const has = new Set(content.pages.map((p) => p.path));
+  const borrowed = [];
+  for (const path of BORROW.filter((p) => !has.has(p))) {
+    let best = null;
+    for (const id of Object.keys(frames).filter((f) => f !== base)) {
+      if (!frames[id]?.pages?.some((p) => p.path === path)) continue;
+      const copy = structuredClone(frames[id]);
+      sanitizeFrame(copy, keepKeys);
+      const page = copy.pages?.find((p) => p.path === path);
+      if (!page) continue;
+      page.sections = page.sections.filter((s) => !s.hidden && !BOUND.has(s.type));
+      const real = page.sections.filter((s) => s.type !== 'breadcrumb').length;
+      if (real && (!best || real > best.real)) best = { id, page, real, credits: copy.credits ?? [] };
+    }
+    if (!best) continue;
+    absolute(best.page, best.id);
+    const files = new Set();
+    const collect = (n) => {
+      if (Array.isArray(n)) n.forEach(collect);
+      else if (n && typeof n === 'object') Object.values(n).forEach(collect);
+      else if (typeof n === 'string' && n.startsWith(`/brands/${best.id}/`)) files.add(n);
+    };
+    collect(best.page);
+    const credits = best.credits.filter((c) => files.has(`/brands/${best.id}/${c.file}`)).map((c) => ({ ...c, file: `/brands/${best.id}/${c.file}` }));
+    content.credits = [...(content.credits ?? []), ...credits.filter((c) => !(content.credits ?? []).some((x) => x.file === c.file))];
+    // Trang 404 đứng cuối; trang khác chèn trước 404 nếu có.
+    const at = content.pages.findIndex((p) => p.path === '404');
+    if (path === '404' || at < 0) content.pages.push(best.page);
+    else content.pages.splice(at, 0, best.page);
+    if (path !== '404' && !(content.nav ?? []).some((item) => item.href === `page:${path}`)) {
+      (content.nav ??= []).push({ label: best.page.title ?? path, href: `page:${path}` });
+    }
+    borrowed.push(path);
+  }
+  return borrowed;
 }
