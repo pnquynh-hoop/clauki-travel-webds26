@@ -198,9 +198,100 @@ const FIELDS = {
     },
     { key: 'note', label: 'Ghi chú', type: 'long', optional: true },
   ],
+  // Trang chi tiết dựng trong một khối (Bậc Trà, brand-test). Mọi trường đều tuỳ chọn: section ghi "item" thì phần lớn
+  // dữ liệu lấy từ catalog, chỉ hiện ô cho trường section tự ghi, để không vô tình ghi đè danh mục.
+  // Giá, số chỗ là số nên chưa có ô (form chưa có kiểu số).
   'room-detail': [
+    { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text', optional: true },
+    { key: 'title', label: 'Tên', type: 'text', optional: true },
     { key: 'lead', label: 'Câu dẫn', type: 'long', optional: true },
     { key: 'priceNote', label: 'Ghi chú giá', type: 'text', optional: true },
+    {
+      key: 'images', label: 'Ảnh', type: 'list', optional: true,
+      fields: [{ key: '', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
+      item: { src: '', alt: '', caption: '' },
+    },
+    {
+      key: 'facts', label: 'Thông số', type: 'list', optional: true,
+      fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'value', label: 'Giá trị', type: 'text' }],
+      item: { label: 'Thông số', value: '' },
+    },
+    {
+      key: 'amenities', label: 'Tiện nghi', type: 'list', optional: true,
+      fields: [{ key: 'text', label: 'Tiện nghi', type: 'text' }],
+      item: { text: 'Tiện nghi mới' },
+    },
+    { key: 'view.text', label: 'Cảnh đáng chờ', type: 'long', optional: true },
+    { key: 'view.best', label: 'Giờ đẹp nhất', type: 'text', optional: true },
+    { key: 'view.image', label: 'Ảnh cảnh đáng chờ', type: 'image', optional: true },
+  ],
+  // Chủ nhà, câu chuyện. Khối không hiện đoạn dẫn nên không có ô lead. Kiểu tv đọc thêm stories (mỗi kênh một chuyện).
+  host: [
+    { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text' },
+    { key: 'title', label: 'Tiêu đề', type: 'text' },
+    { key: 'story', label: 'Đoạn kể', type: 'list', optional: true, fields: [{ key: '', label: 'Đoạn', type: 'long' }], item: 'Một đoạn kể mới.' },
+    { key: 'quote.text', label: 'Câu trích', type: 'long', optional: true },
+    { key: 'quote.by', label: 'Người nói', type: 'text', optional: true },
+    {
+      key: 'facts', label: 'Con số', type: 'list', optional: true,
+      fields: [{ key: 'value', label: 'Con số', type: 'text' }, { key: 'label', label: 'Nhãn', type: 'text' }],
+      item: { value: '1', label: 'Nhãn' },
+    },
+    { key: 'image', label: 'Ảnh lớn', type: 'image', optional: true },
+    { key: 'imageSecond', label: 'Ảnh nhỏ', type: 'image', optional: true },
+    {
+      key: 'stories', label: 'Chuyện trên tivi', type: 'list', optional: true,
+      fields: [
+        { key: 'title', label: 'Tên chuyện', type: 'text' },
+        { key: 'text', label: 'Nội dung', type: 'long' },
+        { key: 'quote.text', label: 'Câu trích', type: 'text' },
+        { key: 'quote.by', label: 'Người nói', type: 'text' },
+        { key: 'image', label: 'Ảnh', type: 'image' },
+      ],
+      item: { title: 'Chuyện mới', text: '', quote: { text: '', by: '' }, image: { src: '', alt: '' } },
+    },
+  ],
+  // Thẻ người, nơi chốn, cam kết. Liên kết của thẻ cần có địa chỉ mới hiện nên chưa đưa vào form.
+  cards: [
+    ...HEAD,
+    { key: 'tag', label: 'Nhãn trên dải màu (kiểu thẻ đeo)', type: 'text', optional: true },
+    {
+      key: 'items', label: 'Thẻ', type: 'list',
+      fields: [
+        { key: 'title', label: 'Tên', type: 'text' },
+        { key: 'meta', label: 'Dòng phụ', type: 'text' },
+        { key: 'text', label: 'Đoạn chữ', type: 'long' },
+        { key: 'quote', label: 'Câu trích', type: 'long' },
+        { key: 'image', label: 'Ảnh', type: 'image' },
+      ],
+      item: { title: 'Thẻ mới', text: '' },
+    },
+  ],
+  // Liên hệ. Cách liên hệ có kind (điện thoại, email, địa chỉ) lấy số, email, địa chỉ từ Thông tin chung; ô "Thông tin riêng"
+  // chỉ dành cho cách liên hệ thêm mới (ví dụ Zalo), vì khối ưu tiên value của mục hơn Thông tin chung.
+  contact: [
+    ...HEAD,
+    { key: 'image', label: 'Ảnh', type: 'image', optional: true },
+    { key: 'image.caption', label: 'Chú thích ảnh', type: 'text', optional: true },
+    { key: 'hours.from', label: 'Giờ mở cửa (HH:MM)', type: 'text', optional: true },
+    { key: 'hours.to', label: 'Giờ đóng cửa (HH:MM)', type: 'text', optional: true },
+    {
+      key: 'ways', label: 'Cách liên hệ', type: 'list', optional: true,
+      fields: [
+        { key: 'label', label: 'Nhãn', type: 'text' },
+        { key: 'text', label: 'Dòng giải thích', type: 'text' },
+        { key: 'value', label: 'Thông tin riêng (để trống với điện thoại, email, địa chỉ)', type: 'text' },
+      ],
+      item: { label: 'Zalo', text: 'Nhắn tin bất cứ lúc nào', value: '0123 456 789' },
+    },
+    { key: 'directions.title', label: 'Tiêu đề chỉ đường', type: 'text', optional: true },
+    { key: 'directions.steps', label: 'Bước chỉ đường', type: 'list', optional: true, fields: [{ key: '', label: 'Bước', type: 'text' }], item: 'Bước mới.' },
+    { key: 'message.title', label: 'Tiêu đề tờ nhắn tin', type: 'text', optional: true },
+    { key: 'message.lead', label: 'Lời dẫn tờ nhắn tin', type: 'long', optional: true },
+    { key: 'message.tipsTitle', label: 'Tiêu đề lời dặn', type: 'text', optional: true },
+    { key: 'message.tips', label: 'Lời dặn', type: 'list', optional: true, fields: [{ key: '', label: 'Lời dặn', type: 'text' }], item: 'Điều nên nhắn kèm.' },
+    { key: 'plate.number', label: 'Số nhà trên biển', type: 'text', optional: true },
+    { key: 'plate.label', label: 'Nhãn biển số (trình đọc màn hình)', type: 'text', optional: true },
   ],
 };
 
