@@ -97,7 +97,8 @@ js/
   ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
   ai/prompts/           mọi lời nhắc gửi Gemini, sửa câu chữ ở đây, không đụng logic: shared.js (luật viết dùng chung),
                         create.js (trình tạo web), editor.js (tab AI, gợi ý màu), translate.js (dịch)
-  sites.js              site khách: nháp /nhap/, đọc và xuất bản trên Supabase
+  sites.js              site khách: nháp /nhap/, đọc, xuất bản, máy demo cập nhật trên Supabase; link tên miền con (publicLink)
+  share.js              khối chia sẻ site khách: mã QR, link, chép, chia sẻ (màn xuất bản và trang khách)
 brands/
   brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
@@ -133,6 +134,8 @@ lại theo danh sách cuối file rồi ghi vào `docs/ai-log.md`.
 Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi `content.json`, hiện ở chân trang.
 
 `wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.
+
+Mã QR: [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 1.4.4 của Kazuhiko Arase (giấy phép MIT), nạp từ cdnjs bằng `js/share.js`, chỉ khi cần vẽ mã QR.
 
 Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/icon.js`, không tải cả bộ.
 
