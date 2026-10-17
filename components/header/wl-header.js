@@ -1,0 +1,174 @@
+/* wl-header.js - đầu trang: logo hoặc tên thương hiệu, menu neo tới các section, nút CTA.
+   Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ header.variant. */
+import { asset } from '../../js/core/core.js';
+import { textEl, linkEl, groupEl, telHref } from '../../js/core/dom.js';
+import { setLang } from '../../js/core/i18n.js';
+import { iconEl } from '../../js/core/icon.js';
+import { toggleMode, MODE_EVENT } from '../../js/core/theme-mode.js';
+
+// Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
+// Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);
+// kiểu header nào chỉ muốn thấy logo thì CSS ẩn chữ khỏi mắt nhưng vẫn giữ cho trình đọc màn hình.
+// Bấm logo thì về trang chủ của thương hiệu (core.js đưa vào site.home); chưa có thì về đầu trang.
+function brandEl(brand, home) {
+  const a = document.createElement('a');
+  // logoMark: logo chỉ là dấu hình (logo chữ cái tạo trong editor), nên tên luôn hiện cạnh logo ở mọi kiểu header.
+  a.className = brand.logo && brand.logoMark ? 'header__brand header__brand--mark' : 'header__brand';
+  a.href = home ?? '#';
+  if (brand.logo) {
+    const img = document.createElement('img');
+    img.src = asset(brand.logo);
+    img.alt = '';
+    // Logo cho chế độ tối (brand.logoDark, tuỳ chọn): CSS chỉ hiện một trong hai theo data-mode trên <html>.
+    let dark = null;
+    if (brand.logoDark) {
+      img.className = 'header__logo-light';
+      dark = document.createElement('img');
+      dark.className = 'header__logo-dark';
+      dark.src = asset(brand.logoDark);
+      dark.alt = '';
+    }
+    a.append(...[img, dark, textEl('span', 'header__brand-name', brand.name) ?? ''].filter(Boolean));
+  } else {
+    a.textContent = brand.name ?? '';
+  }
+  return a;
+}
+
+// Nút đổi ngôn ngữ: chỉ có khi thương hiệu khai từ hai ngôn ngữ (languages) và header.lang ghi chữ cho từng mã
+// (ví dụ { "vi": "VI", "en": "EN", "label": "Ngôn ngữ" }). Mỗi ngôn ngữ một nút, nút đang dùng có aria-pressed.
+function langEl(names, languages, current) {
+  const codes = (languages ?? []).filter((code) => names?.[code]);
+  if (codes.length < 2) return null;
+  const buttons = codes.map((code) => {
+    const button = textEl('button', 'header__lang-btn', names[code]);
+    button.type = 'button';
+    button.lang = code;
+    button.setAttribute('aria-pressed', String(code === current));
+    if (code !== current) button.addEventListener('click', () => setLang(code));
+    return button;
+  });
+  const group = groupEl('header__lang', buttons);
+  group.setAttribute('role', 'group');
+  if (names.label) group.setAttribute('aria-label', names.label);
+  return group;
+}
+
+// Dòng thông tin nhỏ phía trên: có khi dữ liệu ghi header.note (ví dụ giờ nhận phòng) hoặc có nút đổi ngôn ngữ,
+// kèm số điện thoại bấm gọi được.
+function topbarEl(note, phone, lang) {
+  if (!note && !lang) return null;
+  const inner = groupEl('header__topbar-inner container', [
+    textEl('p', 'header__note', note),
+    linkEl(telHref(phone), phone, 'header__phone'),
+    lang,
+  ]);
+  return inner && groupEl('header__topbar', [inner]);
+}
+
+// Nút đổi sáng, tối (chữ cho trình đọc màn hình ở header.modeLabel, ví dụ "Chế độ tối"): luôn dựng nhưng CSS chỉ hiện
+// khi thương hiệu có bảng màu tối (theme-mode.js gắn data-modes lên <html>). aria-pressed là đang ở chế độ tối.
+// Hai icon: mặt trăng khi đang sáng (bấm để tối), mặt trời khi đang tối.
+function modeEl(label) {
+  if (!label) return null;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'header__mode';
+  button.setAttribute('aria-label', label);
+  button.setAttribute('aria-pressed', String(document.documentElement.dataset.mode === 'dark'));
+  button.append(...[iconEl('moon', 'header__mode-icon header__mode-icon--moon'), iconEl('sun', 'header__mode-icon header__mode-icon--sun')].filter(Boolean));
+  button.addEventListener('click', toggleMode);
+  return button;
+}
+
+export class WlHeader extends HTMLElement {
+  connectedCallback() {
+    // Phím Escape đóng menu điện thoại. Cuộn khỏi đầu trang thì bật lớp is-scrolled để CSS hiện đường kẻ dưới header.
+    // Lớp này chỉ được đổi màu, không được đổi chiều cao header (xem chú thích đầu header.css).
+    // Hai listener gắn vào document và window nên phải gỡ khi khối bị gỡ.
+    this._onKey = (e) => {
+      if (e.key === 'Escape') this.setOpen(false);
+    };
+    this._onScroll = () => this.classList.toggle('is-scrolled', window.scrollY > 8);
+    // Chế độ sáng, tối đổi (bấm nút này hoặc editor đổi xem trước) thì cập nhật trạng thái nút.
+    this._onMode = (e) => this._mode?.setAttribute('aria-pressed', String(e.detail.mode === 'dark'));
+    document.addEventListener('keydown', this._onKey);
+    document.addEventListener(MODE_EVENT, this._onMode);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    // Thanh chính là phần còn dính trên màn hình khi cuộn (dải thông tin phía trên trượt khuất), nên đo nó.
+    this._resize = new ResizeObserver(() => this.saveStuckHeight());
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this._onKey);
+    document.removeEventListener(MODE_EVENT, this._onMode);
+    window.removeEventListener('scroll', this._onScroll);
+    this._resize.disconnect();
+  }
+
+  // Ghi chiều cao thanh chính vào biến --header-stuck trên <html>; base.css dùng nó để link nhảy tới khối không bị header che.
+  // Lúc menu điện thoại đang mở thì giữ số cũ: bấm một mục là menu đóng lại trước khi trang cuộn.
+  saveStuckHeight() {
+    if (!this._bar || this.classList.contains('is-open')) return;
+    document.documentElement.style.setProperty('--header-stuck', `${this._bar.offsetHeight}px`);
+  }
+
+  set data(content) {
+    this._data = content;
+    this.render();
+  }
+
+  // Mở hoặc đóng menu trên điện thoại; aria-expanded cho trình đọc màn hình biết trạng thái.
+  setOpen(open) {
+    this.classList.toggle('is-open', open);
+    this._toggle?.setAttribute('aria-expanded', String(open));
+  }
+
+  render() {
+    const content = this._data;
+    const header = content.header ?? {};
+    // minimal: header rút gọn cho landing page (chỉ logo và nút đặt), dựng trên kiểu solid rồi ẩn menu.
+    const variant = header.variant ?? 'solid';
+    this.className = variant === 'minimal' ? 'header header--solid header--minimal' : `header header--${variant}`;
+
+    const nav = document.createElement('nav');
+    nav.className = 'header__nav';
+    nav.id = 'menu-chinh';
+    // item.badge (tuỳ chọn): nhãn nhỏ cạnh chữ của mục, ví dụ "Mới" cho trang chiến dịch vừa ra.
+    const links = (content.nav ?? []).map((item) => {
+      const link = linkEl(item.href, item.label, 'header__link');
+      if (link && item.badge) link.append(' ', textEl('span', 'header__badge', item.badge));
+      return link;
+    }).filter(Boolean);
+    nav.append(...links);
+    // Bấm một mục trong menu điện thoại thì đóng menu lại để thấy section vừa nhảy tới.
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('a')) this.setOpen(false);
+    });
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'header__toggle';
+    toggle.textContent = header.menu ?? 'Menu';
+    toggle.setAttribute('aria-controls', nav.id);
+    toggle.addEventListener('click', () => this.setOpen(!this.classList.contains('is-open')));
+    this._toggle = toggle;
+
+    const bar = document.createElement('div');
+    bar.className = 'header__bar container';
+    const cta = linkEl(this.site?.cta?.href, this.site?.cta?.label, 'btn header__cta');
+    this._mode = modeEl(header.modeLabel);
+    // Nút Menu đứng ngay sau tên thương hiệu: điện thoại thì cùng hàng, phím Tab đi qua nút trước rồi mới tới menu.
+    bar.append(...[brandEl(content.brand ?? {}, this.site?.home), toggle, nav, this._mode, cta].filter(Boolean));
+    // Đổi thương hiệu thì thanh cũ bị thay: theo dõi thanh mới (đổi bề ngang màn hình thì thanh cũng đổi cao).
+    this._bar = bar;
+    this._resize?.disconnect();
+    this._resize?.observe(bar);
+
+    const lang = langEl(header.lang, this.site?.languages, this.site?.lang);
+    this.replaceChildren(...[topbarEl(header.note, content.contact?.phone, lang), bar].filter(Boolean));
+    // Gán className ở trên đã xoá is-open, is-scrolled; đặt lại cho khớp trạng thái hiện tại.
+    this.setOpen(false);
+    this._onScroll?.();
+  }
+}

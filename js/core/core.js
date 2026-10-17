@@ -224,13 +224,13 @@ export function catalogItem(site, id) {
 
 /* ---------- Tải component khi cần ---------- */
 
-// CSS của component chèn trước theme của brand, giữ đúng thứ tự cũ (style component trước, biến của brand sau).
+// CSS của component (name: đường dẫn trong components/ không có đuôi, ví dụ hero/hero-ride) chèn trước theme của brand, giữ đúng thứ tự cũ (style component trước, biến của brand sau).
 function loadCss(name) {
   if (document.querySelector(`link[data-component-css="${name}"]`)) return Promise.resolve();
   return new Promise((resolve) => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `/css/components/${name}.css`;
+    link.href = `/components/${name}.css`;
     link.dataset.componentCss = name;
     // Lỗi tải CSS không chặn trang: khối vẫn hiện, chỉ thiếu style.
     link.onload = () => resolve();
