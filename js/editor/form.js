@@ -138,8 +138,14 @@ function listEl(ctx, section, field, path, items) {
     ctx.h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': `${ctx.key}:${path}:add`, onclick: () => ctx.list(path, 'add', items.length, field.item), text: `Thêm ${field.label.toLowerCase()}` }));
 }
 
+// Form cho một object bất kỳ theo danh sách trường: dùng chung cho khối (buildForm) và mục trong danh mục (tab Danh mục).
+// Trường optional chỉ hiện khi dữ liệu đã có.
+export function buildFields(data, fields, ctx) {
+  const shown = fields.filter((f) => !f.optional || getIn(data, f.key) !== undefined);
+  return shown.length ? ctx.h('div', { class: 'ed-form' }, shown.map((f) => fieldEl(ctx, data, f))) : null;
+}
+
 export function buildForm(section, ctx) {
-  const fields = fieldsFor(section).filter((f) => !f.optional || getIn(section, f.key) !== undefined);
-  if (!fields.length) return ctx.h('p', { class: 'ed-hint', text: 'Khối này chưa có trường sửa được trong editor.' });
-  return ctx.h('div', { class: 'ed-form' }, fields.map((f) => fieldEl(ctx, section, f)));
+  return buildFields(section, fieldsFor(section), ctx)
+    ?? ctx.h('p', { class: 'ed-hint', text: 'Khối này chưa có trường sửa được trong editor.' });
 }
