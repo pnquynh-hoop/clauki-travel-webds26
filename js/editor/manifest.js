@@ -104,7 +104,8 @@ export const FONTS = [
 
 /* ---------- Trường sửa được của từng loại khối (form tự sinh) ----------
    Mỗi trường: key (đường dẫn trong section, ví dụ "link.label"; rỗng là chính mục đó), label, type:
-   text (một dòng), long (đoạn), image ({ src, alt }, chọn trong kho ảnh của thương hiệu), select (options),
+   text (một dòng), long (đoạn), number (số: giá, số chỗ; min, max, step), image ({ src, alt }, chọn trong kho ảnh của
+   thương hiệu), select (options),
    list (mảng; fields là trường của mỗi mục, item là mục mới khi bấm Thêm). optional: chỉ hiện khi dữ liệu đã có. */
 
 const HEAD = [
@@ -262,11 +263,18 @@ const FIELDS = {
       item: { min: 9, label: 'Huy hiệu mới' },
     },
   ],
-  // Đặt chỗ: chỉ mở phần chữ khách đọc (gồm, chưa gồm, điều khoản, ưu đãi, điểm đón); giá, phí, ngày, số chỗ chờ kiểu ô số, ngày.
+  // Đặt chỗ: chữ khách đọc (gồm, chưa gồm, điều khoản, ưu đãi, điểm đón) và các số của section (giá, cọc, giá trẻ em, số khách);
+  // ngày khởi hành, số chỗ theo ngày, phí điểm đón chưa có ô.
   booking: [
     ...HEAD,
     { key: 'image', label: 'Ảnh', type: 'image', optional: true },
+    { key: 'price', label: 'Giá mỗi khách (đồng; kiểu chọn tour từ danh mục thì giá lấy từ Danh mục)', type: 'number', step: 1000, optional: true },
     { key: 'priceNote', label: 'Chữ sau giá', type: 'text', optional: true },
+    { key: 'deposit', label: 'Tiền cọc mỗi khách (đồng)', type: 'number', step: 1000, optional: true },
+    { key: 'childPrice', label: 'Giá trẻ em (đồng, 0 là miễn phí)', type: 'number', step: 1000, optional: true },
+    { key: 'extraGuestPrice', label: 'Phụ thu mỗi khách thêm (đồng)', type: 'number', step: 1000, optional: true },
+    { key: 'maxGuests', label: 'Số khách tối đa', type: 'number', min: 1, max: 99, optional: true },
+    { key: 'maxNights', label: 'Số đêm tối đa', type: 'number', min: 1, max: 30, optional: true },
     { key: 'deal.label', label: 'Dòng ưu đãi', type: 'text', optional: true },
     { key: 'offer.label', label: 'Tên ưu đãi', type: 'text', optional: true },
     { key: 'offer.note', label: 'Ghi chú ưu đãi', type: 'text', optional: true },
@@ -298,11 +306,12 @@ const FIELDS = {
   ],
   // Trang chi tiết dựng trong một khối (Bậc Trà). Mọi trường đều tuỳ chọn: section ghi "item" thì phần lớn
   // dữ liệu lấy từ catalog, chỉ hiện ô cho trường section tự ghi, để không vô tình ghi đè danh mục.
-  // Giá, số chỗ là số nên chưa có ô (form chưa có kiểu số).
+  // Số chỗ còn theo đợt (availability) chưa có ô.
   'room-detail': [
     { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text', optional: true },
     { key: 'title', label: 'Tên', type: 'text', optional: true },
     { key: 'lead', label: 'Câu dẫn', type: 'long', optional: true },
+    { key: 'price', label: 'Giá (đồng)', type: 'number', step: 1000, optional: true },
     { key: 'priceNote', label: 'Ghi chú giá', type: 'text', optional: true },
     {
       key: 'images', label: 'Ảnh', type: 'list', optional: true,
