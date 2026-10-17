@@ -4,7 +4,7 @@
    Giao diện là của ClauKi, dùng chung css/tool/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
-import { backupInUse, usageMark, modelsSince } from '../ai/gemini.js';
+import { usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../core/icon.js';
 import { readTaoDraft, writeTaoDraft, publishSite, updateSite, publishReady, publicLink, readDemoKey, saveDemoKey, SLUG_RE, RESERVED, DRAFT_SLUG } from '../site/sites.js';
@@ -301,8 +301,7 @@ async function create() {
       s.written < s.fields ? `${s.fields - s.written} chỗ giữ chữ của khung${s.blocked ? ` (${s.blocked} dòng bị bộ lọc an toàn chặn)` : ''}, sửa sau bằng editor` : '']);
     if (['run', 'wait'].includes(steps.state('photos'))) steps.set('photos', 'skip', 'Không tìm được ảnh, giữ ảnh của khung');
     steps.set('done', 'done', [`Xong sau ${steps.total()} giây, xem trước bên cạnh, chỉnh tay hay xuất bản được ngay`,
-      modelsSince(mark) ? `Model đã dùng: ${modelsSince(mark)}` : '',
-      backupInUse() ? `Khoá chính hết lượt nên đã dùng khoá dự phòng ${backupInUse()}` : '']);
+      modelsSince(mark) ? `Model đã dùng: ${modelsSince(mark)}` : '']);
     ui.slug.value = slugify(result.profile.ten);
     showPublish();
     // Website coi như xong khi đủ bản tiếng Việt; bản tiếng Anh dịch tiếp phía sau, lỗi thì site vẫn dùng được bằng tiếng Việt.
