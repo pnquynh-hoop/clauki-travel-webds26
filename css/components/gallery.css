@@ -464,26 +464,32 @@
   line-height: 1;
 }
 
+/* Phần chữ là container: cỡ chữ bên dưới đo theo bề ngang thật của ô (cqi), không theo màn hình, vì cùng một màn hình
+   ô có thể hẹp (2 cột ở điện thoại 320px) hay rộng (3 cột ở màn lớn). */
 .gallery__plate-text {
   display: grid;
   gap: 0.2rem;
+  container-type: inline-size;
 }
 
+/* Cỡ chữ như thiết kế cho nhãn ngắn, nhưng không quá 15,4% bề ngang ô (một từ khoảng 7 chữ cái vừa một dòng),
+   tối thiểu 1rem. overflow-wrap là chốt cuối: cụm không thể ngắt (từ rất dài, tên nối bằng dấu cách không ngắt)
+   mà vẫn rộng hơn ô thì xuống dòng thay vì tràn ra ngoài viền. */
 .gallery__plate-name {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-heading);
-  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  font-size: max(1rem, min(clamp(1.3rem, 2.6vw, 1.9rem), 15.4cqi));
   font-weight: 800;
   line-height: 1;
   overflow-wrap: anywhere;
 }
 
-/* Chú thích dài (wl-gallery.js gắn lớp này khi quá 24 ký tự): chữ nhỏ và thưa dòng hơn để cả câu nằm gọn trong ô hẹp ở 390px.
-   overflow-wrap ở trên cho từ rất dài (Jökulsárlón) xuống dòng thay vì tràn ra ngoài viền. */
+/* Chú thích dài (wl-gallery.js gắn lớp này khi quá 24 ký tự): chữ nhỏ, thưa dòng hơn, cũng không quá 11,5% bề ngang ô,
+   để cả câu nằm gọn trong ô ở mọi bề ngang; ô cao lên theo số dòng, không cắt chữ. */
 .gallery__plate--long .gallery__plate-name {
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-size: max(0.8rem, min(clamp(1rem, 1.6vw, 1.25rem), 11.5cqi));
   font-weight: 700;
   line-height: 1.25;
 }
