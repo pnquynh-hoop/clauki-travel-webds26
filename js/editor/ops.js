@@ -1,7 +1,7 @@
 /* ops.js - thao tác sửa dữ liệu thuần trên content và theme, dùng chung cho sửa tay (editor.js) và sửa bằng lời
    (ai.js): cùng một hàm nên hai cách sửa ra cùng kết quả. Các hàm sửa thẳng object được truyền vào;
    editor gọi chúng bên trong commit() để có hoàn tác. */
-import { FONTS, TEMPLATES, PAGE_RESERVED } from './manifest.js';
+import { FONTS, PAGE_RESERVED } from './manifest.js';
 import { slugify } from '../core/dom.js';
 
 export const MAX_NEW_PAGES = 8;
@@ -45,17 +45,13 @@ export function addPage(content, slug, title, onMenu, cloneFrom) {
   if (onMenu) (content.nav ??= []).push({ label: title, href: `page:${slug}` });
 }
 
-// Chèn khối mới từ mẫu vào vị trí at, id không trùng khối nào trên trang; images là kho ảnh để mẫu thư viện ảnh dùng.
-export function insertBlock(sections, type, at, images) {
-  const template = TEMPLATES.find((t) => t.type === type);
-  if (!template) return false;
-  const block = template.make(images);
+// Chèn khối mới (dựng sẵn bằng makeBlock của blocks-add.js) vào vị trí at, id không trùng khối nào trên trang.
+export function insertBlock(sections, block, at) {
   const taken = new Set(sections.map((s) => s.id));
   let n = 1;
-  while (taken.has(`${type}-${n}`)) n += 1;
-  block.id = `${type}-${n}`;
+  while (taken.has(`${block.type}-${n}`)) n += 1;
+  block.id = `${block.type}-${n}`;
   sections.splice(at, 0, block);
-  return true;
 }
 
 // Cặp font rỗng (giữ font gốc) thì gỡ hết biến font khỏi theme.
