@@ -1,4 +1,4 @@
-/* hero.css - giao diện của <wl-hero>. Mọi kiểu dùng chung HTML; class hero--<variant> quyết định bố cục.
+/* hero.css - giao diện của <wl-hero>. coverflow, stacked dùng chung HTML, class hero--<variant> quyết định bố cục; full, haze, ride dựng HTML riêng (hero-haze.css, hero-ride.css).
    Màu, font, bo góc lấy từ biến CSS để mỗi thương hiệu tự đổi. */
 
 .hero__inner {

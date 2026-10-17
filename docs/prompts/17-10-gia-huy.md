@@ -69,3 +69,7 @@ Chân trang site Nắng Bali vẫn còn khẩu hiệu “Every sigh, gone.” c�
 ## PR #246
 
 Dò hết các lỗi tương tự (chữ và dữ liệu của khung mẫu lọt vào website AI tạo) bằng một agent chạy ngầm, rồi sửa các lỗi tìm được.
+
+## PR #250
+
+Soát toàn repo: code sạch, chú thích, tài liệu và tính nhất quán, rồi sửa các lỗi thuộc phần của mình trước giờ nộp.

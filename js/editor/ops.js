@@ -26,7 +26,7 @@ export function checkNewPage(content, title) {
   const pages = content.pages ?? [{ path: '/' }];
   if (!slug) return { error: 'Nhập tên trang.' };
   if (PAGE_RESERVED.includes(slug) || pages.some((p) => norm(p.path) === slug)) return { error: `Đường dẫn /${slug} đã có hoặc là tên dành riêng.` };
-  if (pages.filter((p) => p.added).length >= MAX_NEW_PAGES) return { error: `Thử chỉnh cho thêm tối đa ${MAX_NEW_PAGES} trang.` };
+  if (pages.filter((p) => p.added).length >= MAX_NEW_PAGES) return { error: `Editor cho thêm tối đa ${MAX_NEW_PAGES} trang.` };
   return { slug };
 }
 

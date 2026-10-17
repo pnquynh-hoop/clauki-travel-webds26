@@ -23,8 +23,8 @@
     // Mở bằng file:// thì trình duyệt chặn module app.js; script thường này vẫn chạy để báo cách mở đúng.
     if (location.protocol === 'file:') {
       addEventListener('DOMContentLoaded', () => {
-        document.body.textContent = 'Trang cần chạy qua máy chủ: mở bằng Live Server của VS Code, '
-          + 'hoặc chạy "python3 serve.py" trong thư mục dự án rồi vào http://localhost:5500.';
+        document.body.textContent = 'Trang cần chạy qua máy chủ: chạy "python3 serve.py" trong thư mục dự án '
+          + 'rồi vào http://localhost:5500.';
       });
     }
   </script>
@@ -35,7 +35,6 @@
   <wl-header></wl-header>
   <main id="main"></main>
   <wl-footer></wl-footer>
-  <wl-sticky-cta></wl-sticky-cta>
   <wl-to-top></wl-to-top>
 </body>
 </html>

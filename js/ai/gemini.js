@@ -1,6 +1,6 @@
 /* gemini.js - gọi Gemini qua Firebase AI Logic (#81), dùng chung cho tab AI của editor và trình tạo web.
    Hai project Firebase gói Spark (miễn phí, không gắn thẻ nên không tốn tiền):
-   - công khai: cấu hình ghi trong PUBLIC, ai cũng thử được;
+   - công khai: cấu hình ghi trong PUBLIC_CONFIG, ai cũng thử được;
    - máy demo: cấu hình dán vào localStorage của máy thuyết trình (khoá DEMO_KEY), không bao giờ commit.
    Có cấu hình demo thì dùng demo, không thì dùng công khai. SDK chỉ tải khi gọi AI lần đầu.
    Thêm hai khoá Gemini dự phòng của thành viên (BACKUP_KEYS, gọi thẳng REST API của Gemini, không qua Firebase). Thứ tự thử:
@@ -23,8 +23,6 @@ const REST = 'https://generativelanguage.googleapis.com/v1beta/models';
 const COOL_MS = 60000;
 // Đường gọi (nguồn và model) đang nghỉ vì hết lượt: khoá "nguồn|model" -> thời điểm được dùng lại.
 const cooling = new Map();
-let lastRoute = null;
-export const usingFallback = () => lastRoute?.model === FALLBACK_MODEL;
 
 // Các lượt gọi đã xong (model, khoá), để chỗ nào gọi AI cũng báo được đã dùng model gì: lấy mốc usageMark() trước khi gọi, xong thì
 // modelsSince(mốc). Một việc có nhiều lượt song song (tạo website) có thể dùng nhiều model khi model chính hết lượt giữa chừng.
@@ -209,7 +207,6 @@ async function withRetry(once, canRetry = () => true) {
     for (;;) {
       const route = nextRoute();
       if (!route) throw new AiError('quota', 'AI đang nghỉ (mọi khoá đều hết lượt miễn phí), hãy thử lại sau một phút hoặc sửa tay.');
-      lastRoute = route;
       try {
         const out = await once(abort.signal, route, alive);
         calls.push({ model: route.model, key: route.key });

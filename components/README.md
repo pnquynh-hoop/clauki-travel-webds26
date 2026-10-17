@@ -16,10 +16,10 @@ hero/
   hero-ride.js      kiểu lớn tách file riêng: JS ...
   hero-ride.css     ... và CSS của kiểu ride
   hero-haze.*, hero-reveal.*
-  images/           ảnh riêng của khối (mặt nạ mây...), CSS gọi bằng url("images/...")
+  (images/)         ảnh riêng của khối nếu có, CSS gọi bằng url("images/...") (ví dụ journey/images/)
 ```
 
-- `shared/`: file nhiều khối cùng dùng: `plate` (biển số nhà: intro, footer, contact), `catalog-card` (thẻ tour:
+- `shared/`: file nhiều khối cùng dùng: `plate` (biển số nhà: intro, contact; footer tự vẽ biển số riêng), `catalog-card` (thẻ tour:
   catalog-list, tour-pick), `rooms` (đọc hạng phòng từ danh mục: stays, booking, offer), `item-detail` (các khối của
   trang chi tiết).
 - `effects/`: hiệu ứng dùng chung: `lightbox` (xem ảnh lớn), `parallax` (ảnh trôi chậm), `pin-scroll` (ghim khối,
@@ -68,7 +68,9 @@ trên giao diện. Làm được việc đó là nhờ các kiểu hero dùng ch
   số nhưng dữ liệu khác hẳn.
 - **Ngoại lệ có chủ đích:** `booking` kiểu `stay`, `request` dùng dữ liệu khác `calendar` mà vẫn là kiểu của `booking`, vì
   thương hiệu nào cũng có đúng một khối đặt chỗ để menu, nút CTA, `wl:choose` cùng trỏ tới. Editor không cho đổi qua lại
-  giữa chúng (`needs` trong `manifest.js`).
+  giữa chúng: `stay`, `request` không có trong danh sách kiểu của `booking` ở `manifest.js`, còn ba kiểu chọn ngày khai `needs`
+  để chỉ hiện khi khối có lịch khởi hành. `route` cũng là ngoại lệ: không khai trong `manifest.js` vì chỉ chạy với chặng của
+  danh mục tour, nên editor không thêm mới được.
 
 ## Khi nào tách kiểu ra file riêng
 

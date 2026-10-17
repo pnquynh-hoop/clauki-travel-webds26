@@ -1,4 +1,4 @@
-/* draft.js - bản nháp "Thử chỉnh" (#82) của một thương hiệu có sẵn, chỉ nằm trên máy này (localStorage).
+/* draft.js - bản nháp chỉnh sửa (#82) của một thương hiệu có sẵn, chỉ nằm trên máy này (localStorage).
    Nháp gồm content (bản sao content.json đã sửa) và theme (biến CSS ghi đè lên theme.css, font thêm nếu đổi cặp font).
    core.js đọc nháp mỗi lần dựng trang: có nháp thì dựng theo nháp, nên thoát editor rồi tải lại vẫn thấy bản đang thử.
    Tệp này nhỏ và không có giao diện; giao diện editor nằm ở editor.js, chỉ tải khi mở editor. */

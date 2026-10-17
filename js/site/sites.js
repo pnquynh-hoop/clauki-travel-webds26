@@ -1,6 +1,6 @@
 /* sites.js - site khách tạo bằng trình tạo web /tao (#81): đọc và xuất bản trên Supabase, nháp nằm trên máy.
    Một site là { content, theme }: content cùng dạng content.json của thương hiệu có sẵn, theme gồm base (thư mục
-   thương hiệu làm khung, lấy theme.css và ảnh của khung) và vars (biến CSS ghi đè). Địa chỉ: /<tên>/<trang>.
+   thương hiệu làm khung, lấy theme.css và ảnh của khung) và vars (biến CSS ghi đè). Địa chỉ công khai: <tên>.xachbalo.com/<trang> (Cloudflare chuyển sang /s/<tên>/, core.js đổi thành /<tên>/).
    Supabase chỉ làm kho dữ liệu: bảng sites cho ai cũng thêm, đọc; xuất bản xong là cố định, không ai sửa hay xoá
    được (trừ máy demo: updateSite, xem supabase/sites.sql). Khoá dưới đây là khoá công khai (publishable), quyền do RLS quyết định. */
 
@@ -17,7 +17,7 @@ const DRAFT_KEY = 'clauki-tao';
 
 // Tên không được dùng: thư mục của site, trang công cụ, tên miền con có sẵn; khớp danh sách trong supabase/sites.sql.
 // Thương hiệu có sẵn kiểm riêng theo brands.json (SQL cũng chặn).
-export const RESERVED = ['nhap', 'tao', 'sua', 's', 'css', 'js', 'brands', 'docs', 'supabase', 'editor', 'www', 'clauki', 'timider', 'api', 'admin', 'mail'];
+export const RESERVED = ['nhap', 'tao', 'sua', 's', 'css', 'js', 'brands', 'components', 'docs', 'supabase', 'editor', 'www', 'clauki', 'timider', 'api', 'admin', 'mail'];
 
 // Bộ nhớ bị chặn hoặc nháp hỏng thì coi như chưa có nháp.
 export function readTaoDraft() {
