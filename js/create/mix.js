@@ -58,11 +58,14 @@ const absolute = (node, origin) => {
 };
 
 // Lấy bản của khối "loại:kiểu": của chính khung đang dùng nếu có, không thì của khung đầu tiên có nó. Trả về { section, credits } hoặc null.
+// Trong mỗi khung tìm trang chủ trước và bỏ qua trang 404: khối ở đó mang chữ "không tìm thấy trang" (intro center của Bậc Trà chỉ có ở 404).
 function findSection(key, frames, base) {
   for (const id of [base, ...Object.keys(frames).filter((f) => f !== base)]) {
     const data = frames[id];
     if (!data) continue;
-    const pages = data.pages ?? [{ sections: data.sections ?? [] }];
+    const isHome = (p) => (p.path ?? '/').replace(/^\/+|\/+$/g, '') === '';
+    const all = data.pages ?? [{ sections: data.sections ?? [] }];
+    const pages = [...all.filter(isHome), ...all.filter((p) => !isHome(p) && p.path !== '404')];
     for (const page of pages) {
       const hit = (page.sections ?? []).find((s) => keyOf(s) === key && !s.hidden);
       if (!hit) continue;
