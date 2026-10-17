@@ -207,6 +207,12 @@ function openPage(page) {
   ui.frame.src = pageUrl(state.id, state.page);
 }
 
+// Nút Làm mới: tải lại riêng trang trong khung (về đầu trang), như F5 nhưng không tải lại editor. Hiệu ứng chỉ chạy một lần
+// (hiện dần khi cuộn, đếm số, sương tan) chạy lại từ đầu; nháp vẫn còn vì core.js trong khung dựng theo nháp đã ghi.
+function reloadFrame() {
+  openPage(state.page);
+}
+
 // Mỗi lần trang trong khung tải (lần đầu, đổi trang bằng đường dẫn): gắn style chọn khối và các sự kiện.
 function onFrameLoad() {
   const doc = frameDoc();
@@ -1005,6 +1011,9 @@ function resizerEl() {
 
 /* ---------- Dựng khung editor ---------- */
 
+// Nhãn đủ cho màn rộng và nhãn ngắn cho màn laptop, CSS chọn hiện một trong hai; trình đọc màn hình đọc nhãn đủ (aria-label).
+const twoLabels = (long, short) => [h('span', { class: 'ed-top__long', text: long }), h('span', { class: 'ed-top__short', 'aria-hidden': 'true', text: short })];
+
 const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['ai', 'AI']];
 
 function build() {
@@ -1035,7 +1044,8 @@ function build() {
     state.device = width;
     fit();
   });
-  ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, text: 'Tải theme.css' });
+  ui.reload = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: reloadFrame, title: 'Tải lại trang trong khung để xem lại hiệu ứng, nháp vẫn giữ', text: 'Làm mới' });
+  ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, 'aria-label': 'Tải theme.css' }, twoLabels('Tải theme.css', 'theme.css'));
   ui.save = h('button', { type: 'button', class: 'ed-btn ed-btn--save', onclick: save, text: 'Lưu' });
   ui.exit = h('a', { class: 'ed-btn ed-btn--ghost', text: 'Thoát' });
   ui.publish = h('a', { class: 'ed-btn', href: '/tao#xuat-ban', hidden: true, text: 'Xuất bản' });
@@ -1046,9 +1056,10 @@ function build() {
     ui.lang,
     h('div', { class: 'ed-top__group ed-top__wide' }, ui.viewToggle),
     h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
+    h('div', { class: 'ed-top__group ed-top__wide' }, ui.reload),
     h('div', { class: 'ed-top__group ed-top__end' },
-      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: resetAll, text: 'Về bản gốc' }),
-      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: downloadContent, text: 'Tải content.json' }),
+      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: resetAll, 'aria-label': 'Về bản gốc' }, twoLabels('Về bản gốc', 'Bản gốc')),
+      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: downloadContent, 'aria-label': 'Tải content.json' }, twoLabels('Tải content.json', 'content.json')),
       h('span', { class: 'ed-top__wide' }, ui.themeBtn),
       ui.save,
       ui.publish,
