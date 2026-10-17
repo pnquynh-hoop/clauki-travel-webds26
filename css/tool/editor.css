@@ -1564,6 +1564,19 @@ a.ed-btn[aria-busy='true'] {
   color: var(--ed-green);
 }
 
+/* Thông báo khi AI không gợi ý màu nào (bảng màu đã ổn, AI hỏi lại, câu nhờ không về màu): ô xanh dương nhạt, chữ xanh đậm
+   (tương phản trên 8). */
+.ed-info {
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e40af;
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  border-radius: 8px;
+}
+
 .ed-ai__config {
   margin-top: 1.5rem;
   padding-top: 0.75rem;
@@ -1671,10 +1684,12 @@ a.ed-btn[aria-busy='true'] {
 }
 
 /* Kết quả AI gợi ý: cao tối đa 18rem, dài hơn thì cuộn bên trong khung, để bảng màu và các phần phía dưới không bị đẩy đi;
-   hai nút Đồng ý, Bỏ dính ở đáy khung nên luôn thấy. Mỗi màu một dòng: tên và màu được gợi ý. */
+   hai nút Đồng ý, Bỏ dính ở đáy khung nên luôn thấy. Mỗi màu một dòng: tên và màu được gợi ý. Cách hàng câu mẫu một khoảng
+   cho thấy rõ đâu là phần trả lời. */
 .ed-palette__ai .ed-ai__out {
   max-height: 18rem;
-  margin-top: 0.2rem;
+  margin-top: 0.6rem;
+  padding-top: 0.2rem;
   overflow-y: auto;
   overscroll-behavior: contain;
   border-top: 1px solid var(--ed-line);

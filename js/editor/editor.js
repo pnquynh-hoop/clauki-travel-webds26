@@ -8,6 +8,8 @@ import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
 import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, CATALOG_FIELDS } from './manifest.js';
 import { loadLibrary, addableGroups, makeBlock, addCredits } from './blocks-add.js';
 import { paletteEl, DARK_OFF } from './palette.js';
+import { auditPage } from './page-audit.js';
+import { readMode } from '../core/theme-mode.js';
 import { menuOrderEl } from './menu-order.js';
 import { buildForm, buildFields, imageLibrary, setIn, getIn } from './form.js';
 import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPageTo, insertBlock, applyFont } from './ops.js';
@@ -201,6 +203,15 @@ function isOriginal() {
 // Bản nháp /nhap/ của trình tạo web: editor sửa thẳng nháp của /tao (clauki-tao), không tạo nháp riêng, để Xuất bản ở /tao
 // dùng đúng bản đã chỉnh tay.
 const isTaoDraft = () => state.id === DRAFT_SLUG;
+
+// Nháp như persist gửi cho khung, nhưng với bảng biến vars (bảng màu AI đề xuất, chưa áp): khung ẩn của page-audit.js dựng trang
+// bằng nháp này để đo màu trên trang thật trước khi đưa đề xuất cho người dùng.
+function draftWith(vars) {
+  const theme = { ...state.theme, vars, ...(state.baseId && state.baseId !== state.id ? { base: state.baseId } : {}) };
+  return { base: fingerprint(state.raw), content: state.content, theme, ...draftPart() };
+}
+
+const auditColors = (vars, modes) => auditPage({ url: pageUrl(state.id, state.page), width: state.device, draft: draftWith(vars), modes, restoreMode: readMode() });
 
 // Nháp gửi thẳng cho trang trong khung (xem trước được cả khi bộ nhớ bị chặn), đồng thời ghi trên máy.
 function persist() {
@@ -795,7 +806,7 @@ function renderTheme() {
     themeSection('Chữ và góc',
       h('div', { class: 'ed-setting' }, h('label', { for: 'ed-font', text: 'Font' }), font),
       h('div', { class: 'ed-setting' }, h('label', { for: 'ed-radius', text: 'Bo góc' }), radius, radiusValue)),
-    paletteEl({ h, state, commit, frameDoc, rerender: renderTheme }),
+    paletteEl({ h, state, commit, frameDoc, rerender: renderTheme, audit: auditColors }),
   );
 }
 

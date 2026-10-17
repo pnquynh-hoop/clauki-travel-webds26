@@ -24,6 +24,9 @@ const MAX_OPS = 12;
 
 let api = null;
 let proposal = [];
+// Đề xuất gắn với thương hiệu và trang lúc gửi: các thao tác trỏ vào khối của trang đó. Đổi thương hiệu hay trang thì bỏ đề xuất,
+// để thao tác không chạy lên trang khác (thêm khối nhầm trang, đổi màu nhầm thương hiệu).
+let owner = null;
 let busy = false;
 
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -195,6 +198,7 @@ function renderHistory() {
 }
 
 export function refreshAiHistory() {
+  dropStale();
   renderHistory();
 }
 
@@ -219,7 +223,18 @@ function renderProposal(say, items, done, error, model = '') {
   ].filter(Boolean));
 }
 
+const ownerNow = () => `${api.state.id}|${api.state.page}`;
+
+// Đã sang thương hiệu hay trang khác: bỏ đề xuất cũ khỏi khung. Trả true khi đã bỏ.
+function dropStale() {
+  if (!proposal.length || owner === ownerNow()) return false;
+  proposal = [];
+  out?.replaceChildren();
+  return true;
+}
+
 function accept() {
+  if (dropStale()) return;
   const ok = proposal.filter((p) => p.ok);
   if (!ok.length) return;
   api.commit(`AI: ${pane.querySelector('textarea').value.trim().slice(0, 40)}`, () => ok.forEach((p) => p.run()));
@@ -240,6 +255,9 @@ async function send(text) {
   if (busy || !text.trim()) return;
   busy = true;
   proposal = [];
+  owner = ownerNow();
+  const sentFor = owner;
+  const sentId = api.state.id;
   renderStatus();
   let say = '';
   const button = pane.querySelector('[data-ai-send]');
@@ -257,23 +275,28 @@ async function send(text) {
       } catch {
         return;
       }
-      if (proposal.length >= MAX_OPS) return;
+      if (proposal.length >= MAX_OPS || ownerNow() !== sentFor) return;
       const item = plan(op);
       if (item.say !== undefined) say = item.say;
       // Bỏ thao tác không đổi gì (AI hay liệt kê lại màu giữ nguyên), danh sách chỉ còn thay đổi thật.
       else if (!(item.ok && String(item.from).toLowerCase() === String(item.to).toLowerCase())) proposal.push(item);
       renderProposal(say, proposal, false);
     });
-    checkColors(proposal);
-    renderProposal(say, proposal, true, '', modelsSince(mark));
+    if (ownerNow() !== sentFor) {
+      proposal = [];
+      out.replaceChildren();
+    } else {
+      checkColors(proposal);
+      renderProposal(say, proposal, true, '', modelsSince(mark));
+    }
   } catch (err) {
     failed = err.message;
-    renderProposal(say, proposal, true, err.message);
+    if (ownerNow() === sentFor) renderProposal(say, proposal, true, err.message);
   } finally {
     busy = false;
     button.disabled = false;
     const ok = proposal.filter((p) => p.ok);
-    addTurn(api.state.id, KIND, {
+    addTurn(sentId, KIND, {
       text: text.trim(), say: failed || say, changes: ok.map((p) => `${p.what}: ${short(p.from)} -> ${short(p.to)}`),
       status: failed ? 'error' : ok.length ? 'proposed' : 'empty', model: modelsSince(mark),
     });

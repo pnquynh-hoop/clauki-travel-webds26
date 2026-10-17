@@ -72,12 +72,15 @@ export function variantsFor(section) {
   return block.variants.filter(([value]) => !block.needs?.[value] || block.needs[value](section));
 }
 
-// Biến màu cho chỉnh, theo đúng tên biến bắt buộc ở AGENTS.md mục 5.
+// Biến màu cho chỉnh: bảy màu bắt buộc ở AGENTS.md mục 5, cộng nền phụ --color-tint (tuỳ chọn; tấm thông tin ở chân trang).
+// Thương hiệu khai cứng nền phụ (Bậc Trà: xanh matcha sáng) mà không có bản tối thì chế độ tối giữ nền phụ sáng dưới chữ sáng,
+// nên nền phụ phải nằm trong bảng màu và bộ kiểm tương phản như các màu khác. Không khai thì base.css tự pha từ nút và nền trang.
 export const COLORS = [
   ['--color-primary', 'Nền nút chính'],
   ['--color-on-primary', 'Chữ trên nút chính'],
   ['--color-bg', 'Nền trang'],
   ['--color-surface', 'Nền thẻ'],
+  ['--color-tint', 'Nền phụ (chân trang)'],
   ['--color-ink', 'Chữ'],
   ['--color-muted', 'Chữ phụ'],
   ['--color-accent', 'Màu nhấn (chữ, liên kết)'],
@@ -91,6 +94,7 @@ export const CONTRAST = [
   ['--color-on-primary', '--color-primary', 'Chữ trên nút chính'],
   ['--color-ink', '--color-surface', 'Chữ trên thẻ'],
   ['--color-accent', '--color-surface', 'Màu nhấn trên thẻ'],
+  ['--color-ink', '--color-tint', 'Chữ trên nền phụ'],
 ];
 
 // Cặp font có sẵn (Google Fonts, có dấu tiếng Việt). Giá trị rỗng: giữ font trong theme.css.

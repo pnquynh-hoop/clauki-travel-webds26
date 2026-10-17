@@ -145,7 +145,10 @@
   aspect-ratio: 4 / 5;
   margin: 0;
   padding: 0.6rem;
-  color: var(--color-on-primary);
+  /* Chữ trên tem chọn theo độ sáng của chính màu tem (tem xoay vòng màu nút, màu nhấn, màu pha): tem tối (OKLCH L dưới 0.57,
+     chỗ chữ trắng và chữ đen cùng tương phản) thì chữ gần trắng, tem sáng thì chữ gần đen. Ghi cứng màu chữ nút thì màu nhấn sáng
+     (bảng màu tối, vàng của SighGone) cho chữ trắng trên tem vàng không đọc được. */
+  color: oklch(from var(--stamp) clamp(0.2, (0.57 - l) * 1000, 0.98) 0 h);
   background: var(--stamp);
   mask:
     radial-gradient(circle 3px, transparent 96%, #000) -5px -5px / 10px 10px round,
