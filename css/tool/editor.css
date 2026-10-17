@@ -1097,6 +1097,44 @@ a.ed-btn[aria-busy='true'] {
   }
 }
 
+/* Hộp Xuất bản (js/editor/publish.js): cùng khung với hộp xác nhận, rộng hơn vì có ô tên trang và mã QR; dài quá màn hình
+   (điện thoại, sau khi hiện mã QR) thì cuộn trong hộp. */
+.ed-dialog--publish {
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  font: 500 0.92rem/1.45 var(--ed-font);
+}
+
+.ed-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Tiêu đề là h2: không theo font, cỡ chữ tiêu đề của thương hiệu (base.css). */
+.ed-dialog--publish .ed-dialog__title {
+  font-family: inherit;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.ed-dialog__url {
+  font-weight: 700;
+  color: var(--ed-ink);
+  overflow-wrap: anywhere;
+}
+
+.ed-dialog--publish .ed-input {
+  margin-bottom: 0.2rem;
+}
+
+.ed-dialog--publish .share {
+  margin-top: 0.5rem;
+}
+
 /* ---------- Thông báo ngắn ---------- */
 
 .ed-toast {

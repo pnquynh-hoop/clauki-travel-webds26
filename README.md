@@ -17,7 +17,7 @@ HTML, CSS, JavaScript thuần, Web Components `<wl-*>`. Không framework, không
 | White label | Bấm nút tròn bốn ô ở góc dưới trái, chọn **Đổi thương hiệu**. Trang đang mở được giữ nguyên nếu thương hiệu kia có trang đó. |
 | Đổi kiểu một khối | Nút tròn, chọn **Chỉnh sửa** (hoặc thêm `?sua` vào địa chỉ). Chọn hero, đổi sang `full`, `haze`...: chữ, ảnh giữ nguyên, Hoàn tác được. |
 | AI tạo website | Mở `/tao`, gõ một dòng mô tả (nơi chốn, loại hình, giá), bấm **Tinh chỉnh** rồi **Tạo**. Xem trước ngay bên cạnh trong lúc AI viết. |
-| Xuất bản | Ở `/tao`, đặt tên rồi **Xuất bản**: ra link `<tên>.xachbalo.com` và mã QR để quét bằng điện thoại. |
+| Xuất bản | Ở `/tao`, hoặc bấm **Xuất bản** ngay trong editor (cả khi đang sửa một thương hiệu có sẵn), đặt tên: ra link `<tên>.xachbalo.com` và mã QR để quét bằng điện thoại. |
 | Đặt chỗ | SighGone `/sighgone/dat-tour` (quầy vé, máy in vé), Bậc Trà `/bac-tra/tour-moi` (lịch khởi hành), Gành Sớm `/ganh-som/dat-phong` (hạng phòng), Mé Rạch `/me-rach/` (giá theo khách). |
 
 ## Chạy trên máy
@@ -159,7 +159,8 @@ css/
 js/
   core/                 lõi: app.js (bảng component), core.js (thương hiệu, trang, dựng section), dom.js, icon.js,
                         i18n.js và i18n-text.js (song ngữ), theme-mode.js (sáng, tối)
-  site/                 site khách: sites.js (nháp, xuất bản, Supabase, link tên miền con), share.js (mã QR, chia sẻ)
+  site/                 site khách: sites.js (nháp, xuất bản, Supabase, link tên miền con), share.js (mã QR, chia sẻ),
+                        publish.js (các bước xuất bản dùng chung cho /tao và nút Xuất bản của editor)
   editor/               editor: editor.js, form.js, manifest.js, ops.js (thao tác sửa dùng chung cho tay và AI), ai.js,
                         palette.js, english.js, draft.js, launch.js (nút tròn và menu), preview.js, logo.js...
   create/               trình tạo web: create.js (giao diện), generate.js (AI viết website), mix.js (ghép khối),
