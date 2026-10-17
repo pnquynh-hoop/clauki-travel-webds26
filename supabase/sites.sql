@@ -1,4 +1,4 @@
--- sites.sql - kho site khách của trình tạo web /tao (#81, js/sites.js): bảng sites trên Supabase.
+-- sites.sql - kho site khách của trình tạo web /tao (#81, js/site/sites.js): bảng sites trên Supabase.
 -- Xuất bản xong là cố định: ai cũng thêm và đọc được, không ai sửa hay xoá, trừ máy demo (khoá riêng, không nằm trong repo).
 -- Rào nội dung ở database: tên đúng dạng và không trùng tên dành riêng, mọi địa chỉ phải thuộc danh sách cho phép, JSON dưới 400 KB
 -- (site dựng trên khung SighGone có danh mục tour và ảnh Wikimedia đã gần 200 KB).
@@ -16,7 +16,7 @@ create table sites (
                  check (slug ~ '^[a-z0-9-]{3,30}$')
                  check (slug <> all (array['www','clauki','timider','api','admin','mail',
                                             'bac-tra','ganh-som','me-rach','brand-test','sighgone',
-                                            'nhap','tao','sua','s','css','js','brands','docs','supabase','editor'])),
+                                            'nhap','tao','sua','s','css','js','brands','components','docs','supabase','editor'])),
   content        jsonb not null,
   theme          jsonb not null default '{}',
   hidden         boolean not null default false,

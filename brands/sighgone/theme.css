@@ -1,5 +1,5 @@
 /* theme.css - chỉ khai báo giá trị biến CSS của thương hiệu này, không viết quy tắc giao diện.
-   Danh sách biến xem ở đầu css/base.css. Font Google thì @import ở dòng đầu file. */
+   Danh sách biến xem ở đầu css/site/base.css. Font Google thì @import ở dòng đầu file. */
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Bungee&family=Phudu:wght@600;800;900&display=swap');
 
 /* SighGone: tour trong ngày quanh Sài Gòn. Màu lấy từ phố: giấy báo cũ làm nền, vàng taxi và mũ xe ôm cho nút,

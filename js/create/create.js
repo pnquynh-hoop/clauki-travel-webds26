@@ -1,5 +1,5 @@
 /* create.js - trình tạo web /tao (#81): mô tả bằng lời, AI viết website mới trên khung có sẵn, xem trước ngay bên cạnh,
-   rồi xuất bản thành /<tên>/ (Supabase, js/site/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
+   rồi xuất bản thành <tên>.xachbalo.com (Supabase, js/site/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
    là chính core.js dựng bằng các component <wl-*>, nhận nháp mới qua sự kiện wl:draft mỗi khi AI viết thêm.
    Giao diện là của ClauKi, dùng chung css/tool/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite, refineBrief } from './generate.js';
@@ -606,7 +606,7 @@ export function openBuilder({ brands }) {
       ui.slug.value = `${draft.copyOf.slice(0, 24)}-copy`;
     }
     showPublish();
-    // Từ editor bấm Xuất bản: đưa phần xuất bản vào tầm nhìn, con trỏ ở ô tên trang.
+    // Link cũ /tao#xuat-ban (trước khi editor tự xuất bản): đưa phần xuất bản vào tầm nhìn, con trỏ ở ô tên trang.
     if (location.hash === '#xuat-ban') {
       ui.publish.scrollIntoView({ block: 'center' });
       ui.slug.focus();

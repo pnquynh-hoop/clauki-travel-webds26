@@ -1,4 +1,4 @@
-/* editor.js - editor "Thử chỉnh" (#82): mở bằng /<thương hiệu>/<trang>?sua.
+/* editor.js - editor (#82): mở bằng /<thương hiệu hoặc nhap>/<trang>?sua, hay từ menu nút tròn (Chỉnh sửa).
    Trang thật chạy trong khung (iframe cùng nguồn, có data-ed-frame), editor đứng ngoài: thanh trên, bảng chỉnh bên phải
    (điện thoại: thanh dưới mở tấm trượt), thanh công cụ nổi trên khối đang chọn.
    Editor chỉ sửa dữ liệu: bản sao content.json và biến theme. Mọi thay đổi đi qua commit(): chụp trạng thái cũ để hoàn tác,
@@ -22,7 +22,7 @@ import { mountAi, refreshAiHistory } from './ai.js';
 import { addTurn } from './chat-log.js';
 import { fileToLogo, textLogo } from './logo.js';
 import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../site/sites.js';
-import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish } from './english.js';
+import { mountEnglish, langControl, renderEnglish, finalCheck as checkEnglish, draftPart, baseEnglish } from './english.js';
 
 const HISTORY_MAX = 60;
 const TOAST_MS = 2600;
@@ -339,7 +339,7 @@ async function loadBrand(id, raw, base = null, guestTheme = null) {
   // tiếng Việt, bản tiếng Anh mở khi bấm English ở thanh trên.
   state.view = 'vi';
   const brand = state.brands.find((b) => b.id === id);
-  document.title = `Thử chỉnh - ${brand?.label ?? id}`;
+  document.title = `Chỉnh sửa - ${brand?.label ?? id}`;
 }
 
 function selectedEl() {

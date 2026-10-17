@@ -14,8 +14,8 @@ const BRAND_LIST_URL = `${DATA_ROOT}/brands.json`;
 // Tên do wd2026.js đặt, phải khớp với mã của BTC.
 const STORAGE_KEY = 'wd2026_active_file';
 const CHANGE_EVENT = 'webdesign2026:datachange';
-// Ba khối luôn có sẵn trong index.html, không nằm trong danh sách sections.
-const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-sticky-cta', 'wl-to-top'];
+// Các khối luôn có sẵn trong index.html (đầu trang, chân trang, nút lên đầu trang), không nằm trong danh sách sections.
+const FIXED_TAGS = ['wl-header', 'wl-footer', 'wl-to-top'];
 const HOME = '/';
 // Trang thương hiệu tự khai để hiện khi địa chỉ trỏ tới trang không có.
 const NOT_FOUND = '404';
@@ -38,8 +38,8 @@ let registry = {};
 const loading = new Map();
 // Mỗi lần dựng mang một số; lần dựng cũ tải xong muộn hơn lần mới thì bỏ, không vẽ đè trang mới.
 let renderToken = 0;
-// Editor (#82): trang chạy trong khung của editor thì không hiện nút "Thử chỉnh"; editor báo nháp đổi bằng DRAFT_EVENT.
-// Dựng xong mỗi lần thì phát RENDERED_EVENT (thương hiệu, trang, dữ liệu gốc) để editor và nút "Thử chỉnh" biết.
+// Editor (#82): trang chạy trong khung của editor thì không hiện nút chỉnh sửa; editor báo nháp đổi bằng DRAFT_EVENT.
+// Dựng xong mỗi lần thì phát RENDERED_EVENT (thương hiệu, trang, dữ liệu gốc) để editor và nút chỉnh sửa biết.
 const IN_EDITOR = Boolean(window.frameElement?.hasAttribute('data-ed-frame'));
 const DRAFT_EVENT = 'wl:draft';
 const RENDERED_EVENT = 'wl:rendered';
@@ -275,7 +275,7 @@ function createSection(section, site) {
   return el;
 }
 
-// JSON có thể ghi một loại khối chưa ai viết code (ví dụ booking).
+// JSON có thể ghi một loại khối chưa ai viết code (ví dụ gõ nhầm type).
 // Khi đó bỏ qua khối và báo trong console, để biết vì sao khối không hiện.
 function hasComponent(section) {
   if (customElements.get(`wl-${section.type}`)) return true;
@@ -368,7 +368,7 @@ function replayChoice() {
   document.dispatchEvent(new CustomEvent(CHOOSE_EVENT, { detail }));
 }
 
-// Nháp "Thử chỉnh" của thương hiệu này: trong khung editor lấy bản editor vừa gửi, ngoài ra đọc trên máy.
+// Nháp chỉnh sửa của thương hiệu này: trong khung editor lấy bản editor vừa gửi, ngoài ra đọc trên máy.
 function draftFor(raw) {
   if (guestReadOnly) return null;
   if (IN_EDITOR && editorDraft?.content?.id === raw.id) return editorDraft;
@@ -392,7 +392,7 @@ async function localized(raw, draft) {
 async function render(raw, useDraft = true) {
   const token = ++renderToken;
   lastRaw = raw;
-  // Thương hiệu đang có nháp "Thử chỉnh" thì dựng theo nháp; lastRaw vẫn giữ bản gốc để về bản gốc được.
+  // Thương hiệu đang có nháp chỉnh sửa thì dựng theo nháp; lastRaw vẫn giữ bản gốc để về bản gốc được.
   const draft = useDraft ? draftFor(raw) : null;
   const { lang, source } = await localized(raw, draft);
   if (token !== renderToken) return;
@@ -422,7 +422,7 @@ async function render(raw, useDraft = true) {
   } catch (err) {
     // Nháp hỏng cấu trúc thì dựng lại theo bản gốc, để trang khách không trắng và vẫn có nút về bản gốc.
     if (!draft) throw err;
-    console.warn('Nháp Thử chỉnh lỗi, dựng theo bản gốc:', err);
+    console.warn('Nháp chỉnh sửa lỗi, dựng theo bản gốc:', err);
     return render(raw, false);
   }
   markCurrentPage();
@@ -430,7 +430,7 @@ async function render(raw, useDraft = true) {
   if (firstRender) scrollToHash();
   firstRender = false;
   // page là trang thật sự đã dựng (ví dụ "404" khi địa chỉ trỏ tới trang không có), để editor sửa đúng trang đó.
-  // guest và base: site khách (không phải thương hiệu có sẵn) và thương hiệu làm khung của nó, để nút Thử chỉnh và editor biết.
+  // guest và base: site khách (không phải thương hiệu có sẵn) và thương hiệu làm khung của nó, để nút chỉnh sửa và editor biết.
   lastRendered = { id: raw.id, page: normalizePage(page.path), raw, draft: Boolean(draft), guest: Boolean(guestTheme), base: guestTheme?.base ?? null, theme: guestTheme };
   document.dispatchEvent(new CustomEvent(RENDERED_EVENT, { detail: lastRendered }));
   // Trong khung editor thì báo cả lên thẻ iframe: editor nghe một lần ở đó, không phụ thuộc lúc khung tải.
@@ -444,11 +444,11 @@ function resetDraft() {
   return render(lastRaw).catch(showError);
 }
 
-// Nút "Thử chỉnh" và dải báo đang thử nháp: tải sau khi trang đã dựng, không làm chậm lần hiện đầu tiên.
+// Nút chỉnh sửa và dải báo đang thử nháp: tải sau khi trang đã dựng, không làm chậm lần hiện đầu tiên.
 function mountLauncher() {
   launcher ??= import('../editor/launch.js')
     .then((m) => m.mountLauncher({ current: lastRendered, reset: resetDraft }))
-    .catch((err) => console.error('Không tải được nút Thử chỉnh:', err));
+    .catch((err) => console.error('Không tải được nút chỉnh sửa:', err));
 }
 
 // Link trỏ tới một trang khác của cùng thương hiệu thì trả về trang đó; link ra ngoài, sang thương hiệu khác,
@@ -456,7 +456,7 @@ function mountLauncher() {
 function samebrandPage(a) {
   if (!a || !currentId || a.hasAttribute('download') || (a.target && a.target !== '_self')) return null;
   const url = new URL(a.href, location.href);
-  // Link có phần ?... khác trang hiện tại (ví dụ nút "Thử chỉnh" trỏ tới ?sua để mở editor) thì để trình duyệt mở hẳn.
+  // Link có phần ?... khác trang hiện tại (ví dụ nút chỉnh sửa trỏ tới ?sua để mở editor) thì để trình duyệt mở hẳn.
   if (url.search !== location.search) return null;
   const root = `/${currentId}`;
   if (url.origin !== location.origin || !(url.pathname === root || url.pathname.startsWith(`${root}/`))) return null;
@@ -556,7 +556,7 @@ function listenDraft() {
 }
 
 // Ảnh trên nút tròn của BTC (tuỳ chọn logoSrc của wd2026.js, thay chữ cái đầu tên thương hiệu): bốn ô vuông như icon layout-grid
-// của Lucide, nét trắng, lề rộng để icon khoảng 24px giữa nút 52px, giống icon bút của nút Thử chỉnh trên site khách. Bấm nút mở menu
+// của Lucide, nét trắng, lề rộng để icon khoảng 24px giữa nút 52px, giống icon bút của nút chỉnh sửa trên site khách. Bấm nút mở menu
 // Đổi thương hiệu, Tạo mới, Chỉnh sửa (launch.js).
 const FAB_ICON = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-14 -14 52 52" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>')}`;
 

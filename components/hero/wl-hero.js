@@ -387,6 +387,9 @@ export class WlHero extends HTMLElement {
       const { stage, detach } = buildRide(this, section, this.site);
       this._detachRide = detach;
       this.replaceChildren(stage);
+      // Ride không dùng hiệu ứng reveal: đổi từ kiểu có reveal sang thì gỡ hiệu ứng cũ.
+      this._detachEffect?.();
+      this._detachEffect = null;
       return;
     }
     // Kiểu haze: ảnh phủ sương ở tệp hero-haze.js.

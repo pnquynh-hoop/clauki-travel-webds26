@@ -1,5 +1,5 @@
 /* share.js - khối chia sẻ một site khách: mã QR, link công khai (tên miền con, xem publicLink trong sites.js), nút Chép link,
-   Chia sẻ (bảng chia sẻ của điện thoại, có thì mới hiện), Tải mã QR. Dùng ở màn xuất bản của /tao và mục "Mã QR, chia sẻ" trên
+   Chia sẻ (bảng chia sẻ của điện thoại, có thì mới hiện), Tải mã QR. Dùng ở màn xuất bản của /tao, hộp Xuất bản của editor và mục "Mã QR, chia sẻ" trên
    trang khách đã xuất bản (bản to, để chiếu cho người ngồi dưới quét). Mã QR vẽ bằng qrcode-generator (MIT) nạp từ cdnjs, chỉ khi cần. */
 import { h } from '../core/dom.js';
 

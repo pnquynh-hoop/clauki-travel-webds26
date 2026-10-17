@@ -37,7 +37,7 @@ mở được trang chủ; mở bằng cách nhấp đúp vào file thì trình 
 
 | Thương hiệu | Loại hình | Trang | Đặt chỗ |
 |---|---|---|---|
-| **SighGone** (mặc định) | tour trong ngày ở Sài Gòn, đổi nhiều phương tiện | 18 trang: 7 trang tour, danh mục tour, tour riêng, đêm nay, cẩm nang, hỏi đáp, tuyến số 1, giới thiệu, liên hệ, 404; có bản tiếng Anh và chế độ tối | `ticket`: quầy vé chọn ghế, in vé |
+| **SighGone** (mặc định) | tour trong ngày ở Sài Gòn, đổi nhiều phương tiện | 18 trang: trang chủ, đặt tour, 7 trang tour, danh mục tour, tour riêng, đêm nay, cẩm nang, hỏi đáp, tuyến số 1, giới thiệu, liên hệ, 404; có bản tiếng Anh và chế độ tối | `ticket`: quầy vé chọn ghế, in vé |
 | **Bậc Trà** | tour nhiều ngày Tây Bắc | 9 trang: 3 trang tour, tour mới 2027, chuẩn bị, giới thiệu, liên hệ, 404 | `calendar`: ngày khởi hành, phiếu giữ chỗ |
 | **Gành Sớm** | nghỉ dưỡng biển nhiều hạng phòng | 7 trang: các hạng nhà và 3 trang chi tiết, ưu đãi, đặt phòng | `stay`: ngày nhận, trả phòng |
 | **Mé Rạch** | homestay miệt vườn | landing page một trang | `request`: giá theo khách, soạn tin nhắn giữ phòng |
@@ -56,7 +56,7 @@ Cùng một component mà mỗi thương hiệu trông khác nhau nhờ ba lớp
 1. **Kiểu trình bày (`variant`)** trong `content.json`: component gắn class `<khối>--<kiểu>`, CSS và JS của kiểu đó đổi bố
    cục, hiệu ứng. Ví dụ `hero` có `coverflow`, `full`, `stacked`, `haze`, `ride`.
 2. **Dữ liệu**: trường nào có thì hiện phần đó, thiếu thì bỏ. Cả ba footer kiểu `columns` có ảnh nền, lời hẹn riêng; chỉ Bậc
-   Trà bật `clouds` (mây trôi), chỉ Mé Rạch có `directions` (đường về vườn).
+   Trà bật `clouds` (mây trôi), chỉ SighGone có dây điện và biển số nhà (`wires`, `plate`).
 3. **Biến CSS** trong `theme.css`: màu, font, bo góc và vài biến tuỳ chọn (`--color-tint`, `--font-hand`). Khai thêm bảng màu
    tối (`--dark-*`) thì trang có nút sáng, tối.
 
@@ -73,7 +73,7 @@ Muốn đổi cách một thương hiệu hiển thị thì sửa một trong ba
 | `reviews` | `postcard` | `postcard` | `postcard` | `notes`: tường giấy note |
 | `gallery` | mặc định | `slices` | `slices` | `plates`: ô biển số, ảnh loang theo con trỏ |
 | `faq` | mặc định, `chat` | `chat` | `chat` | `chat` |
-| `footer` | `columns`, có mây | `columns` | `columns`, có đường về vườn | `headline`: chữ bảng hiệu, dây điện, biển số nhà |
+| `footer` | `columns`, có mây | `columns` | `columns` | `headline`: chữ bảng hiệu, dây điện, biển số nhà |
 
 ### Component đặc trưng
 
@@ -92,7 +92,7 @@ Muốn đổi cách một thương hiệu hiển thị thì sửa một trong ba
 | | `clock` | đồng hồ 24 giờ: giờ nào đi đâu, tour hợp giờ đó |
 | | `tour-pick` (`reel`, `claw`) | gợi ý một tour: vòng quay, máy gắp |
 | | `custom-trip` | khách tự ghép tour từ nhiều chặng |
-| | `backdrop`, `tips`, `policy` | dải ảnh nền đứng yên; thẻ mẹo; bảng chính sách huỷ |
+| | `backdrop`, `tips`, `policy` | dải ảnh nền đứng yên; thẻ mẹo (Bậc Trà cũng dùng ở trang chuẩn bị); bảng chính sách huỷ |
 
 Đủ 37 khối, cách tổ chức thư mục và khi nào thêm kiểu hay thêm khối mới: [components/README.md](components/README.md).
 Trường dữ liệu của từng khối: mục 12 của [AGENTS.md](AGENTS.md).
@@ -185,7 +185,8 @@ docs/                   ai-log.md, prompts/, tài liệu thương hiệu
 
 1. Tạo `brands/<id>/` gồm `content.json`, `theme.css`, `images/`.
 2. Thêm `{ "id": "<id>", "label": "<tên>" }` vào `brands/brands.json`.
-3. Mở `/<id>/`. Không sửa HTML, CSS quy tắc hay JavaScript.
+3. Thêm `<id>` vào danh sách tên dành riêng trong `supabase/sites.sql` (khách không đặt được site trùng tên thương hiệu).
+4. Mở `/<id>/`. Không sửa HTML, CSS quy tắc hay JavaScript.
 
 Có thể nhờ AI viết `content.json`, `theme.css` bằng prompt mẫu ở
 [docs/prompts/tao-thuong-hieu-moi.md](docs/prompts/tao-thuong-hieu-moi.md).

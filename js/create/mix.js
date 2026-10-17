@@ -124,7 +124,7 @@ function fixLinks(content, home) {
 }
 
 // Xếp lại trang chủ của khung (đã qua sanitizeFrame): khối chung lấy theo picks (thứ tự do AI chọn), khối khác của khung ở yên chỗ.
-// Chỗ của khối chung trong khung được lấp lần lượt; còn thừa thì nối tiếp sau chỗ cuối. Trả về { sections, kept } hoặc null khi picks
+// Chỗ của khối chung trong khung được lấp lần lượt; còn thừa thì nối tiếp sau chỗ cuối. Trả về { picked, hero } (các khoá loại:kiểu đã ghép, kiểu hero) hoặc null khi picks
 // không dùng được (quá ít khối hợp lệ), khi đó trang chủ giữ nguyên.
 export function composeHome(content, picks, frames, base, keepKeys = []) {
   if (!Array.isArray(picks)) return null;

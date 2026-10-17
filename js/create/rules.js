@@ -1,6 +1,6 @@
 /* rules.js - luật component cho website AI tạo ở /tao (#81), gom ở một chỗ để cả đội sửa được.
    1. Component đặc trưng: mỗi thương hiệu có vài khối gắn với câu chuyện và ảnh riêng của nó (hành trình con đường và dải mây của
-      Bậc Trà, tivi và một ngày ở vườn của Mé Rạch, bưu thiếp ưu đãi của Gành Sớm, đồng hồ, giờ chạy, quầy vé, bảng thành tích của
+      Bậc Trà, tivi và một ngày ở vườn của Mé Rạch, bưu thiếp ưu đãi của Gành Sớm, đồng hồ, giờ chạy, vé giữ chỗ ở trang tour, bảng thành tích của
       SighGone). Khối đặc trưng chỉ được dùng khi hồ sơ nơi chốn thật sự hợp với điều kiện ghi ở SIGNATURE (AI quyết định lúc lập hồ sơ,
       nghi ngờ thì không dùng); riêng khối gắn chặt với ảnh tách nền của thương hiệu khác (hard) thì không bao giờ dùng.
    2. Trộn bộ: website mới không bị khoá vào một thương hiệu. Khung chỉ cho bố cục và dữ liệu nền; kiểu trình bày của từng khối được
@@ -59,10 +59,11 @@ export const isBanned = (section, keep) => {
   return Boolean(sig) && (sig.hard || !keep.has(sig.key));
 };
 
-// Kiểu của khối vẫn dùng được (ví dụ stays có kiểu headland là đặc trưng nhưng stays thường thì không): đổi sang kiểu chung hợp lệ đầu tiên.
+// Kiểu luôn đổi ở site AI tạo, không phụ thuộc luật đặc trưng: quầy vé (booking ticket) thành tờ lịch tháng (wall).
 const ALWAYS = { 'booking:ticket': 'wall' };
 
-// Kiểu ưu tiên khi phải đổi: quầy vé (booking ticket) bị cấm thì đổi sang tờ lịch tháng (wall), không phải dãy thẻ ngày.
+// Kiểu ưu tiên khi fallbackVariant phải đổi kiểu đặc trưng của một khối thường (ví dụ stays headland sang stays thường): booking thì
+// chọn tờ lịch tháng (wall) trước dãy thẻ ngày.
 const PREFER = { booking: 'wall' };
 const fallbackVariant = (section, keep) => {
   const ok = variantsFor(section).map(([value]) => value).filter((value) => !isBanned({ ...section, variant: value || undefined }, keep));
@@ -79,7 +80,7 @@ export const MIX_VARIANTS = {
   faq: ['', 'chat'],
 };
 
-// Kiểu header được chọn: overlay chỉ hợp khi trang chủ mở đầu bằng hero full (ảnh tràn), nên xét riêng ở chooseLayout.
+// Kiểu header được chọn: overlay chỉ hợp khi trang chủ mở đầu bằng hero full (ảnh tràn), nên xét riêng ở layoutTask, applyMixed (generate.js).
 export const HEADER_CHOICES = ['solid', 'center', 'overlay'];
 
 const allowedVariants = (section, keep = new Set()) => variantsFor(section).map(([value]) => value)

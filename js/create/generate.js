@@ -3,7 +3,9 @@
    2. Chép khung (content.json của một thương hiệu có sẵn), tách các trường chữ riêng của brand (bỏ nhãn giao diện,
       thông báo lỗi, mẫu tin nhắn dùng chung), chia vài nhóm chạy song song; mỗi dòng trả về dạng "số|vị trí|chữ",
       code kiểm vị trí khớp số rồi áp ngay; dòng thiếu hoặc lệch thì gửi lại một lần.
-   3. Số liệu do code điền từ hồ sơ (giá), theme lấy từ khung; AI không tự viết con số ở nhiều chỗ.
+   3. Trước khi tách chữ: lọc khối đặc trưng (rules.js), ghép khối trang chủ, chân trang và trang cơ bản từ nhiều khung (mix.js), bỏ dữ
+      liệu gắn với nơi cũ, điền khẩu hiệu mới vào các chỗ trùng khẩu hiệu khung.
+      Số liệu do code điền từ hồ sơ (giá); theme: base là khung, màu và font theo hồ sơ AI (đã sửa cho đạt tương phản AA).
    4. Ảnh: tìm ảnh thật theo nơi chốn (photos.js), AI loại ảnh lạc đề và viết mô tả tiếng Việt, rồi thay vào các chỗ ảnh của khung
       (trừ ảnh tách nền và ảnh đại diện); không tìm được thì giữ ảnh của khung. */
 import { streamLines, generateJson, cleanText } from '../ai/gemini.js';
@@ -30,7 +32,7 @@ const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'tota
 
 // Trường kỹ thuật và dữ liệu có cấu trúc: giữ nguyên, không đưa cho AI. Mọi chữ khác (kể cả nhãn, tin nhắn mẫu, câu báo lỗi, gợi ý)
 // là dữ liệu như nhau, đều được viết lại cho nơi mới. vehicles, buoi, topics là bảng tra (id nối với tour): không đi vào, chỉ nhãn của
-// vehicles và topics được gửi riêng (LOOKUP_LABELS). vehicle, icon, tone, word, pick, focus là mã một từ ("pha", "bike", "villa").
+// vehicles và topics được gửi riêng (lookupLabels). vehicle, icon, tone, word, pick, focus là mã một từ ("pha", "bike", "villa").
 // time có chữ ("Ngày 1, 09:45", "Giờ đón") được gửi; giờ chỉ có số ("06:30") đã bị NOT_TEXT bỏ.
 const SKIP = new Set([
   'id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon',

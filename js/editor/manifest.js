@@ -27,7 +27,7 @@ export const BLOCKS = {
   booking: {
     label: 'Đặt chỗ',
     variants: [['calendar', 'Thẻ ngày kiểu lịch xé'], ['wall', 'Tờ lịch treo tường'], ['ticket', 'Quầy vé có máy in vé']],
-    // Hai kiểu chọn ngày chỉ dùng được với dữ liệu lịch khởi hành (departures hoặc tours); stay và request có ô nhập khác.
+    // Ba kiểu chọn ngày (calendar, wall, ticket) chỉ dùng được với dữ liệu lịch khởi hành (departures hoặc tours); stay và request có ô nhập khác.
     needs: { calendar: (s) => Array.isArray(s.departures) || Boolean(s.tours), wall: (s) => Array.isArray(s.departures) || Boolean(s.tours), ticket: (s) => Array.isArray(s.departures) || Boolean(s.tours) },
   },
   journey: { label: 'Lịch trình con đường', variants: [] },
@@ -61,7 +61,7 @@ export const BLOCKS = {
 };
 
 // Đường dẫn không dùng được cho trang thêm mới: trùng thư mục của site, trang công cụ hay trang đặc biệt.
-export const PAGE_RESERVED = ['404', 'css', 'js', 'brands', 'tao', 'sua', 'nhap', 'editor', 'supabase', 'docs'];
+export const PAGE_RESERVED = ['404', 'css', 'js', 'brands', 'components', 'tao', 'sua', 'nhap', 'editor', 'supabase', 'docs'];
 
 export const HEADER_VARIANTS = [['solid', 'Nền trang'], ['center', 'Tên ở giữa'], ['overlay', 'Trong suốt đè lên ảnh'], ['minimal', 'Rút gọn (logo và nút đặt)']];
 

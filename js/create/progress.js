@@ -1,5 +1,5 @@
 /* progress.js - tiến trình AI dựng website ở /tao: một danh sách các bước dọc (đọc mô tả, chọn khung và màu, ghép bố cục,
-   viết chữ, tìm ảnh, hoàn tất), mỗi bước có trạng thái chờ, đang chạy, xong, bỏ qua, lỗi, kèm chi tiết và số giây.
+   viết chữ, tìm ảnh, hoàn tất, dịch tiếng Anh), mỗi bước có trạng thái chờ, đang chạy, xong, bỏ qua, lỗi, kèm chi tiết và số giây.
    Viết chữ và tìm ảnh chạy song song nên có thể cùng sáng một lúc. Trình đọc màn hình chỉ nghe một câu tóm tắt mỗi khi một bước
    đổi trạng thái (không đọc từng dòng chữ AI viết). */
 import { h } from '../core/dom.js';

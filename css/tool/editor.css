@@ -1,4 +1,4 @@
-/* editor.css - giao diện editor "Thử chỉnh" (#82). Chỉ tải khi mở editor (?sua), trang khách không tải.
+/* editor.css - giao diện editor (#82). Chỉ tải khi mở editor (?sua), trang khách không tải.
    Công cụ của ClauKi, chung cho mọi thương hiệu: không đọc biến màu, font của brand. Đổi brand thì chỉ trang trong khung
    đổi, khung editor đứng yên và luôn đọc được. Xám kẽm, một màu nhấn xanh ngọc không trùng brand nào, một font.
    Thanh trên, tab và bảng chỉnh nền sáng; chỉ vùng chứa trang đang chỉnh nền tối, để trang nổi lên giữa màn hình.

@@ -1,6 +1,6 @@
-/* editor-launch.css - nút "Thử chỉnh" và dải báo nháp trên trang khách. Thuộc công cụ ClauKi, không theo thương hiệu:
+/* editor-launch.css - nút tròn chỉnh sửa (icon bút) và dải báo nháp trên trang khách. Thuộc công cụ ClauKi, không theo thương hiệu:
    màu cố định (xám kẽm, xanh ngọc), font Be Vietnam Pro, không đọc biến màu của brand (#82).
-   Đặt bên trái, ngay trên nút tròn đổi thương hiệu của BTC (góc dưới trái nên để trống); bấm vào thì mở menu phía trên nút. */
+   Góc dưới trái: site khách có nút tròn riêng, thương hiệu có sẵn dùng luôn nút tròn của BTC; bấm vào thì mở menu phía trên nút. */
 
 .ed-fab,
 .ed-draftbar {
