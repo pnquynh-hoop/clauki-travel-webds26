@@ -1,6 +1,6 @@
 /* palette-eval.js - bộ kiểm độ bền của khung "Nhờ AI gợi ý màu" (#194): chạy nhiều kiểu câu nhờ (mơ hồ, có mã màu, tả phong cách,
    tiếng Anh, không dấu, mâu thuẫn, lạc đề, đòi bỏ luật) trên Gemini thật, mỗi câu kiểm tự động các điều đo được rồi in bảng kết quả.
-   Chỉ dùng khi phát triển, trang không tải tệp này. Cách chạy: mở /<thương hiệu>/?sua, vào tab Giao diện cho phần Màu hiện ra,
+   Chỉ dùng khi phát triển, trang không tải tệp này. Cách chạy: mở /<thương hiệu>/?sua, vào tab Thương hiệu cho phần Màu hiện ra,
    mở console rồi gõ: (await import('/js/editor/palette-eval.js')).run()
    Không áp màu nào vào nháp. Khoá AI chỉ nhận yêu cầu từ trang web nên phải chạy trong trình duyệt. */
 import { suggest, checksAfter } from './palette.js';
@@ -80,5 +80,5 @@ export async function run(cases = CASES) {
 
 // Chưa mở phần Màu thì palette.js chưa có dữ liệu của editor: báo cách chạy thay vì lỗi khó hiểu.
 function hintOf(err) {
-  return err instanceof TypeError ? 'Mở tab Giao diện cho phần Màu hiện ra rồi chạy lại.' : err.message;
+  return err instanceof TypeError ? 'Mở tab Thương hiệu cho phần Màu hiện ra rồi chạy lại.' : err.message;
 }

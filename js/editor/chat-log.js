@@ -5,6 +5,8 @@
    để AI hiểu những câu như "đổi lại như lúc nãy". Chỉ lưu những gì đã gửi AI, không có dữ liệu khách hay đơn đặt chỗ.
    Bộ nhớ bị chặn thì vẫn chat được, chỉ không lưu. */
 
+import { confirmAction } from './confirm.js';
+
 const PREFIX = 'clauki-ai-log:';
 const KEEP = 50;
 const SEND = 5;
@@ -92,5 +94,10 @@ export function historyEl(h, turns, { onClear, onPick } = {}) {
         : h('p', { class: 'ed-history__text', text: t.text }),
       t.say ? h('p', { class: 'ed-hint', text: t.say }) : null,
       t.changes?.length ? h('ul', { class: 'ed-history__changes' }, t.changes.map((c) => h('li', { text: c }))) : null))),
-    onClear ? h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: onClear, text: 'Xoá lịch sử' }) : null);
+    onClear ? h('button', {
+      type: 'button', class: 'ed-btn ed-btn--ghost', text: 'Xoá lịch sử',
+      onclick: async () => {
+        if (await confirmAction('Xoá lịch sử nhờ AI?', { note: 'Không lấy lại được.', danger: true })) onClear();
+      },
+    }) : null);
 }

@@ -6,7 +6,7 @@
    Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/tool/editor.css, tiền tố ed-), không đọc biến của brand. */
 import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
 import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES, CATALOG_FIELDS } from './manifest.js';
-import { paletteEl } from './palette.js';
+import { paletteEl, DARK_OFF } from './palette.js';
 import { menuOrderEl } from './menu-order.js';
 import { buildForm, buildFields, imageLibrary, setIn, getIn } from './form.js';
 import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPageTo, insertBlock, applyFont } from './ops.js';
@@ -14,6 +14,7 @@ import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../core/dom.js';
 import { iconEl } from '../core/icon.js';
+import { confirmAction } from './confirm.js';
 import { mountAi, refreshAiHistory } from './ai.js';
 import { addTurn } from './chat-log.js';
 import { fileToLogo, textLogo } from './logo.js';
@@ -400,14 +401,17 @@ function move(key, dir) {
   const list = sections();
   const to = key + dir;
   if (to < 0 || to >= list.length) return;
-  // Khối đang chọn và con trỏ bàn phím đi theo khối vừa dời; đặt trước commit để lần vẽ lại trong commit dùng luôn.
+  // Con trỏ bàn phím đi theo khối vừa dời; đặt trước commit để lần vẽ lại trong commit dùng luôn. Dời chỉ đổi chỗ hai khối,
+  // không mở khối nào: khối đang mở (nếu có) vẫn là nó, chỉ đổi số thứ tự khi nó là một trong hai khối vừa đổi chỗ.
   state.focusKey = `a:${to}:${dir < 0 ? 'up' : 'down'}`;
+  const followed = state.sel === key;
   commit(`Dời ${blockName(list[key])} ${dir < 0 ? 'lên' : 'xuống'}`, () => {
     const s = sections();
     [s[key], s[to]] = [s[to], s[key]];
-    state.sel = to;
+    if (state.sel === key) state.sel = to;
+    else if (state.sel === to) state.sel = key;
   });
-  setTimeout(() => selectedEl()?.scrollIntoView({ block: 'start' }), SCROLL_AFTER_RENDER_MS);
+  if (followed) setTimeout(() => selectedEl()?.scrollIntoView({ block: 'start' }), SCROLL_AFTER_RENDER_MS);
 }
 
 function toggleHidden(key) {
@@ -428,6 +432,8 @@ function duplicate(key) {
     while (taken.has(`${section.id}-${n}`)) n += 1;
     if (section.id) copy.id = `${section.id}-${n}`;
     sections().splice(key + 1, 0, copy);
+    // Bản sao chen vào sau khối gốc: khối đang mở nằm phía sau thì lùi một số để vẫn là đúng khối đó.
+    if (typeof state.sel === 'number' && state.sel > key) state.sel += 1;
   });
 }
 
@@ -435,7 +441,9 @@ function remove(key) {
   const section = sections()[key];
   commit(`Xoá ${blockName(section)}`, () => {
     sections().splice(key, 1);
-    state.sel = null;
+    // Xoá chính khối đang mở thì đóng lại; xoá khối khác thì khối đang mở vẫn mở (khối phía sau tiến lên một số).
+    if (state.sel === key) state.sel = null;
+    else if (typeof state.sel === 'number' && state.sel > key) state.sel -= 1;
   });
 }
 
@@ -575,9 +583,10 @@ function renderTool() {
 
 /* ---------- Tab Khối ---------- */
 
-// Nút chỉ có icon trong danh sách khối: tên việc nằm ở aria-label và title (rê chuột thì thấy chữ).
-function blockIcon(icon, label, onclick, { key, disabled = false, danger = false } = {}) {
-  return h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title: label },
+// Nút chỉ có icon trong danh sách khối. title là tên việc ngắn hiện khi rê chuột (Xoá, Ẩn, Tạo bản sao); aria-label
+// đọc kèm tên khối cho trình đọc màn hình, vì nghe "Xoá" một mình thì không biết xoá khối nào.
+function blockIcon(icon, title, onclick, { label = title, key, disabled = false, danger = false } = {}) {
+  return h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title },
     iconEl(icon, 'ed-icon'));
 }
 
@@ -598,14 +607,14 @@ function closeBlock(key) {
 }
 
 // Nút đóng ở góc phải đầu khối đang mở, tách khỏi các nút thao tác bằng vạch mảnh: dấu X là cách đóng quen thuộc nhất.
-const closeIcon = (key) => h('span', { class: 'ed-block__close' }, blockIcon('x', 'Đóng khối', () => closeBlock(key)));
+const closeIcon = (key) => h('span', { class: 'ed-block__close' }, blockIcon('x', 'Đóng', () => closeBlock(key), { label: 'Đóng khối' }));
 
 function renderBlocks() {
   const list = sections();
   const headerVariant = headerTarget().variant ?? 'solid';
   const headerOn = state.sel === 'header';
   // Danh sách gọn: mỗi khối một dòng. Chỉ khối đang chọn mở rộng (kiểu, các nút, rồi form nội dung ngay bên dưới),
-  // nên danh sách không dài ra theo số khối và luôn thấy khối nào đang sửa. Ẩn và Xoá có sẵn trên mọi dòng.
+  // nên danh sách không dài ra theo số khối và luôn thấy khối nào đang sửa.
   const rows = [
     h('li', { class: `ed-block${headerOn ? ' is-sel' : ' ed-block--compact'}` },
       h('div', { class: 'ed-block__head' },
@@ -616,8 +625,16 @@ function renderBlocks() {
     ...list.map((section, i) => {
       const chosen = state.sel === i;
       const name = blockName(section);
-      const hide = blockIcon(section.hidden ? 'eye' : 'eye-off', `${section.hidden ? 'Hiện' : 'Ẩn'} ${name}`, () => toggleHidden(i), { key: `a:${i}:hide` });
-      const drop = blockIcon('trash-2', `Xoá ${name}`, () => remove(i), { danger: true });
+      const show = section.hidden ? 'Hiện' : 'Ẩn';
+      // Dời, tạo bản sao, ẩn, xoá có sẵn trên mọi dòng, không phải mở khối ra mới làm được.
+      const acts = h('span', { class: 'ed-block__acts' },
+        blockIcon('arrow-up', 'Đưa lên', () => move(i, -1), { label: `Đưa ${name} lên`, key: `a:${i}:up`, disabled: i === 0 }),
+        blockIcon('arrow-down', 'Đưa xuống', () => move(i, 1), { label: `Đưa ${name} xuống`, key: `a:${i}:down`, disabled: i === list.length - 1 }),
+        blockIcon('copy-plus', 'Tạo bản sao', () => duplicate(i), { label: `Tạo bản sao của ${name}`, key: `a:${i}:dup` }),
+        blockIcon(section.hidden ? 'eye' : 'eye-off', show, () => toggleHidden(i), { label: `${show} ${name}`, key: `a:${i}:hide` }),
+        blockIcon('trash-2', 'Xoá', async () => {
+          if (await confirmAction(`Xoá khối ${BLOCKS[section.type]?.label ?? section.type} (số ${i + 1})?`, { note: 'Hoàn tác được.', danger: true })) remove(i);
+        }, { label: `Xoá ${name}`, danger: true }));
       const head = blockHead({
         key: i, num: String(i + 1), label: BLOCKS[section.type]?.label ?? section.type, chosen, hidden: section.hidden,
         // Khối đang ẩn không chọn được (không có trên trang), nên nút Hiện nằm ngay ở dòng gọn.
@@ -625,17 +642,11 @@ function renderBlocks() {
       });
       if (!chosen) {
         return h('li', { class: `ed-block ed-block--compact${section.hidden ? ' is-hidden' : ''}` },
-          h('div', { class: 'ed-block__head' }, head, h('span', { class: 'ed-block__acts' }, hide, drop)));
+          h('div', { class: 'ed-block__head' }, head, acts));
       }
       const options = variantsFor(section);
       return h('li', { class: 'ed-block is-sel' },
-        h('div', { class: 'ed-block__head' }, head,
-          h('span', { class: 'ed-block__acts' },
-            blockIcon('arrow-up', `Đưa ${name} lên`, () => move(i, -1), { key: `a:${i}:up`, disabled: i === 0 }),
-            blockIcon('arrow-down', `Đưa ${name} xuống`, () => move(i, 1), { key: `a:${i}:down`, disabled: i === list.length - 1 }),
-            blockIcon('copy-plus', `Nhân đôi ${name}`, () => duplicate(i), { key: `a:${i}:dup` }),
-            hide, drop),
-          closeIcon(i)),
+        h('div', { class: 'ed-block__head' }, head, acts, closeIcon(i)),
         options.length > 1
           ? variantSelect(i, section.variant ?? '', options, `Kiểu của ${name}`)
           : h('span', { class: 'ed-block__one', text: 'Một kiểu' }),
@@ -648,7 +659,7 @@ function renderBlocks() {
   ].filter(Boolean));
 }
 
-/* ---------- Tab Giao diện ---------- */
+/* ---------- Tab Thương hiệu ---------- */
 
 function setThemeVar(name, value, label) {
   commit(label, () => {
@@ -730,40 +741,44 @@ function logoEl() {
   };
   // Ảnh xem trước: đường dẫn tương đối của thương hiệu có sẵn tính từ thư mục của nó.
   const src = logo && (/^(data:|\/|https:)/.test(logo) ? logo : `/brands/${state.baseId ?? state.id}/${logo}`);
+  // Ảnh xem trước bên trái, các nút bên phải; chưa có logo thì ô viền đứt ghi "Chưa có". Định dạng nhận được ghi ở title của nút.
   return h('div', { class: 'ed-logo' },
-    src ? h('img', { class: 'ed-logo__img', src, alt: 'Logo hiện tại' }) : h('p', { class: 'ed-hint', text: 'Chưa có logo, đầu trang hiện tên bằng chữ.' }),
-    h('div', { class: 'ed-row' },
-      h('button', { type: 'button', class: 'ed-btn', onclick: () => file.click(), text: 'Tải logo' }),
+    src ? h('img', { class: 'ed-logo__img', src, alt: 'Logo hiện tại' }) : h('span', { class: 'ed-logo__img ed-logo__none', text: 'Chưa có' }),
+    h('div', { class: 'ed-logo__acts' },
+      h('button', { type: 'button', class: 'ed-btn', onclick: () => file.click(), title: 'PNG, JPG hoặc WebP', text: 'Tải logo' }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: fromName, text: 'Tạo logo chữ cái' }),
       logo ? h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => setLogo(null, 'Bỏ logo'), text: 'Bỏ logo' }) : null),
-    h('p', { class: 'ed-hint', text: 'PNG, JPG hoặc WebP. Logo được thu nhỏ ngay trên máy và lưu cùng nội dung trang, không thành file riêng; biểu tượng tab đổi theo.' }),
     file, note);
 }
 
+// Một phần của tab Thương hiệu: tiêu đề nhỏ rồi nội dung; các phần ngăn nhau bằng đường kẻ mảnh (editor.css, .ed-sec).
+const themeSection = (title, ...children) => h('section', { class: 'ed-sec', 'aria-label': title }, h('h3', { class: 'ed-h', text: title }), ...children);
+
+// Tab Thương hiệu chia bốn phần, từ trên xuống: Thông tin, Logo, Chữ và góc, Màu (palette.js, kèm nhờ AI). Màu để cuối vì là
+// phần dài nhất (bảng màu, tương phản, khung chat AI), không đẩy các phần ngắn xuống khuất.
 function renderTheme() {
-  const font = h('select', { class: 'ed-select', 'aria-label': 'Cặp font', 'data-ed-key': 'font' },
+  const font = h('select', { class: 'ed-select', id: 'ed-font', 'data-ed-key': 'font' },
     FONTS.map((f) => h('option', { value: f.key, text: f.label, selected: (state.theme.font ?? '') === f.key })));
   font.addEventListener('change', () => setFont(font.value));
-  const radius = h('input', { type: 'range', class: 'ed-range', min: '0', max: '32', step: '2', value: String(radiusPx()), 'aria-label': 'Bo góc', 'data-ed-key': 'radius' });
+  const radius = h('input', { type: 'range', class: 'ed-range', id: 'ed-radius', min: '0', max: '32', step: '2', value: String(radiusPx()), 'data-ed-key': 'radius' });
+  const radiusValue = h('output', { class: 'ed-setting__value', for: 'ed-radius', text: `${radiusPx()}px` });
+  // Kéo thì số px đổi theo ngay; thả tay mới ghi vào nháp (một bước Hoàn tác cho cả lần kéo).
+  radius.addEventListener('input', () => { radiusValue.textContent = `${radius.value}px`; });
   radius.addEventListener('change', () => setThemeVar('--radius', `${Number(radius.value) / 16}rem`, 'Đổi bo góc'));
   const c = state.content;
   ui.panes.theme.replaceChildren(
-    h('h3', { class: 'ed-h', text: 'Màu' }),
-    // Khung chat AI gợi ý màu và bảng màu hai nửa Sáng, Tối (palette.js).
+    themeSection('Thông tin',
+      textField('Tên thương hiệu', 'brand.name', c.brand?.name),
+      textField('Khẩu hiệu', 'brand.slogan', c.brand?.slogan),
+      textField('Chữ trên nút chính', 'cta.label', c.cta?.label),
+      textField('Dòng giá dưới nút', 'cta.note', c.cta?.note),
+      textField('Số điện thoại', 'contact.phone', c.contact?.phone),
+      textField('Địa chỉ', 'contact.address', c.contact?.address)),
+    themeSection('Logo', logoEl()),
+    themeSection('Chữ và góc',
+      h('div', { class: 'ed-setting' }, h('label', { for: 'ed-font', text: 'Font' }), font),
+      h('div', { class: 'ed-setting' }, h('label', { for: 'ed-radius', text: 'Bo góc' }), radius, radiusValue)),
     paletteEl({ h, state, commit, frameDoc, rerender: renderTheme }),
-    h('h3', { class: 'ed-h', text: 'Font' }),
-    font,
-    h('h3', { class: 'ed-h' }, 'Bo góc: ', h('span', { text: `${radiusPx()}px` })),
-    radius,
-    h('h3', { class: 'ed-h', text: 'Logo' }),
-    logoEl(),
-    h('h3', { class: 'ed-h', text: 'Thông tin chung' }),
-    textField('Tên thương hiệu', 'brand.name', c.brand?.name),
-    textField('Khẩu hiệu', 'brand.slogan', c.brand?.slogan),
-    textField('Chữ trên nút chính', 'cta.label', c.cta?.label),
-    textField('Dòng giá dưới nút', 'cta.note', c.cta?.note),
-    textField('Số điện thoại', 'contact.phone', c.contact?.phone),
-    textField('Địa chỉ', 'contact.address', c.contact?.address),
   );
 }
 
@@ -828,7 +843,12 @@ function renderPages() {
       return h('li', { class: path === state.page ? 'is-on' : '' },
         h('span', {}, p.title ?? (path === '/' ? 'Trang chủ' : path), h('small', { text: ` /${path === '/' ? '' : path}` })),
         h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': `p:${path}`, onclick: () => openPage(path), text: 'Mở' }),
-        p.added ? h('button', { type: 'button', class: 'ed-btn ed-btn--danger', onclick: () => removePage(path), text: 'Xoá' }) : null);
+        p.added ? h('button', {
+          type: 'button', class: 'ed-btn ed-btn--danger', text: 'Xoá',
+          onclick: async () => {
+            if (await confirmAction(`Xoá trang ${p.title ?? path}?`, { note: 'Hoàn tác được.', danger: true })) removePage(path);
+          },
+        }) : null);
     })),
     h('h3', { class: 'ed-h', text: 'Thêm trang' }),
     form,
@@ -913,6 +933,11 @@ function themeCss() {
   let body = m[1];
   const extra = [];
   for (const [name, value] of Object.entries(state.theme.vars)) {
+    // Chế độ tối đã tắt (palette.js): bỏ hẳn dòng biến tối của thương hiệu, không ghi "initial" vào theme.css.
+    if (value === DARK_OFF) {
+      body = body.replace(new RegExp(`^[ \\t]*${name.replace(/-/g, '\\-')}\\s*:[^;]*;[ \\t]*\\n?`, 'm'), '');
+      continue;
+    }
     const re = new RegExp(`(^|[\\s;{])(${name.replace(/-/g, '\\-')}\\s*:\\s*)[^;]+;`, 'm');
     if (re.test(body)) body = body.replace(re, `$1$2${value};`);
     else extra.push(`  ${name}: ${value};`);
@@ -1136,7 +1161,7 @@ function resizerEl() {
 // Nhãn đủ cho màn rộng và nhãn ngắn cho màn laptop, CSS chọn hiện một trong hai; trình đọc màn hình đọc nhãn đủ (aria-label).
 const twoLabels = (long, short) => [h('span', { class: 'ed-top__long', text: long }), h('span', { class: 'ed-top__short', 'aria-hidden': 'true', text: short })];
 
-const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['catalog', 'Danh mục'], ['ai', 'AI']];
+const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Thương hiệu'], ['pages', 'Trang'], ['catalog', 'Danh mục'], ['ai', 'AI']];
 
 function build() {
   const css = h('link', { rel: 'stylesheet', href: '/css/tool/editor.css' });

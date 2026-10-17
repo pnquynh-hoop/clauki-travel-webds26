@@ -3,6 +3,7 @@
    editor.js đưa chúng qua commit() để có hoàn tác và nháp. Chữ luôn qua textContent hoặc value, không ghép HTML. */
 import { fieldsFor } from './manifest.js';
 import { iconEl } from '../core/icon.js';
+import { confirmAction } from './confirm.js';
 
 export function getIn(obj, path) {
   if (!path) return obj;
@@ -113,9 +114,10 @@ function fieldEl(ctx, section, field, base = '') {
   return ctx.h(field.type === 'image' ? 'div' : 'label', { class: 'ed-field' }, ctx.h('span', { text: field.label }), control);
 }
 
-// Nút icon của một mục (mũi tên lên, xuống, thùng rác), cùng kiểu với nút của danh sách khối; tên việc nằm ở aria-label, title.
-function itemIcon(ctx, icon, label, onclick, { key, disabled = false, danger = false } = {}) {
-  return ctx.h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title: label },
+// Nút icon của một mục (mũi tên lên, xuống, thùng rác), cùng kiểu với nút của danh sách khối: title là tên việc ngắn
+// hiện khi rê chuột, aria-label đọc kèm tên mục cho trình đọc màn hình.
+function itemIcon(ctx, icon, title, onclick, { label = title, key, disabled = false, danger = false } = {}) {
+  return ctx.h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title },
     iconEl(icon, 'ed-icon'));
 }
 
@@ -127,9 +129,11 @@ function listEl(ctx, section, field, path, items) {
       ctx.h('legend', { class: 'ed-item__head' },
         ctx.h('span', { text: name }),
         ctx.h('span', { class: 'ed-block__acts' },
-          itemIcon(ctx, 'arrow-up', `Đưa ${name} lên`, () => ctx.list(path, 'up', i), { key: `${ctx.key}:${path}:${i}:up`, disabled: i === 0 }),
-          itemIcon(ctx, 'arrow-down', `Đưa ${name} xuống`, () => ctx.list(path, 'down', i), { key: `${ctx.key}:${path}:${i}:down`, disabled: i === items.length - 1 }),
-          itemIcon(ctx, 'trash-2', `Xoá ${name}`, () => ctx.list(path, 'remove', i), { danger: true }))),
+          itemIcon(ctx, 'arrow-up', 'Đưa lên', () => ctx.list(path, 'up', i), { label: `Đưa ${name} lên`, key: `${ctx.key}:${path}:${i}:up`, disabled: i === 0 }),
+          itemIcon(ctx, 'arrow-down', 'Đưa xuống', () => ctx.list(path, 'down', i), { label: `Đưa ${name} xuống`, key: `${ctx.key}:${path}:${i}:down`, disabled: i === items.length - 1 }),
+          itemIcon(ctx, 'trash-2', 'Xoá', async () => {
+            if (await confirmAction(`Xoá ${name.toLowerCase()}?`, { note: 'Hoàn tác được.', danger: true })) ctx.list(path, 'remove', i);
+          }, { label: `Xoá ${name}`, danger: true }))),
       field.fields.map((sub) => fieldEl(ctx, section, sub, join(path, String(i)))));
   });
   return ctx.h('div', { class: 'ed-list' },
