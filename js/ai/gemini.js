@@ -4,14 +4,14 @@
    - máy demo: cấu hình dán vào localStorage của máy thuyết trình (khoá DEMO_KEY), không bao giờ commit.
    Có cấu hình demo thì dùng demo, không thì dùng công khai. SDK chỉ tải khi gọi AI lần đầu.
    Thêm hai khoá Gemini dự phòng của thành viên (BACKUP_KEYS, gọi thẳng REST API của Gemini, không qua Firebase). Thứ tự thử:
-   model chính trên Firebase, rồi trên từng khoá dự phòng; cả ba hết lượt (429) mới hạ xuống model dự phòng, cũng lần lượt
-   Firebase rồi các khoá. Đường nào hết lượt thì nghỉ COOL_MS rồi mới dùng lại.
+   model chính trên từng khoá dự phòng, rồi Firebase sau cùng (giữ hạn mức Firebase cho buổi demo); cả ba hết lượt (429) mới hạ
+   xuống model dự phòng, cũng lần lượt các khoá rồi Firebase. Đường nào hết lượt thì nghỉ COOL_MS rồi mới dùng lại.
    Gói miễn phí: Google dùng nội dung gửi lên để cải thiện sản phẩm, nên không gửi dữ liệu cá nhân hay đơn đặt chỗ. */
 
 const SDK = 'https://www.gstatic.com/firebasejs/13.0.0';
 const DEMO_KEY = 'clauki-ai-demo';
 export const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
-// Model dự phòng, có hạn mức riêng: chỉ dùng khi model chính hết lượt trên mọi đường (Firebase và các khoá dự phòng).
+// Model dự phòng, có hạn mức riêng: chỉ dùng khi model chính hết lượt trên mọi đường (các khoá dự phòng và Firebase).
 export const FALLBACK_MODEL = 'gemini-3.1-flash-lite';
 // Khoá Gemini API dự phòng (Như Quỳnh, Mị Nương). Khoá nằm trong mã trang nên ai xem mã cũng thấy; giới hạn tên miền và gói miễn phí
 // của từng khoá đặt trên Google Cloud.
@@ -25,8 +25,6 @@ const COOL_MS = 60000;
 const cooling = new Map();
 let lastRoute = null;
 export const usingFallback = () => lastRoute?.model === FALLBACK_MODEL;
-// Đang dùng khoá dự phòng thứ mấy (1, 2), 0 là Firebase.
-export const backupInUse = () => (lastRoute?.key ? BACKUP_KEYS.indexOf(lastRoute.key) + 1 : 0);
 
 // Các lượt gọi đã xong (model, khoá), để chỗ nào gọi AI cũng báo được đã dùng model gì: lấy mốc usageMark() trước khi gọi, xong thì
 // modelsSince(mốc). Một việc có nhiều lượt song song (tạo website) có thể dùng nhiều model khi model chính hết lượt giữa chừng.
@@ -42,7 +40,9 @@ export function modelsSince(mark = 0) {
 
 function routes() {
   const main = readDemo()?.model || DEFAULT_MODEL;
-  const sources = [null, ...BACKUP_KEYS];
+  // Khoá dự phòng của thành viên trước, Firebase (khoá của Gia Huy, project công khai hay demo) sau cùng, để hạn mức của Firebase
+  // còn nguyên cho buổi demo.
+  const sources = [...BACKUP_KEYS, null];
   return [main, FALLBACK_MODEL].flatMap((model) => sources.map((key) => ({ key, model, id: `${key ? key.slice(-6) : 'firebase'}|${model}` })));
 }
 
