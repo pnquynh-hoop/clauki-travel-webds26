@@ -315,6 +315,58 @@ function scalePrices(content, price) {
   walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
 }
 
+// Chữ trùng khẩu hiệu của một khung là khẩu hiệu, không phải câu để AI viết lại: tiêu đề hero trang chủ SighGone ("Every sigh,
+// gone.") và lời hẹn của chân trang headline tách hai dòng (title "Every sigh,", titleAccent "gone."). AI hay giữ nguyên câu tiếng Anh
+// này, nên code điền khẩu hiệu mới vào đúng các chỗ đó. Trả về { full: [vị trí], split: [[vị trí dòng 1, vị trí dòng 2]] }.
+const plain = (text) => (typeof text === 'string' ? text.toLowerCase().replace(/\s+/g, ' ').trim() : '');
+
+function sloganSpots(template, pool) {
+  const known = new Set(Object.values(pool).map((f) => plain(f?.brand?.slogan)).filter(Boolean));
+  const spots = { full: [], split: [] };
+  const walk = (node, path) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...path, i]));
+    else if (node && typeof node === 'object') {
+      if (typeof node.title === 'string' && typeof node.titleAccent === 'string' && known.has(plain(`${node.title} ${node.titleAccent}`))) {
+        spots.split.push([[...path, 'title'].join('.'), [...path, 'titleAccent'].join('.')]);
+      }
+      for (const [k, v] of Object.entries(node)) if (!SKIP.has(k)) walk(v, [...path, k]);
+    } else if (known.has(plain(node)) && path.join('.') !== 'brand.slogan') spots.full.push(path.join('.'));
+  };
+  walk(template, []);
+  return spots;
+}
+
+// Bỏ các vị trí khẩu hiệu khỏi danh sách chữ gửi AI; dòng không còn vị trí nào thì bỏ hẳn.
+function withoutPaths(fields, spots) {
+  const skip = new Set([...spots.full, ...spots.split.flat()]);
+  return fields.map((f) => ({ ...f, paths: f.paths.filter((p) => !skip.has(p)) }))
+    .filter((f) => f.paths.length)
+    .map((f) => ({ ...f, key: f.paths[0] }));
+}
+
+// Điền khẩu hiệu mới; chỗ tách hai dòng thì cắt ở dấu phẩy cuối (giữ dấu phẩy ở dòng 1), không có dấu phẩy thì cắt giữa các từ.
+function fillSlogan(content, spots, slogan) {
+  if (!slogan) return;
+  for (const path of spots.full) setIn(content, path, slogan);
+  if (!spots.split.length) return;
+  const comma = slogan.lastIndexOf(',');
+  let first;
+  let second;
+  if (comma > 0 && comma < slogan.length - 1) {
+    first = slogan.slice(0, comma + 1).trim();
+    second = slogan.slice(comma + 1).trim();
+  } else {
+    const words = slogan.trim().split(/\s+/);
+    const half = Math.ceil(words.length / 2);
+    first = words.slice(0, half).join(' ');
+    second = words.slice(half).join(' ');
+  }
+  for (const [a, b] of spots.split) {
+    setIn(content, a, first);
+    setIn(content, b, second);
+  }
+}
+
 // Tiêu đề đọc nhanh của intro (morph: "Sài Gòn" lật thành "Sigh Gone") là chơi chữ trên tên SighGone, AI không viết lại được cho tên mới
 // và để nguyên thì các tấm lật hiện chữ SIGHGONE. Bỏ ở mọi trang của site mới, tiêu đề hiện như headline thường.
 function dropMorph(content) {
@@ -542,9 +594,11 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   dropMorph(template);
   const content = structuredClone(template);
   const oldNames = oldNamesOf(pool, profile);
-  const fields = extractFields(template);
+  const slogans = sloganSpots(template, pool);
+  const fields = withoutPaths(extractFields(template), slogans);
   rebase(content, frame);
   applyProfile(content, profile, slug);
+  fillSlogan(content, slogans, content.brand?.slogan);
   const frameCss = await fetch(`/brands/${frame}/theme.css`).then((r) => (r.ok ? r.text() : '')).catch(() => '');
   const vars = paletteVars(profile.mau, frameCss.includes('--dark-color-bg'));
   const theme = { base: frame, vars: vars ?? {} };
