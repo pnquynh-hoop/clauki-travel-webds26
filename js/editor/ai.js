@@ -10,6 +10,7 @@ import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL, us
 import { editSystem, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
+import { confirmAction } from './confirm.js';
 
 const SITE_FIELDS = {
   'brand.name': 'Tên thương hiệu',
@@ -295,7 +296,8 @@ function configEl() {
     }
   });
   const clear = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', text: 'Xoá' });
-  clear.addEventListener('click', () => {
+  clear.addEventListener('click', async () => {
+    if (!await confirmAction('Xoá cấu hình AI của máy này?', { note: 'Không lấy lại được.', danger: true })) return;
     saveDemo(null);
     area.value = '';
     note.textContent = 'Đã xoá cấu hình demo khỏi máy này.';

@@ -102,10 +102,12 @@ Trường dữ liệu của từng khối: mục 12 của [AGENTS.md](AGENTS.md)
 Mở bằng nút tròn, mục **Chỉnh sửa**, hoặc thêm `?sua` vào địa chỉ. Trang thật chạy trong khung xem trước (điện thoại 390,
 máy tính bảng 768, laptop 1440), bảng chỉnh bên phải có sáu tab:
 
-- **Khối**: chọn khối trên trang để đổi kiểu, dời lên xuống, ẩn, nhân đôi, xoá, thêm khối mới, sửa chữ và ảnh (form sinh theo
-  `js/editor/manifest.js`); khối Đầu trang có kéo thả thứ tự menu.
+- **Khối**: mỗi dòng có nút dời lên xuống, tạo bản sao, ẩn, xoá (xoá hỏi xác nhận trước); bấm khối trên trang hay trong
+  danh sách để đổi kiểu, sửa chữ và ảnh (form sinh theo `js/editor/manifest.js`), thêm khối mới; khối Đầu trang có kéo thả
+  thứ tự menu.
 - **English**: thêm bản tiếng Anh do AI dịch, sửa từng câu.
-- **Giao diện**: màu sáng, tối (nhờ AI gợi ý bằng lời hoặc tự chỉnh, có kiểm tương phản WCAG), font, logo.
+- **Thương hiệu**: thông tin (tên, khẩu hiệu, nút chính, liên hệ), logo, font và bo góc, màu (công tắc bật tắt chế độ tối,
+  xem trước sáng, tối, nhờ AI gợi ý phối màu bằng lời hoặc tự chỉnh, có kiểm tương phản WCAG).
 - **Trang**: mở từng trang, thêm trang mới (trống hoặc chép từ trang đang mở).
 - **Danh mục**: sửa tour, phòng một lần, mọi khối dùng danh mục cùng đổi.
 - **AI**: sửa website bằng lời (gõ hoặc nói); AI trả về các thao tác nhỏ, hiện dạng "trước, sau", bấm Đồng ý mới áp.

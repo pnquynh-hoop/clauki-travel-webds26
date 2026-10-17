@@ -1,5 +1,6 @@
-/* palette.js - phần Màu của tab Giao diện trong editor (#82): trên là khung chat nhờ AI gợi ý bảng màu sáng và tối,
-   dưới là bảng màu chia hai nửa Sáng, Tối để tự chỉnh từng màu, kèm kiểm tương phản AA của từng chế độ.
+/* palette.js - phần Màu của tab Thương hiệu trong editor (#82): hàng tiêu đề có công tắc xem trước Sáng, Tối; dưới là bảng màu
+   chia hai cột Sáng, Tối để tự chỉnh từng màu, một dòng tóm tắt tương phản AA (bấm mở chi tiết từng cặp), cuối là khung chat
+   nhờ AI gợi ý bảng màu sáng và tối.
    Màu tối lưu thành biến --dark-<tên> trong theme của nháp (theme-mode.js của trang dùng chúng khi khách bật chế độ tối);
    tải theme.css thì các biến này nằm trong :root như mọi biến khác.
    Có màu tối mà dữ liệu chưa có header.modeLabel thì thêm luôn, để nút sáng, tối hiện trên header của trang.
@@ -9,11 +10,12 @@
    Bấm Đồng ý mới áp, một lần Hoàn tác là bỏ hết. Bộ kiểm độ bền với nhiều kiểu câu nhờ: palette-eval.js. */
 import { COLORS, CONTRAST } from './manifest.js';
 import { contrastRatio, AA } from './contrast.js';
-import { darkName } from '../core/theme-mode.js';
+import { darkName, readMode } from '../core/theme-mode.js';
 import { streamLines, cleanText, usageMark, modelsSince } from '../ai/gemini.js';
 import { paletteSystem, paletteRetry, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
 import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
+import { iconEl } from '../core/icon.js';
 
 const HEX = /^#[0-9a-f]{6}$/i;
 const MODE_LABEL = 'Chế độ tối';
@@ -47,8 +49,16 @@ function renderHistory() {
 
 /* ---------- Đọc màu ---------- */
 
+// Chế độ tối bị tắt mà theme.css của thương hiệu vốn có màu tối (SighGone): nháp ghi "initial" cho các biến --dark-* đó.
+// Biến tuỳ chỉnh mang giá trị initial coi như không khai, nên trang trong khung không còn bảng màu tối; tải theme.css thì
+// các dòng đó bị bỏ hẳn (editor.js, themeCss).
+export const DARK_OFF = 'initial';
+
 const light = (name, vars = api.state.theme.vars) => vars[name] ?? api.state.base[name] ?? '';
-const darkOnly = (name, vars = api.state.theme.vars) => vars[darkName(name)] ?? api.state.base[darkName(name)] ?? '';
+const darkOnly = (name, vars = api.state.theme.vars) => {
+  const value = vars[darkName(name)] ?? api.state.base[darkName(name)] ?? '';
+  return value === DARK_OFF ? '' : value;
+};
 // Màu tối của một biến; biến chưa có bản tối thì trang giữ màu sáng, nên kiểm tương phản cũng dùng màu sáng.
 const dark = (name, vars) => darkOnly(name, vars) || light(name, vars);
 const hasDark = (vars) => Boolean(darkOnly('--color-bg', vars));
@@ -130,13 +140,35 @@ function preview(mode) {
   api.rerender();
 }
 
+// Bật chế độ tối: thương hiệu vốn có màu tối mà đã bị tắt thì chỉ gỡ các dấu tắt (lấy lại màu tối gốc), không thì pha bảng
+// tối từ màu sáng. Kèm header.modeLabel để header có nút đổi sáng, tối.
 function createDark() {
-  const values = deriveDark();
-  api.commit('Tạo bảng màu tối từ màu sáng', () => {
-    Object.entries(values).forEach(([name, value]) => put(darkName(name), value));
-    ensureModeLabel();
+  const vars = api.state.theme.vars;
+  const offKeys = Object.keys(vars).filter((key) => vars[key] === DARK_OFF);
+  const restore = offKeys.length > 0;
+  const values = restore ? null : deriveDark();
+  api.commit('Bật chế độ tối', () => {
+    offKeys.forEach((key) => delete vars[key]);
+    if (values) Object.entries(values).forEach(([name, value]) => put(darkName(name), value));
+    const label = api.state.raw?.header?.modeLabel ?? MODE_LABEL;
+    if (!api.state.content.header?.modeLabel) api.state.content.header = { ...(api.state.content.header ?? {}), modeLabel: label };
   });
   preview('dark');
+}
+
+// Tắt chế độ tối: bỏ mọi biến --dark-* của nháp; biến tối có sẵn trong theme.css của thương hiệu thì ghi dấu tắt (DARK_OFF).
+// Bỏ cả header.modeLabel để header không còn nút đổi. Khách đã chọn tối từ trước cũng về sáng vì trang không còn màu tối.
+function removeDark() {
+  api.commit('Tắt chế độ tối', () => {
+    const vars = api.state.theme.vars;
+    const keys = new Set([...Object.keys(api.state.base), ...Object.keys(vars)].filter((key) => key.startsWith('--dark-')));
+    keys.forEach((key) => {
+      if (api.state.base[key] !== undefined) vars[key] = DARK_OFF;
+      else delete vars[key];
+    });
+    if (api.state.content.header) delete api.state.content.header.modeLabel;
+  });
+  preview('light');
 }
 
 /* ---------- AI gợi ý màu ---------- */
@@ -297,7 +329,7 @@ function setFixed(items, vars, name, mode, value, auto) {
 }
 
 // Nền thẻ một phía sáng tối, nền trang phía kia thì không màu chữ nào đọc được trên cả hai: dựng lại nền thẻ từ nền trang,
-// sáng hơn nền trang một chút như nút Tạo bảng màu tối. Nền trang là phần lớn của trang nên làm chuẩn.
+// sáng hơn nền trang một chút như khi bật Chế độ tối (deriveDark). Nền trang là phần lớn của trang nên làm chuẩn.
 function fixSurface(items, vars, mode, get) {
   const bg = get('--color-bg');
   const surface = get('--color-surface');
@@ -450,8 +482,10 @@ function renderOut() {
   const group = (mode, title) => {
     const rows = items.filter((p) => p.mode === mode);
     if (!rows.length) return null;
-    // Chỉ hiện màu được gợi ý; màu đang dùng đã thấy ở bảng màu bên dưới.
-    return h('div', {}, h('p', { class: 'ed-palette__group', text: title }), h('ul', { class: 'ed-diff' }, rows.map((p) => h('li', {},
+    // Chỉ hiện màu được gợi ý; màu đang dùng đã thấy ở bảng màu. Tiêu đề nhóm có icon mặt trời, mặt trăng và bám mép trên khi
+    // cuộn trong khung kết quả, để màu nào của chế độ nào luôn thấy rõ.
+    return h('div', {}, h('p', { class: 'ed-palette__group ed-palette__mode-h' }, iconEl(mode === 'dark' ? 'moon' : 'sun', 'ed-icon'), title),
+      h('ul', { class: 'ed-diff' }, rows.map((p) => h('li', {},
       h('strong', { text: p.label }),
       h('span', { class: 'ed-diff__to' }, swatch(p.to), p.to),
       fixNote(p)))));
@@ -513,7 +547,7 @@ function aiEl() {
   renderOut();
   renderHistory();
   return h('div', { class: 'ed-palette__ai' },
-    h('label', { class: 'ed-field', for: 'ed-palette-ai' }, h('span', { text: 'Nhờ AI gợi ý màu sáng, tối' })),
+    h('label', { class: 'ed-field', for: 'ed-palette-ai' }, h('span', { text: 'Nhờ AI gợi ý cách phối màu cho trang web của bạn' })),
     area,
     h('div', { class: 'ed-row' },
       h('button', { type: 'button', class: 'ed-btn', disabled: busy, onclick: () => send(area.value), text: busy ? 'Đang gợi ý...' : 'Gợi ý màu' }),
@@ -545,27 +579,48 @@ function checksEl(title, list) {
       h('b', { text: x.r === null ? 'không đo được' : `${x.r.toFixed(2)} ${x.ok ? 'đạt AA' : 'chưa đạt, cần từ 4,5'}` })))));
 }
 
+// Tương phản gọn một dòng: đạt hết thì chỉ một dòng xanh, bấm mới xem từng cặp; có cặp chưa đạt thì dòng đỏ, mở sẵn.
+function contrastEl(withDark) {
+  const { h } = api;
+  const groups = [['Chế độ sáng', checks((n) => light(n))], ...(withDark ? [['Chế độ tối', checks((n) => dark(n))]] : [])];
+  const bad = groups.reduce((n, [, list]) => n + list.filter((x) => !x.ok).length, 0);
+  return h('details', { class: `ed-contrast${bad ? ' is-bad' : ''}`, open: bad > 0 },
+    h('summary', {}, iconEl(bad ? 'circle-alert' : 'circle-check', 'ed-icon'),
+      bad ? `${bad} cặp màu chưa đạt tương phản AA` : `Tương phản đạt AA${withDark ? ' cả hai chế độ' : ''}`),
+    groups.map(([title, list]) => checksEl(title, list)));
+}
+
 // api: h, state, commit, frameDoc, rerender. state.previewMode nhớ chế độ đang xem trong khung.
 export function paletteEl(options) {
   api = options;
   const { h, state } = api;
-  state.previewMode ??= 'light';
   const withDark = hasDark();
-  const seg = (mode, label) => h('button', { type: 'button', class: 'ed-seg', 'aria-pressed': String(state.previewMode === mode), onclick: () => preview(mode), text: label });
+  // Công tắc luôn đọc chế độ trang trong khung đang nhớ (localStorage clauki-mode, cùng nguồn với khung; preview ghi vào đó
+  // trước khi vẽ lại), nên mở editor, F5 hay đổi thương hiệu đều khớp với trang. Không có bảng màu tối thì chỉ có sáng.
+  state.previewMode = withDark ? readMode() : 'light';
+  // Nút xem trước là icon mặt trời, mặt trăng; chưa bật chế độ tối thì mặt trăng khoá lại (chưa có màu tối để xem).
+  const seg = (mode, icon, label, off = false) => h('button', {
+    type: 'button', class: 'ed-seg ed-seg--icon', 'aria-pressed': String(state.previewMode === mode), disabled: off,
+    'aria-label': label, title: off ? 'Chưa bật chế độ tối' : label, onclick: () => preview(mode),
+  }, iconEl(icon, 'ed-icon'));
+  // Công tắc Chế độ tối: trang có cho khách đổi sang tối hay không. Bật thì có cột Tối để chỉnh và nút xem trước.
+  const darkSwitch = h('button', {
+    type: 'button', class: 'ed-switch', role: 'switch', 'aria-checked': String(withDark), 'data-ed-key': 'dark-mode',
+    onclick: () => (withDark ? removeDark() : createDark()),
+  }, h('span', { class: 'ed-switch__track', 'aria-hidden': 'true' }, h('span', { class: 'ed-switch__thumb' })), h('span', { text: 'Chế độ tối' }));
   const rows = COLORS.map(([name, label]) => h('div', { class: 'ed-palette__row' },
     h('span', { class: 'ed-palette__name', text: label }),
     colorInput(name, label, light(name), 'light'),
     withDark ? colorInput(name, label, darkOnly(name), 'dark') : null));
-  return h('div', { class: 'ed-palette' },
-    aiEl(),
-    h('div', { class: 'ed-row ed-palette__view' }, h('span', { class: 'ed-hint', text: 'Xem trước' }),
-      h('span', { class: 'ed-palette__modes', role: 'group', 'aria-label': 'Chế độ xem trước' }, seg('light', 'Sáng'), seg('dark', 'Tối'))),
+  // Dưới tiêu đề là một hàng: công tắc Chế độ tối bên trái, công tắc xem trước bên phải (mặt trăng mở khi đã bật chế độ tối).
+  return h('section', { class: 'ed-sec ed-palette', 'aria-label': 'Màu' },
+    h('h3', { class: 'ed-h', text: 'Màu' }),
+    h('div', { class: 'ed-palette__switches' }, darkSwitch,
+      h('span', { class: 'ed-palette__modes', role: 'group', 'aria-label': 'Xem trước' },
+        seg('light', 'sun', 'Xem chế độ sáng'), seg('dark', 'moon', 'Xem chế độ tối', !withDark))),
     h('div', { class: `ed-palette__grid${withDark ? '' : ' is-light-only'}` },
       h('div', { class: 'ed-palette__row ed-palette__head' }, h('span', {}), h('span', { text: 'Sáng' }), withDark ? h('span', { text: 'Tối' }) : null),
       rows),
-    withDark ? null : h('div', {},
-      h('p', { class: 'ed-hint', text: 'Thương hiệu chưa có bảng màu tối. Tạo từ màu sáng rồi chỉnh tiếp, hoặc nhờ AI gợi ý ở trên.' }),
-      h('button', { type: 'button', class: 'ed-btn', onclick: createDark, text: 'Tạo bảng màu tối' })),
-    checksEl('Tương phản chế độ sáng', checks((n) => light(n))),
-    withDark ? checksEl('Tương phản chế độ tối', checks((n) => dark(n))) : null);
+    contrastEl(withDark),
+    aiEl());
 }

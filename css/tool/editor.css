@@ -239,6 +239,11 @@
   place-items: center;
 }
 
+.ed-seg:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* Icon trong nút: khung giữ sẵn cỡ để nút không nhảy lúc icon còn đang tải từ CDN. */
 .ed-icon {
   display: block;
@@ -255,6 +260,64 @@
 
 .ed-btn--icon {
   gap: 0.4em;
+}
+
+/* Nút Nói đang nghe: chữ, viền đỏ và icon dừng nhịp nhẹ, để thấy ngay micro đang bật và bấm vào là dừng. */
+.ed-mic.is-on {
+  color: var(--ed-red);
+  border-color: currentColor;
+}
+
+/* Khối bọc nút Nói và dòng báo lỗi không tạo hộp riêng: hai thứ đứng thẳng trong hàng nút của nơi gọi. */
+.ed-mic-wrap {
+  display: contents;
+}
+
+.ed-mic__note {
+  align-self: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ed-red);
+}
+
+/* Hai chữ Nói, Dừng nằm chồng trong một ô lưới: nút rộng bằng chữ dài hơn ở cả hai trạng thái, chữ đang ẩn không đọc. */
+.ed-mic__label {
+  display: grid;
+}
+
+.ed-mic__label > span {
+  grid-area: 1 / 1;
+}
+
+.ed-mic:not(.is-on) .ed-mic__label > :last-child,
+.ed-mic.is-on .ed-mic__label > :first-child {
+  visibility: hidden;
+}
+
+.ed-mic:not(.is-on) .ed-mic__stop,
+.ed-mic.is-on .ed-mic__mic {
+  display: none;
+}
+
+.ed-mic__stop {
+  animation: ed-mic-pulse 1s ease-in-out infinite;
+}
+
+/* Icon dừng là hình vuông đặc: icon Lucide chỉ có nét, tô đầy bằng màu chữ (đỏ). */
+.ed-mic__stop svg {
+  fill: currentColor;
+}
+
+@keyframes ed-mic-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-mic__stop {
+    animation: none;
+  }
 }
 
 /* Công tắc Xem thử: đường trượt và núm tròn, bật thì đường trượt sáng màu nhấn và núm sang phải. */
@@ -383,7 +446,7 @@
     border-color: rgb(255 255 255 / 0.35);
   }
 
-  .ed-seg:not([aria-pressed='true']):hover,
+  .ed-seg:not([aria-pressed='true'], :disabled):hover,
   .ed-lang__opt:not([aria-checked='true']):hover {
     color: var(--ed-ink);
     background: rgb(24 24 27 / 0.07);
@@ -538,9 +601,12 @@ a.ed-btn[aria-busy='true'] {
 
 .ed-tabs {
   display: grid;
-  /* Số tab đổi theo trang (tab English chỉ có khi đã bật bản tiếng Anh): mỗi tab một cột bằng nhau. */
-  grid-auto-columns: 1fr;
+  /* Số tab đổi theo trang (tab English chỉ có khi đã bật bản tiếng Anh): các tab chia đều bề ngang, nhưng không hẹp hơn chữ
+     của mình, để tên dài như "Thương hiệu" không gãy xuống hai dòng. */
+  grid-auto-columns: minmax(max-content, 1fr);
   grid-auto-flow: column;
+  /* Bảng kéo hẹp mà đủ sáu tab (có English, Danh mục) thì hàng tab cuộn ngang thay vì đè chữ. */
+  overflow-x: auto;
   gap: 3px;
   padding: 0.5rem;
   background: #fff;
@@ -549,6 +615,7 @@ a.ed-btn[aria-busy='true'] {
 
 .ed-tab {
   min-height: 2.4rem;
+  padding-inline: 0.5rem;
   font-weight: 800;
   color: var(--ed-muted);
   background: transparent;
@@ -793,7 +860,7 @@ a.ed-btn[aria-busy='true'] {
   }
 }
 
-/* ---------- Tab Giao diện ---------- */
+/* ---------- Tab Thương hiệu ---------- */
 
 .ed-colors {
   display: grid;
@@ -952,6 +1019,82 @@ a.ed-btn[aria-busy='true'] {
 
 .ed-err:empty {
   display: none;
+}
+
+/* ---------- Hộp xác nhận (confirm.js) ---------- */
+
+/* Hộp nhỏ giữa màn hình trên nền mờ: câu hỏi, một dòng hệ quả, hai nút Huỷ và Xác nhận. Hộp hiện ra hơi phóng lên để mắt
+   bắt ngay chỗ cần trả lời; giảm chuyển động thì hiện thẳng. */
+/* margin: auto đặt hộp giữa màn hình: base.css xoá margin của mọi thẻ (* { margin: 0 }), làm mất margin mặc định của
+   <dialog> nên hộp bị dạt lên góc trên bên trái. */
+.ed-dialog {
+  width: min(22rem, calc(100vw - 2rem));
+  margin: auto;
+  padding: 0;
+  color: var(--ed-ink);
+  background: #fff;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.45);
+}
+
+.ed-dialog[open] {
+  animation: ed-dialog-in 0.16s ease-out;
+}
+
+.ed-dialog::backdrop {
+  background: rgb(24 24 27 / 0.45);
+}
+
+.ed-dialog__box {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem 1rem;
+}
+
+.ed-dialog__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.ed-dialog__note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ed-muted);
+}
+
+.ed-dialog__acts {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+/* Xác nhận một việc xoá: nút đỏ (chữ trắng trên #b91c1c đạt 6,5), rê chuột đỏ đậm hơn thay vì màu rê của nút chính. */
+.ed-dialog__danger {
+  background: var(--ed-red);
+}
+
+@media (hover: hover) {
+  .ed-btn.ed-dialog__danger:not(:disabled):hover {
+    background: #991b1b;
+    box-shadow: none;
+  }
+}
+
+@keyframes ed-dialog-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-dialog[open] {
+    animation: none;
+  }
 }
 
 /* ---------- Thông báo ngắn ---------- */
@@ -1404,12 +1547,71 @@ a.ed-btn[aria-busy='true'] {
   scrollbar-color: rgb(120 120 128 / 0.55) transparent;
 }
 
+/* ---------- Các phần của tab Thương hiệu ----------
+   Mỗi phần một tiêu đề nhỏ, ngăn nhau bằng đường kẻ mảnh, không lồng khung trong khung. */
+.ed-sec {
+  padding-block: 1.1rem;
+  border-top: 1px solid var(--ed-line);
+}
+
+.ed-sec:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.ed-sec > .ed-h {
+  margin: 0 0 0.4rem;
+}
+
+/* Phần Màu là lưới đã có khoảng cách giữa các hàng, tiêu đề không cần lề dưới riêng. */
+.ed-palette > .ed-h {
+  margin-bottom: -0.4rem;
+}
+
+/* Hàng tiêu đề có điều khiển bên phải (công tắc xem trước của phần Màu). */
+.ed-sec__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ed-sec__head .ed-h {
+  margin: 0;
+}
+
+/* Một dòng chỉnh: nhãn bên trái, điều khiển ở giữa, giá trị (nếu có) bên phải. */
+.ed-setting {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.ed-setting > label {
+  font-weight: 700;
+}
+
+.ed-setting > :nth-child(2):last-child {
+  grid-column: 2 / -1;
+}
+
+.ed-setting__value {
+  min-width: 2.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ed-muted);
+}
+
 /* ---------- Màu sáng, tối (palette.js) ----------
-   Khung chat AI ở trên, dưới là lưới ba cột: tên màu, ô màu sáng, ô màu tối; chưa có bảng tối thì còn hai cột. */
+   Hàng tiêu đề có công tắc xem trước; dưới là lưới ba cột: tên màu, ô màu sáng, ô màu tối (chưa có bảng tối thì hai cột),
+   một dòng tương phản, cuối là khung nhờ AI. */
 
 .ed-palette {
   display: grid;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .ed-palette__ai {
@@ -1437,6 +1639,21 @@ a.ed-btn[aria-busy='true'] {
   overflow-y: auto;
   overscroll-behavior: contain;
   border-top: 1px solid var(--ed-line);
+}
+
+/* Tiêu đề nhóm màu trong kết quả AI (Chế độ sáng, Chế độ tối): bám mép trên khung khi cuộn. */
+.ed-palette__ai .ed-palette__mode-h {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.5rem 0 0.35rem;
+  font-size: 0.85rem;
+  color: var(--ed-ink);
+  background: #fff;
 }
 
 .ed-palette__ai .ed-ai__say {
@@ -1467,14 +1684,54 @@ a.ed-btn[aria-busy='true'] {
   background: #fff;
 }
 
-.ed-palette__view {
+/* Hàng công tắc dưới tiêu đề Màu: Chế độ tối bên trái, xem trước Sáng, Tối bên phải. */
+.ed-palette__switches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem 0.75rem;
 }
 
-/* .ed-hint có lề dưới cho đoạn chữ; ở đây nó là nhãn đứng cạnh công tắc nên bỏ lề để nằm giữa dòng. */
-.ed-palette__view .ed-hint {
-  margin: 0;
+/* Dòng tương phản: xanh khi đạt hết (gập sẵn), đỏ khi có cặp chưa đạt (mở sẵn); bấm dòng để mở, gập danh sách từng cặp. */
+.ed-contrast > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  list-style: none;
+  color: var(--ed-green);
+  background: rgb(19 160 110 / 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ed-contrast > summary::-webkit-details-marker {
+  display: none;
+}
+
+.ed-contrast.is-bad > summary {
+  color: var(--ed-red);
+  background: rgb(214 51 31 / 0.1);
+}
+
+/* Mũi tên gập, mở vẽ bằng hai cạnh viền: chỉ xuống khi đang gập, chỉ lên khi đang mở. */
+.ed-contrast > summary::after {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -0.1rem;
+}
+
+.ed-contrast[open] > summary::after {
+  rotate: 225deg;
+  translate: 0 0.1rem;
 }
 
 .ed-palette__grid {
@@ -1839,18 +2096,47 @@ button.ed-history__text {
   color: var(--ed-muted);
 }
 
-/* Logo ở tab Giao diện: ảnh xem trước trên nền ô vuông xám nhạt để thấy được cả logo nền trong suốt. */
+/* Logo ở tab Thương hiệu: ảnh xem trước trên nền ô vuông xám nhạt để thấy được cả logo nền trong suốt. */
 .ed-logo {
-  display: grid;
-  gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .ed-logo__img {
-  justify-self: start;
-  max-width: 100%;
+  flex: none;
+  max-width: 7rem;
   max-height: 64px;
   padding: 0.4rem;
   background: repeating-conic-gradient(#f4f4f5 0% 25%, #fff 0% 50%) 50% / 16px 16px;
   border: 1px solid var(--ed-line);
   border-radius: 6px;
+}
+
+/* Chưa có logo: ô vuông viền đứt ở chỗ logo, để hàng nút không nhảy khi vừa tải logo lên. */
+.ed-logo__none {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ed-muted);
+  background: #fff;
+  border-style: dashed;
+}
+
+.ed-logo__acts {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  min-width: 12rem;
+}
+
+/* Dòng báo (đang thu nhỏ, lỗi) xuống hàng riêng dưới logo. */
+.ed-logo .ed-hint {
+  flex-basis: 100%;
+  margin: 0;
 }
