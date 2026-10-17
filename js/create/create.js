@@ -7,7 +7,8 @@ import { micButton } from '../ai/speech.js';
 import { usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../core/icon.js';
-import { readTaoDraft, writeTaoDraft, publishSite, updateSite, publishReady, publicLink, readDemoKey, saveDemoKey, SLUG_RE, RESERVED, DRAFT_SLUG } from '../site/sites.js';
+import { readTaoDraft, writeTaoDraft, publishReady, publicLink, readDemoKey, saveDemoKey, DRAFT_SLUG } from '../site/sites.js';
+import { slugError, isUpdate as isUpdateOf, publishContent } from '../site/publish.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../core/dom.js';
 import { createProgress, swatches, meter } from './progress.js';
@@ -394,14 +395,13 @@ async function translateInBackground(result, steps) {
 
 /* ---------- Xuất bản ---------- */
 
-function slugError(slug) {
-  if (!SLUG_RE.test(slug)) return 'Tên từ 3 tới 30 ký tự, chỉ gồm chữ thường không dấu, số và dấu gạch ngang.';
-  if (RESERVED.includes(slug) || builtIn().includes(slug)) return `Tên /${slug}/ là tên dành riêng, hãy chọn tên khác.`;
-  return '';
-}
-
-// Máy demo đang sửa một site đã xuất bản (nháp có editOf, mở từ "Sửa trang này") và giữ đúng tên cũ: Xuất bản là cập nhật trang đó.
-const isUpdate = () => Boolean(state.draft?.editOf && ui.slug.value.trim() === state.draft.editOf && readDemoKey());
+// Các bước xuất bản (kiểm tên, dịch nốt, ghi Supabase) dùng chung với editor: js/site/publish.js.
+const isUpdate = () => isUpdateOf(state.draft?.editOf, ui.slug.value.trim());
+// Chữ báo bước đang làm khi xuất bản (publishContent gọi on.stage).
+const STAGES = {
+  translate: () => 'Đang dịch nốt các chỗ vừa sửa sang tiếng Anh...',
+  send: (update) => (update ? 'Đang cập nhật...' : 'Đang xuất bản...'),
+};
 
 function syncSlug() {
   ui.url.textContent = publicLink(ui.slug.value || '...');
@@ -417,7 +417,7 @@ function showPublish() {
 
 async function publish() {
   const slug = ui.slug.value.trim();
-  const problem = slugError(slug);
+  const problem = slugError(slug, builtIn());
   ui.publishNote.textContent = problem;
   if (problem || !state.draft?.content) return;
   const update = isUpdate();
@@ -432,28 +432,15 @@ async function publish() {
       ui.publishNote.textContent = 'Đang chờ dịch xong bản tiếng Anh...';
       await state.english;
     }
-    let content = { ...structuredClone(state.draft.content), id: slug };
-    // Site có bản tiếng Anh: dịch nốt các câu đã đổi sau lần dịch trước (chỉnh tay, AI sửa trong editor) rồi mới xuất bản.
-    if (content.languages?.includes('en')) {
-      ui.publishNote.textContent = 'Đang dịch nốt các chỗ vừa sửa sang tiếng Anh...';
-      try {
-        const mark = usageMark();
-        content = (await addEnglish(content, { state: state.draft.i18n ?? null })).content;
-        state.publishModel = modelsSince(mark);
-      } catch {
-        // Không dịch được thì xuất bản với bản tiếng Anh đang có; câu thiếu hiện tiếng Việt.
-      }
-      ui.publishNote.textContent = 'Đang xuất bản...';
-    }
-    content.contact = { ...content.contact, email: `xin-chao@${slug}.clauki` };
-    if (update) await updateSite(slug, content, state.draft.theme);
-    else await publishSite(slug, content, state.draft.theme);
+    const { model } = await publishContent({
+      slug, update, content: state.draft.content, theme: state.draft.theme, i18n: state.draft.i18n ?? null,
+      on: { stage: (step) => { ui.publishNote.textContent = STAGES[step](update); } },
+    });
     // Xuất bản mới: khối chia sẻ bên dưới đã đủ báo xong; cập nhật (máy demo) thì báo một câu ngắn.
-    ui.publishNote.textContent = [update ? 'Đã cập nhật trang.' : '', state.publishModel ? `Dịch nốt tiếng Anh bằng ${state.publishModel}.` : ''].filter(Boolean).join(' ');
-    state.publishModel = '';
+    ui.publishNote.textContent = [update ? 'Đã cập nhật trang.' : '', model ? `Dịch nốt tiếng Anh bằng ${model}.` : ''].filter(Boolean).join(' ');
     // Link công khai (tên miền con trên web thật), mã QR, chép, chia sẻ.
     const { shareEl } = await import('../site/share.js');
-    ui.shareBox.replaceChildren(shareEl(publicLink(slug), { name: slug, title: content.brand?.name ?? '' }));
+    ui.shareBox.replaceChildren(shareEl(publicLink(slug), { name: slug, title: state.draft.content.brand?.name ?? '' }));
   } catch (err) {
     ui.publishNote.textContent = err.message;
   } finally {
@@ -520,7 +507,7 @@ function build() {
     ui.slug,
     h('p', { class: 'tao-hint' }, 'Địa chỉ: ', ui.url),
     h('div', { class: 'ed-row' }, ui.publishBtn,
-      // Chỉnh tay ngay trên nháp (editor sửa thẳng nháp của trang này), xong bấm Xuất bản trong editor là quay lại đây.
+      // Chỉnh tay ngay trên nháp (editor sửa thẳng nháp của trang này), xong bấm Xuất bản ngay trong editor, không phải quay lại đây.
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/?sua`, text: 'Chỉnh tay' }),
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/`, target: '_blank', rel: 'noopener', text: 'Mở nháp trong tab mới' })),
     ui.publishNote,

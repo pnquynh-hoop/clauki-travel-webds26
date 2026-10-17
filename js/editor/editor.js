@@ -131,7 +131,7 @@ function commit(label, mutate) {
 }
 
 // Nút đang chạy việc: khoá lại và hiện vòng quay (editor.css, theo aria-busy), để bấm liên tục không gửi thêm việc trùng.
-// Thẻ a (Xuất bản) không có disabled nên khoá bằng aria-disabled, CSS chặn bấm.
+// Thẻ a không có disabled nên khoá bằng aria-disabled, CSS chặn bấm.
 function setBusy(button, busy) {
   button.setAttribute('aria-busy', String(busy));
   if (button.tagName === 'BUTTON') button.disabled = busy;
@@ -164,6 +164,12 @@ async function save() {
   }
   ui.save.textContent = 'Đã lưu';
   setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
+}
+
+// Hộp thoại Xuất bản chỉ tải khi bấm, như các phần ít dùng khác của editor.
+async function openPublishDialog() {
+  const { openPublish } = await import('./publish.js');
+  openPublish(state);
 }
 
 const timeLabel = (date) => (date ?? new Date()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -1014,12 +1020,10 @@ function refresh() {
     const path = norm(p.path);
     return h('option', { value: path, text: p.title ?? (path === '/' ? 'Trang chủ' : path), selected: path === state.page });
   }), h('option', { value: NEW_PAGE, text: '+ Thêm trang mới' }));
-  // Nháp của trình tạo web: thoát là về /tao, và có nút Xuất bản (mở phần xuất bản của /tao với bản vừa chỉnh).
-  // Đổi thương hiệu trong khung thì lịch sử nhờ AI đổi theo.
+  // Nháp của trình tạo web: thoát là về /tao. Đổi thương hiệu trong khung thì lịch sử nhờ AI đổi theo.
   refreshAiHistory();
   ui.exit.href = isTaoDraft() ? '/tao' : pageUrl(state.id, state.page);
   ui.exit.textContent = isTaoDraft() ? 'Về trang tạo' : 'Thoát';
-  ui.publish.hidden = !isTaoDraft();
   const bad = !contrastChecks().every((c) => c.ok);
   ui.themeBtn.disabled = bad;
   ui.themeBtn.title = bad ? 'Màu chưa đạt tương phản AA' : '';
@@ -1207,12 +1211,8 @@ function build() {
   ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, 'aria-label': 'Tải theme.css' }, twoLabels('Tải theme.css', 'theme.css'));
   ui.save = h('button', { type: 'button', class: 'ed-btn ed-btn--save', onclick: save, text: 'Lưu' });
   ui.exit = h('a', { class: 'ed-btn ed-btn--ghost', text: 'Thoát' });
-  ui.publish = h('a', { class: 'ed-btn', href: '/tao#xuat-ban', hidden: true, text: 'Xuất bản' });
-  // Bấm Xuất bản là rời editor sang /tao: nút quay vòng và khoá trong lúc trang mới đang mở.
-  ui.publish.addEventListener('click', (e) => {
-    if (ui.publish.getAttribute('aria-busy') === 'true') e.preventDefault();
-    else setBusy(ui.publish, true);
-  });
+  // Xuất bản ngay trong editor (thương hiệu có sẵn hay nháp của trình tạo web): hộp thoại đặt tên ở js/editor/publish.js.
+  ui.publish = h('button', { type: 'button', class: 'ed-btn', onclick: openPublishDialog, text: 'Xuất bản' });
 
   // Nút xếp theo nhóm việc, giữa hai nhóm có vạch mảnh (chỉ để nhìn): trang, hoàn tác, ngôn ngữ, xem trước, tệp, lưu.
   const sep = () => h('span', { class: 'ed-top__sep', 'aria-hidden': 'true' });
@@ -1266,8 +1266,6 @@ function build() {
     ui.toast));
 
   document.addEventListener('keydown', onKey);
-  // Bấm Xuất bản rồi bấm Back: trình duyệt có thể trả lại nguyên trang cũ (bfcache), nút còn đang quay thì gỡ ra.
-  window.addEventListener('pageshow', () => setBusy(ui.publish, false));
   // Đo lại khi khu trang đổi cỡ: lúc editor.css chưa tải xong, đổi cửa sổ, mở tấm trượt, kéo độ rộng bảng.
   new ResizeObserver(fit).observe(ui.stage);
   setPanelWidth(readPanelWidth(), false);
