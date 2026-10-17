@@ -486,8 +486,11 @@ nền màu trang hơi trong để chữ không lẫn vào nội dung.
   transition: background-color var(--duration) ease, border-color var(--duration) ease, transform var(--duration) ease;
 }
 
+/* Trong suốt chỉ hợp với hero full: lớp sương sáng ở mép trên giữ cho logo và menu màu mực đọc được. Khối đầu trang
+   là kiểu khác (ảnh tối như haze) thì header có nền ngay từ đầu trang như lúc đã cuộn. */
 .header--overlay.is-scrolled,
-.header--overlay.is-open {
+.header--overlay.is-open,
+body:has(main > :first-child:not(.hero--full)) .header--overlay {
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
   backdrop-filter: blur(18px) saturate(1.2);
 }
