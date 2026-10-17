@@ -1,5 +1,5 @@
 /* menu-order.js - đổi thứ tự các mục menu trên header trong editor (#82): danh sách mục của content.nav, kéo tay nắm
-   để thả mục vào chỗ mới, hoặc bấm Lên, Xuống (bàn phím, màn hình cảm ứng). Hiện khi chọn "Đầu trang" ở tab Khối.
+   để thả mục vào chỗ mới, hoặc bấm mũi tên lên, xuống (bàn phím, màn hình cảm ứng). Hiện khi chọn "Đầu trang" ở tab Khối.
    Kéo bằng pointer events (chuột và cảm ứng cùng một đường): trong lúc kéo chỉ dời thẻ trong danh sách, thả ra mới ghi
    một lần vào dữ liệu, nên một lần Hoàn tác là về thứ tự cũ. Đổi thứ tự menu thì footer (cột menu) cũng đổi theo. */
 import { iconEl } from '../core/icon.js';
@@ -18,7 +18,7 @@ function reorder(from, to) {
   });
 }
 
-// Bấm Lên, Xuống: con trỏ bàn phím đi theo mục vừa dời (editor đặt lại focus theo data-ed-key sau khi vẽ lại).
+// Bấm mũi tên lên, xuống: con trỏ bàn phím đi theo mục vừa dời (editor đặt lại focus theo data-ed-key sau khi vẽ lại).
 function step(index, dir) {
   const to = index + dir;
   api.state.focusKey = `m:${to}:${dir < 0 ? 'up' : 'down'}`;
@@ -71,13 +71,14 @@ export function menuOrderEl(options) {
       handle,
       h('span', { class: 'ed-menu-order__name', text: nameOf(item) }),
       h('span', { class: 'ed-block__acts' },
-        h('button', { type: 'button', 'data-ed-key': `m:${i}:up`, disabled: i === 0, onclick: () => step(i, -1), 'aria-label': `Đưa ${nameOf(item)} lên`, text: 'Lên' }),
-        h('button', { type: 'button', 'data-ed-key': `m:${i}:down`, disabled: i === nav.length - 1, onclick: () => step(i, 1), 'aria-label': `Đưa ${nameOf(item)} xuống`, text: 'Xuống' })));
+        h('button', { type: 'button', class: 'ed-icon-btn', 'data-ed-key': `m:${i}:up`, disabled: i === 0, onclick: () => step(i, -1), 'aria-label': `Đưa ${nameOf(item)} lên`, title: 'Đưa lên' },
+          iconEl('arrow-up', 'ed-icon')),
+        h('button', { type: 'button', class: 'ed-icon-btn', 'data-ed-key': `m:${i}:down`, disabled: i === nav.length - 1, onclick: () => step(i, 1), 'aria-label': `Đưa ${nameOf(item)} xuống`, title: 'Đưa xuống' },
+          iconEl('arrow-down', 'ed-icon'))));
     handle.addEventListener('pointerdown', (e) => startDrag(e, li, list));
     list.append(li);
   });
   return h('div', { class: 'ed-menu-order__wrap' },
     h('p', { class: 'ed-h', text: 'Thứ tự menu' }),
-    h('p', { class: 'ed-hint', text: 'Kéo tay nắm để đổi chỗ, hoặc bấm Lên, Xuống. Mục trên cùng đứng đầu menu.' }),
     list);
 }

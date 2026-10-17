@@ -421,7 +421,9 @@ async function publish() {
   ui.publishNote.textContent = problem;
   if (problem || !state.draft?.content) return;
   const update = isUpdate();
+  // aria-busy: nút quay vòng (editor.css) trong lúc chờ dịch và gửi lên Supabase.
   ui.publishBtn.disabled = true;
+  ui.publishBtn.setAttribute('aria-busy', 'true');
   ui.shareBox.replaceChildren();
   ui.publishNote.textContent = update ? 'Đang cập nhật...' : 'Đang xuất bản...';
   try {
@@ -456,6 +458,7 @@ async function publish() {
     ui.publishNote.textContent = err.message;
   } finally {
     ui.publishBtn.disabled = !publishReady();
+    ui.publishBtn.setAttribute('aria-busy', 'false');
   }
 }
 
@@ -573,7 +576,7 @@ function build() {
 
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, h('strong', { class: 'ed-top__brand', text: 'ClauKi' }), h('span', { class: 'ed-top__status', text: 'Tạo website' })),
-    h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
+    h('div', { class: 'ed-top__group ed-top__wide' }, h('div', { class: 'ed-devices', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices)),
     h('div', { class: 'ed-top__group ed-top__end' }, h('a', { class: 'ed-btn ed-btn--ghost', href: '/', text: 'Về trang chủ' })));
 
   document.body.className = 'ed-body';

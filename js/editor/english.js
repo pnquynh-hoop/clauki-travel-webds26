@@ -8,7 +8,6 @@ import {
   textEntries, translationState, pendingWork, setManual, keepManual, dropManual, setChecked, applyResults, withLanguage,
   withoutLanguage, buildTranslation, addMemory,
 } from '../core/i18n-text.js';
-import { currentLang } from '../core/i18n.js';
 import { usageMark, modelsSince } from '../ai/gemini.js';
 import { norm } from './ops.js';
 
@@ -36,9 +35,6 @@ export async function baseEnglish(raw) {
   const translation = raw.translations?.[LANG] ?? await fetchJson(`/brands/${raw.id}/content.${LANG}.json`);
   return translationState({ ...raw, translations: { [LANG]: translation ?? {} } }, LANG);
 }
-
-// Khách đang xem trang bằng tiếng Anh rồi bấm Chỉnh sửa thì editor mở sẵn bản tiếng Anh.
-export const startView = () => (tr() && currentLang() === LANG ? LANG : 'vi');
 
 // Phần nháp của bản tiếng Anh: trạng thái (để mở lại editor còn nguyên), bản dịch dựng sẵn (để khung xem trước và trang
 // ngoài editor ghép được), ngôn ngữ đang xem trong khung.

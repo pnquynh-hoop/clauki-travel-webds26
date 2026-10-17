@@ -13,11 +13,12 @@ import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPag
 import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
 import { h, slugify } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { mountAi, refreshAiHistory } from './ai.js';
 import { addTurn } from './chat-log.js';
 import { fileToLogo, textLogo } from './logo.js';
 import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../site/sites.js';
-import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
+import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish } from './english.js';
 
 const HISTORY_MAX = 60;
 const TOAST_MS = 2600;
@@ -58,6 +59,9 @@ const state = {
   trBusy: null,
   trIssues: [],
   trReport: '',
+  // Nút Lưu đang chờ AI dịch bản tiếng Anh xong; hẹn giờ gỡ trạng thái đang tải của nút Làm mới nếu khung không báo dựng xong.
+  saving: false,
+  reloadTimer: 0,
 };
 const ui = {};
 
@@ -122,22 +126,40 @@ function commit(label, mutate) {
   persist();
 }
 
+// Nút đang chạy việc: khoá lại và hiện vòng quay (editor.css, theo aria-busy), để bấm liên tục không gửi thêm việc trùng.
+// Thẻ a (Xuất bản) không có disabled nên khoá bằng aria-disabled, CSS chặn bấm.
+function setBusy(button, busy) {
+  button.setAttribute('aria-busy', String(busy));
+  if (button.tagName === 'BUTTON') button.disabled = busy;
+  else button.setAttribute('aria-disabled', String(busy));
+}
+
 // Mỗi thay đổi đã tự ghi nháp ngay (persist), nút Lưu để người dùng thấy rõ điều đó: ghi lại một lần nữa, báo giờ lưu và nơi lưu.
 // Nháp chỉ nằm trên trình duyệt này; muốn đưa vào repo thì tải content.json.
-function save() {
+async function save() {
   if (isOriginal()) {
     toast('Chưa có thay đổi nào để lưu.');
     return;
   }
+  if (state.saving) return;
   persist();
-  // Lưu là một hành động cuối: AI dịch câu tiếng Việt mới và kiểm tra câu tiếng Anh tự sửa (chạy nền, không chặn).
-  checkEnglish();
   const at = timeLabel(state.savedAt);
-  ui.save.textContent = 'Đã lưu';
-  setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
   toast(isTaoDraft()
     ? `Đã lưu lúc ${at} vào nháp của trang tạo web. Bấm Xuất bản để đưa website lên mạng.`
     : `Đã lưu lúc ${at}. Bản nháp nằm trên trình duyệt này, mở lại ?sua là còn. Muốn đưa vào repo thì bấm Tải content.json.`);
+  // Lưu là một hành động cuối: AI dịch câu tiếng Việt mới và kiểm tra câu tiếng Anh tự sửa. Ghi nháp xong ngay, chỉ phần AI
+  // tốn thời gian, nên nút quay vòng tới khi AI xong (không có gì cần dịch thì xong luôn).
+  state.saving = true;
+  setBusy(ui.save, true);
+  try {
+    await checkEnglish();
+  } finally {
+    state.saving = false;
+    setBusy(ui.save, false);
+    ui.save.disabled = isOriginal();
+  }
+  ui.save.textContent = 'Đã lưu';
+  setTimeout(() => { ui.save.textContent = 'Lưu'; }, 1800);
 }
 
 const timeLabel = (date) => (date ?? new Date()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -209,8 +231,15 @@ function openPage(page) {
 
 // Nút Làm mới: tải lại riêng trang trong khung (về đầu trang), như F5 nhưng không tải lại editor. Hiệu ứng chỉ chạy một lần
 // (hiện dần khi cuộn, đếm số, sương tan) chạy lại từ đầu; nháp vẫn còn vì core.js trong khung dựng theo nháp đã ghi.
+// Nút quay vòng tới khi trang trong khung dựng xong (onRendered); khung lỗi không báo thì 15 giây sau tự gỡ.
+// Giữ nguyên trang và khối đang mở: chỉ trang trong khung tải lại, chỗ đang sửa không mất.
 function reloadFrame() {
+  setBusy(ui.reload, true);
+  clearTimeout(state.reloadTimer);
+  state.reloadTimer = setTimeout(() => setBusy(ui.reload, false), 15000);
+  const sel = state.sel;
   openPage(state.page);
+  state.sel = sel;
 }
 
 // Mỗi lần trang trong khung tải (lần đầu, đổi trang bằng đường dẫn): gắn style chọn khối và các sự kiện.
@@ -230,11 +259,13 @@ function onFrameLoad() {
 
 // Trang trong khung vừa dựng xong: đổi thương hiệu (nút của BTC trong khung) hoặc đổi trang thì editor theo.
 async function onRendered(detail) {
+  clearTimeout(state.reloadTimer);
+  setBusy(ui.reload, false);
   if (detail.id !== state.id || !state.raw) await loadBrand(detail.id, detail.raw, detail.base, detail.theme);
   if (detail.id !== state.id) return;
   if (norm(detail.page) !== state.page) state.sel = null;
   state.page = norm(detail.page);
-  // Địa chỉ của editor theo trang trong khung: F5 thì mở lại đúng thương hiệu, đúng trang.
+  // Địa chỉ của editor theo trang trong khung: F5 thì mở lại đúng thương hiệu (trang thì về trang chủ, xem openEditor).
   try {
     history.replaceState(null, '', `${ui.frame.contentWindow.location.pathname}?sua`);
   } catch {
@@ -283,9 +314,9 @@ async function loadBrand(id, raw, base = null, guestTheme = null) {
   state.base = vars;
   state.trBase = JSON.stringify(english);
   state.tr = clone(draft?.i18n ?? (id === DRAFT_SLUG ? readTaoDraft()?.i18n : null) ?? english);
+  // Mở editor luôn bắt đầu ở tiếng Việt và tab Khối, kể cả khi lần trước khách xem trang bằng tiếng Anh: người sửa chỉ sửa
+  // tiếng Việt, bản tiếng Anh mở khi bấm English ở thanh trên.
   state.view = 'vi';
-  // Khách đang xem bản tiếng Anh rồi bấm Chỉnh sửa: mở sẵn bản tiếng Anh (sau khi khung dựng xong lần này).
-  if (startView() === 'en') setTimeout(() => setView('en'));
   const brand = state.brands.find((b) => b.id === id);
   document.title = `Thử chỉnh - ${brand?.label ?? id}`;
 }
@@ -456,11 +487,8 @@ function contentEl() {
     set: (path, value, label) => setField(key, path, value, label),
     list: (path, action, i, item) => listOp(key, path, action, i, item),
   });
-  return h('section', { class: 'ed-content', 'aria-label': `Nội dung của ${blockName(section)}` },
-    h('div', { class: 'ed-content__head' },
-      h('h3', { class: 'ed-h', text: `Nội dung: ${BLOCKS[section.type]?.label ?? section.type}` }),
-      h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', 'data-ed-key': 'unselect', onclick: () => select(null), text: 'Bỏ chọn' })),
-    form);
+  // Form nằm thẳng trong khung của khối, không có tiêu đề hay viền riêng: ở trong khung là biết đang sửa khối đó.
+  return h('section', { class: 'ed-content', 'aria-label': `Nội dung của ${blockName(section)}` }, form);
 }
 
 function addBlockEl() {
@@ -537,43 +565,75 @@ function renderTool() {
 
 /* ---------- Tab Khối ---------- */
 
+// Nút chỉ có icon trong danh sách khối: tên việc nằm ở aria-label và title (rê chuột thì thấy chữ).
+function blockIcon(icon, label, onclick, { key, disabled = false, danger = false } = {}) {
+  return h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title: label },
+    iconEl(icon, 'ed-icon'));
+}
+
+// Tên khối là tên loại khối (khai ở manifest.js). Dòng chưa mở có icon bút chì: bấm cả dòng để mở.
+// Dòng đang mở thì bấm tên lần nữa cũng thu gọn, cùng việc với nút đóng.
+function blockHead({ key, num, label, chosen, hidden, onclick }) {
+  return h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': `n:${key}`, 'aria-expanded': String(chosen), onclick: chosen ? () => closeBlock(key) : onclick },
+    h('span', { class: 'ed-block__num', text: num }),
+    h('strong', { class: 'ed-block__label', text: label }),
+    hidden ? h('small', { text: 'đang ẩn' }) : null,
+    chosen || hidden ? null : iconEl('pencil', 'ed-icon ed-block__edit'));
+}
+
+// Thu gọn khối đang mở (bỏ chọn); con trỏ bàn phím về lại tên khối thay vì rơi mất cùng nút đóng.
+function closeBlock(key) {
+  state.focusKey = `n:${key}`;
+  select(null);
+}
+
+// Nút đóng ở góc phải đầu khối đang mở, tách khỏi các nút thao tác bằng vạch mảnh: dấu X là cách đóng quen thuộc nhất.
+const closeIcon = (key) => h('span', { class: 'ed-block__close' }, blockIcon('x', 'Đóng khối', () => closeBlock(key)));
+
 function renderBlocks() {
   const list = sections();
   const headerVariant = headerTarget().variant ?? 'solid';
+  const headerOn = state.sel === 'header';
   // Danh sách gọn: mỗi khối một dòng. Chỉ khối đang chọn mở rộng (kiểu, các nút, rồi form nội dung ngay bên dưới),
-  // nên danh sách không dài ra theo số khối và luôn thấy khối nào đang sửa.
+  // nên danh sách không dài ra theo số khối và luôn thấy khối nào đang sửa. Ẩn và Xoá có sẵn trên mọi dòng.
   const rows = [
-    h('li', { class: `ed-block${state.sel === 'header' ? ' is-sel' : ' ed-block--compact'}` },
-      h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': 'n:header', onclick: () => select('header', true), text: 'Đầu trang (cố định)' }),
-      state.sel === 'header' ? variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang') : null,
-      state.sel === 'header' ? menuOrderEl({ h, state, commit }) : null),
+    h('li', { class: `ed-block${headerOn ? ' is-sel' : ' ed-block--compact'}` },
+      h('div', { class: 'ed-block__head' },
+        blockHead({ key: 'header', num: '', label: 'Đầu trang', chosen: headerOn, onclick: () => select('header', true) }),
+        headerOn ? closeIcon('header') : null),
+      headerOn ? variantSelect('header', headerVariant, HEADER_VARIANTS, 'Kiểu đầu trang') : null,
+      headerOn ? menuOrderEl({ h, state, commit }) : null),
     ...list.map((section, i) => {
       const chosen = state.sel === i;
-      const options = variantsFor(section);
-      const name = h('button', { type: 'button', class: 'ed-block__name', 'data-ed-key': `n:${i}`, 'aria-expanded': String(chosen), onclick: () => (section.hidden ? null : select(i, true)) },
-        `${i + 1}. ${blockName(section)}`, section.hidden ? h('small', { text: ' đang ẩn' }) : null);
+      const name = blockName(section);
+      const hide = blockIcon(section.hidden ? 'eye' : 'eye-off', `${section.hidden ? 'Hiện' : 'Ẩn'} ${name}`, () => toggleHidden(i), { key: `a:${i}:hide` });
+      const drop = blockIcon('trash-2', `Xoá ${name}`, () => remove(i), { danger: true });
+      const head = blockHead({
+        key: i, num: String(i + 1), label: BLOCKS[section.type]?.label ?? section.type, chosen, hidden: section.hidden,
+        // Khối đang ẩn không chọn được (không có trên trang), nên nút Hiện nằm ngay ở dòng gọn.
+        onclick: () => (section.hidden ? null : select(i, true)),
+      });
       if (!chosen) {
-        // Khối đang ẩn không chọn được, nên giữ nút Hiện ngay ở dòng gọn.
-        return h('li', { class: `ed-block ed-block--compact${section.hidden ? ' is-hidden' : ''}` }, name,
-          section.hidden ? h('button', { type: 'button', class: 'ed-block__show', 'data-ed-key': `a:${i}:hide`, onclick: () => toggleHidden(i), text: 'Hiện' }) : null);
+        return h('li', { class: `ed-block ed-block--compact${section.hidden ? ' is-hidden' : ''}` },
+          h('div', { class: 'ed-block__head' }, head, h('span', { class: 'ed-block__acts' }, hide, drop)));
       }
+      const options = variantsFor(section);
       return h('li', { class: 'ed-block is-sel' },
-        name,
+        h('div', { class: 'ed-block__head' }, head,
+          h('span', { class: 'ed-block__acts' },
+            blockIcon('arrow-up', `Đưa ${name} lên`, () => move(i, -1), { key: `a:${i}:up`, disabled: i === 0 }),
+            blockIcon('arrow-down', `Đưa ${name} xuống`, () => move(i, 1), { key: `a:${i}:down`, disabled: i === list.length - 1 }),
+            blockIcon('copy-plus', `Nhân đôi ${name}`, () => duplicate(i), { key: `a:${i}:dup` }),
+            hide, drop),
+          closeIcon(i)),
         options.length > 1
-          ? variantSelect(i, section.variant ?? '', options, `Kiểu của ${blockName(section)}`)
+          ? variantSelect(i, section.variant ?? '', options, `Kiểu của ${name}`)
           : h('span', { class: 'ed-block__one', text: 'Một kiểu' }),
-        h('span', { class: 'ed-block__acts' },
-          h('button', { type: 'button', 'data-ed-key': `a:${i}:up`, disabled: i === 0, onclick: () => move(i, -1), 'aria-label': `Đưa ${blockName(section)} lên`, text: 'Lên' }),
-          h('button', { type: 'button', 'data-ed-key': `a:${i}:down`, disabled: i === list.length - 1, onclick: () => move(i, 1), 'aria-label': `Đưa ${blockName(section)} xuống`, text: 'Xuống' }),
-          h('button', { type: 'button', 'data-ed-key': `a:${i}:hide`, onclick: () => toggleHidden(i), text: section.hidden ? 'Hiện' : 'Ẩn' }),
-          h('button', { type: 'button', 'data-ed-key': `a:${i}:dup`, onclick: () => duplicate(i), text: 'Nhân đôi' }),
-          h('button', { type: 'button', class: 'is-danger', onclick: () => remove(i), text: 'Xoá' })),
         contentEl());
     }),
   ];
   ui.panes.blocks.replaceChildren(...[
-    h('p', { class: 'ed-hint', text: `Bấm một khối trên trang hoặc trong danh sách để sửa. Trang này có ${list.length} khối.` }),
-    h('ol', { class: 'ed-blocks' }, rows),
+    h('ol', { class: 'ed-blocks', 'aria-label': `Các khối của trang, ${list.length} khối` }, rows),
     pageOf(state.content) ? addBlockEl() : null,
   ].filter(Boolean));
 }
@@ -854,7 +914,7 @@ function refresh() {
   ui.brand.textContent = state.brands.find((b) => b.id === state.id)?.label ?? state.id;
   ui.status.textContent = isOriginal() ? (isTaoDraft() ? 'Bản AI tạo' : 'Bản gốc') : `Đã lưu ${timeLabel(state.savedAt)}`;
   ui.status.title = isOriginal() ? '' : (isTaoDraft() ? 'Đã lưu vào nháp của trang tạo web, bấm Xuất bản để đưa lên mạng.' : 'Bản nháp nằm trên trình duyệt này, chưa vào repo. Tải content.json để đưa vào repo.');
-  ui.save.disabled = isOriginal();
+  ui.save.disabled = isOriginal() || state.saving;
   ui.save.title = isOriginal() ? 'Chưa có thay đổi' : 'Lưu bản nháp trên trình duyệt này';
   ui.status.classList.toggle('is-draft', !isOriginal());
   const pages = state.content.pages ?? [{ path: '/', title: 'Trang chủ' }];
@@ -1044,23 +1104,38 @@ function build() {
     state.device = width;
     fit();
   });
-  ui.reload = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: reloadFrame, title: 'Tải lại trang trong khung để xem lại hiệu ứng, nháp vẫn giữ', text: 'Làm mới' });
+  ui.reload = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-btn--icon', onclick: reloadFrame, title: 'Tải lại trang trong khung để xem lại hiệu ứng, nháp vẫn giữ' },
+    iconEl('refresh-cw', 'ed-icon'), 'Làm mới');
   ui.themeBtn = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: downloadTheme, 'aria-label': 'Tải theme.css' }, twoLabels('Tải theme.css', 'theme.css'));
   ui.save = h('button', { type: 'button', class: 'ed-btn ed-btn--save', onclick: save, text: 'Lưu' });
   ui.exit = h('a', { class: 'ed-btn ed-btn--ghost', text: 'Thoát' });
   ui.publish = h('a', { class: 'ed-btn', href: '/tao#xuat-ban', hidden: true, text: 'Xuất bản' });
+  // Bấm Xuất bản là rời editor sang /tao: nút quay vòng và khoá trong lúc trang mới đang mở.
+  ui.publish.addEventListener('click', (e) => {
+    if (ui.publish.getAttribute('aria-busy') === 'true') e.preventDefault();
+    else setBusy(ui.publish, true);
+  });
 
+  // Nút xếp theo nhóm việc, giữa hai nhóm có vạch mảnh (chỉ để nhìn): trang, hoàn tác, ngôn ngữ, xem trước, tệp, lưu.
+  const sep = () => h('span', { class: 'ed-top__sep', 'aria-hidden': 'true' });
   const top = h('header', { class: 'ed-top' },
     h('div', { class: 'ed-top__who' }, ui.brand, ui.status),
-    h('div', { class: 'ed-top__group' }, ui.pageSelect, ui.undo, ui.redo),
+    sep(),
+    h('div', { class: 'ed-top__group' }, ui.pageSelect),
+    sep(),
+    h('div', { class: 'ed-top__group ed-top__history' }, ui.undo, ui.redo),
+    sep(),
     ui.lang,
-    h('div', { class: 'ed-top__group ed-top__wide' }, ui.viewToggle),
-    h('div', { class: 'ed-top__group ed-top__wide', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
-    h('div', { class: 'ed-top__group ed-top__wide' }, ui.reload),
+    sep(),
+    h('div', { class: 'ed-top__group ed-top__wide' },
+      ui.viewToggle,
+      h('div', { class: 'ed-devices', role: 'group', 'aria-label': 'Khổ màn hình' }, ui.devices),
+      ui.reload),
     h('div', { class: 'ed-top__group ed-top__end' },
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: resetAll, 'aria-label': 'Về bản gốc' }, twoLabels('Về bản gốc', 'Bản gốc')),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost ed-top__wide', onclick: downloadContent, 'aria-label': 'Tải content.json' }, twoLabels('Tải content.json', 'content.json')),
       h('span', { class: 'ed-top__wide' }, ui.themeBtn),
+      sep(),
       ui.save,
       ui.publish,
       ui.exit));
@@ -1093,17 +1168,21 @@ function build() {
     ui.toast));
 
   document.addEventListener('keydown', onKey);
+  // Bấm Xuất bản rồi bấm Back: trình duyệt có thể trả lại nguyên trang cũ (bfcache), nút còn đang quay thì gỡ ra.
+  window.addEventListener('pageshow', () => setBusy(ui.publish, false));
   // Đo lại khi khu trang đổi cỡ: lúc editor.css chưa tải xong, đổi cửa sổ, mở tấm trượt, kéo độ rộng bảng.
   new ResizeObserver(fit).observe(ui.stage);
   setPanelWidth(readPanelWidth(), false);
 }
 
-export function openEditor({ brands, id, page }) {
+// Mở editor (vào mới hay F5) luôn bắt đầu ở trang chủ, tiếng Việt, tab Khối, dù địa chỉ đang trỏ tới trang con: điểm
+// bắt đầu lúc nào cũng giống nhau. Đổi trang bằng ô chọn trang; nút Làm mới chỉ tải lại trang đang mở (state.page).
+export function openEditor({ brands, id }) {
   state.brands = brands;
   state.id = id;
   build();
   fit();
   renderAi();
   mountEnglish({ h, state, commit, persist, refresh, toast, openTab, sections, blockName, download });
-  openPage(page);
+  openPage('/');
 }
