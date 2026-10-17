@@ -1,8 +1,8 @@
 /* wl-footer.js - chân trang: tên thương hiệu, khẩu hiệu, nút CTA, các cột menu, liên hệ, địa chỉ, ghi chú, nguồn ảnh.
    Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ footer.variant. */
-import { asset } from '../core.js';
-import { textEl, linkEl, groupEl, telHref } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { asset } from '../core/core.js';
+import { textEl, linkEl, groupEl, telHref } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 // Bật giảm chuyển động thì CSS tắt dòng chữ chạy, JS cũng thôi chỉnh tốc độ.
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

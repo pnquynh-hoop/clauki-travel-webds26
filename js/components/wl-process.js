@@ -1,8 +1,8 @@
 /* wl-process.js - quy trình từng bước: khối ghim lại khi cuộn, một hình đổi dáng và màu qua từng bước,
    danh sách bước bên cạnh, bước đang tới sáng lên kèm ảnh thật của bước đó.
    Dáng hình (shape) và màu (color) của từng bước nằm trong dữ liệu, nên thương hiệu khác đổi được hình. */
-import { asset } from '../core.js';
-import { textEl, clamp, smooth } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, clamp, smooth } from '../core/dom.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

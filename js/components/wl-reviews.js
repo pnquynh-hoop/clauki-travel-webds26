@@ -3,7 +3,7 @@
    và dấu bưu điện (ngày chuyến đi). Cuộn tới thì các tấm rơi xuống bàn lần lượt.
    Kiểu notes (SighGone): bức tường giấy note dán băng keo, mỗi tờ có lời kể, người gửi và (tuỳ chọn) một thước đo
    "trước chuyến, sau chuyến" vẽ bằng các vòng tròn nhỏ; cuộn tới thì các tờ dán lên lần lượt. */
-import { textEl } from '../dom.js';
+import { textEl } from '../core/dom.js';
 
 // Con số trên tem: số thì viết theo kiểu Việt Nam (1.400), chữ thì giữ nguyên.
 const formatValue = (value) => (typeof value === 'number' ? value.toLocaleString('vi-VN') : value);

@@ -3,8 +3,8 @@
    Mỗi mục: số lớn và nhãn, một câu ngắn, ô hình. Ô hình hoặc lặp một icon (icon, value), hoặc vẽ một danh sách icon
    khác nhau có tên dưới mỗi hình (icons, ví dụ các phương tiện). Tuỳ chọn tô nổi vài hình đầu (mark) và vẽ thêm vài
    hình mờ phía sau (faded), mỗi loại có một dòng chú thích. Cuộn tới thì số đếm lên, các hình hiện lần lượt. */
-import { textEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const format = (n) => new Intl.NumberFormat('vi-VN').format(n);
 

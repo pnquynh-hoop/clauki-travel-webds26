@@ -1,7 +1,7 @@
 /* plate.js - biển số nhà: số lớn, bên cạnh là các dòng tên hẻm, quận ngăn bằng vạch. Dùng chung cho các khối cần
    một tấm biển làm điểm nhấn (contact, intro); giao diện ở css/components/plate.css, khối nào dùng thì tải kèm.
    Dữ liệu: number (bắt buộc), lines (mảng chữ), label (câu đầy đủ cho trình đọc màn hình). */
-import { textEl } from '../dom.js';
+import { textEl } from '../core/dom.js';
 
 export function plateEl(plate, className) {
   if (!plate?.number) return null;

@@ -2,9 +2,9 @@
    item-cover (ảnh bìa), item-booking (đặt chỗ), photo-strip (dải ảnh), scene (cảnh đáng chờ), và room-detail
    (dựng cả trang bằng cách ghép các khối đó). Không phải component: chỉ là hàm, mỗi khối import phần mình cần.
    Tách từ wl-room-detail.js, giữ nguyên cách xử lý. */
-import { asset, catalogItem } from '../core.js';
+import { asset, catalogItem } from '../core/core.js';
 // Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
-import { pageLocale } from '../i18n.js';
+import { pageLocale } from '../core/i18n.js';
 
 export function fill(template, values) {
   return (template ?? '').replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ''));

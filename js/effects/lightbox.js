@@ -2,8 +2,8 @@
    Dựng trên <dialog> có sẵn của trình duyệt: Esc tự đóng, focus giữ trong hộp, trang phía sau không bấm được.
    Đổi ảnh bằng nút trước, sau, phím mũi tên, hoặc vuốt ngang trên điện thoại; bấm ra ngoài ảnh thì đóng.
    Chữ trên nút (cho trình đọc màn hình) lấy từ dữ liệu của component gọi tới. */
-import { asset } from '../core.js';
-import { iconEl } from '../icon.js';
+import { asset } from '../core/core.js';
+import { iconEl } from '../core/icon.js';
 
 let dialog = null;
 let photo = null;

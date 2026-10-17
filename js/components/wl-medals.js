@@ -4,8 +4,8 @@
    nhãn "đã mở khoá" (unlocked) bật ra; thanh kinh nghiệm phía trên đếm số huy chương đã mở (progress có {n}, {total}).
    Rê chuột thì huy chương xoay một vòng như đồng xu. Chữ luôn đọc được, khoá chỉ là lớp hình;
    giảm chuyển động thì mở sẵn hết. */
-import { textEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');

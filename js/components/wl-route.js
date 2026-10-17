@@ -2,9 +2,9 @@
    chấm ga, nhãn và bóng ảnh tô màu phương tiện của chặng. Cuộn trang thì đường ray tô dần, viên phương tiện
    chạy dọc tuyến, đi qua ga nào thì đổi sang phương tiện của ga đó.
    Chặng đọc từ catalog khi section ghi "item"; thương hiệu không có catalog thì ghi stages, vehicles ngay trong section. */
-import { asset, catalogItem } from '../core.js';
-import { textEl, clamp } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { asset, catalogItem } from '../core/core.js';
+import { textEl, clamp } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { openLightbox } from '../effects/lightbox.js';
 
 const pad = (n) => String(n).padStart(2, '0');

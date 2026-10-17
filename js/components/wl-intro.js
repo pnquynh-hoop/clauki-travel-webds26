@@ -5,8 +5,8 @@
    Khối này không cần el.site; khối có nút (như hero) thì lấy nút từ this.site.cta. */
 
 // textEl dùng chung trong dom.js: trường nào trống thì trả về null để bỏ qua, không tạo thẻ rỗng.
-import { textEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { plateEl } from './plate.js';
 import { morphTitle } from './intro-morph.js';
 

@@ -1,15 +1,15 @@
 /* create.js - trình tạo web /tao (#81): mô tả bằng lời, AI viết website mới trên khung có sẵn, xem trước ngay bên cạnh,
-   rồi xuất bản thành /<tên>/ (Supabase, js/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
+   rồi xuất bản thành /<tên>/ (Supabase, js/site/sites.js). Nháp nằm trên máy (xem ở /nhap/); trang trong khung xem trước
    là chính core.js dựng bằng các component <wl-*>, nhận nháp mới qua sự kiện wl:draft mỗi khi AI viết thêm.
-   Giao diện là của ClauKi, dùng chung css/editor.css với editor, không theo thương hiệu nào. */
+   Giao diện là của ClauKi, dùng chung css/tool/editor.css với editor, không theo thương hiệu nào. */
 import { FRAMES, generateSite, refineBrief } from './generate.js';
 import { micButton } from '../ai/speech.js';
 import { backupInUse, usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
-import { iconEl } from '../icon.js';
-import { readTaoDraft, writeTaoDraft, publishSite, updateSite, publishReady, publicLink, readDemoKey, saveDemoKey, SLUG_RE, RESERVED, DRAFT_SLUG } from '../sites.js';
+import { iconEl } from '../core/icon.js';
+import { readTaoDraft, writeTaoDraft, publishSite, updateSite, publishReady, publicLink, readDemoKey, saveDemoKey, SLUG_RE, RESERVED, DRAFT_SLUG } from '../site/sites.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
-import { h, slugify } from '../dom.js';
+import { h, slugify } from '../core/dom.js';
 import { createProgress, swatches, meter } from './progress.js';
 import { addEnglish } from './english.js';
 import { clearLog } from '../editor/chat-log.js';
@@ -451,7 +451,7 @@ async function publish() {
     ui.publishNote.textContent = [update ? 'Đã cập nhật trang.' : '', state.publishModel ? `Dịch nốt tiếng Anh bằng ${state.publishModel}.` : ''].filter(Boolean).join(' ');
     state.publishModel = '';
     // Link công khai (tên miền con trên web thật), mã QR, chép, chia sẻ.
-    const { shareEl } = await import('../share.js');
+    const { shareEl } = await import('../site/share.js');
     ui.shareBox.replaceChildren(shareEl(publicLink(slug), { name: slug, title: content.brand?.name ?? '' }));
   } catch (err) {
     ui.publishNote.textContent = err.message;
@@ -464,8 +464,8 @@ async function publish() {
 
 function build() {
   document.head.append(
-    h('link', { rel: 'stylesheet', href: '/css/editor.css' }),
-    h('link', { rel: 'stylesheet', href: '/css/tao.css' }),
+    h('link', { rel: 'stylesheet', href: '/css/tool/editor.css' }),
+    h('link', { rel: 'stylesheet', href: '/css/tool/tao.css' }),
     h('link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap' }),
   );
   document.title = 'Tạo website - ClauKi';

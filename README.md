@@ -77,18 +77,29 @@ index.html              vỏ trang: không chứa chữ của thương hiệu n�
 serve.py                chạy thử trên máy: trả index.html cho đường dẫn trang con (không deploy)
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 css/
-  base.css              reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
-  theme-mode.css        chế độ tối: khối vốn sáng ngoài đời (giấy note, biển số, chữ trên ảnh) giữ bảng màu sáng
+  site/                 CSS của trang, theo biến của thương hiệu
+    base.css            reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
+    theme-mode.css      chế độ tối: khối vốn sáng ngoài đời (giấy note, biển số, chữ trên ảnh) giữ bảng màu sáng
   components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
-  editor.css            editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua), dùng chung với /tao
-  tao.css               trình tạo web /tao
-  editor-launch.css     nút "Thử chỉnh" và dải báo nháp trên trang khách
+  tool/                 CSS của công cụ ClauKi, màu cố định, không theo thương hiệu
+    editor.css          editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua), dùng chung với /tao
+    tao.css             trình tạo web /tao
+    editor-launch.css   nút "Thử chỉnh" và dải báo nháp trên trang khách
+    share.css           khối chia sẻ: mã QR, link, chép, chia sẻ
+    no-site.css         trang trung tính khi địa chỉ site khách không có
 js/
-  core.js               chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
-  theme-mode.js         chế độ sáng, tối: áp bảng màu --dark-* của thương hiệu, nhớ lựa chọn
-  app.js                bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
-  dom.js                hàm nhỏ dựng thẻ HTML dùng chung cho các component
+  core/                 lõi white label
+    app.js              điểm vào: bảng tra component <wl-*> (file JS, file CSS); tải khi trang cần
+    core.js             chọn thương hiệu, gọi wd2026.js, đổi theme.css và meta, dựng các section
+    dom.js              hàm nhỏ dựng thẻ HTML dùng chung cho các component
+    icon.js             nạp icon Lucide khi cần
+    i18n.js, i18n-text.js  song ngữ: ghép bản dịch; rút chữ và theo dõi câu cần dịch lại
+    theme-mode.js       chế độ sáng, tối: áp bảng màu --dark-* của thương hiệu, nhớ lựa chọn
   components/           mỗi component một file: wl-<tên>.js
+  effects/              hiệu ứng dùng chung (parallax, lightbox, hero reveal)
+  site/                 site khách
+    sites.js            nháp /nhap/, đọc, xuất bản, máy demo cập nhật trên Supabase; link tên miền con (publicLink)
+    share.js            khối chia sẻ: mã QR, link, chép, chia sẻ (màn xuất bản và trang khách)
   editor/               editor "Thử chỉnh": draft.js (nháp trên máy), launch.js (nút vào), editor.js, form.js, manifest.js, ai.js,
                         palette.js (màu sáng, tối: AI gợi ý và bảng màu hai cột),
                         menu-order.js (kéo thả thứ tự menu), chat-log.js (lịch sử nhờ AI)
@@ -97,8 +108,6 @@ js/
   ai/gemini.js          gọi Gemini qua Firebase AI Logic (tab AI của editor, trình tạo web)
   ai/prompts/           mọi lời nhắc gửi Gemini, sửa câu chữ ở đây, không đụng logic: shared.js (luật viết dùng chung),
                         create.js (trình tạo web), editor.js (tab AI, gợi ý màu), translate.js (dịch)
-  sites.js              site khách: nháp /nhap/, đọc, xuất bản, máy demo cập nhật trên Supabase; link tên miền con (publicLink)
-  share.js              khối chia sẻ site khách: mã QR, link, chép, chia sẻ (màn xuất bản và trang khách)
 brands/
   brands.json           danh sách thương hiệu (id, tên hiện trong nút đổi dữ liệu) và thương hiệu mặc định
   <id>/content.json     nội dung, ảnh, bố cục (thứ tự, ẩn hiện, kiểu trình bày section)
@@ -135,8 +144,8 @@ Tác giả và giấy phép của từng ảnh nằm trong `credits` của mỗi
 
 `wd2026.js` do BTC cấp (lấy từ repo mẫu `konya007/demo-wd-26`), giữ nguyên, không sửa.
 
-Mã QR: [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 1.4.4 của Kazuhiko Arase (giấy phép MIT), nạp từ cdnjs bằng `js/share.js`, chỉ khi cần vẽ mã QR.
+Mã QR: [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 1.4.4 của Kazuhiko Arase (giấy phép MIT), nạp từ cdnjs bằng `js/site/share.js`, chỉ khi cần vẽ mã QR.
 
-Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/icon.js`, không tải cả bộ.
+Icon: [Lucide](https://lucide.dev) 0.460.0 (giấy phép ISC), nạp từng icon qua CDN unpkg bằng `js/core/icon.js`, không tải cả bộ.
 
 AI trong editor (tab AI, #81): [Firebase JS SDK](https://github.com/firebase/firebase-js-sdk) 13.0.0 (giấy phép Apache 2.0), nạp từ CDN `www.gstatic.com/firebasejs/13.0.0/` bằng `js/ai/gemini.js`, chỉ khi bấm Gửi; gọi Gemini qua Firebase AI Logic, gói Spark miễn phí; hết lượt thì lần lượt thử hai khoá Gemini dự phòng của thành viên (gọi thẳng REST API), cả ba hết lượt mới hạ xuống Gemini 3.1 Flash Lite; đường nào hết lượt thì nghỉ một phút. Cấu hình của máy demo chỉ dán vào trình duyệt, không nằm trong repo.

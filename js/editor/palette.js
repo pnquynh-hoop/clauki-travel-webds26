@@ -9,7 +9,7 @@
    Bấm Đồng ý mới áp, một lần Hoàn tác là bỏ hết. Bộ kiểm độ bền với nhiều kiểu câu nhờ: palette-eval.js. */
 import { COLORS, CONTRAST } from './manifest.js';
 import { contrastRatio, AA } from './contrast.js';
-import { darkName } from '../theme-mode.js';
+import { darkName } from '../core/theme-mode.js';
 import { streamLines, cleanText, usageMark, modelsSince } from '../ai/gemini.js';
 import { paletteSystem, paletteRetry, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';

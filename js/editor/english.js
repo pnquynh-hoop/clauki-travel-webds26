@@ -7,8 +7,8 @@
 import {
   textEntries, translationState, pendingWork, setManual, keepManual, dropManual, setChecked, applyResults, withLanguage,
   withoutLanguage, buildTranslation, addMemory,
-} from '../i18n-text.js';
-import { currentLang } from '../i18n.js';
+} from '../core/i18n-text.js';
+import { currentLang } from '../core/i18n.js';
 import { usageMark, modelsSince } from '../ai/gemini.js';
 import { norm } from './ops.js';
 

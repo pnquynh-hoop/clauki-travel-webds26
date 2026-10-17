@@ -6,8 +6,8 @@
    Bấm nút kênh, nút nguồn cũng được: trang cuộn tới đúng nấc đó, nên cuộn và bấm luôn khớp nhau.
    Bật giảm chuyển động thì không ghim, tivi bật sẵn, bấm nút để đổi chuyện, không có hiệu ứng.
    Tivi vẽ bằng CSS, màu pha từ biến của thương hiệu; chữ và ảnh lấy từ section.stories và section.tv. */
-import { asset } from '../core.js';
-import { textEl, groupEl, clamp } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl, clamp } from '../core/dom.js';
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 

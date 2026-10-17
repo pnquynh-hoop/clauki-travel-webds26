@@ -3,8 +3,8 @@
    sửa một chỗ là mọi trang cùng đổi. Section chỉ ghi tiêu đề, mẫu chữ trên thẻ (labels) và tuỳ chọn pick
    (danh sách id) khi chỉ muốn hiện vài mục, ví dụ ba tour gợi ý ở trang 404, hoặc related (id một mục) để tự chọn
    các mục cùng gu với mục đó, ví dụ cuối trang chi tiết tour. */
-import { catalogItem } from '../core.js';
-import { textEl, linkEl, groupEl } from '../dom.js';
+import { catalogItem } from '../core/core.js';
+import { textEl, linkEl, groupEl } from '../core/dom.js';
 // Thẻ tour và vài hàm nhỏ dùng chung với khối gợi ý tour (tour-pick).
 import { cardEl, vehiclesOf, isComplete, relatedItems } from './catalog-card.js';
 

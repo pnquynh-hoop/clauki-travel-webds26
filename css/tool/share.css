@@ -1,4 +1,4 @@
-/* share.css - khối chia sẻ site khách (js/share.js): mã QR, link, nút chép, chia sẻ, tải mã QR; và hộp thoại chứa nó trên trang khách.
+/* share.css - khối chia sẻ site khách (js/site/share.js): mã QR, link, nút chép, chia sẻ, tải mã QR; và hộp thoại chứa nó trên trang khách.
    Thuộc công cụ ClauKi nên màu cố định (xám kẽm, xanh ngọc), không đọc biến màu của thương hiệu. */
 
 /* Màu của khối; khai cả trên hộp thoại vì nút Đóng nằm ngoài .share. */

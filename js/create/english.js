@@ -5,7 +5,7 @@
    - Lúc xuất bản thì dịch nốt các câu đã đổi sau đó (chỉnh tay, AI sửa trong editor): i18n-text.js so câu tiếng Việt hiện tại
      với câu lúc dịch (state.source), chỉ câu khác mới gửi AI.
    AI lỗi hay hết lượt thì không chặn: câu chưa dịch hiện tiếng Việt. */
-import { translationState, applyResults, toContent, withLanguage, addMemory } from '../i18n-text.js';
+import { translationState, applyResults, toContent, withLanguage, addMemory } from '../core/i18n-text.js';
 import { syncTranslation } from '../ai/translate.js';
 
 const LANG = 'en';

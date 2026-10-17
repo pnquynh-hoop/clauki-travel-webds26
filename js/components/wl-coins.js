@@ -4,9 +4,9 @@
    Cuộn tới thì xu rơi xuống từng đồng, chồng cao dần, phần trăm đếm lên như điểm trong game (một lần).
    Rê chuột vào một phần thì các phần khác mờ đi. Chữ có sẵn trong DOM cho trình đọc màn hình, đồng xu chỉ để nhìn;
    giảm chuyển động thì hiện đủ ngay. */
-import { catalogItem } from '../core.js';
-import { textEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { catalogItem } from '../core/core.js';
+import { textEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const format = (n) => new Intl.NumberFormat('vi-VN').format(n);

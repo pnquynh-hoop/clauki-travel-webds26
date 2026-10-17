@@ -3,7 +3,7 @@
    phóng to xuyên qua một nét chữ, lớp phủ tan, ảnh phủ kín màn hình rồi mờ đi, lộ ra bố cục hero nằm sẵn bên dưới.
    Chỉ thêm phần tử, không sửa HTML hero có sẵn; tắt hiệu ứng thì hero vẫn đủ. Chữ lấy từ site.brand.name,
    ảnh lấy từ image của hero (hoặc ảnh đầu của slides), nên thương hiệu nào bật cũng chạy. */
-import { asset } from '../core.js';
+import { asset } from '../core/core.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 let instance = 0;

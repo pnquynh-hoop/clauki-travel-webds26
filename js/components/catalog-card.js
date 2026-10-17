@@ -1,10 +1,10 @@
 /* catalog-card.js - thẻ một mục trong danh mục (tour, hạng phòng): ảnh, nhãn giờ chạy và thời lượng, tên, câu ngắn,
    chip phương tiện, giá, báo chuyến còn ít chỗ. Dùng chung cho <wl-catalog-list> (lưới tour) và <wl-tour-pick>
    (thẻ kết quả gợi ý), nên thẻ ở hai nơi luôn giống nhau. Giao diện nằm trong css/components/catalog-list.css. */
-import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 // Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
-import { pageLocale } from '../i18n.js';
+import { pageLocale } from '../core/i18n.js';
 
 // Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
 export function fill(template, values) {

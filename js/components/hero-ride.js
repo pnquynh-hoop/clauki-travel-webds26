@@ -3,7 +3,7 @@
    bật đèn dần. Cả cảnh nằm trong một khung ghim (sticky) cao nhiều màn hình, tiến độ cuộn quyết định mọi thứ.
    Tách tệp riêng vì HTML và hành vi khác hẳn các kiểu còn lại của hero. Giảm chuyển động hoặc chưa chạy JS thì
    chỉ hiện poster và các ga xếp thành dãy thẻ (xem hero-ride.css). */
-import { asset } from '../core.js';
+import { asset } from '../core/core.js';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const SVG_NS = 'http://www.w3.org/2000/svg';

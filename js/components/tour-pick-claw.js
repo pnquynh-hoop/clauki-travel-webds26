@@ -2,8 +2,8 @@
    mỗi viên chứa ảnh một tour của các lựa chọn (options); bấm gắp thì móc chạy tới viên trúng, thả dây xuống, khép móc,
    kéo lên, chạy về ô nhả quà rồi thả rơi, xong mới hiện thẻ tour. Máy chỉ để nhìn (aria-hidden): kết quả đọc qua
    dòng ghi chú. */
-import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 
 // Thời gian từng bước (ms), khớp với transition trong tour-pick.css.
 const MOVE = 700;

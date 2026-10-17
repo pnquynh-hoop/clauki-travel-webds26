@@ -4,7 +4,7 @@
    màn hình bên phải "đổ chuông" một nhịp rồi hiện đúng thông tin của cách đó.
    Cách kind "message" mở khung soạn tin: gõ tới đâu, bong bóng tin nhắn trên màn hình điện thoại hiện tới đó,
    để khách thấy rõ trang chỉ soạn sẵn tin, không có máy chủ nhận thư. */
-import { textEl, linkEl } from '../dom.js';
+import { textEl, linkEl } from '../core/dom.js';
 import { plateEl } from './plate.js';
 import { KINDS, fill, toMinutes, nowMinutes } from './wl-contact.js';
 

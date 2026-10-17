@@ -1,6 +1,6 @@
 /* wl-policy.js - bảng điều khoản ngắn (huỷ, hoàn, dời lịch): mỗi dòng một trường hợp và kết quả. Kết quả có mức
    (tone: ok, mid, no) để tô màu, nhưng chữ luôn ghi rõ, nên không dựa vào màu để hiểu. */
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl } from '../core/dom.js';
 
 const TONES = ['ok', 'mid', 'no'];
 

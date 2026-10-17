@@ -3,11 +3,11 @@
    catalog thì ghi includes, excludes, bring ngay trong section. Trường section ghi riêng được ưu tiên.
    Kiểu mặc định: ba nhóm danh sách có icon cạnh nhau. Kiểu receipt: tờ hoá đơn in nhiệt (tổng một khách, lời cảm ơn),
    câu giới thiệu chữ lớn đứng bên cạnh. Tách khỏi room-detail để landing, trang đặt chỗ, trang tour dùng lại được. */
-import { catalogItem } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { catalogItem } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 // Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
-import { pageLocale } from '../i18n.js';
+import { pageLocale } from '../core/i18n.js';
 
 // Ba nhóm theo thứ tự hiện, kèm icon của kiểu mặc định (tên icon Lucide).
 const GROUPS = [['includes', 'check'], ['excludes', 'x'], ['bring', 'backpack']];

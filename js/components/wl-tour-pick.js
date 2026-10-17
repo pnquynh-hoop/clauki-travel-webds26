@@ -4,8 +4,8 @@
    gắp một viên ngẫu nhiên rồi nhả ra thẻ tour (mã ở tour-pick-claw.js). Hai kiểu đọc cùng dữ liệu: mỗi lựa chọn
    (options) trỏ tới id tour trong catalog (AGENTS.md mục 5); thẻ kết quả dựng bằng catalog-card.js nên giống hệt
    thẻ ở trang tất cả tour. */
-import { catalogItem } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { catalogItem } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 import { cardEl, fill, isComplete } from './catalog-card.js';
 import { machineEl, grab } from './tour-pick-claw.js';
 

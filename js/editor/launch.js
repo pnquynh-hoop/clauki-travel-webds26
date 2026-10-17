@@ -7,8 +7,8 @@
    đặt tên mới rồi xuất bản); máy demo (có khoá) có thêm Sửa trang này; bản nháp /nhap/ thì có Tạo mới và Chỉnh sửa. Khi đang có nháp trên máy, dải báo "Đang thử, chưa lưu vào repo" kèm nút mở lại editor và về bản gốc.
    core.js tải tệp này sau khi trang dựng xong; editor thật (editor.js) chỉ tải khi bấm vào nút. */
 import { clearDraft } from './draft.js';
-import { iconEl } from '../icon.js';
-import { writeTaoDraft, DRAFT_SLUG, readDemoKey, publicLink } from '../sites.js';
+import { iconEl } from '../core/icon.js';
+import { writeTaoDraft, DRAFT_SLUG, readDemoKey, publicLink } from '../site/sites.js';
 
 const CSS_ID = 'ed-launch-css';
 
@@ -17,7 +17,7 @@ function loadCss() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.id = CSS_ID;
-  link.href = '/css/editor-launch.css';
+  link.href = '/css/tool/editor-launch.css';
   document.head.append(link);
 }
 
@@ -69,10 +69,10 @@ function copySite(current, edit = false) {
   location.href = edit ? `/${DRAFT_SLUG}/?sua` : '/tao';
 }
 
-// Hộp thoại mã QR, link tên miền con, chép, chia sẻ của site khách đang xem; js/share.js chỉ tải khi bấm.
+// Hộp thoại mã QR, link tên miền con, chép, chia sẻ của site khách đang xem; js/site/share.js chỉ tải khi bấm.
 async function openShare(current) {
-  const { shareEl } = await import('../share.js');
-  const { h } = await import('../dom.js');
+  const { shareEl } = await import('../site/share.js');
+  const { h } = await import('../core/dom.js');
   const url = publicLink(current.id);
   const dialog = h('dialog', { class: 'share-dialog', 'aria-labelledby': 'share-dialog-title' },
     h('div', { class: 'share-dialog__head' },

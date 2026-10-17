@@ -1,10 +1,10 @@
 /* wl-header.js - đầu trang: logo hoặc tên thương hiệu, menu neo tới các section, nút CTA.
    Là khối cố định nên nhận cả content.json (el.data); kiểu trình bày đọc từ header.variant. */
-import { asset } from '../core.js';
-import { textEl, linkEl, groupEl, telHref } from '../dom.js';
-import { setLang } from '../i18n.js';
-import { iconEl } from '../icon.js';
-import { toggleMode, MODE_EVENT } from '../theme-mode.js';
+import { asset } from '../core/core.js';
+import { textEl, linkEl, groupEl, telHref } from '../core/dom.js';
+import { setLang } from '../core/i18n.js';
+import { iconEl } from '../core/icon.js';
+import { toggleMode, MODE_EVENT } from '../core/theme-mode.js';
 
 // Có logo thì dùng ảnh kèm tên thương hiệu, chưa có thì chỉ hiện tên bằng font tiêu đề.
 // Tên luôn là chữ thật (ảnh để alt rỗng để trình đọc màn hình không đọc tên hai lần);

@@ -1,10 +1,10 @@
 /* wl-custom-trip.js - tự ghép tour riêng: khách chọn chặng lẻ trong kho, xếp thứ tự, xem tạm giờ và giá cho cả nhóm.
    Kho chặng (catalog.legs: tên, phương tiện, số phút, giá) khai một lần trong danh mục (AGENTS.md mục 5), khối chỉ đọc lại.
    Section ghi lộ trình gợi ý (presets), phí đi riêng (surcharge), giờ bắt đầu, ngưỡng cảnh báo và mẫu chữ (labels). */
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl } from '../core/dom.js';
 import { requestEl } from './custom-trip-request.js';
 // Ngày, tiền định dạng theo ngôn ngữ đang hiện (core.js đặt <html lang>).
-import { pageLocale } from '../i18n.js';
+import { pageLocale } from '../core/i18n.js';
 
 // Thay {tên} trong mẫu chữ bằng giá trị. Mẫu thiếu thì trả về null để bỏ phần đó, không hiện chữ giữ chỗ.
 function fill(template, values) {

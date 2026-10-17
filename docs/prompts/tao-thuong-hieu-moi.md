@@ -8,7 +8,7 @@ cuối file và giải thích được từng trường.
 
 1. `AGENTS.md` (mục 5 "Dữ liệu thương hiệu", mục 8 "Ảnh và nội dung", mục 12 "Trường riêng của từng section")
 2. `brands/me-rach/content.json` và `brands/me-rach/theme.css` làm mẫu
-3. Đoạn chú thích đầu `css/base.css` (danh sách biến CSS)
+3. Đoạn chú thích đầu `css/site/base.css` (danh sách biến CSS)
 
 ## Prompt
 

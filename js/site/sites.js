@@ -4,7 +4,7 @@
    Supabase chỉ làm kho dữ liệu: bảng sites cho ai cũng thêm, đọc; xuất bản xong là cố định, không ai sửa hay xoá
    được (trừ máy demo: updateSite, xem supabase/sites.sql). Khoá dưới đây là khoá công khai (publishable), quyền do RLS quyết định. */
 
-export { SITE_SLUG_RE as SLUG_RE } from './core.js';
+export { SITE_SLUG_RE as SLUG_RE } from '../core/core.js';
 
 const SUPABASE = {
   url: 'https://xpiopwkdtvhmqhwnhvdx.supabase.co',

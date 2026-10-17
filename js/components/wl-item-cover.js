@@ -1,8 +1,8 @@
 /* wl-item-cover.js - ảnh bìa trang chi tiết một tour hay hạng phòng: ảnh gần kín màn hình, nhãn nhỏ, tên chữ rất lớn,
    đáy ảnh là dải thông số mảnh (thời lượng, giờ chạy, số khách...); ảnh phóng chậm khi vào trang và trôi chậm khi cuộn.
    Section ghi "item" thì lấy tên, câu ngắn, ảnh, thông số từ catalog (item-detail.js). Tách từ room-detail. */
-import { textEl, groupEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl, groupEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { parallax } from '../effects/parallax.js';
 import { imgEl, itemSection } from './item-detail.js';
 

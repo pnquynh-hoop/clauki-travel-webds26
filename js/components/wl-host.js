@@ -1,8 +1,8 @@
 /* wl-host.js - giới thiệu chủ nhà: ảnh lớn kèm một ảnh nhỏ, vài đoạn chuyện ngắn, câu nói của chủ nhà, vài con số.
    Tên khối theo chức năng, nên thương hiệu nào cũng dùng được để giới thiệu chủ nhà hay người dẫn đường.
    Kiểu "tv" có HTML và hành vi khác hẳn (tivi đời cũ kể chuyện theo cuộn), nên nằm ở tệp riêng host-tv.js. */
-import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 import { buildTv } from './host-tv.js';
 
 function imageEl(image, className) {

@@ -2,8 +2,8 @@
    Dữ liệu có một ảnh (image) thì dựng một khung ảnh. Có nhiều ảnh (slides) thì dựng chồng thẻ ảnh xoay vòng:
    thẻ giữa là ảnh đang xem, các thẻ hai bên nghiêng ra sau, nền là chính ảnh đó được làm mờ.
    hero.css đổi bố cục theo class hero--<variant>. */
-import { asset } from '../core.js';
-import { textEl, linkEl, groupEl, clamp, smooth } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, linkEl, groupEl, clamp, smooth } from '../core/dom.js';
 import { attachReveal } from '../effects/hero-reveal.js';
 import { buildHaze } from './hero-haze.js';
 import { buildRide } from './hero-ride.js';

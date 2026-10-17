@@ -1,7 +1,7 @@
 /* custom-trip-request.js - form gửi yêu cầu tour riêng của <wl-custom-trip>: ngày đi, giờ bắt đầu, số khách, họ tên,
    số điện thoại, tạm tính; gửi thì kiểm từng ô, báo lỗi ngay dưới ô, hợp lệ thì soạn sẵn tin nhắn kèm nút gửi SMS,
    gọi, chép. Tách khỏi wl-custom-trip.js cho file chính ngắn; mọi chữ vẫn lấy từ section qua trip.text(). */
-import { textEl, groupEl, telHref } from '../dom.js';
+import { textEl, groupEl, telHref } from '../core/dom.js';
 
 function validPhone(text) {
   return /^(0|\+84)\d{9}$/.test(text.replace(/[\s.]/g, ''));

@@ -6,9 +6,9 @@
      Ảnh có href (và section có linkLabel) thì dải mở ra kèm một liên kết, ví dụ sang danh sách tour đã lọc theo cách đi đó;
    - plates (SighGone): lưới ô như biển số nhà (nền màu nhấn, viền trắng bên trong), mỗi ô có số, tên (caption), icon và dòng phụ
      (`note`, `icon` tuỳ chọn); rê chuột hoặc Tab tới ô thì ảnh loang ra từ chỗ con trỏ; ảnh có href thì cả ô là liên kết. */
-import { asset } from '../core.js';
-import { textEl, groupEl, linkEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl, linkEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 

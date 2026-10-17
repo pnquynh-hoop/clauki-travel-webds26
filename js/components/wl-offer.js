@@ -5,8 +5,8 @@
    - bên dưới: chọn hạng bằng các con tem (nhóm radio), phiếu giá (giá thường, số tiền trả, giá tính ra mỗi đêm), nút đặt.
    Mọi kiểu dùng chung cấu trúc này, variant chỉ đổi CSS (postcard của Gành Sớm: bưu thiếp nghiêng, tem răng cưa, chữ viết tay).
    Nút đặt lấy từ site.cta; bấm thì phát wl:choose-room để khối đặt chỗ chọn sẵn hạng đang chọn. */
-import { asset } from '../core.js';
-import { textEl, groupEl, clamp } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl, clamp } from '../core/dom.js';
 import { roomsOf } from './rooms.js';
 
 const MINUTE = 60 * 1000;

@@ -1,5 +1,5 @@
 /* tao.css - trình tạo web /tao: bảng nhập bên trái, trang xem trước bên phải (điện thoại: xếp dọc).
-   Dùng chung biến, nút, ô nhập của css/editor.css; màu cố định của ClauKi, không theo thương hiệu.
+   Dùng chung biến, nút, ô nhập của css/tool/editor.css; màu cố định của ClauKi, không theo thương hiệu.
    Bảng gồm hai bước đánh số (1 kể về nơi của bạn, 2 tuỳ chọn) cuộn được, và chân bảng dính ở đáy chứa nút Tạo website. */
 
 .tao-main {
