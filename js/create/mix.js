@@ -58,16 +58,22 @@ const absolute = (node, origin) => {
 };
 
 // Lấy bản của khối "loại:kiểu": của chính khung đang dùng nếu có, không thì của khung đầu tiên có nó. Trả về { section, credits } hoặc null.
-// Trong mỗi khung tìm trang chủ trước và bỏ qua trang 404: khối ở đó mang chữ "không tìm thấy trang" (intro center của Bậc Trà chỉ có ở 404).
+// Tìm ở trang chủ của mọi khung trước (khung đang dùng đứng đầu, kể cả khối đang ẩn ở đó); không trang chủ nào có thì mới tìm ở trang
+// khác, bỏ trang 404. Khối ở trang khác mang chữ của đúng trang ấy (intro center của Bậc Trà chỉ có ở trang 404, "Không tìm thấy trang";
+// intro thường của SighGone ở trang Tối nay, "Tối nay ăn gì?"), nên chỉ dùng khi không còn cách nào; hero full, faq, tips, policy chỉ có ở
+// trang khác.
 function findSection(key, frames, base) {
-  for (const id of [base, ...Object.keys(frames).filter((f) => f !== base)]) {
+  const order = [base, ...Object.keys(frames).filter((f) => f !== base)].filter((id) => frames[id]);
+  const isHome = (p) => (p.path ?? '/').replace(/^\/+|\/+$/g, '') === '';
+  const pagesOf = (id) => frames[id].pages ?? [{ sections: frames[id].sections ?? [] }];
+  const tries = [
+    ...order.map((id) => [id, pagesOf(id).filter(isHome), true]),
+    ...order.map((id) => [id, pagesOf(id).filter((p) => !isHome(p) && p.path !== '404'), false]),
+  ];
+  for (const [id, pages, home] of tries) {
     const data = frames[id];
-    if (!data) continue;
-    const isHome = (p) => (p.path ?? '/').replace(/^\/+|\/+$/g, '') === '';
-    const all = data.pages ?? [{ sections: data.sections ?? [] }];
-    const pages = [...all.filter(isHome), ...all.filter((p) => !isHome(p) && p.path !== '404')];
     for (const page of pages) {
-      const hit = (page.sections ?? []).find((s) => keyOf(s) === key && !s.hidden);
+      const hit = (page.sections ?? []).find((s) => keyOf(s) === key && (home || !s.hidden));
       if (!hit) continue;
       const section = structuredClone(hit);
       const own = id === base;
