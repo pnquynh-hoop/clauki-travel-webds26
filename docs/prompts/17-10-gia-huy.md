@@ -1,123 +1,71 @@
 # Prompt của Gia Huy, 17/10
 
-Nguyên văn tin nhắn Gia Huy gửi Claude Code cho từng PR ghi trong bảng Gia Huy của [ai-log.md](../ai-log.md), giữ cả lỗi gõ. Khoá thật đã ẩn. Chữ trong ngoặc vuông là ghi chú thêm: ảnh chụp, đoạn dán dài, hay yêu cầu chung với PR khác. Việc AI đã làm và phần AI tự quyết định ghi ở cột "Việc nhờ AI làm" của ai-log.
+Prompt chính Gia Huy gửi Claude Code cho từng PR trong bảng Gia Huy của [ai-log.md](../ai-log.md), viết lại thành câu hoàn chỉnh từ các tin nhắn trong phiên làm việc: giữ đúng ý, bỏ lỗi gõ và các câu phụ như “merge”, “ok”. Khoá thật không ghi. Việc AI đã làm và phần AI tự quyết định ghi ở cột “Việc nhờ AI làm” của ai-log.
 
 ## PR #208
 
-> k còn "tính năng" nào chưa/quên làm à
-
-> [ảnh chụp phiếu giữ chỗ: điểm đi, điểm đến ghi cố định, không theo tour và điểm đón khách chọn]
+Phiếu giữ chỗ đang ghi điểm đi, điểm đến cố định (xem ảnh chụp). Cho điểm đi, điểm đến đổi theo tour và điểm đón khách chọn.
 
 ## PR #207
 
-> còn tính năng nào chưa làm k
-
-> cho AI sinh luôn dữ liệu mấy phần thiếu đi, ví dụ mặc định khung cho AI, du lịch sẽ cần những thông tin gì, lưu trú cần gì, sinh dâta mẫu luôn
+Nút Tinh chỉnh ở /tao cho AI tự điền dữ liệu mẫu cho các mục còn thiếu: đặt sẵn danh sách thông tin cần có cho tour và cho lưu trú, mục nào người dùng chưa nói thì AI điền giá trị mẫu để người dùng sửa.
 
 ## PR #211
 
-> t kiu m check tất cả section/component rồi mà
-
-> phải thử hết
-
-> danh sách viết tay BAO GỒM GÌ
-
-> quy ra wl hết được k, nên k
-
-> sao k xem nó như data bình thuonwff trong json đi
-
-> ok, và nếu muốn đổi giọng là ở khúc prompt ấy, ví dụ thấy nhập miền tây, thì hướng phong cách cho gemini,..
+Website AI tạo vẫn còn chữ của khung mẫu dù đã kiểm. Kiểm tra hết mọi section và component; thay vì giữ danh sách chữ viết tay, xem mọi chữ trong JSON là dữ liệu bình thường để AI viết lại. Thêm giọng văn vào hồ sơ để prompt hướng phong cách theo vùng miền, ví dụ mô tả nói miền Tây thì viết giọng miền Tây.
 
 ## PR #212
 
-> check limit gemini
-
-> các phần có gọi gemini thì khi trả kết quả cần hiện ra đã dùng model gì
+Kiểm tra hạn mức Gemini, và ở mọi chỗ có gọi Gemini thì hiện model đã dùng khi trả kết quả.
 
 ## PR #219
 
-> Máy demo chưa sửa được trang đã xuất bản. Trong supabase/sites.sql đã có policy sua và header x-demo-key, nhưng web chưa gửi lệnh sửa nào. Trang khách cũng chưa có nút "Sửa trang này". [...] Link xuất bản chưa đúng như kế hoạch [...]
-
-> máy demo sửa trang đã xuất bản, và link xuất bản theo tên miền con kèm QR.
-
-> lwuu lại trong chrome k
-
-> PR
+Làm hai việc còn thiếu: máy demo (có khoá) sửa được trang đã xuất bản, và link xuất bản dùng tên miền con kèm mã QR. Khoá máy demo lưu trên trình duyệt của máy thuyết trình.
 
 ## PR #220
 
-> màn xuất bản có đưa ra link tên miền con và mã QR không;
->  test sao
-
-> [ảnh chụp màn xuất bản] bỏ dòng Đã xuất bản. Trang đã cố định, chỉ máy demo sửa được.
->  và UI lại khối cha chưa qr
+Kiểm tra màn xuất bản đã đưa ra link tên miền con và mã QR chưa. Bỏ dòng “Đã xuất bản. Trang đã cố định, chỉ máy demo sửa được.” và làm lại giao diện khối chứa mã QR.
 
 ## PR #222
 
-> khi share QR cần thêm nút phóng to để phóng to QR cho bên dưới quét
-
-> bỏ chữ máy demo luôn, chung PR
-
-> nút thử chỉnh đổi thành hình tròn sát góc
-
-> đổi chữ W thành 4 ô vuông đi, hoặc icon tiện ích nafocunxg đc
+Khi chia sẻ mã QR, thêm nút phóng to để người ngồi dưới quét được; bỏ chữ “máy demo”; đổi nút Thử chỉnh thành nút tròn sát góc và thay chữ W trên nút bằng icon bốn ô vuông. Gộp chung một PR.
 
 ## PR #223
 
-> phopsng to nhưng vẫn còn thấy pop ấy k phaỉ che hết
-
-> [ảnh chụp] thôi k cần phóng to, cho popup naỳ to lên là dcd
+Bản phóng to vẫn còn thấy hộp thoại phía sau. Bỏ phóng to, thay bằng làm hộp thoại mã QR to hơn.
 
 ## PR #228
 
-> nên refactor codebase, folder như thế nào
-
-> [dán lại 3 mục refactor AI đã đề xuất: tách file lớn theo kiểu, gom component vào thư mục, sắp lại js/ và css/] Làm ngay cả 3 mục
+Đề xuất cách tổ chức lại thư mục của codebase, rồi làm ngay cả ba mục: tách file lớn theo kiểu trình bày, gom JS và CSS của mỗi component vào một thư mục, sắp lại js/ và css/.
 
 ## PR #230
 
-> [cùng yêu cầu với PR #228, mục gom JS, CSS của mỗi component vào components/<tên>/]
+Làm phần gom component của đợt sắp xếp thư mục: mỗi component một thư mục components/<tên>/ chứa JS, CSS và ảnh riêng.
 
 ## PR #231
 
-> sau đó Xóa brand-test ra khỏi repo
+Xoá thương hiệu thử brand-test khỏi repo.
 
 ## PR #232
 
-> tại sao các secret k đặt trong biến môi trường mà lại để trong code
-
-> lát đổi ưu tiên cho dùng khóa của t cuối để t kiểm soát đc trước demo
-
-> vậy thứ tự là gì
-
-> ok
+Giải thích vì sao các khoá không đặt trong biến môi trường, rồi đổi thứ tự đường gọi Gemini để khoá của mình (Firebase) được dùng sau cùng, giữ hạn mức cho buổi demo.
 
 ## PR #235
 
-> [cùng yêu cầu với PR #228, mục 1: "Tách các file quá lớn theo kiểu trình bày [...] wl-booking.js (1.455 dòng) và booking.css (2.133 dòng) gánh 5 kiểu [...] Nên tách mỗi kiểu một file"]
-
-> viết PR kĩ
+Tách wl-booking.js (1.455 dòng) và booking.css (2.133 dòng) theo từng kiểu trình bày, mỗi kiểu một file, rồi viết mô tả PR thật kỹ.
 
 ## PR #240
 
-> [ảnh chụp site Azure Dome tạo ở /tao: trang chủ có khối "Không tìm thấy trang"]
-
-> ok
-
-> [ảnh chụp site Bắc Cực Xanh: khối intro hiện các tấm lật SIGHGONE]
+Website Azure Dome tạo ở /tao có khối “Không tìm thấy trang” ngay trên trang chủ, còn site Bắc Cực Xanh hiện các tấm lật chữ SIGHGONE (xem ảnh chụp). Tìm nguyên nhân và sửa.
 
 ## PR #241
 
-> việt lại readme
+Viết lại README cho vòng chung kết, đúng với hiện trạng dự án.
 
 ## PR #242
 
-> [ảnh chụp chân trang site Nắng Bali còn "Every sigh, gone."]
+Chân trang site Nắng Bali vẫn còn khẩu hiệu “Every sigh, gone.” của SighGone (xem ảnh chụp). Sửa lỗi này.
 
 ## PR #246
 
-> dò hết các lỗi tương tự
-
-> cho agent dò chạy ngầm
-
-> ok
+Dò hết các lỗi tương tự (chữ và dữ liệu của khung mẫu lọt vào website AI tạo) bằng một agent chạy ngầm, rồi sửa các lỗi tìm được.

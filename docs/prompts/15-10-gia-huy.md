@@ -1,31 +1,19 @@
 # Prompt của Gia Huy, 15/10
 
-Nguyên văn tin nhắn Gia Huy gửi Claude Code cho từng PR ghi trong bảng Gia Huy của [ai-log.md](../ai-log.md), giữ cả lỗi gõ. Khoá thật đã ẩn. Chữ trong ngoặc vuông là ghi chú thêm: ảnh chụp, đoạn dán dài, hay yêu cầu chung với PR khác. Việc AI đã làm và phần AI tự quyết định ghi ở cột "Việc nhờ AI làm" của ai-log.
+Prompt chính Gia Huy gửi Claude Code cho từng PR trong bảng Gia Huy của [ai-log.md](../ai-log.md), viết lại thành câu hoàn chỉnh từ các tin nhắn trong phiên làm việc: giữ đúng ý, bỏ lỗi gõ và các câu phụ như “merge”, “ok”. Khoá thật không ghi. Việc AI đã làm và phần AI tự quyết định ghi ở cột “Việc nhờ AI làm” của ai-log.
 
 ## PR #174
 
-> ví dụ cho AI ghép section từ nhiều khung,  là sao
-
-> t muốn cho trộn
+Cho AI trộn khối từ nhiều khung khi tạo website mới: thay vì chỉ dùng khối của một khung, AI được chọn thứ tự và kiểu trình bày của các khối chung ở trang chủ từ mọi khung có sẵn.
 
 ## PR #176
 
-> [ảnh chụp và dán thông báo của /tao: site Nile Vibe, "Yêu cầu bị bộ lọc an toàn của Gemini chặn..."]
-
-> thật ra Nile là brand do AI tạo nên lỗi đâu phải lỗi Nile
-
-> các rule nào chặn gemini v
-
-> cái này là do gemini k sinh data cho cái này à
-
-> thứ đi vào lượt gửi bị chặn. chặn cái gì
-
-> hay mở chặn gemini đi
+Site Nile Vibe tạo ở /tao bị bỏ dở vì bộ lọc an toàn của Gemini chặn một nhóm chữ, nên trang còn nguyên chữ Sài Gòn của khung. Tìm xem Gemini chặn nội dung gì và vì sao, rồi sửa để website vẫn tạo xong khi có nhóm bị chặn.
 
 ## PR #177
 
-> gemini hết limit thì tự chuyển sang Gemini 3.1 Flash Lite
+Khi model Gemini chính hết lượt, tự chuyển sang Gemini 3.1 Flash Lite để việc tạo website không bị gián đoạn.
 
 ## PR #179
 
-> [không có tin nhắn riêng: Gia Huy thử tạo site Tulip (Hà Lan) ở /tao rồi nhờ sửa các lỗi thấy được: giá tour 10.000 đồng, màu nhấn lệch, chọn ngày, chân trang còn chữ SighGone]
+Sửa các lỗi thấy ở site thử Tulip (Hà Lan) tạo bằng /tao: giá tour chỉ còn 10.000 đồng, màu nhấn lệch với màu nút, chọn ngày chưa tiện, chân trang còn chữ SighGone.

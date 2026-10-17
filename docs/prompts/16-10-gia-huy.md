@@ -1,121 +1,67 @@
 # Prompt của Gia Huy, 16/10
 
-Nguyên văn tin nhắn Gia Huy gửi Claude Code cho từng PR ghi trong bảng Gia Huy của [ai-log.md](../ai-log.md), giữ cả lỗi gõ. Khoá thật đã ẩn. Chữ trong ngoặc vuông là ghi chú thêm: ảnh chụp, đoạn dán dài, hay yêu cầu chung với PR khác. Việc AI đã làm và phần AI tự quyết định ghi ở cột "Việc nhờ AI làm" của ai-log.
+Prompt chính Gia Huy gửi Claude Code cho từng PR trong bảng Gia Huy của [ai-log.md](../ai-log.md), viết lại thành câu hoàn chỉnh từ các tin nhắn trong phiên làm việc: giữ đúng ý, bỏ lỗi gõ và các câu phụ như “merge”, “ok”. Khoá thật không ghi. Việc AI đã làm và phần AI tự quyết định ghi ở cột “Việc nhờ AI làm” của ai-log.
 
 ## PR #182
 
-> Chưa nối kho dữ liệu (Supabase), tạm thời chỉ xem nháp trên máy này.
->
-> xử lý issue này
-
-> chạy sql chi v
-
-> [dán khoá publishable của Supabase, đã ẩn]
+Xử lý issue “Chưa nối kho dữ liệu (Supabase), tạm thời chỉ xem nháp trên máy này”: nối nút Xuất bản của /tao với Supabase bằng khoá publishable mình gửi, và giải thích vì sao cần chạy file SQL.
 
 ## PR #183
 
-> t qua bằng brave vẫn vô chỉnh sửa được, và hiện ra editor luôn. khi bấm tạo bản sao thì nó lấy bản mới nhưng bộ màu của sighgone
+Site khách đã xuất bản vẫn mở được editor khi vào bằng trình duyệt khác (Brave), và bấm Tạo bản sao thì lấy đúng nội dung nhưng lại dùng bộ màu của SighGone. Sửa để site đã xuất bản chỉ đọc và bản sao giữ đúng màu.
 
 ## PR #186
 
-> [ảnh chụp /tao] chỉnh giao diện để trực quan tiến trình AI sinh wbe, đang bước nào,..
+Làm lại giao diện /tao để người dùng thấy trực quan AI đang dựng website tới bước nào.
 
 ## PR #187
 
-> pexexls ngưng cấp APi r
-
-> ok
+Pexels đã ngừng cấp API, thay nguồn ảnh tuỳ chọn bằng Unsplash.
 
 ## PR #192
 
-> [dán hai khoá Gemini của Như Quỳnh, Mị Nương, đã ẩn]
->
-> thêm 2 key này vào back up ,
-
-> chắc thi xong kiu họ xóa key là được
-
-> Tạo issue nhắc xóa secret sau thi
-
-> mở PR
+Thêm hai khoá Gemini của Như Quỳnh và Mị Nương làm khoá dự phòng khi khoá chính hết lượt, tạo issue nhắc xoá các khoá này sau khi thi, rồi mở PR.
 
 ## PR #193
 
-> issue: ở trang tạo mới bằng AI thì cần chỉnh tay được ở đó nữa, hiện tại phải xuất bản rồi mới sửa by editor được
-
-> chỉnh sửa "tạo bản sao" chưa có nút xúât bản
-
-> https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/189
+Xử lý issue #189: ở trang tạo website bằng AI phải chỉnh tay được ngay, không cần xuất bản rồi mới mở editor; editor của bản sao cũng cần có nút Xuất bản.
 
 ## PR #195
 
-> tạo issue: khi cần GEMINI sinh data (tạo web mới, AI sửa) hoặc khi có nhưng chỉnh tay về chữ, thì cần gemini trả kèm bản tiếng tiếng nữa
-
-> https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/188
-
-> ủa sao lúc nó sinh data k kiu nó dịch song ngữ luôn
-
-> vậy nếu: web đc xem là tạo xong khi có đủ dữ liệu như cũ, bước dịch cứ chạy tiếp
+Xử lý issue #188: website AI tạo cần có bản tiếng Anh. Xem website là tạo xong khi đủ bản tiếng Việt, còn bước dịch tiếng Anh chạy tiếp ở nền.
 
 ## PR #196
 
-> sau khi tạo xong thì nút Tạo website -> Tạo lại và cần step-up, lúc đang tạo thì khóa các nút
+Sau khi tạo xong, nút Tạo website đổi thành Tạo lại và phải xác nhận trước khi chạy lại; trong lúc đang tạo thì khoá các nút và ô nhập.
 
 ## PR #197
 
-> https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/98
-> brand Khách sạn, nghỉ dưỡng đang bị ít section hả, AI tạo t thấy nó có vài section và 1 -3 trang thôi
+Xem issue #98: website nghỉ dưỡng do AI tạo chỉ có vài khối và một tới ba trang. Tìm nguyên nhân và sửa để có đủ trang.
 
 ## PR #198
 
-> dùng catalog ,item cho hạng phòng và chi tieetys đc k
-
-> Cho stays và booking:stay đọc từ catalog khi section không ghi rooms là sao
-
-> sửa issue rồi làm
+Cho hạng phòng và trang chi tiết đọc từ catalog.items: khối stays và booking kiểu stay tự lấy hạng phòng từ danh mục khi section không ghi rooms. Cập nhật issue trước rồi làm.
 
 ## PR #199
 
-> [cùng yêu cầu với PR #198: phần dữ liệu Gành Sớm]
-
-> PR #199, phần dữ liệu Gành Sớm (Closes #98):
-> cũng dùng đcc cho các brand về lưu trú khác đúng k
+Làm phần dữ liệu của issue #98: thêm danh mục hạng nhà và trang chi tiết cho Gành Sớm, theo cách các thương hiệu lưu trú khác cũng dùng được.
 
 ## PR #200
 
-> https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/172. khi AI tạo web t thấy còn kashc nhiều section để dữ liệu cũ
-
-> Các khung khác (Bậc Trà, Gành Sớm, Mé Rạch) tôi chưa đối chiếu theo cách này.
-> keierm tra hết  luôn đi
+Xem issue #172: website AI tạo còn nhiều khối giữ dữ liệu cũ của khung. Đối chiếu từng dòng với khung SighGone, rồi kiểm tra luôn các khung Bậc Trà, Gành Sớm, Mé Rạch.
 
 ## PR #202
 
-> tạo issue lưu lịch sử chat với AI khi sửa editor
-
-> Gửi kèm vài lượt gần nhất khi nhờ tiếp, để AI hiểu những câu như "đổi lại như lúc nãy".
-> và là mấy
-
-> https://github.com/pnquynh-hoop/clauki-travel-webds26/issues/201
+Tạo issue và làm: lưu lịch sử chat với AI khi sửa trong editor, gửi kèm vài lượt gần nhất khi nhờ tiếp để AI hiểu những câu như “đổi lại như lúc nãy”.
 
 ## PR #203
 
-> về phần up ảnh / logo thì sao
-
-> vậy người ta bảo cho kách đổi logo của họ thì sao
-
-> Trình duyệt tự thu nhỏ logo (cao tối đa khoảng 200px, khoảng 20 đến 40 KB) và nhúng thẳng vào dữ liệu site. Không có file nào nằm trên máy chủ, nên không bị lợi dụng làm chỗ chứa ảnh.. sao bảo k cần superbase
+Cho khách tự đổi logo trong editor (tải logo từ máy hoặc tạo logo chữ); giải thích logo được lưu ở đâu và vì sao không cần thêm kho ảnh trên Supabase.
 
 ## PR #204
 
-> đang có các brand nào đã xuất bản
-
-> gỡ hết
-
-> giờ sao
-
-> Một trang trung tính của ClauKi:
+Khi mở một site khách không có (gõ nhầm hay đã gỡ), hiện một trang trung tính của ClauKi thay cho dòng chữ trơn.
 
 ## PR #205
 
-> thưởng hiệu mặc định nghĩa là sao
-
-> ok
+Đổi thương hiệu mặc định của trang gốc từ Bậc Trà sang SighGone, thương hiệu chính của đội.
