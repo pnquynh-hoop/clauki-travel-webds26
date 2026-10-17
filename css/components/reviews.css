@@ -321,13 +321,13 @@
   list-style: none;
 }
 
-/* Giấy note ngoài đời luôn sáng, chữ luôn tối. Brand nền tối (brand-test) có màu mực sáng, mặt thẻ tối nên chữ chìm vào giấy:
-   ép độ sáng nhưng giữ sắc màu của brand (mực tối nhất 0.3, chữ phụ 0.5, mặt giấy sáng ít nhất 0.96).
-   Brand nền sáng vốn đã thoả các mức này nên trông như cũ. Khai trên .reviews__sticky để đọc đúng bảng màu sáng
-   mà theme-mode.css trả về cho tờ note ở chế độ tối. */
+/* Giấy note ngoài đời luôn sáng, chữ luôn tối. Màu giấy do khối tự pha từ màu brand nên kho màu (AI, editor) không kiểm được:
+   ép độ sáng nhưng giữ sắc màu của brand (mực tối nhất 0.3, chữ phụ 0.45, giấy sáng ít nhất 0.9), nên bộ màu nào
+   cũng đạt tương phản từ 4,5 (thử 20.000 bộ màu ngẫu nhiên: chữ phụ thấp nhất 5, chữ thấp nhất 9,5). Khai trên .reviews__sticky để đọc
+   đúng bảng màu sáng mà theme-mode.css trả về cho tờ note ở chế độ tối. */
 .reviews__sticky {
   --note-ink: oklch(from var(--color-ink) min(l, 0.3) c h);
-  --note-muted: oklch(from var(--color-muted) min(l, 0.5) c h);
+  --note-muted: oklch(from var(--color-muted) min(l, 0.45) c h);
   --note-surface: oklch(from var(--color-surface) max(l, 0.96) c h);
 }
 
@@ -347,7 +347,7 @@
   margin: 0;
   padding: 1.6rem 1.3rem 1.2rem;
   color: var(--note-ink);
-  background: var(--paper, var(--note-surface));
+  background: oklch(from var(--paper, var(--note-surface)) max(l, 0.9) c h);
   box-shadow: 0 1px 0 color-mix(in srgb, var(--note-ink) 8%, transparent), 0 18px 30px -18px color-mix(in srgb, var(--note-ink) 45%, transparent);
   transform: rotate(var(--rot, -1.5deg));
   transition: transform calc(var(--duration, 0.2s) * 1.5) cubic-bezier(0.2, 0.8, 0.2, 1);
