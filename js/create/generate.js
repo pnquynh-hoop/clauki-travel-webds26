@@ -90,7 +90,9 @@ const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...
 function oldNamesOf(pool, profile = {}) {
   const own = [profile.ten, profile.slogan, profile.noiChon, profile.chuNha, ...(Array.isArray(profile.chiTiet) ? profile.chiTiet : [])].join(' ').toLowerCase();
   const names = Object.values(pool).flatMap((f) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name)])
-    .filter((n) => typeof n === 'string' && n.trim().length > 2 && !own.includes(n.toLowerCase()));
+    .filter((n) => typeof n === 'string' && n.trim().length > 2 && !own.includes(n.toLowerCase()))
+    // Tên viết liền có chữ hoa giữa (SighGone) còn được viết tách trong câu ("đọc nhanh thành Sigh Gone"): dò cả hai.
+    .flatMap((n) => [n, n.replace(/(\p{Ll})(\p{Lu})/gu, '$1 $2')]);
   // Khớp nguyên từ ("ghe" không khớp trong "nghe", "Quận 1" không khớp "Quận 10"); \b của JS không hiểu chữ có dấu nên dùng \p{L}.
   const list = [...new Set(names)].map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   return names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${list})(?![\\p{L}\\p{N}])`, 'u') : null;
@@ -313,6 +315,12 @@ function scalePrices(content, price) {
   walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
 }
 
+// Tiêu đề đọc nhanh của intro (morph: "Sài Gòn" lật thành "Sigh Gone") là chơi chữ trên tên SighGone, AI không viết lại được cho tên mới
+// và để nguyên thì các tấm lật hiện chữ SIGHGONE. Bỏ ở mọi trang của site mới, tiêu đề hiện như headline thường.
+function dropMorph(content) {
+  for (const page of content.pages ?? [content]) for (const section of page.sections ?? []) delete section.morph;
+}
+
 // Ngôn ngữ của khung (SighGone có tiếng Anh) không đi theo: bản dịch của khung không khớp chữ mới. Bỏ trên khung trước khi tách
 // chữ cho AI viết; bản tiếng Anh của site mới do bước dịch ở /tao thêm vào (english.js).
 function dropLanguages(content) {
@@ -531,6 +539,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   composeFooter(template, profile.chanTrang, pool, frame, approved);
   const borrowed = borrowPages(template, pool, frame, approved);
   if (borrowed.length) rules.borrowed = borrowed;
+  dropMorph(template);
   const content = structuredClone(template);
   const oldNames = oldNamesOf(pool, profile);
   const fields = extractFields(template);
