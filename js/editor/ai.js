@@ -3,7 +3,8 @@
    các thao tác nhỏ dạng JSON Lines. Mỗi thao tác qua cùng bộ kiểm tra với sửa tay (kiểu có trong manifest, khối có thật,
    màu hex, tương phản AA); thao tác đạt mới hiện thành dòng "trước, sau". Bấm Đồng ý thì áp tất cả trong một commit,
    nên một lần Hoàn tác là bỏ hết. Không gửi dữ liệu cá nhân, đơn đặt chỗ hay cả content.json cho AI. */
-import { BLOCKS, HEADER_VARIANTS, COLORS, FONTS, TEMPLATES, variantsFor, fieldsFor } from './manifest.js';
+import { BLOCKS, HEADER_VARIANTS, COLORS, FONTS, variantsFor, fieldsFor } from './manifest.js';
+import { addableGroups, makeBlock, addCredits } from './blocks-add.js';
 import { headerTarget, checkNewPage, addPage, insertBlock, applyFont } from './ops.js';
 import { getIn, setIn } from './form.js';
 import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL, usageMark, modelsSince } from '../ai/gemini.js';
@@ -27,6 +28,9 @@ let busy = false;
 
 const HEX = /^#[0-9a-f]{6}$/i;
 const blockLabel = (section) => BLOCKS[section.type]?.label ?? section.type;
+// Mốc (#id) các khối trên trang đang mở, để mẫu khối mượn từ thương hiệu khác không giữ liên kết tới mốc không có ở đây.
+const anchorsOf = (list) => new Set(list.map((s) => s.id).filter(Boolean));
+
 const variantLabel = (type, value) => (type === 'header' ? HEADER_VARIANTS : BLOCKS[type]?.variants ?? []).find(([v]) => v === (value ?? ''))?.[1] ?? (value || 'mặc định');
 
 /* ---------- Ngữ cảnh gửi cho AI ---------- */
@@ -54,7 +58,8 @@ function context() {
     site: Object.fromEntries(Object.keys(SITE_FIELDS).map((k) => [k, k.split('.').reduce((n, key) => n?.[key], state.content) ?? ''])),
     colors: Object.fromEntries(COLORS.map(([name, label]) => [name, `${colorOf(name)} (${label})`])),
     fonts: FONTS.map((f) => `${f.key || '""'} (${f.label})`),
-    addable: TEMPLATES.map((t) => `${t.type} (${t.label})`),
+    // Cùng danh sách khối với ô Thêm khối của tab Khối (blocks-add.js), chỉ các khối thêm được ở site này.
+    addable: addableGroups(state.content, state.baseId, anchorsOf(list)).flatMap((g) => g.blocks).filter((b) => !b.reason).map((b) => `${b.type} (${b.label})`),
   };
 }
 
@@ -102,11 +107,11 @@ function plan(op) {
       return { ok: true, what: name, from: 'có trên trang', to: 'xoá',
         run: () => { const s = sections(); if (at(section) >= 0) s.splice(at(section), 1); } };
     case 'add': {
-      const template = TEMPLATES.find((t) => t.type === op.type);
-      if (!template) return { ok: false, reason: `Không thêm được loại khối "${op.type}".` };
+      const made = makeBlock(op.type, state.content, state.baseId, api.images().filter((img) => img.alt), anchorsOf(list));
+      if (!made) return { ok: false, reason: `Không thêm được loại khối "${op.type}".` };
       const after = list[Number(op.after)] ?? null;
-      return { ok: true, what: `Khối mới: ${template.label}`, from: 'chưa có', to: after ? `sau ${blockLabel(after)}` : 'đầu trang',
-        run: () => insertBlock(sections(), op.type, after ? at(after) + 1 : 0, api.images().filter((img) => img.alt)) };
+      return { ok: true, what: `Khối mới: ${BLOCKS[op.type]?.label ?? op.type}`, from: 'chưa có', to: after ? `sau ${blockLabel(after)}` : 'đầu trang',
+        run: () => { insertBlock(sections(), made.section, after ? at(after) + 1 : 0); addCredits(state.content, made.credits); } };
     }
     case 'text': {
       const field = fieldsFor(section).find((f) => f.key === op.field && (f.type === 'text' || f.type === 'long'));

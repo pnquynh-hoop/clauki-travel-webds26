@@ -1418,6 +1418,7 @@ a.ed-btn[aria-busy='true'] {
 
 .ed-add__row .ed-select {
   flex: 1;
+  min-width: 0;
 }
 
 /* ---------- Tab AI ---------- */

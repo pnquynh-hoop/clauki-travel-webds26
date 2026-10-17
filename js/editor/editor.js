@@ -5,7 +5,8 @@
    ghi nháp trên máy (draft.js), rồi báo trang trong khung dựng lại bằng chính các component <wl-*>.
    Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/tool/editor.css, tiền tố ed-), không đọc biến của brand. */
 import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
-import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES, CATALOG_FIELDS } from './manifest.js';
+import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, CATALOG_FIELDS } from './manifest.js';
+import { loadLibrary, addableGroups, makeBlock, addCredits } from './blocks-add.js';
 import { paletteEl, DARK_OFF } from './palette.js';
 import { menuOrderEl } from './menu-order.js';
 import { buildForm, buildFields, imageLibrary, setIn, getIn } from './form.js';
@@ -478,13 +479,18 @@ function listOp(key, path, action, i, item) {
   });
 }
 
-// Khối mới chèn ngay sau khối đang chọn (chưa chọn thì cuối trang), id không trùng khối nào trên trang.
+// Mốc (#id) của các khối trên trang đang mở: liên kết của mẫu trỏ tới mốc không có ở đây thì blocks-add.js đổi đi.
+const anchors = () => new Set(sections().map((s) => s.id).filter(Boolean));
+
+// Khối mới chèn ngay sau khối đang chọn (chưa chọn thì cuối trang), id không trùng khối nào trên trang. Mẫu mượn của thương hiệu
+// khác kèm dòng credits cho ảnh của nó.
 function addBlock(type) {
-  const template = TEMPLATES.find((t) => t.type === type);
-  if (!template) return;
+  const made = makeBlock(type, state.content, state.baseId, imageLibrary(state.content).filter((img) => img.alt), anchors());
+  if (!made) return;
   const at = typeof state.sel === 'number' ? state.sel + 1 : sections().length;
-  commit(`Thêm khối ${template.label}`, () => {
-    insertBlock(sections(), type, at, imageLibrary(state.content).filter((img) => img.alt));
+  commit(`Thêm khối ${BLOCKS[type]?.label ?? type}`, () => {
+    insertBlock(sections(), made.section, at);
+    addCredits(state.content, made.credits);
     state.sel = at;
   });
   setTimeout(() => selectedEl()?.scrollIntoView({ block: 'start' }), SCROLL_AFTER_RENDER_MS);
@@ -509,9 +515,14 @@ function contentEl() {
   return h('section', { class: 'ed-content', 'aria-label': `Nội dung của ${blockName(section)}` }, form);
 }
 
+// Ô chọn khối chia nhóm theo việc (blocks-add.js), như một kho khối dùng chung của cả hệ thống; khối chưa thêm được
+// (cần danh mục) vẫn hiện nhưng khoá, kèm lý do.
 function addBlockEl() {
+  const groups = addableGroups(state.content, state.baseId, anchors());
   const pick = h('select', { class: 'ed-select', 'aria-label': 'Loại khối muốn thêm', 'data-ed-key': 'add:type' },
-    TEMPLATES.map((t) => h('option', { value: t.type, text: t.label })));
+    groups.map(({ group, blocks: items }) => h('optgroup', { label: group },
+      items.map((b) => h('option', { value: b.type, disabled: Boolean(b.reason), text: b.reason ? `${b.label} (${b.reason})` : b.label })))));
+  pick.value = groups.flatMap((g) => g.blocks).find((b) => !b.reason)?.type ?? '';
   const where = typeof state.sel === 'number' ? `sau khối ${state.sel + 1}` : 'cuối trang';
   return h('div', { class: 'ed-add' },
     h('h3', { class: 'ed-h', text: 'Thêm khối' }),
@@ -1272,4 +1283,8 @@ export function openEditor({ brands, id }) {
   renderAi();
   mountEnglish({ h, state, commit, persist, refresh, toast, openTab, sections, blockName, download });
   openPage('/');
+  // Mẫu khối của các thương hiệu có sẵn cho ô Thêm khối; tải xong thì vẽ lại để ô chọn có đủ khối.
+  loadLibrary(brands.map((b) => b.id)).then(() => {
+    if (state.content) refresh();
+  });
 }

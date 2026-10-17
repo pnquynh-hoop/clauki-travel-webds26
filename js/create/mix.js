@@ -44,7 +44,9 @@ export async function loadFrames(ids) {
   return Object.fromEntries(entries.filter(Boolean));
 }
 
-const absolute = (node, origin) => {
+// Đường dẫn ảnh tính từ thư mục thương hiệu (images/...) thành đường dẫn tuyệt đối của thương hiệu gốc, để khối mượn sang chỗ khác
+// vẫn trỏ đúng ảnh. Editor dùng chung khi thêm khối lấy từ thương hiệu khác (editor/blocks-add.js).
+export const absolute = (node, origin) => {
   const walk = (n) => {
     if (Array.isArray(n)) n.forEach(walk);
     else if (n && typeof n === 'object') {
