@@ -1,0 +1,140 @@
+/* lightbox.css - hộp xem ảnh lớn toàn màn hình (components/effects/lightbox.js).
+   Nền là màu mực của thương hiệu pha trong, chữ màu nền; ảnh giữa màn hình, nút đóng góc trên,
+   nút trước, sau hai bên (điện thoại thì nằm dưới ảnh). */
+
+.lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  color: var(--color-bg);
+  background: transparent;
+}
+
+.lightbox[open] {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  justify-items: center;
+  animation: lightbox-in calc(var(--duration) * 1.5) ease;
+}
+
+.lightbox::backdrop {
+  background: color-mix(in srgb, var(--color-ink) 92%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.lightbox__figure {
+  grid-row: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  max-width: min(100%, 72rem);
+}
+
+.lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: 76dvh;
+  object-fit: contain;
+  border-radius: calc(var(--radius) * 0.5);
+}
+
+.lightbox__caption {
+  margin: 0;
+  max-width: 48rem;
+  text-align: center;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-bg) 85%, transparent);
+}
+
+.lightbox__counter {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+}
+
+.lightbox__btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  color: var(--color-bg);
+  border: 1px solid color-mix(in srgb, var(--color-bg) 35%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-bg) 10%, transparent);
+  cursor: pointer;
+  transition: background-color var(--duration) ease;
+}
+
+.lightbox__btn:hover {
+  background: color-mix(in srgb, var(--color-bg) 22%, transparent);
+}
+
+.lightbox__icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.lightbox__close {
+  grid-row: 1;
+  justify-self: end;
+}
+
+/* Điện thoại: hai nút trước, sau nằm chung hàng dưới ảnh. */
+.lightbox__prev,
+.lightbox__next {
+  grid-row: 3;
+}
+
+.lightbox__prev {
+  justify-self: start;
+}
+
+.lightbox__next {
+  justify-self: end;
+  margin-top: -3rem;
+}
+
+@media (min-width: 760px) {
+  .lightbox[open] {
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+  }
+
+  .lightbox__close {
+    grid-column: 3;
+  }
+
+  .lightbox__figure {
+    grid-column: 2;
+  }
+
+  .lightbox__prev,
+  .lightbox__next {
+    grid-row: 2;
+    margin-top: 0;
+  }
+
+  .lightbox__prev {
+    grid-column: 1;
+  }
+
+  .lightbox__next {
+    grid-column: 3;
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}

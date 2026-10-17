@@ -76,11 +76,14 @@ Trường dữ liệu và kiểu trình bày của từng component ghi ở mụ
 index.html              vỏ trang: không chứa chữ của thương hiệu nào
 serve.py                chạy thử trên máy: trả index.html cho đường dẫn trang con (không deploy)
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
+components/             mỗi component một thư mục <tên>/: wl-<tên>.js, <tên>.css, kiểu riêng, images/;
+                        core.js chỉ tải JS, CSS của khối trang đang dùng
+  shared/               file nhiều khối dùng chung (plate, catalog-card, rooms, item-detail)
+  effects/              hiệu ứng dùng chung (lightbox, parallax, pin-scroll)
 css/
   site/                 CSS của trang, theo biến của thương hiệu
     base.css            reset, kiểu chữ, bố cục, responsive; chỉ dùng biến CSS
     theme-mode.css      chế độ tối: khối vốn sáng ngoài đời (giấy note, biển số, chữ trên ảnh) giữ bảng màu sáng
-  components/           mỗi component một file; core.js chỉ tải file của khối trang đang dùng
   tool/                 CSS của công cụ ClauKi, màu cố định, không theo thương hiệu
     editor.css          editor "Thử chỉnh" (chỉ tải khi mở /<brand>/<trang>?sua), dùng chung với /tao
     tao.css             trình tạo web /tao
@@ -95,8 +98,6 @@ js/
     icon.js             nạp icon Lucide khi cần
     i18n.js, i18n-text.js  song ngữ: ghép bản dịch; rút chữ và theo dõi câu cần dịch lại
     theme-mode.js       chế độ sáng, tối: áp bảng màu --dark-* của thương hiệu, nhớ lựa chọn
-  components/           mỗi component một file: wl-<tên>.js
-  effects/              hiệu ứng dùng chung (parallax, lightbox, hero reveal)
   site/                 site khách
     sites.js            nháp /nhap/, đọc, xuất bản, máy demo cập nhật trên Supabase; link tên miền con (publicLink)
     share.js            khối chia sẻ: mã QR, link, chép, chia sẻ (màn xuất bản và trang khách)
