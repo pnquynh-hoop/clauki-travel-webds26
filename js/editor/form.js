@@ -2,6 +2,7 @@
    Form không tự sửa dữ liệu: mỗi thay đổi gọi ctx.set (đặt một giá trị) hoặc ctx.list (thêm, bớt, dời một mục),
    editor.js đưa chúng qua commit() để có hoàn tác và nháp. Chữ luôn qua textContent hoặc value, không ghép HTML. */
 import { fieldsFor } from './manifest.js';
+import { iconEl } from '../core/icon.js';
 
 export function getIn(obj, path) {
   if (!path) return obj;
@@ -92,15 +93,25 @@ function fieldEl(ctx, section, field, base = '') {
   return ctx.h(field.type === 'image' ? 'div' : 'label', { class: 'ed-field' }, ctx.h('span', { text: field.label }), control);
 }
 
-// Danh sách: mỗi mục một khung có các trường con và nút Lên, Xuống, Xoá; cuối danh sách có nút Thêm.
+// Nút icon của một mục (mũi tên lên, xuống, thùng rác), cùng kiểu với nút của danh sách khối; tên việc nằm ở aria-label, title.
+function itemIcon(ctx, icon, label, onclick, { key, disabled = false, danger = false } = {}) {
+  return ctx.h('button', { type: 'button', class: `ed-icon-btn${danger ? ' is-danger' : ''}`, 'data-ed-key': key, disabled, onclick, 'aria-label': label, title: label },
+    iconEl(icon, 'ed-icon'));
+}
+
+// Danh sách: mỗi mục một khung có các trường con và nút lên, xuống, xoá ngang hàng tên mục; cuối danh sách có nút Thêm.
 function listEl(ctx, section, field, path, items) {
-  const rows = items.map((_, i) => ctx.h('fieldset', { class: 'ed-item' },
-    ctx.h('legend', { text: `${field.label} ${i + 1}` }),
-    field.fields.map((sub) => fieldEl(ctx, section, sub, join(path, String(i)))),
-    ctx.h('div', { class: 'ed-item__acts' },
-      ctx.h('button', { type: 'button', disabled: i === 0, 'data-ed-key': `${ctx.key}:${path}:${i}:up`, onclick: () => ctx.list(path, 'up', i), text: 'Lên' }),
-      ctx.h('button', { type: 'button', disabled: i === items.length - 1, 'data-ed-key': `${ctx.key}:${path}:${i}:down`, onclick: () => ctx.list(path, 'down', i), text: 'Xuống' }),
-      ctx.h('button', { type: 'button', class: 'is-danger', onclick: () => ctx.list(path, 'remove', i), text: 'Xoá' }))));
+  const rows = items.map((_, i) => {
+    const name = `${field.label} ${i + 1}`;
+    return ctx.h('fieldset', { class: 'ed-item' },
+      ctx.h('legend', { class: 'ed-item__head' },
+        ctx.h('span', { text: name }),
+        ctx.h('span', { class: 'ed-block__acts' },
+          itemIcon(ctx, 'arrow-up', `Đưa ${name} lên`, () => ctx.list(path, 'up', i), { key: `${ctx.key}:${path}:${i}:up`, disabled: i === 0 }),
+          itemIcon(ctx, 'arrow-down', `Đưa ${name} xuống`, () => ctx.list(path, 'down', i), { key: `${ctx.key}:${path}:${i}:down`, disabled: i === items.length - 1 }),
+          itemIcon(ctx, 'trash-2', `Xoá ${name}`, () => ctx.list(path, 'remove', i), { danger: true }))),
+      field.fields.map((sub) => fieldEl(ctx, section, sub, join(path, String(i)))));
+  });
   return ctx.h('div', { class: 'ed-list' },
     ctx.h('p', { class: 'ed-list__head', text: `${field.label} (${items.length})` }),
     rows,

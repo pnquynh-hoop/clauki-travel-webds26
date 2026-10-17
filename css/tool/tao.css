@@ -721,6 +721,12 @@
   border: 2px solid #c2410c;
 }
 
+/* Rê chuột lúc đang chờ bấm lần hai: giữ màu cam cảnh báo, không đổi sang màu rê của nút chính trong editor.css. */
+.ed-btn.tao-create.is-armed:hover {
+  background: #ffedd5;
+  box-shadow: none;
+}
+
 .tao-create-note {
   margin: 0;
   font-size: 0.8rem;

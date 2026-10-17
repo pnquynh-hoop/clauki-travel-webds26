@@ -1,7 +1,8 @@
 /* editor.css - giao diện editor "Thử chỉnh" (#82). Chỉ tải khi mở editor (?sua), trang khách không tải.
    Công cụ của ClauKi, chung cho mọi thương hiệu: không đọc biến màu, font của brand. Đổi brand thì chỉ trang trong khung
    đổi, khung editor đứng yên và luôn đọc được. Xám kẽm, một màu nhấn xanh ngọc không trùng brand nào, một font.
-   Nút đều có chữ, không dùng icon trang trí. */
+   Thanh trên, tab và bảng chỉnh nền sáng; chỉ vùng chứa trang đang chỉnh nền tối, để trang nổi lên giữa màn hình.
+   Nút có chữ; icon chỉ dùng ở chỗ nhận ra nhanh hơn chữ (khổ thiết bị, làm mới), không dùng icon trang trí. */
 
 .ed-body {
   --ed-ink: #18181b;
@@ -9,10 +10,9 @@
   --ed-ink-3: #2e2e33;
   --ed-paper: #f4f4f5;
   --ed-line: rgb(24 24 27 / 0.12);
-  /* Nhấn xanh ngọc đậm (dịu hơn cyan sáng #22d3ee cũ, chữ trắng trên nền này đạt 5,4), kèm bản sáng cho chữ nhỏ trên nền tối. */
+  /* Nhấn xanh ngọc đậm (dịu hơn cyan sáng #22d3ee cũ): chữ trắng trên nền này, chữ màu này trên nền trắng đều đạt 5,4. */
   --ed-accent: #0e7490;
   --ed-accent-ink: #ffffff;
-  --ed-accent-text: #7dd3e0;
   --ed-red: #b91c1c;
   --ed-green: #166534;
   --ed-muted: #52525b;
@@ -62,9 +62,9 @@
   align-items: center;
   gap: 0.6rem 1rem;
   padding: 0.6rem 1rem;
-  color: var(--ed-paper);
-  background: var(--ed-ink);
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  color: var(--ed-ink);
+  background: #fff;
+  border-bottom: 1px solid var(--ed-line);
 }
 
 .ed-top__who {
@@ -80,11 +80,11 @@
 .ed-top__status {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #a1a1aa;
+  color: var(--ed-muted);
 }
 
 .ed-top__status.is-draft {
-  color: var(--ed-accent-text);
+  color: var(--ed-accent);
 }
 
 .ed-top__group {
@@ -98,12 +98,19 @@
   margin-left: auto;
 }
 
+/* Ô chọn trang rộng theo tên trang dài nhất, tới giới hạn thì tên cắt bằng dấu ba chấm thay vì bị xén ngang chữ. */
 .ed-top .ed-select {
   width: auto;
   max-width: 14rem;
-  color: var(--ed-paper);
-  background: var(--ed-ink-3);
-  border-color: rgb(255 255 255 / 0.16);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Vạch mảnh ngăn các nhóm nút theo việc: trang, hoàn tác, ngôn ngữ, xem trước, tệp, lưu. Điện thoại chỉ còn một hàng
+   ít nút nên không cần vạch. */
+.ed-top__sep {
+  display: none;
 }
 
 .ed-top__short {
@@ -115,8 +122,27 @@
 @media (min-width: 1024px) {
   .ed-top {
     --ed-top-fs: clamp(0.74rem, 0.37rem + 0.47vw, 0.95rem);
-    gap: 0.5rem clamp(0.35rem, 0.5vw, 1rem);
+    --ed-top-gap: clamp(0.35rem, 0.5vw, 1rem);
+    gap: 0.5rem var(--ed-top-gap);
     padding-inline: clamp(0.6rem, 0.8vw, 1rem);
+  }
+
+  /* Trong nhóm các nút đứng sát nhau hơn khoảng cách giữa hai nhóm, để mắt tự gom nút cùng việc. */
+  .ed-top__group {
+    gap: 0.3rem;
+  }
+
+  .ed-top__sep {
+    display: block;
+    flex: none;
+    width: 1px;
+    height: 1.5rem;
+    background: var(--ed-line);
+  }
+
+  /* Vạch nằm trong nhóm cuối (giữa các nút tệp và Lưu) thì nới thêm cho hai bên vạch rộng bằng các vạch giữa hai nhóm. */
+  .ed-top__group > .ed-top__sep {
+    margin-inline: calc(var(--ed-top-gap) - 0.3rem);
   }
 
   .ed-top .ed-btn,
@@ -138,7 +164,7 @@
   }
 
   .ed-top .ed-select {
-    max-width: clamp(7rem, 9vw, 14rem);
+    max-width: clamp(8rem, 14vw, 22rem);
   }
 
   .ed-top__brand {
@@ -152,7 +178,8 @@
 /* Laptop nhỏ (dưới 1200px): nút đã co hết cỡ mà vẫn thiếu chỗ, nên bỏ tên thương hiệu và trạng thái lưu như ở điện thoại,
    khoảng đệm trong nút và ô chọn trang hẹp thêm. */
 @media (min-width: 1024px) and (max-width: 1199px) {
-  .ed-top__who {
+  .ed-top__who,
+  .ed-top__who + .ed-top__sep {
     display: none;
   }
 
@@ -162,7 +189,7 @@
   }
 
   .ed-top .ed-select {
-    max-width: 6rem;
+    max-width: 7.5rem;
   }
 }
 
@@ -180,19 +207,54 @@
   }
 }
 
+/* Công tắc chọn một trong vài nấc (ngôn ngữ, khổ xem trước, Sáng và Tối của bảng màu): một viên chung bao các nấc,
+   nấc đang chọn tô màu nhấn, nhìn là biết chỉ chọn một. */
+.ed-lang__seg,
+.ed-devices,
+.ed-palette__modes {
+  display: inline-flex;
+  padding: 3px;
+  background: color-mix(in srgb, var(--ed-line) 35%, #fff);
+  border: 1px solid var(--ed-line);
+  border-radius: 999px;
+}
+
 .ed-seg {
-  min-height: 2.2rem;
-  padding: 0.3rem 0.75rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.85rem;
   font-weight: 700;
-  color: rgb(242 238 228 / 0.8);
-  background: var(--ed-ink-3);
+  color: var(--ed-muted);
+  background: transparent;
   border: 0;
-  border-radius: 8px;
+  border-radius: 999px;
 }
 
 .ed-seg[aria-pressed='true'] {
   color: var(--ed-accent-ink);
   background: var(--ed-accent);
+}
+
+.ed-seg--icon {
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Icon trong nút: khung giữ sẵn cỡ để nút không nhảy lúc icon còn đang tải từ CDN. */
+.ed-icon {
+  display: block;
+  flex: none;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.ed-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ed-btn--icon {
+  gap: 0.4em;
 }
 
 /* Công tắc Xem thử: đường trượt và núm tròn, bật thì đường trượt sáng màu nhấn và núm sang phải. */
@@ -210,13 +272,14 @@
   cursor: pointer;
 }
 
+/* Lúc tắt: đường trượt nhạt có viền và núm xám đậm (viền, núm đạt tương phản 3:1 trên nền trắng); bật thì cả hai đổi màu nhấn. */
 .ed-switch__track {
   position: relative;
   flex: none;
   width: 2.7rem;
   height: 1.5rem;
-  background: var(--ed-ink-3);
-  border: 1px solid rgb(255 255 255 / 0.25);
+  background: #e4e4e7;
+  border: 1px solid #71717a;
   border-radius: 999px;
   transition: background 0.2s;
 }
@@ -227,7 +290,7 @@
   left: 2px;
   width: 1.15rem;
   height: 1.15rem;
-  background: var(--ed-paper);
+  background: #71717a;
   border-radius: 50%;
   transition: translate 0.2s;
 }
@@ -279,14 +342,112 @@
   border-color: var(--ed-line);
 }
 
-.ed-top .ed-btn--ghost {
-  border-color: rgb(255 255 255 / 0.22);
-}
-
 .ed-btn--danger {
   color: #fca5a5;
   background: transparent;
   border-color: rgb(252 165 165 / 0.4);
+}
+
+/* ---------- Rê chuột và đang xử lý ---------- */
+
+/* Rê chuột: nút chính đậm màu hơn, nút viền và các nấc chưa chọn có nền mờ, viền đậm lên, để biết chỗ nào bấm được.
+   Chỉ máy có chuột (hover: hover), để màn cảm ứng không dính trạng thái rê sau khi chạm. */
+.ed-btn,
+.ed-seg,
+.ed-lang__opt,
+.ed-tab,
+.ed-switch__track {
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+@media (hover: hover) {
+  .ed-btn:not(:disabled, [aria-disabled='true']):hover {
+    background: #155e75;
+    box-shadow: 0 4px 12px -6px rgb(14 116 144 / 0.7);
+  }
+
+  .ed-btn--ghost:not(:disabled):hover {
+    background: rgb(24 24 27 / 0.06);
+    border-color: rgb(24 24 27 / 0.3);
+    box-shadow: none;
+  }
+
+  .ed-btn--danger:not(:disabled):hover {
+    background: rgb(185 28 28 / 0.08);
+    border-color: currentColor;
+    box-shadow: none;
+  }
+
+  .ed-tool .ed-btn--ghost:not(:disabled):hover {
+    background: rgb(255 255 255 / 0.1);
+    border-color: rgb(255 255 255 / 0.35);
+  }
+
+  .ed-seg:not([aria-pressed='true']):hover,
+  .ed-lang__opt:not([aria-checked='true']):hover {
+    color: var(--ed-ink);
+    background: rgb(24 24 27 / 0.07);
+  }
+
+  .ed-switch:hover .ed-switch__track {
+    border-color: var(--ed-ink);
+  }
+
+  .ed-switch[aria-checked='true']:hover .ed-switch__track {
+    background: #155e75;
+  }
+}
+
+/* Đang xử lý (aria-busy, đặt từ JS): nút khoá lại nhưng không mờ như nút tắt, có vòng quay đứng trước chữ; nút đã có
+   icon (Làm mới) thì chính icon quay. Bấm thêm không gửi việc trùng. */
+.ed-btn[aria-busy='true'] {
+  gap: 0.45em;
+  cursor: progress;
+}
+
+.ed-btn[aria-busy='true']:disabled {
+  opacity: 0.85;
+}
+
+a.ed-btn[aria-busy='true'] {
+  pointer-events: none;
+}
+
+.ed-btn[aria-busy='true']:not(.ed-btn--icon)::before {
+  content: '';
+  flex: none;
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: ed-spin 0.7s linear infinite;
+}
+
+.ed-btn[aria-busy='true'] .ed-icon {
+  animation: ed-spin 0.7s linear infinite;
+}
+
+@keyframes ed-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Giảm chuyển động: vòng đứng yên, vẫn đủ báo đang xử lý. */
+@media (prefers-reduced-motion: reduce) {
+  .ed-btn,
+  .ed-seg,
+  .ed-lang__opt,
+  .ed-tab,
+  .ed-switch__track {
+    transition: none;
+  }
+
+  .ed-btn[aria-busy='true']::before,
+  .ed-btn[aria-busy='true'] .ed-icon {
+    animation: none;
+  }
 }
 
 /* ---------- Khu chính: khung trang và bảng chỉnh ---------- */
@@ -303,7 +464,7 @@
   background: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1px) 0 0 / 18px 18px, var(--ed-ink-2);
 }
 
-/* Khung rộng đúng khổ đang chọn (390 hoặc 1440), thu nhỏ cho vừa chỗ; JS đặt rộng, cao, tỉ lệ. */
+/* Khung rộng đúng khổ đang chọn (390, 768 hoặc 1440), thu nhỏ cho vừa chỗ; JS đặt rộng, cao, tỉ lệ. */
 .ed-frame-wrap {
   position: absolute;
   top: 16px;
@@ -356,7 +517,9 @@
   width: auto;
   min-height: 2rem;
   color: #fff;
-  background: var(--ed-ink-3);
+  /* Thanh nổi nền tối: cùng chevron nhưng nét sáng. */
+  background-color: var(--ed-ink-3);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4d4d8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   border-color: rgb(255 255 255 / 0.16);
 }
 
@@ -380,16 +543,21 @@
   grid-auto-flow: column;
   gap: 3px;
   padding: 0.5rem;
-  background: var(--ed-ink);
+  background: #fff;
+  border-bottom: 1px solid var(--ed-line);
 }
 
 .ed-tab {
   min-height: 2.4rem;
   font-weight: 800;
-  color: rgb(242 238 228 / 0.8);
-  background: var(--ed-ink-3);
+  color: var(--ed-muted);
+  background: transparent;
   border: 0;
   border-radius: 8px;
+}
+
+.ed-tab:hover {
+  background: var(--ed-paper);
 }
 
 .ed-tab[aria-selected='true'] {
@@ -446,6 +614,26 @@
   border-radius: 8px;
 }
 
+/* Bỏ mũi tên mặc định của trình duyệt (mỗi hệ điều hành một kiểu, to và thô), thay bằng chevron nét mảnh vẽ theo icon
+   chevron-down của Lucide, cùng nét với các icon khác của editor; chữ chừa chỗ bên phải để không chạm mũi tên. */
+.ed-select {
+  appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2352525b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 0.95rem;
+  cursor: pointer;
+}
+
+.ed-select:hover {
+  border-color: rgb(24 24 27 / 0.3);
+}
+
+.ed-tool .ed-select:hover {
+  border-color: rgb(255 255 255 / 0.35);
+}
+
 /* ---------- Tab Khối ---------- */
 
 .ed-blocks {
@@ -468,39 +656,16 @@
 }
 
 .ed-block.is-sel {
-  border-color: var(--ed-ink);
-  box-shadow: 0 0 0 2px var(--ed-accent);
+  border-color: var(--ed-accent);
 }
 
 .ed-block.is-hidden {
   opacity: 0.6;
 }
 
-/* Dòng gọn của khối chưa chọn: một dòng, tên cắt bằng dấu ba chấm, đủ cao để bấm bằng ngón tay. */
+/* Dòng gọn của khối chưa chọn: tên một dòng cắt bằng dấu ba chấm, đủ cao để bấm bằng ngón tay. */
 .ed-block--compact {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.15rem 0.6rem;
-}
-
-.ed-block--compact .ed-block__name {
-  flex: 1;
-  min-width: 0;
-  min-height: 2.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ed-block__show {
-  min-height: 2rem;
-  padding: 0.2rem 0.7rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  background: var(--ed-paper);
-  border: 1px solid var(--ed-line);
-  border-radius: 999px;
+  padding-block: 0.2rem;
 }
 
 .ed-block.is-sel > .ed-content {
@@ -509,18 +674,54 @@
   border-top: 1px solid var(--ed-line);
 }
 
+/* Đầu dòng: tên khối (bấm để mở) bên trái, các nút icon bên phải. */
+.ed-block__head {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
 .ed-block__name {
-  justify-self: start;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  min-height: 2.6rem;
   padding: 0;
-  font-weight: 800;
   text-align: left;
   background: none;
   border: 0;
 }
 
+.ed-block__num {
+  flex: none;
+  min-width: 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ed-muted);
+}
+
+.ed-block__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .ed-block__name small {
-  font-weight: 600;
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--ed-red);
+}
+
+.ed-block__edit {
+  color: var(--ed-muted);
 }
 
 .ed-block__one {
@@ -530,27 +731,66 @@
 
 .ed-block__acts {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
+  flex: none;
+  gap: 2px;
 }
 
-.ed-block__acts button {
-  min-height: 2rem;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  background: var(--ed-paper);
-  border: 1px solid var(--ed-line);
-  border-radius: 999px;
+.ed-block__close {
+  display: flex;
+  flex: none;
+  margin-left: 0.2rem;
+  padding-left: 0.2rem;
+  border-left: 1px solid var(--ed-line);
 }
 
-.ed-block__acts button:disabled {
+.ed-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--ed-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.ed-icon-btn .ed-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.ed-icon-btn:disabled {
   opacity: 0.35;
   cursor: default;
 }
 
-.ed-block__acts .is-danger {
-  color: var(--ed-red);
+/* Rê chuột: cả dòng gọn có viền, bút chì đổi màu nhấn (bấm cả dòng là sửa); nút icon có nền mờ, nút xoá đỏ lên. */
+@media (hover: hover) {
+  .ed-block--compact:not(.is-hidden):hover {
+    border-color: var(--ed-line);
+  }
+
+  .ed-block--compact:hover .ed-block__edit {
+    color: var(--ed-accent);
+  }
+
+  .ed-icon-btn:not(:disabled):hover {
+    color: var(--ed-ink);
+    background: rgb(24 24 27 / 0.07);
+  }
+
+  .ed-icon-btn.is-danger:not(:disabled):hover {
+    color: var(--ed-red);
+    background: rgb(185 28 28 / 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-icon-btn {
+    transition: none;
+  }
 }
 
 /* ---------- Tab Giao diện ---------- */
@@ -818,7 +1058,8 @@
     min-width: 0;
   }
 
-  .ed-top__end {
+  .ed-top__end,
+  .ed-top__history {
     flex: none;
     margin-left: 0;
   }
@@ -874,14 +1115,15 @@
     grid-auto-flow: column;
     gap: 4px;
     padding: 0.4rem;
-    background: var(--ed-ink);
+    background: #fff;
+    border-top: 1px solid var(--ed-line);
   }
 
   .ed-dock__btn {
     min-height: 2.8rem;
     font-weight: 800;
-    color: var(--ed-paper);
-    background: var(--ed-ink-3);
+    color: var(--ed-muted);
+    background: var(--ed-paper);
     border: 0;
     border-radius: 10px;
   }
@@ -907,31 +1149,6 @@
 }
 
 /* ---------- Form nội dung khối, thêm khối ---------- */
-
-.ed-content {
-  margin-bottom: 1.25rem;
-  padding: 0.85rem;
-  background: #fff;
-  border: 2px solid var(--ed-ink);
-  border-radius: 12px;
-  box-shadow: 0 0 0 2px var(--ed-accent);
-}
-
-.ed-content__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.ed-content__head .ed-h {
-  margin: 0;
-}
-
-.ed-content__head .ed-btn {
-  min-height: 2rem;
-  padding: 0.15rem 0.7rem;
-}
 
 .ed-form {
   display: grid;
@@ -1007,29 +1224,16 @@
   color: var(--ed-muted);
 }
 
-.ed-item__acts {
+/* Tên mục và các nút icon cùng một hàng ở đầu khung mục. float đưa legend vào trong khung thay vì vắt trên viền,
+   để hàng nút trải hết bề ngang mà viền trên không bị cắt. */
+.ed-item > .ed-item__head {
   display: flex;
-  gap: 0.25rem;
-  margin-top: 0.4rem;
-}
-
-.ed-item__acts button {
-  min-height: 2rem;
-  padding: 0.15rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  background: #fff;
-  border: 1px solid var(--ed-line);
-  border-radius: 999px;
-}
-
-.ed-item__acts button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-.ed-item__acts .is-danger {
-  color: var(--ed-red);
+  float: left;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0;
 }
 
 .ed-add {
@@ -1245,29 +1449,6 @@
   margin: 0;
 }
 
-/* Sáng, Tối là một công tắc hai nấc chung một khung bo tròn, giống công tắc Tiếng Việt, English ở thanh trên:
-   nhìn là biết chỉ chọn một trong hai; nấc đang xem tô màu nhấn. */
-.ed-palette__modes {
-  display: inline-flex;
-  padding: 3px;
-  background: color-mix(in srgb, var(--ed-line) 35%, #fff);
-  border: 1px solid var(--ed-line);
-  border-radius: 999px;
-}
-
-.ed-palette__modes .ed-seg {
-  min-height: 2rem;
-  padding: 0.25rem 0.95rem;
-  color: var(--ed-ink);
-  background: transparent;
-  border-radius: 999px;
-}
-
-.ed-palette__modes .ed-seg[aria-pressed='true'] {
-  color: var(--ed-accent-ink);
-  background: var(--ed-accent);
-}
-
 .ed-palette__grid {
   display: grid;
   gap: 0.35rem;
@@ -1415,20 +1596,12 @@
   gap: 0.4rem;
 }
 
-/* Công tắc ngôn ngữ: một viên chung bao hai lựa chọn, lựa chọn đang bật nổi màu nhấn, để thấy ngay là chọn một trong hai. */
-.ed-lang__seg {
-  display: inline-flex;
-  padding: 3px;
-  background: var(--ed-ink-3);
-  border: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 999px;
-}
-
+/* Viên chung của công tắc ngôn ngữ khai cùng công tắc khổ xem trước (.ed-devices). */
 .ed-lang__opt {
   min-height: 2rem;
   padding: 0.25rem 0.85rem;
   font-weight: 700;
-  color: rgb(242 238 228 / 0.75);
+  color: var(--ed-muted);
   background: transparent;
   border: 0;
   border-radius: 999px;
@@ -1467,9 +1640,9 @@
   padding: 0.2rem 0.6rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--ed-accent-text);
+  color: var(--ed-accent);
   background: transparent;
-  border: 1px solid rgb(125 211 224 / 0.4);
+  border: 1px solid rgb(14 116 144 / 0.35);
   border-radius: 999px;
 }
 
