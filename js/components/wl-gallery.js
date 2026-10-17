@@ -121,6 +121,8 @@ export class WlGallery extends HTMLElement {
   plateEl(image, i) {
     const plate = document.createElement(image.href ? 'a' : 'div');
     plate.className = 'gallery__plate';
+    // Ô làm cho nhãn ngắn (Đi bộ, Xích lô); chú thích dài như một câu thì CSS cho chữ nhỏ lại để khỏi tràn ô.
+    if (image.caption?.length > 24) plate.classList.add('gallery__plate--long');
     if (image.href) plate.href = image.href;
     else plate.tabIndex = 0;
     const photo = document.createElement('span');
@@ -130,7 +132,9 @@ export class WlGallery extends HTMLElement {
     number.setAttribute('aria-hidden', 'true');
     const name = textEl('span', 'gallery__plate-name', image.caption);
     if (name) name.prepend(...[iconEl(image.icon, 'gallery__plate-icon')].filter(Boolean));
-    plate.append(photo, number, groupEl('gallery__plate-text', [name, textEl('span', 'gallery__plate-note', image.note)]));
+    // Ảnh không có chú thích lẫn dòng phụ thì groupEl trả null; append(null) sẽ in chữ "null" lên ô nên phải lọc.
+    const text = groupEl('gallery__plate-text', [name, textEl('span', 'gallery__plate-note', image.note)]);
+    plate.append(...[photo, number, text].filter(Boolean));
     plate.addEventListener('pointermove', (e) => {
       const box = plate.getBoundingClientRect();
       plate.style.setProperty('--mx', `${e.clientX - box.left}px`);
