@@ -536,6 +536,31 @@ export function fieldsFor(section) {
   return FIELDS[section.type] ?? HEAD;
 }
 
+/* Trường sửa được của một tour hay hạng phòng trong danh mục (catalog.items, AGENTS.md mục 5), cho tab Danh mục của editor.
+   Sửa một lần thì mọi khối đọc danh mục (danh sách, trang chi tiết, đặt chỗ, bảng giờ, gợi ý tour) cùng đổi. Tên và giá luôn có;
+   các trường khác chỉ hiện khi mục đã có. id, đường dẫn trang chi tiết, giờ chạy, các chặng, ngày còn chỗ giữ nguyên: đổi id
+   hay đường dẫn làm gãy liên kết và đặt chỗ đang trỏ tới mục đó. */
+export const CATALOG_FIELDS = [
+  { key: 'name', label: 'Tên', type: 'text' },
+  { key: 'tagline', label: 'Câu ngắn', type: 'text', optional: true },
+  { key: 'text', label: 'Mô tả', type: 'long', optional: true },
+  { key: 'image', label: 'Ảnh đại diện', type: 'image', optional: true },
+  { key: 'price', label: 'Giá (đồng)', type: 'number', step: 1000 },
+  { key: 'unit', label: 'Đơn vị giá (khách, đêm...)', type: 'text', optional: true },
+  { key: 'maxGuests', label: 'Số khách tối đa', type: 'number', min: 1, max: 99, optional: true },
+  { key: 'area', label: 'Diện tích', type: 'text', optional: true },
+  {
+    key: 'facts', label: 'Thông số', type: 'list', optional: true,
+    fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'value', label: 'Giá trị', type: 'text' }],
+    item: { label: 'Thông số', value: '' },
+  },
+  { key: 'includes', label: 'Đã gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+  { key: 'excludes', label: 'Chưa gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+  { key: 'bring', label: 'Nên mang', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+  { key: 'view.text', label: 'Cảnh đáng chờ', type: 'long', optional: true },
+  { key: 'view.best', label: 'Giờ đẹp nhất', type: 'text', optional: true },
+];
+
 // Khối thêm mới: dữ liệu mẫu tối thiểu để khối hiện được ngay, người dùng sửa tiếp trong form.
 // gallery lấy ảnh từ kho ảnh của thương hiệu (images: [{ src, alt }]) lúc thêm.
 export const TEMPLATES = [

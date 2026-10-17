@@ -1155,6 +1155,34 @@ a.ed-btn[aria-busy='true'] {
   gap: 0.15rem;
 }
 
+/* Tab Danh mục: mỗi tour, hạng phòng một khung gập mở; mở ra là form của mục đó. */
+.ed-cat {
+  margin-top: 0.6rem;
+  background: #fff;
+  border: 1px solid var(--ed-line);
+  border-radius: 10px;
+}
+
+.ed-cat__head {
+  padding: 0.65rem 0.8rem;
+  font-weight: 800;
+  color: var(--ed-ink);
+  cursor: pointer;
+}
+
+.ed-cat__head:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 2px;
+}
+
+.ed-cat[open] > .ed-cat__head {
+  border-bottom: 1px solid var(--ed-line);
+}
+
+.ed-cat > .ed-form {
+  padding: 0.5rem 0.8rem 0.8rem;
+}
+
 .ed-body textarea.ed-input {
   min-height: 4.5rem;
   resize: vertical;

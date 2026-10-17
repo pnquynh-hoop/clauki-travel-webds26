@@ -5,10 +5,10 @@
    ghi nháp trên máy (draft.js), rồi báo trang trong khung dựng lại bằng chính các component <wl-*>.
    Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/tool/editor.css, tiền tố ed-), không đọc biến của brand. */
 import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
-import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES } from './manifest.js';
+import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES, CATALOG_FIELDS } from './manifest.js';
 import { paletteEl } from './palette.js';
 import { menuOrderEl } from './menu-order.js';
-import { buildForm, imageLibrary, setIn, getIn } from './form.js';
+import { buildForm, buildFields, imageLibrary, setIn, getIn } from './form.js';
 import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPageTo, insertBlock, applyFont } from './ops.js';
 import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
@@ -41,6 +41,8 @@ const state = {
   past: [],
   future: [],
   sel: null,
+  // Tab Danh mục: id các mục đang mở, giữ qua mỗi lần vẽ lại bảng chỉnh.
+  catOpen: new Set(),
   mode: 'edit',
   device: DESKTOP,
   // Số thứ tự lần nạp thương hiệu: đổi brand liên tiếp thì kết quả tải theme.css của lần cũ bị bỏ.
@@ -446,19 +448,25 @@ function setField(key, path, value, label) {
   });
 }
 
+const LIST_LABELS = { add: 'Thêm mục', remove: 'Xoá mục', up: 'Dời mục lên', down: 'Dời mục xuống' };
+
+// Thêm, xoá, dời một mục của danh sách nằm ở path trong target (khối hoặc mục danh mục); gọi bên trong commit().
+function editList(target, path, action, i, item) {
+  let list = getIn(target, path);
+  if (!Array.isArray(list)) {
+    list = [];
+    setIn(target, path, list);
+  }
+  if (action === 'add') list.push(clone(item ?? {}));
+  if (action === 'remove') list.splice(i, 1);
+  const to = action === 'up' ? i - 1 : i + 1;
+  if ((action === 'up' || action === 'down') && to >= 0 && to < list.length) [list[i], list[to]] = [list[to], list[i]];
+}
+
 function listOp(key, path, action, i, item) {
-  const labels = { add: 'Thêm mục', remove: 'Xoá mục', up: 'Dời mục lên', down: 'Dời mục xuống' };
-  commit(`${labels[action]} trong ${blockName(sections()[key])}`, () => {
+  commit(`${LIST_LABELS[action]} trong ${blockName(sections()[key])}`, () => {
     const section = sections()[key];
-    let list = getIn(section, path);
-    if (!Array.isArray(list)) {
-      list = [];
-      setIn(section, path, list);
-    }
-    if (action === 'add') list.push(clone(item ?? {}));
-    if (action === 'remove') list.splice(i, 1);
-    const to = action === 'up' ? i - 1 : i + 1;
-    if ((action === 'up' || action === 'down') && to >= 0 && to < list.length) [list[i], list[to]] = [list[to], list[i]];
+    if (section) editList(section, path, action, i, item);
   });
 }
 
@@ -474,6 +482,9 @@ function addBlock(type) {
   setTimeout(() => selectedEl()?.scrollIntoView({ block: 'start' }), SCROLL_AFTER_RENDER_MS);
 }
 
+// Ảnh xem trước trong form. Ảnh của site khách ghi đường dẫn tuyệt đối (/brands/<khung>/images/...): giữ nguyên.
+const assetUrl = (src) => (/^(\/|https:\/\/)/.test(String(src)) ? src : `/brands/${state.baseId}/${src}`);
+
 function contentEl() {
   const key = state.sel;
   const section = typeof key === 'number' ? sections()[key] : null;
@@ -482,8 +493,7 @@ function contentEl() {
     h,
     key: `f:${key}`,
     images: imageLibrary(state.content),
-    // Ảnh của site khách ghi đường dẫn tuyệt đối (/brands/<khung>/images/...): giữ nguyên.
-    assetUrl: (src) => (/^(\/|https:\/\/)/.test(String(src)) ? src : `/brands/${state.baseId}/${src}`),
+    assetUrl,
     set: (path, value, label) => setField(key, path, value, label),
     list: (path, action, i, item) => listOp(key, path, action, i, item),
   });
@@ -825,6 +835,52 @@ function renderPages() {
   );
 }
 
+/* ---------- Tab Danh mục ---------- */
+
+// Tour, hạng phòng khai một lần trong catalog.items (AGENTS.md mục 5); sửa ở đây thì mọi khối đọc danh mục cùng đổi.
+// Chỉ sửa, chưa thêm hay xoá mục: id của mục đang được trang chi tiết, đặt chỗ, gợi ý tour trỏ tới.
+const catalogItems = () => state.content?.catalog?.items ?? [];
+const itemName = (i) => catalogItems()[i]?.name || 'danh mục';
+
+function setCatalogField(i, path, value, label) {
+  commit(`${label} (${itemName(i)})`, () => {
+    const item = catalogItems()[i];
+    if (item) setIn(item, path, value);
+  });
+}
+
+function catalogListOp(i, path, action, j, item) {
+  commit(`${LIST_LABELS[action]} trong ${itemName(i)}`, () => {
+    const target = catalogItems()[i];
+    if (target) editList(target, path, action, j, item);
+  });
+}
+
+// Mỗi mục một khung gập mở (details); mục đang mở được nhớ trong state.catOpen để vẽ lại không gập mất.
+function renderCatalog() {
+  const images = imageLibrary(state.content);
+  ui.panes.catalog.replaceChildren(
+    h('p', { class: 'ed-hint', text: 'Tour, hạng phòng khai một lần ở đây. Sửa xong thì danh sách, trang chi tiết, đặt chỗ, bảng giờ, gợi ý tour cùng đổi.' }),
+    ...catalogItems().map((item, i) => {
+      const key = item.id ?? String(i);
+      const box = h('details', { class: 'ed-cat', open: state.catOpen.has(key) },
+        h('summary', { class: 'ed-cat__head', text: item.name || item.id || `Mục ${i + 1}` }),
+        buildFields(item, CATALOG_FIELDS, {
+          h,
+          key: `c:${key}`,
+          images,
+          assetUrl,
+          set: (path, value, label) => setCatalogField(i, path, value, label),
+          list: (path, action, j, it) => catalogListOp(i, path, action, j, it),
+        }));
+      box.addEventListener('toggle', () => {
+        if (box.open) state.catOpen.add(key);
+        else state.catOpen.delete(key);
+      });
+      return box;
+    }));
+}
+
 /* ---------- Tab AI ---------- */
 
 function renderAi() {
@@ -935,6 +991,11 @@ function refresh() {
   // Tab English chỉ có khi trang đã bật bản tiếng Anh.
   [...ui.tabs, ...ui.docks].filter((b) => (b.dataset.tab ?? b.dataset.dock) === 'en').forEach((b) => { b.hidden = !state.tr; });
   if (!state.tr && !ui.panes.en.hidden) openTab('blocks');
+  // Tab Danh mục chỉ có khi thương hiệu khai catalog; chỉ vẽ khi đang mở (mỗi mục là một form, vẽ hết mỗi lần sửa thì phí).
+  const hasCatalog = catalogItems().length > 0;
+  [...ui.tabs, ...ui.docks].filter((b) => (b.dataset.tab ?? b.dataset.dock) === 'catalog').forEach((b) => { b.hidden = !hasCatalog; });
+  if (!hasCatalog && !ui.panes.catalog.hidden) openTab('blocks');
+  if (!ui.panes.catalog.hidden) renderCatalog();
   renderBlocks();
   renderTheme();
   renderPages();
@@ -993,6 +1054,7 @@ function openTab(name) {
     pane.hidden = key !== name;
   });
   if (name === 'en' && state.content) renderEnglish(ui.panes.en);
+  if (name === 'catalog' && state.content) renderCatalog();
 }
 
 // Điện thoại: bấm nút ở thanh dưới mở tấm trượt của tab đó; bấm lại nút đang mở thì đóng.
@@ -1074,7 +1136,7 @@ function resizerEl() {
 // Nhãn đủ cho màn rộng và nhãn ngắn cho màn laptop, CSS chọn hiện một trong hai; trình đọc màn hình đọc nhãn đủ (aria-label).
 const twoLabels = (long, short) => [h('span', { class: 'ed-top__long', text: long }), h('span', { class: 'ed-top__short', 'aria-hidden': 'true', text: short })];
 
-const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['ai', 'AI']];
+const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['catalog', 'Danh mục'], ['ai', 'AI']];
 
 function build() {
   const css = h('link', { rel: 'stylesheet', href: '/css/tool/editor.css' });
