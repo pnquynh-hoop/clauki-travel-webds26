@@ -198,6 +198,104 @@ const FIELDS = {
     },
     { key: 'note', label: 'Ghi chú', type: 'long', optional: true },
   ],
+  // Các khối dưới đây chỉ mở ô chữ; số (giá, phí, phần trăm, số chỗ), id tour, icon, màu giữ nguyên vì form chưa có kiểu số và ô
+  // chọn. Mục thêm mới mang sẵn số hợp lệ, để khối không bỏ qua mục đó.
+  pictogram: [
+    ...HEAD,
+    {
+      key: 'items', label: 'Con số', type: 'list',
+      fields: [
+        { key: 'label', label: 'Nhãn', type: 'text' },
+        { key: 'text', label: 'Câu ngắn', type: 'text' },
+        { key: 'markLabel', label: 'Chú thích hình tô nổi', type: 'text' },
+        { key: 'fadedLabel', label: 'Chú thích hình mờ', type: 'text' },
+      ],
+      item: { value: 3, icon: 'user', label: 'Con số mới', text: '' },
+    },
+  ],
+  medals: [
+    ...HEAD,
+    { key: 'progress', label: 'Chữ thanh kinh nghiệm (có {n}, {total})', type: 'text', optional: true },
+    { key: 'unlocked', label: 'Nhãn đã mở khoá', type: 'text', optional: true },
+    {
+      key: 'items', label: 'Huy chương', type: 'list',
+      fields: [
+        { key: 'title', label: 'Tên', type: 'text' },
+        { key: 'text', label: 'Giải thích', type: 'long' },
+        { key: 'value', label: 'Con số chốt', type: 'text' },
+        { key: 'valueLabel', label: 'Chữ sau con số', type: 'text' },
+      ],
+      item: { title: 'Cam kết mới', text: '' },
+    },
+  ],
+  coins: [
+    ...HEAD,
+    {
+      key: 'parts', label: 'Phần', type: 'list',
+      fields: [{ key: 'label', label: 'Tên phần', type: 'text' }, { key: 'text', label: 'Câu ngắn', type: 'text' }],
+      item: { label: 'Phần mới', value: 5, text: '' },
+    },
+  ],
+  timetable: [
+    ...HEAD,
+    { key: 'note', label: 'Chú thích cuối bảng', type: 'text', optional: true },
+  ],
+  // Gợi ý tour: mỗi lựa chọn trỏ tới id tour trong catalog (không sửa ở đây); lựa chọn không có tour nào thì khối bỏ qua.
+  'tour-pick': [
+    ...HEAD,
+    { key: 'labels.spin', label: 'Chữ nút quay, gắp', type: 'text', optional: true },
+    { key: 'labels.again', label: 'Chữ nút quay lại', type: 'text', optional: true },
+    { key: 'labels.sign', label: 'Chữ trên biển máy gắp', type: 'text', optional: true },
+    { key: 'options', label: 'Lựa chọn', type: 'list', optional: true, fields: [{ key: 'label', label: 'Chữ', type: 'text' }], item: { label: 'Lựa chọn mới', items: [] } },
+  ],
+  // Tự ghép tour: chặng lẻ nằm trong catalog.legs; lộ trình gợi ý chỉ sửa tên và ghi chú (các chặng giữ nguyên).
+  'custom-trip': [
+    ...HEAD,
+    {
+      key: 'presets', label: 'Lộ trình gợi ý', type: 'list', optional: true,
+      fields: [{ key: 'name', label: 'Tên', type: 'text' }, { key: 'note', label: 'Ghi chú', type: 'text' }],
+      item: { name: 'Lộ trình mới', note: '', legs: [] },
+    },
+    {
+      key: 'badges', label: 'Huy hiệu', type: 'list', optional: true,
+      fields: [{ key: 'label', label: 'Chữ', type: 'text' }],
+      item: { min: 9, label: 'Huy hiệu mới' },
+    },
+  ],
+  // Đặt chỗ: chỉ mở phần chữ khách đọc (gồm, chưa gồm, điều khoản, ưu đãi, điểm đón); giá, phí, ngày, số chỗ chờ kiểu ô số, ngày.
+  booking: [
+    ...HEAD,
+    { key: 'image', label: 'Ảnh', type: 'image', optional: true },
+    { key: 'priceNote', label: 'Chữ sau giá', type: 'text', optional: true },
+    { key: 'deal.label', label: 'Dòng ưu đãi', type: 'text', optional: true },
+    { key: 'offer.label', label: 'Tên ưu đãi', type: 'text', optional: true },
+    { key: 'offer.note', label: 'Ghi chú ưu đãi', type: 'text', optional: true },
+    { key: 'includes', label: 'Đã gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+    { key: 'excludes', label: 'Chưa gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+    { key: 'bring', label: 'Nên mang', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+    {
+      key: 'policies', label: 'Nhóm điều khoản', type: 'list', optional: true,
+      fields: [
+        { key: 'title', label: 'Tên nhóm', type: 'text' },
+        {
+          key: 'items', label: 'Điều khoản', type: 'list',
+          fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'text', label: 'Nội dung', type: 'long' }],
+          item: { label: 'Điều khoản', text: '' },
+        },
+      ],
+      item: { title: 'Nhóm mới', items: [] },
+    },
+    {
+      key: 'pickups', label: 'Điểm đón', type: 'list', optional: true,
+      fields: [{ key: 'label', label: 'Tên điểm đón', type: 'text' }],
+      item: { id: 'diem-don-moi', label: 'Điểm đón mới', fee: 0 },
+    },
+    {
+      key: 'perks', label: 'Ưu đãi theo số đêm', type: 'list', optional: true,
+      fields: [{ key: 'text', label: 'Nội dung', type: 'text' }],
+      item: { minNights: 2, months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], text: 'Ưu đãi mới' },
+    },
+  ],
   // Trang chi tiết dựng trong một khối (Bậc Trà). Mọi trường đều tuỳ chọn: section ghi "item" thì phần lớn
   // dữ liệu lấy từ catalog, chỉ hiện ô cho trường section tự ghi, để không vô tình ghi đè danh mục.
   // Giá, số chỗ là số nên chưa có ô (form chưa có kiểu số).
