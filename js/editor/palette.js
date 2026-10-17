@@ -558,7 +558,8 @@ export function paletteEl(options) {
     withDark ? colorInput(name, label, darkOnly(name), 'dark') : null));
   return h('div', { class: 'ed-palette' },
     aiEl(),
-    h('div', { class: 'ed-row ed-palette__view' }, h('span', { class: 'ed-hint', text: 'Xem trước:' }), seg('light', 'Sáng'), seg('dark', 'Tối')),
+    h('div', { class: 'ed-row ed-palette__view' }, h('span', { class: 'ed-hint', text: 'Xem trước' }),
+      h('span', { class: 'ed-palette__modes', role: 'group', 'aria-label': 'Chế độ xem trước' }, seg('light', 'Sáng'), seg('dark', 'Tối'))),
     h('div', { class: `ed-palette__grid${withDark ? '' : ' is-light-only'}` },
       h('div', { class: 'ed-palette__row ed-palette__head' }, h('span', {}), h('span', { text: 'Sáng' }), withDark ? h('span', { text: 'Tối' }) : null),
       rows),
