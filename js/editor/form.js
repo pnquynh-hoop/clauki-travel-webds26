@@ -60,6 +60,25 @@ function selectInput(ctx, path, value, options, label) {
   return select;
 }
 
+// Ô số (giá, số chỗ, phí): ghi đúng kiểu số vào dữ liệu, vì component cộng trừ, định dạng tiền từ số; ghi chuỗi "390000"
+// thì phần tính tiền hỏng. Ô trống, gõ sai, ngoài khoảng min, max, hay số lẻ (giá, số chỗ là số nguyên) thì không ghi và trả lại
+// giá trị cũ.
+function numberInput(ctx, path, value, field) {
+  const input = ctx.h('input', { class: 'ed-input', type: 'number', inputmode: 'numeric', 'data-ed-key': `${ctx.key}:${path}`,
+    min: field.min ?? 0, max: field.max, step: field.step ?? 1 });
+  input.value = typeof value === 'number' ? String(value) : '';
+  input.addEventListener('change', () => {
+    const next = Number(input.value);
+    const ok = input.value.trim() !== '' && Number.isInteger(next) && next >= (field.min ?? 0) && (field.max === undefined || next <= field.max);
+    if (!ok) {
+      input.value = typeof value === 'number' ? String(value) : '';
+      return;
+    }
+    setTimeout(() => ctx.set(path, next, `Sửa ${field.label.toLowerCase()}`));
+  });
+  return input;
+}
+
 // Ảnh: xem trước, chọn trong kho, mô tả ảnh (bắt buộc). Chọn ảnh khác thì lấy luôn mô tả đã có của ảnh đó.
 function imageInput(ctx, path, value, label) {
   const image = value ?? {};
@@ -89,6 +108,7 @@ function fieldEl(ctx, section, field, base = '') {
   let control;
   if (field.type === 'image') control = imageInput(ctx, path, value, field.label);
   else if (field.type === 'select') control = selectInput(ctx, path, value, field.options, field.label);
+  else if (field.type === 'number') control = numberInput(ctx, path, value, field);
   else control = textInput(ctx, path, value, field.type === 'long', field.label);
   return ctx.h(field.type === 'image' ? 'div' : 'label', { class: 'ed-field' }, ctx.h('span', { text: field.label }), control);
 }
