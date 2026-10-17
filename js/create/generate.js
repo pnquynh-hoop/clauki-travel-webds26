@@ -14,7 +14,7 @@ import { findPhotos } from './photos.js';
 import { FONTS } from '../editor/manifest.js';
 import { applyFont } from '../editor/ops.js';
 import { MENU, FOOTERS, composeFooter, composeHome, loadFrames, borrowPages } from './mix.js';
-import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE } from './rules.js';
+import { sanitizeFrame, choicesFor, MIX_VARIANTS, HEADER_CHOICES, SIGNATURE, FRAME_PHRASES } from './rules.js';
 
 // Khung trang: thương hiệu có sẵn dùng làm bộ khung (bố cục, component, ảnh có giấy phép).
 export const FRAMES = [
@@ -29,11 +29,13 @@ const UI_KEYS = new Set(['label', 'open', 'close', 'prev', 'next', 'best', 'tota
   'group', 'hint', 'phone', 'name', 'book', 'from', 'perNight', 'duration', 'unit', 'left', 'placeholder', 'question']);
 
 // Trường kỹ thuật và dữ liệu có cấu trúc: giữ nguyên, không đưa cho AI. Mọi chữ khác (kể cả nhãn, tin nhắn mẫu, câu báo lỗi, gợi ý)
-// là dữ liệu như nhau, đều được viết lại cho nơi mới. vehicles, buoi, topics là bảng tra (id nối với tour), đổi nhãn sẽ lệch nghĩa.
+// là dữ liệu như nhau, đều được viết lại cho nơi mới. vehicles, buoi, topics là bảng tra (id nối với tour): không đi vào, chỉ nhãn của
+// vehicles và topics được gửi riêng (LOOKUP_LABELS). vehicle, icon, tone, word, pick, focus là mã một từ ("pha", "bike", "villa").
+// time có chữ ("Ngày 1, 09:45", "Giờ đón") được gửi; giờ chỉ có số ("06:30") đã bị NOT_TEXT bỏ.
 const SKIP = new Set([
   'id', 'type', 'variant', 'href', 'src', 'path', 'file', 'license', 'source', 'author', 'credit', 'credits', 'timezone', 'favicon',
-  'logo', 'alt', 'languages', 'currency', 'kind', 'effect', 'date', 'time', 'availability', 'item', 'rating', 'tags', 'vehicles', 'buoi',
-  'topics', 'unit', 'phone', 'email',
+  'logo', 'alt', 'languages', 'currency', 'kind', 'effect', 'date', 'availability', 'item', 'rating', 'tags', 'vehicles', 'buoi',
+  'topics', 'unit', 'phone', 'email', 'vehicle', 'icon', 'tone', 'word', 'pick', 'focus',
 ]);
 const NOT_TEXT = /^(https?:|images\/|#|\/|\d{4}-\d{2}|[\d\s.,:+-]+$|page:|tel:|mailto:)/;
 // Mã như "can-gio", "len-den" (id tour trong danh sách chọn), không phải chữ.
@@ -49,20 +51,32 @@ const FROM_PROFILE = ['brand.name', 'brand.slogan'];
 // chỗ (paths). Nhờ gộp, đưa cả nhãn cho AI vẫn ít dòng hơn khi tách riêng nhãn giao diện (SighGone 736 dòng thay vì 873).
 function extractFields(template) {
   const byValue = new Map();
+  const add = (node, key) => {
+    const field = byValue.get(node);
+    if (field) field.paths.push(key);
+    else byValue.set(node, { key, value: node, paths: [key] });
+  };
   const walk = (node, path) => {
     if (Array.isArray(node)) node.forEach((v, i) => walk(v, [...path, i]));
     else if (node && typeof node === 'object') {
       for (const [k, v] of Object.entries(node)) if (!SKIP.has(k)) walk(v, [...path, k]);
     } else if (typeof node === 'string' && node.trim().length > 1 && !NOT_TEXT.test(node.trim()) && !SLUG.test(node.trim())) {
       const key = path.join('.');
-      if (FROM_PROFILE.includes(key)) return;
-      const field = byValue.get(node);
-      if (field) field.paths.push(key);
-      else byValue.set(node, { key, value: node, paths: [key] });
+      if (!FROM_PROFILE.includes(key)) add(node, key);
     }
   };
   walk(template, []);
+  for (const [path, value] of lookupLabels(template)) add(value, path);
   return [...byValue.values()];
+}
+
+// Nhãn của bảng tra phương tiện, chủ đề (chip "Xích lô", bộ lọc "Sông nước" trên thẻ tour): chữ của nơi cũ, phải viết lại; id giữ nguyên
+// để tour vẫn tra đúng.
+function lookupLabels(template) {
+  const out = [];
+  for (const [id, v] of Object.entries(template.catalog?.vehicles ?? {})) if (typeof v?.label === 'string') out.push([`catalog.vehicles.${id}.label`, v.label]);
+  for (const [id, v] of Object.entries(template.catalog?.topics ?? {})) if (typeof v === 'string') out.push([`catalog.topics.${id}`, v]);
+  return out;
 }
 
 // Chia nhóm liền nhau, số ký tự mỗi nhóm gần bằng nhau. Mỗi dòng mang vị trí đầy đủ (pages.0.sections.2.title),
@@ -81,7 +95,8 @@ function splitGroups(fields) {
 }
 
 // Hồ sơ đưa cho AI viết chữ: bỏ các truy vấn tìm ảnh (tiếng Anh) kẻo chúng lọt vào chú thích, câu chữ của trang.
-const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...rest }) => rest;
+// Không có giá (gia 0) thì không đưa: AI từng viết "từ 0đ / khách"; số tiền trong chữ đã được nhân theo giá ở scaleMoneyText.
+const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, gia, ...rest }) => (Number(gia) >= 50000 ? { ...rest, gia } : rest);
 
 // Tên thương hiệu, nơi chốn và tên sản phẩm trong catalog của mọi khung (trang và khối mượn từ khung khác cũng mang chữ của khung đó),
 // lấy thẳng từ dữ liệu, để dò chữ còn sót của nơi cũ sau khi AI viết. pool: { id khung: content }.
@@ -89,13 +104,14 @@ const brandProfile = ({ anhTimKiem, dacTrung, trangChu, dauTrang, chanTrang, ...
 // hay khoá khối cũng nằm trong hồ sơ.
 function oldNamesOf(pool, profile = {}) {
   const own = [profile.ten, profile.slogan, profile.noiChon, profile.chuNha, ...(Array.isArray(profile.chiTiet) ? profile.chiTiet : [])].join(' ').toLowerCase();
-  const names = Object.values(pool).flatMap((f) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name)])
+  const names = Object.entries(pool).flatMap(([id, f]) => [f?.brand?.name, f?.place?.name, ...(f?.catalog?.items ?? []).map((item) => item.name),
+    ...(FRAME_PHRASES[id] ?? [])])
     .filter((n) => typeof n === 'string' && n.trim().length > 2 && !own.includes(n.toLowerCase()))
     // Tên viết liền có chữ hoa giữa (SighGone) còn được viết tách trong câu ("đọc nhanh thành Sigh Gone"): dò cả hai.
     .flatMap((n) => [n, n.replace(/(\p{Ll})(\p{Lu})/gu, '$1 $2')]);
   // Khớp nguyên từ ("ghe" không khớp trong "nghe", "Quận 1" không khớp "Quận 10"); \b của JS không hiểu chữ có dấu nên dùng \p{L}.
   const list = [...new Set(names)].map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-  return names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${list})(?![\\p{L}\\p{N}])`, 'u') : null;
+  return names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${list})(?![\\p{L}\\p{N}])`, 'iu') : null;
 }
 
 // Chỗ giữ chỗ trong ngoặc nhọn ({name}, {n}...) code điền lúc chạy: chữ mới phải giữ đúng bộ đó, thiếu hay thừa thì bỏ dòng.
@@ -294,6 +310,22 @@ function rebase(content, base) {
 const PRICE_KEYS = new Set(['price', 'childPrice', 'extraGuestPrice', 'deposit', 'amount']);
 
 function scalePrices(content, price) {
+  const ratio = priceRatio(content, price);
+  if (!ratio) return;
+  const walk = (node, fn) => {
+    if (Array.isArray(node)) node.forEach((v) => walk(v, fn));
+    else if (node && typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) {
+        if (PRICE_KEYS.has(k) && typeof v === 'number' && v > 0) fn(node, k, v);
+        else walk(v, fn);
+      }
+    }
+  };
+  walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
+}
+
+// Tỉ lệ giá mới so với giá của khung; null khi không đổi được (không có giá, giá AI ghi sai đơn vị).
+function priceRatio(content, price) {
   const found = [];
   const walk = (node, fn) => {
     if (Array.isArray(node)) node.forEach((v) => walk(v, fn));
@@ -310,9 +342,8 @@ function scalePrices(content, price) {
   const main = (content.catalog?.items ?? []).map((item) => item.price).filter((v) => typeof v === 'number' && v > 0);
   const base = Math.min(...(main.length ? main : found));
   // Giá dưới 50.000 đồng là AI ghi sai đơn vị ("45" thay cho 45 triệu, hay ghi theo ngoại tệ): bỏ qua, giữ giá của khung.
-  if (!found.length || !(price >= 50000) || !Number.isFinite(base)) return;
-  const ratio = price / base;
-  walk(content, (node, k, v) => { node[k] = Math.max(10000, Math.round((v * ratio) / 10000) * 10000); });
+  if (!found.length || !(price >= 50000) || !Number.isFinite(base)) return null;
+  return price / base;
 }
 
 // Chữ trùng khẩu hiệu của một khung là khẩu hiệu, không phải câu để AI viết lại: tiêu đề hero trang chủ SighGone ("Every sigh,
@@ -367,10 +398,54 @@ function fillSlogan(content, spots, slogan) {
   }
 }
 
-// Tiêu đề đọc nhanh của intro (morph: "Sài Gòn" lật thành "Sigh Gone") là chơi chữ trên tên SighGone, AI không viết lại được cho tên mới
-// và để nguyên thì các tấm lật hiện chữ SIGHGONE. Bỏ ở mọi trang của site mới, tiêu đề hiện như headline thường.
-function dropMorph(content) {
-  for (const page of content.pages ?? [content]) for (const section of page.sections ?? []) delete section.morph;
+// Dữ liệu gắn với nơi cũ mà AI không viết lại được, bỏ ở mọi trang của site mới (khối vẫn hiện, chỉ thiếu phần đó):
+// - morph của intro: chơi chữ "Sài Gòn" lật thành "Sigh Gone", để nguyên thì các tấm lật hiện chữ SIGHGONE;
+// - độ cao các trạm của journey (Suối Giàng 1.400 m) và lời chú về độ cao; tem số đo của reviews ("1.400 m");
+// - dải 12 tháng biển của offer (gió mùa Quy Nhơn).
+function dropPlaceData(content) {
+  for (const page of content.pages ?? [content]) {
+    for (const section of page.sections ?? []) {
+      delete section.morph;
+      if (section.type === 'journey' && (section.stops ?? []).some((stop) => 'altitude' in stop)) {
+        section.stops.forEach((stop) => delete stop.altitude);
+        delete section.note;
+      }
+      for (const item of Array.isArray(section.items) ? section.items : []) {
+        if (item?.stamp?.unit) {
+          delete item.stamp.value;
+          delete item.stamp.unit;
+        }
+      }
+      if (section.type === 'offer') delete section.sea;
+    }
+  }
+}
+
+// Số tiền trong câu chữ ("giảm 500.000 đ mỗi khách", "cọc 1.500.000 đ") theo cùng tỉ lệ với giá (scalePrices), trước khi gửi AI để AI
+// thấy số đúng; AI hay chép nguyên con số.
+const MONEY = /(\d{1,3}(?:\.\d{3})+)(\s?(?:đ|đồng)(?![\p{L}]))/gu;
+function scaleMoneyText(content, ratio) {
+  if (!ratio || ratio === 1) return;
+  const fmt = (n) => n.toLocaleString('vi-VN');
+  const walk = (node) => {
+    if (Array.isArray(node)) node.forEach((v, i) => { if (typeof v === 'string') node[i] = scaleOne(v); else walk(v); });
+    else if (node && typeof node === 'object') for (const [k, v] of Object.entries(node)) { if (typeof v === 'string') node[k] = scaleOne(v); else walk(v); }
+  };
+  const scaleOne = (text) => text.replace(MONEY, (_, num, unit) => fmt(Math.max(10000, Math.round((Number(num.replace(/\./g, '')) * ratio) / 10000) * 10000)) + unit);
+  walk(content);
+}
+
+// Sau khi AI viết xong: link email đi theo chữ email mới (thẻ "Hợp tác" của Bậc Trà ghi email mới mà href vẫn mailto: của Bậc Trà).
+function syncEmailLinks(content) {
+  const walk = (node) => {
+    if (Array.isArray(node)) node.forEach(walk);
+    else if (node && typeof node === 'object') {
+      if (node.kind === 'email' && typeof node.value === 'string' && node.value.includes('@')) node.href = `mailto:${node.value.trim()}`;
+      else if (typeof node.href === 'string' && node.href.startsWith('mailto:') && content.contact?.email) node.href = `mailto:${content.contact.email}`;
+      Object.values(node).forEach(walk);
+    }
+  };
+  walk(content);
 }
 
 // Ngôn ngữ của khung (SighGone có tiếng Anh) không đi theo: bản dịch của khung không khớp chữ mới. Bỏ trên khung trước khi tách
@@ -591,7 +666,8 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   composeFooter(template, profile.chanTrang, pool, frame, approved);
   const borrowed = borrowPages(template, pool, frame, approved);
   if (borrowed.length) rules.borrowed = borrowed;
-  dropMorph(template);
+  dropPlaceData(template);
+  scaleMoneyText(template, priceRatio(template, Number(profile.gia)));
   const content = structuredClone(template);
   const oldNames = oldNamesOf(pool, profile);
   const slogans = sloganSpots(template, pool);
@@ -676,7 +752,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   if (leftover.length) {
     leftover.forEach((i) => redoing.add(i));
     on.redo?.(leftover.length);
-    const bannedIn = (idx) => [...new Set(idx.flatMap((i) => (written.get(i) ?? fields[i].value).match(new RegExp(oldNames?.source ?? '$^', 'gu')) ?? []))];
+    const bannedIn = (idx) => [...new Set(idx.flatMap((i) => (written.get(i) ?? fields[i].value).match(new RegExp(oldNames?.source ?? '$^', 'giu')) ?? []))];
     await Promise.all(splitGroups(leftover.map((i) => fields[i])).map((g) => {
       const idx = g.map((k) => leftover[k]);
       return streamLines('', writePrompt(profile, fields, idx, note, true, bannedIn(idx)), handle).catch(() => {});
@@ -685,6 +761,7 @@ export async function generateSite({ brief, frameId, slug, frames, photos, on })
   const redone = leftover.filter((i) => written.get(i) !== fields[i].value).length;
   const photoCount = await photoRun;
   await layoutRun;
+  syncEmailLinks(content);
   on.update?.(content, theme);
   const stats = { profile: profileSec, first, total: sec(), fields: fields.length, written: got.size, groups: groups.length, mismatched, photos: photoCount, blocked: blocked.length, leftover: leftover.length, redone };
   return { content, theme, profile, stats };
