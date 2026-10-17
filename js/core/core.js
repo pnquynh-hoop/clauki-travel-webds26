@@ -82,7 +82,7 @@ function showNoSite(err, brands = []) {
   const actions = el('div', 'no-site__actions');
   actions.append(button('/tao', 'Tạo website của bạn'), button('/', 'Về trang chủ', true));
   card.append(el('p', 'no-site__brand', 'ClauKi'), title, lead, actions);
-  const samples = brands.filter((b) => b.id !== 'brand-test');
+  const samples = brands;
   if (samples.length) {
     const list = el('ul', 'no-site__list');
     samples.forEach((b) => {

@@ -198,7 +198,7 @@ const FIELDS = {
     },
     { key: 'note', label: 'Ghi chú', type: 'long', optional: true },
   ],
-  // Trang chi tiết dựng trong một khối (Bậc Trà, brand-test). Mọi trường đều tuỳ chọn: section ghi "item" thì phần lớn
+  // Trang chi tiết dựng trong một khối (Bậc Trà). Mọi trường đều tuỳ chọn: section ghi "item" thì phần lớn
   // dữ liệu lấy từ catalog, chỉ hiện ô cho trường section tự ghi, để không vô tình ghi đè danh mục.
   // Giá, số chỗ là số nên chưa có ô (form chưa có kiểu số).
   'room-detail': [
