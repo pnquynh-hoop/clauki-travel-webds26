@@ -3,8 +3,8 @@
    như host tv thì đổi sang kiểu thường). Bảy khối có mẫu trống (TEMPLATES) dùng mẫu đó. Khối khác lấy bản có sẵn trong content.json:
    của thương hiệu đang mở (hay khung của site khách) trước, không có thì của thương hiệu khác, trang chủ trước, bỏ trang 404; mẫu
    lấy từ thương hiệu khác thì đường dẫn ảnh đổi sang thư mục thương hiệu đó và kèm dòng credits của ảnh, như composeHome, borrowPages
-   của /tao. Khối đọc danh mục (item, items, tours, pick, related) gắn sang sản phẩm của site đang sửa; site không có danh mục thì
-   khối đó khoá lại, ghi lý do. Liên kết của mẫu trỏ tới trang không có ở site đang sửa thì đổi về nút hành động chính. */
+   của /tao. Khối đọc danh mục (item, items, tours, pick, related) chỉ lấy mẫu của thương hiệu có danh mục cùng loại (tour hay phòng)
+   rồi gắn sang sản phẩm của site đang sửa; site không có danh mục, hay chỉ có mẫu khác loại, thì khối đó khoá lại, ghi lý do. Liên kết của mẫu trỏ tới trang không có ở site đang sửa thì đổi về nút hành động chính. */
 import { BLOCKS, TEMPLATES, variantsFor } from './manifest.js';
 import { norm } from './ops.js';
 import { isBanned } from '../create/rules.js';
@@ -34,6 +34,12 @@ export function loadLibrary(ids) {
 }
 
 const catalogIds = (content) => (content.catalog?.items ?? []).map((item) => item.id).filter(Boolean);
+// Danh mục là phòng (giá theo đêm, có diện tích, số căn, cảnh nhìn ra) hay tour: mẫu đọc danh mục chỉ dùng cho site có danh mục cùng
+// loại, để khối ưu đãi theo hạng phòng của Gành Sớm không gắn nhầm vào tour của Bậc Trà.
+const kindOf = (content) => ((content.catalog?.items ?? []).some((item) => item.area || item.count || item.view || /đêm/i.test(item.unit ?? '')) ? 'stay' : 'tour');
+const NEED_KIND = { stay: 'cần danh mục phòng', tour: 'cần danh mục tour' };
+// Khối chỉ đọc trường chung của mọi sản phẩm (tên, ảnh, đã gồm, chưa gồm), dùng được với cả tour lẫn phòng.
+const ANY_KIND = new Set(['included', 'item-cover', 'photo-strip']);
 const idList = (value) => Array.isArray(value) && value.length > 0 && value.every((x) => typeof x === 'string');
 
 // Khối có đọc sản phẩm trong danh mục không. items của breadcrumb, cards là mảng object nên không tính.
@@ -114,6 +120,7 @@ function candidates(type, base) {
 function sampleOf(type, content, base, anchors) {
   const ids = catalogIds(content);
   let needCatalog = false;
+  let needKind = null;
   const list = candidates(type, base);
   for (const plainOnly of [true, false]) {
     for (const { id, data, section } of list) {
@@ -125,6 +132,10 @@ function sampleOf(type, content, base, anchors) {
           needCatalog = true;
           continue;
         }
+        if (!ANY_KIND.has(type) && kindOf(data) !== kindOf(content)) {
+          needKind = kindOf(data);
+          continue;
+        }
         bindCatalog(copy, ids);
       }
       delete copy.id;
@@ -134,7 +145,8 @@ function sampleOf(type, content, base, anchors) {
       return { section: copy, credits: own ? [] : creditsOf(copy, id, data) };
     }
   }
-  return needCatalog ? { reason: NEED_CATALOG } : null;
+  if (needCatalog) return { reason: NEED_CATALOG };
+  return needKind ? { reason: NEED_KIND[needKind] } : null;
 }
 
 // Một khối thêm được: mẫu trống (TEMPLATES) hay bản lấy từ thương hiệu. Khối đặc trưng không thêm được.
