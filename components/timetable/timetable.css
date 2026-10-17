@@ -282,9 +282,23 @@ a.timetable__row[href]:hover {
   50% { opacity: 0; }
 }
 
+/* Từ 760px mọi dòng dùng chung một lưới cột (subgrid): mỗi dòng tự chia cột thì chữ trạng thái dài ngắn khác nhau
+   ("đã chạy", "còn 1 chỗ") đẩy cột phương tiện lệch theo từng dòng. Cột giờ, cột trạng thái rộng theo ô dài nhất cả bảng. */
 @media (min-width: 760px) {
+  .timetable__list {
+    grid-template-columns: max-content minmax(0, 1.4fr) minmax(0, 1fr) max-content;
+    column-gap: 1rem;
+  }
+
+  .timetable__item {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+
   .timetable__row {
-    grid-template-columns: 5.5rem 1.4fr 1fr auto;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     grid-template-areas: 'time name vehicles status';
   }
 
