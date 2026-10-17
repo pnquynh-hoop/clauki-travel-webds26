@@ -7,9 +7,9 @@
    AI trả về các thao tác nhỏ dạng JSON Lines như tab AI (#194): dòng scope ghi cách AI hiểu câu nhờ (chế độ, mức đổi, màu giữ),
    rồi các màu, rồi dòng tự kiểm tương phản. Code kiểm câu trả lời theo dòng scope, lỗi tự sửa được thì tự sửa, không thì hỏi lại
    AI một lần; cặp chưa đạt AA thì code chỉ sửa màu của cặp đó cho đạt, không bỏ màu nào và không bắt người dùng tự phối màu.
-   Bấm Đồng ý mới áp, một lần Hoàn tác là bỏ hết. Bộ kiểm độ bền với nhiều kiểu câu nhờ: palette-eval.js. */
+   Bấm Đồng ý mới áp, một lần Hoàn tác là bỏ hết. */
 import { COLORS, CONTRAST } from './manifest.js';
-import { contrastRatio, AA } from './contrast.js';
+import { contrastRatio, AA, oklch } from './contrast.js';
 import { darkName, readMode } from '../core/theme-mode.js';
 import { streamLines, cleanText, usageMark, modelsSince } from '../ai/gemini.js';
 import { paletteSystem, paletteRetry, requestPrompt } from '../ai/prompts/editor.js';
@@ -33,6 +33,8 @@ let api = null;
 let text = '';
 let proposal = null;
 let busy = false;
+// Nút Gợi ý màu: khoá và quay vòng (aria-busy, editor.css) suốt lúc AI trả lời và lúc kiểm trên trang, để không gửi trùng.
+let sendBtn = null;
 let out = null;
 let historyBox = null;
 // Lịch sử khung chat màu tách riêng khỏi tab AI (#201).
@@ -63,8 +65,9 @@ const darkOnly = (name, vars = api.state.theme.vars) => {
 const dark = (name, vars) => darkOnly(name, vars) || light(name, vars);
 const hasDark = (vars) => Boolean(darkOnly('--color-bg', vars));
 
+// Cặp có màu chưa khai (nền phụ của thương hiệu không khai --color-tint, base.css tự pha) thì không đo, không hiện.
 function checks(get) {
-  return CONTRAST.map(([fg, bg, label]) => {
+  return CONTRAST.filter(([fg, bg]) => get(fg) && get(bg)).map(([fg, bg, label]) => {
     const r = contrastRatio(get(fg), get(bg));
     return { label, r, ok: r === null || r >= AA };
   });
@@ -79,14 +82,14 @@ const mix = (a, b, t) => toHex(toRgb(a).map((v, i) => v + (toRgb(b)[i] - v) * t)
 // Tương phản thấp nhất của một màu với các nền; cặp không đo được (màu không phải mã hex) coi như đạt, giống bảng kiểm bên dưới.
 const minRatio = (color, backgrounds) => Math.min(...backgrounds.map((bg) => contrastRatio(color, bg) ?? Infinity));
 
-// Pha dần màu về phía đen (nền sáng) hay phía trắng (nền tối) tới khi đủ tương phản với mọi nền cho trước.
+// Pha dần màu về phía đen (nền sáng) hay phía trắng (nền tối) tới khi đủ tương phản (target, mặc định AA) với mọi nền cho trước.
 // Tới đen, trắng vẫn chưa đạt (thường do hai nền một sáng một tối) thì trả null.
-function toPass(color, backgrounds) {
+function toPass(color, backgrounds, target = AA) {
   if (!HEX.test(color)) return null;
   const pole = minRatio('#000000', backgrounds) >= minRatio('#ffffff', backgrounds) ? '#000000' : '#ffffff';
   for (let step = 0; step <= 20; step += 1) {
     const next = mix(color, pole, step / 20);
-    if (minRatio(next, backgrounds) >= AA) return next;
+    if (minRatio(next, backgrounds) >= target) return next;
   }
   return null;
 }
@@ -101,16 +104,22 @@ function deriveDark(vars = api.state.theme.vars) {
   const bg = mix(mix(ink, '#000000', 0.25), accent, 0.06);
   const surface = mix(bg, '#ffffff', 0.07);
   const text = (contrastRatio(paper, bg) ?? 0) >= AA ? paper : '#f4f4f5';
-  return {
+  const primary = pick('--color-primary', accent);
+  const out = {
     '--color-bg': bg,
     '--color-surface': surface,
     '--color-ink': text,
     '--color-muted': toPass(mix(text, bg, 0.35), [bg, surface]) ?? '#ffffff',
     '--color-accent': toPass(accent, [bg, surface]) ?? '#ffffff',
-    '--color-primary': pick('--color-primary', accent),
+    '--color-primary': primary,
     '--color-on-primary': pick('--color-on-primary', '#111114'),
   };
+  // Nền phụ khai cứng thì pha bản tối như base.css pha khi không khai: 18% màu nút trên nền trang tối.
+  if (HEX.test(light('--color-tint', vars))) out['--color-tint'] = tintOf(bg, primary);
+  return out;
 }
+
+const tintOf = (bg, primary) => mix(bg, HEX.test(primary) ? primary : bg, 0.18);
 
 /* ---------- Ghi màu ---------- */
 
@@ -195,13 +204,57 @@ function pairs(mode) {
   });
 }
 
+// Vai trò và diện tích của từng màu trên trang, để AI biết màu nào phủ rộng (nên dịu) và màu nào chỉ là điểm nhấn (được rực).
+const ROLES = {
+  '--color-bg': 'nền trang, phần lớn diện tích (khoảng 60%)',
+  '--color-surface': 'nền thẻ, ô nhập, khung chat (khoảng 20%)',
+  '--color-tint': 'nền tấm thông tin ở chân trang',
+  '--color-primary': 'nền nút chính và vài dải màu nhỏ (dưới 10%)',
+  '--color-on-primary': 'chữ trên nút chính',
+  '--color-ink': 'chữ chính, tiêu đề',
+  '--color-muted': 'chữ phụ, chú thích',
+  '--color-accent': 'chữ nhấn, liên kết, nhãn nhỏ; nền của vài khối nhấn (ô biển số, tem)',
+};
+
+// Ý đồ của bảng màu gốc: câu chú thích ngay trước :root trong theme.css (Bậc Trà: "xanh của đồi chè, vàng của lúa...").
+// Site khách dùng theme.css của khung nên câu đó là của thương hiệu khác: bỏ.
+function storyOf() {
+  if (api.state.baseId && api.state.baseId !== api.state.id) return null;
+  // Nội dung chú thích không chứa "*/", nên khớp đúng chú thích cuối cùng đứng sát :root, không nuốt chú thích đầu tệp.
+  const m = /\/\*((?:(?!\*\/)[\s\S])*)\*\/\s*:root/.exec(api.state.baseCss ?? '');
+  return m ? m[1].replace(/\s+/g, ' ').trim().slice(0, 300) : null;
+}
+
+// Hồ sơ thương hiệu cho AI dựa vào khi câu nhờ không nêu màu: là gì, ở đâu, bán gì, ý đồ màu gốc.
+function profile() {
+  const c = api.state.content;
+  const items = c.catalog?.items ?? [];
+  const stay = items.some((item) => item.area || item.count || /đêm/i.test(item.unit ?? ''));
+  return {
+    name: c.brand?.name ?? null,
+    slogan: c.brand?.slogan ?? null,
+    description: c.meta?.description ?? null,
+    kind: items.length ? (stay ? 'lưu trú' : 'tour') : null,
+    place: c.place?.name ?? null,
+    story: storyOf(),
+  };
+}
+
+// Số đo OKLCH gọn của từng màu: "L 96, C 0.012, H 120".
+const toneOf = (get) => Object.fromEntries(COLORS.map(([name]) => {
+  const t = oklch(get(name));
+  return [name, t ? `L ${t.l}, C ${t.c}, H ${t.h}` : null];
+}));
+
 function context() {
   const pick = (get) => Object.fromEntries(COLORS.map(([name]) => [name, get(name) || null]));
   const report = (mode) => pairs(mode).map((c) => ({ pair: `${c.fg} trên ${c.bg}`, ratio: c.r === null ? null : Number(c.r.toFixed(2)), pass: c.ok }));
   return {
-    brand: api.state.content.brand?.name,
+    brand: profile(),
+    roles: ROLES,
     light: pick((n) => light(n)),
     dark: hasDark() ? pick((n) => darkOnly(n)) : null,
+    tone: { light: toneOf((n) => light(n)), dark: hasDark() ? toneOf((n) => darkOnly(n)) : null },
     hasDarkMode: hasDark(),
     contrast: { light: report('light'), dark: hasDark() ? report('dark') : null },
   };
@@ -216,13 +269,11 @@ const NO_COLOR = ['none', 'ask'];
 // Hỏi lại rồi vẫn thiếu dòng scope thì coi như chỉnh vài màu ở mọi chế độ, tức không lọc thêm gì.
 const ANY_SCOPE = { modes: MODES, change: 'tweak', keep: [], target: '' };
 
-// Chuẩn hoá dòng scope. Muốn chế độ tối mà thương hiệu chưa có thì phải dựng bảng màu tối, nên không thể là none hay fix.
+// Chuẩn hoá dòng scope. Chế độ tối đang tắt thì suggest bỏ chế độ tối khỏi modes (AI không tự bật chế độ tối).
 function readScope(op) {
   const modes = (Array.isArray(op.modes) ? op.modes : []).filter((m) => MODES.includes(m));
   const keep = (Array.isArray(op.keep) ? op.keep : []).filter((k) => ALLOWED.has(k));
-  const scope = { modes: modes.length ? modes : MODES, change: CHANGES[op.change] ? op.change : 'tweak', keep, target: cleanText(op.target ?? '', 120) };
-  if (scope.modes.includes('dark') && !hasDark() && (scope.change === 'none' || scope.change === 'fix')) scope.change = 'new';
-  return scope;
+  return { modes: modes.length ? modes : MODES, change: CHANGES[op.change] ? op.change : 'tweak', keep, target: cleanText(op.target ?? '', 120) };
 }
 
 const kept = (scope, p) => scope.keep.includes(p.key) || scope.keep.includes(p.name);
@@ -328,13 +379,18 @@ function setFixed(items, vars, name, mode, value, auto) {
   else items.push({ auto, key, name, mode, label: LABELS.get(name), from: mode === 'dark' ? darkOnly(name) : light(name), to: value });
 }
 
-// Nền thẻ một phía sáng tối, nền trang phía kia thì không màu chữ nào đọc được trên cả hai: dựng lại nền thẻ từ nền trang,
-// sáng hơn nền trang một chút như khi bật Chế độ tối (deriveDark). Nền trang là phần lớn của trang nên làm chuẩn.
+// Nền thẻ hay nền phụ một phía sáng tối, nền trang phía kia thì không màu chữ nào đọc được trên cả hai: dựng lại nền đó từ nền
+// trang như khi bật Chế độ tối (deriveDark): nền thẻ sáng hơn nền trang một chút, nền phụ pha 18% màu nút. Nền trang là phần lớn
+// của trang nên làm chuẩn. Ví dụ AI phối màu tối cho Bậc Trà: nền phụ matcha sáng giữ nguyên dưới chữ sáng ở chân trang.
 function fixSurface(items, vars, mode, get) {
   const bg = get('--color-bg');
+  if (!HEX.test(bg)) return;
   const surface = get('--color-surface');
-  if (!HEX.test(bg) || !HEX.test(surface) || isLight(bg) === isLight(surface)) return;
-  setFixed(items, vars, '--color-surface', mode, mix(bg, '#ffffff', isLight(bg) ? 0.7 : 0.07), 'read');
+  if (HEX.test(surface) && isLight(bg) !== isLight(surface)) {
+    setFixed(items, vars, '--color-surface', mode, mix(bg, '#ffffff', isLight(bg) ? 0.7 : 0.07), 'read');
+  }
+  const tint = get('--color-tint');
+  if (HEX.test(tint) && isLight(bg) !== isLight(tint)) setFixed(items, vars, '--color-tint', mode, tintOf(bg, get('--color-primary')), 'read');
 }
 
 // Chữ chưa đủ tương phản thì kéo đậm hay nhạt dần tới khi đạt; màu nhấn, chữ trên nút giữ sắc AI chọn. Chữ, chữ phụ cùng phía
@@ -359,23 +415,12 @@ function fixMode(items, vars, mode) {
   fixTexts(items, vars, mode, get);
 }
 
-// AI gợi ý màu tối mà thương hiệu chưa có chế độ tối (chưa có nền tối) thì màu đó không dùng tới được: dựng bảng màu tối như nút
-// Tạo bảng màu tối rồi giữ màu AI đã gợi ý lên trên.
-function ensureDark(items, vars) {
-  if (hasDark(vars) || !items.some((p) => p.mode === 'dark')) return;
-  Object.entries(deriveDark(vars)).forEach(([name, value]) => {
-    if (!items.some((p) => p.key === darkName(name))) setFixed(items, vars, name, 'dark', value, 'dark');
-  });
-}
-
 // Thử áp các màu lên bản sao rồi chỉnh các chế độ đã chọn; chế độ không được chọn thì để nguyên, kể cả khi đang chưa đạt.
 // Chế độ sáng làm trước vì chế độ tối mượn màu sáng của biến chưa có bản tối.
 function settle(items, modes) {
   const vars = draftVars(items);
   if (modes.includes('light')) fixMode(items, vars, 'light');
-  if (!modes.includes('dark')) return;
-  ensureDark(items, vars);
-  if (hasDark(vars)) fixMode(items, vars, 'dark');
+  if (modes.includes('dark') && hasDark(vars)) fixMode(items, vars, 'dark');
 }
 
 // Gọi AI một lượt và đọc các dòng thành đề xuất; onUpdate để giao diện hiện dần trong lúc AI trả lời.
@@ -402,61 +447,197 @@ async function askOnce(prompt, onUpdate) {
   return result;
 }
 
-// Nhờ AI gợi ý màu, không đụng giao diện nên bộ kiểm độ bền (palette-eval.js) gọi thẳng được. Câu trả lời có lỗi mà code không
+// Nhờ AI gợi ý màu, không đụng giao diện. Câu trả lời có lỗi mà code không
 // tự sửa được (problemsOf) thì gửi lại AI đúng lỗi đó kèm số đo, tối đa một lần; retried ghi các lỗi đã khiến phải hỏi lại.
 // Sau đó lọc theo dòng scope và tự chỉnh cho dễ đọc. history: false để không gửi kèm lịch sử chat (khi chạy bộ kiểm).
 export async function suggest(request, { onUpdate, history = true } = {}) {
   const past = history ? contextText(readLog(api.state.id, KIND)) : '';
   request = cleanInput(request);
   const prompt = requestPrompt({ history: past, request, label: 'Bảng màu hiện tại', data: context() });
+  // Đo bảng màu hiện tại trên trang song song với lúc AI đang trả lời, để bước kiểm sau đó chỉ xét chỗ đề xuất làm tệ đi.
+  const modesNow = hasDark() ? ['light', 'dark'] : ['light'];
+  const baseline = api.audit ? api.audit({ ...api.state.theme.vars }, modesNow) : Promise.resolve(null);
   let result = await askOnce(prompt, onUpdate);
   const problems = problemsOf(result);
   if (problems.length) {
     result = await askOnce(paletteRetry({ prompt, previous: result.lines, problems }), onUpdate);
     result.retried = problems;
   }
-  // problems: lỗi còn lại sau khi hỏi lại, để bộ kiểm độ bền đếm.
-  result.problems = problemsOf(result);
   result.scope ??= { ...ANY_SCOPE, missing: true };
+  // Chỉ phối màu cho chế độ người dùng đang bật: công tắc Chế độ tối tắt thì bỏ mọi màu tối AI trả về, không tự bật chế độ tối.
+  if (!hasDark()) {
+    result.darkOff = result.scope.modes.includes('dark') && !result.scope.modes.includes('light');
+    result.scope.modes = result.scope.modes.filter((mode) => mode === 'light');
+  }
   result.items = keepInScope(result.items, result.scope);
-  if (!NO_COLOR.includes(result.scope.change)) settle(result.items, result.scope.modes);
+  if (!NO_COLOR.includes(result.scope.change)) {
+    settle(result.items, result.scope.modes);
+    if (result.items.length) await guardPage(result, onUpdate, baseline, prompt);
+  }
   return result;
 }
 
-// Tương phản của từng chế độ sau khi áp các màu đề xuất (chế độ tối chưa có thì rỗng), để bộ kiểm độ bền xác nhận mọi cặp đạt.
-export function checksAfter(items) {
-  const vars = draftVars(items);
-  return { light: checks((n) => light(n, vars)), dark: hasDark(vars) ? checks((n) => dark(n, vars)) : [] };
+/* ---------- Kiểm trên trang thật (page-audit.js) ----------
+   Cặp biến ở CONTRAST đạt chưa đủ: trong khối còn chữ pha color-mix, chữ trên nền nút, nhãn trên màu nhấn... Trước khi đưa đề xuất
+   cho người dùng, dựng trang đang mở với bảng màu đề xuất trong khung ẩn, đo mọi chữ ở các chế độ có màu đổi. Chỗ chưa đạt thì
+   tìm biến màu chữ gây ra (trùng màu, hay gần nhất khi chữ là màu pha) rồi kéo cho đủ tương phản với cả nền của chỗ đó, đo lại,
+   tối đa ROUNDS vòng. Chỉ xét chỗ đề xuất làm tệ hơn bảng màu hiện tại (đo song song lúc AI trả lời): chỗ khó đọc có sẵn từ thiết
+   kế của khối không phải lỗi của đề xuất. Còn chỗ không sửa được thì không bày cho người dùng; dòng xanh "Đã kiểm trên trang"
+   chỉ hiện khi không còn chỗ nào. */
+
+const ROUNDS = 3;
+const TEXT_VARS = TEXTS.map(([fg]) => fg);
+const distance = (a, b) => toRgb(a).reduce((sum, v, i) => sum + (v - toRgb(b)[i]) ** 2, 0);
+
+// Biến màu chữ ứng với màu đo được: trùng màu thì chắc chắn là nó; không trùng (chữ pha từ biến) thì lấy biến gần màu nhất.
+function textVarOf(color, get) {
+  const known = TEXT_VARS.filter((name) => HEX.test(get(name)));
+  if (!known.length) return null;
+  const nearest = known.reduce((best, name) => (distance(get(name), color) < distance(get(best), color) ? name : best));
+  return { name: nearest, exact: distance(get(nearest), color) < 12 };
 }
+
+// Sửa các chỗ đo được; trả true khi có đổi màu nào. Chữ là màu pha thì đặt ngưỡng cao hơn một chút, vì độ pha kéo tương phản xuống.
+function repair(items, issues) {
+  const vars = draftVars(items);
+  let changed = false;
+  for (const [mode, list] of Object.entries(issues)) {
+    const get = (name) => (mode === 'dark' ? dark(name, vars) : light(name, vars));
+    for (const issue of list) {
+      const hit = textVarOf(issue.fg, get);
+      if (!hit) continue;
+      const backs = [...(TEXTS.find(([fg]) => fg === hit.name)?.[1] ?? []).map(get).filter((c) => HEX.test(c)), issue.bg];
+      const next = toPass(get(hit.name), backs, hit.exact ? issue.need : issue.need + 1.5);
+      if (next && next !== get(hit.name)) {
+        setFixed(items, vars, hit.name, mode, next, 'read');
+        changed = true;
+        continue;
+      }
+      // Kéo màu chữ không đủ (chữ phải đọc được trên hai nền khác phía sáng tối): dựng lại nền của chỗ đó từ nền trang nếu là
+      // nền thẻ hay nền phụ, như fixSurface.
+      const back = ['--color-surface', '--color-tint'].find((name) => HEX.test(get(name)) && distance(get(name), issue.bg) < 12);
+      const page = get('--color-bg');
+      if (!back || !HEX.test(page)) continue;
+      const rebuilt = back === '--color-tint' ? tintOf(page, get('--color-primary')) : mix(page, '#ffffff', isLight(page) ? 0.7 : 0.07);
+      if (rebuilt === get(back)) continue;
+      setFixed(items, vars, back, mode, rebuilt, 'read');
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+const issueCount = (issues) => Object.values(issues).reduce((n, list) => n + list.length, 0);
+
+// Chỗ khó đọc có sẵn từ trước (thiết kế của khối, bảng màu gốc) không phải lỗi của đề xuất: chỉ xét chỗ mới có hay tệ hơn lúc đầu.
+const sameSpot = (a, b) => a.where === b.where && a.text === b.text;
+function regressions(issues, baseline) {
+  return Object.fromEntries(Object.entries(issues).map(([mode, list]) => [mode,
+    list.filter((x) => !(baseline?.[mode] ?? []).some((b) => sameSpot(b, x) && x.ratio >= b.ratio - 0.05))]));
+}
+
+// Đo và tự sửa tối đa ROUNDS vòng; trả về các chỗ đề xuất làm tệ đi còn lại, null khi không dựng được trang.
+async function repairLoop(items, modes, baseline) {
+  const issues = await api.audit(draftVars(items), modes);
+  let worse = issues && regressions(issues, baseline);
+  for (let round = 0; worse && issueCount(worse) && round < ROUNDS; round += 1) {
+    if (!repair(items, worse)) break;
+    const next = await api.audit(draftVars(items), modes);
+    if (next) worse = regressions(next, baseline);
+  }
+  return worse;
+}
+
+// Các chỗ còn khó đọc viết thành câu cho AI: khối nào, chữ nào, màu chữ, màu nền, đạt bao nhiêu, cần bao nhiêu.
+const pageProblems = (worse) => [
+  ...Object.entries(worse).flatMap(([mode, list]) => list.slice(0, 6).map((x) => `Trên trang, ${x.where} (chế độ ${mode === 'dark' ? 'tối' : 'sáng'}): chữ "${x.text}" màu ${x.fg} trên nền ${x.bg} chỉ đạt ${x.ratio.toFixed(2)}, cần ${x.need}.`)),
+  'Đổi các màu liên quan (chữ, chữ phụ, nhấn, nền thẻ, nền phụ, nút) cho các chỗ này đọc được, giữ hướng màu đã chọn.',
+];
+
+async function guardPage(result, onUpdate, baselineAudit, prompt) {
+  if (!api.audit) return;
+  const vars = draftVars(result.items);
+  const modes = [...new Set(result.items.map((p) => p.mode))].filter((mode) => mode === 'light' || hasDark(vars));
+  if (!modes.length) return;
+  result.checking = true;
+  onUpdate?.(result);
+  const baseline = await baselineAudit;
+  let worse = await repairLoop(result.items, modes, baseline);
+  // Tự sửa không hết (khối pha màu cố định, chữ phải đọc được trên nhiều nền): hỏi lại AI một lượt kèm đúng các chỗ đó, rồi kiểm
+  // và tự sửa lại; chỉ lấy bản mới khi còn ít chỗ hơn bản cũ.
+  if (worse && issueCount(worse) && prompt) {
+    const again = await askOnce(paletteRetry({ prompt, previous: result.lines, problems: pageProblems(worse) }));
+    const items = keepInScope(again.items, result.scope);
+    if (items.length) {
+      settle(items, result.scope.modes);
+      const better = await repairLoop(items, modes, baseline);
+      if (better && issueCount(better) < issueCount(worse)) {
+        Object.assign(result, { items, lines: again.lines, say: again.say || result.say });
+        worse = better;
+      }
+    }
+  }
+  result.checking = false;
+  // Không dựng được trang để đo (mạng lỗi, quá lâu): vẫn đưa đề xuất, ghi là chưa kiểm được trên trang.
+  if (!worse) result.audit = 'skipped';
+  else result.pageIssues = Object.entries(worse).flatMap(([mode, list]) => list.map((x) => ({ ...x, mode })));
+}
+
+// Đề xuất màu gắn với thương hiệu lúc gửi (owner): bảng màu được kiểm trên trang của thương hiệu đó. Đổi thương hiệu thì đề xuất
+// cũ bị bỏ, không áp được sang thương hiệu khác chưa qua bước kiểm; AI trả lời sau khi đã đổi thì không hiện, chỉ ghi lịch sử của
+// thương hiệu cũ.
+const mine = (p) => Boolean(p) && p.owner === api.state.id;
 
 async function send(value) {
   if (busy || !cleanInput(value)) return;
   busy = true;
+  setSending(true);
   text = value;
-  proposal = { say: '', items: [], same: 0, done: false, error: '', model: '' };
+  const owner = api.state.id;
+  const current = { say: '', items: [], same: 0, done: false, error: '', model: '', owner };
+  proposal = current;
   renderOut();
   const mark = usageMark();
   try {
-    const result = await suggest(value, { onUpdate: (r) => { Object.assign(proposal, { say: r.say, items: r.items, same: r.same }); renderOut(); } });
-    Object.assign(proposal, result);
-  } catch (err) {
-    proposal.error = err.message;
-  } finally {
-    proposal.done = true;
-    proposal.model = modelsSince(mark);
-    busy = false;
-    const { items } = proposal;
-    addTurn(api.state.id, KIND, {
-      text: cleanInput(value), say: proposal.error || proposal.say,
-      changes: items.map((p) => `${p.label} (${p.mode === 'dark' ? 'tối' : 'sáng'}): ${p.from || 'chưa có'} -> ${p.to}`),
-      status: proposal.error ? 'error' : items.length ? 'proposed' : 'empty', model: proposal.model,
+    const result = await suggest(value, {
+      onUpdate: (r) => {
+        Object.assign(current, { say: r.say, items: r.items, same: r.same, checking: r.checking });
+        if (mine(current)) renderOut();
+      },
     });
+    Object.assign(current, result);
+  } catch (err) {
+    current.error = err.message;
+  } finally {
+    current.done = true;
+    current.model = modelsSince(mark);
+    busy = false;
+    setSending(false);
+    const { items } = current;
+    addTurn(owner, KIND, {
+      text: cleanInput(value), say: current.error || current.say,
+      changes: items.map((p) => `${p.label} (${p.mode === 'dark' ? 'tối' : 'sáng'}): ${p.from || 'chưa có'} -> ${p.to}`),
+      status: current.error ? 'error' : items.length ? 'proposed' : 'empty', model: current.model,
+    });
+    if (!mine(current) && proposal === current) proposal = null;
     renderOut();
     renderHistory();
   }
 }
 
+function setSending(on) {
+  if (!sendBtn) return;
+  sendBtn.disabled = on;
+  sendBtn.setAttribute('aria-busy', String(on));
+  sendBtn.textContent = on ? 'Đang gợi ý...' : 'Gợi ý màu';
+}
+
 function accept() {
+  if (!mine(proposal)) {
+    proposal = null;
+    renderOut();
+    return;
+  }
   const { items } = proposal;
   if (!items.length) return;
   const toDark = items.some((p) => p.mode === 'dark');
@@ -465,7 +646,7 @@ function accept() {
     ensureModeLabel();
   });
   markLast(api.state.id, KIND, 'applied');
-  proposal = { say: `Đã áp ${items.length} màu. Bấm Hoàn tác nếu muốn bỏ.`, items: [], done: true, applied: true };
+  proposal = { say: `Đã áp ${items.length} màu. Bấm Hoàn tác nếu muốn bỏ.`, items: [], done: true, applied: true, owner: api.state.id };
   preview(toDark ? 'dark' : 'light');
 }
 
@@ -478,7 +659,7 @@ function swatch(color) {
 function renderOut() {
   if (!out || !proposal) return;
   const { h } = api;
-  const { say, items, same, done, error, applied, scope, model } = proposal;
+  const { say, items, same, done, error, applied, scope, model, checking, pageIssues, audit, darkOff } = proposal;
   const group = (mode, title) => {
     const rows = items.filter((p) => p.mode === mode);
     if (!rows.length) return null;
@@ -493,25 +674,34 @@ function renderOut() {
   out.replaceChildren(...[
     // Không còn màu nào để áp thì câu AI nói (hay kể đã chỉnh gì) dễ gây hiểu lầm, nên ẩn, để dòng "không cần đổi" nói thay;
     // trừ khi AI đang trả lời câu nhờ không về màu.
-    say && !(done && !applied && !items.length && !NO_COLOR.includes(scope?.change)) ? h('p', { class: applied ? 'ed-ok' : 'ed-ai__say', text: say }) : null,
-    // Cho người dùng thấy AI hiểu yêu cầu thế nào: kiểm tra hay đổi theo ý, ở chế độ nào.
-    done && scope && !applied && scope.change !== 'ask' ? h('p', { class: 'ed-hint', text: `${CHANGES[scope.change]}, chế độ ${modeNames(scope.modes)}${scope.target ? `: ${scope.target}` : ''}` }) : null,
+    // AI chỉ trả lời, không gợi ý màu nào (hỏi lại, câu nhờ không về màu): câu trả lời là một thông báo xanh dương.
+    say && !(done && !applied && !items.length && !NO_COLOR.includes(scope?.change))
+      ? h('p', { class: applied ? 'ed-ok' : done && !items.length ? 'ed-info' : 'ed-ai__say', text: say }) : null,
+    // Cho người dùng thấy AI hiểu yêu cầu thế nào: kiểm tra hay đổi theo ý, ở chế độ nào (chỉ khi có màu đề xuất).
+    done && scope && !applied && items.length && scope.change !== 'ask' ? h('p', { class: 'ed-hint', text: `${CHANGES[scope.change]}, chế độ ${modeNames(scope.modes)}${scope.target ? `: ${scope.target}` : ''}` }) : null,
     group('light', 'Chế độ sáng'),
     group('dark', 'Chế độ tối'),
-    !done ? h('p', { class: 'ed-hint', text: 'AI đang gợi ý...' }) : null,
+    !done ? h('p', { class: 'ed-hint', text: checking ? 'Đang kiểm màu trên trang...' : 'AI đang gợi ý...' }) : null,
+    done && !applied && items.length ? pageNoteEl(pageIssues, audit) : null,
     error ? h('p', { class: 'ed-err', text: error }) : null,
     done && items.length ? h('div', { class: 'ed-row' },
       h('button', { type: 'button', class: 'ed-btn', onclick: accept, text: `Đồng ý (${items.length} màu)` }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: () => { markLast(api.state.id, KIND, 'rejected'); renderHistory(); proposal = null; out.replaceChildren(); }, text: 'Bỏ' })) : null,
-    done && !applied && !items.length && !error ? noteEl(same, scope) : null,
+    done && !applied && !items.length && !error ? noteEl(same, scope, darkOff) : null,
     done && !applied && model ? h('p', { class: 'ed-model', text: `Model: ${model}` }) : null,
   ].filter(Boolean));
+}
+
+// Kết quả kiểm trên trang: đạt hết thì một dòng xanh; còn chỗ khó đọc thì nói khối nào, chữ nào, chế độ nào (tối đa 5 chỗ).
+function pageNoteEl(issues, audit) {
+  const { h } = api;
+  if (audit === 'skipped') return h('p', { class: 'ed-hint', text: 'Chưa dựng được trang để kiểm màu, chỉ kiểm các cặp màu chính.' });
+  return issues && !issues.length ? h('p', { class: 'ed-ok', text: 'Đã kiểm trên trang: đề xuất không làm chữ nào khó đọc hơn.' }) : null;
 }
 
 // Màu code đã chỉnh hay tự thêm: ghi chú nhỏ bằng lời thường dưới tên, để người dùng biết vì sao khác màu AI nói mà không cần
 // hiểu tương phản là gì.
 function fixNote(p) {
-  if (p.auto === 'dark') return api.h('small', { text: 'Tự thêm để có chế độ tối' });
   if (p.auto) return api.h('small', { text: 'Tự thêm cho chữ dễ đọc' });
   if (p.to !== p.ai) return api.h('small', { text: `AI gợi ý ${p.ai}, đã chỉnh cho dễ đọc` });
   return null;
@@ -519,11 +709,12 @@ function fixNote(p) {
 
 // Không có màu nào để áp: nói rõ vì sao. Tự phối mà không còn màu nào nghĩa là bảng màu đã đạt hết (cặp chưa đạt thì code đã
 // tự chỉnh); màu gợi ý trùng màu đang dùng cũng là bảng màu đã hợp, không phải lỗi.
-function noteEl(same, scope) {
+function noteEl(same, scope, darkOff) {
   const { h } = api;
-  if (scope?.change === 'ask') return h('p', { class: 'ed-hint', text: 'Trả lời vào ô bên trên rồi bấm Gợi ý màu.' });
-  if (scope?.change === 'none' || scope?.change === 'fix') return h('p', { class: 'ed-hint', text: `Bảng màu chế độ ${modeNames(scope.modes)} không cần đổi màu nào.` });
-  if (same) return h('p', { class: 'ed-hint', text: 'Bảng màu hiện tại đã đúng như AI gợi ý, không cần đổi màu nào.' });
+  if (darkOff) return h('p', { class: 'ed-info', text: 'Chế độ tối đang tắt nên chưa phối màu tối. Bật công tắc Chế độ tối rồi nhờ lại.' });
+  if (scope?.change === 'ask') return null;
+  if (scope?.change === 'none' || scope?.change === 'fix') return h('p', { class: 'ed-info', text: `Bảng màu chế độ ${modeNames(scope.modes)} không cần đổi màu nào.` });
+  if (same) return h('p', { class: 'ed-info', text: 'Bảng màu hiện tại đã đúng như AI gợi ý, không cần đổi màu nào.' });
   return h('p', { class: 'ed-err', text: 'AI chưa gợi ý màu nào. Thử viết cụ thể hơn, ví dụ: nền tối hơn, chữ trắng ngà, giữ nút vàng.' });
 }
 
@@ -550,7 +741,7 @@ function aiEl() {
     h('label', { class: 'ed-field', for: 'ed-palette-ai' }, h('span', { text: 'Nhờ AI gợi ý cách phối màu cho trang web của bạn' })),
     area,
     h('div', { class: 'ed-row' },
-      h('button', { type: 'button', class: 'ed-btn', disabled: busy, onclick: () => send(area.value), text: busy ? 'Đang gợi ý...' : 'Gợi ý màu' }),
+      sendBtn = h('button', { type: 'button', class: 'ed-btn', disabled: busy, 'aria-busy': String(busy), onclick: () => send(area.value), text: busy ? 'Đang gợi ý...' : 'Gợi ý màu' }),
       micButton(h, area)),
     // Câu mẫu chỉ điền vào ô để sửa thêm, chưa gửi: người dùng bấm Gợi ý màu khi đã viết xong.
     h('div', { class: 'ed-chips' }, EXAMPLES.map((example) => h('button', { type: 'button', onclick: () => fill(area, example), text: example }))),
@@ -594,6 +785,8 @@ function contrastEl(withDark) {
 export function paletteEl(options) {
   api = options;
   const { h, state } = api;
+  // Đã đổi sang thương hiệu khác: bỏ đề xuất của thương hiệu cũ.
+  if (proposal && !mine(proposal)) proposal = null;
   const withDark = hasDark();
   // Công tắc luôn đọc chế độ trang trong khung đang nhớ (localStorage clauki-mode, cùng nguồn với khung; preview ghi vào đó
   // trước khi vẽ lại), nên mở editor, F5 hay đổi thương hiệu đều khớp với trang. Không có bảng màu tối thì chỉ có sáng.

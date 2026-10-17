@@ -3,10 +3,12 @@
    Vật vốn sáng ngoài đời (giấy note, vé, biển, chữ đè trên ảnh) giữ bảng màu sáng: trong phạm vi các khối đó, biến màu
    trả về bản sáng mà theme-mode.js đã chép ra --light-*. Gom ở đây để không phải sửa CSS của từng khối. */
 
-/* Giữ bảng màu sáng trong chế độ tối: ảnh đầu trang có chữ, sương vẽ trên ảnh (hero haze), poster và cảnh thành phố
-   (hero ride), giấy note của khách kể, biển số nhà (khối dùng plate.js, footer, ô biển số của gallery).
+/* Giữ bảng màu sáng trong chế độ tối: ảnh đầu trang có chữ, sương vẽ trên ảnh (hero haze, hero full), poster và cảnh thành phố
+   (hero ride), giấy note của khách kể, biển số nhà (khối dùng plate.js, footer, ô biển số của gallery), mây (dải mây nối khối,
+   mây trôi ở chân trang, đám mây và biển mây của lịch trình con đường): mây tô bằng màu nền thẻ nên chế độ tối thành mây đen.
    Biến nào thương hiệu không có bản sáng (--light-* rỗng) thì không hợp lệ, khối tự dùng giá trị dự phòng của nó. */
-:root[data-mode='dark'] :is(.hero--haze, .hero--ride, .reviews__sticky, .gallery__plates, .plate, .footer__plate) {
+:root[data-mode='dark'] :is(.hero--haze, .hero--full, .hero--ride, .reviews__sticky, .gallery__plates, .plate, .footer__plate,
+  .cloud-band, .footer__clouds, .journey__puff, .journey__sea) {
   --color-primary: var(--light-color-primary);
   --color-on-primary: var(--light-color-on-primary);
   --color-bg: var(--light-color-bg);
