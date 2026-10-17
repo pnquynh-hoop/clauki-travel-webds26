@@ -267,6 +267,136 @@ const FIELDS = {
       item: { title: 'Thẻ mới', text: '' },
     },
   ],
+  // Ưu đãi. Hạn đặt, mùa ưu đãi là ngày, số đêm và giá các hạng là số: chưa có ô (form chưa có kiểu ngày, số); không cho thêm
+  // hạng vì hạng thiếu giá làm hỏng con tem giá.
+  offer: [
+    ...HEAD,
+    { key: 'titleAccent', label: 'Phần cuối tiêu đề (màu nhấn)', type: 'text', optional: true },
+    { key: 'image', label: 'Ảnh mặt trước', type: 'image', optional: true },
+    { key: 'caption', label: 'Chú thích ảnh', type: 'text', optional: true },
+    { key: 'captionPlace', label: 'Nơi chụp', type: 'text', optional: true },
+    { key: 'note.label', label: 'Nhãn mặt sau', type: 'text', optional: true },
+    { key: 'note.greeting', label: 'Lời chào', type: 'text', optional: true },
+    { key: 'note.text', label: 'Lời nhắn', type: 'long', optional: true },
+    { key: 'note.sign', label: 'Chữ ký', type: 'text', optional: true },
+    {
+      key: 'facts', label: 'Điều kiện', type: 'list', optional: true,
+      fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'value', label: 'Nội dung', type: 'text' }],
+      item: { label: 'Điều kiện', value: '' },
+    },
+  ],
+  // Các hạng phòng. Mỏm đá tách nền và vị trí mốc (kiểu headland) là dữ liệu vẽ riêng nên không đưa vào form.
+  stays: [
+    ...HEAD,
+    { key: 'hint', label: 'Gợi ý bấm mốc', type: 'text', optional: true },
+    { key: 'priceNote', label: 'Ghi chú giá', type: 'text', optional: true },
+    {
+      key: 'rooms', label: 'Hạng', type: 'list', optional: true,
+      fields: [
+        { key: 'label', label: 'Tên hạng', type: 'text' },
+        { key: 'text', label: 'Mô tả', type: 'long' },
+        { key: 'area', label: 'Diện tích', type: 'text' },
+        { key: 'image', label: 'Ảnh', type: 'image' },
+        { key: 'view.text', label: 'Cảnh nhìn ra', type: 'text' },
+        { key: 'view.best', label: 'Giờ đẹp nhất', type: 'text' },
+      ],
+      item: { id: 'hang-moi', label: 'Hạng mới', text: '', image: { src: '', alt: '' } },
+    },
+  ],
+  // Gồm gì. Thường lấy từ catalog (section ghi item); chỉ hiện ô khi section tự ghi danh sách.
+  included: [
+    { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text', optional: true },
+    { key: 'title', label: 'Tiêu đề', type: 'text', optional: true },
+    { key: 'lead', label: 'Câu dẫn', type: 'long', optional: true },
+    { key: 'includes', label: 'Đã gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+    { key: 'excludes', label: 'Chưa gồm', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+    { key: 'bring', label: 'Nên mang', type: 'list', optional: true, fields: [{ key: '', label: 'Mục', type: 'text' }], item: 'Mục mới' },
+  ],
+  // Ảnh bìa trang chi tiết. Thường lấy tên, ảnh, thông số từ catalog; chỉ hiện ô khi section tự ghi.
+  'item-cover': [
+    { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text', optional: true },
+    { key: 'title', label: 'Tên', type: 'text', optional: true },
+    {
+      key: 'images', label: 'Ảnh', type: 'list', optional: true,
+      fields: [{ key: '', label: 'Ảnh', type: 'image' }, { key: 'caption', label: 'Chú thích', type: 'text' }],
+      item: { src: '', alt: '', caption: '' },
+    },
+    {
+      key: 'facts', label: 'Thông số', type: 'list', optional: true,
+      fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'value', label: 'Giá trị', type: 'text' }],
+      item: { label: 'Thông số', value: '' },
+    },
+  ],
+  // Cảnh đáng chờ: section ghi view thì dùng của section, không thì lấy view của mục trong catalog.
+  scene: [
+    { key: 'view.text', label: 'Câu tả cảnh', type: 'long', optional: true },
+    { key: 'view.best', label: 'Giờ đẹp nhất', type: 'text', optional: true },
+    { key: 'view.image', label: 'Ảnh', type: 'image', optional: true },
+  ],
+  // Lịch trình con đường. Giờ của trạm dạng HH:MM (trời đổi theo giờ); độ cao là số nên chưa có ô.
+  journey: [
+    ...HEAD,
+    { key: 'note', label: 'Ghi chú dưới đồng hồ', type: 'text', optional: true },
+    { key: 'planLabel', label: 'Chữ nút mở mây', type: 'text', optional: true },
+    {
+      key: 'days', label: 'Ngày', type: 'list', optional: true,
+      fields: [{ key: 'title', label: 'Tên ngày', type: 'text' }, { key: 'text', label: 'Mô tả', type: 'text' }],
+      item: { title: 'Ngày mới', text: '' },
+    },
+    {
+      key: 'stops', label: 'Trạm', type: 'list', optional: true,
+      fields: [
+        { key: 'time', label: 'Giờ (HH:MM)', type: 'text' },
+        { key: 'title', label: 'Tên trạm', type: 'text' },
+        { key: 'text', label: 'Mô tả', type: 'long' },
+        { key: 'night', label: 'Nơi ngủ đêm (nếu có)', type: 'text' },
+        { key: 'image', label: 'Ảnh', type: 'image' },
+        {
+          key: 'plan', label: 'Mốc giờ trong mây', type: 'list',
+          fields: [{ key: 'time', label: 'Giờ (HH:MM)', type: 'text' }, { key: 'text', label: 'Việc', type: 'text' }],
+          item: { time: '12:00', text: 'Việc mới' },
+        },
+      ],
+      item: { time: '12:00', title: 'Trạm mới', text: '', image: { src: '', alt: '' } },
+    },
+    { key: 'finish.eyebrow', label: 'Nhãn ô cuối đường', type: 'text', optional: true },
+    { key: 'finish.title', label: 'Tiêu đề ô cuối đường', type: 'text', optional: true },
+    { key: 'finish.text', label: 'Chữ ô cuối đường', type: 'long', optional: true },
+  ],
+  // Một ngày theo giờ (sông và bến). Múi giờ lấy từ nơi chốn của thương hiệu.
+  'day-plan': [
+    { key: 'eyebrow', label: 'Nhãn nhỏ', type: 'text' },
+    { key: 'title', label: 'Tiêu đề', type: 'text' },
+    { key: 'hint', label: 'Gợi ý cuộn', type: 'text', optional: true },
+    { key: 'nowLabel', label: 'Chữ trước giờ thật', type: 'text', optional: true },
+    { key: 'liveLabel', label: 'Nhãn bến đang diễn ra', type: 'text', optional: true },
+    { key: 'moreLabel', label: 'Nhãn góc ảnh', type: 'text', optional: true },
+    {
+      key: 'stops', label: 'Bến', type: 'list', optional: true,
+      fields: [
+        { key: 'time', label: 'Giờ (HH:MM)', type: 'text' },
+        { key: 'title', label: 'Tên bến', type: 'text' },
+        { key: 'text', label: 'Mô tả', type: 'long' },
+        { key: 'image', label: 'Ảnh', type: 'image' },
+        {
+          key: 'details', label: 'Chi tiết', type: 'list',
+          fields: [{ key: 'label', label: 'Nhãn', type: 'text' }, { key: 'value', label: 'Nội dung', type: 'text' }],
+          item: { label: 'Nhãn', value: '' },
+        },
+      ],
+      item: { time: '12:00', title: 'Bến mới', text: '', image: { src: '', alt: '' } },
+    },
+  ],
+  // Các bước. Hình SVG và màu của từng bước là dữ liệu vẽ nên không đưa vào form; bước thêm mới không có hình thì khối
+  // chuyển sang cách hiện tĩnh (đã có sẵn trong component).
+  process: [
+    ...HEAD,
+    {
+      key: 'steps', label: 'Bước', type: 'list', optional: true,
+      fields: [{ key: 'name', label: 'Tên bước', type: 'text' }, { key: 'text', label: 'Mô tả', type: 'long' }, { key: 'image', label: 'Ảnh', type: 'image' }],
+      item: { name: 'Bước mới', text: '', image: { src: '', alt: '' } },
+    },
+  ],
   // Liên hệ. Cách liên hệ có kind (điện thoại, email, địa chỉ) lấy số, email, địa chỉ từ Thông tin chung; ô "Thông tin riêng"
   // chỉ dành cho cách liên hệ thêm mới (ví dụ Zalo), vì khối ưu tiên value của mục hơn Thông tin chung.
   contact: [
