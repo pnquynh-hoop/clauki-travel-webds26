@@ -3,7 +3,7 @@
    photo-strip (dải ảnh), included (tờ hoá đơn, chỉ ở kiểu ticket), scene (cảnh đáng chờ), rồi tự dựng phần cuối là thẻ
    ảnh các mục khác cùng buổi. Mỗi khối con nhận cùng dữ liệu của section và tự lấy phần mình cần.
    Trang muốn sắp xếp, ẩn, đổi kiểu từng phần thì dùng thẳng các khối riêng đó trong sections (như trang tour SighGone);
-   khối này giữ cho các trang đã viết theo kiểu một khối (Bậc Trà, brand-test) chạy như cũ.
+   khối này giữ cho các trang đã viết theo kiểu một khối (Bậc Trà) chạy như cũ.
    Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog; trường nào section ghi riêng thì dùng của section. */
 import { catalogItem } from '../../js/core/core.js';
 import { textEl, groupEl } from '../../js/core/dom.js';
