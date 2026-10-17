@@ -37,6 +37,16 @@ export const SIGNATURE = [
   { key: 'stays:headland', hard: true, fit: 'cần ảnh mỏm đá tách nền của đúng chỗ ở đó' },
 ];
 
+// Cụm chữ riêng của từng khung mà AI hay giữ lại (chơi chữ, tên người, địa danh nhỏ không nằm trong place hay catalog). Trình tạo web
+// dò các cụm này cùng tên thương hiệu, nơi chốn, tên tour (oldNamesOf trong generate.js), không phân biệt hoa thường; dòng nào còn thì
+// gửi AI viết lại. Thêm khung mới hay thấy chữ cũ lọt ra site AI tạo: thêm cụm vào đây.
+export const FRAME_PHRASES = {
+  sighgone: ['thở ra', 'thở dài', 'Chuyện cái tên'],
+  'bac-tra': ['Tây Bắc', 'Suối Giàng', 'Mường Lò', 'Khau Phạ', 'Thác Bà', 'Nghĩa Lộ', 'cô Dua', 'anh Chứ', 'anh Lực', 'bà Lò', 'chị Hoa', 'ông Sử'],
+  'ganh-som': ['Nhơn Lý', 'mỏm gành', 'Eo Gió'],
+  'me-rach': ['chú Sáu', 'Cái Răng', 'miệt vườn'],
+};
+
 const SIGNATURE_BY_KEY = new Map(SIGNATURE.map((item) => [item.key, item]));
 
 // Khối này có phải đặc trưng không (theo loại, hoặc theo loại và kiểu).
