@@ -10,7 +10,7 @@
    Bấm Đồng ý mới áp, một lần Hoàn tác là bỏ hết. Bộ kiểm độ bền với nhiều kiểu câu nhờ: palette-eval.js. */
 import { COLORS, CONTRAST } from './manifest.js';
 import { contrastRatio, AA } from './contrast.js';
-import { darkName } from '../core/theme-mode.js';
+import { darkName, readMode } from '../core/theme-mode.js';
 import { streamLines, cleanText, usageMark, modelsSince } from '../ai/gemini.js';
 import { paletteSystem, paletteRetry, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
@@ -595,8 +595,9 @@ export function paletteEl(options) {
   api = options;
   const { h, state } = api;
   const withDark = hasDark();
-  // Thương hiệu không có bảng màu tối thì khung chỉ có chế độ sáng (đổi từ thương hiệu có màu tối sang cũng vậy).
-  state.previewMode = withDark ? state.previewMode ?? 'light' : 'light';
+  // Công tắc luôn đọc chế độ trang trong khung đang nhớ (localStorage clauki-mode, cùng nguồn với khung; preview ghi vào đó
+  // trước khi vẽ lại), nên mở editor, F5 hay đổi thương hiệu đều khớp với trang. Không có bảng màu tối thì chỉ có sáng.
+  state.previewMode = withDark ? readMode() : 'light';
   // Nút xem trước là icon mặt trời, mặt trăng; chưa bật chế độ tối thì mặt trăng khoá lại (chưa có màu tối để xem).
   const seg = (mode, icon, label, off = false) => h('button', {
     type: 'button', class: 'ed-seg ed-seg--icon', 'aria-pressed': String(state.previewMode === mode), disabled: off,
