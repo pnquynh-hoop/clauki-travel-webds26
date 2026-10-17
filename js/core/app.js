@@ -16,7 +16,7 @@ const COMPONENTS = {
   'wl-footer': { load: () => import('../../components/footer/wl-footer.js').then((m) => m.WlFooter), css: ['footer/footer'] },
   'wl-host': { load: () => import('../../components/host/wl-host.js').then((m) => m.WlHost), css: ['host/host', 'host/host-tv'] },
   'wl-day-plan': { load: () => import('../../components/day-plan/wl-day-plan.js').then((m) => m.WlDayPlan), css: ['day-plan/day-plan'] },
-  'wl-booking': { load: () => import('../../components/booking/wl-booking.js').then((m) => m.WlBooking), css: ['booking/booking'] },
+  'wl-booking': { load: () => import('../../components/booking/wl-booking.js').then((m) => m.WlBooking), css: ['booking/booking', 'booking/booking-calendar', 'booking/booking-wall', 'booking/booking-ticket'] },
   'wl-faq': { load: () => import('../../components/faq/wl-faq.js').then((m) => m.WlFaq), css: ['faq/faq'] },
   'wl-gallery': { load: () => import('../../components/gallery/wl-gallery.js').then((m) => m.WlGallery), css: ['gallery/gallery'] },
   'wl-stays': { load: () => import('../../components/stays/wl-stays.js').then((m) => m.WlStays), css: ['stays/stays'] },

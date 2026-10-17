@@ -1,0 +1,668 @@
+/* booking-calendar.css - kiểu calendar của <wl-booking>, dùng chung cho wall và ticket: thẻ ngày, form giữ chỗ, tạm tính, phiếu giữ chỗ, bố cục ba bước. Nạp sau booking.css. */
+
+/* =========================================================
+VARIANT: CALENDAR
+Tour theo lịch khởi hành cố định. Bên trái các thẻ ngày như tờ
+lịch treo, danh sách đã gồm, chưa gồm, các điều khoản; bên phải
+form giữ chỗ. Gửi form thì phiếu giữ chỗ hiện ngay bên dưới.
+========================================================= */
+
+.booking--calendar {
+  background: color-mix(in srgb, var(--color-accent) 7%, var(--color-bg));
+}
+
+.booking--calendar .booking__head {
+  margin: 0 0 2.5rem;
+  text-align: left;
+}
+
+.booking__layout {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Thẻ ngày như tờ lịch: dải màu chủ đạo ghi thứ, số ngày lớn, tháng và năm, số chỗ còn;
+   hai khoen treo ở mép trên, mấy lớp giấy lót ở đáy. Hết chỗ thì mờ đi, gạch ngang số ngày, không bấm được. */
+.booking__dates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.9rem, 1fr));
+  gap: 0.9rem;
+  padding-top: 0.5rem;
+}
+
+.booking__date {
+  position: relative;
+  display: grid;
+  padding: 0 0 0.7rem;
+  font: inherit;
+  text-align: center;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 0;
+  border-radius: 0.5rem 0.5rem 0.9rem 0.9rem;
+  box-shadow:
+    0 2px 0 color-mix(in srgb, var(--color-ink) 10%, var(--color-surface)),
+    0 4px 0 color-mix(in srgb, var(--color-ink) 4%, var(--color-surface)),
+    0 6px 0 color-mix(in srgb, var(--color-ink) 10%, var(--color-surface)),
+    0 14px 24px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  cursor: pointer;
+  transition: transform calc(var(--duration) * 1.25) ease, box-shadow calc(var(--duration) * 1.25) ease;
+}
+
+.booking__date::before {
+  content: '';
+  position: absolute;
+  top: -0.45rem;
+  left: 22%;
+  right: 22%;
+  height: 0.9rem;
+  border-left: 4px solid color-mix(in srgb, var(--color-ink) 50%, var(--color-bg));
+  border-right: 4px solid color-mix(in srgb, var(--color-ink) 50%, var(--color-bg));
+  border-radius: 3px;
+}
+
+.booking__date-dow {
+  padding: 0.45rem 0.3rem 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.booking__date-day {
+  padding-top: 0.55rem;
+  font-family: var(--font-heading);
+  font-size: 2.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.booking__date-month {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.booking__date-seats {
+  margin: 0.5rem 0.55rem 0;
+  padding: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  border-radius: 999px;
+}
+
+.booking__date-seats--few {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 15%, var(--color-surface));
+}
+
+.booking__date:hover:not(:disabled) {
+  transform: translateY(-3px) rotate(-1deg);
+}
+
+.booking__date[aria-pressed='true'] {
+  transform: translateY(-4px) rotate(-2deg);
+  box-shadow: 0 0 0 2px var(--color-primary), 0 18px 30px color-mix(in srgb, var(--color-ink) 16%, transparent);
+}
+
+.booking__date:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.booking__date:disabled .booking__date-dow {
+  background: var(--color-muted);
+}
+
+.booking__date:disabled .booking__date-day {
+  text-decoration: line-through;
+}
+
+.booking__terms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem 2rem;
+  margin-top: 1.75rem;
+}
+
+.booking__term-title {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.booking__included {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-muted);
+}
+
+/* Điều khoản cọc, đổi huỷ: hộp nền thẻ, viền mảnh; nhãn mỗi dòng in đậm. */
+.booking__policy {
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: var(--radius);
+}
+
+.booking__policy ul {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+.booking__policy strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.booking__policy-note {
+  margin: 0.8rem 0 0;
+  padding-top: 0.8rem;
+  font-size: 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+/* Form giữ chỗ: thẻ nền trắng, bóng đổ mềm. */
+.booking__hold {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 1.8rem);
+  background: var(--color-surface);
+  border-radius: calc(var(--radius) * 1.3);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.booking__hold-price {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.booking__hold-price strong {
+  margin-right: 0.3rem;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.booking__hold-count {
+  margin: -0.5rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Sơ đồ ghế: bốn ghế một hàng; ghế đã có người gạch chéo, không dựa vào màu. */
+.booking__seatpick {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.booking__seatpick-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.booking__seatmap {
+  display: grid;
+  grid-template-columns: repeat(4, 3rem);
+  gap: 0.5rem 0.75rem;
+}
+
+.booking__seat {
+  height: 3rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius) var(--radius) 0.3rem 0.3rem;
+  cursor: pointer;
+  transition: translate var(--duration) ease, background-color var(--duration) ease;
+}
+
+.booking__seat:not(:disabled):hover {
+  translate: 0 -3px;
+}
+
+.booking__seat[aria-pressed='true'] {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  box-shadow: 0 3px 0 var(--color-ink);
+}
+
+.booking__seat:disabled {
+  color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--color-ink) 25%, transparent) 0 6px, transparent 6px 12px), var(--color-bg);
+  border-color: color-mix(in srgb, var(--color-ink) 40%, transparent);
+  cursor: not-allowed;
+}
+
+.booking__hold-deal {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+  border-radius: 0.6rem;
+}
+
+/* Tạm tính: các dòng nhãn và số tiền, ngăn với phần nhập bằng nét đứt; dòng tạm tính đậm hơn, dòng cọc nhạt hơn. */
+.booking__sum {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  font-size: 0.92rem;
+  border-top: 1px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+.booking__sum-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.booking__sum-row[hidden] {
+  display: none;
+}
+
+.booking__sum-row dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.booking__sum-row--deal dd {
+  color: var(--color-accent);
+}
+
+.booking__sum-row--total {
+  padding-top: 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.booking__sum-row--deposit {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* Nút giữ chỗ kéo hết bề ngang thẻ, bo tròn hai đầu; bỏ vị trí cột 2 mà phần tạm tính của kiểu stay đặt cho nút ở màn rộng. */
+.booking--calendar .booking__submit {
+  grid-column: auto;
+  grid-row: auto;
+  align-self: auto;
+  width: 100%;
+  border-radius: 999px;
+}
+
+/* Tiêu đề khối lớn hơn tiêu đề mặc định, đúng cỡ của bản thiết kế. */
+.booking--calendar .booking__title {
+  margin: 0.4rem 0 0.8rem;
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.booking--calendar .booking__lead {
+  margin: 0;
+}
+
+/* Nhãn nhỏ in hoa giãn chữ như các khối khác của trang. */
+.booking--calendar .booking__eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Ô nhập: viền mảnh, bo 0,7rem, nền màu nền trang; nhãn chữ thường đậm vừa. */
+.booking--calendar .booking__field {
+  gap: 0.35rem;
+}
+
+.booking--calendar .booking__field label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.booking--calendar .booking__input {
+  min-height: 2.9rem;
+  background: var(--color-bg);
+  padding: 0.55rem 0.85rem;
+  border-color: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  border-radius: 0.7rem;
+}
+
+/* Số khách: khung viên thuốc ôm vừa hai nút tròn và con số. */
+.booking--calendar .booking__stepper {
+  gap: 0.25rem;
+  width: max-content;
+  padding: 0.2rem;
+  border-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: 999px;
+}
+
+.booking--calendar .booking__step {
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.2rem;
+  background: var(--color-bg);
+  border-radius: 50%;
+}
+
+.booking--calendar .booking__stepper .booking__count {
+  flex: none;
+  width: 2.5rem;
+  min-height: 0;
+  padding: 0;
+  font-weight: 600;
+  background: transparent;
+}
+
+/* Nút trên cuống phiếu cỡ nhỏ, bo tròn hai đầu. */
+.booking__ticket-stub .btn {
+  /* Tên thương hiệu dài (nút "Gọi ...") thì chữ xuống dòng nằm giữa nút. */
+  text-align: center;
+  min-height: 2.4rem;
+  padding: 0.45rem 1.05rem;
+  font-size: 0.92rem;
+  border-radius: 999px;
+}
+
+/* Phiếu giữ chỗ: tờ giấy hơi nghiêng, cuống phiếu ngăn bằng nét đứt; dấu "chờ xác nhận" đóng xuống sau một nhịp. */
+.booking__ticket {
+  display: grid;
+  max-width: 52rem;
+  margin-top: 2.5rem;
+  background: color-mix(in srgb, var(--color-surface) 96%, var(--color-accent));
+  border-radius: 1rem;
+  box-shadow: 0 30px 60px color-mix(in srgb, var(--color-ink) 16%, transparent);
+  rotate: -1.2deg;
+  animation: booking-ticket-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.booking__ticket[hidden] {
+  display: none;
+}
+
+@keyframes booking-ticket-in {
+  from {
+    transform: translateY(30px) rotate(3deg);
+    opacity: 0;
+  }
+}
+
+.booking__ticket-main {
+  padding: 1.5rem 1.6rem;
+}
+
+.booking__ticket-brand {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.booking__ticket-route {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.booking__ticket-line {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--color-ink) 0 8px, transparent 8px 14px);
+}
+
+.booking__ticket-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 1.5rem;
+  margin: 1.1rem 0 0;
+}
+
+.booking__ticket-info dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.booking__ticket-info dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.booking__ticket-msg {
+  margin: 1rem 0 0;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  background: var(--color-surface);
+  border: 1px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+  border-radius: 0.6rem;
+}
+
+.booking__ticket-stub {
+  display: grid;
+  align-content: start;
+  gap: 0.55rem;
+  padding: 1.5rem 1.4rem;
+  border-top: 2px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+}
+
+.booking__ticket-stamp {
+  justify-self: center;
+  margin: 0 0 0.5rem;
+  padding: 0.35rem 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 3px solid var(--color-accent);
+  border-radius: 0.4rem;
+  rotate: -8deg;
+  animation: booking-stamp 0.5s 0.35s both cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+
+@keyframes booking-stamp {
+  from {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (min-width: 760px) {
+  .booking__ticket {
+    grid-template-columns: 1fr 15rem;
+  }
+
+  .booking__ticket-stub {
+    border-top: 0;
+    border-left: 2px dashed color-mix(in srgb, var(--color-ink) 22%, transparent);
+  }
+}
+
+@media (min-width: 1024px) {
+  .booking__layout {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking__ticket,
+  .booking__ticket-stamp {
+    animation: none;
+  }
+
+  .booking__date,
+  .booking__date:hover:not(:disabled),
+  .booking__date[aria-pressed='true'] {
+    transform: none;
+  }
+}
+
+/* Nút mở thêm ngày: nằm hết hàng dưới các thẻ ngày. */
+.booking__dates-more {
+  grid-column: 1 / -1;
+  min-height: 2.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--color-ink) 35%, transparent);
+  border-radius: calc(var(--radius) * 0.8);
+  cursor: pointer;
+}
+
+.booking__dates-more:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* Bố cục ba bước của kiểu calendar: 1 chọn tour, 2 chọn ngày (cột trái), 3 thông tin (thẻ bên phải, dính khi cuộn);
+   "đã gồm" và điều khoản xuống dưới cột trái. Điện thoại xếp 1, 2, 3 rồi mới tới phần phụ. */
+.booking--calendar .booking__layout {
+  gap: 2rem;
+}
+
+.booking__layout--steps {
+  counter-reset: step;
+}
+
+.booking--calendar .booking__info,
+.booking--calendar .booking__extra {
+  display: grid;
+  gap: 1.75rem;
+  min-width: 0;
+}
+
+.booking--calendar .booking__extra .booking__terms,
+.booking--calendar .booking__extra .booking__policy {
+  margin-top: 0;
+}
+
+.booking__step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.booking__layout--steps .booking__step-title {
+  counter-increment: step;
+}
+
+.booking__layout--steps .booking__step-title::before {
+  content: counter(step);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+}
+
+/* Thẻ tour: ảnh vuông nhỏ, tên, giờ và giá; hai cột từ 760px. */
+.booking__tours {
+  margin: 0;
+}
+
+.booking__tour-list {
+  display: flex;
+  gap: 0.6rem;
+  margin-inline: calc(-1 * var(--page-gutter, 1rem));
+  padding: 0.15rem var(--page-gutter, 1rem) 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.booking__tour-list > .booking__tour {
+  flex: 0 0 min(15rem, 78%);
+  scroll-snap-align: start;
+}
+
+.booking__tour {
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.2rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+}
+
+.booking__tour .booking__room-thumb {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.booking__tour .booking__room-text {
+  display: grid;
+  gap: 0.15rem;
+}
+
+
+@media (min-width: 760px) {
+  .booking__tour-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .booking__tour-list > .booking__tour {
+    flex: initial;
+  }
+}
+
+@media (min-width: 1024px) {
+  .booking--calendar .booking__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(21rem, 27rem);
+    grid-template-areas: 'main form' 'extra form';
+    gap: 2.5rem 3.5rem;
+  }
+
+  .booking--calendar .booking__info {
+    grid-area: main;
+  }
+
+  .booking--calendar .booking__hold {
+    grid-area: form;
+    position: sticky;
+    top: calc(var(--header-stuck, 4rem) + 1.25rem);
+  }
+
+  .booking--calendar .booking__extra {
+    grid-area: extra;
+  }
+}
