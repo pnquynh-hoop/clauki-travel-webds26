@@ -80,7 +80,9 @@ body:has(.header--overlay) main > .intro:first-child {
 .intro--headline .intro__title {
   font-size: clamp(2.6rem, 9vw, 7.5rem);
   font-weight: 800;
-  line-height: 0.95;
+  /* Chữ tiếng Việt có hai tầng dấu (ấ, ồ): dòng sát hơn thì dấu chạm chân chữ (y, p) của dòng trên,
+     nhất là font có dấu cao như Playfair Display (brand-test). */
+  line-height: 1.25;
   letter-spacing: -0.04em;
 }
 
