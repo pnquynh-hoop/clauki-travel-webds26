@@ -77,7 +77,8 @@ index.html              vỏ trang: không chứa chữ của thương hiệu n�
 serve.py                chạy thử trên máy: trả index.html cho đường dẫn trang con (không deploy)
 wd2026.js               thư viện đổi dữ liệu của BTC, giữ nguyên
 components/             mỗi component một thư mục <tên>/: wl-<tên>.js, <tên>.css, kiểu riêng, images/;
-                        core.js chỉ tải JS, CSS của khối trang đang dùng
+                        core.js chỉ tải JS, CSS của khối trang đang dùng; cách tổ chức, khi nào thêm kiểu hay khối
+                        mới: components/README.md
   shared/               file nhiều khối dùng chung (plate, catalog-card, rooms, item-detail)
   effects/              hiệu ứng dùng chung (lightbox, parallax, pin-scroll)
 css/
