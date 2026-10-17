@@ -5,8 +5,8 @@
    Trang muốn sắp xếp, ẩn, đổi kiểu từng phần thì dùng thẳng các khối riêng đó trong sections (như trang tour SighGone);
    khối này giữ cho các trang đã viết theo kiểu một khối (Bậc Trà, brand-test) chạy như cũ.
    Section ghi "item" thì lấy tour hoặc hạng phòng trong catalog; trường nào section ghi riêng thì dùng của section. */
-import { catalogItem } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { catalogItem } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 import { imgEl, childEl, lazyChildEl } from './item-detail.js';
 import { WlItemCover } from './wl-item-cover.js';
 import { WlItemBooking } from './wl-item-booking.js';

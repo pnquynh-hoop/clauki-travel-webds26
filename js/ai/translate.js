@@ -5,7 +5,7 @@
    AI lỗi hay hết lượt thì không chặn: câu chưa dịch hiện tiếng Việt, stats.error ghi lý do để editor báo. */
 import { streamLines, cleanText } from './gemini.js';
 import { translatePrompt, reviewPrompt } from './prompts/translate.js';
-import { pendingWork, memoryOf, placeholders } from '../i18n-text.js';
+import { pendingWork, memoryOf, placeholders } from '../core/i18n-text.js';
 
 // Tên ngôn ngữ đưa vào lời dặn; ngôn ngữ chưa có ở đây thì Intl tự gọi tên (ví dụ "tiếng Nhật").
 const LANG_NAMES = { en: 'tiếng Anh' };

@@ -1,4 +1,4 @@
-/* theme-mode.css - quy tắc của chế độ tối (js/theme-mode.js). Luôn tải, nhưng chỉ có tác dụng khi <html> có
+/* theme-mode.css - quy tắc của chế độ tối (js/core/theme-mode.js). Luôn tải, nhưng chỉ có tác dụng khi <html> có
    data-mode="dark", tức thương hiệu có bảng màu tối (--dark-*) và khách đang chọn chế độ tối.
    Vật vốn sáng ngoài đời (giấy note, vé, biển, chữ đè trên ảnh) giữ bảng màu sáng: trong phạm vi các khối đó, biến màu
    trả về bản sáng mà theme-mode.js đã chép ra --light-*. Gom ở đây để không phải sửa CSS của từng khối. */

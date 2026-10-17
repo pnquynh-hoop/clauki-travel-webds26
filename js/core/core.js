@@ -3,7 +3,7 @@
    mỗi lần đổi thương hiệu thì đổi màu, tiêu đề tab và dựng lại các khối của trang đang mở.
    Component không tải sẵn: trước khi dựng, core.js tải JS và CSS của đúng các khối trang đó dùng (bảng tra ở app.js). */
 
-import { readDraft } from './editor/draft.js';
+import { readDraft } from '../editor/draft.js';
 import { applyTheme } from './theme-mode.js';
 // Song ngữ: chọn ngôn ngữ, ghép bản dịch content.<lang>.json vào nội dung (xem chú thích đầu i18n.js).
 import { localize, langFor, mergeTranslation, BASE_LANG } from './i18n.js';
@@ -53,11 +53,11 @@ let guestTheme = null;
 let guestReadOnly = false;
 
 // Trang trung tính của ClauKi khi địa chỉ site khách không có: câu báo, nút tạo website, nút xem các thương hiệu mẫu.
-// CSS riêng (css/no-site.css) chỉ tải khi cần.
+// CSS riêng (css/tool/no-site.css) chỉ tải khi cần.
 function showNoSite(err, brands = []) {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = '/css/no-site.css';
+  link.href = '/css/tool/no-site.css';
   document.head.append(link);
   document.title = err.isDraft ? 'Chưa có bản nháp - ClauKi' : 'Không có website này - ClauKi';
   document.documentElement.classList.add('no-site-page');
@@ -446,7 +446,7 @@ function resetDraft() {
 
 // Nút "Thử chỉnh" và dải báo đang thử nháp: tải sau khi trang đã dựng, không làm chậm lần hiện đầu tiên.
 function mountLauncher() {
-  launcher ??= import('./editor/launch.js')
+  launcher ??= import('../editor/launch.js')
     .then((m) => m.mountLauncher({ current: lastRendered, reset: resetDraft }))
     .catch((err) => console.error('Không tải được nút Thử chỉnh:', err));
 }
@@ -513,7 +513,7 @@ function onPopState() {
 // Site khách: đọc từ nháp trên máy (/nhap/) hoặc Supabase, dựng thẳng, không qua nút đổi thương hiệu của BTC.
 // Trình tạo web mở /nhap/ trong khung (data-ed-frame) và gửi nháp mới bằng DRAFT_EVENT khi AI đang viết.
 async function startGuest(here, ids) {
-  const { loadSite, RESERVED, DRAFT_SLUG } = await import('./sites.js');
+  const { loadSite, RESERVED, DRAFT_SLUG } = await import('../site/sites.js');
   const isDraft = here.guest === DRAFT_SLUG;
   // Không có site (gõ nhầm, đã gỡ, chưa có nháp): báo bằng trang trung tính của ClauKi, không mượn giao diện thương hiệu nào.
   const missing = () => Object.assign(new Error(isDraft ? 'Chưa có bản nháp.' : `Không có trang /${here.guest}/.`), { kind: 'no-site', slug: here.guest, isDraft });
@@ -571,7 +571,7 @@ export async function start(components = {}) {
     const ids = list.brands.map((b) => b.id);
     const here = readLocation(ids);
     if (here.tool === 'tao') {
-      const { openBuilder } = await import('./create/create.js');
+      const { openBuilder } = await import('../create/create.js');
       openBuilder({ brands: list.brands });
       return;
     }
@@ -579,12 +579,12 @@ export async function start(components = {}) {
     // Bản nháp /nhap/ của trình tạo web cũng sửa được (nháp trên máy này).
     let wantsEditor = new URLSearchParams(location.search).has('sua') && !IN_EDITOR;
     // Site khách đã xuất bản không sửa được: bỏ ?sua khỏi địa chỉ rồi dựng như trang xem bình thường.
-    if (wantsEditor && here.guest && here.guest !== (await import('./sites.js')).DRAFT_SLUG) {
+    if (wantsEditor && here.guest && here.guest !== (await import('../site/sites.js')).DRAFT_SLUG) {
       history.replaceState(history.state, '', location.pathname + location.hash);
       wantsEditor = false;
     }
     if (wantsEditor) {
-      const { openEditor } = await import('./editor/editor.js');
+      const { openEditor } = await import('../editor/editor.js');
       openEditor({ brands: list.brands, id: here.guest ?? here.id ?? list.default, page: here.page });
       return;
     }

@@ -2,7 +2,7 @@
    theo vệt con trỏ, lộ ảnh rực màu bên dưới; tan gần một nửa (CLEAR_RATIO) thì tan hết, một chữ trong tiêu đề (haze.word) bay mất.
    Điện thoại không có chuột: sau một lúc, một "hơi thở" tự quét ngang ảnh. Bật giảm chuyển động thì không có sương.
    Tách tệp riêng vì HTML và hành vi khác hẳn các kiểu còn lại của hero. */
-import { asset } from '../core.js';
+import { asset } from '../core/core.js';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 // Tỉ lệ điểm ảnh đã tan để coi như tan hết; đo trên lưới thưa cho nhẹ.

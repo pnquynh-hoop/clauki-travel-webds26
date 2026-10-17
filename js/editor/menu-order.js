@@ -2,7 +2,7 @@
    để thả mục vào chỗ mới, hoặc bấm Lên, Xuống (bàn phím, màn hình cảm ứng). Hiện khi chọn "Đầu trang" ở tab Khối.
    Kéo bằng pointer events (chuột và cảm ứng cùng một đường): trong lúc kéo chỉ dời thẻ trong danh sách, thả ra mới ghi
    một lần vào dữ liệu, nên một lần Hoàn tác là về thứ tự cũ. Đổi thứ tự menu thì footer (cột menu) cũng đổi theo. */
-import { iconEl } from '../icon.js';
+import { iconEl } from '../core/icon.js';
 
 let api = null;
 

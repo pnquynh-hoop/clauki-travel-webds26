@@ -5,8 +5,8 @@
      thẻ bên cạnh hiện tên, mô tả, các con số và giá của hạng đó.
    Hạng phòng lấy từ catalog.items khi section ghi items (rooms.js), hạng có href thì thẻ có liên kết xem chi tiết.
    Nút "đặt hạng này" phát sự kiện wl:choose-room (detail.id là id hạng) để khối đặt chỗ chọn sẵn hạng đó. */
-import { asset } from '../core.js';
-import { textEl, groupEl, linkEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl, linkEl } from '../core/dom.js';
 import { roomsOf } from './rooms.js';
 
 function fill(template, values) {

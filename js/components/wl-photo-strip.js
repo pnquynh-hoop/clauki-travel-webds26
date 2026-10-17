@@ -1,7 +1,7 @@
 /* wl-photo-strip.js - dải ảnh như cuộn phim: từ 1024px khối ghim lại, cuộn dọc thì dải trôi ngang; điện thoại vuốt
    ngang; bấm ảnh thì xem lớn toàn màn hình. Section ghi "item" thì lấy ảnh bìa rồi ảnh từng chặng trong catalog
    (chú thích là tên chặng); không thì ghi images ({ src, alt, caption }) trong section. Tách từ room-detail. */
-import { textEl, groupEl } from '../dom.js';
+import { textEl, groupEl } from '../core/dom.js';
 import { pinHorizontal } from '../effects/pin-scroll.js';
 import { openLightbox } from '../effects/lightbox.js';
 import { fill, imgEl, pad, itemSection } from './item-detail.js';

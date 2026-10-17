@@ -9,8 +9,8 @@
    nên không còn là liên kết (bỏ href: không bấm, không Tab tới); trạng thái đổi theo giờ thì liên kết bật, tắt theo.
    Kiểu board: bảng giờ nhà ga, giờ và trạng thái xếp trên các ô chữ lật; cuộn tới thì các ô quay chữ rồi dừng
    (một lần); giảm chuyển động thì không lật. Kiểu mặc định: danh sách trên một tấm thẻ. */
-import { textEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fill = (text, values) => String(text ?? '').replace(/\{(\w+)\}/g, (_, key) => values[key] ?? '');

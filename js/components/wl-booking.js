@@ -5,10 +5,10 @@
    bên phải là thẻ ảnh để chọn hạng, ngày nhận và trả phòng, số khách, họ tên, số điện thoại và tạm tính.
    Kiểu request (nhà dân tính tiền theo khách): một ảnh lớn của nhà, ngày đến và ngày về (ở tối đa maxNights đêm),
    số người lớn và số trẻ em, họ tên, số điện thoại, tạm tính theo đầu người. Hai kiểu dùng chung ô nhập, khung tin nhắn. */
-import { asset } from '../core.js';
+import { asset } from '../core/core.js';
 import { roomsOf } from './rooms.js';
-import { textEl, groupEl, telHref } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl, groupEl, telHref } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 const DAY = 86400000;
 

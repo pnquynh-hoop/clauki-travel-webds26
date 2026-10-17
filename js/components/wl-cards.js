@@ -3,9 +3,9 @@
    Kiểu mặc định: lưới thẻ (ảnh hoặc icon, tiêu đề, dòng phụ, đoạn chữ, các dòng thông tin, câu trích, chip, liên kết).
    Kiểu badge: thẻ đeo có kẹp dây, dải màu đầu thẻ ghi nhãn chung (tag), vòng tròn ảnh hoặc chữ tắt của tiêu đề;
    các thẻ treo lệch nhau, cuộn tới thì đung đưa một lần rồi dừng. */
-import { asset } from '../core.js';
-import { textEl, linkEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { asset } from '../core/core.js';
+import { textEl, linkEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 
 // Chữ tắt cho vòng tròn khi thẻ không có ảnh: chữ đầu của hai từ cuối ("Chị Tư Hạnh" thành "TH"),
 // vì tên người Việt hay có tiếng xưng hô đứng đầu, phần tên nằm ở cuối.

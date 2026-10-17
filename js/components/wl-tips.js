@@ -1,7 +1,7 @@
 /* wl-tips.js - các thẻ mẹo ngắn (mặc gì, tháng nào mưa, tránh giờ nào): tiêu đề, một đoạn chữ, tuỳ chọn một biểu đồ
    cột nhỏ (chart) và một liên kết sang tour hay trang khác. Biểu đồ chỉ để nhìn nhanh; con số đầy đủ nằm trong
    chart.label để trình đọc màn hình đọc thay cho các cột. */
-import { textEl, linkEl, groupEl } from '../dom.js';
+import { textEl, linkEl, groupEl } from '../core/dom.js';
 
 function chartEl(chart) {
   const values = (chart?.values ?? []).filter((v) => Number.isFinite(v));

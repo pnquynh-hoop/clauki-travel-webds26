@@ -2,7 +2,7 @@
    (ai.js): cùng một hàm nên hai cách sửa ra cùng kết quả. Các hàm sửa thẳng object được truyền vào;
    editor gọi chúng bên trong commit() để có hoàn tác. */
 import { FONTS, TEMPLATES, PAGE_RESERVED } from './manifest.js';
-import { slugify } from '../dom.js';
+import { slugify } from '../core/dom.js';
 
 export const MAX_NEW_PAGES = 8;
 

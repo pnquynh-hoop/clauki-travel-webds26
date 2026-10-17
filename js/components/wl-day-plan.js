@@ -4,8 +4,8 @@
    ảnh mở ra, chữ trượt vào; sông vẽ bằng SVG theo chiều cao khối, xuồng trôi theo độ cuộn,
    nền đổi màu theo giờ của bến đang tới.
    Múi giờ lấy từ site.place.timezone, nên thương hiệu nào dùng khối này cũng có giờ thật của nơi mình. */
-import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 // Mỗi phần bắt đầu hiện khi mép trên vừa ló khỏi đáy màn hình, hiện xong sau khi cuộn thêm 35% chiều cao màn hình:

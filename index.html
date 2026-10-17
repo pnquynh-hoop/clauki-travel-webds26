@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Tiêu đề, mô tả, favicon do js/core.js điền từ content.json của thương hiệu đang chọn. -->
+  <!-- Tiêu đề, mô tả, favicon do js/core/core.js điền từ content.json của thương hiệu đang chọn. -->
   <title></title>
   <meta name="description" content="">
   <link rel="icon" href="data:,">
 
   <!-- Đường dẫn tính từ gốc vì trang có thể nằm ở /ganh-som/phong. -->
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/theme-mode.css">
-  <!-- Style của từng component do core.js chèn khi trang dùng tới khối đó (bảng tra ở js/app.js). -->
+  <link rel="stylesheet" href="/css/site/base.css">
+  <link rel="stylesheet" href="/css/site/theme-mode.css">
+  <!-- Style của từng component do core.js chèn khi trang dùng tới khối đó (bảng tra ở js/core/app.js). -->
   <!-- core.js đổi href thành /brands/<id>/theme.css -->
   <link rel="stylesheet" id="brand-theme" href="">
 
   <!-- wd2026.js của BTC (giữ nguyên, không sửa): nút đổi thương hiệu cho BGK.
        Phải đứng trước app.js để window.WebDesign2026 có sẵn khi core.js chạy. -->
   <script src="/wd2026.js" defer></script>
-  <script type="module" src="/js/app.js"></script>
+  <script type="module" src="/js/core/app.js"></script>
   <script>
     // Mở bằng file:// thì trình duyệt chặn module app.js; script thường này vẫn chạy để báo cách mở đúng.
     if (location.protocol === 'file:') {

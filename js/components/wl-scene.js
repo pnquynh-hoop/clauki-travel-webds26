@@ -1,7 +1,7 @@
 /* wl-scene.js - cảnh đáng chờ: ảnh tràn màn hình, nhãn nhỏ, câu tả cảnh chữ lớn nghiêng đè lên góc dưới, giờ đẹp
    nhất; ảnh trôi chậm khi cuộn. Dữ liệu ở section.view (image, text, best), hoặc view của mục danh mục khi section ghi item
    (hạng phòng). Tách từ room-detail. */
-import { textEl } from '../dom.js';
+import { textEl } from '../core/dom.js';
 import { parallax } from '../effects/parallax.js';
 import { imgEl, itemSection } from './item-detail.js';
 

@@ -2,7 +2,7 @@
    viết chữ, tìm ảnh, hoàn tất), mỗi bước có trạng thái chờ, đang chạy, xong, bỏ qua, lỗi, kèm chi tiết và số giây.
    Viết chữ và tìm ảnh chạy song song nên có thể cùng sáng một lúc. Trình đọc màn hình chỉ nghe một câu tóm tắt mỗi khi một bước
    đổi trạng thái (không đọc từng dòng chữ AI viết). */
-import { h } from '../dom.js';
+import { h } from '../core/dom.js';
 
 export const STEPS = [
   { key: 'profile', title: 'Đọc mô tả', wait: 'Tên, nơi chốn, giá, giọng văn' },

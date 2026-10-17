@@ -5,9 +5,9 @@
    Tuỳ chọn tờ chỉ đường (directions): các bước đánh số tới điểm hẹn và nút mở bản đồ.
    Bên dưới là tờ giấy kẻ dòng để soạn sẵn tin nhắn rồi gửi bằng SMS hoặc email: trang tĩnh không có máy chủ
    nhận thư, nên tin đi thẳng tới số điện thoại và email thật của thương hiệu. */
-import { asset } from '../core.js';
-import { textEl, linkEl, telHref } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { asset } from '../core/core.js';
+import { textEl, linkEl, telHref } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { plateEl } from './plate.js';
 
 // Số, email, địa chỉ lấy từ site.contact chứ không chép vào từng tờ, để đổi số điện thoại chỉ phải sửa một chỗ.

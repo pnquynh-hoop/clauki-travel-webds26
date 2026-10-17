@@ -1,7 +1,7 @@
 /* share.js - khối chia sẻ một site khách: mã QR, link công khai (tên miền con, xem publicLink trong sites.js), nút Chép link,
    Chia sẻ (bảng chia sẻ của điện thoại, có thì mới hiện), Tải mã QR. Dùng ở màn xuất bản của /tao và mục "Mã QR, chia sẻ" trên
    trang khách đã xuất bản (bản to, để chiếu cho người ngồi dưới quét). Mã QR vẽ bằng qrcode-generator (MIT) nạp từ cdnjs, chỉ khi cần. */
-import { h } from './dom.js';
+import { h } from '../core/dom.js';
 
 const QR_LIB = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
 const CSS_ID = 'share-css';
@@ -9,7 +9,7 @@ let lib = null;
 
 function loadCss() {
   if (document.getElementById(CSS_ID)) return;
-  document.head.append(h('link', { rel: 'stylesheet', id: CSS_ID, href: '/css/share.css' }));
+  document.head.append(h('link', { rel: 'stylesheet', id: CSS_ID, href: '/css/tool/share.css' }));
 }
 
 // Thư viện là script thường (biến toàn cục qrcode), nạp một lần; lỗi mạng thì lần sau thử lại.

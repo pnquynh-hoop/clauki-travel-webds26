@@ -2,7 +2,7 @@
    Chỉ hiện khi đã cuộn quá một màn hình; vòng quanh nút cho biết đã đọc tới đâu trong trang.
    Nằm ngay phía trên nút tròn đổi thương hiệu của BTC (góc dưới phải), không đè lên nút đó.
    Tên nút cho trình đọc màn hình lấy từ toTop.label; thương hiệu không ghi thì không có nút. */
-import { clamp } from '../dom.js';
+import { clamp } from '../core/dom.js';
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 

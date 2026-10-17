@@ -3,7 +3,7 @@
    (điện thoại: thanh dưới mở tấm trượt), thanh công cụ nổi trên khối đang chọn.
    Editor chỉ sửa dữ liệu: bản sao content.json và biến theme. Mọi thay đổi đi qua commit(): chụp trạng thái cũ để hoàn tác,
    ghi nháp trên máy (draft.js), rồi báo trang trong khung dựng lại bằng chính các component <wl-*>.
-   Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/editor.css, tiền tố ed-), không đọc biến của brand. */
+   Giao diện editor là của ClauKi, chung cho mọi thương hiệu (css/tool/editor.css, tiền tố ed-), không đọc biến của brand. */
 import { readDraft, writeDraft, clearDraft, fingerprint } from './draft.js';
 import { BLOCKS, HEADER_VARIANTS, variantsFor, CONTRAST, FONTS, TEMPLATES } from './manifest.js';
 import { paletteEl } from './palette.js';
@@ -12,11 +12,11 @@ import { buildForm, imageLibrary, setIn, getIn } from './form.js';
 import { norm, pageAt, headerTarget as headerOf, checkNewPage, addPage as addPageTo, insertBlock, applyFont } from './ops.js';
 import { contrastRatio, AA } from './contrast.js';
 import { DESKTOP, isNarrow, fitFrame, deviceButtons } from './preview.js';
-import { h, slugify } from '../dom.js';
+import { h, slugify } from '../core/dom.js';
 import { mountAi, refreshAiHistory } from './ai.js';
 import { addTurn } from './chat-log.js';
 import { fileToLogo, textLogo } from './logo.js';
-import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../sites.js';
+import { readTaoDraft, writeTaoDraft, DRAFT_SLUG } from '../site/sites.js';
 import { mountEnglish, langControl, renderEnglish, setView, finalCheck as checkEnglish, draftPart, baseEnglish, startView } from './english.js';
 
 const HISTORY_MAX = 60;
@@ -1008,7 +1008,7 @@ function resizerEl() {
 const TABS = [['blocks', 'Khối'], ['en', 'English'], ['theme', 'Giao diện'], ['pages', 'Trang'], ['ai', 'AI']];
 
 function build() {
-  const css = h('link', { rel: 'stylesheet', href: '/css/editor.css' });
+  const css = h('link', { rel: 'stylesheet', href: '/css/tool/editor.css' });
   const font = h('link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap' });
   document.head.append(css, font);
 

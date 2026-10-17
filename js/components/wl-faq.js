@@ -3,8 +3,8 @@
      mở câu này thì câu đang mở tự đóng; chuyển động mở, đóng nằm trong faq.css;
    - chat (Gành Sớm): khung nhắn tin với chủ nhà. Các câu hỏi là nút gợi ý; bấm một câu thì nó hiện thành tin nhắn
      của khách, chủ nhà "đang nhập" một lúc rồi trả lời. Bên cạnh là thẻ ảnh mời gọi hotline. */
-import { asset } from '../core.js';
-import { textEl, groupEl, telHref } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl, telHref } from '../core/dom.js';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

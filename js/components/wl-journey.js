@@ -2,10 +2,10 @@
    Cuộn trang thì xe chạy theo, trời đổi màu theo giờ, đồng hồ báo độ cao, núi chìm dần khi lên cao.
    Rê chuột vào ảnh trạm thì mây bay ra kể việc làm ở đó. Cuối đường có ô giữ chỗ.
    Chữ và ảnh đều lấy từ content.json nên thương hiệu nào cũng dùng được. */
-import { asset } from '../core.js';
+import { asset } from '../core/core.js';
 // Hàm dùng chung trong dom.js: textEl tạo thẻ chữ (chữ trống thì bỏ qua), clamp giữ số trong khoảng,
 // smooth đi dần từ 0 lên 1 cho chuyển động không bị giật.
-import { textEl, clamp, smooth } from '../dom.js';
+import { textEl, clamp, smooth } from '../core/dom.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 // Năm khoảng trời trong ngày; mỗi khoảng là một lớp màu trong CSS.

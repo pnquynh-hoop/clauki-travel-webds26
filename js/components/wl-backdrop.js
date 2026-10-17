@@ -1,8 +1,8 @@
 /* wl-backdrop.js - một dải ảnh "đóng đinh" vào màn hình: trang cuộn qua, ảnh đứng yên như nền cố định, chữ (nếu có) trôi lên trên ảnh.
    Ảnh là phần tử position: fixed nằm trong khung cắt bằng clip-path, nên chỉ thấy trong phạm vi của khối. Cách này chạy cả trên
    điện thoại (background-attachment: fixed thì iOS bỏ qua). Bật giảm chuyển động thì ảnh cuộn cùng trang, không còn hiệu ứng. */
-import { asset } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { asset } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 
 export class WlBackdrop extends HTMLElement {
   set data(section) {

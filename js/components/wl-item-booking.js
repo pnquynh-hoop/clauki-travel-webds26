@@ -4,8 +4,8 @@
    Kiểu ticket (tour theo ngày, theo bản mẫu SighGone): thẻ đặt thành vé giữ chỗ, 5 ngày gần nhất là các ô bấm chọn,
    nút giữ chỗ phát wl:choose với id và ngày đã chọn; section có route thì cột trái là lộ trình (component route).
    Nút đặt lấy từ site.cta; section ghi book (label, href) thì dùng nút riêng. Tách từ room-detail. */
-import { textEl, groupEl } from '../dom.js';
-import { iconEl } from '../icon.js';
+import { textEl, groupEl } from '../core/dom.js';
+import { iconEl } from '../core/icon.js';
 import { fill, dayChip, itemSection, money, lazyChildEl } from './item-detail.js';
 
 // Vé giữ chỗ chỉ có chỗ cho 5 ô ngày trên một hàng.

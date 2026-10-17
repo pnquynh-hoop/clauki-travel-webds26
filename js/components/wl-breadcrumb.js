@@ -1,7 +1,7 @@
 /* wl-breadcrumb.js - đường dẫn "Trang chủ / Tour / Sài Gòn lên đèn" ở đầu trang con, để khách biết mình đang ở đâu và quay lên một bậc.
    Bước đầu (trang chủ) lấy từ site.home, chữ của nó là `home`; các bước tiếp theo ghi trong `items`; bước cuối là trang đang xem
    (không có liên kết, aria-current="page"). Thiếu `home` hoặc site.home thì bỏ bước đầu; không có bước nào thì không dựng gì. */
-import { textEl } from '../dom.js';
+import { textEl } from '../core/dom.js';
 
 export class WlBreadcrumb extends HTMLElement {
   set data(section) {

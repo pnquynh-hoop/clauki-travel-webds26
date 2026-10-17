@@ -2,8 +2,8 @@
    đang chọn; bảng bên cạnh hiện tên múi, nên ăn gì, làm gì, mức kẹt xe và tour hợp giờ đó (lấy từ catalog).
    Mặc định là giờ thật ở nơi của thương hiệu (place.timezone). Đổi giờ bằng cách bấm hoặc kéo trên mặt đồng hồ
    (chuột, cảm ứng), hoặc thanh trượt (bàn phím, trình đọc màn hình); mặt đồng hồ chỉ để nhìn nên ẩn với trình đọc. */
-import { catalogItem } from '../core.js';
-import { textEl, groupEl } from '../dom.js';
+import { catalogItem } from '../core/core.js';
+import { textEl, groupEl } from '../core/dom.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const TAU = Math.PI * 2;

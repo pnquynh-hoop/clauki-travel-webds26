@@ -4,7 +4,7 @@
    Đè bằng style trên thẻ <html> để thắng cả theme.css lẫn biến của nháp (nháp cũng gán trên <html>).
    Có bảng màu tối thì <html> có data-modes="dark" để header hiện nút đổi; data-mode là chế độ đang dùng.
    Lựa chọn nhớ ở localStorage cho mọi thương hiệu; lần đầu là sáng, vì đó là màu chính của thương hiệu. */
-import { applyDraftTheme } from './editor/draft.js';
+import { applyDraftTheme } from '../editor/draft.js';
 
 const KEY = 'clauki-mode';
 export const MODE_EVENT = 'wl:mode';
@@ -55,7 +55,7 @@ export function applyMode() {
   if (dark) {
     const style = getComputedStyle(root);
     // Chép màu sáng ra --light-* trước khi đè: vật vốn sáng ngoài đời (giấy note, vé, chữ trên ảnh) dùng lại bảng sáng
-    // trong chế độ tối (css/theme-mode.css).
+    // trong chế độ tối (css/site/theme-mode.css).
     const lights = MODE_VARS.map((name) => [name, style.getPropertyValue(name).trim()]);
     lights.forEach(([name, value]) => {
       if (!value) return;
