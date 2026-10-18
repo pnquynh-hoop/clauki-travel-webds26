@@ -132,7 +132,7 @@ xuất bản.
 ## AI
 
 - Gemini gọi thẳng từ trình duyệt (`js/ai/gemini.js`), model chính `gemini-3.5-flash-lite`, dự phòng `gemini-3.1-flash-lite`.
-  Thứ tự: hai khoá dự phòng của thành viên, rồi Firebase AI Logic (gói Spark miễn phí); đường nào hết lượt thì nghỉ một phút,
+  Thứ tự: Firebase AI Logic (gói Spark miễn phí) trước, khoá Gemini dự phòng (nếu có) sau; khoá bị từ chối thì bỏ qua, thử đường kế tiếp; đường nào hết lượt thì nghỉ một phút,
   máy chủ bận thì thử lại rồi chuyển đường.
 - Mọi lời nhắc gửi Gemini nằm ở `js/ai/prompts/`: sửa câu chữ ở đây, không đụng logic.
 - Nhật ký dùng AI khi làm sản phẩm: [docs/ai-log.md](docs/ai-log.md), prompt đầy đủ ở `docs/prompts/`. Commit có dùng AI ghi
