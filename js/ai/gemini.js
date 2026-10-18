@@ -3,9 +3,10 @@
    - công khai: cấu hình ghi trong PUBLIC_CONFIG, ai cũng thử được;
    - máy demo: cấu hình dán vào localStorage của máy thuyết trình (khoá DEMO_KEY), không bao giờ commit.
    Có cấu hình demo thì dùng demo, không thì dùng công khai. SDK chỉ tải khi gọi AI lần đầu.
-   Thêm hai khoá Gemini dự phòng của thành viên (BACKUP_KEYS, gọi thẳng REST API của Gemini, không qua Firebase). Thứ tự thử:
-   model chính trên từng khoá dự phòng, rồi Firebase sau cùng (giữ hạn mức Firebase cho buổi demo); cả ba hết lượt (429) mới hạ
-   xuống model dự phòng, cũng lần lượt các khoá rồi Firebase. Đường nào hết lượt thì nghỉ COOL_MS rồi mới dùng lại.
+   Khoá Gemini dự phòng (BACKUP_KEYS, gọi thẳng REST API, không qua Firebase) nếu có thì thử sau Firebase. Thứ tự: model chính trên
+   Firebase rồi từng khoá dự phòng; hết lượt (429) cả thì hạ xuống model dự phòng, cũng Firebase trước. Đường nào hết lượt thì nghỉ
+   COOL_MS rồi mới dùng lại; đường nào bị từ chối (401, 403: khoá sai, bị thu hồi, sai tên miền) thì bỏ hẳn trong phiên này và thử
+   đường kế tiếp, để một khoá hỏng không làm hỏng cả AI.
    Gói miễn phí: Google dùng nội dung gửi lên để cải thiện sản phẩm, nên không gửi dữ liệu cá nhân hay đơn đặt chỗ. */
 
 const SDK = 'https://www.gstatic.com/firebasejs/13.0.0';
@@ -13,12 +14,9 @@ const DEMO_KEY = 'clauki-ai-demo';
 export const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 // Model dự phòng, có hạn mức riêng: chỉ dùng khi model chính hết lượt trên mọi đường (các khoá dự phòng và Firebase).
 export const FALLBACK_MODEL = 'gemini-3.1-flash-lite';
-// Khoá Gemini API dự phòng (Như Quỳnh, Mị Nương). Khoá nằm trong mã trang nên ai xem mã cũng thấy; giới hạn tên miền và gói miễn phí
-// của từng khoá đặt trên Google Cloud.
-const BACKUP_KEYS = [
-  'AQ.Ab8RN6Le_vl9mwtxFItxfVQYgwg8jKG8T9go8jViJcYT5_RMWw',
-  'AQ.Ab8RN6L64kInIlz2dy-3nn9yEIm6njxqeZaCypwyubb5YbpKRw',
-];
+// Khoá Gemini API dự phòng gọi thẳng REST API, thử sau Firebase. Hai khoá cũ (Như Quỳnh, Mị Nương) đã không còn hợp lệ từ 18/10 (Gemini
+// trả 401) nên đã bỏ; thêm khoá mới thì ghi vào đây. Khoá nằm trong mã trang nên ai xem mã cũng thấy.
+const BACKUP_KEYS = [];
 const REST = 'https://generativelanguage.googleapis.com/v1beta/models';
 const COOL_MS = 60000;
 // Đường gọi (nguồn và model) đang nghỉ vì hết lượt: khoá "nguồn|model" -> thời điểm được dùng lại.
@@ -38,9 +36,8 @@ export function modelsSince(mark = 0) {
 
 function routes() {
   const main = readDemo()?.model || DEFAULT_MODEL;
-  // Khoá dự phòng của thành viên trước, Firebase (khoá của Gia Huy, project công khai hay demo) sau cùng, để hạn mức của Firebase
-  // còn nguyên cho buổi demo.
-  const sources = [...BACKUP_KEYS, null];
+  // Firebase (khoá của Gia Huy: cấu hình demo nếu máy đã dán, không thì project công khai) trước, khoá dự phòng (nếu có) sau.
+  const sources = [null, ...BACKUP_KEYS];
   return [main, FALLBACK_MODEL].flatMap((model) => sources.map((key) => ({ key, model, id: `${key ? key.slice(-6) : 'firebase'}|${model}` })));
 }
 
@@ -213,6 +210,11 @@ async function withRetry(once, canRetry = () => true) {
         return out;
       } catch (err) {
         const why = explain(err, abort.signal.aborted);
+        // Khoá bị từ chối: bỏ đường này tới hết phiên rồi thử đường kế tiếp; không còn đường nào thì báo lỗi như cũ.
+        if (why.kind === 'denied') {
+          cooling.set(route.id, Infinity);
+          if (canRetry() && nextRoute()) continue;
+        }
         if (why.kind === 'quota') {
           cooling.set(route.id, Date.now() + COOL_MS);
           if (canRetry() && nextRoute()) continue;
