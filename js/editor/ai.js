@@ -10,7 +10,8 @@ import { getIn, setIn } from './form.js';
 import { streamLines, aiSource, readDemo, saveDemo, cleanText, DEFAULT_MODEL, usageMark, modelsSince } from '../ai/gemini.js';
 import { editSystem, requestPrompt } from '../ai/prompts/editor.js';
 import { micButton } from '../ai/speech.js';
-import { readLog, addTurn, markLast, clearLog, contextText, historyEl } from './chat-log.js';
+import { readLog, addTurn, markLast, clearLog, contextText } from './chat-log.js';
+import { iconEl } from '../core/icon.js';
 import { confirmAction } from './confirm.js';
 
 const SITE_FIELDS = {
@@ -178,49 +179,105 @@ function checkColors(items) {
   });
 }
 
-/* ---------- Giao diện tab ---------- */
+/* ---------- Giao diện tab: khung chat ---------- */
 
 let pane = null;
+// Tin trả lời của AI cho lượt đang chạy hay đang chờ Đồng ý: renderProposal vẽ vào đây, các lượt cũ chỉ để đọc.
 let out = null;
-let historyBox = null;
+let thread = null;
+let input = null;
+let sendBtn = null;
+let clearBtn = null;
+// Lượt đang chạy hay đang chờ Đồng ý: { text, logged }. logged: đã ghi vào lịch sử (khi AI trả lời xong), nên khi vẽ lịch sử
+// thì bỏ lượt cuối, để lượt này chỉ hiện một lần, bằng tin out có nút Đồng ý.
+let live = null;
 
 const KIND = 'ai';
 const short = (value) => String(value ?? '').replace(/\s+/g, ' ').slice(0, 60);
+const TAGS = { applied: 'Đã áp', rejected: 'Đã bỏ', proposed: 'Chưa áp' };
 
-// Lịch sử nhờ AI của thương hiệu đang mở (#201); bấm một lượt thì chép lại câu đã gõ để sửa rồi gửi lại.
-function renderHistory() {
-  if (!historyBox) return;
-  const id = api.state.id;
-  historyBox.replaceChildren(...[historyEl(api.h, readLog(id, KIND), {
-    onClear: () => { clearLog(id, KIND); renderHistory(); },
-    onPick: (text) => { const area = pane.querySelector('textarea'); area.value = text; area.focus(); },
-  })].filter(Boolean));
+// Ô nhập cao theo số dòng đã gõ, tối đa khoảng 6 dòng rồi cuộn trong ô.
+function grow() {
+  input.style.height = 'auto';
+  input.style.height = `${Math.min(input.scrollHeight, 160)}px`;
+}
+
+function syncSend() {
+  sendBtn.disabled = busy || !input.value.trim();
+}
+
+// Tin của người dùng là nút: bấm thì chép lại câu đó vào ô nhập để sửa rồi gửi lại.
+function mineEl(text) {
+  return api.h('button', { type: 'button', class: 'ed-msg ed-msg--me', title: 'Chép lại vào ô nhập', text,
+    onclick: () => { input.value = text; grow(); syncSend(); input.focus(); } });
+}
+
+function metaEl(tag, status, model) {
+  const { h } = api;
+  if (!tag && !model) return null;
+  return h('p', { class: 'ed-msg__meta' },
+    tag ? h('span', { class: `ed-msg__tag is-${status}`, text: tag }) : null,
+    model ? h('span', { text: model }) : null);
+}
+
+// Một lượt đã lưu: tin của người dùng, tin trả lời của AI (tóm tắt, các thay đổi, trạng thái). Mốc Về bản gốc là một dòng giữa khung.
+function turnEls(t) {
+  const { h } = api;
+  if (t.status === 'reset') return [h('p', { class: 'ed-chat__mark', text: t.text })];
+  const say = t.say || (t.status === 'empty' ? 'AI chưa đưa ra thay đổi nào. Hãy viết yêu cầu cụ thể hơn.' : '');
+  return [mineEl(t.text), h('div', { class: `ed-msg ed-msg--ai${t.status === 'error' ? ' is-error' : ''}` },
+    say ? h('p', { text: say }) : null,
+    t.changes?.length ? h('ul', { class: 'ed-msg__changes' }, t.changes.map((c) => h('li', { text: c.replace(' -> ', ' thành ') }))) : null,
+    metaEl(TAGS[t.status], t.status, t.model))];
+}
+
+function emptyEl() {
+  const { h } = api;
+  return h('div', { class: 'ed-chat__empty' },
+    h('p', { class: 'ed-chat__hello', text: 'Bạn muốn đổi gì trên trang này?' }),
+    h('p', { class: 'ed-chat__sub', text: 'AI đề xuất, bạn bấm Đồng ý mới áp.' }),
+    h('div', { class: 'ed-chips' }, EXAMPLES.map((text) => h('button', { type: 'button', onclick: () => send(text), text }))));
+}
+
+// Vẽ lại khung chat từ lịch sử của thương hiệu đang mở (#201), cộng lượt đang chạy; luôn cuộn xuống tin mới nhất.
+function renderThread() {
+  if (!thread) return;
+  let turns = readLog(api.state.id, KIND);
+  if (live?.logged) turns = turns.slice(0, -1);
+  thread.replaceChildren(
+    ...(turns.length || live ? [] : [emptyEl()]),
+    ...turns.flatMap(turnEls),
+    ...(live ? [mineEl(live.text), out] : []));
+  thread.scrollTop = thread.scrollHeight;
+  clearBtn.hidden = !turns.length;
 }
 
 export function refreshAiHistory() {
   dropStale();
-  renderHistory();
+  renderThread();
 }
 
-// model: chuỗi model đã dùng cho lượt này (modelsSince), hiện dưới đề xuất khi AI trả lời xong.
+// Tin trả lời của lượt đang chạy: ba chấm khi AI chưa nói gì, rồi tóm tắt, các thay đổi trước và sau, nút Đồng ý, Bỏ.
+// model: chuỗi model đã dùng cho lượt này (modelsSince), hiện nhỏ cuối tin khi AI trả lời xong.
 function renderProposal(say, items, done, error, model = '') {
   const { h } = api;
   const ok = items.filter((p) => p.ok);
+  out.classList.toggle('is-error', Boolean(error));
   out.replaceChildren(...[
-    say ? h('p', { class: 'ed-ai__say', text: say }) : null,
+    say ? h('p', { text: say }) : null,
     items.length ? h('ul', { class: 'ed-diff' }, items.map((p) => (p.ok
       ? h('li', {}, h('strong', { text: p.what }),
         h('span', { class: 'ed-diff__from' }, p.swatch ? h('i', { class: 'ed-swatch', style: `background:${p.swatch[0]}` }) : null, String(p.from)),
         h('span', { class: 'ed-diff__to' }, p.swatch ? h('i', { class: 'ed-swatch', style: `background:${p.swatch[1]}` }) : null, String(p.to)))
       : h('li', { class: 'is-skip' }, h('strong', { text: 'Bỏ qua' }), h('span', { text: p.reason })))) ) : null,
-    !done && !error ? h('p', { class: 'ed-hint', text: 'AI đang trả lời...' }) : null,
-    error ? h('p', { class: 'ed-err', text: error }) : null,
+    !done && !error ? h('span', { class: 'ed-typing', role: 'img', 'aria-label': 'AI đang trả lời' }, h('i'), h('i'), h('i')) : null,
+    error ? h('p', { text: error }) : null,
     done && ok.length ? h('div', { class: 'ed-row' },
       h('button', { type: 'button', class: 'ed-btn', 'data-ed-key': 'ai:accept', onclick: accept, text: `Đồng ý (${ok.length} thay đổi)` }),
       h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', onclick: reject, text: 'Bỏ' })) : null,
-    done && !ok.length && !error && !say ? h('p', { class: 'ed-err', text: 'AI chưa đưa ra thay đổi nào. Hãy viết yêu cầu cụ thể hơn.' }) : null,
-    done && model ? h('p', { class: 'ed-model', text: `Model: ${model}` }) : null,
+    done && model ? metaEl('', '', model) : null,
   ].filter(Boolean));
+  thread.scrollTop = thread.scrollHeight;
 }
 
 const ownerNow = () => `${api.state.id}|${api.state.page}`;
@@ -229,26 +286,29 @@ const ownerNow = () => `${api.state.id}|${api.state.page}`;
 function dropStale() {
   if (!proposal.length || owner === ownerNow()) return false;
   proposal = [];
-  out?.replaceChildren();
+  live = null;
   return true;
 }
 
 function accept() {
-  if (dropStale()) return;
+  if (dropStale()) {
+    renderThread();
+    return;
+  }
   const ok = proposal.filter((p) => p.ok);
   if (!ok.length) return;
-  api.commit(`AI: ${pane.querySelector('textarea').value.trim().slice(0, 40)}`, () => ok.forEach((p) => p.run()));
+  api.commit(`AI: ${live?.text.slice(0, 40) ?? ''}`, () => ok.forEach((p) => p.run()));
   markLast(api.state.id, KIND, 'applied');
-  renderHistory();
   proposal = [];
-  out.replaceChildren(api.h('p', { class: 'ed-ok', text: `Đã áp ${ok.length} thay đổi. Bấm Hoàn tác nếu muốn bỏ.` }));
+  live = null;
+  renderThread();
 }
 
 function reject() {
   markLast(api.state.id, KIND, 'rejected');
-  renderHistory();
   proposal = [];
-  out.replaceChildren();
+  live = null;
+  renderThread();
 }
 
 async function send(text) {
@@ -258,13 +318,15 @@ async function send(text) {
   owner = ownerNow();
   const sentFor = owner;
   const sentId = api.state.id;
-  renderStatus();
   let say = '';
-  const button = pane.querySelector('[data-ai-send]');
-  button.disabled = true;
-  renderProposal('', [], false);
   // Gửi kèm vài lượt gần nhất để AI hiểu những câu như "đổi lại như lúc nãy".
   const prompt = requestPrompt({ history: contextText(readLog(api.state.id, KIND)), request: text, label: 'Trang hiện tại', data: context() });
+  live = { text: text.trim(), logged: false };
+  input.value = '';
+  grow();
+  syncSend();
+  renderProposal('', [], false);
+  renderThread();
   let failed = '';
   const mark = usageMark();
   try {
@@ -282,25 +344,25 @@ async function send(text) {
       else if (!(item.ok && String(item.from).toLowerCase() === String(item.to).toLowerCase())) proposal.push(item);
       renderProposal(say, proposal, false);
     });
-    if (ownerNow() !== sentFor) {
-      proposal = [];
-      out.replaceChildren();
-    } else {
-      checkColors(proposal);
-      renderProposal(say, proposal, true, '', modelsSince(mark));
-    }
+    if (ownerNow() !== sentFor) proposal = [];
+    else checkColors(proposal);
   } catch (err) {
     failed = err.message;
-    if (ownerNow() === sentFor) renderProposal(say, proposal, true, err.message);
   } finally {
     busy = false;
-    button.disabled = false;
     const ok = proposal.filter((p) => p.ok);
     addTurn(sentId, KIND, {
       text: text.trim(), say: failed || say, changes: ok.map((p) => `${p.what}: ${short(p.from)} -> ${short(p.to)}`),
       status: failed ? 'error' : ok.length ? 'proposed' : 'empty', model: modelsSince(mark),
     });
-    renderHistory();
+    // Có thay đổi để duyệt thì tin out ở lại với nút Đồng ý; không thì lượt đã xong (lỗi, không thay đổi, đã sang trang khác),
+    // vẽ như các lượt cũ.
+    if (ok.length && ownerNow() === sentFor) {
+      live.logged = true;
+      renderProposal(say, proposal, true, '', modelsSince(mark));
+    } else live = null;
+    renderThread();
+    syncSend();
   }
 }
 
@@ -331,8 +393,9 @@ function configEl() {
     note.textContent = 'Đã xoá cấu hình demo khỏi máy này.';
     renderStatus();
   });
-  return h('details', { class: 'ed-ai__config' },
-    h('summary', { text: 'Cấu hình AI (máy demo)' }),
+  return h('div', { class: 'ed-chat__settings', id: 'ed-ai-settings', hidden: true },
+    h('p', { class: 'ed-chat__settings-title', text: 'Cấu hình AI (máy demo)' }),
+    h('p', { class: 'ed-ai__status' }),
     h('p', { class: 'ed-hint', text: 'Cấu hình web của project Firebase dành cho máy thuyết trình. Chỉ lưu trong trình duyệt này, không đưa vào repo.' }),
     area, model, h('div', { class: 'ed-row' }, save, clear), note);
 }
@@ -348,25 +411,40 @@ export function mountAi(target, options) {
   api = options;
   pane = target;
   const { h } = api;
-  const textarea = h('textarea', { class: 'ed-input', rows: '3', id: 'ed-ai-input', placeholder: 'Ví dụ: đưa phần hỏi đáp lên trên, đổi sang tông xanh rêu' });
-  textarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) send(textarea.value);
+  pane.classList.add('ed-pane--chat');
+  input = h('textarea', { class: 'ed-chat__input', rows: '1', id: 'ed-ai-input', 'aria-label': 'Yêu cầu cho AI', placeholder: 'Nhắn yêu cầu cho AI...' });
+  input.addEventListener('input', () => { grow(); syncSend(); });
+  // Enter là gửi, Shift+Enter xuống dòng, như các ứng dụng chat; đang gõ dấu bằng bộ gõ (isComposing) thì Enter là của bộ gõ.
+  input.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || e.shiftKey || e.isComposing) return;
+    e.preventDefault();
+    send(input.value);
   });
-  out = h('div', { class: 'ed-ai__out', 'aria-live': 'polite' });
-  historyBox = h('div', { class: 'ed-ai__history' });
+  sendBtn = h('button', { type: 'button', class: 'ed-chat__send', 'aria-label': 'Gửi', title: 'Gửi (Enter)', disabled: true, onclick: () => send(input.value) },
+    iconEl('arrow-up', 'ed-icon'));
+  out = h('div', { class: 'ed-msg ed-msg--ai', 'aria-live': 'polite' });
+  thread = h('div', { class: 'ed-chat__thread', role: 'log', 'aria-label': 'Trò chuyện với AI' });
+  const settings = configEl();
+  const settingsBtn = h('button', { type: 'button', class: 'ed-icon-btn', 'aria-label': 'Cấu hình AI', title: 'Cấu hình AI (máy demo)', 'aria-expanded': 'false', 'aria-controls': 'ed-ai-settings' },
+    iconEl('settings', 'ed-icon'));
+  settingsBtn.addEventListener('click', () => {
+    settings.hidden = !settings.hidden;
+    settingsBtn.setAttribute('aria-expanded', String(!settings.hidden));
+  });
+  clearBtn = h('button', { type: 'button', class: 'ed-icon-btn is-danger', 'aria-label': 'Xoá lịch sử trò chuyện', title: 'Xoá lịch sử trò chuyện' },
+    iconEl('trash-2', 'ed-icon'));
+  clearBtn.addEventListener('click', async () => {
+    if (!await confirmAction('Xoá lịch sử nhờ AI?', { note: 'Không lấy lại được.', danger: true })) return;
+    clearLog(api.state.id, KIND);
+    proposal = [];
+    live = null;
+    renderThread();
+  });
   pane.replaceChildren(
-    h('p', { class: 'ed-hint', text: 'Gõ hoặc nói yêu cầu. AI đề xuất từng thay đổi kèm trước và sau, bấm Đồng ý mới áp; một lần Hoàn tác là bỏ hết.' }),
-    h('p', { class: 'ed-ai__status' }),
-    h('label', { class: 'ed-field', for: 'ed-ai-input' }, h('span', { text: 'Yêu cầu' })),
-    textarea,
-    h('div', { class: 'ed-row' },
-      h('button', { type: 'button', class: 'ed-btn', 'data-ai-send': true, onclick: () => send(textarea.value), text: 'Gửi' }),
-      micButton(h, textarea)),
-    h('div', { class: 'ed-chips' }, EXAMPLES.map((text) => h('button', { type: 'button', onclick: () => { textarea.value = text; send(text); }, text }))),
-    out,
-    historyBox,
-    configEl(),
-  );
+    h('div', { class: 'ed-chat__bar' }, clearBtn, settingsBtn),
+    settings,
+    thread,
+    h('div', { class: 'ed-chat__composer' }, input, h('div', { class: 'ed-chat__tools' }, micButton(h, input), sendBtn)));
   renderStatus();
-  renderHistory();
+  renderThread();
 }
