@@ -20,6 +20,8 @@ create table sites (
   content        jsonb not null,
   theme          jsonb not null default '{}',
   hidden         boolean not null default false,
+  -- Tên tác giả nhập khi xuất bản (ghi nhận, hỗ trợ, thống kê). Không cấp quyền đọc cho khách nên không lộ qua API công khai.
+  author         text check (author is null or char_length(btrim(author)) between 2 and 80),
   created_at     timestamptz default now(),
   updated_at     timestamptz default now()
 );
@@ -75,8 +77,8 @@ alter table sites add constraint content_ok check (site_ok(content));
 
 alter table sites enable row level security;
 
--- Ai cũng tạo trang mới được.
-create policy tao_moi on sites for insert with check (true);
+-- Ai cũng tạo trang mới được, nhưng phải ghi tên tác giả (site cũ trước khi có cột này thì để trống, vẫn sửa được bằng máy demo).
+create policy tao_moi on sites for insert with check (author is not null and char_length(btrim(author)) >= 2);
 -- UPDATE kèm WHERE cần thấy được dòng, nên phải có policy select.
 create policy xem     on sites for select using (not hidden);
 -- Chỉ máy demo sửa được. Không có policy delete: không ai xoá được.
@@ -84,7 +86,7 @@ create policy sua     on sites for update using (may_demo()) with check (may_dem
 
 -- Quyền theo cột: khách chỉ thêm và đọc; cột update chỉ có tác dụng khi qua được policy sua.
 revoke all on sites from anon, authenticated;
-grant insert (slug, content, theme)             on sites to anon;
+grant insert (slug, content, theme, author)     on sites to anon;
 grant select (slug, content, theme, hidden)     on sites to anon;
 grant update (content, theme, updated_at)       on sites to anon;
 
@@ -97,3 +99,9 @@ grant select on public_sites to anon;
 
 -- Chạy RIÊNG câu này, thay <KHOÁ DEMO> bằng khoá thật, không lưu lại khoá ở đâu ngoài trình quản lý mật khẩu:
 -- insert into cau_hinh_rieng values ('demo_key_hash', encode(extensions.digest('<KHOÁ DEMO>', 'sha256'), 'hex'));
+
+-- Bảng đã có dữ liệu, chỉ thêm tác giả (chạy riêng khối này, không chạy cả file vì cả file xoá bảng cũ):
+-- alter table sites add column if not exists author text check (author is null or char_length(btrim(author)) between 2 and 80);
+-- drop policy if exists tao_moi on sites;
+-- create policy tao_moi on sites for insert with check (author is not null and char_length(btrim(author)) >= 2);
+-- grant insert (author) on sites to anon;

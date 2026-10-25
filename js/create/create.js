@@ -8,7 +8,7 @@ import { usageMark, modelsSince } from '../ai/gemini.js';
 import { readUnsplashKey, saveUnsplashKey } from './photos.js';
 import { iconEl } from '../core/icon.js';
 import { readTaoDraft, writeTaoDraft, publishReady, publicLink, readDemoKey, saveDemoKey, DRAFT_SLUG } from '../site/sites.js';
-import { slugError, isUpdate as isUpdateOf, publishContent } from '../site/publish.js';
+import { slugError, isUpdate as isUpdateOf, publishContent, authorField, authorError } from '../site/publish.js';
 import { DESKTOP, fitFrame, deviceButtons } from '../editor/preview.js';
 import { h, slugify } from '../core/dom.js';
 import { createProgress, swatches, meter } from './progress.js';
@@ -406,6 +406,8 @@ const STAGES = {
 function syncSlug() {
   ui.url.textContent = publicLink(ui.slug.value || '...');
   ui.publishBtn.textContent = isUpdate() ? `Cập nhật /${ui.slug.value}/` : 'Xuất bản';
+  // Cập nhật trang đã có (máy demo) không ghi lại tác giả.
+  ui.author.box.hidden = isUpdate();
 }
 
 function showPublish() {
@@ -421,6 +423,13 @@ async function publish() {
   ui.publishNote.textContent = problem;
   if (problem || !state.draft?.content) return;
   const update = isUpdate();
+  const author = ui.author.input.value;
+  const missing = update ? '' : authorError(author);
+  if (missing) {
+    ui.publishNote.textContent = missing;
+    ui.author.input.focus();
+    return;
+  }
   // aria-busy: nút quay vòng (editor.css) trong lúc chờ dịch và gửi lên Supabase.
   ui.publishBtn.disabled = true;
   ui.publishBtn.setAttribute('aria-busy', 'true');
@@ -433,7 +442,7 @@ async function publish() {
       await state.english;
     }
     const { model } = await publishContent({
-      slug, update, content: state.draft.content, theme: state.draft.theme, i18n: state.draft.i18n ?? null,
+      slug, update, author, content: state.draft.content, theme: state.draft.theme, i18n: state.draft.i18n ?? null,
       on: { stage: (step) => { ui.publishNote.textContent = STAGES[step](update); } },
     });
     // Xuất bản mới: khối chia sẻ bên dưới đã đủ báo xong; cập nhật (máy demo) thì báo một câu ngắn.
@@ -498,6 +507,7 @@ function build() {
     ui.publishNote.textContent = '';
   });
   ui.url = h('code', { class: 'tao-url' });
+  ui.author = authorField('tao-author', () => { ui.publishNote.textContent = ''; });
   ui.publishBtn = h('button', { type: 'button', class: 'ed-btn', onclick: publish, text: 'Xuất bản' });
   ui.publishNote = h('p', { class: 'tao-note', 'aria-live': 'polite' });
   ui.shareBox = h('div', { class: 'tao-share' });
@@ -506,6 +516,7 @@ function build() {
     h('label', { class: 'ed-field', for: 'tao-slug' }, h('span', { text: 'Tên trang (địa chỉ)' })),
     ui.slug,
     h('p', { class: 'tao-hint' }, 'Địa chỉ: ', ui.url),
+    ui.author.box,
     h('div', { class: 'ed-row' }, ui.publishBtn,
       // Chỉnh tay ngay trên nháp (editor sửa thẳng nháp của trang này), xong bấm Xuất bản ngay trong editor, không phải quay lại đây.
       h('a', { class: 'ed-btn ed-btn--ghost', href: `/${DRAFT_SLUG}/?sua`, text: 'Chỉnh tay' }),

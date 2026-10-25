@@ -106,11 +106,11 @@ export async function updateSite(slug, content, theme) {
 }
 
 // Xuất bản: thêm một dòng. Trùng tên thì Supabase trả 409; nội dung không qua kiểm tra (link, ảnh lạ, quá lớn) trả 400.
-export async function publishSite(slug, content, theme) {
+export async function publishSite(slug, content, theme, author) {
   const res = await fetch(`${SUPABASE.url}/rest/v1/sites`, {
     method: 'POST',
     headers: headers({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
-    body: JSON.stringify({ slug, content, theme }),
+    body: JSON.stringify({ slug, content, theme, author }),
   });
   if (res.ok) return;
   const text = await res.text().catch(() => '');

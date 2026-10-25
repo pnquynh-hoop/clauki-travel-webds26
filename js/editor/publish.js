@@ -6,7 +6,7 @@
 import { h, slugify } from '../core/dom.js';
 import { toContent } from '../core/i18n-text.js';
 import { publicLink, publishReady, readTaoDraft, DRAFT_SLUG } from '../site/sites.js';
-import { slugError, isUpdate, publishContent } from '../site/publish.js';
+import { slugError, isUpdate, publishContent, authorField, authorError } from '../site/publish.js';
 
 const STAGES = {
   translate: () => 'Đang dịch nốt các chỗ vừa sửa sang tiếng Anh...',
@@ -54,10 +54,13 @@ export function openPublish(state) {
   const button = h('button', { type: 'button', class: 'ed-btn' });
   const close = h('button', { type: 'button', class: 'ed-btn ed-btn--ghost', text: 'Đóng' });
 
+  const author = authorField('ed-publish-author', () => { note.textContent = ''; });
   const update = () => isUpdate(editOf, slug.value.trim());
   const sync = () => {
     url.textContent = publicLink(slug.value || '...');
     button.textContent = update() ? `Cập nhật /${slug.value}/` : 'Xuất bản';
+    // Cập nhật trang đã có (máy demo) không ghi lại tác giả.
+    author.box.hidden = update();
   };
   slug.addEventListener('input', () => {
     slug.value = slug.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -74,12 +77,18 @@ export function openPublish(state) {
       return;
     }
     const isUpdating = update();
+    const missing = isUpdating ? '' : authorError(author.input.value);
+    if (missing) {
+      note.textContent = missing;
+      author.input.focus();
+      return;
+    }
     button.disabled = true;
     button.setAttribute('aria-busy', 'true');
     share.replaceChildren();
     try {
       const { model } = await publishContent({
-        slug: name, update: isUpdating, ...payload(state),
+        slug: name, update: isUpdating, author: author.input.value, ...payload(state),
         on: { stage: (step) => { note.textContent = STAGES[step](isUpdating); } },
       });
       note.textContent = [isUpdating ? 'Đã cập nhật trang.' : 'Đã xuất bản.', model ? `Dịch nốt tiếng Anh bằng ${model}.` : ''].filter(Boolean).join(' ');
@@ -114,6 +123,7 @@ export function openPublish(state) {
       h('p', { class: 'ed-dialog__note', text: editOf
         ? 'Giữ đúng tên cũ là ghi đè trang đã xuất bản; đổi tên là xuất bản thành trang mới.'
         : 'Xuất bản xong là cố định, muốn đổi thì xuất bản bản mới với tên khác.' }),
+      author.box,
       h('div', { class: 'ed-row' }, button),
       note,
       share));
